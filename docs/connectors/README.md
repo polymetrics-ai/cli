@@ -81,8 +81,27 @@
 - [circa](circa/MANUAL.md): Reads Circa events, contacts, companies, and teams through the Circa REST API.
 - [circleci](circleci/MANUAL.md): Reads CircleCI projects, pipelines, workflows, and jobs through the CircleCI v2 REST API.
 - [cisco-meraki](cisco-meraki/MANUAL.md): Reads Cisco Meraki organizations, networks, devices, and admins from the Meraki Dashboard API v1.
+- [clarif-ai](clarif-ai/MANUAL.md): Reads Clarifai applications, datasets, models, model versions, and workflows through the Clarifai v2 REST API.
+- [clazar](clazar/MANUAL.md): Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, and private offers) from the Clazar REST API using OAuth2 client credentials.
+- [clickup-api](clickup-api/MANUAL.md): Reads ClickUp workspaces (teams), spaces, folders, lists, and tasks through the ClickUp v2 REST API using a personal API token.
+- [clockify](clockify/MANUAL.md): Reads Clockify workspaces, clients, projects, tags, and users through the Clockify REST API v1.
+- [clockodo](clockodo/MANUAL.md): Reads Clockodo customers, projects, services, and users through the Clockodo REST API.
 - [close-com](close-com/MANUAL.md): Reads Close CRM leads, contacts, opportunities, activities, and users through the Close REST API. Read-only.
+- [cloudbeds](cloudbeds/MANUAL.md): Reads Cloudbeds guests, hotels, rooms, reservations, and transactions through the Cloudbeds v1.2 REST API.
+- [coassemble](coassemble/MANUAL.md): Reads Coassemble courses, screen types, and learner tracking records through the Coassemble headless REST API.
+- [coda](coda/MANUAL.md): Reads Coda docs and doc-scoped tables, pages, formulas, and controls through the Coda REST API v1. Read-only source.
+- [codefresh](codefresh/MANUAL.md): Reads Codefresh projects, pipelines, runner agents, and shared contexts through the Codefresh REST API.
+- [coin-api](coin-api/MANUAL.md): Reads CoinAPI market data: symbols, exchanges, assets, and historical OHLCV and trades for a configured symbol via the CoinAPI REST API.
+- [coingecko-coins](coingecko-coins/MANUAL.md): Reads a coin's market chart time series, daily historical snapshots, and current metadata from the CoinGecko REST API.
+- [coinmarketcap](coinmarketcap/MANUAL.md): Reads CoinMarketCap cryptocurrency map, latest market listings, categories, fiat currencies, and global metrics through the CoinMarketCap Pro API.
+- [concord](concord/MANUAL.md): Reads Concord agreements, user organizations, folders, reports, and tags through the Concord REST API.
+- [configcat](configcat/MANUAL.md): Reads ConfigCat organizations, products, configs, environments, and tags through the ConfigCat Public Management API.
 - [confluence](confluence/MANUAL.md): Reads Confluence Cloud spaces, pages, blog posts, labels, and attachments through the Confluence Cloud REST API v2.
+- [convertkit](convertkit/MANUAL.md): Reads ConvertKit (Kit) subscribers, forms, sequences, tags, and broadcasts through the ConvertKit v3 REST API.
+- [copper](copper/MANUAL.md): Reads Copper CRM people, companies, opportunities, leads, and tasks through the Copper REST API.
+- [countercyclical](countercyclical/MANUAL.md): Reads Countercyclical investments, valuations, and research memos through the Countercyclical REST API.
+- [criteo-marketing](criteo-marketing/MANUAL.md): Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, and ad spend statistics through the Criteo REST API using OAuth2 client-credentials auth.
+- [customer-io](customer-io/MANUAL.md): Reads Customer.io campaigns, newsletters, segments, and broadcasts through the Customer.io App API.
 - [delighted](delighted/MANUAL.md): Reads Delighted survey responses, people, bounces, unsubscribes, and aggregate metrics through the Delighted REST API.
 - [file](file/MANUAL.md): Reads local JSONL or CSV files as source streams.
 - [freshdesk](freshdesk/MANUAL.md): Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2.

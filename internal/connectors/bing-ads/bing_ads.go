@@ -15,13 +15,12 @@
 // Like stripe/github, it self-registers with the connectors registry via
 // RegisterFactory in init(); the registryset package blank-imports this package
 // in the production binary to run that side effect. The Go package is named
-// bingads (a valid identifier) while the connector's registry key is the bare
-// system name "bing-ads".
+// bingads (a valid identifier) while the connector's directory and registry key
+// are the bare system name "bing-ads".
 package bingads
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -43,6 +42,8 @@ const (
 	// defaultTokenURLTemplate is the Microsoft identity platform token endpoint;
 	// %s is the tenant id (default "common").
 	defaultTokenURLTemplate = "https://login.microsoftonline.com/%s/oauth2/v2.0/token"
+	// defaultScope is the OAuth scope required for Microsoft Advertising access.
+	defaultScope = "https://ads.microsoft.com/msads.manage offline_access"
 
 	userAgent       = "polymetrics-go-cli"
 	defaultTenantID = "common"
@@ -89,14 +90,14 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 	if err := validateSecrets(cfg); err != nil {
 		return err
 	}
-	r, _, err := c.requester(cfg, serviceCustomer)
+	r, err := c.requester(cfg, serviceCustomer)
 	if err != nil {
 		return err
 	}
 	// A bounded AccountsInfo query confirms the OAuth exchange, the developer
 	// token, and connectivity without mutating anything.
 	ep := streamEndpoints["accounts"]
-	if _, err := r.Do(ctx, http.MethodPost, ep.path, nil, ep.body(cfg)); err != nil {
+	if _, err := r.Do(ctx, http.MethodPost, ep.path, nil, ep.body(cfg, "")); err != nil {
 		return fmt.Errorf("check bing-ads: %w", err)
 	}
 	return nil
@@ -123,27 +124,44 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 	}
 
 	if fixtureMode(req.Config) {
-		return c.readFixture(ctx, stream, ep, req, emit)
+		return c.readFixture(ctx, ep, req, emit)
 	}
 
-	r, _, err := c.requester(req.Config, ep.kind)
+	r, err := c.requester(req.Config, ep.kind)
 	if err != nil {
 		return err
 	}
-	resp, err := r.Do(ctx, http.MethodPost, ep.path, nil, ep.body(req.Config))
-	if err != nil {
-		return fmt.Errorf("read bing-ads %s: %w", stream, err)
+
+	// Per-account streams (e.g. campaigns) iterate the configured account ids so
+	// a sync can span every account in the set. A single empty id is used when no
+	// account ids are configured, which lets the request body carry whatever
+	// account the headers already scope it to.
+	accountIDs := []string{""}
+	if ep.perAccount {
+		if ids := accountIDList(req.Config); len(ids) > 0 {
+			accountIDs = ids
+		}
 	}
-	records, err := connsdk.RecordsAt(resp.Body, ep.recordsPath)
-	if err != nil {
-		return fmt.Errorf("decode bing-ads %s: %w", stream, err)
-	}
-	for _, item := range records {
+
+	for _, accountID := range accountIDs {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		if err := emit(ep.mapRecord(item)); err != nil {
-			return err
+		resp, err := r.Do(ctx, http.MethodPost, ep.path, nil, ep.body(req.Config, accountID))
+		if err != nil {
+			return fmt.Errorf("read bing-ads %s: %w", stream, err)
+		}
+		records, err := connsdk.RecordsAt(resp.Body, ep.recordsPath)
+		if err != nil {
+			return fmt.Errorf("decode bing-ads %s: %w", stream, err)
+		}
+		for _, item := range records {
+			if err := ctx.Err(); err != nil {
+				return err
+			}
+			if err := emit(ep.mapRecord(item)); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -158,7 +176,7 @@ func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, recor
 
 // readFixture emits deterministic records without any network access so the
 // conformance harness can exercise bing-ads credential-free.
-func (c Connector) readFixture(ctx context.Context, stream string, ep streamEndpoint, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+func (c Connector) readFixture(ctx context.Context, ep streamEndpoint, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	for _, item := range ep.fixture() {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -179,9 +197,9 @@ func (c Connector) readFixture(ctx context.Context, stream string, ep streamEndp
 // the DeveloperToken header, and (for campaign-scoped streams) the CustomerId and
 // CustomerAccountId headers. Secrets only ever flow into the authenticator and
 // headers; they are never logged.
-func (c Connector) requester(cfg connectors.RuntimeConfig, kind serviceKind) (*connsdk.Requester, *oauthRefreshAuth, error) {
+func (c Connector) requester(cfg connectors.RuntimeConfig, kind serviceKind) (*connsdk.Requester, error) {
 	if err := validateSecrets(cfg); err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	var base string
@@ -193,16 +211,16 @@ func (c Connector) requester(cfg connectors.RuntimeConfig, kind serviceKind) (*c
 		base, err = customerBaseURL(cfg)
 	}
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	tokenURL, err := tokenURL(cfg)
+	tokenEndpoint, err := tokenURL(cfg)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	auth := &oauthRefreshAuth{
-		tokenURL:     tokenURL,
+		tokenURL:     tokenEndpoint,
 		clientID:     secret(cfg, "client_id"),
 		clientSecret: secret(cfg, "client_secret"),
 		refreshToken: secret(cfg, "refresh_token"),
@@ -227,7 +245,7 @@ func (c Connector) requester(cfg connectors.RuntimeConfig, kind serviceKind) (*c
 		Auth:           auth,
 		UserAgent:      userAgent,
 		DefaultHeaders: headers,
-	}, auth, nil
+	}, nil
 }
 
 // validateSecrets enforces the required credential set. Values are never logged.
@@ -245,6 +263,25 @@ func secret(cfg connectors.RuntimeConfig, name string) string {
 		return ""
 	}
 	return cfg.Secrets[name]
+}
+
+// accountIDList parses the comma-separated account_ids config into a slice,
+// falling back to a single account_id / customer_account_id when set.
+func accountIDList(cfg connectors.RuntimeConfig) []string {
+	raw := strings.TrimSpace(cfg.Config["account_ids"])
+	if raw == "" {
+		if single := customerAccountID(cfg); single != "" {
+			return []string{single}
+		}
+		return nil
+	}
+	var out []string
+	for _, part := range strings.Split(raw, ",") {
+		if id := strings.TrimSpace(part); id != "" {
+			out = append(out, id)
+		}
+	}
+	return out
 }
 
 // customerAccountID resolves the CustomerAccountId, falling back to account_id.
@@ -298,7 +335,7 @@ func tokenURL(cfg connectors.RuntimeConfig) (string, error) {
 			return "", fmt.Errorf("bing-ads config token_url must use http or https, got %q", parsed.Scheme)
 		}
 		if parsed.Host == "" {
-			return "", errors.New("bing-ads config token_url must include a host")
+			return "", fmt.Errorf("bing-ads config token_url must include a host")
 		}
 		return override, nil
 	}

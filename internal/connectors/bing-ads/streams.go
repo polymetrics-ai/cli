@@ -18,6 +18,10 @@ const (
 // streamEndpoint maps a stream to its REST POST endpoint, the JSON path to the
 // records array in the response, the request-body builder, the service kind, the
 // record mapper, and a deterministic fixture generator.
+//
+// perAccount marks campaign-scoped streams whose query is keyed by AccountId; the
+// read path iterates the configured account ids and merges the results so a sync
+// can span every account in the configured set.
 type streamEndpoint struct {
 	// path is the endpoint path relative to the service base URL.
 	path string
@@ -25,8 +29,12 @@ type streamEndpoint struct {
 	recordsPath string
 	// kind selects customer vs campaign service wiring.
 	kind serviceKind
-	// body builds the POST request body from the runtime config.
-	body func(connectors.RuntimeConfig) map[string]any
+	// perAccount, when true, runs the query once per configured account id with
+	// AccountId injected into the request body.
+	perAccount bool
+	// body builds the POST request body from the runtime config and the current
+	// account id (empty for non-per-account streams).
+	body func(cfg connectors.RuntimeConfig, accountID string) map[string]any
 	// mapRecord flattens a raw Bing Ads object into a connectors.Record.
 	mapRecord func(map[string]any) connectors.Record
 	// fixture returns deterministic raw objects for credential-free conformance.
@@ -41,7 +49,7 @@ var streamEndpoints = map[string]streamEndpoint{
 		path:        "AccountsInfo/Query",
 		recordsPath: "AccountsInfo",
 		kind:        serviceCustomer,
-		body: func(cfg connectors.RuntimeConfig) map[string]any {
+		body: func(cfg connectors.RuntimeConfig, _ string) map[string]any {
 			b := map[string]any{"OnlyParentAccounts": false}
 			if v := strings.TrimSpace(cfg.Config["customer_id"]); v != "" {
 				b["CustomerId"] = v
@@ -55,7 +63,7 @@ var streamEndpoints = map[string]streamEndpoint{
 		path:        "User/Query",
 		recordsPath: "User",
 		kind:        serviceCustomer,
-		body: func(cfg connectors.RuntimeConfig) map[string]any {
+		body: func(cfg connectors.RuntimeConfig, _ string) map[string]any {
 			return map[string]any{"UserId": nil}
 		},
 		mapRecord: userRecord,
@@ -65,10 +73,11 @@ var streamEndpoints = map[string]streamEndpoint{
 		path:        "Campaigns/QueryByAccountId",
 		recordsPath: "Campaigns",
 		kind:        serviceCampaign,
-		body: func(cfg connectors.RuntimeConfig) map[string]any {
+		perAccount:  true,
+		body: func(_ connectors.RuntimeConfig, accountID string) map[string]any {
 			b := map[string]any{}
-			if v := customerAccountID(cfg); v != "" {
-				b["AccountId"] = v
+			if accountID != "" {
+				b["AccountId"] = accountID
 			}
 			return b
 		},
@@ -79,7 +88,7 @@ var streamEndpoints = map[string]streamEndpoint{
 		path:        "AdGroups/QueryByCampaignId",
 		recordsPath: "AdGroups",
 		kind:        serviceCampaign,
-		body: func(cfg connectors.RuntimeConfig) map[string]any {
+		body: func(cfg connectors.RuntimeConfig, _ string) map[string]any {
 			b := map[string]any{}
 			if v := strings.TrimSpace(cfg.Config["campaign_id"]); v != "" {
 				b["CampaignId"] = v
@@ -93,7 +102,7 @@ var streamEndpoints = map[string]streamEndpoint{
 		path:        "Ads/QueryByAdGroupId",
 		recordsPath: "Ads",
 		kind:        serviceCampaign,
-		body: func(cfg connectors.RuntimeConfig) map[string]any {
+		body: func(cfg connectors.RuntimeConfig, _ string) map[string]any {
 			b := map[string]any{}
 			if v := strings.TrimSpace(cfg.Config["ad_group_id"]); v != "" {
 				b["AdGroupId"] = v
@@ -126,7 +135,7 @@ func bingStreams() []connectors.Stream {
 		},
 		{
 			Name:        "campaigns",
-			Description: "Campaigns within the configured advertiser account.",
+			Description: "Campaigns within the configured advertiser accounts.",
 			PrimaryKey:  []string{"Id"},
 			Fields:      campaignFields(),
 		},

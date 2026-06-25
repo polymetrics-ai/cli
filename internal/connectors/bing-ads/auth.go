@@ -13,9 +13,10 @@ import (
 )
 
 // oauthRefreshAuth implements connsdk.Authenticator for the Microsoft identity
-// platform refresh-token grant used by the Bing Ads API. It exchanges the
-// configured refresh_token for a short-lived access token and caches it until
-// shortly before expiry, then sets Authorization: Bearer <token> on each request.
+// platform refresh-token grant used by the Bing Ads (Microsoft Advertising) API.
+// It exchanges the configured refresh_token for a short-lived access token and
+// caches it until shortly before expiry, then sets Authorization: Bearer <token>
+// on each request.
 //
 // It never logs secret values: the client secret, refresh token, and access
 // token are only ever placed in the outgoing token request form or the
@@ -83,7 +84,7 @@ func (a *oauthRefreshAuth) accessToken(ctx context.Context) (string, error) {
 	}
 	scope := a.scope
 	if scope == "" {
-		scope = "https://ads.microsoft.com/msads.manage offline_access"
+		scope = defaultScope
 	}
 	form.Set("scope", scope)
 

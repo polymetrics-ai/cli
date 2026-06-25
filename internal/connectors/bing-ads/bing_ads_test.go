@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/connectors/bingads"
+	bingads "polymetrics.ai/internal/connectors/bing-ads"
 )
 
 // TestReadAccountsAuthenticatesAndMaps is the red-first test for the Bing Ads
@@ -21,12 +21,12 @@ import (
 //   - the AccountsInfo array is mapped into records keyed by Id.
 func TestReadAccountsAuthenticatesAndMaps(t *testing.T) {
 	var (
-		sawGrant     string
-		sawRefresh   string
-		sawAuth      string
-		sawDevToken  string
-		tokenCalled  int
-		accountsHits int
+		sawGrant    string
+		sawRefresh  string
+		sawScope    string
+		sawAuth     string
+		sawDevToken string
+		tokenCalled int
 	)
 
 	mux := http.NewServeMux()
@@ -35,10 +35,10 @@ func TestReadAccountsAuthenticatesAndMaps(t *testing.T) {
 		_ = r.ParseForm()
 		sawGrant = r.Form.Get("grant_type")
 		sawRefresh = r.Form.Get("refresh_token")
+		sawScope = r.Form.Get("scope")
 		_, _ = w.Write([]byte(`{"access_token":"ACCESS_XYZ","token_type":"Bearer","expires_in":3600}`))
 	})
 	mux.HandleFunc("/CustomerManagement/v13/AccountsInfo/Query", func(w http.ResponseWriter, r *http.Request) {
-		accountsHits++
 		sawAuth = r.Header.Get("Authorization")
 		sawDevToken = r.Header.Get("DeveloperToken")
 		_, _ = w.Write([]byte(`{"AccountsInfo":[{"Id":"111","Name":"Acme","Number":"X0001","AccountLifeCycleStatus":"Active"},{"Id":"222","Name":"Globex","Number":"X0002","AccountLifeCycleStatus":"Paused"}]}`))
@@ -78,6 +78,9 @@ func TestReadAccountsAuthenticatesAndMaps(t *testing.T) {
 	if sawRefresh != "rtok" {
 		t.Fatalf("refresh_token = %q, want rtok", sawRefresh)
 	}
+	if !strings.Contains(sawScope, "msads.manage") {
+		t.Fatalf("scope = %q, want it to contain msads.manage", sawScope)
+	}
 	if sawAuth != "Bearer ACCESS_XYZ" {
 		t.Fatalf("Authorization = %q, want Bearer ACCESS_XYZ", sawAuth)
 	}
@@ -92,15 +95,15 @@ func TestReadAccountsAuthenticatesAndMaps(t *testing.T) {
 	}
 }
 
-// TestReadCampaignsSendsAccountHeadersAndBody asserts that campaign-scoped
-// streams send the CustomerId / CustomerAccountId headers and the AccountId in
-// the POST body, and that the Campaigns array maps correctly. This exercises the
-// second stream family (campaign management) and the header/body wiring.
-func TestReadCampaignsSendsAccountHeadersAndBody(t *testing.T) {
+// TestReadCampaignsPaginatesByAccount asserts that campaign-scoped streams send
+// the CustomerId / CustomerAccountId headers and the AccountId in the POST body,
+// page across the configured account ids, and that the Campaigns array maps
+// correctly. This exercises the second stream family (campaign management), the
+// header/body wiring, and multi-account pagination.
+func TestReadCampaignsPaginatesByAccount(t *testing.T) {
 	var (
 		sawCustomerID string
-		sawAccountID  string
-		sawBody       map[string]any
+		seenAccounts  []string
 	)
 
 	mux := http.NewServeMux()
@@ -109,9 +112,18 @@ func TestReadCampaignsSendsAccountHeadersAndBody(t *testing.T) {
 	})
 	mux.HandleFunc("/CampaignManagement/v13/Campaigns/QueryByAccountId", func(w http.ResponseWriter, r *http.Request) {
 		sawCustomerID = r.Header.Get("CustomerId")
-		sawAccountID = r.Header.Get("CustomerAccountId")
-		_ = json.NewDecoder(r.Body).Decode(&sawBody)
-		_, _ = w.Write([]byte(`{"Campaigns":[{"Id":"900","Name":"Brand","Status":"Active","CampaignType":"Search"}]}`))
+		var body map[string]any
+		_ = json.NewDecoder(r.Body).Decode(&body)
+		acct, _ := body["AccountId"].(string)
+		seenAccounts = append(seenAccounts, acct)
+		switch acct {
+		case "111":
+			_, _ = w.Write([]byte(`{"Campaigns":[{"Id":"900","Name":"Brand","Status":"Active","CampaignType":"Search"}]}`))
+		case "222":
+			_, _ = w.Write([]byte(`{"Campaigns":[{"Id":"901","Name":"Shopping","Status":"Paused","CampaignType":"Shopping"}]}`))
+		default:
+			_, _ = w.Write([]byte(`{"Campaigns":[]}`))
+		}
 	})
 	srv := httptest.NewServer(mux)
 	defer srv.Close()
@@ -119,10 +131,10 @@ func TestReadCampaignsSendsAccountHeadersAndBody(t *testing.T) {
 	c := bingads.New()
 	cfg := connectors.RuntimeConfig{
 		Config: map[string]string{
-			"campaign_base_url":   srv.URL + "/CampaignManagement/v13",
-			"token_url":           srv.URL + "/oauth/token",
-			"customer_id":         "C42",
-			"customer_account_id": "777",
+			"campaign_base_url": srv.URL + "/CampaignManagement/v13",
+			"token_url":         srv.URL + "/oauth/token",
+			"customer_id":       "C42",
+			"account_ids":       "111,222",
 		},
 		Secrets: map[string]string{
 			"client_id":       "cid",
@@ -142,14 +154,14 @@ func TestReadCampaignsSendsAccountHeadersAndBody(t *testing.T) {
 	if sawCustomerID != "C42" {
 		t.Fatalf("CustomerId header = %q, want C42", sawCustomerID)
 	}
-	if sawAccountID != "777" {
-		t.Fatalf("CustomerAccountId header = %q, want 777", sawAccountID)
+	if len(seenAccounts) != 2 || seenAccounts[0] != "111" || seenAccounts[1] != "222" {
+		t.Fatalf("paged accounts = %v, want [111 222]", seenAccounts)
 	}
-	if sawBody["AccountId"] != "777" {
-		t.Fatalf("body AccountId = %v, want 777", sawBody["AccountId"])
+	if len(got) != 2 {
+		t.Fatalf("campaign records = %d, want 2 (one per account)", len(got))
 	}
-	if len(got) != 1 || got[0]["Id"] != "900" || got[0]["Name"] != "Brand" {
-		t.Fatalf("campaign records = %+v, want one Id=900 Name=Brand", got)
+	if got[0]["Id"] != "900" || got[1]["Id"] != "901" {
+		t.Fatalf("campaign ids = %v / %v, want 900 / 901", got[0]["Id"], got[1]["Id"])
 	}
 }
 
@@ -192,6 +204,9 @@ func TestCatalogStreams(t *testing.T) {
 	cat, err := c.Catalog(context.Background(), connectors.RuntimeConfig{})
 	if err != nil {
 		t.Fatalf("Catalog: %v", err)
+	}
+	if cat.Connector != "bing-ads" {
+		t.Fatalf("catalog connector = %q, want bing-ads", cat.Connector)
 	}
 	want := map[string]bool{"accounts": false, "campaigns": false, "ad_groups": false, "ads": false, "users": false}
 	for _, s := range cat.Streams {
@@ -241,5 +256,15 @@ func TestBaseURLValidationRejectsBadScheme(t *testing.T) {
 	err := c.Read(context.Background(), connectors.ReadRequest{Stream: "accounts", Config: cfg}, func(connectors.Record) error { return nil })
 	if err == nil || !strings.Contains(err.Error(), "base_url") {
 		t.Fatalf("expected base_url validation error, got %v", err)
+	}
+}
+
+// TestMissingSecretsRejected confirms required credentials are enforced.
+func TestMissingSecretsRejected(t *testing.T) {
+	c := bingads.New()
+	cfg := connectors.RuntimeConfig{Secrets: map[string]string{"client_id": "c"}}
+	err := c.Read(context.Background(), connectors.ReadRequest{Stream: "accounts", Config: cfg}, func(connectors.Record) error { return nil })
+	if err == nil {
+		t.Fatal("expected missing-secret error, got nil")
 	}
 }
