@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/chargify"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/chargify"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: Basic auth (api_key as

@@ -1,6 +1,6 @@
 package carequalitycommission
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the CQC Syndication API resource path
 // (relative to base_url), the JSON field path that holds the records array in

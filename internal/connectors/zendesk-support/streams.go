@@ -1,6 +1,6 @@
 package zendesksupport
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to its Zendesk API resource. resource is the
 // path segment under /api/v2 (e.g. "tickets"); recordsKey is the JSON object key

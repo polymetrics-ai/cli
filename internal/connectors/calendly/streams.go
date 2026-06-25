@@ -1,6 +1,6 @@
 package calendly
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // scope describes the query parameter a Calendly list endpoint requires to be
 // bound to the authenticated user's organization or user URI.

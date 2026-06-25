@@ -1,6 +1,6 @@
 package box
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Box API resource path (relative to
 // base_url) it reads from, and the record mapper that flattens its entries. Box

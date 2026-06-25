@@ -1,6 +1,6 @@
 package confluence
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Confluence v2 API resource path
 // (relative to base_url, which already ends in /wiki/api/v2) and the record

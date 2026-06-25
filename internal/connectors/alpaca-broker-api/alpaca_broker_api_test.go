@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	alpacabrokerapi "polymetrics/internal/connectors/alpaca-broker-api"
+	"polymetrics.ai/internal/connectors"
+	alpacabrokerapi "polymetrics.ai/internal/connectors/alpaca-broker-api"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: HTTP Basic auth

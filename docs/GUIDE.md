@@ -24,7 +24,17 @@ extract → query → write-back workflows. For the elevator pitch see the
 **Prerequisites:** Go **1.24+**. (The `Makefile` sets `GOTOOLCHAIN=auto`, so `make`
 targets auto-fetch the right toolchain even on an older local Go.)
 
-### Build from source (recommended)
+### Install with `go install`
+
+```bash
+go install polymetrics.ai/cmd/pm@latest      # installs the `pm` binary into $(go env GOBIN)
+```
+
+The module path is `polymetrics.ai`; the binary is always named `pm` (it builds from
+`cmd/pm`). This resolves once `polymetrics.ai` serves its Go module meta tag — until then,
+build from source below.
+
+### Build from source
 
 ```bash
 git clone https://github.com/karthik-sivadas/polymetrics-cli

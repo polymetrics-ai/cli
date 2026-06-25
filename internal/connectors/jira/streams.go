@@ -1,6 +1,6 @@
 package jira
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Jira REST API resource path it reads
 // from, the JSON path at which its record array lives in the response, and the

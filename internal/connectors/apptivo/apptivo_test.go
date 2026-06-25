@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/apptivo"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/apptivo"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Apptivo

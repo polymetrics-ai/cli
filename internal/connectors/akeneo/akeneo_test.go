@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/akeneo"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/akeneo"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Akeneo

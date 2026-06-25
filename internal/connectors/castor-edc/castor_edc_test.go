@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	castoredc "polymetrics/internal/connectors/castor-edc"
+	"polymetrics.ai/internal/connectors"
+	castoredc "polymetrics.ai/internal/connectors/castor-edc"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Castor EDC

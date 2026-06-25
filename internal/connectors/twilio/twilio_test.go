@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/twilio"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/twilio"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Twilio

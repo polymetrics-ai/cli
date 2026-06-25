@@ -5,7 +5,7 @@ package app
 import (
 	"context"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 // newSQLEngine returns the default JSONL-backed query engine. It reproduces the

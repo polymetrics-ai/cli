@@ -1,6 +1,6 @@
 package apptivo
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Apptivo DAO resource path (relative
 // to base_url) it reads from, the JSON path holding the records array, and the

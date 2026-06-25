@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	linkedinads "polymetrics/internal/connectors/linkedin-ads"
+	"polymetrics.ai/internal/connectors"
+	linkedinads "polymetrics.ai/internal/connectors/linkedin-ads"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the LinkedIn Ads

@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/assemblyai"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/assemblyai"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the AssemblyAI

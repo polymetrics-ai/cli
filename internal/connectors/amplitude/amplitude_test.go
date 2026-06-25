@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/amplitude"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/amplitude"
 )
 
 // TestReadCohortsAuthenticatesAndMaps is the red-first test: HTTP Basic auth

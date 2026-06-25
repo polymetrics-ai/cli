@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/metabase"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/metabase"
 )
 
 // TestReadAuthenticatesAndMapsRecords is the red-first test for the Metabase

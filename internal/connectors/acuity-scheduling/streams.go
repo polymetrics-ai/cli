@@ -1,6 +1,6 @@
 package acuityscheduling
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Acuity API resource path (relative to
 // base_url) it reads from, the record mapper that flattens its objects, and

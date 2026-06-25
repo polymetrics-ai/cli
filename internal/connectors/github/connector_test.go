@@ -14,7 +14,7 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 func TestGithubCheckSendsAuthAndValidatesRepository(t *testing.T) {

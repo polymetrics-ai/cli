@@ -1,6 +1,6 @@
 package instagram
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Facebook Graph API edge it reads from
 // (relative to the Instagram Business Account node), the comma-separated field

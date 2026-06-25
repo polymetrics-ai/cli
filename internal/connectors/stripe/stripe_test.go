@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/stripe"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/stripe"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Stripe

@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/mailchimp"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/mailchimp"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Mailchimp

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	ciscomeraki "polymetrics/internal/connectors/cisco-meraki"
+	"polymetrics.ai/internal/connectors"
+	ciscomeraki "polymetrics.ai/internal/connectors/cisco-meraki"
 )
 
 // TestReadOrganizationsPaginatesAndAuthenticates is the red-first test: it asserts

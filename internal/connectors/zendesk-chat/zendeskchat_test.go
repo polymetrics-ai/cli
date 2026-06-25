@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	zendeskchat "polymetrics/internal/connectors/zendesk-chat"
+	"polymetrics.ai/internal/connectors"
+	zendeskchat "polymetrics.ai/internal/connectors/zendesk-chat"
 )
 
 // TestReadArrayStreamAuthenticates verifies Bearer auth and top-level-array

@@ -1,6 +1,6 @@
 package activecampaign
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the ActiveCampaign API v3 resource path
 // (relative to base_url) and the record mapper that flattens its objects, plus

@@ -1,6 +1,6 @@
 package churnkey
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Churnkey Data API resource path
 // (relative to base_url), whether it supports limit/skip offset pagination, and

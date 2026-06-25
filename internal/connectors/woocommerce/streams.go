@@ -1,6 +1,6 @@
 package woocommerce
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the WooCommerce REST resource path
 // (relative to base_url, e.g. "orders") and the record mapper that flattens its

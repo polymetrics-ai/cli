@@ -1,6 +1,6 @@
 package harvest
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Harvest API resource path (relative to
 // base_url) it reads from, the JSON key holding the records array in the list

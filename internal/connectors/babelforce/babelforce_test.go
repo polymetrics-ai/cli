@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/babelforce"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/babelforce"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Babelforce

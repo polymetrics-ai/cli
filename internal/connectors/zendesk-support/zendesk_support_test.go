@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	zendesksupport "polymetrics/internal/connectors/zendesk-support"
+	"polymetrics.ai/internal/connectors"
+	zendesksupport "polymetrics.ai/internal/connectors/zendesk-support"
 )
 
 // TestReadPaginatesAndAuthenticatesAPIToken is the red-first test for the

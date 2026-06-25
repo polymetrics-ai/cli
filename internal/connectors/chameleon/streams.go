@@ -1,6 +1,6 @@
 package chameleon
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Chameleon API resource path (relative
 // to base_url), the JSON field that holds its record array, and the mapper that

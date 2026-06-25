@@ -6,7 +6,7 @@ import (
 	"context"
 	"testing"
 
-	"polymetrics/internal/app"
+	"polymetrics.ai/internal/app"
 )
 
 // TestQuerySQLEngineSeamPreservesSelectAll is the red-first test for the

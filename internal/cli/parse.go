@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"polymetrics/internal/app"
-	"polymetrics/internal/safety"
+	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/safety"
 )
 
 var errUsage = usageErrorf("invalid usage")

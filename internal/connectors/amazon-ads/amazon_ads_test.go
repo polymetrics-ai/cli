@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	amazonads "polymetrics/internal/connectors/amazon-ads"
+	"polymetrics.ai/internal/connectors"
+	amazonads "polymetrics.ai/internal/connectors/amazon-ads"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: it asserts the

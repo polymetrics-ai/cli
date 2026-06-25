@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/aircall"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/aircall"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: Basic auth

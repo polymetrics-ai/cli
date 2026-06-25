@@ -1,6 +1,6 @@
 package cin7
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Cin7 Core API resource path (relative
 // to base_url), the JSON record-selector path that holds the array of objects in

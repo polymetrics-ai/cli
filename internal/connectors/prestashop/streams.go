@@ -1,6 +1,6 @@
 package prestashop
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the PrestaShop Webservice resource path
 // (relative to <shop_url>/api) it reads from, and the record mapper that

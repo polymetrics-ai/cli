@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	acuityscheduling "polymetrics/internal/connectors/acuity-scheduling"
+	"polymetrics.ai/internal/connectors"
+	acuityscheduling "polymetrics.ai/internal/connectors/acuity-scheduling"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Acuity

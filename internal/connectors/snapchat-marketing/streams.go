@@ -1,6 +1,6 @@
 package snapchatmarketing
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamSpec describes how a Snapchat Ads API stream is read. The Snapchat
 // Marketing API is hierarchical: organizations are top-level, ad accounts hang

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/chargebee"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/chargebee"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Chargebee

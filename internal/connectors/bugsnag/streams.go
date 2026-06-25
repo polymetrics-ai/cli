@@ -1,6 +1,6 @@
 package bugsnag
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // scope describes the parent resource a stream's endpoint is nested under in the
 // Bugsnag Data Access API. Bugsnag resources form a hierarchy:

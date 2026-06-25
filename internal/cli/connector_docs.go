@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 func writeConnectorDocs(dir string, registry *connectors.Registry) error {

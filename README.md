@@ -35,24 +35,30 @@ Moving data today means renting a cloud pipeline (Fivetran's surprise MAR bills)
 
 ## ⚡ Quickstart (60 seconds)
 
-> Requires **Go 1.24+**. `make build` auto-fetches the right toolchain.
+**Install** (Go 1.24+):
 
 ```bash
-git clone https://github.com/karthik-sivadas/polymetrics-cli
-cd polymetrics-cli
-make build                      # → ./pm
+go install polymetrics.ai/cmd/pm@latest      # installs the `pm` binary onto your PATH
+```
 
+<sub>Or build from source — <code>git clone https://github.com/karthik-sivadas/polymetrics-cli && cd polymetrics-cli && make build</code> (produces <code>./pm</code>; <code>make build</code> auto-fetches the Go 1.24 toolchain).</sub>
+
+**Run** a full extract → land → query loop with zero external services:
+
+```bash
 export PM_SAMPLE_TOKEN=demo
-./pm init
-./pm credentials add sample    --connector sample    --from-env token=PM_SAMPLE_TOKEN
-./pm credentials add warehouse --connector warehouse --config path=.polymetrics/warehouse
-./pm connections create demo \
+pm init
+pm credentials add sample    --connector sample    --from-env token=PM_SAMPLE_TOKEN
+pm credentials add warehouse --connector warehouse --config path=.polymetrics/warehouse
+pm connections create demo \
   --source sample:sample --destination warehouse:warehouse \
   --stream customers --primary-key id --cursor updated_at --table customers
 
-./pm etl run   --connection demo --stream customers --json   # 1. extract
-./pm query run --table customers --limit 5 --json            # 2. analyze
+pm etl run   --connection demo --stream customers --json   # 1. extract
+pm query run --table customers --limit 5 --json            # 2. analyze
 ```
+
+<sub>Built from source instead of <code>go install</code>? Use <code>./pm</code>, or run <code>make install</code> to put <code>pm</code> on your PATH.</sub>
 
 That's a full **extract → land → query** loop with zero external services. Swap `sample` for `github`, `stripe`, `postgres`, `slack`, `hubspot`, or any of the [118+ connectors](#-connectors) — then add a `reverse` step to write results back.
 

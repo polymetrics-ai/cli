@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	snapchatmarketing "polymetrics/internal/connectors/snapchat-marketing"
+	"polymetrics.ai/internal/connectors"
+	snapchatmarketing "polymetrics.ai/internal/connectors/snapchat-marketing"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: it stands up a fake

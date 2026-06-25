@@ -1,6 +1,6 @@
 package ciscomeraki
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Meraki API resource path it reads from
 // and the record mapper that flattens its objects. orgScoped streams require an

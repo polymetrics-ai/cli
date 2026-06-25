@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/instagram"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/instagram"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Instagram

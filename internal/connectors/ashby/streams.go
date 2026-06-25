@@ -1,6 +1,6 @@
 package ashby
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Ashby API resource path (relative to
 // base_url) it reads from, and the record mapper that flattens its objects.

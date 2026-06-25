@@ -1,6 +1,6 @@
 package campayn
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Campayn API resource path (relative to
 // base_url) it reads from, and the record mapper that shapes its objects. Campayn

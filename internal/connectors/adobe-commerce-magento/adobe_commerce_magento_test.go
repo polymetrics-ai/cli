@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	adobe "polymetrics/internal/connectors/adobe-commerce-magento"
+	"polymetrics.ai/internal/connectors"
+	adobe "polymetrics.ai/internal/connectors/adobe-commerce-magento"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Adobe Commerce

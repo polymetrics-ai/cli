@@ -1,6 +1,6 @@
 package buildkite
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // scope describes whether a stream's endpoint is rooted at the top-level API or
 // scoped under a specific organization slug.

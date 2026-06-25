@@ -1,6 +1,6 @@
 package alphavantage
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamSpec describes an Alpha Vantage "function" endpoint and how to extract
 // its records. Alpha Vantage does not return JSON arrays: the time-series

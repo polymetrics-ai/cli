@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	bunnyinc "polymetrics/internal/connectors/bunny-inc"
+	"polymetrics.ai/internal/connectors"
+	bunnyinc "polymetrics.ai/internal/connectors/bunny-inc"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Bunny, Inc.

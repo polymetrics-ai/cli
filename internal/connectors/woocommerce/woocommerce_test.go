@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/woocommerce"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/woocommerce"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the WooCommerce

@@ -1,6 +1,6 @@
 package twitter
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint describes how a published stream maps onto the Twitter API v2
 // recent-search endpoint. Both streams read from the same endpoint

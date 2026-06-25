@@ -1,6 +1,6 @@
 package alpacabrokerapi
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Alpaca Broker API resource path
 // (relative to base_url) it reads from, the record mapper that flattens its

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/safety"
+	"polymetrics.ai/internal/safety"
 )
 
 func TestSanitizeTerminalStripsControlAndDangerousUnicode(t *testing.T) {

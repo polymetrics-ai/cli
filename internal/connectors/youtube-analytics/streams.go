@@ -1,6 +1,6 @@
 package youtubeanalytics
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the YouTube Reporting API resource path
 // (relative to base_url), the JSON field the records array lives under, and the

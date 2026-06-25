@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 // writeAction describes an allow-listed reverse-ETL action: the HTTP method and

@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/intercom"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/intercom"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: Bearer auth, Intercom

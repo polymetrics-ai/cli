@@ -1,6 +1,6 @@
 package campaignmonitor
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint describes how to read one Campaign Monitor stream: the API
 // resource path (relative to base_url), whether it is per-client (requiring a

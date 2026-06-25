@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/monday"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/monday"
 )
 
 // graphqlRequest is the minimal shape of a monday.com GraphQL POST body.

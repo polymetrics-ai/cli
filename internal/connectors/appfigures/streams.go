@@ -1,6 +1,6 @@
 package appfigures
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // shape describes how a stream's records are laid out in the Appfigures JSON
 // response so the read loop can extract them generically.

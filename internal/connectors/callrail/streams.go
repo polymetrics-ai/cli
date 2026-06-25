@@ -1,6 +1,6 @@
 package callrail
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the CallRail API resource file (relative
 // to the account-scoped path), the JSON key holding the record array in the

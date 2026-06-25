@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	googleanalyticsdataapi "polymetrics/internal/connectors/google-analytics-data-api"
+	"polymetrics.ai/internal/connectors"
+	googleanalyticsdataapi "polymetrics.ai/internal/connectors/google-analytics-data-api"
 )
 
 // runReportRequest mirrors the subset of the GA4 runReport request body the

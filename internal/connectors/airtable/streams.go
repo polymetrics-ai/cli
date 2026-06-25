@@ -1,6 +1,6 @@
 package airtable
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to how its Airtable list endpoint is built
 // and the record mapper that flattens its objects. Airtable has three relevant

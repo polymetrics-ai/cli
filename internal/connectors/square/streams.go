@@ -1,6 +1,6 @@
 package square
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Square API resource path (relative to
 // base_url) it reads from, the JSON key under which the records array lives, the

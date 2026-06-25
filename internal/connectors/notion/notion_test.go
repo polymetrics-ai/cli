@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/notion"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/notion"
 )
 
 // TestSearchPaginatesAndAuthenticates is the red-first test: it asserts the

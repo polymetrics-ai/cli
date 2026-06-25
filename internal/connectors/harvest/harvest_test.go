@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/harvest"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/harvest"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Harvest

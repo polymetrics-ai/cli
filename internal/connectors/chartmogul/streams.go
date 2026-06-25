@@ -1,6 +1,6 @@
 package chartmogul
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // paginationKind describes how a ChartMogul endpoint paginates.
 type paginationKind int

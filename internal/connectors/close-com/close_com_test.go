@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	closecom "polymetrics/internal/connectors/close-com"
+	"polymetrics.ai/internal/connectors"
+	closecom "polymetrics.ai/internal/connectors/close-com"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Close.com

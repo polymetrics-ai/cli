@@ -3,7 +3,7 @@ package apifydataset
 import (
 	"fmt"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 // streamEndpoint maps a stream name to the Apify API resource it reads from. The

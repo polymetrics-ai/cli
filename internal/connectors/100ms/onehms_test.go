@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	onehms "polymetrics/internal/connectors/100ms"
+	"polymetrics.ai/internal/connectors"
+	onehms "polymetrics.ai/internal/connectors/100ms"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: Bearer auth with the

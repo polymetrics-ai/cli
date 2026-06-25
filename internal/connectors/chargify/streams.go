@@ -1,6 +1,6 @@
 package chargify
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Chargify API resource path (relative
 // to base_url) it reads from, the wrapper key Chargify nests each list element

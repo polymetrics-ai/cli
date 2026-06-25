@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/campayn"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/campayn"
 )
 
 // TestReadListsAuthenticates is the red-first test for the Campayn connector:

@@ -1,6 +1,6 @@
 package braze
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Braze list export endpoint it reads
 // from, the top-level JSON field that holds the records array, and the mapper

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/bingads"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/bingads"
 )
 
 // TestReadAccountsAuthenticatesAndMaps is the red-first test for the Bing Ads

@@ -1,6 +1,6 @@
 package blogger
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to how it is read from the Blogger API.
 type streamEndpoint struct {

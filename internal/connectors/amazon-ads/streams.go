@@ -1,6 +1,6 @@
 package amazonads
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Amazon Ads API resource path
 // (relative to base_url), whether the request must carry the

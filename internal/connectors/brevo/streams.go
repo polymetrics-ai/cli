@@ -1,6 +1,6 @@
 package brevo
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Brevo API resource path (relative to
 // base_url), the JSON path to the records array in the response body, and the

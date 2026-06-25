@@ -1,6 +1,6 @@
 package freshsales
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Freshsales resource and the JSON key
 // under which its records array lives, plus the record mapper that flattens its

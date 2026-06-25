@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 func cloneStringMap(in map[string]string) map[string]string {

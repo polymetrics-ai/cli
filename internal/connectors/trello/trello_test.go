@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/trello"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/trello"
 )
 
 // TestReadCardsAuthenticatesAndPaginates is the red-first test for the Trello

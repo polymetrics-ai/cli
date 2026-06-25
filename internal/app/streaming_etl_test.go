@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 type streamingSource struct {

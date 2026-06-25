@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	amazonsellerpartner "polymetrics/internal/connectors/amazon-seller-partner"
+	"polymetrics.ai/internal/connectors"
+	amazonsellerpartner "polymetrics.ai/internal/connectors/amazon-seller-partner"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: it asserts the LWA

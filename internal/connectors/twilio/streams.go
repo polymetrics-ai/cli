@@ -1,6 +1,6 @@
 package twilio
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the account-scoped Twilio resource path
 // segment (relative to /Accounts/{sid}) it reads from, the JSON key holding the

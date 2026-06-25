@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/calendly"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/calendly"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Calendly

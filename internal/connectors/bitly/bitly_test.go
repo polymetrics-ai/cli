@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/bitly"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/bitly"
 )
 
 // TestReadGroupsAuthenticates is the red-first test: Bearer auth on the

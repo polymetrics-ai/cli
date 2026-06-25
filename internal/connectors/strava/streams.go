@@ -1,6 +1,6 @@
 package strava
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Strava API resource path (relative to
 // base_url) and the record mapper that flattens its objects.

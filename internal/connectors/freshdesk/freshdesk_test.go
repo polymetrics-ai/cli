@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/freshdesk"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/freshdesk"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Freshdesk

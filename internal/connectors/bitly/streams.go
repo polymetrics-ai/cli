@@ -1,6 +1,6 @@
 package bitly
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to its Bitly list endpoint shape: the
 // resource path (relative to base_url), the JSON key under which the records

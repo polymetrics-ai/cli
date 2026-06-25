@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	alphavantage "polymetrics/internal/connectors/alpha-vantage"
+	"polymetrics.ai/internal/connectors"
+	alphavantage "polymetrics.ai/internal/connectors/alpha-vantage"
 )
 
 // TestReadDailyAuthenticatesAndMaps is the red-first test: the apikey query

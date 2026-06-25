@@ -8,8 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/ashby"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/ashby"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Ashby

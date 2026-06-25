@@ -1,6 +1,6 @@
 package postgres
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // pgTypeToFieldType maps a PostgreSQL information_schema.columns.data_type value
 // to the connector's coarse field type vocabulary. Unknown types fall back to

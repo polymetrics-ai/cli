@@ -1,6 +1,6 @@
 package paypaltransaction
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // pagination identifies how a PayPal endpoint exposes additional pages so the
 // read loop knows which paginator to drive.

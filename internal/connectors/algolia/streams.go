@@ -1,6 +1,6 @@
 package algolia
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Algolia API resource path (relative
 // to base_url), the JSON path to its records array, and the record mapper that

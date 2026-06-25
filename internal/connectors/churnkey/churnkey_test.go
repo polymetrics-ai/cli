@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/churnkey"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/churnkey"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Churnkey

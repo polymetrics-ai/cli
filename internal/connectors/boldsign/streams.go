@@ -1,6 +1,6 @@
 package boldsign
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the BoldSign API resource path (relative
 // to base_url), the JSON path to the records array in the list response, and the

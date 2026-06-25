@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/cli"
+	"polymetrics.ai/internal/cli"
 )
 
 func TestUnknownCommandJSONErrorIsStructuredAndSanitized(t *testing.T) {

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	awscloudtrail "polymetrics/internal/connectors/aws-cloudtrail"
+	"polymetrics.ai/internal/connectors"
+	awscloudtrail "polymetrics.ai/internal/connectors/aws-cloudtrail"
 )
 
 // TestReadPaginatesAndSigns is the red-first test: it asserts AWS SigV4 auth on

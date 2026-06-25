@@ -33,8 +33,8 @@ import (
 	"strconv"
 	"strings"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

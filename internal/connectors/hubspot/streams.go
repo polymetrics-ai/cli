@@ -1,6 +1,6 @@
 package hubspot
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the HubSpot CRM v3 object segment it reads
 // from (relative to /crm/v3/objects) and the record mapper that flattens its

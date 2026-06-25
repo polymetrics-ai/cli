@@ -10,14 +10,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"polymetrics/internal/app"
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/registryset"
-	"polymetrics/internal/coordination"
-	"polymetrics/internal/ledger"
-	"polymetrics/internal/perf"
-	"polymetrics/internal/runtimecheck"
-	"polymetrics/internal/safety"
+	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/registryset"
+	"polymetrics.ai/internal/coordination"
+	"polymetrics.ai/internal/ledger"
+	"polymetrics.ai/internal/perf"
+	"polymetrics.ai/internal/runtimecheck"
+	"polymetrics.ai/internal/safety"
 )
 
 type envelope map[string]any

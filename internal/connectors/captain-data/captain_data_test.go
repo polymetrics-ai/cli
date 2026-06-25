@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	captaindata "polymetrics/internal/connectors/captain-data"
+	"polymetrics.ai/internal/connectors"
+	captaindata "polymetrics.ai/internal/connectors/captain-data"
 )
 
 // TestReadWorkflowsAuthenticates is the red-first test for the Captain Data

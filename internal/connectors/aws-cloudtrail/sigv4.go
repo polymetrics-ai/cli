@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"polymetrics/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 // sigV4Signer applies an AWS Signature Version 4 Authorization header to each

@@ -1,6 +1,6 @@
 package capsulecrm
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Capsule CRM v2 list endpoint path
 // (relative to base_url), the JSON wrapper key holding the array of objects, and

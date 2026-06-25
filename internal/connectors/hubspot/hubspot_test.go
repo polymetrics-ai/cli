@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/hubspot"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/hubspot"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the HubSpot

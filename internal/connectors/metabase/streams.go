@@ -1,6 +1,6 @@
 package metabase
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Metabase API resource path (relative
 // to instance_api_url) it reads from, and the record mapper that projects its

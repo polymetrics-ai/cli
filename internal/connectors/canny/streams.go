@@ -1,6 +1,6 @@
 package canny
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Canny API resource path (relative to
 // base_url) it reads from, the JSON key holding the records array in the

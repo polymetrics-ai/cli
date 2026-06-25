@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"polymetrics/internal/app"
+	"polymetrics.ai/internal/app"
 )
 
 func TestLocalETLAndReverseETLWorkflow(t *testing.T) {

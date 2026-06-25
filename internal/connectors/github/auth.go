@@ -18,7 +18,7 @@ import (
 	"strings"
 	"time"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 type githubAuthMode string

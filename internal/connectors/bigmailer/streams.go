@@ -1,6 +1,6 @@
 package bigmailer
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint describes how a BigMailer stream is read.
 //

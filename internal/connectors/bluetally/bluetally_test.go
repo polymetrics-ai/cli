@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/bluetally"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/bluetally"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: it asserts Bearer auth

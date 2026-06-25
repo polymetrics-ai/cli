@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/airtable"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/airtable"
 )
 
 // TestReadBasesPaginatesAndAuthenticates is the red-first test: Bearer auth,

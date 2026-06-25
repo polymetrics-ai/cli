@@ -1,6 +1,6 @@
 package appfollow
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the AppFollow API resource path (relative
 // to base_url), the dotted JSON path its records live at, and the mapper that

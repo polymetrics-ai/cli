@@ -3,7 +3,7 @@ package bingads
 import (
 	"strings"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 // serviceKind selects which Bing Ads REST service (and therefore which base URL

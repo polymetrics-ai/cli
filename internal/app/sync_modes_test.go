@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 type scriptedSyncSource struct {

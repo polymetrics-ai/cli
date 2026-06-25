@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"polymetrics/internal/app"
+	"polymetrics.ai/internal/app"
 )
 
 // TestDuckDBJoinAndAggregate is the red-first test for the DuckDB-backed query

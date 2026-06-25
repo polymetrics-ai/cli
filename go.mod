@@ -1,4 +1,4 @@
-module polymetrics
+module polymetrics.ai
 
 go 1.24
 

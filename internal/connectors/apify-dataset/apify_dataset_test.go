@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	apifydataset "polymetrics/internal/connectors/apify-dataset"
+	"polymetrics.ai/internal/connectors"
+	apifydataset "polymetrics.ai/internal/connectors/apify-dataset"
 )
 
 // TestReadItemsPaginatesAndAuthenticates is the red-first test for the Apify

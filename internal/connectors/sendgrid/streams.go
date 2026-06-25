@@ -1,6 +1,6 @@
 package sendgrid
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // paginationStyle selects how a stream walks its pages.
 type paginationStyle int

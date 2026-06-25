@@ -1,6 +1,6 @@
 package breezyhr
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // breezyStreams returns the connector's published stream catalog. Breezy exposes
 // positions for a company, the candidates on each position, and the company's

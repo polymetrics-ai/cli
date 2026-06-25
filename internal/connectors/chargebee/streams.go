@@ -1,6 +1,6 @@
 package chargebee
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Chargebee API resource path (relative
 // to base_url) it reads from, the JSON key each list item wraps its object in

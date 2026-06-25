@@ -1,6 +1,6 @@
 package aha
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Aha! API resource path segment (under
 // /api/v1) it reads from, the JSON envelope key that holds its records array, and

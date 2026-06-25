@@ -1,6 +1,6 @@
 package applesearchads
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Apple Search Ads API resource it reads
 // from, the HTTP method, and the record mapper that flattens its objects.

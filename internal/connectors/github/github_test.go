@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/github"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/github"
 )
 
 // TestNewContract is the red-first test for the migrated per-system GitHub

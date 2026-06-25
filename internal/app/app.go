@@ -14,9 +14,9 @@ import (
 	"strings"
 	"time"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/registryset"
-	"polymetrics/internal/vault"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/registryset"
+	"polymetrics.ai/internal/vault"
 )
 
 type App struct {

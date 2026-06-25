@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/slack"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/slack"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: Bearer auth, Slack

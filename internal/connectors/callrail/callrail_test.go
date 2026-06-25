@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/callrail"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/callrail"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: it asserts the

@@ -1,6 +1,6 @@
 package zendeskchat
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // pagination distinguishes the two read shapes Zendesk Chat exposes.
 type pagination int

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	campaignmonitor "polymetrics/internal/connectors/campaign-monitor"
+	"polymetrics.ai/internal/connectors"
+	campaignmonitor "polymetrics.ai/internal/connectors/campaign-monitor"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: HTTP Basic auth

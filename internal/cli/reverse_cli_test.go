@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/cli"
+	"polymetrics.ai/internal/cli"
 )
 
 func TestReverseETLCLIWorkflowIsScriptableAndApprovalBounded(t *testing.T) {

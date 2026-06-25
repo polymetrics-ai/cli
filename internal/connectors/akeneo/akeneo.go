@@ -26,8 +26,8 @@ import (
 	"sync"
 	"time"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 const (

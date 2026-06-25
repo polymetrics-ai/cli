@@ -16,7 +16,7 @@ import (
 
 	_ "github.com/marcboeker/go-duckdb"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 // newSQLEngine returns the DuckDB-backed analytical engine (built only with

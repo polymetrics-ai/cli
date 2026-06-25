@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/klaviyo"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/klaviyo"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: it asserts the

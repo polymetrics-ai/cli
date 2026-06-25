@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/algolia"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/algolia"
 )
 
 // TestReadIndicesPaginatesAndAuthenticates is the red-first test for the Algolia

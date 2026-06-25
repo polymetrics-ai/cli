@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	calcom "polymetrics/internal/connectors/cal-com"
+	"polymetrics.ai/internal/connectors"
+	calcom "polymetrics.ai/internal/connectors/cal-com"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: Bearer auth from the

@@ -1,6 +1,6 @@
 package mailchimp
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Mailchimp Marketing API resource path
 // (relative to base_url), the JSON key under which the records array lives in

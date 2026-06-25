@@ -1,6 +1,6 @@
 package agilecrm
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the AgileCRM API resource path (relative
 // to base_url) it reads from, whether that resource paginates via AgileCRM's

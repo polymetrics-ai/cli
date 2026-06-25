@@ -1,6 +1,6 @@
 package castoredc
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Castor EDC API resource path
 // (relative to base_url), the HAL collection key under "_embedded" where the

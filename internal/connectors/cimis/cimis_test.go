@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/cimis"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/cimis"
 )
 
 // TestReadDataAuthenticatesAndFlattensProviders is the red-first test for the

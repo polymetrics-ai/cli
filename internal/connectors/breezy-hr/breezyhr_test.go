@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	breezyhr "polymetrics/internal/connectors/breezy-hr"
+	"polymetrics.ai/internal/connectors"
+	breezyhr "polymetrics.ai/internal/connectors/breezy-hr"
 )
 
 // TestReadPositionsPaginatesAndAuthenticates is the red-first test for the

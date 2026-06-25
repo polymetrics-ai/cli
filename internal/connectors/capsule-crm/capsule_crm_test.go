@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	capsulecrm "polymetrics/internal/connectors/capsule-crm"
+	"polymetrics.ai/internal/connectors"
+	capsulecrm "polymetrics.ai/internal/connectors/capsule-crm"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Capsule CRM

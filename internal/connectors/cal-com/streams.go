@@ -1,6 +1,6 @@
 package calcom
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to its Cal.com v2 API resource path and the
 // behaviour needed to extract and map its records. The read path is fully

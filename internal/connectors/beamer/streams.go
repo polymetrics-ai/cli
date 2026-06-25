@@ -1,6 +1,6 @@
 package beamer
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Beamer API resource path (relative to
 // the /v0 base) it reads from, the incremental cursor field, the cursor's

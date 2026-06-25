@@ -1,6 +1,6 @@
 package aircall
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Aircall API resource path (relative
 // to base_url), the JSON key holding the array of records in the list response,

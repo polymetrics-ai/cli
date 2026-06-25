@@ -1,6 +1,6 @@
 package awinadvertiser
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Awin Advertiser API resource it reads
 // from (relative to base_url, with the {advertiserId} placeholder substituted at

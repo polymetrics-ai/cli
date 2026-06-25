@@ -1,6 +1,6 @@
 package slack
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Slack Web API method path (relative
 // to base_url), the JSON list key its records live under (members/channels/

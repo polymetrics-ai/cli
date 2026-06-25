@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/postgres"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/postgres"
 )
 
 // fixtureConfig is a minimal valid fixture-mode config. Fixture mode short

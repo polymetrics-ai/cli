@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	youtubeanalytics "polymetrics/internal/connectors/youtube-analytics"
+	"polymetrics.ai/internal/connectors"
+	youtubeanalytics "polymetrics.ai/internal/connectors/youtube-analytics"
 )
 
 // liveConfig builds a RuntimeConfig pointed at an httptest server, with the

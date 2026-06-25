@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 func TestGithubReadExpandedRepositoryStreams(t *testing.T) {

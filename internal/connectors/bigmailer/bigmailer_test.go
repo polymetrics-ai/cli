@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/bigmailer"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/bigmailer"
 )
 
 // TestReadBrandsPaginatesAndAuthenticates is the red-first test: it asserts the

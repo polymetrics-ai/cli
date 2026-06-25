@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/buzzsprout"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/buzzsprout"
 )
 
 // TestReadEpisodesAuthAndPagination is the red-first test: it asserts the

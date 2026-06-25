@@ -1,6 +1,6 @@
 package notion
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Notion API resource and the request
 // shape it uses. Notion exposes two list shapes: POST /search (databases, pages)

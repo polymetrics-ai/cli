@@ -1,6 +1,6 @@
 package awscloudtrail
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamSpec describes a CloudTrail stream: the LookupEvents read-only filter
 // applied to narrow the event set, and the record mapper that flattens an event.

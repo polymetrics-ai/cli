@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 // streamEndpoint maps a stream name to the SP-API resource path it reads from,

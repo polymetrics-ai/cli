@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"polymetrics/internal/safety"
+	"polymetrics.ai/internal/safety"
 )
 
 const apiVersion = "polymetrics.ai/v1"

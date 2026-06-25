@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/cli"
+	"polymetrics.ai/internal/cli"
 )
 
 func TestConnectorCatalogCLIJSON(t *testing.T) {

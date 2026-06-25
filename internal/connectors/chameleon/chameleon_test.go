@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/chameleon"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/chameleon"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Chameleon

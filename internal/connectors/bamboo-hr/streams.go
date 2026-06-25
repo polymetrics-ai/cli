@@ -1,6 +1,6 @@
 package bamboohr
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the BambooHR API resource path (relative
 // to base_url), the dotted JSON path where its record array lives, and the record

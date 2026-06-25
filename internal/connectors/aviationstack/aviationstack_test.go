@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/aviationstack"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/aviationstack"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the aviationstack

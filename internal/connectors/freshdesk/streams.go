@@ -1,6 +1,6 @@
 package freshdesk
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Freshdesk API resource path (relative
 // to base_url, e.g. "tickets") and the record mapper that flattens its objects.

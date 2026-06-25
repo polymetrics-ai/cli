@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	bamboohr "polymetrics/internal/connectors/bamboo-hr"
+	"polymetrics.ai/internal/connectors"
+	bamboohr "polymetrics.ai/internal/connectors/bamboo-hr"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the BambooHR

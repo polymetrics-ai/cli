@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/sendgrid"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/sendgrid"
 )
 
 // TestReadListsPaginatesAndAuthenticates is the red-first test for the SendGrid

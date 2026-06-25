@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/delighted"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/delighted"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Delighted

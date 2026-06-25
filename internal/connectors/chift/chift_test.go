@@ -8,8 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/chift"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/chift"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Chift

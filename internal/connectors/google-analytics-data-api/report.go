@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 // reportResponse is the subset of the GA4 runReport response the connector

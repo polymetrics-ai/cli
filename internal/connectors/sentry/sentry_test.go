@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/sentry"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/sentry"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: it asserts Bearer

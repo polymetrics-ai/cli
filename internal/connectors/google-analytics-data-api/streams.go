@@ -1,6 +1,6 @@
 package googleanalyticsdataapi
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // reportSpec describes a GA4 runReport "stream": a fixed set of dimensions and
 // metrics that are projected onto flat record fields. The GA4 Data API has no

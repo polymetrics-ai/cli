@@ -1,6 +1,6 @@
 package uptick
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Uptick API resource path segment
 // (relative to {base_url}/api/<apiVersion>/) and the record mapper that projects

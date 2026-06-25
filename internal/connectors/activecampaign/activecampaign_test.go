@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/activecampaign"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/activecampaign"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: it asserts the

@@ -1,6 +1,6 @@
 package zendesktalk
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to its Zendesk Talk API resource path
 // (relative to base_url), the JSON key holding its record array, and the mapper

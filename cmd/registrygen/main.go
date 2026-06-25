@@ -22,7 +22,7 @@ import (
 const (
 	connectorsRel = "internal/connectors"
 	outRel        = "internal/connectors/registryset/registry_gen.go"
-	modulePath    = "polymetrics/internal/connectors"
+	modulePath    = "polymetrics.ai/internal/connectors"
 )
 
 // skip lists directories under internal/connectors that are not connector

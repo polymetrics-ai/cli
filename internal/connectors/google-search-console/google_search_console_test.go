@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	googlesearchconsole "polymetrics/internal/connectors/google-search-console"
+	"polymetrics.ai/internal/connectors"
+	googlesearchconsole "polymetrics.ai/internal/connectors/google-search-console"
 )
 
 // TestSearchAnalyticsPaginatesAndAuthenticates is the red-first test: it asserts

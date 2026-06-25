@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/tempo"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/tempo"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Tempo

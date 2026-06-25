@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/canny"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/canny"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Canny

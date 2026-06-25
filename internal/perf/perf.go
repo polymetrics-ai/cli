@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"polymetrics/internal/app"
-	"polymetrics/internal/coordination"
-	"polymetrics/internal/ledger"
-	"polymetrics/internal/runtimecheck"
+	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/coordination"
+	"polymetrics.ai/internal/ledger"
+	"polymetrics.ai/internal/runtimecheck"
 )
 
 type CompareRequest struct {

@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/twitter"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/twitter"
 )
 
 // TestReadTweetsPaginatesAndAuthenticates is the red-first test for the Twitter

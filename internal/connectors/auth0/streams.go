@@ -1,6 +1,6 @@
 package auth0
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Auth0 Management API v2 resource path
 // (relative to base_url) it reads from, the JSON key under which the

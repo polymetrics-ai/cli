@@ -1,6 +1,6 @@
 package breezometer
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // listStream marks endpoints whose `data` payload is an array of time-series
 // points (forecast/history) versus single point-in-time objects (current

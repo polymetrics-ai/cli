@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	carequalitycommission "polymetrics/internal/connectors/care-quality-commission"
+	"polymetrics.ai/internal/connectors"
+	carequalitycommission "polymetrics.ai/internal/connectors/care-quality-commission"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the CQC connector:

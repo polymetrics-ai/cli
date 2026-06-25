@@ -3,7 +3,7 @@ package app
 import (
 	"time"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 type AddCredentialRequest struct {

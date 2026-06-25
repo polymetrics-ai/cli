@@ -1,6 +1,6 @@
 package buzzsprout
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Buzzsprout API resource and how its
 // objects are flattened into connectors.Record values.

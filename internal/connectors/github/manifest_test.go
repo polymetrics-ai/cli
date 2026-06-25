@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/github"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/github"
 )
 
 func TestGithubManifestAdvertisesAllSyncModesAndPRDefaults(t *testing.T) {

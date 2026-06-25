@@ -1,6 +1,6 @@
 package monday
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamSpec describes how one monday.com stream is read from the GraphQL API.
 //

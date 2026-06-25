@@ -1,6 +1,6 @@
 package chift
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Chift API resource path (relative to
 // base_url) it reads from, the record mapper that flattens its objects, and the

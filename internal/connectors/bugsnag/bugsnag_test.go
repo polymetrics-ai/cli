@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/bugsnag"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/bugsnag"
 )
 
 // TestReadOrganizationsPaginatesAndAuthenticates is the red-first test: it

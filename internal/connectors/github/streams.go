@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"strings"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 func githubStreams() []connectors.Stream {

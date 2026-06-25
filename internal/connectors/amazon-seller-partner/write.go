@@ -3,7 +3,7 @@ package amazonsellerpartner
 import (
 	"context"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 // Write is unsupported: the Amazon Selling Partner connector is read-only. SP-API

@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	paypaltransaction "polymetrics/internal/connectors/paypal-transaction"
+	"polymetrics.ai/internal/connectors"
+	paypaltransaction "polymetrics.ai/internal/connectors/paypal-transaction"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the PayPal

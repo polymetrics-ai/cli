@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	awinadvertiser "polymetrics/internal/connectors/awin-advertiser"
+	"polymetrics.ai/internal/connectors"
+	awinadvertiser "polymetrics.ai/internal/connectors/awin-advertiser"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: it asserts the Awin

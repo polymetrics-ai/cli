@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 type skillDoc struct {

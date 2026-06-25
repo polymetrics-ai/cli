@@ -1,6 +1,6 @@
 package adobecommercemagento
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Magento REST resource path (relative
 // to <base>/rest/<api_version>) it reads from, and the record mapper that

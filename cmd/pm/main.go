@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"polymetrics/internal/cli"
+	"polymetrics.ai/internal/cli"
 )
 
 func main() {

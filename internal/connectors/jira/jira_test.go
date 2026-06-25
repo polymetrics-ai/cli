@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/jira"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/jira"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Jira

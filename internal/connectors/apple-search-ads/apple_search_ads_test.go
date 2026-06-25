@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	applesearchads "polymetrics/internal/connectors/apple-search-ads"
+	"polymetrics.ai/internal/connectors"
+	applesearchads "polymetrics.ai/internal/connectors/apple-search-ads"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Apple Search

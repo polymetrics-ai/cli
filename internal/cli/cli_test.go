@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/cli"
+	"polymetrics.ai/internal/cli"
 )
 
 func TestHelpIncludesManPageStyleSections(t *testing.T) {

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/prestashop"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/prestashop"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the PrestaShop

@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/uptick"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/uptick"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Uptick

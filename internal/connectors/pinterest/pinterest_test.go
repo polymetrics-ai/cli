@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/pinterest"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/pinterest"
 )
 
 // testConfig builds a RuntimeConfig pointed at the test server with the three

@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 func TestGithubPullRequestsETLSupportsAllSyncModes(t *testing.T) {

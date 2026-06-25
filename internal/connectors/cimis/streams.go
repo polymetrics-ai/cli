@@ -1,6 +1,6 @@
 package cimis
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // scope distinguishes the two flavours of CIMIS /api/data reads.
 type scope string

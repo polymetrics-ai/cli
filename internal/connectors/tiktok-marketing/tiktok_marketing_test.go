@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	tiktokmarketing "polymetrics/internal/connectors/tiktok-marketing"
+	"polymetrics.ai/internal/connectors"
+	tiktokmarketing "polymetrics.ai/internal/connectors/tiktok-marketing"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test: it asserts the custom

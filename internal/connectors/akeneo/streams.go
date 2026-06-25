@@ -1,6 +1,6 @@
 package akeneo
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Akeneo REST resource path (relative to
 // the /api/rest/v1 base) it reads from, and the record mapper that flattens its

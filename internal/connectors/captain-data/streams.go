@@ -1,6 +1,6 @@
 package captaindata
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Captain Data v3 API resource it reads
 // from and the record mapper that flattens its objects.

@@ -1,6 +1,6 @@
 package sentry
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // scope describes the path-template scope a Sentry endpoint requires.
 type scope int

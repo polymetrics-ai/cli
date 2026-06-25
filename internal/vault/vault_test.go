@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/vault"
+	"polymetrics.ai/internal/vault"
 )
 
 func TestVaultEncryptsSecretsAtRest(t *testing.T) {

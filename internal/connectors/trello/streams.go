@@ -1,6 +1,6 @@
 package trello
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // scope describes how a Trello stream is fetched relative to the API base URL.
 //   - boardScoped streams are read once per board at /boards/{id}/<resource>.

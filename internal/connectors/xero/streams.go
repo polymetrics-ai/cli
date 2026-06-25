@@ -1,6 +1,6 @@
 package xero
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Xero Accounting API resource path
 // (relative to base_url), the JSON key the records array lives under in the

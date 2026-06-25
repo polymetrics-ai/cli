@@ -1,6 +1,6 @@
 package freshdesk
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // allSyncModes mirrors connectors.allSyncModes (unexported there). Kept local so
 // the freshdesk package does not depend on an unexported connectors helper.

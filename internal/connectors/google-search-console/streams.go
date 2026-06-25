@@ -3,7 +3,7 @@ package googlesearchconsole
 import (
 	"fmt"
 
-	"polymetrics/internal/connectors"
+	"polymetrics.ai/internal/connectors"
 )
 
 // stringify renders a value (which may be a nested array/object from the sitemap

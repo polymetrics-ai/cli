@@ -1,6 +1,6 @@
 package bunnyinc
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint describes how to read one Bunny GraphQL collection. Bunny exposes
 // a single POST /graphql endpoint; each stream is a top-level connection field

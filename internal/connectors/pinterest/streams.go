@@ -1,6 +1,6 @@
 package pinterest
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Pinterest API v5 resource path it
 // reads from, whether that path is scoped to an ad account, and the record

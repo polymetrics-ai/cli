@@ -1,6 +1,6 @@
 package appcues
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Appcues resource segment (appended to
 // accounts/{account_id}/) it reads from, and the record mapper that flattens its

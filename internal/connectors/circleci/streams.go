@@ -1,6 +1,6 @@
 package circleci
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamShape distinguishes the two response shapes the CircleCI v2 API returns:
 // a paginated list ({"items":[...],"next_page_token":...}) versus a single

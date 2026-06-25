@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	sevenshifts "polymetrics/internal/connectors/7shifts"
+	"polymetrics.ai/internal/connectors"
+	sevenshifts "polymetrics.ai/internal/connectors/7shifts"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the 7shifts

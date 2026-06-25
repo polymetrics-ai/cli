@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/blogger"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/blogger"
 )
 
 // TestReadPaginatesAndAuthenticates is the red-first test for the Blogger

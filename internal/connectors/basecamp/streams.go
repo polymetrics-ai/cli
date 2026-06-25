@@ -1,6 +1,6 @@
 package basecamp
 
-import "polymetrics/internal/connectors"
+import "polymetrics.ai/internal/connectors"
 
 // streamEndpoint maps a stream name to the Basecamp API resource path (relative
 // to base_url, which already includes the account id) it reads from, and the

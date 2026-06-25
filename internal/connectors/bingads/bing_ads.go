@@ -27,8 +27,8 @@ import (
 	"net/url"
 	"strings"
 
-	"polymetrics/internal/connectors"
-	"polymetrics/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 const (
