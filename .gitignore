@@ -1,0 +1,14 @@
+poly
+
+# Built binary (Makefile builds ./pm; ~45MB, do not commit)
+/pm
+
+# Local Claude Code settings
+.claude/settings.local.json
+
+.polymetrics/
+deploy/compose/.env
+
+*.tmp
+*.log
+

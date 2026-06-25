@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "wave0-duckdb-warehouse-query",
+  "images": [
+    {
+      "direction": "direction-a",
+      "source": "pending-human-or-image-tool",
+      "promptRef": "docs/design/generated/wave0-duckdb-warehouse-query-direction-a.prompt.md",
+      "imageRef": null,
+      "imageUrl": null,
+      "critiqueRef": "docs/design/generated/wave0-duckdb-warehouse-query-direction-a-critique.md",
+      "selected": false,
+      "notes": "Use an attached human reference or generated image before frontend implementation.",
+      "createdAt": "2026-06-25T17:40:37.920Z"
+    }
+  ],
+  "updatedAt": "2026-06-25T17:40:37.920Z"
+}

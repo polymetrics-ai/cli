@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "native-runtime-capability-matrix",
+  "images": [
+    {
+      "direction": "direction-a",
+      "source": "pending-human-or-image-tool",
+      "promptRef": "docs/design/generated/native-runtime-capability-matrix-direction-a.prompt.md",
+      "imageRef": null,
+      "imageUrl": null,
+      "critiqueRef": "docs/design/generated/native-runtime-capability-matrix-direction-a-critique.md",
+      "selected": false,
+      "notes": "Use an attached human reference or generated image before frontend implementation.",
+      "createdAt": "2026-06-25T12:39:54.605Z"
+    }
+  ],
+  "updatedAt": "2026-06-25T12:39:54.605Z"
+}

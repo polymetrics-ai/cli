@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "airbyte-style-sync-modes",
+  "images": [
+    {
+      "direction": "direction-a",
+      "source": "pending-human-or-image-tool",
+      "promptRef": "docs/design/generated/airbyte-style-sync-modes-direction-a.prompt.md",
+      "imageRef": null,
+      "imageUrl": null,
+      "critiqueRef": "docs/design/generated/airbyte-style-sync-modes-direction-a-critique.md",
+      "selected": false,
+      "notes": "Use an attached human reference or generated image before frontend implementation.",
+      "createdAt": "2026-06-24T20:41:49.425Z"
+    }
+  ],
+  "updatedAt": "2026-06-24T20:41:49.425Z"
+}

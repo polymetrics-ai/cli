@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "native-connector-port-program",
+  "status": "completed_with_warnings",
+  "reason": "Implementation and local verification passed; the generic GSD helper still cannot infer Makefile checks and git diff fails because this folder is not a git worktree.",
+  "details": {
+    "catalog_total": 647,
+    "native_port_families": {
+      "native_saas": 1,
+      "declarative_http_source": 503,
+      "database_cdc_source": 7,
+      "database_source": 18,
+      "file_object_source": 11,
+      "destination_writer": 56,
+      "custom_go_port": 51
+    },
+    "installed_binary": "/Users/karthiksivadas/.local/bin/pm",
+    "verification": [
+      "go test ./internal/connectors -run TestNativePort",
+      "go test ./internal/cli -run TestConnectorPortPlan",
+      "go test ./...",
+      "go vet ./...",
+      "go build -o pm ./cmd/pm",
+      "./pm docs generate --dir docs/cli --connectors-dir docs/connectors",
+      "./pm docs validate --connectors-dir docs/connectors",
+      "make verify",
+      "make install"
+    ]
+  },
+  "updatedAt": "2026-06-25T14:05:00+05:30"
+}

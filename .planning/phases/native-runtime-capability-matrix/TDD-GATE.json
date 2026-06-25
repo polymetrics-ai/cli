@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "native-runtime-capability-matrix",
+  "planRefs": [
+    ".planning/phases/native-runtime-capability-matrix/EVAL-PLAN.md",
+    ".planning/phases/native-runtime-capability-matrix/PLAN.md",
+    ".planning/phases/native-runtime-capability-matrix/TEST-PLAN.md"
+  ],
+  "ledgerRef": ".planning/phases/native-runtime-capability-matrix/TDD-LEDGER.md",
+  "passed": true,
+  "tasks": [],
+  "behaviorTasks": [],
+  "failures": [],
+  "updatedAt": "2026-06-25T12:42:43.798Z"
+}

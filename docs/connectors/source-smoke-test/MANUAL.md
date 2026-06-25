@@ -1,0 +1,89 @@
+# pm connectors inspect source-smoke-test
+
+```text
+NAME
+  pm connectors inspect source-smoke-test - Smoke Test connector manual
+
+SYNOPSIS
+  pm connectors inspect source-smoke-test
+  pm connectors inspect source-smoke-test --json
+  pm credentials add <name> --connector source-smoke-test [--config key=value] [--from-env field=ENV] [--value-stdin field]
+
+DESCRIPTION
+  Smoke Test catalog connector for https://docs.airbyte.com/integrations/sources/smoke-test. Native implementation status: planned_native_port.
+
+CAPABILITIES
+  catalog_metadata=true
+  connector type: source
+  release stage: alpha
+  support level: community
+
+IMPLEMENTATION STATUS
+  implementation_status: planned_native_port
+  runtime_kind: native_go
+  notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
+  upstream image reference: airbyte/source-smoke-test:0.1.0 (metadata only; not executed)
+
+RUNTIME CAPABILITIES
+  metadata=true
+  check=false
+  catalog=false
+  read=false
+  write=false
+  query=false
+  etl=false
+  reverse_etl=false
+  unsupported_reason: Native Go port is planned but not enabled; only catalog metadata is available.
+
+NATIVE PORT PLAN
+  family: custom_go_port
+  priority_wave: 3
+  etl_operations: catalog, check, read_snapshot
+  reverse_etl_operations: none until native write conformance passes
+  conformance: catalog, check, docs_skill, read_fixture, secret_redaction, spec, state_checkpoint
+
+OFFICIAL APPLICATION DOCUMENTATION
+  No upstream application documentation URL was listed in the imported connector registry.
+  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/smoke-test
+
+CONFIGURATION
+  all_fast_streams (boolean): Include all fast (non-high-volume) predefined streams.
+  all_slow_streams (boolean): Include all slow (high-volume) streams such as large_batch_stream. These are excluded by default to avoid incurring the cost of large record sets.
+  custom_scenarios (array): Additional test scenarios to inject at runtime. Each scenario defines a stream name, JSON schema, and records.
+  large_batch_record_count (integer): Number of records to generate for the large_batch_stream scenario. Set to 0 to emit no records for this stream.
+  namespace ([string null]): Namespace (schema/database) to set on all streams. When provided, the destination will write data into this namespace.
+  scenario_filter (array): Specific scenario names to include. These are unioned with the boolean-driven sets (deduped). If omitted or empty, only the boolean flags control selection.
+
+SYNC MODES
+  supported sync modes: full_refresh
+  supports incremental: false
+
+SECURITY
+  Secret values are never rendered; only secret field names are shown.
+  Upstream image references are metadata only and are not executed by pm.
+  Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
+
+DOCUMENTATION
+  https://docs.airbyte.com/integrations/sources/smoke-test
+
+EXAMPLES
+  # Inspect catalog entry
+  pm connectors inspect source-smoke-test
+
+  # Inspect as JSON
+  pm connectors inspect source-smoke-test --json
+
+AGENT WORKFLOW
+  - Read implementation_status before planning ETL or reverse ETL.
+  - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
+  - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
+
+SEE ALSO
+  Smoke Test documentation: https://docs.airbyte.com/integrations/sources/smoke-test
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+
+```

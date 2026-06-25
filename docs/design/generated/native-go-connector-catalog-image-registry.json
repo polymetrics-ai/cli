@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "native-go-connector-catalog",
+  "images": [
+    {
+      "direction": "direction-a",
+      "source": "pending-human-or-image-tool",
+      "promptRef": "docs/design/generated/native-go-connector-catalog-direction-a.prompt.md",
+      "imageRef": null,
+      "imageUrl": null,
+      "critiqueRef": "docs/design/generated/native-go-connector-catalog-direction-a-critique.md",
+      "selected": false,
+      "notes": "Use an attached human reference or generated image before frontend implementation.",
+      "createdAt": "2026-06-25T12:29:36.452Z"
+    }
+  ],
+  "updatedAt": "2026-06-25T12:29:36.452Z"
+}

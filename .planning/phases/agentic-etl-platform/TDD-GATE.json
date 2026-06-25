@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "agentic-etl-platform",
+  "planRefs": [
+    ".planning/phases/agentic-etl-platform/EVAL-PLAN.md",
+    ".planning/phases/agentic-etl-platform/PLAN.md",
+    ".planning/phases/agentic-etl-platform/TEST-PLAN.md"
+  ],
+  "ledgerRef": ".planning/phases/agentic-etl-platform/TDD-LEDGER.md",
+  "passed": true,
+  "tasks": [
+    {
+      "id": "record-baseline-verification-and-prompt-snapshot",
+      "text": "Record baseline verification and prompt snapshot.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "add-red-tests-for-structured-errors-and-json-error-contracts",
+      "text": "Add red tests for structured errors and JSON error contracts.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "implement-typed-cli-errors-and-sanitized-stderr",
+      "text": "Implement typed CLI errors and sanitized stderr.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "add-red-tests-for-validators-and-terminal-sanitizer",
+      "text": "Add red tests for validators and terminal sanitizer.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "implement-shared-validation-sanitization-package",
+      "text": "Implement shared validation/sanitization package.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "add-red-tests-for-connector-manifests-and-secret-redaction",
+      "text": "Add red tests for connector manifests and secret redaction.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "implement-connector-manifests-and-manifest-backed-inspection",
+      "text": "Implement connector manifests and manifest-backed inspection.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "add-red-tests-for-generated-skills",
+      "text": "Add red tests for generated skills.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "implement",
+      "text": "Implement `poly skills generate`.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "add-red-tests-for-streaming-etl-batches",
+      "text": "Add red tests for streaming ETL batches.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "implement-bounded-etl-batch-writes-and-checkpoint-metadata",
+      "text": "Implement bounded ETL batch writes and checkpoint metadata.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "run-full-local-verification-and-update-phase-artifacts",
+      "text": "Run full local verification and update phase artifacts.",
+      "docsOnly": false,
+      "behavior": true
+    }
+  ],
+  "behaviorTasks": [
+    {
+      "id": "record-baseline-verification-and-prompt-snapshot",
+      "text": "Record baseline verification and prompt snapshot.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "add-red-tests-for-structured-errors-and-json-error-contracts",
+      "text": "Add red tests for structured errors and JSON error contracts.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "implement-typed-cli-errors-and-sanitized-stderr",
+      "text": "Implement typed CLI errors and sanitized stderr.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "add-red-tests-for-validators-and-terminal-sanitizer",
+      "text": "Add red tests for validators and terminal sanitizer.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "implement-shared-validation-sanitization-package",
+      "text": "Implement shared validation/sanitization package.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "add-red-tests-for-connector-manifests-and-secret-redaction",
+      "text": "Add red tests for connector manifests and secret redaction.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "implement-connector-manifests-and-manifest-backed-inspection",
+      "text": "Implement connector manifests and manifest-backed inspection.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "add-red-tests-for-generated-skills",
+      "text": "Add red tests for generated skills.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "implement",
+      "text": "Implement `poly skills generate`.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "add-red-tests-for-streaming-etl-batches",
+      "text": "Add red tests for streaming ETL batches.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "implement-bounded-etl-batch-writes-and-checkpoint-metadata",
+      "text": "Implement bounded ETL batch writes and checkpoint metadata.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "run-full-local-verification-and-update-phase-artifacts",
+      "text": "Run full local verification and update phase artifacts.",
+      "docsOnly": false,
+      "behavior": true
+    }
+  ],
+  "failures": [],
+  "updatedAt": "2026-06-24T15:47:52.718Z"
+}

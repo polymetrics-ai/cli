@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "wave0-duckdb-warehouse-query",
+  "status": "completed_with_warnings",
+  "reason": "DuckDB analytical query engine added behind a `duckdb` build tag; default build stays CGO-free; both make verify lanes green; e2e JOIN/GROUP BY verified. Warning: go-duckdb v1.8.5 bumped the module go directive to 1.24 (affects default build); mitigated via GOTOOLCHAIN=auto in Makefile.",
+  "details": {
+    "agentMode": "agents",
+    "coveragePassed": true,
+    "tddGatePassed": true,
+    "tddBehaviorTasks": ["b-engine-seam", "b-duckdb-engine", "b-verify-lane"],
+    "gates": {
+      "default": { "command": "make verify", "result": "exit 0 (CGO-free; go-duckdb not in default deps)" },
+      "duckdb": { "command": "make verify-duckdb", "result": "exit 0" }
+    },
+    "e2e": {
+      "join_group_by": "pm query run --sql JOIN+GROUP BY -> Ada=150, Grace=70",
+      "select_only": "DROP VIEW rejected: only SELECT/WITH queries are allowed"
+    },
+    "dependencyAdded": "github.com/marcboeker/go-duckdb v1.8.5 (CGO, build-tag gated; human-gate approved)",
+    "reviewerVerdict": "GO (orchestrator review): SELECT-only + identifier/path injection safety verified; HUGEINT/time/[]byte normalization correct.",
+    "warnings": [
+      "go-duckdb v1.8.5 requires go 1.24 -> module go directive bumped 1.23->1.24 (affects the default build too). Mitigated by GOTOOLCHAIN ?= auto in Makefile. Owner decision pending: accept go1.24 or pin an older go-duckdb to keep the go1.23 floor."
+    ],
+    "deferred": [
+      "Warehouse storage stays JSONL (DuckDB queries via read_ndjson_auto views); Parquet/native-DuckDB storage deferred.",
+      "DuckDB not wired into the ETL write path (query-only this phase)."
+    ]
+  },
+  "updatedAt": "2026-06-25T18:05:00.000Z"
+}

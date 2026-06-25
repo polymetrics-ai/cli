@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-06-25T18:01:45.305Z",
+  "repo": {
+    "name": "polymetrics-v2",
+    "root": ".",
+    "monorepo": false,
+    "confidence": 0.2
+  },
+  "packageManagers": [
+    {
+      "name": "go",
+      "files": [
+        "go.mod"
+      ],
+      "confidence": 1
+    },
+    {
+      "name": "make",
+      "files": [
+        "Makefile"
+      ],
+      "confidence": 1
+    }
+  ],
+  "languages": [
+    {
+      "name": "Go",
+      "paths": [
+        "cmd",
+        "internal"
+      ],
+      "confidence": 0.9
+    }
+  ],
+  "applications": [
+    {
+      "name": "pm",
+      "type": "cli",
+      "entrypoint": "cmd/pm/main.go",
+      "confidence": 1
+    }
+  ],
+  "services": [],
+  "dataStores": [],
+  "externalSystems": [],
+  "ci": {
+    "provider": null,
+    "files": [],
+    "requiredChecks": [],
+    "confidence": 0
+  },
+  "deployment": {
+    "targets": [],
+    "manifests": [],
+    "confidence": 0
+  },
+  "qualityTools": {
+    "unitTest": [
+      "go test ./..."
+    ],
+    "integrationTest": [
+      "make smoke"
+    ],
+    "e2eTest": [],
+    "lint": [
+      "go vet ./..."
+    ],
+    "format": [
+      "gofmt -w cmd internal"
+    ],
+    "typecheck": [
+      "go test ./..."
+    ],
+    "security": [],
+    "accessibility": [],
+    "load": []
+  },
+  "unknowns": [
+    {
+      "area": "package-manager",
+      "question": "No package manager or lockfile was detected.",
+      "blocking": true
+    },
+    {
+      "area": "applications",
+      "question": "No package manifests were detected.",
+      "blocking": true
+    },
+    {
+      "area": "tests",
+      "question": "No test command was detected.",
+      "blocking": true
+    },
+    {
+      "area": "build",
+      "question": "No build command was detected.",
+      "blocking": true
+    },
+    {
+      "area": "ci",
+      "question": "No CI configuration was detected; create a local verification harness before feature work.",
+      "blocking": true
+    },
+    {
+      "area": "ci",
+      "question": "No CI configuration exists yet. Local verification is available through make verify.",
+      "blocking": false
+    },
+    {
+      "area": "security",
+      "question": "No dependency vulnerability scanner is configured.",
+      "blocking": false
+    }
+  ]
+}

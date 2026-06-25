@@ -1,0 +1,63 @@
+# pm connectors inspect file
+
+```text
+NAME
+  pm connectors inspect file - File connector manual
+
+SYNOPSIS
+  pm connectors inspect file
+  pm connectors inspect file --json
+  pm credentials add <name> --connector file [--config key=value] [--from-env field=ENV] [--value-stdin field]
+
+DESCRIPTION
+  Reads local JSONL or CSV files as source streams.
+
+CAPABILITIES
+  check=true catalog=true read=true write=false query=false
+  Integration type: file
+
+AUTHENTICATION
+  No secret authentication is required for this connector.
+
+CONFIGURATION
+  path (required): Local JSONL or CSV file path.
+  stream: Optional stream name override.
+
+ETL STREAMS
+  file: Local file stream from configured path.
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+  Source modes: full_refresh, incremental
+  Destination modes: append, overwrite, append_dedup, overwrite_dedup
+
+SECURITY
+  read risk: local file read
+  write risk: unsupported
+  mutation risk: none
+  approval: not required for reads
+  Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+EXAMPLES
+  # Inspect as a manual
+  pm connectors inspect file
+
+  # Inspect as structured JSON
+  pm connectors inspect file --json
+
+  # File ETL
+  pm credentials add file-local --connector file --config path=/path/to/records.jsonl
+  pm connections create file_to_warehouse --source file:file-local --destination warehouse:warehouse-local --stream file --table imported_records
+  pm etl run --connection file_to_warehouse --stream file --json
+
+AGENT WORKFLOW
+  - Run pm connectors inspect file before creating credentials or plans.
+  - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+  - Never ask the user to paste secret values into chat.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+
+```

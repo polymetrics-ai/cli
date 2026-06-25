@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "wave0-duckdb-warehouse-query",
+  "planRefs": [
+    ".planning/phases/wave0-duckdb-warehouse-query/PLAN.md",
+    ".planning/phases/wave0-duckdb-warehouse-query/TEST-PLAN.md"
+  ],
+  "ledgerRef": ".planning/phases/wave0-duckdb-warehouse-query/TDD-LEDGER.md",
+  "passed": true,
+  "tasks": [
+    {
+      "id": "t-engine-seam",
+      "text": "id: t-engine-seam type: test — Red test (default build): `App.QuerySQL` delegates to a",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "b-engine-seam",
+      "text": "id: b-engine-seam type: behavior — Add `sqlQueryEngine` interface + `query_engine_default.go`",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "t-duckdb-query",
+      "text": "id: t-duckdb-query type: test — Red test (`//go:build duckdb`, internal/app): write two JSONL",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "b-duckdb-engine",
+      "text": "id: b-duckdb-engine type: behavior — Add dependency go-duckdb@v1.8.5; `query_engine_duckdb.go`",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-verify-lane",
+      "text": "id: b-verify-lane type: behavior — Add `make verify-duckdb` (CGO build + `go test -tags duckdb ./...`).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "t-both-green",
+      "text": "id: t-both-green type: test — Default `make verify` green (CGO-free, unchanged); `make",
+      "docsOnly": false,
+      "behavior": false
+    }
+  ],
+  "behaviorTasks": [
+    {
+      "id": "b-engine-seam",
+      "text": "id: b-engine-seam type: behavior — Add `sqlQueryEngine` interface + `query_engine_default.go`",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-duckdb-engine",
+      "text": "id: b-duckdb-engine type: behavior — Add dependency go-duckdb@v1.8.5; `query_engine_duckdb.go`",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-verify-lane",
+      "text": "id: b-verify-lane type: behavior — Add `make verify-duckdb` (CGO build + `go test -tags duckdb ./...`).",
+      "docsOnly": false,
+      "behavior": true
+    }
+  ],
+  "failures": [],
+  "updatedAt": "2026-06-25T17:44:27.901Z"
+}

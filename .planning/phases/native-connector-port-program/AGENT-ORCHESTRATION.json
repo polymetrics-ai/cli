@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "native-connector-port-program",
+  "mode": "inline",
+  "reason": "Subagent tools unavailable; using sequential inline role passes.",
+  "roles": [
+    "coordinator",
+    "planner",
+    "frontend",
+    "backend",
+    "tester",
+    "security",
+    "reliability-observability",
+    "reviewer"
+  ],
+  "updatedAt": "2026-06-25T12:51:10.170Z"
+}

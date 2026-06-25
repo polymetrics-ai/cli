@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "native-go-connector-catalog",
+  "status": "completed_with_warnings",
+  "reason": "Implementation and make verify passed; generic GSD verify helper could not detect Makefile commands outside a Git worktree.",
+  "details": {
+    "catalog_total": 647,
+    "sources": 591,
+    "destinations": 56,
+    "enabled": 1,
+    "planned_native_port": 646,
+    "verification": "make verify passed"
+  },
+  "updatedAt": "2026-06-25T12:45:00Z"
+}

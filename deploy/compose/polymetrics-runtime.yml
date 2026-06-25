@@ -1,0 +1,149 @@
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE:-ghcr.io/enterprisedb/postgresql:16}
+    container_name: polymetrics-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-polymetrics}
+      POSTGRES_USER: ${POSTGRES_USER:-polymetrics}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-polymetrics}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - polymetrics-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-polymetrics} -d ${POSTGRES_DB:-polymetrics}"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 20s
+    networks:
+      - polymetrics-runtime
+
+  dragonfly:
+    image: ${DRAGONFLY_IMAGE:-ghcr.io/dragonflydb/dragonfly:latest}
+    container_name: polymetrics-dragonfly
+    command: ["--logtostderr"]
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "${DRAGONFLY_PORT:-6379}:6379"
+    volumes:
+      - polymetrics-dragonfly-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 3 bash -c '</dev/tcp/127.0.0.1/6379'"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+    networks:
+      - polymetrics-runtime
+
+  temporal-postgres:
+    image: ${POSTGRES_IMAGE:-ghcr.io/enterprisedb/postgresql:16}
+    container_name: polymetrics-temporal-postgres
+    environment:
+      POSTGRES_USER: temporal
+      POSTGRES_PASSWORD: temporal
+    ports:
+      - "15432:5432"
+    volumes:
+      - polymetrics-temporal-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temporal"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 20s
+    networks:
+      - polymetrics-runtime
+
+  temporal-admin-tools:
+    image: ${TEMPORAL_ADMINTOOLS_IMAGE:-temporalio/admin-tools:1.31.0}
+    container_name: polymetrics-temporal-admin-tools
+    restart: "no"
+    depends_on:
+      temporal-postgres:
+        condition: service_healthy
+    environment:
+      DB: postgres12
+      DB_PORT: 5432
+      POSTGRES_USER: temporal
+      POSTGRES_PWD: temporal
+      POSTGRES_SEEDS: temporal-postgres
+      SQL_PASSWORD: temporal
+    volumes:
+      - ../temporal/scripts:/scripts:ro
+    entrypoint: ["/bin/sh"]
+    command: /scripts/setup-postgres.sh
+    networks:
+      - polymetrics-runtime
+
+  temporal:
+    image: ${TEMPORAL_SERVER_IMAGE:-temporalio/server:1.31.0}
+    container_name: polymetrics-temporal
+    depends_on:
+      temporal-admin-tools:
+        condition: service_completed_successfully
+    environment:
+      DB: postgres12
+      DB_PORT: 5432
+      POSTGRES_USER: temporal
+      POSTGRES_PWD: temporal
+      POSTGRES_SEEDS: temporal-postgres
+      BIND_ON_IP: 0.0.0.0
+      DYNAMIC_CONFIG_FILE_PATH: config/dynamicconfig/development-sql.yaml
+    ports:
+      - "${TEMPORAL_PORT:-7233}:7233"
+    volumes:
+      - ../temporal/dynamicconfig:/etc/temporal/config/dynamicconfig:ro
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 3 bash -c '</dev/tcp/127.0.0.1/7233'"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 30s
+    networks:
+      - polymetrics-runtime
+
+  temporal-create-namespace:
+    image: ${TEMPORAL_ADMINTOOLS_IMAGE:-temporalio/admin-tools:1.31.0}
+    container_name: polymetrics-temporal-create-namespace
+    restart: on-failure:5
+    depends_on:
+      temporal:
+        condition: service_healthy
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+      DEFAULT_NAMESPACE: ${TEMPORAL_NAMESPACE:-default}
+    volumes:
+      - ../temporal/scripts:/scripts:ro
+    entrypoint: ["/bin/sh"]
+    command: /scripts/create-namespace.sh
+    networks:
+      - polymetrics-runtime
+
+  temporal-ui:
+    image: ${TEMPORAL_UI_IMAGE:-temporalio/ui:2.49.1}
+    container_name: polymetrics-temporal-ui
+    depends_on:
+      temporal:
+        condition: service_healthy
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+      TEMPORAL_CORS_ORIGINS: http://localhost:3000
+    ports:
+      - "${TEMPORAL_UI_PORT:-8080}:8080"
+    networks:
+      - polymetrics-runtime
+
+volumes:
+  polymetrics-postgres-data:
+  polymetrics-dragonfly-data:
+  polymetrics-temporal-postgres-data:
+
+networks:
+  polymetrics-runtime:
+    name: polymetrics-runtime
+    driver: bridge

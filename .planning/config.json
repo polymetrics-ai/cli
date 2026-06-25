@@ -1,0 +1,7 @@
+{
+  "workflow": {
+    "use_worktrees": false,
+    "tdd_mode": true,
+    "universal_programming_loop": true
+  }
+}

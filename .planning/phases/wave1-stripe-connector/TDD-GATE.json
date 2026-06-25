@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "wave1-stripe-connector",
+  "planRefs": [
+    ".planning/phases/wave1-stripe-connector/PLAN.md",
+    ".planning/phases/wave1-stripe-connector/TEST-PLAN.md"
+  ],
+  "ledgerRef": ".planning/phases/wave1-stripe-connector/TDD-LEDGER.md",
+  "passed": true,
+  "tasks": [
+    {
+      "id": "t-stripe-read",
+      "text": "id: t-stripe-read type: test — Red httptest test: `stripe.New()` reads `customers` across 2",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "b-stripe-read",
+      "text": "id: b-stripe-read type: behavior — Implement package stripe on connsdk: New/Name/Metadata",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "t-stripe-write",
+      "text": "id: t-stripe-write type: test — Red test: ValidateWrite accepts `create_customer`, rejects",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "b-stripe-write",
+      "text": "id: b-stripe-write type: behavior — Implement WriteValidator/DryRunWriter + allow-listed",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "t-stripe-verify",
+      "text": "id: t-stripe-verify type: test — Parity: `pm connectors inspect stripe --json` → kind",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "b-stripe-catalog",
+      "text": "id: b-stripe-catalog type: behavior — Flip `source-stripe` to enabled + pm_connector_name=stripe",
+      "docsOnly": false,
+      "behavior": true
+    }
+  ],
+  "behaviorTasks": [
+    {
+      "id": "b-stripe-read",
+      "text": "id: b-stripe-read type: behavior — Implement package stripe on connsdk: New/Name/Metadata",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-stripe-write",
+      "text": "id: b-stripe-write type: behavior — Implement WriteValidator/DryRunWriter + allow-listed",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-stripe-catalog",
+      "text": "id: b-stripe-catalog type: behavior — Flip `source-stripe` to enabled + pm_connector_name=stripe",
+      "docsOnly": false,
+      "behavior": true
+    }
+  ],
+  "failures": [],
+  "updatedAt": "2026-06-25T18:04:19.425Z"
+}

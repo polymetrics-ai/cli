@@ -1,0 +1,96 @@
+# pm connectors inspect source-mongodb-v2
+
+```text
+NAME
+  pm connectors inspect source-mongodb-v2 - MongoDb connector manual
+
+SYNOPSIS
+  pm connectors inspect source-mongodb-v2
+  pm connectors inspect source-mongodb-v2 --json
+  pm credentials add <name> --connector source-mongodb-v2 [--config key=value] [--from-env field=ENV] [--value-stdin field]
+
+DESCRIPTION
+  MongoDb catalog connector for https://docs.airbyte.com/integrations/sources/mongodb-v2. Native implementation status: planned_native_port.
+
+CAPABILITIES
+  catalog_metadata=true
+  connector type: source
+  release stage: generally_available
+  support level: certified
+
+IMPLEMENTATION STATUS
+  implementation_status: planned_native_port
+  runtime_kind: database_go
+  notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
+  upstream image reference: airbyte/source-mongodb-v2:2.0.7 (metadata only; not executed)
+
+RUNTIME CAPABILITIES
+  metadata=true
+  check=false
+  catalog=false
+  read=false
+  write=false
+  query=false
+  etl=false
+  reverse_etl=false
+  unsupported_reason: Native Go port is planned but not enabled; only catalog metadata is available.
+
+NATIVE PORT PLAN
+  family: database_cdc_source
+  priority_wave: 1
+  etl_operations: catalog, check, read_cdc, read_snapshot
+  reverse_etl_operations: none until native write conformance passes
+  cdc_modes: snapshot, mongodb_change_streams
+  cdc_state_fields: resume_token, cluster_time, snapshot_completed
+  conformance: catalog, cdc_checkpoint, cdc_setup_validation, check, delete_semantics, docs_skill, ordering, read_fixture, secret_redaction, snapshot_consistency, spec, state_checkpoint
+
+OFFICIAL APPLICATION DOCUMENTATION
+  MongoDB documentation: https://www.mongodb.com/docs/
+  MongoDB authentication: https://www.mongodb.com/docs/manual/core/authentication/
+  Release Notes: https://www.mongodb.com/docs/manual/release-notes/
+  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mongodb-v2
+
+CONFIGURATION
+  database_config (object) required: Configures the MongoDB cluster type.
+  discover_sample_size (integer): The maximum number of documents to sample when attempting to discover the unique fields for a collection.
+  discover_timeout_seconds (integer): The amount of time the connector will wait when it discovers a document. Defaults to 600 seconds. Valid range: 5 seconds to 1200 seconds.
+  initial_load_timeout_hours (integer): The amount of time an initial load is allowed to continue for before catching up on CDC logs.
+  initial_waiting_seconds (integer): The amount of time the connector will wait when it launches to determine if there is new data to sync or not. Defaults to 300 seconds. Valid range: 120 seconds to 1200 seconds.
+  invalid_cdc_cursor_position_behavior (string): Determines whether Airbyte should fail or re-sync data in case of an stale/invalid cursor value into the WAL. If 'Fail sync' is chosen, a user will have to manually reset the co...
+  queue_size (integer): The size of the internal queue. This may interfere with memory consumption and efficiency of the connector, please be careful.
+  update_capture_mode (string): Determines how Airbyte looks up the value of an updated document. If 'Lookup' is chosen, the current value of the document will be read. If 'Post Image' is chosen, then the vers...
+  secret fields: database_config.password
+
+SYNC MODES
+  supported sync modes: full_refresh
+  supports incremental: false
+
+SECURITY
+  Secret values are never rendered; only secret field names are shown.
+  Upstream image references are metadata only and are not executed by pm.
+  Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
+
+DOCUMENTATION
+  https://docs.airbyte.com/integrations/sources/mongodb-v2
+
+EXAMPLES
+  # Inspect catalog entry
+  pm connectors inspect source-mongodb-v2
+
+  # Inspect as JSON
+  pm connectors inspect source-mongodb-v2 --json
+
+AGENT WORKFLOW
+  - Read implementation_status before planning ETL or reverse ETL.
+  - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
+  - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
+
+SEE ALSO
+  MongoDb documentation: https://docs.airbyte.com/integrations/sources/mongodb-v2
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+
+```

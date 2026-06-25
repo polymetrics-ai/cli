@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "wave0-github-native-package",
+  "mode": "agents",
+  "reason": "Subagent tools detected.",
+  "roles": [
+    "coordinator",
+    "planner",
+    "frontend",
+    "backend",
+    "tester",
+    "security",
+    "reliability-observability",
+    "reviewer"
+  ],
+  "updatedAt": "2026-06-25T17:03:48.422Z"
+}

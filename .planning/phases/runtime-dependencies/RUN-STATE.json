@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "runtime-dependencies",
+  "status": "completed_with_warnings",
+  "warnings": [
+    "Full Temporal workflow execution is not yet migrated; current implementation health-checks Temporal and keeps ETL in-process.",
+    "Runtime containers could not be fully started because image pulls failed with DNS resolution errors for production.cloudfront.docker.com."
+  ],
+  "verification": {
+    "go_test": "passed",
+    "go_vet": "passed",
+    "go_build": "passed",
+    "make_verify": "passed",
+    "perf_dependency_free": "passed",
+    "perf_runtime_backed": "degraded_runtime_unavailable"
+  },
+  "updatedAt": "2026-06-24T13:20:00Z"
+}
+
