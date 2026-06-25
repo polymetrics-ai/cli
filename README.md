@@ -1,285 +1,188 @@
-# Polymetrics AI pm CLI MVP
+<div align="center">
 
-This repository contains a working Go-only `pm` CLI monolith prototype for Polymetrics AI.
+# Polymetrics
 
-It implements a dependency-free local vertical slice:
+### Fivetran capability. Zero infrastructure.
 
-- project initialization
-- embedded help/man-style docs
-- encrypted local credential vault
-- built-in `sample`, `github`, `file`, `warehouse`, and `outbox` connectors
-- connection and catalog management
-- ETL from a source connector into a local JSONL warehouse
-- query over local warehouse tables
-- reverse ETL plan, preview, approval, and execution into a local outbox
-- agent-oriented JSON output
+**`pm` is a local-first, single-binary data engine.** Extract from **118+ native connectors**, query the data with an **embedded DuckDB** SQL engine, and **write it back** to your tools — all from one Go binary that **AI agents can drive safely**. No SaaS. No Docker. Your data never leaves your machine.
 
-## Build
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/karthik-sivadas/polymetrics-cli)](https://goreportcard.com/report/github.com/karthik-sivadas/polymetrics-cli)
+![Go](https://img.shields.io/badge/Go-1.24+-00ADD8?logo=go&logoColor=white)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#-contributing)
+[![GitHub stars](https://img.shields.io/github/stars/karthik-sivadas/polymetrics-cli?style=social)](https://github.com/karthik-sivadas/polymetrics-cli/stargazers)
 
-```bash
-make verify
-```
+[Quickstart](#-quickstart-60-seconds) · [Why](#-why-polymetrics) · [Agent-native](#-agent-native) · [Compare](#-how-it-compares) · [Docs](docs/GUIDE.md) · [Roadmap](#-roadmap)
 
-This runs `gofmt`, `go vet`, `go test ./...`, builds `./pm`, and executes an end-to-end smoke flow.
+</div>
 
-## Install
+---
 
-Install `pm` onto your PATH so it can be run from any directory:
+Moving data today means renting a cloud pipeline (Fivetran's surprise MAR bills), babysitting a Docker/Kubernetes deployment (Airbyte's 8 GB of services), or wiring together a graveyard of half-maintained Singer taps. And once the data lands, you still need a *second* tool to push results back into the apps your team actually uses.
 
-```bash
-make install
-pm help
-```
-
-By default this installs to `~/.local/bin/pm`. Override the destination when needed:
-
-```bash
-make install INSTALL_DIR=/opt/homebrew/bin
-```
-
-Remove the installed binary with:
-
-```bash
-make uninstall
-```
-
-## Quick Start
-
-```bash
-go build ./cmd/pm
-
-ROOT=$(mktemp -d)
-export PM_SAMPLE_TOKEN=sample-token
-
-./pm init --root "$ROOT"
-./pm credentials add sample-local --connector sample --from-env token=PM_SAMPLE_TOKEN --root "$ROOT"
-./pm credentials add warehouse-local --connector warehouse --config path="$ROOT/.polymetrics/warehouse" --root "$ROOT"
-./pm credentials add outbox-local --connector outbox --config path="$ROOT/.polymetrics/outbox" --root "$ROOT"
-
-./pm connections create sample_to_warehouse \
-  --source sample:sample-local \
-  --destination warehouse:warehouse-local \
-  --stream customers \
-  --primary-key id \
-  --cursor updated_at \
-  --table sample_customers \
-  --root "$ROOT"
-
-./pm catalog refresh --connection sample_to_warehouse --root "$ROOT"
-./pm etl run --connection sample_to_warehouse --stream customers --root "$ROOT" --json
-./pm query run --table sample_customers --limit 3 --root "$ROOT" --json
-```
-
-GitHub ETL can read public repositories without a token. Use `GITHUB_TOKEN` for
-private repositories or a higher GitHub API rate limit:
-
-```bash
-go build ./cmd/pm
-
-ROOT=$(mktemp -d)
-./pm init --root "$ROOT"
-
-# Public repository, no secret required.
-./pm credentials add github-public \
-  --connector github \
-  --config repository=octocat/Hello-World \
-  --root "$ROOT"
-
-# Authenticated token alternatives. The token can be a classic PAT,
-# fine-grained PAT, OAuth token, GitHub Actions GITHUB_TOKEN, or a
-# pre-generated installation token.
-# export GITHUB_TOKEN=...
-# ./pm credentials add github-private \
-#   --connector github \
-#   --config repository=OWNER/REPO \
-#   --from-env token=GITHUB_TOKEN \
-#   --root "$ROOT"
-
-# GitHub App installation alternative.
-# ./pm credentials add github-app \
-#   --connector github \
-#   --config repository=OWNER/REPO \
-#   --config auth_type=github_app \
-#   --config app_id=12345 \
-#   --config installation_id=67890 \
-#   --value-stdin private_key \
-#   --root "$ROOT" < app-private-key.pem
-
-./pm credentials add warehouse-local \
-  --connector warehouse \
-  --config path="$ROOT/.polymetrics/warehouse" \
-  --root "$ROOT"
-
-./pm connections create github_to_warehouse \
-  --source github:github-public \
-  --destination warehouse:warehouse-local \
-  --stream issues \
-  --primary-key id \
-  --cursor updated_at \
-  --table github_issues \
-  --root "$ROOT"
-
-./pm catalog refresh --connection github_to_warehouse --root "$ROOT" --json
-./pm etl run --connection github_to_warehouse --stream issues --root "$ROOT" --json
-./pm query run --table github_issues --limit 5 --root "$ROOT" --json
-```
-
-The GitHub connector defaults to one page for safe local runs. To exhaust a
-stream, set `--config max_pages=0` on the credential or `--source-config
-max_pages=0` on a connection. `max_pages=all` and `max_pages=unlimited` are
-accepted aliases.
-
-For large streams, use bounded ETL batches:
-
-```bash
-./pm etl run --connection github_to_warehouse --stream pull_requests --batch-size 100 --root "$ROOT" --json
-```
-
-Reverse ETL is preview/approval based:
-
-```bash
-./pm reverse plan customers_to_outbox \
-  --source-table sample_customers \
-  --destination outbox:outbox-local \
-  --map id:external_id \
-  --map name:full_name \
-  --map email:email \
-  --root "$ROOT"
-
-./pm reverse run <plan-id> --approve <approval-token> --root "$ROOT" --json
-```
-
-GitHub can also be a reverse ETL destination for approved issue and pull request
-mutations. Writes require a token and an explicit action:
-
-```bash
-export GITHUB_TOKEN=...
-
-./pm credentials add github-write \
-  --connector github \
-  --config repository=OWNER/REPO \
-  --from-env token=GITHUB_TOKEN \
-  --root "$ROOT"
-
-./pm reverse plan prs_to_github \
-  --source-table github_pr_candidates \
-  --destination github:github-write \
-  --action create_pull_request \
-  --map title:title \
-  --map body:body \
-  --map head:head \
-  --map base:base \
-  --map reviewers:reviewers \
-  --root "$ROOT"
-
-./pm reverse preview <plan-id> --root "$ROOT" --json
-./pm reverse run <plan-id> --approve <approval-token> --root "$ROOT" --json
-```
-
-Supported GitHub reverse ETL actions include `create_issue`, `update_issue`,
-`comment_issue`, `close_issue`, `create_pull_request`, `update_pull_request`,
-`close_pull_request`, `request_reviewers`, and `merge_pull_request`.
-
-See `docs/connectors/github-etl-reverse-etl.md` for the complete GitHub auth,
-ETL stream, sync mode, and reverse ETL action reference.
-
-## Docs
-
-```bash
-./pm help
-./pm help credentials
-./pm man reverse
-./pm docs generate --dir docs/cli
-./pm skills generate --dir docs/skills --json
-```
-
-## Runtime Dependencies
-
-The next integration phase uses local PostgreSQL, DragonflyDB, and Temporal services.
-
-Runtime preference is Podman first, Docker fallback:
-
-1. `podman compose`
-2. `podman-compose`
-3. `docker compose`
-4. `docker-compose`
-
-macOS:
-
-```bash
-scripts/setup-runtime-macos.sh
-scripts/runtime.sh up
-```
-
-Linux:
-
-```bash
-scripts/setup-runtime-linux.sh
-scripts/runtime.sh up
-```
-
-Useful commands:
-
-```bash
-make runtime-doctor
-make runtime-up
-make runtime-down
-make runtime-reset
-```
-
-Service endpoints:
+**Polymetrics is one binary that does the whole loop — extract, query, and act — locally.**
 
 ```text
-PostgreSQL: localhost:15433
-DragonflyDB: localhost:6379
-Temporal gRPC: localhost:7233
-Temporal UI: http://localhost:8080
+  ANY SOURCE ──extract / CDC──▶  DuckDB warehouse  ──query · analyze──▶  DECIDE
+  (118+ connectors)                (real SQL, local)                       │
+                                                                           ▼
+                              ANY DESTINATION  ◀──plan → preview → approve → write──┘
+                                (reverse-ETL: write data back, take actions)
 ```
 
-Runtime details are in [docs/runtime/SETUP.md](docs/runtime/SETUP.md).
+<!-- TODO: drop a vhs/asciinema terminal GIF of the quickstart here — the single highest-impact addition for stars. -->
 
-PostgreSQL and DragonflyDB now default to GHCR images:
+## ⚡ Quickstart (60 seconds)
 
-```text
-ghcr.io/enterprisedb/postgresql:16
-ghcr.io/dragonflydb/dragonfly:latest
-```
-
-Temporal image paths are configurable with `TEMPORAL_SERVER_IMAGE`, `TEMPORAL_ADMINTOOLS_IMAGE`, and `TEMPORAL_UI_IMAGE`. The official Temporal images were not available under verified GHCR names for the configured tags, so the default Temporal images remain upstream `temporalio/*` unless a trusted GHCR mirror is configured.
-
-## Performance Comparison
-
-The CLI can compare the dependency-free path with the dependency-backed path.
-
-Dependency-free mode:
+> Requires **Go 1.24+**. `make build` auto-fetches the right toolchain.
 
 ```bash
-make perf-free
+git clone https://github.com/karthik-sivadas/polymetrics-cli
+cd polymetrics-cli
+make build                      # → ./pm
+
+export PM_SAMPLE_TOKEN=demo
+./pm init
+./pm credentials add sample    --connector sample    --from-env token=PM_SAMPLE_TOKEN
+./pm credentials add warehouse --connector warehouse --config path=.polymetrics/warehouse
+./pm connections create demo \
+  --source sample:sample --destination warehouse:warehouse \
+  --stream customers --primary-key id --cursor updated_at --table customers
+
+./pm etl run   --connection demo --stream customers --json   # 1. extract
+./pm query run --table customers --limit 5 --json            # 2. analyze
 ```
 
-Runtime-backed mode requires PostgreSQL, DragonflyDB, and Temporal to be healthy:
+That's a full **extract → land → query** loop with zero external services. Swap `sample` for `github`, `stripe`, `postgres`, `slack`, `hubspot`, or any of the [118+ connectors](#-connectors) — then add a `reverse` step to write results back.
+
+## 🎯 Why Polymetrics
+
+- **🧩 One binary, the whole loop.** ETL **and** reverse-ETL **and** SQL analytics in a single static Go executable. Most tools do one. We do all three.
+- **🏠 Local-first.** Credentials live in an encrypted local vault; data lands in a local warehouse. Nothing is shipped to a vendor cloud unless *you* write it there.
+- **🤖 Agent-native by design.** Every command speaks `--json`, exit codes are stable and branchable, and every write is approval-gated (`plan → preview → approve → execute`). An LLM agent can run the whole pipeline without a human in the hot path — and can't mutate a destination by accident. ([details](#-agent-native))
+- **🦆 Real analytics built in.** An embedded **DuckDB** engine runs joins, aggregations, and window functions over your extracted data — no separate warehouse required.
+- **🔄 Bidirectional.** Pull issues out of GitHub *and* open pull requests back into it. Read your warehouse *and* upsert contacts into HubSpot. Sources and destinations are the same unified connector.
+- **🔌 118+ native connectors and counting.** Hand-written Go on a shared HTTP/DB toolkit — on the way to the full **600+ connector catalog**.
+- **🪶 Dependency-light.** The default build is pure Go (CGO-free, trivially cross-compiled). DuckDB analytics is an opt-in build tag.
+
+## 🤖 Agent-native
+
+Polymetrics is built to be **driven by AI agents**, not just humans. The contract is explicit:
+
+**1. Everything is JSON.** Add `--json` to any command for a structured envelope (`api_version`, `kind`, typed fields). Logs and progress go to stderr; data goes to stdout.
+
+```jsonc
+// pm etl run --connection demo --stream customers --json
+{ "api_version": "polymetrics.io/v1", "kind": "Run",
+  "run": { "status": "completed", "records_read": 3, "records_loaded": 3 } }
+```
+
+**2. Exit codes are stable and branchable.** No parsing required to decide what to do next:
+
+| Code | Category | Meaning | Agent action |
+|---:|---|---|---|
+| `0` | — | success | continue |
+| `2` | usage | bad command/flags | fix invocation, don't retry |
+| `3` | validation | bad input | fix arguments, don't retry |
+| `4` | auth | missing/invalid credentials | obtain credentials |
+| `5` | connector | connector/API error | inspect, maybe retry |
+| `6` | runtime | local dependency unavailable | start dependency |
+| `7` | policy | blocked by policy (e.g. approval) | obtain approval, then retry |
+| `1` | internal | unexpected error | report |
+
+**3. Writes are gated, never silent.** Reverse-ETL follows `plan → preview → approve → execute`. The agent gets a diff of exactly what *would* change and a one-time approval token; nothing mutates a destination until the agent (or a human) replays the command with `--approve`.
 
 ```bash
-make runtime-up
-make perf-runtime
-make runtime-down
+pm reverse plan sync --source-table candidates --destination github:write \
+  --action create_pull_request --map title:title --map body:body --json   # returns a plan + approval token + sample
+pm reverse preview <plan-id> --json                                        # see exactly what will be written
+pm reverse run <plan-id> --approve <token> --json                          # only now does anything change
 ```
 
-Dependency-free means the CLI uses only local files:
+Secrets are never printed or logged — only secret *field names* surface in docs and manifests.
 
-- JSON state
-- AES-GCM encrypted vault files
-- JSONL warehouse and outbox
-- in-process ETL and reverse ETL execution
+## 📊 How it compares
 
-Runtime-backed means the same local ETL loop runs while also using:
+| | **Polymetrics** | Airbyte | Fivetran | dlt | Hightouch / Census |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **Deploy** | Single local binary | Docker/K8s (8 GB+) or Cloud | Cloud SaaS | Python library | Cloud SaaS |
+| **Direction** | ✅ ETL **+** reverse-ETL | ETL only | ETL only | ETL only | ⚠️ reverse-ETL only |
+| **Built-in SQL / analytics** | ✅ embedded DuckDB | ❌ | ❌ | ❌ | ❌ |
+| **CDC** | ✅ snapshot + incremental*  | ✅ | ✅ | ⚠️ partial | ❌ |
+| **Agent-friendly** | ✅ `--json` + exit codes + gated writes | partial (API) | partial (API) | code-native | API/UI |
+| **Data stays local** | ✅ | ⚠️ self-host only | ❌ | ✅ | ❌ |
+| **Cost** | ✅ free / flat | credit-based | ❌ usage-priced | free | ❌ $$$ |
+| **Connectors** | 118 → 600+ | 600+ | 700+ | few verified | 200+ |
 
-- PostgreSQL for run-ledger persistence
-- DragonflyDB for lease coordination
-- Temporal health checks as the durable workflow target
+<sub>Polymetrics is younger: it has fewer connectors today and **no managed orchestration, scheduling, hosted UI, or SLAs** — it's a local engine, not a managed platform. *Logical-replication CDC (Postgres) is in progress; snapshot + cursor-incremental ships today.*</sub>
 
-## Current Limitations
+**Where it wins:** no infrastructure to run, predictable cost, both directions in one tool, SQL built in, and a CLI an agent can actually drive.
 
-This is a working MVP, not the final production architecture. The PRD calls for SQLite, DuckDB, OS keychain integration, Parquet batches, and real SaaS/database connectors. Those are intentionally deferred because they require dependency and integration decisions.
+## 🔌 Connectors
 
-The runtime Compose stack is local development infrastructure. The Go client dependencies for PostgreSQL, DragonflyDB, and Temporal are now present, but full workflow migration to Temporal is still incremental.
+**118 native Go connectors** are implemented today, with a **647-connector catalog** as the roadmap.
+
+```bash
+pm connectors list              # connectors available in your binary
+pm connectors list --all        # the full catalog (implemented + planned)
+pm connectors inspect stripe    # auth, streams, sync modes, write actions
+```
+
+Highlights: `github` · `gitlab` · `stripe` · `postgres` · `slack` · `hubspot` · `notion` · `jira` · `sendgrid` · `airtable` · `intercom` · `klaviyo` · `mailchimp` · `zendesk-support` · `square` · `xero` · `shopify` · … plus the long tail. Databases support snapshot + incremental reads (logical-replication CDC in progress); SaaS connectors support incremental reads and, where the API allows, approval-gated writes.
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart LR
+  S["Sources<br/>(APIs · DBs · files)"] -->|extract · CDC| W[("DuckDB / JSONL<br/>warehouse — local")]
+  W -->|query · analyze<br/>real SQL| W
+  W -->|plan → preview → approve| D["Destinations<br/>(reverse-ETL · actions)"]
+  CLI["pm CLI / AI agent<br/>(JSON + exit codes)"] -.drives.- S & W & D
+```
+
+- **Connectors** — one Go package per system on a shared `connsdk` toolkit (auth, pagination, retry, schema inference). A derived registry wires them in automatically.
+- **Warehouse** — pure-Go JSONL by default; opt into an embedded **DuckDB** engine (`-tags duckdb`) for analytical SQL.
+- **Vault** — AES-GCM encrypted local credential storage.
+- **Reverse-ETL** — plan/preview/approve/execute with time-bounded, single-use approval tokens.
+
+Full details, build options, sync modes, and per-connector usage are in the **[Setup & Usage Guide →](docs/GUIDE.md)**.
+
+## 📚 Documentation
+
+- **[Setup & Usage Guide](docs/GUIDE.md)** — install, build options (incl. DuckDB), core concepts, ETL/query/reverse-ETL workflows, connector reference, agent integration, and troubleshooting.
+- Built-in manuals: every command group is its own man page — `pm`, `pm etl`, `pm reverse`, `pm connectors`, … (add `--json` for the machine-readable version).
+
+## 🗺️ Roadmap
+
+- [x] Per-system connector architecture + shared `connsdk` toolkit
+- [x] 118 native connectors (HTTP + Postgres)
+- [x] Embedded DuckDB analytical query engine
+- [x] ETL + approval-gated reverse-ETL + sync modes
+- [ ] Remaining catalog → **600+ connectors**
+- [ ] Logical-replication CDC (Postgres/MySQL/Mongo/SQL Server/Oracle)
+- [ ] Prebuilt release binaries + Homebrew tap
+- [ ] Bundled MCP server (same `plan → approve → execute` gate)
+- [ ] Scheduling & incremental orchestration
+
+## 🤝 Contributing
+
+Contributions are very welcome — **adding a connector is the best first PR.** Copy an existing package (`internal/connectors/stripe/` for HTTP, `internal/connectors/postgres/` for databases), wire it up, and the derived registry picks it up automatically. See the [guide](docs/GUIDE.md#contributing-a-connector).
+
+```bash
+make verify          # gofmt + vet + go test ./... + build + smoke
+make verify-duckdb   # the DuckDB (CGO) build lane
+```
+
+Look for [`good first issue`](https://github.com/karthik-sivadas/polymetrics-cli/labels/good%20first%20issue) to get started.
+
+## ⭐ Star us
+
+If a single local binary that extracts, analyzes, and writes back your data — and that your AI agent can drive — sounds useful, **star the repo** to follow along as we march toward 600+ connectors.
+
+<a href="https://star-history.com/#karthik-sivadas/polymetrics-cli&Date">
+  <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=karthik-sivadas/polymetrics-cli&type=Date" width="600">
+</a>
+
+## 📄 License
+
+[MIT](LICENSE) © 2026 Karthik Sivadas
