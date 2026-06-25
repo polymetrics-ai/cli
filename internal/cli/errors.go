@@ -8,7 +8,7 @@ import (
 	"polymetrics/internal/safety"
 )
 
-const apiVersion = "polymetrics.io/v1"
+const apiVersion = "polymetrics.ai/v1"
 
 type errorCategory string
 

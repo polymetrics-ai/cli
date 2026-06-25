@@ -6,13 +6,14 @@
 
 **`pm` is a local-first, single-binary data engine.** Extract from **118+ native connectors**, query the data with an **embedded DuckDB** SQL engine, and **write it back** to your tools — all from one Go binary that **AI agents can drive safely**. No SaaS. No Docker. Your data never leaves your machine.
 
+[![Website](https://img.shields.io/badge/polymetrics.ai-6f42c1?logo=icloud&logoColor=white)](https://polymetrics.ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/karthik-sivadas/polymetrics-cli)](https://goreportcard.com/report/github.com/karthik-sivadas/polymetrics-cli)
 ![Go](https://img.shields.io/badge/Go-1.24+-00ADD8?logo=go&logoColor=white)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#-contributing)
 [![GitHub stars](https://img.shields.io/github/stars/karthik-sivadas/polymetrics-cli?style=social)](https://github.com/karthik-sivadas/polymetrics-cli/stargazers)
 
-[Quickstart](#-quickstart-60-seconds) · [Why](#-why-polymetrics) · [Agent-native](#-agent-native) · [Compare](#-how-it-compares) · [Docs](docs/GUIDE.md) · [Roadmap](#-roadmap)
+[Website](https://polymetrics.ai) · [Quickstart](#-quickstart-60-seconds) · [Why](#-why-polymetrics) · [Agent-native](#-agent-native) · [Compare](#-how-it-compares) · [Docs](docs/GUIDE.md) · [Roadmap](#-roadmap)
 
 </div>
 
@@ -73,7 +74,7 @@ Polymetrics is built to be **driven by AI agents**, not just humans. The contrac
 
 ```jsonc
 // pm etl run --connection demo --stream customers --json
-{ "api_version": "polymetrics.io/v1", "kind": "Run",
+{ "api_version": "polymetrics.ai/v1", "kind": "Run",
   "run": { "status": "completed", "records_read": 3, "records_loaded": 3 } }
 ```
 

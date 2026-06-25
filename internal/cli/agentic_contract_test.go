@@ -32,7 +32,7 @@ func TestUnknownCommandJSONErrorIsStructuredAndSanitized(t *testing.T) {
 	if err := json.Unmarshal(stdout.Bytes(), &got); err != nil {
 		t.Fatalf("stdout is not JSON error: %v\n%s", err, stdout.String())
 	}
-	if got.APIVersion != "polymetrics.io/v1" || got.Kind != "Error" || got.Error.Category != "usage" || got.Error.Code == "" {
+	if got.APIVersion != "polymetrics.ai/v1" || got.Kind != "Error" || got.Error.Category != "usage" || got.Error.Code == "" {
 		t.Fatalf("unexpected JSON error: %+v", got)
 	}
 }

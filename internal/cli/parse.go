@@ -122,6 +122,13 @@ func parseInt(value string, fallback int) int {
 }
 
 func writeJSON(w io.Writer, v any) error {
+	// Stamp every JSON envelope with the API version so agents get a consistent
+	// contract (api_version + kind) on every response, not just on errors.
+	if env, ok := v.(envelope); ok {
+		if _, exists := env["api_version"]; !exists {
+			env["api_version"] = apiVersion
+		}
+	}
 	enc := json.NewEncoder(w)
 	enc.SetIndent("", "  ")
 	return enc.Encode(v)

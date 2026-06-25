@@ -4,7 +4,7 @@
 
 ```json
 {
-  "api_version": "polymetrics.io/v1",
+  "api_version": "polymetrics.ai/v1",
   "kind": "Error",
   "error": {
     "category": "validation",

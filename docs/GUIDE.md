@@ -4,6 +4,8 @@ Everything you need to install Polymetrics, understand its model, and run real
 extract → query → write-back workflows. For the elevator pitch see the
 [README](../README.md); this is the hands-on reference.
 
+🌐 Homepage: **[polymetrics.ai](https://polymetrics.ai)**
+
 - [Install & build](#install--build)
 - [Core concepts](#core-concepts)
 - [Workflow 1 — ETL (extract)](#workflow-1--etl-extract)

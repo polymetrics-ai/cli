@@ -214,7 +214,7 @@ Example:
 
 ```json
 {
-  "api_version": "polymetrics.io/v1",
+  "api_version": "polymetrics.ai/v1",
   "kind": "ETLRun",
   "run_id": "run_01JZ...",
   "status": "completed",
@@ -631,7 +631,7 @@ vault:
 
 defaults:
   output: table
-  json_api_version: polymetrics.io/v1
+  json_api_version: polymetrics.ai/v1
   batch_size: 10000
   max_parallelism: 8
 ```
