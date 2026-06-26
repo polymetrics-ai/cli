@@ -102,23 +102,152 @@
 - [countercyclical](countercyclical/MANUAL.md): Reads Countercyclical investments, valuations, and research memos through the Countercyclical REST API.
 - [criteo-marketing](criteo-marketing/MANUAL.md): Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, and ad spend statistics through the Criteo REST API using OAuth2 client-credentials auth.
 - [customer-io](customer-io/MANUAL.md): Reads Customer.io campaigns, newsletters, segments, and broadcasts through the Customer.io App API.
+- [customerly](customerly/MANUAL.md): Reads Customerly users and leads through the Customerly v1 REST API.
+- [datadog](datadog/MANUAL.md): Reads Datadog monitors, dashboards, users, SLOs, and downtimes through the Datadog REST API.
+- [datascope](datascope/MANUAL.md): Reads DataScope locations, form answers, lists, and notifications from the DataScope external REST API (read-only).
+- [dbt](dbt/MANUAL.md): Reads dbt Cloud projects, runs, repositories, users, and environments through the dbt Cloud Administrative API v2.
+- [defillama](defillama/MANUAL.md): Reads DefiLlama DeFi analytics: protocols, chains, stablecoins, DEX volumes, and fees/revenue from the public DefiLlama REST API. Read-only; no authentication required.
 - [delighted](delighted/MANUAL.md): Reads Delighted survey responses, people, bounces, unsubscribes, and aggregate metrics through the Delighted REST API.
+- [deputy](deputy/MANUAL.md): Reads Deputy locations, employees, departments, timesheets, and tasks through the Deputy REST API (read-only, full refresh).
+- [devin-ai](devin-ai/MANUAL.md): Reads Devin AI sessions, session insights, session messages, playbooks, and secret metadata through the Devin v3 REST API.
+- [ding-connect](ding-connect/MANUAL.md): Reads DingConnect reference catalogs (countries, currencies, regions, providers, and products) through the DingConnect REST API.
+- [discord](discord/MANUAL.md): Reads Discord guild, channel, role, and member data through the Discord REST API using a bot token.
+- [dixa](dixa/MANUAL.md): Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API.
+- [dockerhub](dockerhub/MANUAL.md): Reads public Docker Hub repositories, image tags, and namespace profiles for a configured username or organization via the Docker Hub registry API.
+- [docuseal](docuseal/MANUAL.md): Reads DocuSeal templates, submissions, and submitters through the DocuSeal REST API.
+- [dolibarr](dolibarr/MANUAL.md): Reads Dolibarr ERP/CRM third parties, contacts, products, customer invoices, and orders through the Dolibarr REST API.
+- [dremio](dremio/MANUAL.md): Reads Dremio catalog entries, reflections, sources, and users through the Dremio REST API.
+- [drift](drift/MANUAL.md): Reads Drift users, accounts, conversations, and contacts through the Drift REST API.
+- [drip](drip/MANUAL.md): Reads Drip subscribers, campaigns, broadcasts, and accounts through the Drip REST API.
+- [dropbox-sign](dropbox-sign/MANUAL.md): Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and account details through the Dropbox Sign REST API.
+- [dwolla](dwolla/MANUAL.md): Reads Dwolla customers, events, exchange partners, and business classifications via the Dwolla HAL+JSON REST API using OAuth2 client-credentials.
+- [e-conomic](e-conomic/MANUAL.md): Reads e-conomic customers, products, suppliers, accounts, and booked invoices through the e-conomic REST API (read-only).
+- [easypost](easypost/MANUAL.md): Reads EasyPost shipments, trackers, addresses, parcels, and insurances through the EasyPost REST API.
+- [easypromos](easypromos/MANUAL.md): Reads Easypromos promotions, organizing brands, stages, users, participations, and prizes through the Easypromos REST API.
+- [ebay-finance](ebay-finance/MANUAL.md): Reads eBay seller financial data — transactions, payouts, transfers, and the seller funds summary — through the eBay Sell Finances REST API.
+- [ebay-fulfillment](ebay-fulfillment/MANUAL.md): Reads eBay seller orders, line items, shipping fulfillments, and payment disputes through the eBay Sell Fulfillment REST API.
+- [elasticemail](elasticemail/MANUAL.md): Reads Elastic Email contacts, campaigns, lists, segments, and templates through the Elastic Email v4 REST API.
+- [emailoctopus](emailoctopus/MANUAL.md): Reads EmailOctopus lists, campaigns, and list contacts through the EmailOctopus v1.6 REST API.
+- [employment-hero](employment-hero/MANUAL.md): Reads Employment Hero organisations, employees, leave requests, and teams through the Employment Hero REST API. Read-only (the API is full-refresh only).
+- [encharge](encharge/MANUAL.md): Reads Encharge people, segments, fields, account tags, and schemas through the Encharge REST API.
+- [eventbrite](eventbrite/MANUAL.md): Reads Eventbrite organizations, events, attendees, orders, and ticket classes through the Eventbrite v3 REST API. Read-only source.
+- [eventee](eventee/MANUAL.md): Reads Eventee event agenda data (lectures, speakers, days, halls, tracks, workshops, partners) through the Eventee public REST API.
+- [eventzilla](eventzilla/MANUAL.md): Reads Eventzilla events, categories, users, attendees, and ticket types through the Eventzilla v2 REST API (read-only; full refresh).
+- [everhour](everhour/MANUAL.md): Reads Everhour projects, clients, team members, tasks, and time records through the Everhour REST API.
+- [exchange-rates](exchange-rates/MANUAL.md): Reads daily, latest, and supported-symbol foreign-exchange rates from the exchangeratesapi.io REST API.
+- [ezofficeinventory](ezofficeinventory/MANUAL.md): Reads EZOfficeInventory assets, inventory items, stock assets, members, and locations through the EZOfficeInventory REST API.
+- [factorial](factorial/MANUAL.md): Reads FactorialHR employees, teams, time-off leaves, leave types, and locations through the Factorial REST API.
+- [fastbill](fastbill/MANUAL.md): Reads FastBill customers, invoices, products, recurring invoices, and revenues through the FastBill JSON API.
+- [fastly](fastly/MANUAL.md): Reads Fastly services, the current user, the current customer (account), and datacenters through the Fastly REST API. Read-only.
+- [feishu](feishu/MANUAL.md): Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open Platform REST API using a tenant_access_token exchange.
 - [file](file/MANUAL.md): Reads local JSONL or CSV files as source streams.
+- [fillout](fillout/MANUAL.md): Reads Fillout forms, their question definitions, and form submissions (responses) through the Fillout REST API.
+- [finage](finage/MANUAL.md): Reads Finage US market data: most active stocks, top gainers and losers, sector performance, delisted companies, and per-symbol market news via the Finage REST API.
+- [financial-modelling](financial-modelling/MANUAL.md): Reads stock and ETF symbol lists, the stock screener, and delisted companies from the Financial Modeling Prep REST API.
+- [finnhub](finnhub/MANUAL.md): Reads Finnhub stock symbols, company and market news, company profiles, and analyst recommendations through the Finnhub REST API.
+- [finnworlds](finnworlds/MANUAL.md): Reads global financial data (dividends, stock splits, historical candlesticks, and commodity prices) from the Finnworlds REST API.
+- [firehydrant](firehydrant/MANUAL.md): Reads FireHydrant incidents, services, teams, environments, and functionalities through the FireHydrant REST API.
+- [fleetio](fleetio/MANUAL.md): Reads Fleetio fleet management data: vehicles, contacts, fuel entries, issues, and service entries through the Fleetio REST API.
+- [flexmail](flexmail/MANUAL.md): Reads Flexmail contacts, custom fields, interests, segments, and sources through the Flexmail REST API.
+- [flexport](flexport/MANUAL.md): Reads Flexport companies, locations, products, invoices, and shipments through the Flexport REST API. Read-only.
+- [float](float/MANUAL.md): Reads Float people, projects, clients, tasks, and departments through the Float v3 REST API.
+- [flowlu](flowlu/MANUAL.md): Reads Flowlu CRM accounts, leads, tasks, projects, invoices, and agile issues through the Flowlu REST API.
+- [formbricks](formbricks/MANUAL.md): Reads Formbricks surveys, responses, action classes, attribute classes, and webhooks through the Formbricks management API.
+- [free-agent-connector](free-agent-connector/MANUAL.md): Reads FreeAgent contacts, invoices, bills, projects, and tasks through the FreeAgent v2 REST API using OAuth2 refresh-token authentication.
+- [freightview](freightview/MANUAL.md): Reads Freightview shipments, quotes, and tracking events through the Freightview v2.0 REST API using the client-credentials session-token flow.
+- [freshbooks](freshbooks/MANUAL.md): Reads FreshBooks clients, invoices, expenses, payments, and items through the FreshBooks accounting REST API.
+- [freshchat](freshchat/MANUAL.md): Reads Freshchat agents, users, groups, channels, and roles through the Freshchat v2 REST API.
 - [freshdesk](freshdesk/MANUAL.md): Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2.
 - [freshsales](freshsales/MANUAL.md): Reads Freshsales (Freshworks CRM) contacts, sales accounts, deals, and leads through the Freshsales REST API.
+- [freshservice](freshservice/MANUAL.md): Reads Freshservice tickets, agents, requesters, assets, and problems through the Freshservice REST API v2.
+- [front](front/MANUAL.md): Reads Front contacts, conversations, inboxes, tags, teammates, and channels through the Front Core REST API.
+- [fulcrum](fulcrum/MANUAL.md): Reads Fulcrum forms, records, projects, choice lists, and classification sets through the Fulcrum REST API v2.
+- [fullstory](fullstory/MANUAL.md): Reads FullStory segments, users, and events through the FullStory REST API (read-only analytics export).
+- [gainsight-px](gainsight-px/MANUAL.md): Reads Gainsight PX accounts, users, features, and segments through the aptrinsic REST API (read-only).
+- [getgist](getgist/MANUAL.md): Reads Gist contacts, tags, segments, campaigns, forms, and teammates through the Gist REST API.
+- [getlago](getlago/MANUAL.md): Reads Lago customers, invoices, subscriptions, plans, and billable metrics through the Lago REST API.
+- [giphy](giphy/MANUAL.md): Reads GIFs, stickers, and clips from the Giphy search and trending REST endpoints. Read-only.
+- [gitbook](gitbook/MANUAL.md): Reads GitBook users, organizations, organization members, and space content (pages) through the GitBook REST API.
 - [github](github/MANUAL.md): Reads GitHub repository, issue, pull request, code, release, collaboration, and Actions data, and writes approved reverse ETL actions through the GitHub REST API.
 - [gitlab](gitlab/MANUAL.md): Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
+- [glassfrog](glassfrog/MANUAL.md): Reads GlassFrog circles, roles, people, projects, and assignments through the GlassFrog API v3 (read-only full-refresh source).
+- [gmail](gmail/MANUAL.md): Reads Gmail messages, threads, drafts, and labels via the Google OAuth 2.0 refresh-token grant.
+- [gnews](gnews/MANUAL.md): Reads GNews articles from the keyword search and top-headlines endpoints of the GNews REST API. Read-only.
+- [gocardless](gocardless/MANUAL.md): Reads GoCardless payments, mandates, payouts, and refunds through the GoCardless REST API.
+- [goldcast](goldcast/MANUAL.md): Reads Goldcast organizations, events, agenda items, discussion groups, and tracks through the Goldcast customapi REST API.
+- [gologin](gologin/MANUAL.md): Reads GoLogin browser profiles, folders, tags, and account information through the GoLogin REST API.
+- [gong](gong/MANUAL.md): Reads Gong users, calls, and scorecards through the Gong REST API (read-only).
 - [google-analytics-data-api](google-analytics-data-api/MANUAL.md): Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only.
+- [google-calendar](google-calendar/MANUAL.md): Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token.
+- [google-classroom](google-classroom/MANUAL.md): Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token.
+- [google-forms](google-forms/MANUAL.md): Reads Google Forms metadata, form items, and submitted responses through the Google Forms REST API using an OAuth2 refresh token.
+- [google-pagespeed-insights](google-pagespeed-insights/MANUAL.md): Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API.
 - [google-search-console](google-search-console/MANUAL.md): Reads Google Search Console sites, sitemaps, and Search Analytics performance reports (by date, query, page, country, and device) through the Search Console v3 REST API. Read-only.
+- [google-tasks](google-tasks/MANUAL.md): Reads Google task lists and tasks through the Google Tasks REST API.
+- [google-webfonts](google-webfonts/MANUAL.md): Reads Google Web Fonts families (default, popular, trending, newest, and alphabetical views) through the Google Fonts Developer API. Read-only.
+- [gorgias](gorgias/MANUAL.md): Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias REST API.
+- [grafana](grafana/MANUAL.md): Reads Grafana dashboards, folders, data sources, organization users, and provisioned alert rules through the Grafana REST API.
+- [granola](granola/MANUAL.md): Reads Granola meeting notes and full note detail (summaries, owners, attendees, calendar events) through the Granola public API.
 - [greenhouse](greenhouse/MANUAL.md): Reads Greenhouse candidates, applications, jobs, offers, and users through the Greenhouse Harvest REST API.
+- [greythr](greythr/MANUAL.md): Reads greytHR employees, profiles, work details, bank details, and users via the greytHR REST API using session-token authentication.
+- [guru](guru/MANUAL.md): Reads Guru collections, groups, members, and teams through the Guru REST API using HTTP Basic authentication (email + API token).
+- [gutendex](gutendex/MANUAL.md): Reads Project Gutenberg books from the free, public Gutendex JSON API (books, popular, latest, and English-language views). Read-only; no credentials required.
+- [harness](harness/MANUAL.md): Reads Harness NextGen organizations, projects, services, connectors, and pipelines through the Harness platform REST API.
 - [harvest](harvest/MANUAL.md): Reads Harvest clients, projects, tasks, users, and time entries through the Harvest v2 REST API.
+- [height](height/MANUAL.md): Reads Height tasks, lists, field templates, users, and workspace through the Height REST API.
+- [hellobaton](hellobaton/MANUAL.md): Reads Hellobaton projects, milestones, tasks, phases, companies, and users through the Hellobaton REST API.
+- [help-scout](help-scout/MANUAL.md): Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.
+- [hibob](hibob/MANUAL.md): Reads HiBob HR data: employee profiles, company named lists, and people field definitions via the HiBob REST API (read-only).
+- [high-level](high-level/MANUAL.md): Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipelines, custom fields, and form submissions for a location through the HighLevel REST API.
+- [hoorayhr](hoorayhr/MANUAL.md): Reads HoorayHR users, time-off, leave-types, and sick-leave records through the HoorayHR REST API using session-token authentication.
+- [hubplanner](hubplanner/MANUAL.md): Reads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through the Hubplanner REST API.
 - [hubspot](hubspot/MANUAL.md): Reads HubSpot CRM contacts, companies, deals, and tickets, and writes approved reverse ETL contact actions through the HubSpot CRM v3 REST API.
+- [hugging-face-datasets](hugging-face-datasets/MANUAL.md): Reads dataset splits, per-split sizes, and rows from the Hugging Face dataset-viewer REST API. Read-only; an optional user access token unlocks gated and private datasets.
+- [humanitix](humanitix/MANUAL.md): Reads Humanitix events, orders, tickets, and tags through the Humanitix public REST API.
+- [huntr](huntr/MANUAL.md): Reads Huntr organization members, candidates, activities, notes, and actions through the Huntr REST API.
+- [illumina-basespace](illumina-basespace/MANUAL.md): Reads Illumina BaseSpace projects, runs, samples, app sessions, and datasets through the BaseSpace v1pre3 REST API.
+- [imagga](imagga/MANUAL.md): Reads Imagga image-recognition results (tags, categories, colors, face detections) and account usage via the Imagga REST API. Read-only.
+- [incident-io](incident-io/MANUAL.md): Reads incident.io incidents, severities, incident roles, users, and follow-ups through the incident.io REST API.
+- [inflowinventory](inflowinventory/MANUAL.md): Reads inFlow Inventory products, customers, vendors, sales orders, and categories through the inFlow cloud REST API.
+- [insightful](insightful/MANUAL.md): Reads Insightful workforce-analytics employees, teams, projects, and directory entries through the Insightful REST API.
+- [insightly](insightly/MANUAL.md): Reads Insightly CRM contacts, organisations, opportunities, leads, projects, and tasks through the Insightly REST API v3.1.
 - [instagram](instagram/MANUAL.md): Reads Instagram Business/Creator account profile, media, stories, and account insights through the Facebook Graph API.
+- [instatus](instatus/MANUAL.md): Reads Instatus status pages, components, incidents, and maintenances through the Instatus REST API.
 - [intercom](intercom/MANUAL.md): Reads Intercom contacts, companies, conversations, admins, and tags through the Intercom REST API.
+- [interzoid](interzoid/MANUAL.md): Reads Interzoid data-matching lookups: company-name, individual-name, and street-address similarity keys, plus organization-name standardization, via the Interzoid REST API.
+- [intruder](intruder/MANUAL.md): Reads Intruder issues, issue occurrences, scans, and targets through the Intruder REST API (read-only, full refresh).
+- [invoiced](invoiced/MANUAL.md): Reads Invoiced customers, invoices, payments, subscriptions, and estimates through the Invoiced REST API.
+- [invoiceninja](invoiceninja/MANUAL.md): Reads Invoice Ninja clients, invoices, products, payments, and quotes through the Invoice Ninja v5 REST API.
+- [ip2whois](ip2whois/MANUAL.md): Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing flattened whois, nameservers, and contacts streams.
+- [jamf-pro](jamf-pro/MANUAL.md): Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf Pro REST API using token-based authentication.
 - [jira](jira/MANUAL.md): Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using HTTP Basic auth (email + API token). Read-only.
+- [jobnimbus](jobnimbus/MANUAL.md): Reads JobNimbus CRM contacts, jobs, tasks, activities, and files through the JobNimbus REST API.
+- [jotform](jotform/MANUAL.md): Reads Jotform forms, submissions, reports, folders, and the account profile through the Jotform REST API.
+- [judge-me-reviews](judge-me-reviews/MANUAL.md): Reads Judge.me reviews, products, and widgets for a Shopify shop through the Judge.me REST API.
+- [just-sift](just-sift/MANUAL.md): Reads JustSift people directory profiles and person field definitions through the Sift REST API.
+- [justcall](justcall/MANUAL.md): Reads JustCall users, call logs, SMS, contacts, and phone numbers through the JustCall REST API.
+- [k6-cloud](k6-cloud/MANUAL.md): Reads k6 Cloud organizations, projects, and load tests through the k6 Cloud REST API.
+- [katana](katana/MANUAL.md): Reads Katana MRP (Cloud Inventory) products, materials, variants, sales orders, and customers through the Katana REST API.
+- [keka](keka/MANUAL.md): Reads Keka HRIS employees, attendance, leave types, leave requests, clients, and projects through the Keka REST API.
+- [kisi](kisi/MANUAL.md): Reads Kisi physical access-control data: members, locks, groups, users, and logins via the Kisi REST API.
+- [kissmetrics](kissmetrics/MANUAL.md): Reads Kissmetrics products, reports, events, and properties through the Kissmetrics query API using HTTP Basic authentication.
+- [klaus-api](klaus-api/MANUAL.md): Reads Klaus (Zendesk QA) users, rating categories, and review conversations through the Klaus public REST API.
 - [klaviyo](klaviyo/MANUAL.md): Reads Klaviyo profiles, events, campaigns, lists, metrics, and segments through the Klaviyo REST (JSON:API) API.
+- [launchdarkly](launchdarkly/MANUAL.md): Reads LaunchDarkly projects, members, audit log entries, feature flags, and environments through the LaunchDarkly REST API.
+- [leadfeeder](leadfeeder/MANUAL.md): Reads Leadfeeder accounts and their leads, visits, and custom feeds through the Leadfeeder JSON:API.
+- [lemlist](lemlist/MANUAL.md): Reads lemlist team, campaigns, activities, and unsubscribes through the lemlist REST API.
+- [less-annoying-crm](less-annoying-crm/MANUAL.md): Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API.
+- [lever-hiring](lever-hiring/MANUAL.md): Reads Lever Hiring opportunities, postings, users, requisitions, and stages through the Lever Data API. Read-only (full-refresh).
+- [lightspeed-retail](lightspeed-retail/MANUAL.md): Reads Lightspeed Retail (X-Series) products, customers, sales, outlets, and registers through the Lightspeed REST API. Read-only.
+- [linear](linear/MANUAL.md): Reads Linear issues, teams, projects, and users through the Linear GraphQL API.
 - [linkedin-ads](linkedin-ads/MANUAL.md): Reads LinkedIn Ads accounts, campaign groups, campaigns, and creatives through the LinkedIn Marketing REST API.
+- [linkedin-pages](linkedin-pages/MANUAL.md): Reads LinkedIn organization (company page) profile, follower statistics, share statistics, and total follower count through the LinkedIn Community Management REST API.
+- [linkrunner](linkrunner/MANUAL.md): Reads Linkrunner mobile attribution campaigns and attributed users from the Linkrunner Data API.
+- [lob](lob/MANUAL.md): Reads Lob addresses, postcards, letters, checks, and bank accounts through the Lob print & mail REST API.
+- [lokalise](lokalise/MANUAL.md): Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API.
+- [luma](luma/MANUAL.md): Reads lu.ma events, event guests, and event hosts through the Luma public REST API.
 - [mailchimp](mailchimp/MANUAL.md): Reads Mailchimp Marketing API audiences (lists), campaigns, reports, and automations through the datacenter-scoped REST API.
+- [mailerlite](mailerlite/MANUAL.md): Reads MailerLite subscribers, campaigns, groups, segments, and automations through the MailerLite v2 REST API.
 - [metabase](metabase/MANUAL.md): Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using session-token authentication.
 - [monday](monday/MANUAL.md): Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API. Read-only.
 - [notion](notion/MANUAL.md): Reads Notion databases, pages, and users through the Notion REST API. Read-only.

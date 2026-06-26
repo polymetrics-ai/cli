@@ -30,6 +30,7 @@ const (
 var skip = map[string]bool{
 	"connsdk":     true,
 	"registryset": true,
+	"_quarantine": true,
 }
 
 func main() {
