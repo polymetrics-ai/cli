@@ -421,6 +421,7 @@ import (
 	_ "polymetrics.ai/internal/connectors/sap-fieldglass"
 	_ "polymetrics.ai/internal/connectors/savvycal"
 	_ "polymetrics.ai/internal/connectors/scryfall"
+	_ "polymetrics.ai/internal/connectors/searxng"
 	_ "polymetrics.ai/internal/connectors/secoda"
 	_ "polymetrics.ai/internal/connectors/segment"
 	_ "polymetrics.ai/internal/connectors/sendgrid"

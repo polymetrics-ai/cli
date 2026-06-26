@@ -14,6 +14,7 @@
 - [github](github/MANUAL.md): Reads GitHub repository, issue, pull request, code, release, collaboration, and Actions data, and writes approved reverse ETL actions through the GitHub REST API.
 - [outbox](outbox/MANUAL.md): Local JSONL destination that records reverse ETL writes and receipts.
 - [sample](sample/MANUAL.md): Built-in deterministic source connector for local development and tests.
+- [searxng](searxng/MANUAL.md): Reads web and Reddit search results from a SearXNG metasearch instance's JSON API (format=json). Read-only. Requires base_url; no credentials by default.
 - [source-github](source-github/MANUAL.md): GitHub native Go source connector. Runtime family: native_go. Documentation: https://docs.airbyte.com/integrations/sources/github.
 - [source-stripe](source-stripe/MANUAL.md): Stripe native Go source connector. Runtime family: declarative_http_go. Documentation: https://docs.airbyte.com/integrations/sources/stripe.
 - [stripe](stripe/MANUAL.md): Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse ETL customer actions through the Stripe REST API.

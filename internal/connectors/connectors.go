@@ -32,6 +32,26 @@ var liveFactoryNamesCache = struct {
 	names map[string]bool
 }{names: map[string]bool{}}
 
+// nativeLiveNames holds pm-native connector names that should be live
+// (CLI-executable via the production registry) even though they have NO
+// catalog_data.json entry. Populated by RegisterNativeLive from a connector
+// package init(), alongside RegisterFactory.
+var nativeLiveNames = struct {
+	mu    sync.Mutex
+	names map[string]bool
+}{names: map[string]bool{}}
+
+// RegisterNativeLive marks a self-registered connector as live so NewLiveRegistry
+// (and therefore the CLI) exposes it without a catalog entry. It is intended for
+// pm-native connectors built directly on connsdk — e.g. searxng — that are not
+// part of the imported airbyte-style catalog. Call it from init() next to
+// RegisterFactory. Safe to call before the live-name cache is built.
+func RegisterNativeLive(name string) {
+	nativeLiveNames.mu.Lock()
+	defer nativeLiveNames.mu.Unlock()
+	nativeLiveNames.names[name] = true
+}
+
 // RegisterFactory registers a connector factory under name. It is intended to
 // be called from a connector package's init(); a generated registry_gen.go (in
 // the registryset package) blank-imports each connector package to run those
@@ -308,6 +328,13 @@ func isLiveFactory(name string) bool {
 			names[def.Slug] = true
 			names[BareName(def.Slug)] = true
 		}
+		// pm-native connectors with no catalog entry (e.g. searxng) opt in via
+		// RegisterNativeLive and are live too.
+		nativeLiveNames.mu.Lock()
+		for n := range nativeLiveNames.names {
+			names[n] = true
+		}
+		nativeLiveNames.mu.Unlock()
 		liveFactoryNamesCache.names = names
 	})
 	return liveFactoryNamesCache.names[name]
