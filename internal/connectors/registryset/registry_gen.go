@@ -128,7 +128,7 @@ import (
 	_ "polymetrics.ai/internal/connectors/ebay-fulfillment"
 	_ "polymetrics.ai/internal/connectors/elasticemail"
 	_ "polymetrics.ai/internal/connectors/emailoctopus"
-	_ "polymetrics.ai/internal/connectors/employmenthero"
+	_ "polymetrics.ai/internal/connectors/employment-hero"
 	_ "polymetrics.ai/internal/connectors/encharge"
 	_ "polymetrics.ai/internal/connectors/eventbrite"
 	_ "polymetrics.ai/internal/connectors/eventee"

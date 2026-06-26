@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
-	employmenthero "polymetrics.ai/internal/connectors/employmenthero"
+	employmenthero "polymetrics.ai/internal/connectors/employment-hero"
 )
 
 // TestReadOrganisationsPaginatesAndAuthenticates is the red-first test: it
