@@ -91,7 +91,7 @@ func TestDocsGenerateIncludesConnectorCatalog(t *testing.T) {
 		filepath.Join(connectorsDir, "catalog", "all-connectors.json"),
 		filepath.Join(connectorsDir, "catalog", "all-connectors.md"),
 		filepath.Join(connectorsDir, "destination-postgres", "MANUAL.md"),
-		filepath.Join(connectorsDir, "source-github", "SKILL.md"),
+		filepath.Join(connectorsDir, "source-github", "MANUAL.md"),
 	} {
 		if _, err := os.Stat(path); err != nil {
 			t.Fatalf("expected generated doc %s: %v", path, err)

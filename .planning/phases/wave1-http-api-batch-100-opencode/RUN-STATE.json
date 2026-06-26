@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "wave1-http-api-batch-100-opencode",
+  "status": "completed",
+  "reason": "OpenCode subagents completed 100 HTTP API connector packages, repaired the inherited pending batch, regenerated registry/docs, and make verify passed.",
+  "details": {
+    "mechanism": "10 parallel OpenCode builder subagents plus centralized convergence",
+    "built_green": 100,
+    "repaired": ["opinion-stage", "opsgenie", "openweather", "e2e-test filename"],
+    "quarantined": 0,
+    "connector_dirs": 416,
+    "api_sources": 555,
+    "api_sources_with_dirs": 415,
+    "api_sources_remaining": 140,
+    "remaining_api_stage_breakdown": {"alpha": 140},
+    "gate": {"command": "make verify", "result": "exit 0", "registry_imports": 416},
+    "dependencies": "unchanged; no new Go module dependencies"
+  },
+  "updatedAt": "2026-06-26T00:00:00.000Z"
+}

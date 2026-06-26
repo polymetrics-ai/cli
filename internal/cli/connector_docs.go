@@ -41,9 +41,6 @@ func writeConnectorDocs(dir string, registry *connectors.Registry) error {
 		if err := os.WriteFile(filepath.Join(connectorDir, "MANUAL.md"), []byte(manual), 0o644); err != nil {
 			return fmt.Errorf("write connector manual %s: %w", meta.Name, err)
 		}
-		if err := os.WriteFile(filepath.Join(connectorDir, "SKILL.md"), []byte(connectors.RenderConnectorSkill(connector)), 0o644); err != nil {
-			return fmt.Errorf("write connector skill %s: %w", meta.Name, err)
-		}
 		index.WriteString("- [" + meta.Name + "](" + meta.Name + "/MANUAL.md): " + meta.Description + "\n")
 	}
 	index.WriteString("\n## Catalog Connectors\n\n")
@@ -63,9 +60,6 @@ func writeConnectorDocs(dir string, registry *connectors.Registry) error {
 		manual := "# pm connectors inspect " + def.Slug + "\n\n```text\n" + connectors.RenderConnectorDefinitionManual(def) + "\n```\n"
 		if err := os.WriteFile(filepath.Join(connectorDir, "MANUAL.md"), []byte(manual), 0o644); err != nil {
 			return fmt.Errorf("write connector manual %s: %w", def.Slug, err)
-		}
-		if err := os.WriteFile(filepath.Join(connectorDir, "SKILL.md"), []byte(connectors.RenderConnectorDefinitionSkill(def)), 0o644); err != nil {
-			return fmt.Errorf("write connector skill %s: %w", def.Slug, err)
 		}
 		index.WriteString("- [" + def.Slug + "](" + def.Slug + "/MANUAL.md): " + def.Name + " (" + string(def.ImplementationStatus) + ")\n")
 	}
@@ -88,22 +82,14 @@ func validateConnectorDocs(dir string, registry *connectors.Registry) error {
 			return err
 		}
 		manualPath := filepath.Join(dir, meta.Name, "MANUAL.md")
-		skillPath := filepath.Join(dir, meta.Name, "SKILL.md")
 		manual, err := os.ReadFile(manualPath)
 		if err != nil {
 			return fmt.Errorf("connector %s missing manual at %s: %w", meta.Name, manualPath, err)
-		}
-		skill, err := os.ReadFile(skillPath)
-		if err != nil {
-			return fmt.Errorf("connector %s missing skill at %s: %w", meta.Name, skillPath, err)
 		}
 		for _, required := range []string{"NAME", "SYNOPSIS", "DESCRIPTION", "SECURITY", "AGENT WORKFLOW"} {
 			if !strings.Contains(string(manual), required) {
 				return fmt.Errorf("connector %s manual missing %s", meta.Name, required)
 			}
-		}
-		if !strings.Contains(string(skill), "name: pm-"+meta.Name) || !strings.Contains(string(skill), "## Agent Rules") {
-			return fmt.Errorf("connector %s skill is incomplete", meta.Name)
 		}
 	}
 	for _, def := range connectors.ConnectorCatalog() {
@@ -111,22 +97,14 @@ func validateConnectorDocs(dir string, registry *connectors.Registry) error {
 			return err
 		}
 		manualPath := filepath.Join(dir, def.Slug, "MANUAL.md")
-		skillPath := filepath.Join(dir, def.Slug, "SKILL.md")
 		manual, err := os.ReadFile(manualPath)
 		if err != nil {
 			return fmt.Errorf("connector %s missing manual at %s: %w", def.Slug, manualPath, err)
-		}
-		skill, err := os.ReadFile(skillPath)
-		if err != nil {
-			return fmt.Errorf("connector %s missing skill at %s: %w", def.Slug, skillPath, err)
 		}
 		for _, required := range []string{"NAME", "SYNOPSIS", "DESCRIPTION", "IMPLEMENTATION STATUS", "RUNTIME CAPABILITIES", "NATIVE PORT PLAN", "SECURITY", "AGENT WORKFLOW"} {
 			if !strings.Contains(string(manual), required) {
 				return fmt.Errorf("connector %s manual missing %s", def.Slug, required)
 			}
-		}
-		if !strings.Contains(string(skill), "name: pm-"+def.Slug) || !strings.Contains(string(skill), "## Agent Rules") {
-			return fmt.Errorf("connector %s skill is incomplete", def.Slug)
 		}
 	}
 	return nil

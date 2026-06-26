@@ -8,13 +8,12 @@ SYNOPSIS
 
 DESCRIPTION
   Writes embedded command documentation as markdown files. Generation also
-  writes connector manuals and connector SKILL.md files under a connector docs
-  directory. By default, when --dir is docs/cli, connector docs are written to
-  docs/connectors.
+  writes connector manuals under a connector docs directory. By default, when
+  --dir is docs/cli, connector docs are written to docs/connectors.
 
-  Validation checks every registered connector has a generated MANUAL.md and
-  SKILL.md with required human and agent sections. This is intended for CI hooks
-  and local preflight checks before adding or changing connectors.
+  Validation checks every registered connector has a generated MANUAL.md with
+  required human and agent workflow sections. This is intended for CI hooks and
+  local preflight checks before adding or changing connectors.
 
 OPTIONS
   --dir path             command docs output directory
