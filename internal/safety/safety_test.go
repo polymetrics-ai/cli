@@ -45,3 +45,16 @@ func TestValidateIdentifierAcceptsExpectedNames(t *testing.T) {
 		}
 	}
 }
+
+func TestRedactErrorTextRemovesHTTPURLQueryAndBodySecrets(t *testing.T) {
+	input := `http 401 for https://api.example.test/v1/items?api_key=secret-token&cursor=abc: {"error":"secret-token denied","access_token":"abc"}`
+	got := safety.RedactErrorText(input)
+	for _, leaked := range []string{"secret-token", "api_key=", "access_token", "cursor=abc"} {
+		if strings.Contains(got, leaked) {
+			t.Fatalf("RedactErrorText leaked %q in %q", leaked, got)
+		}
+	}
+	if !strings.Contains(got, "https://api.example.test/v1/items") {
+		t.Fatalf("RedactErrorText removed useful URL context: %q", got)
+	}
+}

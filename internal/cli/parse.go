@@ -79,28 +79,28 @@ func parseEndpoint(raw string) (app.EndpointConfig, error) {
 	return app.EndpointConfig{Connector: connector, Credential: credential}, nil
 }
 
-func keyValues(values []string) map[string]string {
+func keyValues(values []string) (map[string]string, error) {
 	out := map[string]string{}
 	for _, item := range values {
 		key, value, ok := strings.Cut(item, "=")
 		if !ok || key == "" {
-			continue
+			return nil, validationErrorf("invalid key-value %q, want key=value", item)
 		}
 		out[key] = value
 	}
-	return out
+	return out, nil
 }
 
-func colonValues(values []string) map[string]string {
+func colonValues(values []string) (map[string]string, error) {
 	out := map[string]string{}
 	for _, item := range values {
 		key, value, ok := strings.Cut(item, ":")
 		if !ok || key == "" || value == "" {
-			continue
+			return nil, validationErrorf("invalid mapping %q, want source:destination", item)
 		}
 		out[key] = value
 	}
-	return out
+	return out, nil
 }
 
 func valueOr(value, fallback string) string {
@@ -110,15 +110,15 @@ func valueOr(value, fallback string) string {
 	return value
 }
 
-func parseInt(value string, fallback int) int {
+func parseIntFlag(name, value string, fallback int) (int, error) {
 	if value == "" {
-		return fallback
+		return fallback, nil
 	}
 	n, err := strconv.Atoi(value)
 	if err != nil {
-		return fallback
+		return 0, validationErrorf("invalid --%s %q, want integer", name, value)
 	}
-	return n
+	return n, nil
 }
 
 func writeJSON(w io.Writer, v any) error {

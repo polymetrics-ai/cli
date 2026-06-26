@@ -9,13 +9,13 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/registryset"
-	"polymetrics.ai/internal/coordination"
-	"polymetrics.ai/internal/ledger"
 	"polymetrics.ai/internal/perf"
+	pmruntime "polymetrics.ai/internal/runtime"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
 )
@@ -297,10 +297,17 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			}
 			secrets[field] = strings.TrimRight(string(b), "\r\n")
 		}
+		config, err := keyValues(flags.values["config"])
+		if err != nil {
+			return err
+		}
+		if err := validateCredentialConfig(a, connector, config); err != nil {
+			return err
+		}
 		cred, err := a.AddCredential(ctx, app.AddCredentialRequest{
 			Name:      args[1],
 			Connector: connector,
-			Config:    keyValues(flags.values["config"]),
+			Config:    config,
 			Secrets:   secrets,
 		})
 		if err != nil {
@@ -383,8 +390,16 @@ func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		if stream == "" {
 			return errors.New("missing --stream")
 		}
-		source.Config = keyValues(flags.values["source-config"])
-		dest.Config = keyValues(flags.values["destination-config"])
+		sourceConfig, err := keyValues(flags.values["source-config"])
+		if err != nil {
+			return err
+		}
+		destConfig, err := keyValues(flags.values["destination-config"])
+		if err != nil {
+			return err
+		}
+		source.Config = sourceConfig
+		dest.Config = destConfig
 		streamCfg := app.StreamConfig{
 			SyncMode:         valueOr(flags.first("sync-mode"), "full_refresh_overwrite"),
 			CursorField:      flags.first("cursor"),
@@ -491,19 +506,19 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 			return err
 		}
 		stream := flags.first("stream")
-		limit := parseInt(valueOr(flags.first("limit"), "100"), 100)
+		limit, err := parseIntFlag("limit", valueOr(flags.first("limit"), "100"), 100)
+		if err != nil {
+			return err
+		}
 		if limit <= 0 {
 			limit = 100
 		}
 		rows := make([]connectors.Record, 0, limit)
-		err = connector.Read(ctx, connectors.ReadRequest{Stream: stream, Config: cfg}, func(record connectors.Record) error {
-			if len(rows) >= limit {
-				return nil
-			}
+		err = connector.Read(ctx, connectors.ReadRequest{Stream: stream, Config: cfg, Limit: limit}, connectors.LimitEmitter(limit, func(record connectors.Record) error {
 			rows = append(rows, record)
 			return nil
-		})
-		if err != nil {
+		}))
+		if err := connectors.IgnoreReadLimit(err); err != nil {
 			return err
 		}
 		if jsonOut {
@@ -516,10 +531,14 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		return nil
 	case "run":
 		flags := parseFlags(args[1:])
+		batchSize, err := parseIntFlag("batch-size", flags.first("batch-size"), 0)
+		if err != nil {
+			return err
+		}
 		run, err := a.RunETL(ctx, app.RunETLRequest{
 			Connection: flags.first("connection"),
 			Stream:     flags.first("stream"),
-			BatchSize:  parseInt(flags.first("batch-size"), 0),
+			BatchSize:  batchSize,
 		})
 		if err != nil {
 			return err
@@ -571,9 +590,13 @@ func directConnector(a *app.App, args []string) (connectors.Connector, connector
 	if !ok {
 		return nil, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", name)
 	}
+	config, err := keyValues(flags.values["config"])
+	if err != nil {
+		return nil, connectors.RuntimeConfig{}, err
+	}
 	return connector, connectors.RuntimeConfig{
 		ProjectDir: a.ProjectDir(),
-		Config:     keyValues(flags.values["config"]),
+		Config:     config,
 	}, nil
 }
 
@@ -582,9 +605,11 @@ func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, 
 		return errUsage
 	}
 	flags := parseFlags(args[1:])
-	limit := parseInt(valueOr(flags.first("limit"), "100"), 100)
+	limit, err := parseIntFlag("limit", valueOr(flags.first("limit"), "100"), 100)
+	if err != nil {
+		return err
+	}
 	var rows []connectors.Record
-	var err error
 	if sql := flags.first("sql"); sql != "" {
 		rows, err = a.QuerySQL(ctx, sql, limit)
 	} else {
@@ -633,6 +658,14 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if err != nil {
 			return err
 		}
+		mappings, err := colonValues(flags.values["map"])
+		if err != nil {
+			return err
+		}
+		limit, err := parseIntFlag("limit", flags.first("limit"), 0)
+		if err != nil {
+			return err
+		}
 		plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 			Name:                  args[1],
 			SourceTable:           flags.first("source-table"),
@@ -640,8 +673,8 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			DestinationCredential: dest.Credential,
 			DestinationConfig:     dest.Config,
 			Action:                valueOr(flags.first("action"), "upsert"),
-			Mappings:              colonValues(flags.values["map"]),
-			Limit:                 parseInt(flags.first("limit"), 0),
+			Mappings:              mappings,
+			Limit:                 limit,
 		})
 		if err != nil {
 			return err
@@ -795,19 +828,9 @@ func recordRuntimeETL(ctx context.Context, run app.Run) error {
 	if !runtimecheck.Healthy(report) {
 		return fmt.Errorf("runtime dependencies are not healthy; run `pm runtime doctor --json` for details")
 	}
-	dragonfly := coordination.OpenDragonfly(cfg.DragonflyAddr)
+	dragonfly := pmruntime.OpenDragonflyLeaseStore(cfg.DragonflyAddr)
 	defer dragonfly.Close()
-	leaseKey := "polymetrics:etl:" + run.ID
-	acquired, err := dragonfly.AcquireLease(ctx, leaseKey, "recording", 30_000_000_000)
-	if err != nil {
-		return err
-	}
-	if !acquired {
-		return fmt.Errorf("runtime ETL lease was not acquired for %s", run.ID)
-	}
-	defer dragonfly.ReleaseLease(ctx, leaseKey)
-
-	pg, err := ledger.OpenPostgres(ctx, cfg.PostgresURL)
+	pg, err := pmruntime.OpenPostgresRunLedger(ctx, cfg.PostgresURL)
 	if err != nil {
 		return err
 	}
@@ -815,7 +838,8 @@ func recordRuntimeETL(ctx context.Context, run app.Run) error {
 	if err := pg.Migrate(ctx); err != nil {
 		return err
 	}
-	return pg.Append(ctx, ledger.RunRecord{
+	module := pmruntime.Module{Leases: dragonfly, Ledger: pg}
+	return module.RecordRunWithLease(ctx, pmruntime.LeaseRequest{Key: "polymetrics:etl:" + run.ID, Value: "recording", TTL: 30 * time.Second}, pmruntime.RunRecord{
 		ID:             run.ID,
 		Mode:           "runtime-backed",
 		Operation:      "etl",
@@ -834,8 +858,12 @@ func runPerf(ctx context.Context, args []string, stdout io.Writer, jsonOut bool)
 	switch args[0] {
 	case "compare":
 		flags := parseFlags(args[1:])
+		iterations, err := parseIntFlag("iterations", valueOr(flags.first("iterations"), "25"), 25)
+		if err != nil {
+			return err
+		}
 		comparison, err := perf.Compare(ctx, perf.CompareRequest{
-			Iterations: parseInt(flags.first("iterations"), 25),
+			Iterations: iterations,
 			Runtime:    flags.first("runtime") == "true",
 		})
 		if err != nil {
@@ -853,8 +881,12 @@ func runPerf(ctx context.Context, args []string, stdout io.Writer, jsonOut bool)
 		return nil
 	case "sync-modes":
 		flags := parseFlags(args[1:])
+		records, err := parseIntFlag("records", valueOr(flags.first("records"), "1000"), 1000)
+		if err != nil {
+			return err
+		}
 		benchmark, err := perf.CompareSyncModes(ctx, perf.SyncModeBenchmarkRequest{
-			Records: parseInt(flags.first("records"), 1000),
+			Records: records,
 		})
 		if err != nil {
 			return err
@@ -897,6 +929,25 @@ func withApp(root string, fn func(*app.App) error) error {
 		return err
 	}
 	return fn(a)
+}
+
+func validateCredentialConfig(a *app.App, connector string, config map[string]string) error {
+	path := config["path"]
+	if path == "" {
+		return nil
+	}
+	switch connector {
+	case "warehouse", "outbox":
+		allowExternal := strings.EqualFold(config["allow_external_path"], "true")
+		if err := safety.ValidateLocalWritePath(filepath.Dir(a.ProjectDir()), path, connector+" path", allowExternal); err != nil {
+			return validationErrorf("%v", err)
+		}
+	default:
+		if err := safety.RejectDangerousChars(path, connector+" path"); err != nil {
+			return validationErrorf("%v", err)
+		}
+	}
+	return nil
 }
 
 func appRegistry() *connectors.Registry {

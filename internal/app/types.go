@@ -123,6 +123,7 @@ type ReversePlan struct {
 	PlanHash              string              `json:"plan_hash"`
 	ApprovalTokenHash     string              `json:"approval_token_hash,omitempty"`
 	ApprovalToken         string              `json:"approval_token,omitempty"`
+	ApprovalConsumedAt    time.Time           `json:"approval_consumed_at,omitempty"`
 	CreatedAt             time.Time           `json:"created_at"`
 	ExpiresAt             time.Time           `json:"expires_at"`
 }

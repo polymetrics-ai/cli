@@ -27,6 +27,11 @@ var factoryRegistry = struct {
 	byName map[string]func() Connector
 }{byName: map[string]func() Connector{}}
 
+var liveFactoryNamesCache = struct {
+	once  sync.Once
+	names map[string]bool
+}{names: map[string]bool{}}
+
 // RegisterFactory registers a connector factory under name. It is intended to
 // be called from a connector package's init(); a generated registry_gen.go (in
 // the registryset package) blank-imports each connector package to run those
@@ -124,6 +129,36 @@ type ReadRequest struct {
 	Stream string
 	Config RuntimeConfig
 	State  map[string]string
+	Limit  int
+}
+
+var ErrReadLimitReached = errors.New("connector read limit reached")
+
+func LimitEmitter(limit int, emit func(Record) error) func(Record) error {
+	if limit <= 0 {
+		return emit
+	}
+	count := 0
+	return func(record Record) error {
+		if count >= limit {
+			return ErrReadLimitReached
+		}
+		if err := emit(record); err != nil {
+			return err
+		}
+		count++
+		if count >= limit {
+			return ErrReadLimitReached
+		}
+		return nil
+	}
+}
+
+func IgnoreReadLimit(err error) error {
+	if errors.Is(err, ErrReadLimitReached) {
+		return nil
+	}
+	return err
 }
 
 type WriteRequest struct {
@@ -206,11 +241,23 @@ type Connector interface {
 	Write(ctx context.Context, req WriteRequest, records []Record) (WriteResult, error)
 }
 
+type LocalWarehouseMaterializer interface {
+	MaterializesLocalWarehouse() bool
+}
+
 type Registry struct {
 	connectors map[string]Connector
 }
 
 func NewRegistry() *Registry {
+	return newRegistry(false)
+}
+
+func NewLiveRegistry() *Registry {
+	return newRegistry(true)
+}
+
+func newRegistry(liveOnly bool) *Registry {
 	r := &Registry{connectors: make(map[string]Connector)}
 	// Built-in primitive connectors stay explicit.
 	r.Register(Sample{})
@@ -222,6 +269,9 @@ func NewRegistry() *Registry {
 	// runs RegisterFactory in its init(); the registryset package blank-imports
 	// those packages in the production binary.
 	for _, entry := range registeredFactories() {
+		if liveOnly && !isLiveFactory(entry.name) {
+			continue
+		}
 		if _, exists := r.connectors[entry.name]; exists {
 			continue
 		}
@@ -243,6 +293,24 @@ func NewRegistry() *Registry {
 		r.Register(NewNativeCatalogConnector(def))
 	}
 	return r
+}
+
+func isLiveFactory(name string) bool {
+	liveFactoryNamesCache.once.Do(func() {
+		names := map[string]bool{}
+		for _, def := range ConnectorCatalog() {
+			if def.ImplementationStatus != ImplementationEnabled {
+				continue
+			}
+			if def.PMConnectorName != "" {
+				names[def.PMConnectorName] = true
+			}
+			names[def.Slug] = true
+			names[BareName(def.Slug)] = true
+		}
+		liveFactoryNamesCache.names = names
+	})
+	return liveFactoryNamesCache.names[name]
 }
 
 func (r *Registry) Register(c Connector) {
@@ -516,6 +584,8 @@ func (File) Write(ctx context.Context, req WriteRequest, records []Record) (Writ
 type Warehouse struct{}
 
 func (Warehouse) Name() string { return "warehouse" }
+
+func (Warehouse) MaterializesLocalWarehouse() bool { return true }
 
 func (Warehouse) Metadata() Metadata {
 	return Metadata{

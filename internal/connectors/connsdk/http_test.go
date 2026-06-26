@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -98,6 +99,37 @@ func TestRequesterReturnsHTTPErrorOn404(t *testing.T) {
 	}
 	if httpErr.Status != http.StatusNotFound {
 		t.Fatalf("status = %d", httpErr.Status)
+	}
+}
+
+func TestHTTPErrorErrorRedactsURLQueryAndBody(t *testing.T) {
+	err := (&HTTPError{Status: http.StatusUnauthorized, URL: "https://api.example.test/items?api_key=secret-token", Body: `{"error":"secret-token denied"}`}).Error()
+	for _, leaked := range []string{"secret-token", "api_key=", "denied"} {
+		if strings.Contains(err, leaked) {
+			t.Fatalf("HTTPError leaked %q in %q", leaked, err)
+		}
+	}
+	if !strings.Contains(err, "http 401") || !strings.Contains(err, "https://api.example.test/items") {
+		t.Fatalf("HTTPError lost useful context: %q", err)
+	}
+}
+
+func TestRequesterDoJSONDecodeErrorDoesNotIncludeRequestURL(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"broken"`))
+	}))
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, Auth: APIKeyQuery("api_key", "secret-token"), Sleep: noSleep}
+	var out map[string]any
+	err := r.DoJSON(context.Background(), http.MethodGet, "/items", nil, nil, &out)
+	if err == nil {
+		t.Fatal("expected decode error")
+	}
+	for _, leaked := range []string{srv.URL, "secret-token", "api_key"} {
+		if strings.Contains(err.Error(), leaked) {
+			t.Fatalf("decode error leaked %q in %q", leaked, err.Error())
+		}
 	}
 }
 

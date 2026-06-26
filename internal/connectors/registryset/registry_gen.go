@@ -568,5 +568,10 @@ import (
 	_ "polymetrics.ai/internal/connectors/zoom"
 )
 
-// New returns a connectors.Registry with every wired connector registered.
-func New() *connectors.Registry { return connectors.NewRegistry() }
+// New returns the production registry: built-ins plus explicitly live-enabled
+// connector factories. Self-registered package factories are staged by default.
+func New() *connectors.Registry { return connectors.NewLiveRegistry() }
+
+// NewStaged returns the test/conformance registry with every wired staged
+// connector factory included.
+func NewStaged() *connectors.Registry { return connectors.NewRegistry() }

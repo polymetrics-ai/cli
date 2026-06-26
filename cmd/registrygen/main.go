@@ -29,6 +29,7 @@ const (
 // packages (the shared SDK and the wiring package itself).
 var skip = map[string]bool{
 	"connsdk":     true,
+	"httpsource":  true,
 	"registryset": true,
 	"_quarantine": true,
 }
@@ -154,8 +155,12 @@ func writeRegistry(outPath string, pkgs []string) error {
 		}
 	}
 	b.WriteString(")\n\n")
-	b.WriteString("// New returns a connectors.Registry with every wired connector registered.\n")
-	b.WriteString("func New() *connectors.Registry { return connectors.NewRegistry() }\n")
+	b.WriteString("// New returns the production registry: built-ins plus explicitly live-enabled\n")
+	b.WriteString("// connector factories. Self-registered package factories are staged by default.\n")
+	b.WriteString("func New() *connectors.Registry { return connectors.NewLiveRegistry() }\n\n")
+	b.WriteString("// NewStaged returns the test/conformance registry with every wired staged\n")
+	b.WriteString("// connector factory included.\n")
+	b.WriteString("func NewStaged() *connectors.Registry { return connectors.NewRegistry() }\n")
 	return os.WriteFile(outPath, []byte(b.String()), 0o644)
 }
 

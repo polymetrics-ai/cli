@@ -87,7 +87,7 @@ func writeError(stdout, stderr io.Writer, err error, jsonOut bool) int {
 	if ce == nil {
 		return 0
 	}
-	message := safety.SanitizeTerminal(ce.Error())
+	message := safety.SanitizeTerminal(safety.RedactErrorText(ce.Error()))
 	if jsonOut {
 		_ = writeJSON(stdout, envelope{
 			"api_version": apiVersion,

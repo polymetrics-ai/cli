@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"polymetrics.ai/internal/safety"
 )
 
 // maxErrorBody bounds how much of an error response body is captured in HTTPError.
@@ -41,7 +43,7 @@ func (e *HTTPError) Error() string {
 	if len(msg) > 512 {
 		msg = msg[:512] + "..."
 	}
-	return fmt.Sprintf("http %d for %s: %s", e.Status, e.URL, msg)
+	return safety.RedactErrorText(fmt.Sprintf("http %d for %s: %s", e.Status, e.URL, msg))
 }
 
 // Requester performs JSON HTTP requests with auth, retry, and rate-limit handling.
@@ -272,7 +274,7 @@ func (r *Requester) DoJSON(ctx context.Context, method, path string, query url.V
 	dec := json.NewDecoder(bytes.NewReader(resp.Body))
 	dec.UseNumber()
 	if err := dec.Decode(out); err != nil {
-		return fmt.Errorf("decode response from %s: %w", resp.requestURL, err)
+		return fmt.Errorf("decode response body: %w", err)
 	}
 	return nil
 }

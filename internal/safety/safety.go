@@ -2,9 +2,15 @@ package safety
 
 import (
 	"fmt"
+	"net/url"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
+
+var httpURLPattern = regexp.MustCompile(`https?://[^\s]+`)
+var jsonBodyPattern = regexp.MustCompile(`: \{.*\}$`)
+var secretAssignmentPattern = regexp.MustCompile(`(?i)(api[_-]?key|access[_-]?token|token|secret|password)=([^\s&]+)`)
 
 func IsDangerousUnicode(r rune) bool {
 	switch {
@@ -39,6 +45,32 @@ func SanitizeTerminal(text string) string {
 		b.WriteRune(r)
 	}
 	return b.String()
+}
+
+func RedactErrorText(text string) string {
+	text = httpURLPattern.ReplaceAllStringFunc(text, redactURL)
+	text = jsonBodyPattern.ReplaceAllString(text, ": [redacted]")
+	text = secretAssignmentPattern.ReplaceAllString(text, "$1=[redacted]")
+	return text
+}
+
+func redactURL(raw string) string {
+	suffix := ""
+	for len(raw) > 0 {
+		last := raw[len(raw)-1]
+		if last != ':' && last != ',' && last != ')' && last != ']' && last != '}' {
+			break
+		}
+		suffix = string(last) + suffix
+		raw = raw[:len(raw)-1]
+	}
+	parsed, err := url.Parse(raw)
+	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
+		return raw + suffix
+	}
+	parsed.RawQuery = ""
+	parsed.Fragment = ""
+	return parsed.String() + suffix
 }
 
 func RejectDangerousChars(value, field string) error {
@@ -89,6 +121,38 @@ func ValidateRelativePath(value, field string) error {
 	clean := filepath.Clean(value)
 	if clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) {
 		return fmt.Errorf("%s must not escape the current directory", field)
+	}
+	return nil
+}
+
+func ValidateLocalWritePath(projectRoot, value, field string, allowExternal bool) error {
+	if strings.TrimSpace(value) == "" {
+		return nil
+	}
+	if err := RejectDangerousChars(value, field); err != nil {
+		return err
+	}
+	rootAbs, err := filepath.Abs(projectRoot)
+	if err != nil {
+		return fmt.Errorf("resolve project root: %w", err)
+	}
+	var pathAbs string
+	if filepath.IsAbs(value) {
+		pathAbs = filepath.Clean(value)
+	} else {
+		clean := filepath.Clean(value)
+		if clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) {
+			return fmt.Errorf("%s must not escape the project root", field)
+		}
+		pathAbs = filepath.Join(rootAbs, clean)
+	}
+	rel, err := filepath.Rel(rootAbs, pathAbs)
+	if err != nil {
+		return fmt.Errorf("compare %s to project root: %w", field, err)
+	}
+	insideProject := rel == "." || (rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)) && !filepath.IsAbs(rel))
+	if !insideProject && !allowExternal {
+		return fmt.Errorf("%s outside the project root requires allow_external_path=true", field)
 	}
 	return nil
 }

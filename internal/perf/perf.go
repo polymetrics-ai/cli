@@ -9,8 +9,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/app"
-	"polymetrics.ai/internal/coordination"
-	"polymetrics.ai/internal/ledger"
+	pmruntime "polymetrics.ai/internal/runtime"
 	"polymetrics.ai/internal/runtimecheck"
 )
 
@@ -210,22 +209,12 @@ func runDependencyFree(ctx context.Context, iterations int) (Result, error) {
 func runRuntimeBacked(ctx context.Context, iterations int, cfg runtimecheck.Config) (Result, error) {
 	root := filepath.Join(os.TempDir(), fmt.Sprintf("pm-perf-runtime-%d", time.Now().UnixNano()))
 	start := time.Now()
-	dragonfly := coordination.OpenDragonfly(cfg.DragonflyAddr)
+	dragonfly := pmruntime.OpenDragonflyLeaseStore(cfg.DragonflyAddr)
 	defer dragonfly.Close()
 	if err := dragonfly.Ping(ctx); err != nil {
 		return Result{Mode: "runtime-backed", Iterations: iterations}, err
 	}
-	leaseKey := fmt.Sprintf("polymetrics:perf:%d", time.Now().UnixNano())
-	acquired, err := dragonfly.AcquireLease(ctx, leaseKey, "running", 30*time.Second)
-	if err != nil {
-		return Result{Mode: "runtime-backed", Iterations: iterations}, err
-	}
-	if !acquired {
-		return Result{Mode: "runtime-backed", Iterations: iterations}, fmt.Errorf("runtime performance lease was not acquired")
-	}
-	defer dragonfly.ReleaseLease(ctx, leaseKey)
-
-	pg, err := ledger.OpenPostgres(ctx, cfg.PostgresURL)
+	pg, err := pmruntime.OpenPostgresRunLedger(ctx, cfg.PostgresURL)
 	if err != nil {
 		return Result{Mode: "runtime-backed", Iterations: iterations}, err
 	}
@@ -239,7 +228,8 @@ func runRuntimeBacked(ctx context.Context, iterations int, cfg runtimecheck.Conf
 	}
 	duration := time.Since(start)
 	result := summarize("runtime-backed", iterations, records, duration)
-	if err := pg.Append(ctx, ledger.RunRecord{
+	module := pmruntime.Module{Leases: dragonfly, Ledger: pg}
+	if err := module.RecordRunWithLease(ctx, pmruntime.LeaseRequest{Key: fmt.Sprintf("polymetrics:perf:%d", time.Now().UnixNano()), Value: "running", TTL: 30 * time.Second}, pmruntime.RunRecord{
 		ID:             fmt.Sprintf("perf_%d", time.Now().UnixNano()),
 		Mode:           "runtime-backed",
 		Operation:      "perf_compare",

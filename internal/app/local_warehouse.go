@@ -276,19 +276,9 @@ func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey stri
 }
 
 func materializeDedupedFinal(ctx context.Context, rawPath, finalPath string) (int, error) {
-	rawRecords, err := readLocalRawRecords(ctx, rawPath)
+	best, err := readBestLocalRawRecords(ctx, rawPath)
 	if err != nil {
 		return 0, err
-	}
-	best := map[string]localRawRecord{}
-	for _, raw := range rawRecords {
-		if raw.PrimaryKey == "" {
-			return 0, fmt.Errorf("raw record %s is missing primary key metadata", raw.RawID)
-		}
-		current, ok := best[raw.PrimaryKey]
-		if !ok || rawRecordNewer(raw, current) {
-			best[raw.PrimaryKey] = raw
-		}
 	}
 	keys := make([]string, 0, len(best))
 	for key, raw := range best {
@@ -327,18 +317,18 @@ func rawRecordNewer(candidate, current localRawRecord) bool {
 	return candidate.RawID > current.RawID
 }
 
-func readLocalRawRecords(ctx context.Context, path string) ([]localRawRecord, error) {
+func readBestLocalRawRecords(ctx context.Context, path string) (map[string]localRawRecord, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return nil, nil
+			return map[string]localRawRecord{}, nil
 		}
 		return nil, fmt.Errorf("open raw table: %w", err)
 	}
 	defer file.Close()
 	reader := bufio.NewScanner(file)
 	reader.Buffer(make([]byte, 0, 64*1024), 10*1024*1024)
-	records := []localRawRecord{}
+	best := map[string]localRawRecord{}
 	for reader.Scan() {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -351,12 +341,18 @@ func readLocalRawRecords(ctx context.Context, path string) ([]localRawRecord, er
 		if err := json.Unmarshal([]byte(line), &record); err != nil {
 			return nil, fmt.Errorf("decode raw record: %w", err)
 		}
-		records = append(records, record)
+		if record.PrimaryKey == "" {
+			return nil, fmt.Errorf("raw record %s is missing primary key metadata", record.RawID)
+		}
+		current, ok := best[record.PrimaryKey]
+		if !ok || rawRecordNewer(record, current) {
+			best[record.PrimaryKey] = record
+		}
 	}
 	if err := reader.Err(); err != nil && err != io.EOF {
 		return nil, fmt.Errorf("scan raw records: %w", err)
 	}
-	return records, nil
+	return best, nil
 }
 
 func isDeletedRecord(record connectors.Record) bool {

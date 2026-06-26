@@ -29,6 +29,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/httpsource"
 )
 
 const (
@@ -54,6 +55,21 @@ type Connector struct {
 
 func (Connector) Name() string { return "google-webfonts" }
 
+func (c Connector) source() httpsource.Source {
+	return httpsource.Source{Client: c.Client, Spec: httpsource.Spec{
+		Name:            "google-webfonts",
+		DisplayName:     "Google Webfonts",
+		IntegrationType: "api",
+		Description:     "Reads Google Web Fonts families (default, popular, trending, newest, and alphabetical views) through the Google Fonts Developer API. Read-only.",
+		DefaultBaseURL:  defaultBaseURL,
+		DefaultStream:   "webfonts",
+		UserAgent:       userAgent,
+		Auth:            httpsource.AuthSpec{Type: httpsource.AuthAPIKeyQuery, SecretName: "api_key", QueryParam: "key"},
+		DefaultMaxPages: maxPagesCap,
+		Streams:         httpStreams(),
+	}}
+}
+
 func (Connector) Metadata() connectors.Metadata {
 	return connectors.Metadata{
 		Name:            "google-webfonts",
@@ -67,69 +83,95 @@ func (Connector) Metadata() connectors.Metadata {
 // Check verifies the connector is configured well enough to talk to the Google
 // Web Fonts API. In fixture mode it short-circuits without a network call.
 func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
-	if err := ctx.Err(); err != nil {
-		return err
-	}
-	if fixtureMode(cfg) {
-		return nil
-	}
-	if _, err := baseURL(cfg); err != nil {
-		return err
-	}
-	if strings.TrimSpace(secret(cfg)) == "" {
-		return errors.New("google-webfonts connector requires secret api_key")
-	}
-	r, err := c.requester(cfg)
-	if err != nil {
-		return err
-	}
-	// A bounded read of the font list confirms the API key and connectivity
-	// without mutating anything.
-	if err := r.DoJSON(ctx, http.MethodGet, listResource, nil, nil, nil); err != nil {
-		return fmt.Errorf("check google-webfonts: %w", err)
-	}
-	return nil
+	return c.source().Check(ctx, cfg)
 }
 
 func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (connectors.Catalog, error) {
-	if err := ctx.Err(); err != nil {
-		return connectors.Catalog{}, err
-	}
-	return connectors.Catalog{Connector: c.Name(), Streams: streams()}, nil
+	return c.source().Catalog(ctx, cfg)
 }
 
 // InitialState satisfies connectors.StatefulReader: a stream starts with an
 // empty incremental cursor (full sync). The Google Web Fonts API does not accept
 // a server-side lastModified filter, so the cursor is advisory only.
 func (c Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
-	if err := ctx.Err(); err != nil {
-		return nil, err
-	}
-	return connsdk.WithCursor(map[string]string{"stream": stream}, ""), nil
+	return c.source().InitialState(ctx, stream, cfg)
 }
 
 func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
-	if err := ctx.Err(); err != nil {
-		return err
-	}
-	stream := req.Stream
-	if stream == "" {
-		stream = "webfonts"
-	}
-	endpoint, ok := streamEndpoints[stream]
-	if !ok {
-		return fmt.Errorf("google-webfonts stream %q not found", stream)
-	}
+	return c.source().Read(ctx, req, emit)
+}
 
-	if fixtureMode(req.Config) {
-		return c.readFixture(ctx, endpoint, req, emit)
+func httpStreams() []httpsource.StreamSpec {
+	catalog := streams()
+	out := make([]httpsource.StreamSpec, 0, len(catalog))
+	for _, stream := range catalog {
+		endpoint := streamEndpoints[stream.Name]
+		sort := endpoint.sort
+		mapper := endpoint.mapRecord
+		out = append(out, httpsource.StreamSpec{
+			Name:           stream.Name,
+			Description:    stream.Description,
+			Fields:         stream.Fields,
+			PrimaryKey:     stream.PrimaryKey,
+			CursorFields:   stream.CursorFields,
+			Method:         http.MethodGet,
+			Path:           listResource,
+			RecordsPath:    "items",
+			FixtureRecords: googleFixtureRecords(),
+			Query: func(cfg connectors.RuntimeConfig, pageSize int) url.Values {
+				query := url.Values{}
+				if sort != "" {
+					query.Set("sort", sort)
+				}
+				for k, v := range optionalQuery(cfg) {
+					query.Set(k, v)
+				}
+				return query
+			},
+			Paginator: func(pageSize int) connsdk.Paginator {
+				return &connsdk.CursorPaginator{CursorParam: "pageToken", TokenPath: "nextPageToken"}
+			},
+			Map: func(record connectors.Record) (connectors.Record, error) {
+				return mapper(map[string]any(record)), nil
+			},
+		})
 	}
+	return out
+}
 
-	r, err := c.requester(req.Config)
-	if err != nil {
-		return err
+func googleFixtureRecords() []connectors.Record {
+	fixtures := []map[string]any{
+		{
+			"family":       "Roboto",
+			"category":     "sans-serif",
+			"version":      "v30",
+			"lastModified": "2026-01-01",
+			"kind":         "webfonts#webfont",
+			"menu":         "https://fonts.gstatic.com/s/roboto/menu.ttf",
+			"variants":     []any{"100", "300", "regular", "500", "700"},
+			"subsets":      []any{"latin", "latin-ext", "cyrillic"},
+			"files":        map[string]any{"regular": "https://fonts.gstatic.com/s/roboto/regular.ttf"},
+		},
+		{
+			"family":       "Open Sans",
+			"category":     "sans-serif",
+			"version":      "v40",
+			"lastModified": "2026-01-02",
+			"kind":         "webfonts#webfont",
+			"menu":         "https://fonts.gstatic.com/s/opensans/menu.ttf",
+			"variants":     []any{"300", "regular", "600", "700"},
+			"subsets":      []any{"latin", "greek"},
+			"files":        map[string]any{"regular": "https://fonts.gstatic.com/s/opensans/regular.ttf"},
+		},
 	}
-	return c.harvest(ctx, r, endpoint, req.Config, emit)
+	out := make([]connectors.Record, 0, len(fixtures))
+	for _, fixture := range fixtures {
+		record := fontRecord(fixture)
+		record["connector"] = "google-webfonts"
+		record["fixture"] = true
+		out = append(out, record)
+	}
+	return out
 }
 
 // harvest reads the Google Web Fonts list endpoint. The API returns the full
@@ -307,6 +349,6 @@ func cloneValues(in url.Values) url.Values {
 
 // Write satisfies the connectors.Connector interface. The Google Web Fonts API
 // is read-only, so writes are unsupported.
-func (Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
-	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
+func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
+	return c.source().Write(ctx, req, records)
 }

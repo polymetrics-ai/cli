@@ -16,6 +16,8 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/registryset"
+	"polymetrics.ai/internal/safety"
+	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/vault"
 )
 
@@ -23,6 +25,7 @@ type App struct {
 	root       string
 	projectDir string
 	statePath  string
+	store      statestore.JSONStore[state]
 	state      state
 	vault      *vault.Vault
 	registry   *connectors.Registry
@@ -100,10 +103,12 @@ func Open(root string) (*App, error) {
 	if err != nil {
 		return nil, err
 	}
+	statePath := filepath.Join(projectDir, "state", "state.json")
 	a := &App{
 		root:       root,
 		projectDir: projectDir,
-		statePath:  filepath.Join(projectDir, "state", "state.json"),
+		statePath:  statePath,
+		store:      newStateStore(statePath),
 		vault:      v,
 		registry:   registryset.New(),
 	}
@@ -115,6 +120,8 @@ func Open(root string) (*App, error) {
 }
 
 func (a *App) ProjectDir() string { return a.projectDir }
+
+func (a *App) projectRoot() string { return filepath.Dir(a.projectDir) }
 
 func (a *App) Registry() *connectors.Registry { return a.registry }
 
@@ -131,21 +138,11 @@ func (a *App) Connector(name string) (connectors.Metadata, error) {
 }
 
 func (a *App) load() error {
-	b, err := os.ReadFile(a.statePath)
-	if errors.Is(err, os.ErrNotExist) {
-		a.state = state{Checkpoints: map[string]map[string]string{}, StreamStates: map[string]StreamState{}}
-		return a.save()
-	}
+	loaded, err := a.store.Load()
 	if err != nil {
-		return fmt.Errorf("read state: %w", err)
+		return err
 	}
-	if len(b) == 0 {
-		a.state = state{Checkpoints: map[string]map[string]string{}, StreamStates: map[string]StreamState{}}
-		return nil
-	}
-	if err := json.Unmarshal(b, &a.state); err != nil {
-		return fmt.Errorf("decode state: %w", err)
-	}
+	a.state = loaded
 	if a.state.Checkpoints == nil {
 		a.state.Checkpoints = map[string]map[string]string{}
 	}
@@ -156,7 +153,17 @@ func (a *App) load() error {
 }
 
 func (a *App) save() error {
-	return writeJSONAtomic(a.statePath, a.state)
+	return a.store.Save(a.state)
+}
+
+func newStateStore(path string) statestore.JSONStore[state] {
+	return statestore.JSONStore[state]{
+		Path: path,
+		Initial: func() state {
+			return state{Checkpoints: map[string]map[string]string{}, StreamStates: map[string]StreamState{}}
+		},
+		Locker: statestore.FileLock{Path: path + ".lock"},
+	}
 }
 
 func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (CredentialMeta, error) {
@@ -178,6 +185,9 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	}
 	if req.Secrets == nil {
 		req.Secrets = map[string]string{}
+	}
+	if err := a.validateCredentialConfig(req.Connector, req.Config); err != nil {
+		return CredentialMeta{}, err
 	}
 	if err := a.vault.Put(ctx, id, req.Secrets); err != nil {
 		return CredentialMeta{}, err
@@ -208,6 +218,20 @@ func (a *App) ListCredentials() []CredentialMeta {
 	out := append([]CredentialMeta(nil), a.state.Credentials...)
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
+}
+
+func (a *App) validateCredentialConfig(connector string, config map[string]string) error {
+	path := config["path"]
+	if path == "" {
+		return nil
+	}
+	switch connector {
+	case "warehouse", "outbox":
+		allowExternal := strings.EqualFold(config["allow_external_path"], "true")
+		return safety.ValidateLocalWritePath(a.projectRoot(), path, connector+" path", allowExternal)
+	default:
+		return safety.RejectDangerousChars(path, connector+" path")
+	}
 }
 
 func (a *App) InspectCredential(name string) (CredentialMeta, error) {
@@ -401,7 +425,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return a.failRun(runID, err)
 	}
 	var result etlExecutionResult
-	if destination.Name() == "warehouse" {
+	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
 		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destRuntime, req.Stream, stream, mode, batchSize)
 	} else {
 		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, req.Stream, stream, mode, batchSize)
@@ -578,14 +602,11 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 		return nil, errors.New("warehouse connector not registered")
 	}
 	rows := make([]connectors.Record, 0)
-	err := warehouse.Read(ctx, connectors.ReadRequest{Stream: req.Table, Config: cfg}, func(record connectors.Record) error {
-		if len(rows) >= req.Limit {
-			return nil
-		}
+	err := warehouse.Read(ctx, connectors.ReadRequest{Stream: req.Table, Config: cfg, Limit: req.Limit}, connectors.LimitEmitter(req.Limit, func(record connectors.Record) error {
 		rows = append(rows, record)
 		return nil
-	})
-	if err != nil {
+	}))
+	if err := connectors.IgnoreReadLimit(err); err != nil {
 		return nil, err
 	}
 	return rows, nil
@@ -646,12 +667,7 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		return ReversePlan{}, err
 	}
 	created := time.Now().UTC()
-	planForHash := map[string]any{
-		"name": req.Name, "source_table": req.SourceTable, "destination_connector": req.DestinationConnector,
-		"destination_credential": req.DestinationCredential, "action": req.Action, "mappings": req.Mappings,
-		"record_count": len(records),
-	}
-	planHash, err := hashJSON(planForHash)
+	planHash, err := reversePlanHash(req.Name, req.SourceTable, req.DestinationConnector, req.DestinationCredential, req.Action, req.DestinationConfig, req.Mappings, mapped)
 	if err != nil {
 		return ReversePlan{}, err
 	}
@@ -725,15 +741,33 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 		return ReverseRun{}, fmt.Errorf("reverse plan %q not found", req.PlanID)
 	}
 	plan := a.state.ReversePlans[planIndex]
+	if plan.Status != "planned" {
+		return ReverseRun{}, fmt.Errorf("reverse plan %q was already %s", req.PlanID, plan.Status)
+	}
 	if time.Now().UTC().After(plan.ExpiresAt) {
 		return ReverseRun{}, errors.New("reverse plan approval has expired")
+	}
+	if plan.ApprovalTokenHash == "" {
+		return ReverseRun{}, errors.New("reverse plan approval has already been consumed")
 	}
 	if hashString(req.ApprovalToken) != plan.ApprovalTokenHash {
 		return ReverseRun{}, errors.New("approval token is invalid")
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount)})
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
 	if err != nil {
 		return ReverseRun{}, err
+	}
+	mappedForHash := mapReverseRecords(records, plan.Mappings, "")
+	planHash, err := reversePlanHash(plan.Name, plan.SourceTable, plan.DestinationConnector, plan.DestinationCredential, plan.Action, plan.DestinationConfig, plan.Mappings, mappedForHash)
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	if planHash != plan.PlanHash {
+		a.state.ReversePlans[planIndex].Status = "invalidated"
+		a.state.ReversePlans[planIndex].ApprovalTokenHash = ""
+		a.state.ReversePlans[planIndex].ApprovalConsumedAt = time.Now().UTC()
+		_ = a.save()
+		return ReverseRun{}, errors.New("reverse plan source rows changed since approval")
 	}
 	mapped := mapReverseRecords(records, plan.Mappings, plan.ID)
 	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}
@@ -746,6 +780,12 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 		return ReverseRun{}, err
 	}
 	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: len(mapped), StartedAt: time.Now().UTC()}
+	a.state.ReversePlans[planIndex].Status = "executing"
+	a.state.ReversePlans[planIndex].ApprovalTokenHash = ""
+	a.state.ReversePlans[planIndex].ApprovalConsumedAt = time.Now().UTC()
+	if err := a.save(); err != nil {
+		return ReverseRun{}, err
+	}
 	result, err := writer.Write(ctx, connectors.WriteRequest{
 		Stream: "records",
 		Table:  plan.Name,
@@ -759,9 +799,10 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 		if run.RecordsFailed == 0 {
 			run.RecordsFailed = len(mapped) - result.RecordsWritten
 		}
-		run.Error = err.Error()
+		run.Error = safety.RedactErrorText(err.Error())
 		run.CompletedAt = time.Now().UTC()
 		a.state.ReverseRuns = append(a.state.ReverseRuns, run)
+		a.state.ReversePlans[planIndex].Status = "failed"
 		_ = a.save()
 		return run, err
 	}
@@ -830,7 +871,7 @@ func (a *App) failRun(runID string, err error) (Run, error) {
 	for i := range a.state.Runs {
 		if a.state.Runs[i].ID == runID {
 			a.state.Runs[i].Status = "failed"
-			a.state.Runs[i].Error = err.Error()
+			a.state.Runs[i].Error = safety.RedactErrorText(err.Error())
 			a.state.Runs[i].CompletedAt = time.Now().UTC()
 			run := a.state.Runs[i]
 			_ = a.save()
