@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/rlm"
@@ -20,7 +21,7 @@ import (
 // uses it (Tier 2) and otherwise falls back to the offline keyword heuristic
 // (Tier 1). The RLM execution branch is wired in a later slice; until then a
 // data_analysis/ml route returns its decision so the caller can escalate.
-func runExtract(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+func runExtract(ctx context.Context, a *app.App, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	request := flags.first("request")
 	if request == "" {
@@ -62,7 +63,33 @@ func runExtract(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			env["note"] = "simple_query route, but no SQL was generated; pass --sql or configure an LLM provider for SQL synthesis"
 		}
 	} else {
-		env["note"] = "rlm_analysis route; run `pm rlm run --mode agent` (requires the RLM worker + podman) to execute"
+		// RLM path: execute the agent when both tables are provided and the
+		// backend (fake runner, or Temporal+podman) is available; otherwise
+		// return the decision so the caller can supply tables or escalate.
+		inTable, outTable := flags.first("in"), flags.first("out")
+		if inTable != "" && outTable != "" {
+			analyzer, closer, err := buildAgentAnalyzer(request)
+			if err != nil {
+				env["note"] = fmt.Sprintf("rlm_analysis route; agent backend unavailable: %v", err)
+			} else {
+				if closer != nil {
+					defer closer()
+				}
+				rlmReq := rlm.RunRequest{
+					Spec:         &rlm.Spec{Name: valueOr(flags.first("spec-name"), "extract")},
+					InTable:      inTable,
+					OutTable:     outTable,
+					WarehouseDir: filepath.Join(root, ".polymetrics", "warehouse"),
+				}
+				res, runErr := analyzer.Run(ctx, rlmReq)
+				if runErr != nil {
+					return fmt.Errorf("extract: rlm agent: %w", runErr)
+				}
+				env["rlm"] = res
+			}
+		} else {
+			env["note"] = "rlm_analysis route; provide --in and --out (and run `pm worker serve` or set POLYMETRICS_RLM_FAKE_RUNNER) to execute"
+		}
 	}
 
 	if jsonOut {

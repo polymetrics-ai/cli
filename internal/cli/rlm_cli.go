@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 
 	"polymetrics.ai/internal/rlm"
+	"polymetrics.ai/internal/temporalprobe"
+	"polymetrics.ai/internal/worker"
 )
 
 func runRLM(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -39,7 +41,7 @@ func runRLMRun(ctx context.Context, root string, args []string, stdout io.Writer
 		return usageErrorf("rlm run: --out is required")
 	}
 	if mode == "" {
-		return usageErrorf("rlm run: --mode is required (deterministic|fixture|model)")
+		return usageErrorf("rlm run: --mode is required (deterministic|fixture|model|agent)")
 	}
 
 	specData, err := os.ReadFile(specPath)
@@ -63,6 +65,7 @@ func runRLMRun(ctx context.Context, root string, args []string, stdout io.Writer
 	}
 
 	var analyzer rlm.Analyzer
+	var closer func() error
 	switch mode {
 	case "deterministic":
 		analyzer = &rlm.DeterministicAnalyzer{}
@@ -70,8 +73,17 @@ func runRLMRun(ctx context.Context, root string, args []string, stdout io.Writer
 		analyzer = &rlm.FixtureAnalyzer{}
 	case "model":
 		analyzer = &rlm.ModelAnalyzer{}
+	case "agent":
+		a, c, err := buildAgentAnalyzer(flags.first("request"))
+		if err != nil {
+			return err
+		}
+		analyzer, closer = a, c
 	default:
-		return usageErrorf("rlm run: unknown mode %q (want deterministic|fixture|model)", mode)
+		return usageErrorf("rlm run: unknown mode %q (want deterministic|fixture|model|agent)", mode)
+	}
+	if closer != nil {
+		defer closer()
 	}
 
 	result, err := analyzer.Run(ctx, req)
@@ -88,4 +100,39 @@ func runRLMRun(ctx context.Context, root string, args []string, stdout io.Writer
 		result.Mode, result.InTable, result.OutTable,
 		result.RecordsRead, result.RecordsScored, result.DryRun, result.Duration)
 	return nil
+}
+
+// buildAgentAnalyzer constructs the RLM agent backend. When
+// POLYMETRICS_RLM_FAKE_RUNNER is set it runs fully offline (no Temporal/podman) —
+// the hermetic dev/test path. Otherwise it wires the real Temporal submitter
+// (daemon by default; embedded with POLYMETRICS_RLM_EMBEDDED_WORKER=1) and probe.
+func buildAgentAnalyzer(request string) (rlm.Analyzer, func() error, error) {
+	cfg := rlm.AgentConfigFromEnv(os.Getenv)
+
+	if os.Getenv("POLYMETRICS_RLM_FAKE_RUNNER") != "" {
+		a := &rlm.AgentAnalyzer{
+			Cfg:      rlm.AgentConfig{TemporalAddr: "fake", PodmanBin: "fake", Image: cfg.Image, MaxIter: cfg.MaxIter},
+			Probe:    func(context.Context, string) bool { return true },
+			LookPath: func(string) (string, error) { return "fake", nil },
+			Submit:   rlm.NewFakeRunnerSubmit(),
+			Request:  request,
+		}
+		return a, nil, nil
+	}
+
+	if cfg.TemporalAddr == "" {
+		return nil, nil, rlm.ErrRemoteUnavailable
+	}
+	embedded := os.Getenv("POLYMETRICS_RLM_EMBEDDED_WORKER") == "1"
+	submit, closer, err := worker.SubmitterFor(cfg.TemporalAddr, embedded)
+	if err != nil {
+		return nil, nil, fmt.Errorf("rlm: %w (%v)", rlm.ErrRemoteUnavailable, err)
+	}
+	a := &rlm.AgentAnalyzer{
+		Cfg:     cfg,
+		Probe:   temporalprobe.Probe,
+		Submit:  submit,
+		Request: request,
+	}
+	return a, closer, nil
 }

@@ -284,3 +284,70 @@ func specName(s *Spec) string {
 	}
 	return s.Name
 }
+
+// NewFakeRunnerSubmit returns a SubmitFunc that simulates the container locally,
+// without Temporal or podman, for hermetic tests and offline development (enabled
+// via POLYMETRICS_RLM_FAKE_RUNNER). It reads the staged input + spec, scores with
+// the deterministic spec scorer, and writes out/output.ndjson + manifest.json so
+// the full read-back + writeOutTable path is exercised end-to-end. Because it
+// scores via the same scoreRecords as the deterministic backend, the agent
+// OutTable matches the deterministic OutTable except for _rlm_mode/_rlm_scored_at.
+func NewFakeRunnerSubmit() SubmitFunc {
+	return func(ctx context.Context, req AgentRequest) (AgentResult, error) {
+		recs, err := readEnvelopedRecords(filepath.Join(req.JobDir, "in", "input.ndjson"))
+		if err != nil {
+			return AgentResult{}, fmt.Errorf("rlm: fake runner read input: %w", err)
+		}
+		spec := readStagedSpec(req.JobDir)
+		scored, err := scoreRecords(spec, recs)
+		if err != nil {
+			return AgentResult{}, fmt.Errorf("rlm: fake runner score: %w", err)
+		}
+		if err := writeFakeOutput(req.JobDir, scored); err != nil {
+			return AgentResult{}, err
+		}
+		return AgentResult{JobDir: req.JobDir, RecordsRead: len(recs), RecordsScored: len(scored)}, nil
+	}
+}
+
+func readStagedSpec(jobDir string) *Spec {
+	b, err := os.ReadFile(filepath.Join(jobDir, "in", "request.json"))
+	if err != nil {
+		return &Spec{}
+	}
+	var desc struct {
+		Spec *Spec `json:"spec"`
+	}
+	if err := json.Unmarshal(b, &desc); err != nil || desc.Spec == nil {
+		return &Spec{}
+	}
+	return desc.Spec
+}
+
+func writeFakeOutput(jobDir string, scored []connectors.Record) error {
+	outDir := filepath.Join(jobDir, "out")
+	if err := os.MkdirAll(outDir, 0o700); err != nil {
+		return err
+	}
+	tmp := filepath.Join(outDir, "output.ndjson.tmp")
+	f, err := os.Create(tmp)
+	if err != nil {
+		return err
+	}
+	enc := json.NewEncoder(f)
+	for _, r := range scored {
+		if err := enc.Encode(r); err != nil {
+			f.Close()
+			os.Remove(tmp)
+			return err
+		}
+	}
+	if err := f.Close(); err != nil {
+		return err
+	}
+	if err := os.Rename(tmp, filepath.Join(outDir, "output.ndjson")); err != nil {
+		return err
+	}
+	mb, _ := json.Marshal(agentManifest{ExpectedCount: len(scored), RecordsRead: len(scored)})
+	return os.WriteFile(filepath.Join(outDir, "manifest.json"), mb, 0o600)
+}

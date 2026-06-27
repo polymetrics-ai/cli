@@ -76,7 +76,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	case "flow":
 		err = withApp(root, func(a *app.App) error { return runFlow(ctx, a, rest, stdout, jsonOut) })
 	case "extract":
-		err = withApp(root, func(a *app.App) error { return runExtract(ctx, a, rest, stdout, jsonOut) })
+		err = withApp(root, func(a *app.App) error { return runExtract(ctx, a, root, rest, stdout, jsonOut) })
 	case "perf":
 		err = runPerf(ctx, rest, stdout, jsonOut)
 	case "docs":
@@ -87,6 +87,8 @@ func Run(args []string, stdout, stderr io.Writer) int {
 		err = runRLM(ctx, root, rest, stdout, jsonOut)
 	case "schedule":
 		err = runSchedule(ctx, root, rest, stdout, jsonOut)
+	case "worker":
+		err = runWorker(ctx, rest, stdout, jsonOut)
 	default:
 		err = usageErrorf("unknown command %q", cmd)
 	}
