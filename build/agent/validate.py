@@ -18,7 +18,7 @@ import duckdb
 
 CHECKS = """
 WITH checks AS (
-  SELECT 'schema.required' AS check, (
+  SELECT 'schema.required' AS chk, (
     (SELECT COUNT(*) FROM (DESCRIBE result) WHERE column_name = '_polymetrics_raw_id') = 1
     AND (SELECT COUNT(*) FROM (DESCRIBE result) WHERE column_name = '_rlm_score') = 1
   ) AS passed
@@ -44,7 +44,7 @@ WITH checks AS (
     ((SELECT COUNT(DISTINCT _rlm_score) FROM result) >= 2
      AND (SELECT stddev_pop(_rlm_score) FROM result) > 1e-9)
 )
-SELECT check, COALESCE(passed, false) AS passed FROM checks;
+SELECT chk, COALESCE(passed, false) AS passed FROM checks;
 """
 
 

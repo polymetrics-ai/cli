@@ -26,7 +26,9 @@ import * as os from "node:os";
 import * as path from "node:path";
 
 import { Agent, type AgentTool } from "@earendil-works/pi-agent-core";
-import { getModel } from "@earendil-works/pi-ai";
+// pi-ai 0.80.x: the bare `getModel` export was removed; the supported catalog
+// read is `getBuiltinModel(provider, modelId)` from the providers/all subpath.
+import { getBuiltinModel } from "@earendil-works/pi-ai/providers/all";
 import { Type } from "@sinclair/typebox";
 
 const IN_DIR = "/work/in";
@@ -164,9 +166,9 @@ async function main(): Promise<number> {
 
   let model;
   try {
-    model = getModel(provider, modelId);
+    model = getBuiltinModel(provider as any, modelId as any);
   } catch (e) {
-    process.stderr.write(`LLM model init failed: ${String(e)}\n`);
+    process.stderr.write(`LLM model init failed (provider=${provider} model=${modelId}): ${String(e)}\n`);
     return EXIT_LLM_UNREACHABLE;
   }
 
