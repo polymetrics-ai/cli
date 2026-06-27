@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "schedule",
+  "status": "failed_verification",
+  "reason": null,
+  "details": {
+    "lifecycle": [
+      "load-project-context",
+      "profile-repo",
+      "prepare-design-and-prompts",
+      "prd-coverage-gate",
+      "gsd-plan-phase",
+      "tdd-gate-before-execution",
+      "gsd-execute-phase",
+      "local-verification",
+      "gsd-verify-work",
+      "gsd-gap-loop",
+      "write-phase-summary"
+    ],
+    "agentMode": "agents",
+    "coveragePassed": true,
+    "tddGatePassed": true,
+    "verificationMissingRequired": [
+      "install",
+      "unit"
+    ]
+  },
+  "updatedAt": "2026-06-27T07:44:55.948Z"
+}

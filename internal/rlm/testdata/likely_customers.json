@@ -1,0 +1,9 @@
+{
+  "name": "likely-customers",
+  "description": "Scores contacts by likelihood of becoming customers based on profile completeness.",
+  "features": [
+    {"name": "email",   "weight": 0.3, "score_if_set": 1.0},
+    {"name": "company", "weight": 0.4, "score_if_set": 1.0},
+    {"name": "title",   "weight": 0.3, "score_if_set": 1.0}
+  ]
+}

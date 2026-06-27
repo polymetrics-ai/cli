@@ -1,0 +1,10 @@
+[Unit]
+Description=pm schedule nightly-leads (flow: likely-customers)
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/pm flow run likely-customers --json
+
+[Install]
+WantedBy=default.target

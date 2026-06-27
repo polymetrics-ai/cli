@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "flow-engine",
+  "planRefs": [
+    ".planning/phases/flow-engine/EVAL-PLAN.md",
+    ".planning/phases/flow-engine/PLAN.md",
+    ".planning/phases/flow-engine/TEST-PLAN.md"
+  ],
+  "ledgerRef": ".planning/phases/flow-engine/TDD-LEDGER.md",
+  "passed": true,
+  "tasks": [],
+  "behaviorTasks": [],
+  "failures": [],
+  "updatedAt": "2026-06-27T07:44:55.663Z"
+}
