@@ -10,19 +10,33 @@ import (
 type StepKind string
 
 const (
-	KindSync  StepKind = "sync"
-	KindQuery StepKind = "query"
+	KindSync   StepKind = "sync"
+	KindQuery  StepKind = "query"
+	KindAction StepKind = "action"
 )
+
+// ActionConfig holds the configuration for a step of kind "action".
+type ActionConfig struct {
+	SourceTable           string            `json:"source_table"`
+	DestinationConnector  string            `json:"destination_connector"`
+	DestinationCredential string            `json:"destination_credential"`
+	DestinationConfig     map[string]string `json:"destination_config,omitempty"`
+	Action                string            `json:"action"` // upsert | create | delete; defaults to "upsert"
+	Mappings              map[string]string `json:"mappings"`
+	MaxRetries            int               `json:"max_retries,omitempty"` // default 3
+	BatchSize             int               `json:"batch_size,omitempty"`  // default 100
+}
 
 // FlowStep describes a single step in a flow manifest.
 type FlowStep struct {
-	ID         string   `json:"id"`
-	Kind       StepKind `json:"kind"`
-	Connection string   `json:"connection,omitempty"`
-	Streams    []string `json:"streams,omitempty"`
-	SQL        string   `json:"sql,omitempty"`
-	In         []string `json:"in"`
-	Out        []string `json:"out"`
+	ID         string        `json:"id"`
+	Kind       StepKind      `json:"kind"`
+	Connection string        `json:"connection,omitempty"`
+	Streams    []string      `json:"streams,omitempty"`
+	SQL        string        `json:"sql,omitempty"`
+	ActionCfg  *ActionConfig `json:"action_cfg,omitempty"`
+	In         []string      `json:"in"`
+	Out        []string      `json:"out"`
 }
 
 // FlowManifest is the top-level structure of a flow definition.
@@ -88,6 +102,25 @@ func ValidateManifest(m FlowManifest) []error {
 		case KindQuery:
 			if s.SQL == "" {
 				add("step %q (query) must have non-empty sql", s.ID)
+			}
+		case KindAction:
+			cfg := s.ActionCfg
+			if cfg == nil {
+				add("step %q (action) must have action_cfg", s.ID)
+				break
+			}
+			if cfg.SourceTable == "" {
+				add("step %q (action) must have source_table", s.ID)
+			}
+			if cfg.DestinationConnector == "" {
+				add("step %q (action) must have destination_connector", s.ID)
+			}
+			if len(cfg.Mappings) == 0 {
+				add("step %q (action) must have at least one mapping", s.ID)
+			}
+			// Default action to "upsert" — not an error if empty.
+			if cfg.Action == "" {
+				cfg.Action = "upsert"
 			}
 		default:
 			add("step %q has unknown kind %q", s.ID, s.Kind)

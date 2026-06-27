@@ -35,9 +35,11 @@ type LedgerRecord struct {
 
 // RunOptions controls how a flow run behaves.
 type RunOptions struct {
-	DryRun bool
-	Force  bool
-	JSON   bool
+	DryRun        bool
+	Force         bool
+	JSON          bool
+	ApprovalToken string // required when any KindAction step is present
+	PerAction     bool   // each action step gets its own token (future)
 }
 
 // StepResult is the per-step outcome in a RunResult.
@@ -47,8 +49,11 @@ type StepResult struct {
 	Status         string `json:"status"`
 	RecordsRead    int    `json:"records_read"`
 	RecordsWritten int    `json:"records_written"`
+	RecordsFailed  int    `json:"records_failed,omitempty"`
 	DurationNs     int64  `json:"duration_ns"`
 	Error          string `json:"error,omitempty"`
+	DLQPath        string `json:"dlq_path,omitempty"`
+	SchemaDrift    bool   `json:"schema_drift,omitempty"`
 }
 
 // RunResult is the top-level outcome of Engine.Run.
@@ -60,11 +65,12 @@ type RunResult struct {
 
 // Engine executes a FlowManifest.
 type Engine struct {
-	Manifest   FlowManifest
-	App        AppAdapter
-	Ledger     LedgerAdapter
-	Checkpoint CheckpointStore
-	LockDir    string
+	Manifest     FlowManifest
+	App          AppAdapter
+	Ledger       LedgerAdapter
+	Checkpoint   CheckpointStore
+	LockDir      string
+	ActionRunner StepActionRunner // optional; required when manifest has KindAction steps
 }
 
 func (e *Engine) lockPath() string {
@@ -119,6 +125,15 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 	if opts.Force && e.Checkpoint != nil {
 		if err := e.Checkpoint.Clear(e.Manifest.Name); err != nil {
 			return result, err
+		}
+	}
+
+	// Pre-flight: if any action step is present and no token is provided, fail fast.
+	if !opts.DryRun {
+		for _, s := range e.Manifest.Steps {
+			if s.Kind == KindAction && opts.ApprovalToken == "" {
+				return result, ErrApprovalRequired
+			}
 		}
 	}
 
@@ -179,6 +194,26 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			sr.RecordsWritten = etlRes.RecordsWritten
 		case KindQuery:
 			_, stepErr = e.App.QuerySQL(ctx, s.SQL, 0)
+		case KindAction:
+			if e.ActionRunner == nil {
+				stepErr = fmt.Errorf("action step %q: no ActionRunner configured", s.ID)
+				break
+			}
+			// Fetch source records from the warehouse for this action step.
+			var sourceRecords []map[string]any
+			if s.ActionCfg != nil && s.ActionCfg.SourceTable != "" {
+				sourceRecords, stepErr = e.App.QuerySQL(ctx, "SELECT * FROM "+s.ActionCfg.SourceTable, 0)
+				if stepErr != nil {
+					break
+				}
+			}
+			runID := fmt.Sprintf("run-%d", start.UnixNano())
+			var actionRes ActionResult
+			actionRes, stepErr = e.ActionRunner.ExecuteStep(ctx, s, sourceRecords, opts.ApprovalToken, runID)
+			sr.RecordsRead = actionRes.RecordsAttempted
+			sr.RecordsWritten = actionRes.RecordsSucceeded
+			sr.RecordsFailed = actionRes.RecordsFailed
+			sr.DLQPath = actionRes.DLQPath
 		default:
 			stepErr = fmt.Errorf("%w: %s", ErrUnknownStepKind, s.Kind)
 		}
