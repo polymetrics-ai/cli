@@ -18,6 +18,7 @@ func TestClassifyHeuristic(t *testing.T) {
 		{"analysis correlation", "find the correlation between spend and region", TaskDataAnalysis},
 		{"analysis trend", "what is the monthly revenue trend by product", TaskDataAnalysis},
 		{"analysis join", "join orders and customers and break down revenue", TaskDataAnalysis},
+		{"analysis bus factor", "what is the bus factor for the rails/rails repository", TaskDataAnalysis},
 		{"ml predict", "predict which customers will churn next month", TaskML},
 		{"ml train", "train a model to classify leads by quality", TaskML},
 		{"ml cluster", "cluster customers into segments", TaskML},

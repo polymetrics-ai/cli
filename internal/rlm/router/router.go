@@ -78,6 +78,9 @@ var analysisKeywords = []string{
 	"average over", "compare", "comparison", "percentile", "growth", "retention",
 	"funnel", "join", "across tables", "month over month", "year over year",
 	"breakdown", "rolling", "moving average",
+	// concentration / contribution-distribution analyses
+	"bus factor", "concentration", "gini", "contribution", "contributor",
+	"key people", "key contributors", "share of", "top contributors",
 }
 
 func classifyHeuristic(request string) Decision {
