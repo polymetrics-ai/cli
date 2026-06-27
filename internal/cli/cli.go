@@ -70,7 +70,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	case "reverse":
 		err = withApp(root, func(a *app.App) error { return runReverse(ctx, a, rest, stdout, jsonOut) })
 	case "agent":
-		err = runAgent(rest, stdout, jsonOut)
+		err = runAgent(ctx, root, rest, stdout, jsonOut)
 	case "runtime":
 		err = runRuntime(ctx, rest, stdout, jsonOut)
 	case "flow":
@@ -740,8 +740,14 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 	}
 }
 
-func runAgent(args []string, stdout io.Writer, jsonOut bool) error {
-	if len(args) == 0 || args[0] != "plan" {
+func runAgent(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+	if len(args) == 0 {
+		return errUsage
+	}
+	if args[0] == "image" {
+		return runAgentImage(ctx, root, args[1:], stdout, jsonOut)
+	}
+	if args[0] != "plan" {
 		return errUsage
 	}
 	flags := parseFlags(args[1:])
