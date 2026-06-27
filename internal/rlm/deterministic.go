@@ -1,13 +1,11 @@
 package rlm
 
 import (
-	"bufio"
 	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
-	"sort"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
@@ -31,9 +29,10 @@ func (d *DeterministicAnalyzer) Run(ctx context.Context, req RunRequest) (RunRes
 		DryRun:   req.DryRun,
 	}
 
-	// Read InTable NDJSON
+	// Read InTable NDJSON, preserving the envelope's _polymetrics_raw_id so the
+	// sort tie-break and any reference-integrity checks have a stable identity.
 	inPath := filepath.Join(req.WarehouseDir, req.InTable+".ndjson")
-	records, err := readNDJSON(inPath)
+	records, err := readEnvelopedRecords(inPath)
 	if err != nil {
 		return result, fmt.Errorf("rlm: read InTable %q: %w", inPath, err)
 	}
@@ -46,6 +45,9 @@ func (d *DeterministicAnalyzer) Run(ctx context.Context, req RunRequest) (RunRes
 	result.RecordsScored = len(scored)
 
 	if !req.DryRun {
+		if err := validateOutTable(req.OutTable); err != nil {
+			return result, err
+		}
 		now := time.Now().UTC().Format(time.RFC3339)
 		if err := writeOutTable(req.WarehouseDir, req.OutTable, scored, d.Mode(), req.Spec.Name, now); err != nil {
 			return result, fmt.Errorf("rlm: write OutTable: %w", err)
@@ -54,33 +56,6 @@ func (d *DeterministicAnalyzer) Run(ctx context.Context, req RunRequest) (RunRes
 
 	result.Duration = time.Since(start)
 	return result, nil
-}
-
-// readNDJSON reads a local warehouse NDJSON file and extracts the record field.
-func readNDJSON(path string) ([]connectors.Record, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-
-	var records []connectors.Record
-	sc := bufio.NewScanner(f)
-	for sc.Scan() {
-		line := sc.Bytes()
-		if len(line) == 0 {
-			continue
-		}
-		// Local warehouse format: {"_polymetrics_raw_id": "...", "record": {...}}
-		var raw struct {
-			Record connectors.Record `json:"record"`
-		}
-		if err := json.Unmarshal(line, &raw); err != nil {
-			return nil, fmt.Errorf("parse line: %w", err)
-		}
-		records = append(records, raw.Record)
-	}
-	return records, sc.Err()
 }
 
 // writeOutTable atomically writes scored records to OutTable NDJSON.
@@ -153,17 +128,8 @@ func scoreRecords(spec *Spec, records []connectors.Record) ([]connectors.Record,
 		out = append(out, scored)
 	}
 
-	// Sort: score desc, then _polymetrics_raw_id asc
-	sort.SliceStable(out, func(i, j int) bool {
-		si := out[i]["_rlm_score"].(float64)
-		sj := out[j]["_rlm_score"].(float64)
-		if si != sj {
-			return si > sj
-		}
-		ri, _ := out[i]["_polymetrics_raw_id"].(string)
-		rj, _ := out[j]["_polymetrics_raw_id"].(string)
-		return ri < rj
-	})
+	// Sort: score desc, then _polymetrics_raw_id asc (shared helper).
+	sortScored(out)
 
 	return out, nil
 }

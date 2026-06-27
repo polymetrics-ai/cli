@@ -331,6 +331,7 @@ import (
 	_ "polymetrics.ai/internal/connectors/open-exchange-rates"
 	_ "polymetrics.ai/internal/connectors/openaq"
 	_ "polymetrics.ai/internal/connectors/openfda"
+	_ "polymetrics.ai/internal/connectors/openrouter"
 	_ "polymetrics.ai/internal/connectors/openweather"
 	_ "polymetrics.ai/internal/connectors/opinion-stage"
 	_ "polymetrics.ai/internal/connectors/opsgenie"

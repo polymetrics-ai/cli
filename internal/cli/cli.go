@@ -9,13 +9,11 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/registryset"
 	"polymetrics.ai/internal/perf"
-	pmruntime "polymetrics.ai/internal/runtime"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
 )
@@ -75,12 +73,20 @@ func Run(args []string, stdout, stderr io.Writer) int {
 		err = runAgent(rest, stdout, jsonOut)
 	case "runtime":
 		err = runRuntime(ctx, rest, stdout, jsonOut)
+	case "flow":
+		err = withApp(root, func(a *app.App) error { return runFlow(ctx, a, rest, stdout, jsonOut) })
+	case "extract":
+		err = withApp(root, func(a *app.App) error { return runExtract(ctx, a, rest, stdout, jsonOut) })
 	case "perf":
 		err = runPerf(ctx, rest, stdout, jsonOut)
 	case "docs":
 		err = runDocs(rest, stdout)
 	case "skills":
 		err = runSkills(rest, stdout, jsonOut)
+	case "rlm":
+		err = runRLM(ctx, root, rest, stdout, jsonOut)
+	case "schedule":
+		err = runSchedule(ctx, root, rest, stdout, jsonOut)
 	default:
 		err = usageErrorf("unknown command %q", cmd)
 	}
@@ -820,35 +826,6 @@ func runRuntime(ctx context.Context, args []string, stdout io.Writer, jsonOut bo
 		fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\n", check.Name, check.Status, check.Endpoint, check.Latency)
 	}
 	return nil
-}
-
-func recordRuntimeETL(ctx context.Context, run app.Run) error {
-	cfg := runtimecheck.FromEnv()
-	report := runtimecheck.Doctor(ctx, cfg)
-	if !runtimecheck.Healthy(report) {
-		return fmt.Errorf("runtime dependencies are not healthy; run `pm runtime doctor --json` for details")
-	}
-	dragonfly := pmruntime.OpenDragonflyLeaseStore(cfg.DragonflyAddr)
-	defer dragonfly.Close()
-	pg, err := pmruntime.OpenPostgresRunLedger(ctx, cfg.PostgresURL)
-	if err != nil {
-		return err
-	}
-	defer pg.Close()
-	if err := pg.Migrate(ctx); err != nil {
-		return err
-	}
-	module := pmruntime.Module{Leases: dragonfly, Ledger: pg}
-	return module.RecordRunWithLease(ctx, pmruntime.LeaseRequest{Key: "polymetrics:etl:" + run.ID, Value: "recording", TTL: 30 * time.Second}, pmruntime.RunRecord{
-		ID:             run.ID,
-		Mode:           "runtime-backed",
-		Operation:      "etl",
-		Status:         run.Status,
-		RecordsRead:    run.RecordsRead,
-		RecordsWritten: run.RecordsLoaded,
-		Duration:       run.CompletedAt.Sub(run.StartedAt).Nanoseconds(),
-		CreatedAt:      run.StartedAt,
-	})
 }
 
 func runPerf(ctx context.Context, args []string, stdout io.Writer, jsonOut bool) error {
