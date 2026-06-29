@@ -7,7 +7,14 @@ description: Auth0 connector knowledge and safe action guide.
 
 ## Purpose
 
-Auth0 catalog connector for https://docs.airbyte.com/integrations/sources/auth0. Native implementation status: planned_native_port.
+Auth0 catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/auth0.svg
+- source: official
+- review_status: official_verified
+- review_url: https://auth0.com/docs/api/management/v2
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Auth0 catalog connector for https://docs.airbyte.com/integrations/sources/auth0.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-auth0:0.6.2 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Auth0 catalog connector for https://docs.airbyte.com/integrations/sources/auth0.
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/auth0
+- Auth0 documentation: https://auth0.com/docs/api/management/v2
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Auth0 catalog connector for https://docs.airbyte.com/integrations/sources/auth0.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/auth0
 
 ## Commands
 
@@ -92,4 +93,4 @@ pm connectors inspect source-auth0 --json
 
 ## References
 
-- [Auth0 documentation](https://docs.airbyte.com/integrations/sources/auth0)
+- [Auth0 documentation](https://auth0.com/docs/api/management/v2)

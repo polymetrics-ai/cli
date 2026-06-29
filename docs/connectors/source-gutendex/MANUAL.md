@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-gutendex [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Gutendex catalog connector for https://docs.airbyte.com/integrations/sources/gutendex. Native implementation status: planned_native_port.
+  Gutendex catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/source-gutendex.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-gutendex:0.2.12 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/gutendex
+  Gutendex documentation: https://gutendex.com/
 
 CONFIGURATION
   author_year_end (string): (Optional) Defines the maximum birth year of the authors. Books by authors born after the end year will not be returned. Supports both positive (CE) or negative (BCE) integer va...
@@ -61,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/gutendex
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +80,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Gutendex documentation: https://docs.airbyte.com/integrations/sources/gutendex
+  Gutendex documentation: https://gutendex.com/
 
 EXIT STATUS
   0 success

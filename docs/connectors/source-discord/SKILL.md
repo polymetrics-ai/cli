@@ -7,7 +7,13 @@ description: Discord connector knowledge and safe action guide.
 
 ## Purpose
 
-Discord catalog connector for https://docs.airbyte.com/integrations/sources/discord. Native implementation status: planned_native_port.
+Discord catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Discord catalog connector for https://docs.airbyte.com/integrations/sources/disc
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-discord:0.1.3 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Discord catalog connector for https://docs.airbyte.com/integrations/sources/disc
 - Discord API Reference: https://discord.com/developers/docs/reference
 - Discord Developer Portal: https://discord.com/developers/applications
 - Discord Rate Limits: https://discord.com/developers/docs/topics/rate-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/discord
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Discord catalog connector for https://docs.airbyte.com/integrations/sources/disc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/discord
 
 ## Commands
 
@@ -92,4 +92,6 @@ pm connectors inspect source-discord --json
 
 ## References
 
-- [Discord documentation](https://docs.airbyte.com/integrations/sources/discord)
+- [Discord API Reference](https://discord.com/developers/docs/reference)
+- [Discord Developer Portal](https://discord.com/developers/applications)
+- [Discord Rate Limits](https://discord.com/developers/docs/topics/rate-limits)

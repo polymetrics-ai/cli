@@ -7,7 +7,14 @@ description: Marketo connector knowledge and safe action guide.
 
 ## Purpose
 
-Marketo catalog connector for https://docs.airbyte.com/integrations/sources/marketo. Native implementation status: planned_native_port.
+Marketo catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/marketo.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.marketo.com/rest-api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Marketo catalog connector for https://docs.airbyte.com/integrations/sources/mark
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-marketo:2.0.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,13 +54,12 @@ Marketo catalog connector for https://docs.airbyte.com/integrations/sources/mark
 - Marketo REST API: https://developers.marketo.com/rest-api/
 - Marketo authentication: https://developers.marketo.com/rest-api/authentication/
 - Marketo rate limits: https://developers.marketo.com/rest-api/marketo-integration-best-practices/#api_limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/marketo
 
 ## Configuration
 
-- client_id (string) required secret: The Client ID of your Marketo developer application. See <a href="https://docs.airbyte.com/integrations/sources/marketo"> the docs </a> for info on how to obtain this.
-- client_secret (string) required secret: The Client Secret of your Marketo developer application. See <a href="https://docs.airbyte.com/integrations/sources/marketo"> the docs </a> for info on how to obtain this.
-- domain_url (string) required secret: Your Marketo Base URL. See <a href="https://docs.airbyte.com/integrations/sources/marketo"> the docs </a> for info on how to obtain this.
+- client_id (string) required secret: manual intervention needed
+- client_secret (string) required secret: manual intervention needed
+- domain_url (string) required secret: manual intervention needed
 - start_date (string) required: UTC date and time in the format 2017-01-25T00:00:00Z. Any data before this date will not be replicated.
 - secret fields: client_id, client_secret, domain_url
 
@@ -66,12 +71,8 @@ Marketo catalog connector for https://docs.airbyte.com/integrations/sources/mark
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/marketo
 
 ## Commands
 
@@ -95,4 +96,6 @@ pm connectors inspect source-marketo --json
 
 ## References
 
-- [Marketo documentation](https://docs.airbyte.com/integrations/sources/marketo)
+- [Marketo REST API](https://developers.marketo.com/rest-api/)
+- [Marketo authentication](https://developers.marketo.com/rest-api/authentication/)
+- [Marketo rate limits](https://developers.marketo.com/rest-api/marketo-integration-best-practices/#api_limits)

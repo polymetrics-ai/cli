@@ -7,7 +7,13 @@ description: Jotform connector knowledge and safe action guide.
 
 ## Purpose
 
-Jotform catalog connector for https://docs.airbyte.com/integrations/sources/jotform. Native implementation status: planned_native_port.
+Jotform catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Jotform catalog connector for https://docs.airbyte.com/integrations/sources/jotf
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-jotform:0.0.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Jotform catalog connector for https://docs.airbyte.com/integrations/sources/jotf
 
 - Jotform API documentation: https://api.jotform.com/docs/
 - Jotform authentication: https://api.jotform.com/docs/#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/jotform
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Jotform catalog connector for https://docs.airbyte.com/integrations/sources/jotf
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/jotform
 
 ## Commands
 
@@ -94,4 +94,5 @@ pm connectors inspect source-jotform --json
 
 ## References
 
-- [Jotform documentation](https://docs.airbyte.com/integrations/sources/jotform)
+- [Jotform API documentation](https://api.jotform.com/docs/)
+- [Jotform authentication](https://api.jotform.com/docs/#authentication)

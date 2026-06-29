@@ -7,7 +7,14 @@ description: Okta connector knowledge and safe action guide.
 
 ## Purpose
 
-Okta catalog connector for https://docs.airbyte.com/integrations/sources/okta. Native implementation status: planned_native_port.
+Okta catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/okta.svg
+- source: official
+- review_status: official_verified
+- review_url: https://developer.okta.com/docs/reference/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Okta catalog connector for https://docs.airbyte.com/integrations/sources/okta. N
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-okta:0.3.21 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,16 +51,12 @@ Okta catalog connector for https://docs.airbyte.com/integrations/sources/okta. N
 
 ## Official Application Documentation
 
-- Okta API reference: https://developer.okta.com/docs/reference/
-- Okta authentication: https://developer.okta.com/docs/guides/implement-oauth-for-okta/main/
-- Okta rate limits: https://developer.okta.com/docs/reference/rate-limits/
-- Okta Status: https://status.okta.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/okta
+- Okta documentation: https://developer.okta.com/docs/reference/
 
 ## Configuration
 
 - credentials (object)
-- domain (string): The Okta domain. See the <a href="https://docs.airbyte.com/integrations/sources/okta">docs</a> for instructions on how to find it.
+- domain (string): manual intervention needed
 - start_date (string): UTC date and time in the format YYYY-MM-DDTHH:MM:SSZ. Any data before this date will not be replicated.
 - secret fields: credentials.api_token, credentials.client_id, credentials.client_secret, credentials.key_id, credentials.private_key, credentials.refresh_token
 
@@ -66,12 +68,8 @@ Okta catalog connector for https://docs.airbyte.com/integrations/sources/okta. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/okta
 
 ## Commands
 
@@ -95,4 +93,4 @@ pm connectors inspect source-okta --json
 
 ## References
 
-- [Okta documentation](https://docs.airbyte.com/integrations/sources/okta)
+- [Okta documentation](https://developer.okta.com/docs/reference/)

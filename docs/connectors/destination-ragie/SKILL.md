@@ -7,7 +7,13 @@ description: Ragie connector knowledge and safe action guide.
 
 ## Purpose
 
-Ragie catalog connector for https://docs.airbyte.com/integrations/destinations/ragie. Native implementation status: planned_native_port.
+Ragie catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-warehouse.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Ragie catalog connector for https://docs.airbyte.com/integrations/destinations/r
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-ragie:0.1.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Ragie catalog connector for https://docs.airbyte.com/integrations/destinations/r
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/ragie
+- Ragie documentation: https://docs.ragie.ai/docs/getting-started
 
 ## Configuration
 
@@ -69,12 +73,8 @@ Ragie catalog connector for https://docs.airbyte.com/integrations/destinations/r
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/ragie
 
 ## Commands
 
@@ -98,4 +98,4 @@ pm connectors inspect destination-ragie --json
 
 ## References
 
-- [Ragie documentation](https://docs.airbyte.com/integrations/destinations/ragie)
+- [Ragie documentation](https://docs.ragie.ai/docs/getting-started)

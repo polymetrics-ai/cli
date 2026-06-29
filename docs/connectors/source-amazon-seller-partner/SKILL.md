@@ -7,7 +7,14 @@ description: Amazon Seller Partner connector knowledge and safe action guide.
 
 ## Purpose
 
-Amazon Seller Partner catalog connector for https://docs.airbyte.com/integrations/sources/amazon-seller-partner. Native implementation status: planned_native_port.
+Amazon Seller Partner catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/amazonsellerpartner.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Amazon Seller Partner catalog connector for https://docs.airbyte.com/integration
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-amazon-seller-partner:5.7.10 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,11 +56,10 @@ Amazon Seller Partner catalog connector for https://docs.airbyte.com/integration
 - SP-API Release Notes: https://developer-docs.amazon.com/sp-api/docs/sp-api-release-notes
 - Authorization: https://developer-docs.amazon.com/sp-api/docs/authorizing-selling-partner-api-applications
 - Usage plans and rate limits: https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/amazon-seller-partner
 
 ## Configuration
 
-- account_type (string) required: Type of the Account you're going to authorize the Airbyte application by
+- account_type (string) required: manual intervention needed
 - app_id (string) secret: Your Amazon Application ID.
 - auth_type (string)
 - aws_environment (string) required: Select the AWS Environment.
@@ -88,12 +93,8 @@ Amazon Seller Partner catalog connector for https://docs.airbyte.com/integration
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/amazon-seller-partner
 
 ## Commands
 
@@ -117,4 +118,8 @@ pm connectors inspect source-amazon-seller-partner --json
 
 ## References
 
-- [Amazon Seller Partner documentation](https://docs.airbyte.com/integrations/sources/amazon-seller-partner)
+- [SP-API documentation](https://developer-docs.amazon.com/sp-api/)
+- [SP-API Deprecation Schedule](https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations)
+- [SP-API Release Notes](https://developer-docs.amazon.com/sp-api/docs/sp-api-release-notes)
+- [Authorization](https://developer-docs.amazon.com/sp-api/docs/authorizing-selling-partner-api-applications)
+- [Usage plans and rate limits](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api)

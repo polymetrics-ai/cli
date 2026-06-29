@@ -15,7 +15,7 @@ type streamEndpoint struct {
 // means adding one entry here plus a Stream definition in hubplannerStreams; the
 // read path is fully data-driven from this table.
 //
-// Stream names are the public, pluralized names (matching the Airbyte source);
+// Stream names are the public, pluralized names (matching the upstream source);
 // the resource path is the Hubplanner singular endpoint segment.
 var hubplannerStreamEndpoints = map[string]streamEndpoint{
 	"resources":     {resource: "resource", mapRecord: hubplannerResourceRecord},

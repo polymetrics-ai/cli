@@ -7,7 +7,13 @@ description: Pennylane connector knowledge and safe action guide.
 
 ## Purpose
 
-Pennylane catalog connector for https://docs.airbyte.com/integrations/sources/pennylane. Native implementation status: planned_native_port.
+Pennylane catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Pennylane catalog connector for https://docs.airbyte.com/integrations/sources/pe
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-pennylane:0.3.36 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Pennylane catalog connector for https://docs.airbyte.com/integrations/sources/pe
 ## Official Application Documentation
 
 - Pennylane API documentation: https://pennylane.com/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pennylane
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Pennylane catalog connector for https://docs.airbyte.com/integrations/sources/pe
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/pennylane
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-pennylane --json
 
 ## References
 
-- [Pennylane documentation](https://docs.airbyte.com/integrations/sources/pennylane)
+- [Pennylane API documentation](https://pennylane.com/api/)

@@ -7,7 +7,13 @@ description: Finage connector knowledge and safe action guide.
 
 ## Purpose
 
-Finage catalog connector for https://docs.airbyte.com/integrations/sources/finage. Native implementation status: planned_native_port.
+Finage catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Finage catalog connector for https://docs.airbyte.com/integrations/sources/finag
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-finage:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Finage catalog connector for https://docs.airbyte.com/integrations/sources/finag
 
 - Finage API documentation: https://finage.co.uk/docs/api
 - Finage authentication: https://finage.co.uk/docs/api/getting-started
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/finage
 
 ## Configuration
 
@@ -69,12 +73,8 @@ Finage catalog connector for https://docs.airbyte.com/integrations/sources/finag
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/finage
 
 ## Commands
 
@@ -98,4 +98,5 @@ pm connectors inspect source-finage --json
 
 ## References
 
-- [Finage documentation](https://docs.airbyte.com/integrations/sources/finage)
+- [Finage API documentation](https://finage.co.uk/docs/api)
+- [Finage authentication](https://finage.co.uk/docs/api/getting-started)

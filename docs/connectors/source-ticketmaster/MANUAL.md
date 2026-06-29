@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-ticketmaster [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Ticketmaster catalog connector for https://docs.airbyte.com/integrations/sources/ticketmaster. Native implementation status: planned_native_port.
+  Ticketmaster catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/ticketmaster.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-ticketmaster:0.0.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +48,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  Ticketmaster Discovery API: https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/ticketmaster
+  Ticketmaster documentation: https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/
 
 CONFIGURATION
   api_key (string) required secret
@@ -56,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/ticketmaster
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Ticketmaster documentation: https://docs.airbyte.com/integrations/sources/ticketmaster
+  Ticketmaster documentation: https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/
 
 EXIT STATUS
   0 success

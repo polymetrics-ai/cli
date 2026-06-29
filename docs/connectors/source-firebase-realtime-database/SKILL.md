@@ -7,7 +7,14 @@ description: Firebase Realtime Database connector knowledge and safe action guid
 
 ## Purpose
 
-Firebase Realtime Database catalog connector for https://docs.airbyte.com/integrations/sources/firebase-realtime-database. Native implementation status: planned_native_port.
+Firebase Realtime Database catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/source-firebase-realtime-database.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://firebase.google.com/docs/reference/rest/database
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Firebase Realtime Database catalog connector for https://docs.airbyte.com/integr
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-firebase-realtime-database:0.1.48 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Firebase Realtime Database catalog connector for https://docs.airbyte.com/integr
 - Firebase Realtime Database REST API: https://firebase.google.com/docs/reference/rest/database
 - Firebase authentication: https://firebase.google.com/docs/database/rest/auth
 - Firebase Status Dashboard: https://status.firebase.google.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/firebase-realtime-database
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Firebase Realtime Database catalog connector for https://docs.airbyte.com/integr
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/firebase-realtime-database
 
 ## Commands
 
@@ -95,4 +96,6 @@ pm connectors inspect source-firebase-realtime-database --json
 
 ## References
 
-- [Firebase Realtime Database documentation](https://docs.airbyte.com/integrations/sources/firebase-realtime-database)
+- [Firebase Realtime Database REST API](https://firebase.google.com/docs/reference/rest/database)
+- [Firebase authentication](https://firebase.google.com/docs/database/rest/auth)
+- [Firebase Status Dashboard](https://status.firebase.google.com/)

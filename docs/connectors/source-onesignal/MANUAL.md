@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-onesignal [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  OneSignal catalog connector for https://docs.airbyte.com/integrations/sources/onesignal. Native implementation status: planned_native_port.
+  OneSignal catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/onesignal.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://documentation.onesignal.com/reference
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-onesignal:1.2.56 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   OneSignal authentication: https://documentation.onesignal.com/docs/accounts-and-keys
   OneSignal rate limits: https://documentation.onesignal.com/docs/rate-limits
   OneSignal Status: https://status.onesignal.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/onesignal
 
 CONFIGURATION
   applications (array) required: Applications keys, see the <a href="https://documentation.onesignal.com/docs/accounts-and-keys">docs</a> for more information on how to obtain this data
@@ -62,11 +66,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/onesignal
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +82,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  OneSignal documentation: https://docs.airbyte.com/integrations/sources/onesignal
+  OneSignal API reference: https://documentation.onesignal.com/reference
+  OneSignal authentication: https://documentation.onesignal.com/docs/accounts-and-keys
+  OneSignal rate limits: https://documentation.onesignal.com/docs/rate-limits
+  OneSignal Status: https://status.onesignal.com/
 
 EXIT STATUS
   0 success

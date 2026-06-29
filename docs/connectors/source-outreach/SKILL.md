@@ -7,7 +7,14 @@ description: Outreach connector knowledge and safe action guide.
 
 ## Purpose
 
-Outreach catalog connector for https://docs.airbyte.com/integrations/sources/outreach. Native implementation status: planned_native_port.
+Outreach catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/outreach.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://api.outreach.io/api/v2/docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Outreach catalog connector for https://docs.airbyte.com/integrations/sources/out
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-outreach:1.1.34 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Outreach catalog connector for https://docs.airbyte.com/integrations/sources/out
 - Outreach API reference: https://api.outreach.io/api/v2/docs
 - Outreach authentication: https://api.outreach.io/api/v2/docs#authentication
 - Outreach rate limits: https://api.outreach.io/api/v2/docs#rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/outreach
 
 ## Configuration
 
@@ -67,12 +72,8 @@ Outreach catalog connector for https://docs.airbyte.com/integrations/sources/out
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/outreach
 
 ## Commands
 
@@ -96,4 +97,6 @@ pm connectors inspect source-outreach --json
 
 ## References
 
-- [Outreach documentation](https://docs.airbyte.com/integrations/sources/outreach)
+- [Outreach API reference](https://api.outreach.io/api/v2/docs)
+- [Outreach authentication](https://api.outreach.io/api/v2/docs#authentication)
+- [Outreach rate limits](https://api.outreach.io/api/v2/docs#rate-limiting)

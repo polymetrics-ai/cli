@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-tiktok-marketing [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  TikTok Marketing catalog connector for https://docs.airbyte.com/integrations/sources/tiktok-marketing. Native implementation status: planned_native_port.
+  TikTok Marketing catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/tiktok.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://business-api.tiktok.com/portal/docs?id=1740029169927169
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-tiktok-marketing:5.1.1 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Versioning docs: https://business-api.tiktok.com/portal/docs?id=1740029169927169
   Changelog: https://business-api.tiktok.com/portal/docs?id=1740029165513730
   TikTok Business API Documentation: https://business-api.tiktok.com/portal/docs?id=1740302848670722
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tiktok-marketing
 
 CONFIGURATION
   attribution_window (integer): The attribution window in days.
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/tiktok-marketing
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  TikTok Marketing documentation: https://docs.airbyte.com/integrations/sources/tiktok-marketing
+  Versioning docs: https://business-api.tiktok.com/portal/docs?id=1740029169927169
+  Changelog: https://business-api.tiktok.com/portal/docs?id=1740029165513730
+  TikTok Business API Documentation: https://business-api.tiktok.com/portal/docs?id=1740302848670722
 
 EXIT STATUS
   0 success

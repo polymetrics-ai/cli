@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-cisco-meraki [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Cisco Meraki catalog connector for https://docs.airbyte.com/integrations/sources/cisco-meraki. Native implementation status: planned_native_port.
+  Cisco Meraki catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-cisco-meraki:0.0.37 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Meraki authentication: https://developer.cisco.com/meraki/api-v1/#!authorization
   Meraki rate limits: https://developer.cisco.com/meraki/api-v1/#!rate-limit
   Meraki Status: https://status.meraki.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/cisco-meraki
 
 CONFIGURATION
   api_key (string) required secret: Your Meraki API key. Obtain it by logging into your Meraki Dashboard at https://dashboard.meraki.com/, navigating to 'My Profile' via the avatar icon in the top right corner, an...
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/cisco-meraki
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Cisco Meraki documentation: https://docs.airbyte.com/integrations/sources/cisco-meraki
+  Cisco Meraki Dashboard API: https://developer.cisco.com/meraki/api-v1/
+  Meraki authentication: https://developer.cisco.com/meraki/api-v1/#!authorization
+  Meraki rate limits: https://developer.cisco.com/meraki/api-v1/#!rate-limit
+  Meraki Status: https://status.meraki.com/
 
 EXIT STATUS
   0 success

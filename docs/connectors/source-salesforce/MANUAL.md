@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-salesforce [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Salesforce catalog connector for https://docs.airbyte.com/integrations/sources/salesforce. Native implementation status: planned_native_port.
+  Salesforce catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/salesforce.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/rest_rns.htm
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-salesforce:2.7.23 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   REST API Release Notes: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/rest_rns.htm
   Winter 2026 release notes - API: https://help.salesforce.com/s/articleView?id=release-notes.salesforce_release_notes.htm&release=258&type=5
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/salesforce
 
 CONFIGURATION
   auth_type (string)
@@ -53,9 +57,9 @@ CONFIGURATION
   client_secret (string) required secret: Enter your Salesforce developer application's <a href="https://developer.salesforce.com/forums/?id=9062I000000DLgbQAG">Client secret</a>
   force_use_bulk_api (boolean): Toggle to use Bulk API (this might cause empty fields for some streams)
   is_sandbox (boolean): Toggle if you're using a <a href="https://help.salesforce.com/s/articleView?id=sf.deploy_sandboxes_parent.htm&type=5">Salesforce Sandbox</a>
-  lookback_window (string): The duration (ISO8601 duration) to re-read data from the source when running incremental syncs. This compensates for records that may not be immediately available when querying ...
-  refresh_token (string) required secret: Enter your application's <a href="https://developer.salesforce.com/docs/atlas.en-us.mobile_sdk.meta/mobile_sdk/oauth_refresh_token_flow.htm">Salesforce Refresh Token</a> used fo...
-  start_date (string): Enter the date (or date-time) in the YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ format. Airbyte will replicate the data updated on and after this date. If this field is blank, Airbyte w...
+  lookback_window (string): manual intervention needed
+  refresh_token (string) required secret: manual intervention needed
+  start_date (string): manual intervention needed
   stream_slice_step (string): The size of the time window (ISO8601 duration) to slice requests.
   streams_criteria (array): Add filters to select only required stream based on `SObject` name. Use this field to filter which tables are displayed by this connector. This is useful if your Salesforce acco...
   secret fields: client_secret, refresh_token
@@ -66,11 +70,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/salesforce
 
 EXAMPLES
   # Inspect catalog entry
@@ -85,7 +86,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Salesforce documentation: https://docs.airbyte.com/integrations/sources/salesforce
+  REST API Release Notes: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/rest_rns.htm
+  Winter 2026 release notes - API: https://help.salesforce.com/s/articleView?id=release-notes.salesforce_release_notes.htm&release=258&type=5
 
 EXIT STATUS
   0 success

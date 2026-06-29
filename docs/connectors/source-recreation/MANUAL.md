@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-recreation [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Recreation catalog connector for https://docs.airbyte.com/integrations/sources/recreation. Native implementation status: planned_native_port.
+  Recreation catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/recreation.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-recreation:0.2.25 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/recreation
+  Recreation documentation: https://ridb.recreation.gov/docs
 
 CONFIGURATION
   apikey (string) required secret: API Key
@@ -57,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/recreation
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Recreation documentation: https://docs.airbyte.com/integrations/sources/recreation
+  Recreation documentation: https://ridb.recreation.gov/docs
 
 EXIT STATUS
   0 success

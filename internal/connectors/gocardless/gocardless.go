@@ -5,7 +5,7 @@
 // definitions and endpoints.
 //
 // GoCardless is read-only here (full-refresh source, matching the upstream
-// Airbyte source-gocardless): no reverse-ETL writes are exposed.
+// upstream source-gocardless): no reverse-ETL writes are exposed.
 //
 // Like stripe, it self-registers with the connectors registry via RegisterFactory
 // in init(); the registryset package blank-imports this package in the

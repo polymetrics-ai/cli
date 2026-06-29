@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-motherduck [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  MotherDuck catalog connector for https://docs.airbyte.com/integrations/destinations/motherduck. Native implementation status: planned_native_port.
+  MotherDuck catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/duckdb.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://motherduck.com/docs
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-motherduck:0.2.3 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Authentication: https://motherduck.com/docs/key-tasks/authenticating-and-connecting-to-motherduck/
   MotherDuck Version Lifecycle Schedules: https://motherduck.com/docs/troubleshooting/version-lifecycle-schedules/
   MotherDuck Status: https://status.motherduck.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/motherduck
 
 CONFIGURATION
   destination_path (string): Path to a .duckdb file or 'md:<DATABASE_NAME>' to connect to a MotherDuck database. If 'md:' is specified without a database name, the default MotherDuck database name ('my_db')...
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/motherduck
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  MotherDuck documentation: https://docs.airbyte.com/integrations/destinations/motherduck
+  MotherDuck documentation: https://motherduck.com/docs
+  Authentication: https://motherduck.com/docs/key-tasks/authenticating-and-connecting-to-motherduck/
+  MotherDuck Version Lifecycle Schedules: https://motherduck.com/docs/troubleshooting/version-lifecycle-schedules/
+  MotherDuck Status: https://status.motherduck.com/
 
 EXIT STATUS
   0 success

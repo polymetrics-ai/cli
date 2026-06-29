@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-s3-data-lake [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  S3 Data Lake catalog connector for https://docs.airbyte.com/integrations/destinations/s3-data-lake. Native implementation status: planned_native_port.
+  S3 Data Lake catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/s3.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.aws.amazon.com/s3/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-s3-data-lake:0.3.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   AWS S3 documentation: https://docs.aws.amazon.com/s3/
   IAM authentication: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html
   Bucket policies and permissions: https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-policy-language-overview.html
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/s3-data-lake
 
 CONFIGURATION
   access_key_id (string) secret: The AWS Access Key ID with permissions for S3 and Glue operations.
@@ -66,11 +70,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/s3-data-lake
 
 EXAMPLES
   # Inspect catalog entry
@@ -85,7 +86,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  S3 Data Lake documentation: https://docs.airbyte.com/integrations/destinations/s3-data-lake
+  AWS S3 documentation: https://docs.aws.amazon.com/s3/
+  IAM authentication: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html
+  Bucket policies and permissions: https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-policy-language-overview.html
 
 EXIT STATUS
   0 success

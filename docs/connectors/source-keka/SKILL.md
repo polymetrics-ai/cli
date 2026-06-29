@@ -7,7 +7,13 @@ description: Keka connector knowledge and safe action guide.
 
 ## Purpose
 
-Keka catalog connector for https://docs.airbyte.com/integrations/sources/keka. Native implementation status: planned_native_port.
+Keka catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Keka catalog connector for https://docs.airbyte.com/integrations/sources/keka. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-keka:0.0.44 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Keka catalog connector for https://docs.airbyte.com/integrations/sources/keka. N
 ## Official Application Documentation
 
 - Keka API documentation: https://developers.keka.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/keka
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Keka catalog connector for https://docs.airbyte.com/integrations/sources/keka. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/keka
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-keka --json
 
 ## References
 
-- [Keka documentation](https://docs.airbyte.com/integrations/sources/keka)
+- [Keka API documentation](https://developers.keka.com/)

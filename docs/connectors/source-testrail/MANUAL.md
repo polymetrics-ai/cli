@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-testrail [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Testrail catalog connector for https://docs.airbyte.com/integrations/sources/testrail. Native implementation status: planned_native_port.
+  Testrail catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-testrail:0.0.55 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   TestRail API reference: https://support.testrail.com/hc/en-us/articles/7077039051284-Introduction-to-the-TestRail-API
   TestRail authentication: https://support.testrail.com/hc/en-us/articles/7077196481428-Accessing-the-TestRail-API
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/testrail
 
 CONFIGURATION
   domain_name (string) required: The unique domain name for accessing testrail
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/testrail
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Testrail documentation: https://docs.airbyte.com/integrations/sources/testrail
+  TestRail API reference: https://support.testrail.com/hc/en-us/articles/7077039051284-Introduction-to-the-TestRail-API
+  TestRail authentication: https://support.testrail.com/hc/en-us/articles/7077196481428-Accessing-the-TestRail-API
 
 EXIT STATUS
   0 success

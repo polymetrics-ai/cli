@@ -7,7 +7,13 @@ description: Insightful connector knowledge and safe action guide.
 
 ## Purpose
 
-Insightful catalog connector for https://docs.airbyte.com/integrations/sources/insightful. Native implementation status: planned_native_port.
+Insightful catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Insightful catalog connector for https://docs.airbyte.com/integrations/sources/i
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-insightful:0.0.40 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Insightful catalog connector for https://docs.airbyte.com/integrations/sources/i
 ## Official Application Documentation
 
 - Insightful API documentation: https://developer.insightful.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/insightful
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Insightful catalog connector for https://docs.airbyte.com/integrations/sources/i
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/insightful
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-insightful --json
 
 ## References
 
-- [Insightful documentation](https://docs.airbyte.com/integrations/sources/insightful)
+- [Insightful API documentation](https://developer.insightful.io/)

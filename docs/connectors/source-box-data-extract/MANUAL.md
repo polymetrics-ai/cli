@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-box-data-extract [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Box Data Extract catalog connector for https://docs.airbyte.com/integrations/sources/box-data-extract. Native implementation status: planned_native_port.
+  Box Data Extract catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-box-data-extract:0.1.13 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Box authentication guide: https://developer.box.com/guides/authentication/
   Box API rate limits: https://developer.box.com/guides/api-calls/permissions-and-errors/rate-limits/
   Box Platform Status: https://status.box.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/box-data-extract
 
 CONFIGURATION
   ask_ai_prompt (string): Prompt to use in Ask AI Stream.
@@ -67,11 +70,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/box-data-extract
 
 EXAMPLES
   # Inspect catalog entry
@@ -86,7 +86,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Box Data Extract documentation: https://docs.airbyte.com/integrations/sources/box-data-extract
+  Box Platform API reference: https://developer.box.com/reference/
+  Box authentication guide: https://developer.box.com/guides/authentication/
+  Box API rate limits: https://developer.box.com/guides/api-calls/permissions-and-errors/rate-limits/
+  Box Platform Status: https://status.box.com/
 
 EXIT STATUS
   0 success

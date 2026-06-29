@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-netsuite [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Netsuite catalog connector for https://docs.airbyte.com/integrations/sources/netsuite. Native implementation status: planned_native_port.
+  Netsuite catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/netsuite.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1540391670.html
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-netsuite:0.1.27 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   NetSuite REST API: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1540391670.html
   NetSuite authentication: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4389727047.html
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/netsuite
 
 CONFIGURATION
   consumer_key (string) required secret: Consumer key associated with your integration
@@ -64,11 +68,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/netsuite
 
 EXAMPLES
   # Inspect catalog entry
@@ -83,7 +84,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Netsuite documentation: https://docs.airbyte.com/integrations/sources/netsuite
+  NetSuite REST API: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1540391670.html
+  NetSuite authentication: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4389727047.html
 
 EXIT STATUS
   0 success

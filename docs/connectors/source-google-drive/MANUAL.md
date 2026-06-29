@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-google-drive [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Google Drive catalog connector for https://docs.airbyte.com/integrations/sources/google-drive. Native implementation status: planned_native_port.
+  Google Drive catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/google-drive.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.google.com/drive/api/reference/rest/v3
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: file_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-google-drive:0.5.21 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,14 +52,13 @@ OFFICIAL APPLICATION DOCUMENTATION
   Google Drive authentication: https://developers.google.com/drive/api/guides/about-auth
   Google Drive quotas: https://developers.google.com/drive/api/guides/limits
   Google Workspace Status: https://www.google.com/appsstatus/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-drive
 
 CONFIGURATION
   credentials (object) required: Credentials for connecting to the Google Drive API
   delivery_method (object)
   folder_url (string) required: URL for the folder you want to sync. Using individual streams and glob patterns, it's possible to only sync a subset of all files located in the folder.
   start_date (string): UTC date and time in the format 2017-01-25T00:00:00.000000Z. Any file modified before this date will not be replicated.
-  streams (array) required: Each instance of this configuration defines a <a href="https://docs.airbyte.com/cloud/core-concepts#stream">stream</a>. Use this to define which files belong in the stream, thei...
+  streams (array) required: manual intervention needed
   secret fields: credentials.client_id, credentials.client_secret, credentials.refresh_token, credentials.service_account_info
 
 SYNC MODES
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/google-drive
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Google Drive documentation: https://docs.airbyte.com/integrations/sources/google-drive
+  Google Drive API reference: https://developers.google.com/drive/api/reference/rest/v3
+  Google Drive authentication: https://developers.google.com/drive/api/guides/about-auth
+  Google Drive quotas: https://developers.google.com/drive/api/guides/limits
+  Google Workspace Status: https://www.google.com/appsstatus/
 
 EXIT STATUS
   0 success

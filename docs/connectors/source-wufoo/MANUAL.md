@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-wufoo [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Wufoo catalog connector for https://docs.airbyte.com/integrations/sources/wufoo. Native implementation status: planned_native_port.
+  Wufoo catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-wufoo:0.0.56 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Wufoo API documentation: https://wufoo.github.io/docs/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/wufoo
 
 CONFIGURATION
   api_key (string) required secret: Your Wufoo API Key. You can find it by logging into your Wufoo account, selecting 'API Information' from the 'More' dropdown on any form, and locating the 16-digit code.
@@ -57,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/wufoo
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Wufoo documentation: https://docs.airbyte.com/integrations/sources/wufoo
+  Wufoo API documentation: https://wufoo.github.io/docs/
 
 EXIT STATUS
   0 success

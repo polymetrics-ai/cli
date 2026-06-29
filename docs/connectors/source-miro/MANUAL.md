@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-miro [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Miro catalog connector for https://docs.airbyte.com/integrations/sources/miro. Native implementation status: planned_native_port.
+  Miro catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-miro:0.0.57 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Miro REST API: https://developers.miro.com/reference/api-reference
   Miro authentication: https://developers.miro.com/docs/getting-started-with-oauth
   Miro rate limits: https://developers.miro.com/docs/rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/miro
 
 CONFIGURATION
   api_key (string) required secret
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/miro
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Miro documentation: https://docs.airbyte.com/integrations/sources/miro
+  Miro REST API: https://developers.miro.com/reference/api-reference
+  Miro authentication: https://developers.miro.com/docs/getting-started-with-oauth
+  Miro rate limits: https://developers.miro.com/docs/rate-limits
 
 EXIT STATUS
   0 success

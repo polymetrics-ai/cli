@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-square [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Square catalog connector for https://docs.airbyte.com/integrations/sources/square. Native implementation status: planned_native_port.
+  Square catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/square.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.squareup.com/reference/square
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-square:1.7.20 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -49,7 +54,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Square API changelog: https://developer.squareup.com/docs/changelog
   Square rate limits: https://developer.squareup.com/docs/build-basics/api-rate-limits
   Square Status: https://www.issquareup.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/square
 
 CONFIGURATION
   credentials (object): Choose how to authenticate to Square.
@@ -64,11 +68,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/square
 
 EXAMPLES
   # Inspect catalog entry
@@ -83,7 +84,12 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Square documentation: https://docs.airbyte.com/integrations/sources/square
+  Square API reference: https://developer.squareup.com/reference/square
+  Square authentication: https://developer.squareup.com/docs/build-basics/access-tokens
+  Square API Release Notes: https://developer.squareup.com/docs/release-notes
+  Square API changelog: https://developer.squareup.com/docs/changelog
+  Square rate limits: https://developer.squareup.com/docs/build-basics/api-rate-limits
+  Square Status: https://www.issquareup.com/
 
 EXIT STATUS
   0 success

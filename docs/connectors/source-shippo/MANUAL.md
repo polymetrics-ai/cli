@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-shippo [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Shippo catalog connector for https://docs.airbyte.com/integrations/sources/shippo. Native implementation status: planned_native_port.
+  Shippo catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-shippo:0.0.49 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Shippo API reference: https://docs.goshippo.com/docs/intro
   Shippo authentication: https://docs.goshippo.com/docs/authentication
   Shippo rate limits: https://docs.goshippo.com/docs/rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/shippo
 
 CONFIGURATION
   shippo_token (string) required: The bearer token used for making requests
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/shippo
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Shippo documentation: https://docs.airbyte.com/integrations/sources/shippo
+  Shippo API reference: https://docs.goshippo.com/docs/intro
+  Shippo authentication: https://docs.goshippo.com/docs/authentication
+  Shippo rate limits: https://docs.goshippo.com/docs/rate-limiting
 
 EXIT STATUS
   0 success

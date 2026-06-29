@@ -28,7 +28,7 @@ var streamEndpoints = map[string]streamEndpoint{
 
 // youtubeStreams returns the connector's published stream catalog. These are the
 // three core resources of the YouTube Reporting API (the bulk-report data plane
-// the Airbyte source is built on): the scheduled reporting jobs, the available
+// the upstream source is built on): the scheduled reporting jobs, the available
 // report types, and the generated reports for a job.
 func youtubeStreams() []connectors.Stream {
 	return []connectors.Stream{

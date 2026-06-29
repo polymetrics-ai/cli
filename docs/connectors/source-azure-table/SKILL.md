@@ -7,7 +7,13 @@ description: Azure Table Storage connector knowledge and safe action guide.
 
 ## Purpose
 
-Azure Table Storage catalog connector for https://docs.airbyte.com/integrations/sources/azure-table. Native implementation status: planned_native_port.
+Azure Table Storage catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/azureblobstorage.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Azure Table Storage catalog connector for https://docs.airbyte.com/integrations/
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-azure-table:0.1.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,14 +50,13 @@ Azure Table Storage catalog connector for https://docs.airbyte.com/integrations/
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/azure-table
+- Azure Table Storage documentation: https://learn.microsoft.com/en-us/azure/storage/tables/
 
 ## Configuration
 
-- storage_access_key (string) required secret: Azure Table Storage Access Key. See the <a href="https://docs.airbyte.com/integrations/sources/azure-table">docs</a> for more information on how to obtain this key.
+- storage_access_key (string) required secret: manual intervention needed
 - storage_account_name (string) required: The name of your storage account.
-- storage_endpoint_suffix (string): Azure Table Storage service account URL suffix. See the <a href="https://docs.airbyte.com/integrations/sources/azure-table">docs</a> for more information on how to obtain endpoi...
+- storage_endpoint_suffix (string): manual intervention needed
 - secret fields: storage_access_key
 
 ## Sync Modes
@@ -63,12 +67,8 @@ Azure Table Storage catalog connector for https://docs.airbyte.com/integrations/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/azure-table
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-azure-table --json
 
 ## References
 
-- [Azure Table Storage documentation](https://docs.airbyte.com/integrations/sources/azure-table)
+- [Azure Table Storage documentation](https://learn.microsoft.com/en-us/azure/storage/tables/)

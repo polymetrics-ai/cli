@@ -12,6 +12,12 @@ SYNOPSIS
 DESCRIPTION
   Reads local JSONL or CSV files as source streams.
 
+ICON
+  asset: icons/pm-file.svg
+  source: polymetrics
+  review_status: polymetrics
+  review_url: https://github.com/karthik-sivadas/polymetrics-cli
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: file

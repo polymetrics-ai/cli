@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector destination-aws-datalake [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  AWS Datalake catalog connector for https://docs.airbyte.com/integrations/destinations/aws-datalake. Native implementation status: planned_native_port.
+  AWS Datalake catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/awsdatalake.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-aws-datalake:0.1.58 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/aws-datalake
+  manual intervention needed
 
 CONFIGURATION
   aws_account_id (string): target aws account id
@@ -67,11 +70,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/aws-datalake
 
 EXAMPLES
   # Inspect catalog entry
@@ -84,9 +84,6 @@ AGENT WORKFLOW
   - Read implementation_status before planning ETL or reverse ETL.
   - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-SEE ALSO
-  AWS Datalake documentation: https://docs.airbyte.com/integrations/destinations/aws-datalake
 
 EXIT STATUS
   0 success

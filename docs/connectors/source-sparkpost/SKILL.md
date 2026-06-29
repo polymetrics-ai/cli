@@ -7,7 +7,13 @@ description: SparkPost connector knowledge and safe action guide.
 
 ## Purpose
 
-SparkPost catalog connector for https://docs.airbyte.com/integrations/sources/sparkpost. Native implementation status: planned_native_port.
+SparkPost catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ SparkPost catalog connector for https://docs.airbyte.com/integrations/sources/sp
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sparkpost:0.0.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ SparkPost catalog connector for https://docs.airbyte.com/integrations/sources/sp
 - SparkPost authentication: https://developers.sparkpost.com/api/#header-authentication
 - SparkPost rate limits: https://developers.sparkpost.com/api/#header-rate-limiting
 - SparkPost Status: https://status.sparkpost.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sparkpost
 
 ## Configuration
 
@@ -66,12 +70,8 @@ SparkPost catalog connector for https://docs.airbyte.com/integrations/sources/sp
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/sparkpost
 
 ## Commands
 
@@ -95,4 +95,7 @@ pm connectors inspect source-sparkpost --json
 
 ## References
 
-- [SparkPost documentation](https://docs.airbyte.com/integrations/sources/sparkpost)
+- [SparkPost API reference](https://developers.sparkpost.com/api/)
+- [SparkPost authentication](https://developers.sparkpost.com/api/#header-authentication)
+- [SparkPost rate limits](https://developers.sparkpost.com/api/#header-rate-limiting)
+- [SparkPost Status](https://status.sparkpost.com/)

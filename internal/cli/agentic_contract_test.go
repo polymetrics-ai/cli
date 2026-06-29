@@ -46,6 +46,8 @@ func TestConnectorInspectJSONIncludesManifest(t *testing.T) {
 	out := stdout.String()
 	for _, want := range []string{
 		`"kind": "Connector"`,
+		`"icon"`,
+		`"path": "icons/github.svg"`,
 		`"manifest"`,
 		`"config_fields"`,
 		`"secret_fields"`,

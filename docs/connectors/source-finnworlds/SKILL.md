@@ -7,7 +7,13 @@ description: Finnworlds connector knowledge and safe action guide.
 
 ## Purpose
 
-Finnworlds catalog connector for https://docs.airbyte.com/integrations/sources/finnworlds. Native implementation status: planned_native_port.
+Finnworlds catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Finnworlds catalog connector for https://docs.airbyte.com/integrations/sources/f
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-finnworlds:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Finnworlds catalog connector for https://docs.airbyte.com/integrations/sources/f
 ## Official Application Documentation
 
 - Finnworlds API documentation: https://api.finnworlds.com/docs
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/finnworlds
 
 ## Configuration
 
@@ -68,12 +72,8 @@ Finnworlds catalog connector for https://docs.airbyte.com/integrations/sources/f
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/finnworlds
 
 ## Commands
 
@@ -97,4 +97,4 @@ pm connectors inspect source-finnworlds --json
 
 ## References
 
-- [Finnworlds documentation](https://docs.airbyte.com/integrations/sources/finnworlds)
+- [Finnworlds API documentation](https://api.finnworlds.com/docs)

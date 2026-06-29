@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-captain-data [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Captain Data catalog connector for https://docs.airbyte.com/integrations/sources/captain-data. Native implementation status: planned_native_port.
+  Captain Data catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/captain-data.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.captaindata.co/api-documentation
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-captain-data:0.2.25 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Captain Data API documentation: https://docs.captaindata.co/api-documentation
   Captain Data authentication: https://docs.captaindata.co/api-documentation/authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/captain-data
 
 CONFIGURATION
   api_key (string) required secret: Your Captain Data project API key.
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/captain-data
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Captain Data documentation: https://docs.airbyte.com/integrations/sources/captain-data
+  Captain Data API documentation: https://docs.captaindata.co/api-documentation
+  Captain Data authentication: https://docs.captaindata.co/api-documentation/authentication
 
 EXIT STATUS
   0 success

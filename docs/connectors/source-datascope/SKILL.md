@@ -7,7 +7,14 @@ description: Datascope connector knowledge and safe action guide.
 
 ## Purpose
 
-Datascope catalog connector for https://docs.airbyte.com/integrations/sources/datascope. Native implementation status: planned_native_port.
+Datascope catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/datascope.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://app.mydatascope.com/api/external/docs/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Datascope catalog connector for https://docs.airbyte.com/integrations/sources/da
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-datascope:0.2.25 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Datascope catalog connector for https://docs.airbyte.com/integrations/sources/da
 
 - DataScope API documentation: https://app.mydatascope.com/api/external/docs/
 - DataScope authentication: https://app.mydatascope.com/api/external/docs/#section/Authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/datascope
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Datascope catalog connector for https://docs.airbyte.com/integrations/sources/da
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/datascope
 
 ## Commands
 
@@ -92,4 +93,5 @@ pm connectors inspect source-datascope --json
 
 ## References
 
-- [Datascope documentation](https://docs.airbyte.com/integrations/sources/datascope)
+- [DataScope API documentation](https://app.mydatascope.com/api/external/docs/)
+- [DataScope authentication](https://app.mydatascope.com/api/external/docs/#section/Authentication)

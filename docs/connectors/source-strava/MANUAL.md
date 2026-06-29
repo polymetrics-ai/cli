@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-strava [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Strava catalog connector for https://docs.airbyte.com/integrations/sources/strava. Native implementation status: planned_native_port.
+  Strava catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/strava.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.strava.com/docs/reference/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-strava:0.3.51 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Strava API reference: https://developers.strava.com/docs/reference/
   Strava authentication: https://developers.strava.com/docs/authentication/
   Strava rate limits: https://developers.strava.com/docs/rate-limits/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/strava
 
 CONFIGURATION
   athlete_id (integer) required: The Athlete ID of your Strava developer application.
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/strava
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Strava documentation: https://docs.airbyte.com/integrations/sources/strava
+  Strava API reference: https://developers.strava.com/docs/reference/
+  Strava authentication: https://developers.strava.com/docs/authentication/
+  Strava rate limits: https://developers.strava.com/docs/rate-limits/
 
 EXIT STATUS
   0 success

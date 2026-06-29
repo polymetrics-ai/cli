@@ -289,7 +289,7 @@ func googleTasksBaseURL(cfg connectors.RuntimeConfig) (string, error) {
 }
 
 // googleTasksLimit resolves the per-request page size from the records_limit
-// config (Airbyte's field name), bounded by the API maximum.
+// config (upstream's field name), bounded by the API maximum.
 func googleTasksLimit(cfg connectors.RuntimeConfig) (int, error) {
 	raw := strings.TrimSpace(cfg.Config["records_limit"])
 	if raw == "" {

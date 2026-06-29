@@ -7,7 +7,13 @@ description: Google Calendar connector knowledge and safe action guide.
 
 ## Purpose
 
-Google Calendar catalog connector for https://docs.airbyte.com/integrations/sources/google-calendar. Native implementation status: planned_native_port.
+Google Calendar catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Google Calendar catalog connector for https://docs.airbyte.com/integrations/sour
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-google-calendar:0.0.43 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Google Calendar catalog connector for https://docs.airbyte.com/integrations/sour
 - Google Calendar authentication: https://developers.google.com/calendar/api/guides/auth
 - Google Calendar quotas: https://developers.google.com/calendar/api/guides/quota
 - Google Workspace Status: https://www.google.com/appsstatus/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-calendar
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Google Calendar catalog connector for https://docs.airbyte.com/integrations/sour
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/google-calendar
 
 ## Commands
 
@@ -96,4 +96,7 @@ pm connectors inspect source-google-calendar --json
 
 ## References
 
-- [Google Calendar documentation](https://docs.airbyte.com/integrations/sources/google-calendar)
+- [Google Calendar API reference](https://developers.google.com/calendar/api/v3/reference)
+- [Google Calendar authentication](https://developers.google.com/calendar/api/guides/auth)
+- [Google Calendar quotas](https://developers.google.com/calendar/api/guides/quota)
+- [Google Workspace Status](https://www.google.com/appsstatus/)

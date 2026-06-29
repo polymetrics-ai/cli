@@ -7,7 +7,14 @@ description: Teradata connector knowledge and safe action guide.
 
 ## Purpose
 
-Teradata catalog connector for https://docs.airbyte.com/integrations/sources/teradata. Native implementation status: planned_native_port.
+Teradata catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/teradata.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.teradata.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Teradata catalog connector for https://docs.airbyte.com/integrations/sources/ter
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-teradata:0.2.6 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Teradata catalog connector for https://docs.airbyte.com/integrations/sources/ter
 ## Official Application Documentation
 
 - Teradata documentation: https://docs.teradata.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/teradata
 
 ## Configuration
 
@@ -57,7 +62,7 @@ Teradata catalog connector for https://docs.airbyte.com/integrations/sources/ter
 - port (integer): Port of the database.
 - replication_method (string): Replication method to use for extracting data from the database. STANDARD replication requires no setup on the DB side but will not be able to represent deletions incrementally....
 - ssl (boolean): Encrypt data using SSL. When activating SSL, please select one of the connection modes.
-- ssl_mode (object): SSL connection modes. <b>disable</b> - Chose this mode to disable encryption of communication between Airbyte and destination database <b>allow</b> - Chose this mode to enable e...
+- ssl_mode (object): manual intervention needed
 - username (string) required: Username to use to access the database.
 - secret fields: password, ssl_mode.ssl_ca_certificate
 
@@ -69,12 +74,8 @@ Teradata catalog connector for https://docs.airbyte.com/integrations/sources/ter
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/teradata
 
 ## Commands
 
@@ -98,4 +99,4 @@ pm connectors inspect source-teradata --json
 
 ## References
 
-- [Teradata documentation](https://docs.airbyte.com/integrations/sources/teradata)
+- [Teradata documentation](https://docs.teradata.com/)

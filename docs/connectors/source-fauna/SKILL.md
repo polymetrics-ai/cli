@@ -7,7 +7,14 @@ description: Fauna connector knowledge and safe action guide.
 
 ## Purpose
 
-Fauna catalog connector for https://docs.airbyte.com/integrations/sources/fauna. Native implementation status: planned_native_port.
+Fauna catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/fauna.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.fauna.com/fauna/current/api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Fauna catalog connector for https://docs.airbyte.com/integrations/sources/fauna.
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-fauna:0.1.9 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Fauna catalog connector for https://docs.airbyte.com/integrations/sources/fauna.
 - Fauna API reference: https://docs.fauna.com/fauna/current/api/
 - Fauna authentication: https://docs.fauna.com/fauna/current/security/
 - Fauna Status: https://status.fauna.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/fauna
 
 ## Configuration
 
@@ -67,12 +72,8 @@ Fauna catalog connector for https://docs.airbyte.com/integrations/sources/fauna.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/fauna
 
 ## Commands
 
@@ -96,4 +97,6 @@ pm connectors inspect source-fauna --json
 
 ## References
 
-- [Fauna documentation](https://docs.airbyte.com/integrations/sources/fauna)
+- [Fauna API reference](https://docs.fauna.com/fauna/current/api/)
+- [Fauna authentication](https://docs.fauna.com/fauna/current/security/)
+- [Fauna Status](https://status.fauna.com/)

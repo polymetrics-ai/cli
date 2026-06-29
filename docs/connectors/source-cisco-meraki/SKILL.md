@@ -7,7 +7,13 @@ description: Cisco Meraki connector knowledge and safe action guide.
 
 ## Purpose
 
-Cisco Meraki catalog connector for https://docs.airbyte.com/integrations/sources/cisco-meraki. Native implementation status: planned_native_port.
+Cisco Meraki catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Cisco Meraki catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-cisco-meraki:0.0.37 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Cisco Meraki catalog connector for https://docs.airbyte.com/integrations/sources
 - Meraki authentication: https://developer.cisco.com/meraki/api-v1/#!authorization
 - Meraki rate limits: https://developer.cisco.com/meraki/api-v1/#!rate-limit
 - Meraki Status: https://status.meraki.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/cisco-meraki
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Cisco Meraki catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/cisco-meraki
 
 ## Commands
 
@@ -94,4 +94,7 @@ pm connectors inspect source-cisco-meraki --json
 
 ## References
 
-- [Cisco Meraki documentation](https://docs.airbyte.com/integrations/sources/cisco-meraki)
+- [Cisco Meraki Dashboard API](https://developer.cisco.com/meraki/api-v1/)
+- [Meraki authentication](https://developer.cisco.com/meraki/api-v1/#!authorization)
+- [Meraki rate limits](https://developer.cisco.com/meraki/api-v1/#!rate-limit)
+- [Meraki Status](https://status.meraki.com/)

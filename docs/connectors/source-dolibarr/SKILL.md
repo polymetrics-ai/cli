@@ -7,7 +7,13 @@ description: Dolibarr connector knowledge and safe action guide.
 
 ## Purpose
 
-Dolibarr catalog connector for https://docs.airbyte.com/integrations/sources/dolibarr. Native implementation status: planned_native_port.
+Dolibarr catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Dolibarr catalog connector for https://docs.airbyte.com/integrations/sources/dol
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-dolibarr:1.0.23 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Dolibarr catalog connector for https://docs.airbyte.com/integrations/sources/dol
 
 - Dolibarr REST API: https://wiki.dolibarr.org/index.php/REST_API
 - Dolibarr authentication: https://wiki.dolibarr.org/index.php/REST_API#Authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/dolibarr
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Dolibarr catalog connector for https://docs.airbyte.com/integrations/sources/dol
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/dolibarr
 
 ## Commands
 
@@ -93,4 +93,5 @@ pm connectors inspect source-dolibarr --json
 
 ## References
 
-- [Dolibarr documentation](https://docs.airbyte.com/integrations/sources/dolibarr)
+- [Dolibarr REST API](https://wiki.dolibarr.org/index.php/REST_API)
+- [Dolibarr authentication](https://wiki.dolibarr.org/index.php/REST_API#Authentication)

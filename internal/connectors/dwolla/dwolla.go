@@ -14,7 +14,7 @@
 // or "api-sandbox". connsdk.OAuth2ClientCredentials handles minting, caching, and
 // refreshing the bearer token.
 //
-// The connector is read-only: Dwolla is an Airbyte source with no reverse-ETL
+// The connector is read-only: Dwolla is an upstream source with no reverse-ETL
 // surface, so Write returns ErrUnsupportedOperation and Capabilities.Write=false.
 //
 // Like stripe, it self-registers with the connectors registry via RegisterFactory

@@ -7,7 +7,14 @@ description: Bing Ads connector knowledge and safe action guide.
 
 ## Purpose
 
-Bing Ads catalog connector for https://docs.airbyte.com/integrations/sources/bing-ads. Native implementation status: planned_native_port.
+Bing Ads catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/bingads.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://learn.microsoft.com/en-us/advertising/guides/release-notes
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Bing Ads catalog connector for https://docs.airbyte.com/integrations/sources/bin
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-bing-ads:3.0.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Bing Ads catalog connector for https://docs.airbyte.com/integrations/sources/bin
 
 - Bing Ads API Release Notes: https://learn.microsoft.com/en-us/advertising/guides/release-notes
 - Release notes: https://learn.microsoft.com/en-us/advertising/guides/release-notes?view=bingads-13
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/bing-ads
 
 ## Configuration
 
@@ -72,12 +77,8 @@ Bing Ads catalog connector for https://docs.airbyte.com/integrations/sources/bin
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/bing-ads
 
 ## Commands
 
@@ -101,4 +102,5 @@ pm connectors inspect source-bing-ads --json
 
 ## References
 
-- [Bing Ads documentation](https://docs.airbyte.com/integrations/sources/bing-ads)
+- [Bing Ads API Release Notes](https://learn.microsoft.com/en-us/advertising/guides/release-notes)
+- [Release notes](https://learn.microsoft.com/en-us/advertising/guides/release-notes?view=bingads-13)

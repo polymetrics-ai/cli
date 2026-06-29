@@ -7,7 +7,14 @@ description: Google PageSpeed Insights connector knowledge and safe action guide
 
 ## Purpose
 
-Google PageSpeed Insights catalog connector for https://docs.airbyte.com/integrations/sources/google-pagespeed-insights. Native implementation status: planned_native_port.
+Google PageSpeed Insights catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/google-pagespeed-insights.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.google.com/speed/docs/insights/v5/get-started
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Google PageSpeed Insights catalog connector for https://docs.airbyte.com/integra
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-google-pagespeed-insights:0.2.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Google PageSpeed Insights catalog connector for https://docs.airbyte.com/integra
 
 - PageSpeed Insights API: https://developers.google.com/speed/docs/insights/v5/get-started
 - PageSpeed Insights quotas: https://developers.google.com/speed/docs/insights/v5/get-started#quota
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-pagespeed-insights
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Google PageSpeed Insights catalog connector for https://docs.airbyte.com/integra
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/google-pagespeed-insights
 
 ## Commands
 
@@ -94,4 +95,5 @@ pm connectors inspect source-google-pagespeed-insights --json
 
 ## References
 
-- [Google PageSpeed Insights documentation](https://docs.airbyte.com/integrations/sources/google-pagespeed-insights)
+- [PageSpeed Insights API](https://developers.google.com/speed/docs/insights/v5/get-started)
+- [PageSpeed Insights quotas](https://developers.google.com/speed/docs/insights/v5/get-started#quota)

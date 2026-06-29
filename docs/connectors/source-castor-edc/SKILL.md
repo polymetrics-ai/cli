@@ -7,7 +7,13 @@ description: Castor EDC connector knowledge and safe action guide.
 
 ## Purpose
 
-Castor EDC catalog connector for https://docs.airbyte.com/integrations/sources/castor-edc. Native implementation status: planned_native_port.
+Castor EDC catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Castor EDC catalog connector for https://docs.airbyte.com/integrations/sources/c
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-castor-edc:0.0.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Castor EDC catalog connector for https://docs.airbyte.com/integrations/sources/c
 
 - Castor EDC API reference: https://data.castoredc.com/api
 - Castor EDC authentication: https://helpdesk.castoredc.com/article/124-application-programming-interface-api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/castor-edc
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Castor EDC catalog connector for https://docs.airbyte.com/integrations/sources/c
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/castor-edc
 
 ## Commands
 
@@ -94,4 +94,5 @@ pm connectors inspect source-castor-edc --json
 
 ## References
 
-- [Castor EDC documentation](https://docs.airbyte.com/integrations/sources/castor-edc)
+- [Castor EDC API reference](https://data.castoredc.com/api)
+- [Castor EDC authentication](https://helpdesk.castoredc.com/article/124-application-programming-interface-api)

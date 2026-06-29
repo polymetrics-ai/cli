@@ -7,7 +7,14 @@ description: Newsdata connector knowledge and safe action guide.
 
 ## Purpose
 
-Newsdata catalog connector for https://docs.airbyte.com/integrations/sources/newsdata. Native implementation status: planned_native_port.
+Newsdata catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/source-newsdata.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://newsdata.io/documentation
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Newsdata catalog connector for https://docs.airbyte.com/integrations/sources/new
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-newsdata:0.2.31 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Newsdata catalog connector for https://docs.airbyte.com/integrations/sources/new
 ## Official Application Documentation
 
 - NewsData.io API documentation: https://newsdata.io/documentation
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/newsdata
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Newsdata catalog connector for https://docs.airbyte.com/integrations/sources/new
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/newsdata
 
 ## Commands
 
@@ -95,4 +96,4 @@ pm connectors inspect source-newsdata --json
 
 ## References
 
-- [Newsdata documentation](https://docs.airbyte.com/integrations/sources/newsdata)
+- [NewsData.io API documentation](https://newsdata.io/documentation)

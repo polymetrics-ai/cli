@@ -7,7 +7,14 @@ description: ClickHouse connector knowledge and safe action guide.
 
 ## Purpose
 
-ClickHouse catalog connector for https://docs.airbyte.com/integrations/destinations/clickhouse. Native implementation status: planned_native_port.
+ClickHouse catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/clickhouse.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://clickhouse.com/docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ ClickHouse catalog connector for https://docs.airbyte.com/integrations/destinati
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-clickhouse:2.1.24 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ ClickHouse catalog connector for https://docs.airbyte.com/integrations/destinati
 - SQL reference: https://clickhouse.com/docs/en/sql-reference
 - User authentication: https://clickhouse.com/docs/en/operations/access-rights
 - Changelog: https://clickhouse.com/docs/whats-new/changelog
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/clickhouse
 
 ## Configuration
 
@@ -72,12 +77,8 @@ ClickHouse catalog connector for https://docs.airbyte.com/integrations/destinati
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/clickhouse
 
 ## Commands
 
@@ -101,4 +102,7 @@ pm connectors inspect destination-clickhouse --json
 
 ## References
 
-- [ClickHouse documentation](https://docs.airbyte.com/integrations/destinations/clickhouse)
+- [ClickHouse documentation](https://clickhouse.com/docs)
+- [SQL reference](https://clickhouse.com/docs/en/sql-reference)
+- [User authentication](https://clickhouse.com/docs/en/operations/access-rights)
+- [Changelog](https://clickhouse.com/docs/whats-new/changelog)

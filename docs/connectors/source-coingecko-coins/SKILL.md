@@ -7,7 +7,14 @@ description: CoinGecko Coins connector knowledge and safe action guide.
 
 ## Purpose
 
-CoinGecko Coins catalog connector for https://docs.airbyte.com/integrations/sources/coingecko-coins. Native implementation status: planned_native_port.
+CoinGecko Coins catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/coingeckocoins.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.coingecko.com/en/api/documentation
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ CoinGecko Coins catalog connector for https://docs.airbyte.com/integrations/sour
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-coingecko-coins:0.2.26 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ CoinGecko Coins catalog connector for https://docs.airbyte.com/integrations/sour
 - CoinGecko API documentation: https://www.coingecko.com/en/api/documentation
 - CoinGecko rate limits: https://www.coingecko.com/en/api/pricing
 - CoinGecko Status: https://status.coingecko.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/coingecko-coins
 
 ## Configuration
 
@@ -68,12 +73,8 @@ CoinGecko Coins catalog connector for https://docs.airbyte.com/integrations/sour
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/coingecko-coins
 
 ## Commands
 
@@ -97,4 +98,6 @@ pm connectors inspect source-coingecko-coins --json
 
 ## References
 
-- [CoinGecko Coins documentation](https://docs.airbyte.com/integrations/sources/coingecko-coins)
+- [CoinGecko API documentation](https://www.coingecko.com/en/api/documentation)
+- [CoinGecko rate limits](https://www.coingecko.com/en/api/pricing)
+- [CoinGecko Status](https://status.coingecko.com/)

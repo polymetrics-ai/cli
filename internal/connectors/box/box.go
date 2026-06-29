@@ -8,7 +8,7 @@
 // Authentication / Client Credentials Grant): the client_id/client_secret are
 // exchanged at the token endpoint for a short-lived bearer token, scoped to an
 // enterprise or user via box_subject_type/box_subject_id. The connector is
-// read-only (Box's Airbyte manifest source is a read source), so Capabilities
+// read-only (Box's upstream manifest source is a read source), so Capabilities
 // .Write is false.
 //
 // Like stripe, it self-registers with the connectors registry via

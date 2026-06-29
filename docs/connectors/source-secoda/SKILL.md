@@ -7,7 +7,14 @@ description: Secoda connector knowledge and safe action guide.
 
 ## Purpose
 
-Secoda catalog connector for https://docs.airbyte.com/integrations/sources/secoda. Native implementation status: planned_native_port.
+Secoda catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/secoda.svg
+- source: official
+- review_status: official_verified
+- review_url: https://docs.secoda.co/api.md
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Secoda catalog connector for https://docs.airbyte.com/integrations/sources/secod
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-secoda:0.2.25 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Secoda catalog connector for https://docs.airbyte.com/integrations/sources/secod
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/secoda
+- Secoda documentation: https://docs.secoda.co/api.md
 
 ## Configuration
 
@@ -61,12 +66,8 @@ Secoda catalog connector for https://docs.airbyte.com/integrations/sources/secod
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/secoda
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-secoda --json
 
 ## References
 
-- [Secoda documentation](https://docs.airbyte.com/integrations/sources/secoda)
+- [Secoda documentation](https://docs.secoda.co/api.md)

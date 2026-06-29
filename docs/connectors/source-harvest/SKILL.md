@@ -7,7 +7,14 @@ description: Harvest connector knowledge and safe action guide.
 
 ## Purpose
 
-Harvest catalog connector for https://docs.airbyte.com/integrations/sources/harvest. Native implementation status: planned_native_port.
+Harvest catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/harvest.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.harveststatus.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Harvest catalog connector for https://docs.airbyte.com/integrations/sources/harv
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-harvest:1.2.42 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Harvest catalog connector for https://docs.airbyte.com/integrations/sources/harv
 
 - Systems status: https://www.harveststatus.com/
 - overview: https://help.getharvest.com/api-v2/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/harvest
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Harvest catalog connector for https://docs.airbyte.com/integrations/sources/harv
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/harvest
 
 ## Commands
 
@@ -95,4 +96,5 @@ pm connectors inspect source-harvest --json
 
 ## References
 
-- [Harvest documentation](https://docs.airbyte.com/integrations/sources/harvest)
+- [Systems status](https://www.harveststatus.com/)
+- [overview](https://help.getharvest.com/api-v2/)

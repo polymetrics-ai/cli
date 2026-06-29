@@ -7,7 +7,14 @@ description: Asana connector knowledge and safe action guide.
 
 ## Purpose
 
-Asana catalog connector for https://docs.airbyte.com/integrations/sources/asana. Native implementation status: planned_native_port.
+Asana catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/asana.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.asana.com/reference/rest-api-reference
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Asana catalog connector for https://docs.airbyte.com/integrations/sources/asana.
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-asana:1.7.2 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Asana catalog connector for https://docs.airbyte.com/integrations/sources/asana.
 - Authentication: https://developers.asana.com/docs/authentication
 - Rate limits: https://developers.asana.com/docs/rate-limits
 - Asana Status: https://status.asana.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/asana
 
 ## Configuration
 
@@ -67,12 +72,8 @@ Asana catalog connector for https://docs.airbyte.com/integrations/sources/asana.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/asana
 
 ## Commands
 
@@ -96,4 +97,7 @@ pm connectors inspect source-asana --json
 
 ## References
 
-- [Asana documentation](https://docs.airbyte.com/integrations/sources/asana)
+- [API reference](https://developers.asana.com/reference/rest-api-reference)
+- [Authentication](https://developers.asana.com/docs/authentication)
+- [Rate limits](https://developers.asana.com/docs/rate-limits)
+- [Asana Status](https://status.asana.com/)

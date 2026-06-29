@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-nytimes [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  New York Times catalog connector for https://docs.airbyte.com/integrations/sources/nytimes. Native implementation status: planned_native_port.
+  New York Times catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/nytimes.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.nytimes.com/apis
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-nytimes:0.2.33 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   New York Times APIs: https://developer.nytimes.com/apis
   NYT API authentication: https://developer.nytimes.com/get-started
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/nytimes
 
 CONFIGURATION
   api_key (string) required secret: API Key
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/nytimes
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  New York Times documentation: https://docs.airbyte.com/integrations/sources/nytimes
+  New York Times APIs: https://developer.nytimes.com/apis
+  NYT API authentication: https://developer.nytimes.com/get-started
 
 EXIT STATUS
   0 success

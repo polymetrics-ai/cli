@@ -38,7 +38,7 @@ func TestReadTweetsPaginatesAndAuthenticates(t *testing.T) {
 
 	c := twitter.New()
 	cfg := connectors.RuntimeConfig{
-		Config:  map[string]string{"base_url": srv.URL, "query": "from:airbyte"},
+		Config:  map[string]string{"base_url": srv.URL, "query": "from:upstream"},
 		Secrets: map[string]string{"api_key": "BEARER_TEST_123"},
 	}
 

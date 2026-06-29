@@ -7,7 +7,14 @@ description: Coda connector knowledge and safe action guide.
 
 ## Purpose
 
-Coda catalog connector for https://docs.airbyte.com/integrations/sources/coda. Native implementation status: planned_native_port.
+Coda catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/coda.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://coda.io/developers/apis/v1
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Coda catalog connector for https://docs.airbyte.com/integrations/sources/coda. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-coda:1.3.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Coda catalog connector for https://docs.airbyte.com/integrations/sources/coda. N
 - Coda API reference: https://coda.io/developers/apis/v1
 - Coda authentication: https://coda.io/developers/apis/v1#section/Authentication
 - Coda rate limits: https://coda.io/developers/apis/v1#section/Rate-Limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/coda
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Coda catalog connector for https://docs.airbyte.com/integrations/sources/coda. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/coda
 
 ## Commands
 
@@ -92,4 +93,6 @@ pm connectors inspect source-coda --json
 
 ## References
 
-- [Coda documentation](https://docs.airbyte.com/integrations/sources/coda)
+- [Coda API reference](https://coda.io/developers/apis/v1)
+- [Coda authentication](https://coda.io/developers/apis/v1#section/Authentication)
+- [Coda rate limits](https://coda.io/developers/apis/v1#section/Rate-Limiting)

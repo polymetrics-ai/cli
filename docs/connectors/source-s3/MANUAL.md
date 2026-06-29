@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-s3 [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  S3 catalog connector for https://docs.airbyte.com/integrations/sources/s3. Native implementation status: planned_native_port.
+  S3 catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/s3.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/WhatsNew.html
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: file_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-s3:4.15.10 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Changelog: https://docs.aws.amazon.com/AmazonS3/latest/userguide/WhatsNew.html
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/s3
 
 CONFIGURATION
   aws_access_key_id (string) secret: In order to access private Buckets stored on AWS S3, this connector requires credentials with the proper permissions. If accessing publicly available data, this field is not nec...
@@ -57,10 +61,10 @@ CONFIGURATION
   path_pattern (string): Deprecated and will be removed soon. Please do not use this field anymore and use streams.globs instead. A regular expression which tells the connector which files to replicate....
   provider (object): Deprecated and will be removed soon. Please do not use this field anymore and use bucket, aws_access_key_id, aws_secret_access_key and endpoint instead. Use this to load files f...
   region_name (string): AWS region where the S3 bucket is located. If not provided, the region will be determined automatically.
-  role_arn (string): Specifies the Amazon Resource Name (ARN) of an IAM role that you want to use to perform operations requested using this profile. Set the External ID to the Airbyte workspace ID,...
+  role_arn (string): manual intervention needed
   schema (string): Deprecated and will be removed soon. Please do not use this field anymore and use streams.input_schema instead. Optionally provide a schema to enforce, as a valid JSON string. E...
   start_date (string): UTC date and time in the format 2017-01-25T00:00:00.000000Z. Any file modified before this date will not be replicated.
-  streams (array) required: Each instance of this configuration defines a <a href="https://docs.airbyte.com/cloud/core-concepts#stream">stream</a>. Use this to define which files belong in the stream, thei...
+  streams (array) required: manual intervention needed
   secret fields: aws_access_key_id, aws_secret_access_key, provider.aws_access_key_id, provider.aws_secret_access_key
 
 SYNC MODES
@@ -69,11 +73,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/s3
 
 EXAMPLES
   # Inspect catalog entry
@@ -88,7 +89,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  S3 documentation: https://docs.airbyte.com/integrations/sources/s3
+  Changelog: https://docs.aws.amazon.com/AmazonS3/latest/userguide/WhatsNew.html
 
 EXIT STATUS
   0 success

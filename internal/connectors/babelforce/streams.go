@@ -18,7 +18,7 @@ type streamEndpoint struct {
 // means adding one entry here plus a Stream definition in babelforceStreams; the
 // read path is fully data-driven from this table.
 //
-// "calls" is the stream verified against the upstream Airbyte manifest
+// "calls" is the stream verified against the upstream upstream manifest
 // (/calls/reporting/simple). The remaining streams target sibling Babelforce v2
 // list endpoints that share the identical {items,pagination} envelope and
 // dual-header auth.

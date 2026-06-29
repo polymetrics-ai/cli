@@ -18,7 +18,6 @@ import (
 	_ "polymetrics.ai/internal/connectors/adobe-commerce-magento"
 	_ "polymetrics.ai/internal/connectors/agilecrm"
 	_ "polymetrics.ai/internal/connectors/aha"
-	_ "polymetrics.ai/internal/connectors/airbyte"
 	_ "polymetrics.ai/internal/connectors/aircall"
 	_ "polymetrics.ai/internal/connectors/airtable"
 	_ "polymetrics.ai/internal/connectors/akeneo"

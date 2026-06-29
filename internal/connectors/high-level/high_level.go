@@ -1,7 +1,7 @@
 // Package highlevel implements the native pm HighLevel (Go HighLevel /
 // LeadConnector) connector. It is a declarative-HTTP per-system connector built
 // on the connsdk toolkit (Requester + x-api-key auth + RecordsAt extraction)
-// wired to the Airbyte source-high-level proxy API. It mirrors the stripe and
+// wired to the upstream source-high-level proxy API. It mirrors the stripe and
 // cal-com reference connectors' shape.
 //
 // It self-registers with the connectors registry via RegisterFactory in init();
@@ -91,7 +91,7 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 	// A bounded read of the pipelines endpoint confirms auth and connectivity
 	// without mutating anything; pipelines is small and unpaginated.
 	query := url.Values{"locationId": []string{location}}
-	if err := r.DoJSON(ctx, http.MethodGet, "airbyte/pipelines", query, nil, nil); err != nil {
+	if err := r.DoJSON(ctx, http.MethodGet, "upstream/pipelines", query, nil, nil); err != nil {
 		return fmt.Errorf("check %s: %w", registryName, err)
 	}
 	return nil
@@ -145,7 +145,7 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 // nextPageUrl); when no next URL is present, pagination ends. Single-request
 // streams (pipelines, custom_fields) make exactly one call.
 func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint streamEndpoint, location string, pageSize, maxPages int, emit func(connectors.Record) error) error {
-	path := "airbyte/" + endpoint.resource
+	path := "upstream/" + endpoint.resource
 	base := url.Values{}
 	base.Set("locationId", location)
 	if endpoint.style == styleCursor {

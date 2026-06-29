@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-sftp [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  SFTP catalog connector for https://docs.airbyte.com/integrations/sources/sftp. Native implementation status: planned_native_port.
+  SFTP catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/sftp.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: file_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-sftp:0.2.4 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: bounded_streaming, catalog, check, docs_skill, format_detection, path_safety, read_fixture, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sftp
+  manual intervention needed
 
 CONFIGURATION
   credentials (object): The server authentication method
@@ -62,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/sftp
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,9 +79,6 @@ AGENT WORKFLOW
   - Read implementation_status before planning ETL or reverse ETL.
   - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-SEE ALSO
-  SFTP documentation: https://docs.airbyte.com/integrations/sources/sftp
 
 EXIT STATUS
   0 success

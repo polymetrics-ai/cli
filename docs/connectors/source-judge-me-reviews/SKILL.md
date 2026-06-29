@@ -7,7 +7,13 @@ description: Judge.me Reviews connector knowledge and safe action guide.
 
 ## Purpose
 
-Judge.me Reviews catalog connector for https://docs.airbyte.com/integrations/sources/judge-me-reviews. Native implementation status: planned_native_port.
+Judge.me Reviews catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Judge.me Reviews catalog connector for https://docs.airbyte.com/integrations/sou
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-judge-me-reviews:0.0.30 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Judge.me Reviews catalog connector for https://docs.airbyte.com/integrations/sou
 ## Official Application Documentation
 
 - Judge.me API documentation: https://judge.me/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/judge-me-reviews
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Judge.me Reviews catalog connector for https://docs.airbyte.com/integrations/sou
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/judge-me-reviews
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-judge-me-reviews --json
 
 ## References
 
-- [Judge.me Reviews documentation](https://docs.airbyte.com/integrations/sources/judge-me-reviews)
+- [Judge.me API documentation](https://judge.me/api)

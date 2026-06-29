@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-notion [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Notion catalog connector for https://docs.airbyte.com/integrations/sources/notion. Native implementation status: planned_native_port.
+  Notion catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/notion.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.notion.com/reference/changes-by-version
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-notion:4.0.13 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,10 +50,9 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Changes by version: https://developers.notion.com/reference/changes-by-version
   Changelog: https://developers.notion.com/page/changelog
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/notion
 
 CONFIGURATION
-  credentials (object): Choose either OAuth (recommended for Airbyte Cloud) or Access Token. See our <a href='https://docs.airbyte.com/integrations/sources/notion#setup-guide'>docs</a> for more informa...
+  credentials (object): manual intervention needed
   num_workers (integer): Number of worker threads to use for the sync. Higher values can speed up large syncs but may increase rate-limit pressure against Notion's limit of approximately three requests ...
   start_date (string): UTC date and time in the format YYYY-MM-DDTHH:MM:SS.000Z. During incremental sync, any data generated before this date will not be replicated. If left blank, the start date will...
   secret fields: credentials.access_token, credentials.client_id, credentials.client_secret, credentials.token
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/notion
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Notion documentation: https://docs.airbyte.com/integrations/sources/notion
+  Changes by version: https://developers.notion.com/reference/changes-by-version
+  Changelog: https://developers.notion.com/page/changelog
 
 EXIT STATUS
   0 success

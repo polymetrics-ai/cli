@@ -7,7 +7,13 @@ description: Solarwinds Service Desk connector knowledge and safe action guide.
 
 ## Purpose
 
-Solarwinds Service Desk catalog connector for https://docs.airbyte.com/integrations/sources/solarwinds-service-desk. Native implementation status: planned_native_port.
+Solarwinds Service Desk catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Solarwinds Service Desk catalog connector for https://docs.airbyte.com/integrati
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-solarwinds-service-desk:0.0.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Solarwinds Service Desk catalog connector for https://docs.airbyte.com/integrati
 ## Official Application Documentation
 
 - SolarWinds Service Desk API: https://documentation.solarwinds.com/en/success_center/swsd/content/api/swsd-api.htm
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/solarwinds-service-desk
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Solarwinds Service Desk catalog connector for https://docs.airbyte.com/integrati
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/solarwinds-service-desk
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-solarwinds-service-desk --json
 
 ## References
 
-- [Solarwinds Service Desk documentation](https://docs.airbyte.com/integrations/sources/solarwinds-service-desk)
+- [SolarWinds Service Desk API](https://documentation.solarwinds.com/en/success_center/swsd/content/api/swsd-api.htm)

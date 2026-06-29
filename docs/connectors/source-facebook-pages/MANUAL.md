@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-facebook-pages [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Facebook Pages catalog connector for https://docs.airbyte.com/integrations/sources/facebook-pages. Native implementation status: planned_native_port.
+  Facebook Pages catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/facebook.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.facebook.com/docs/pages/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-facebook-pages:2.1.1 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Facebook authentication guide: https://developers.facebook.com/docs/facebook-login/guides/access-tokens/
   Facebook Graph API changelog: https://developers.facebook.com/docs/graph-api/changelog/
   Facebook Platform Status: https://developers.facebook.com/status/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/facebook-pages
 
 CONFIGURATION
   access_token (string) required secret: Facebook Page Access Token
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/facebook-pages
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Facebook Pages documentation: https://docs.airbyte.com/integrations/sources/facebook-pages
+  Facebook Pages API reference: https://developers.facebook.com/docs/pages/
+  Facebook authentication guide: https://developers.facebook.com/docs/facebook-login/guides/access-tokens/
+  Facebook Graph API changelog: https://developers.facebook.com/docs/graph-api/changelog/
+  Facebook Platform Status: https://developers.facebook.com/status/
 
 EXIT STATUS
   0 success

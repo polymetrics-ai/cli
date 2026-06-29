@@ -7,7 +7,14 @@ description: Qualaroo connector knowledge and safe action guide.
 
 ## Purpose
 
-Qualaroo catalog connector for https://docs.airbyte.com/integrations/sources/qualaroo. Native implementation status: planned_native_port.
+Qualaroo catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/qualaroo.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Qualaroo catalog connector for https://docs.airbyte.com/integrations/sources/qua
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-qualaroo:0.4.49 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Qualaroo catalog connector for https://docs.airbyte.com/integrations/sources/qua
 ## Official Application Documentation
 
 - Qualaroo API documentation: https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/qualaroo
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Qualaroo catalog connector for https://docs.airbyte.com/integrations/sources/qua
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/qualaroo
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect source-qualaroo --json
 
 ## References
 
-- [Qualaroo documentation](https://docs.airbyte.com/integrations/sources/qualaroo)
+- [Qualaroo API documentation](https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API)

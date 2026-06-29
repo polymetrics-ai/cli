@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-savvycal [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  SavvyCal catalog connector for https://docs.airbyte.com/integrations/sources/savvycal. Native implementation status: planned_native_port.
+  SavvyCal catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-savvycal:0.0.57 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   SavvyCal API documentation: https://savvycal.com/api
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/savvycal
 
 CONFIGURATION
   api_key (string) required secret: Go to SavvyCal → Settings → Developer → Personal Tokens and make a new token. Then, copy the private key. https://savvycal.com/developers
@@ -56,11 +59,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/savvycal
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +75,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  SavvyCal documentation: https://docs.airbyte.com/integrations/sources/savvycal
+  SavvyCal API documentation: https://savvycal.com/api
 
 EXIT STATUS
   0 success

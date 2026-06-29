@@ -7,7 +7,13 @@ description: Systeme connector knowledge and safe action guide.
 
 ## Purpose
 
-Systeme catalog connector for https://docs.airbyte.com/integrations/sources/systeme. Native implementation status: planned_native_port.
+Systeme catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Systeme catalog connector for https://docs.airbyte.com/integrations/sources/syst
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-systeme:0.0.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Systeme catalog connector for https://docs.airbyte.com/integrations/sources/syst
 ## Official Application Documentation
 
 - Systeme.io API documentation: https://systeme.io/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/systeme
 
 ## Configuration
 
@@ -61,12 +65,8 @@ Systeme catalog connector for https://docs.airbyte.com/integrations/sources/syst
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/systeme
 
 ## Commands
 
@@ -90,4 +90,4 @@ pm connectors inspect source-systeme --json
 
 ## References
 
-- [Systeme documentation](https://docs.airbyte.com/integrations/sources/systeme)
+- [Systeme.io API documentation](https://systeme.io/api)

@@ -7,7 +7,14 @@ description: Milvus connector knowledge and safe action guide.
 
 ## Purpose
 
-Milvus catalog connector for https://docs.airbyte.com/integrations/destinations/milvus. Native implementation status: planned_native_port.
+Milvus catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/milvus.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://milvus.io/docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Milvus catalog connector for https://docs.airbyte.com/integrations/destinations/
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-milvus:0.0.58 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Milvus catalog connector for https://docs.airbyte.com/integrations/destinations/
 - Milvus documentation: https://milvus.io/docs
 - Authentication: https://milvus.io/docs/authenticate.md
 - Release notes: https://milvus.io/docs/release_notes.md
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/milvus
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Milvus catalog connector for https://docs.airbyte.com/integrations/destinations/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/milvus
 
 ## Commands
 
@@ -95,4 +96,6 @@ pm connectors inspect destination-milvus --json
 
 ## References
 
-- [Milvus documentation](https://docs.airbyte.com/integrations/destinations/milvus)
+- [Milvus documentation](https://milvus.io/docs)
+- [Authentication](https://milvus.io/docs/authenticate.md)
+- [Release notes](https://milvus.io/docs/release_notes.md)

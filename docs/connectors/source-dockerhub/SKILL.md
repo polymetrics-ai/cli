@@ -7,7 +7,14 @@ description: Dockerhub connector knowledge and safe action guide.
 
 ## Purpose
 
-Dockerhub catalog connector for https://docs.airbyte.com/integrations/sources/dockerhub. Native implementation status: planned_native_port.
+Dockerhub catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/dockerhub.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.docker.com/docker-hub/api/latest/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Dockerhub catalog connector for https://docs.airbyte.com/integrations/sources/do
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-dockerhub:0.3.26 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Dockerhub catalog connector for https://docs.airbyte.com/integrations/sources/do
 - Docker Hub authentication: https://docs.docker.com/docker-hub/api/latest/#section/Authentication
 - Docker Hub rate limits: https://docs.docker.com/docker-hub/download-rate-limit/
 - Docker Status: https://www.dockerstatus.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/dockerhub
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Dockerhub catalog connector for https://docs.airbyte.com/integrations/sources/do
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/dockerhub
 
 ## Commands
 
@@ -92,4 +93,7 @@ pm connectors inspect source-dockerhub --json
 
 ## References
 
-- [Dockerhub documentation](https://docs.airbyte.com/integrations/sources/dockerhub)
+- [Docker Hub API reference](https://docs.docker.com/docker-hub/api/latest/)
+- [Docker Hub authentication](https://docs.docker.com/docker-hub/api/latest/#section/Authentication)
+- [Docker Hub rate limits](https://docs.docker.com/docker-hub/download-rate-limit/)
+- [Docker Status](https://www.dockerstatus.com/)

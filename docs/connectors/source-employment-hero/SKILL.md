@@ -7,7 +7,13 @@ description: Employment-Hero connector knowledge and safe action guide.
 
 ## Purpose
 
-Employment-Hero catalog connector for https://docs.airbyte.com/integrations/sources/employment-hero. Native implementation status: planned_native_port.
+Employment-Hero catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Employment-Hero catalog connector for https://docs.airbyte.com/integrations/sour
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-employment-hero:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Employment-Hero catalog connector for https://docs.airbyte.com/integrations/sour
 
 - Employment Hero API reference: https://developer.employmenthero.com/
 - Employment Hero authentication: https://developer.employmenthero.com/api-references/authentication/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/employment-hero
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Employment-Hero catalog connector for https://docs.airbyte.com/integrations/sour
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/employment-hero
 
 ## Commands
 
@@ -93,4 +93,5 @@ pm connectors inspect source-employment-hero --json
 
 ## References
 
-- [Employment-Hero documentation](https://docs.airbyte.com/integrations/sources/employment-hero)
+- [Employment Hero API reference](https://developer.employmenthero.com/)
+- [Employment Hero authentication](https://developer.employmenthero.com/api-references/authentication/)

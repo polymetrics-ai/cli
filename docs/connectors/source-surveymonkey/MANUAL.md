@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-surveymonkey [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  SurveyMonkey catalog connector for https://docs.airbyte.com/integrations/sources/surveymonkey. Native implementation status: planned_native_port.
+  SurveyMonkey catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/surveymonkey.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.surveymonkey.com/api/v3/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-surveymonkey:0.3.48 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   SurveyMonkey authentication: https://developer.surveymonkey.com/api/v3/#authentication
   SurveyMonkey API Changelog: https://developer.surveymonkey.com/api/v3/#changelog
   SurveyMonkey rate limits: https://developer.surveymonkey.com/api/v3/#rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/surveymonkey
 
 CONFIGURATION
   credentials (object) required: The authorization method to use to retrieve data from SurveyMonkey
@@ -62,11 +66,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/surveymonkey
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +82,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  SurveyMonkey documentation: https://docs.airbyte.com/integrations/sources/surveymonkey
+  SurveyMonkey API reference: https://developer.surveymonkey.com/api/v3/
+  SurveyMonkey authentication: https://developer.surveymonkey.com/api/v3/#authentication
+  SurveyMonkey API Changelog: https://developer.surveymonkey.com/api/v3/#changelog
+  SurveyMonkey rate limits: https://developer.surveymonkey.com/api/v3/#rate-limits
 
 EXIT STATUS
   0 success

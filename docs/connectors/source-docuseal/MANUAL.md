@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-docuseal [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Docuseal catalog connector for https://docs.airbyte.com/integrations/sources/docuseal. Native implementation status: planned_native_port.
+  Docuseal catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-docuseal:0.0.29 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   DocuSeal API documentation: https://www.docuseal.co/docs/api
   DocuSeal authentication: https://www.docuseal.co/docs/api#authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/docuseal
 
 CONFIGURATION
   api_key (string) required secret: Your API key for authenticating with the DocuSeal API. Obtain it from the DocuSeal API Console at https://console.docuseal.com/api.
@@ -59,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/docuseal
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +78,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Docuseal documentation: https://docs.airbyte.com/integrations/sources/docuseal
+  DocuSeal API documentation: https://www.docuseal.co/docs/api
+  DocuSeal authentication: https://www.docuseal.co/docs/api#authentication
 
 EXIT STATUS
   0 success

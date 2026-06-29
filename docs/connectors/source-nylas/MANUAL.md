@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-nylas [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Nylas catalog connector for https://docs.airbyte.com/integrations/sources/nylas. Native implementation status: planned_native_port.
+  Nylas catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-nylas:0.0.59 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Nylas authentication: https://developer.nylas.com/docs/the-basics/authentication/
   Nylas rate limits: https://developer.nylas.com/docs/dev-guide/platform/rate-limits/
   Nylas Status: https://status.nylas.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/nylas
 
 CONFIGURATION
   api_key (string) required secret
@@ -62,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/nylas
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +81,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Nylas documentation: https://docs.airbyte.com/integrations/sources/nylas
+  Nylas API reference: https://developer.nylas.com/docs/api/
+  Nylas authentication: https://developer.nylas.com/docs/the-basics/authentication/
+  Nylas rate limits: https://developer.nylas.com/docs/dev-guide/platform/rate-limits/
+  Nylas Status: https://status.nylas.com/
 
 EXIT STATUS
   0 success

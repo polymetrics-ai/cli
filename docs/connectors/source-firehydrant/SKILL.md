@@ -7,7 +7,13 @@ description: FireHydrant connector knowledge and safe action guide.
 
 ## Purpose
 
-FireHydrant catalog connector for https://docs.airbyte.com/integrations/sources/firehydrant. Native implementation status: planned_native_port.
+FireHydrant catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ FireHydrant catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-firehydrant:1.0.9 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ FireHydrant catalog connector for https://docs.airbyte.com/integrations/sources/
 - FireHydrant API documentation: https://firehydrant.com/docs/api/
 - FireHydrant authentication: https://firehydrant.com/docs/api/#authentication
 - FireHydrant Status: https://status.firehydrant.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/firehydrant
 
 ## Configuration
 
@@ -63,12 +67,8 @@ FireHydrant catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/firehydrant
 
 ## Commands
 
@@ -92,4 +92,6 @@ pm connectors inspect source-firehydrant --json
 
 ## References
 
-- [FireHydrant documentation](https://docs.airbyte.com/integrations/sources/firehydrant)
+- [FireHydrant API documentation](https://firehydrant.com/docs/api/)
+- [FireHydrant authentication](https://firehydrant.com/docs/api/#authentication)
+- [FireHydrant Status](https://status.firehydrant.io/)

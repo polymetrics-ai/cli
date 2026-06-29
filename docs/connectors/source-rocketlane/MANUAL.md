@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-rocketlane [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Rocketlane catalog connector for https://docs.airbyte.com/integrations/sources/rocketlane. Native implementation status: planned_native_port.
+  Rocketlane catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-rocketlane:0.0.55 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Rocketlane API documentation: https://apidocs.rocketlane.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/rocketlane
 
 CONFIGURATION
   api_key (string) required secret: API key to use. Generate it from the API section in Settings of your Rocketlane account.
@@ -56,11 +59,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/rocketlane
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +75,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Rocketlane documentation: https://docs.airbyte.com/integrations/sources/rocketlane
+  Rocketlane API documentation: https://apidocs.rocketlane.com/
 
 EXIT STATUS
   0 success

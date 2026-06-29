@@ -7,7 +7,14 @@ description: Amazon Ads connector knowledge and safe action guide.
 
 ## Purpose
 
-Amazon Ads catalog connector for https://docs.airbyte.com/integrations/sources/amazon-ads. Native implementation status: planned_native_port.
+Amazon Ads catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/amazonads.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://advertising.amazon.com/API/docs/en-us/release-notes/deprecations
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Amazon Ads catalog connector for https://docs.airbyte.com/integrations/sources/a
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-amazon-ads:9.0.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ Amazon Ads catalog connector for https://docs.airbyte.com/integrations/sources/a
 - All releases: https://advertising.amazon.com/API/docs/en-us/release-notes/index
 - Deprecations: https://advertising.amazon.com/API/docs/en-us/release-notes/deprecations
 - Rate limits: https://advertising.amazon.com/API/docs/en-us/get-started/developer-notes#rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/amazon-ads
 
 ## Configuration
 
@@ -74,12 +79,8 @@ Amazon Ads catalog connector for https://docs.airbyte.com/integrations/sources/a
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/amazon-ads
 
 ## Commands
 
@@ -103,4 +104,8 @@ pm connectors inspect source-amazon-ads --json
 
 ## References
 
-- [Amazon Ads documentation](https://docs.airbyte.com/integrations/sources/amazon-ads)
+- [Advertising API](https://advertising.amazon.com/API/docs/en-us)
+- [Authorization](https://advertising.amazon.com/API/docs/en-us/get-started/authorization)
+- [All releases](https://advertising.amazon.com/API/docs/en-us/release-notes/index)
+- [Deprecations](https://advertising.amazon.com/API/docs/en-us/release-notes/deprecations)
+- [Rate limits](https://advertising.amazon.com/API/docs/en-us/get-started/developer-notes#rate-limiting)

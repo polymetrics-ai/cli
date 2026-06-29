@@ -7,7 +7,13 @@ description: Mailosaur connector knowledge and safe action guide.
 
 ## Purpose
 
-Mailosaur catalog connector for https://docs.airbyte.com/integrations/sources/mailosaur. Native implementation status: planned_native_port.
+Mailosaur catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Mailosaur catalog connector for https://docs.airbyte.com/integrations/sources/ma
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mailosaur:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Mailosaur catalog connector for https://docs.airbyte.com/integrations/sources/ma
 
 - Mailosaur API reference: https://mailosaur.com/docs/api/
 - Mailosaur authentication: https://mailosaur.com/docs/managing-your-account/api-keys/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mailosaur
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Mailosaur catalog connector for https://docs.airbyte.com/integrations/sources/ma
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mailosaur
 
 ## Commands
 
@@ -92,4 +92,5 @@ pm connectors inspect source-mailosaur --json
 
 ## References
 
-- [Mailosaur documentation](https://docs.airbyte.com/integrations/sources/mailosaur)
+- [Mailosaur API reference](https://mailosaur.com/docs/api/)
+- [Mailosaur authentication](https://mailosaur.com/docs/managing-your-account/api-keys/)

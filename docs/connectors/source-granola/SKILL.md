@@ -7,7 +7,14 @@ description: Granola connector knowledge and safe action guide.
 
 ## Purpose
 
-Granola catalog connector for https://docs.airbyte.com/integrations/sources/granola. Native implementation status: planned_native_port.
+Granola catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/source-granola.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.granola.ai/introduction
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Granola catalog connector for https://docs.airbyte.com/integrations/sources/gran
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-granola:0.2.5 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Granola catalog connector for https://docs.airbyte.com/integrations/sources/gran
 ## Official Application Documentation
 
 - Granola Enterprise API documentation: https://docs.granola.ai/introduction
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/granola
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Granola catalog connector for https://docs.airbyte.com/integrations/sources/gran
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/granola
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-granola --json
 
 ## References
 
-- [Granola documentation](https://docs.airbyte.com/integrations/sources/granola)
+- [Granola Enterprise API documentation](https://docs.granola.ai/introduction)

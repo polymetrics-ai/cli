@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-linkedin-ads [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  LinkedIn Ads catalog connector for https://docs.airbyte.com/integrations/sources/linkedin-ads. Native implementation status: planned_native_port.
+  LinkedIn Ads catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/linkedin.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-linkedin-ads:5.6.9 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Changelog: https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/linkedin-ads
 
 CONFIGURATION
   account_ids (array): Specify the account IDs to pull data from, separated by a space. Leave this field empty if you want to pull the data from all accounts accessible by the authenticated user. See ...
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/linkedin-ads
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  LinkedIn Ads documentation: https://docs.airbyte.com/integrations/sources/linkedin-ads
+  Changelog: https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10
 
 EXIT STATUS
   0 success

@@ -7,7 +7,14 @@ description: MySQL connector knowledge and safe action guide.
 
 ## Purpose
 
-MySQL catalog connector for https://docs.airbyte.com/integrations/sources/mysql. Native implementation status: planned_native_port.
+MySQL catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/mysql.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://dev.mysql.com/doc/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ MySQL catalog connector for https://docs.airbyte.com/integrations/sources/mysql.
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mysql:3.52.3 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ MySQL catalog connector for https://docs.airbyte.com/integrations/sources/mysql.
 - MySQL documentation: https://dev.mysql.com/doc/
 - MySQL authentication: https://dev.mysql.com/doc/refman/8.0/en/access-control.html
 - MySQL Release Notes: https://dev.mysql.com/doc/relnotes/mysql/en/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mysql
 
 ## Configuration
 
@@ -60,7 +65,7 @@ MySQL catalog connector for https://docs.airbyte.com/integrations/sources/mysql.
 - database (string) required: The database name.
 - host (string) required: Hostname of the database.
 - jdbc_url_params (string): Additional properties to pass to the JDBC URL string when connecting to the database formatted as 'key=value' pairs separated by the symbol '&'. (example: key1=value1&key2=value...
-- max_db_connections (integer): Maximum number of concurrent queries to the database. Leave empty to let Airbyte optimize performance.
+- max_db_connections (integer): manual intervention needed
 - password (string) secret: The password associated with the username.
 - port (integer) required: Port of the database.
 - replication_method (object) required: Configures how data is extracted from the database.
@@ -79,12 +84,8 @@ MySQL catalog connector for https://docs.airbyte.com/integrations/sources/mysql.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mysql
 
 ## Commands
 
@@ -108,4 +109,6 @@ pm connectors inspect source-mysql --json
 
 ## References
 
-- [MySQL documentation](https://docs.airbyte.com/integrations/sources/mysql)
+- [MySQL documentation](https://dev.mysql.com/doc/)
+- [MySQL authentication](https://dev.mysql.com/doc/refman/8.0/en/access-control.html)
+- [MySQL Release Notes](https://dev.mysql.com/doc/relnotes/mysql/en/)

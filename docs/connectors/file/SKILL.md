@@ -9,6 +9,13 @@ description: File connector knowledge and safe action guide.
 
 Reads local JSONL or CSV files as source streams.
 
+## Icon
+
+- asset: icons/pm-file.svg
+- source: polymetrics
+- review_status: polymetrics
+- review_url: https://github.com/karthik-sivadas/polymetrics-cli
+
 ## Capabilities
 
 - check=true catalog=true read=true write=false query=false
@@ -68,4 +75,3 @@ pm etl run --connection file_to_warehouse --stream file --json
 - Run pm connectors inspect file before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

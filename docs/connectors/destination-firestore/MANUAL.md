@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector destination-firestore [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Google Firestore catalog connector for https://docs.airbyte.com/integrations/destinations/firestore. Native implementation status: planned_native_port.
+  Google Firestore catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/firestore.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-firestore:0.2.22 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,11 +47,10 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/firestore
+  Google Firestore documentation: https://firebase.google.com/docs/firestore
 
 CONFIGURATION
-  credentials_json (string) secret: The contents of the JSON service account key. Check out the <a href="https://docs.airbyte.com/integrations/destinations/firestore">docs</a> if you need help generating this key....
+  credentials_json (string) secret: manual intervention needed
   project_id (string) required: The GCP project ID for the project containing the target BigQuery dataset.
   secret fields: credentials_json
 
@@ -57,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/firestore
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Google Firestore documentation: https://docs.airbyte.com/integrations/destinations/firestore
+  Google Firestore documentation: https://firebase.google.com/docs/firestore
 
 EXIT STATUS
   0 success

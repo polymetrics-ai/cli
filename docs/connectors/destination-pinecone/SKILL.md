@@ -7,7 +7,14 @@ description: Pinecone connector knowledge and safe action guide.
 
 ## Purpose
 
-Pinecone catalog connector for https://docs.airbyte.com/integrations/destinations/pinecone. Native implementation status: planned_native_port.
+Pinecone catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pinecone.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.pinecone.io/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Pinecone catalog connector for https://docs.airbyte.com/integrations/destination
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-pinecone:0.1.48 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ Pinecone catalog connector for https://docs.airbyte.com/integrations/destination
 - Release notes: https://docs.pinecone.io/release-notes
 - Rate limits: https://docs.pinecone.io/troubleshooting/rate-limits
 - Pinecone Status: https://status.pinecone.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/pinecone
 
 ## Configuration
 
@@ -68,12 +73,8 @@ Pinecone catalog connector for https://docs.airbyte.com/integrations/destination
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/pinecone
 
 ## Commands
 
@@ -97,4 +98,8 @@ pm connectors inspect destination-pinecone --json
 
 ## References
 
-- [Pinecone documentation](https://docs.airbyte.com/integrations/destinations/pinecone)
+- [Pinecone documentation](https://docs.pinecone.io/)
+- [Authentication](https://docs.pinecone.io/guides/get-started/authentication)
+- [Release notes](https://docs.pinecone.io/release-notes)
+- [Rate limits](https://docs.pinecone.io/troubleshooting/rate-limits)
+- [Pinecone Status](https://status.pinecone.io/)

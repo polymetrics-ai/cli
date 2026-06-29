@@ -7,7 +7,13 @@ description: Leadfeeder connector knowledge and safe action guide.
 
 ## Purpose
 
-Leadfeeder catalog connector for https://docs.airbyte.com/integrations/sources/leadfeeder. Native implementation status: planned_native_port.
+Leadfeeder catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Leadfeeder catalog connector for https://docs.airbyte.com/integrations/sources/l
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-leadfeeder:0.0.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Leadfeeder catalog connector for https://docs.airbyte.com/integrations/sources/l
 ## Official Application Documentation
 
 - Leadfeeder API documentation: https://docs.leadfeeder.com/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/leadfeeder
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Leadfeeder catalog connector for https://docs.airbyte.com/integrations/sources/l
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/leadfeeder
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-leadfeeder --json
 
 ## References
 
-- [Leadfeeder documentation](https://docs.airbyte.com/integrations/sources/leadfeeder)
+- [Leadfeeder API documentation](https://docs.leadfeeder.com/api/)

@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-cloudbeds [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Cloudbeds catalog connector for https://docs.airbyte.com/integrations/sources/cloudbeds. Native implementation status: planned_native_port.
+  Cloudbeds catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-cloudbeds:0.0.54 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Cloudbeds API reference: https://hotels.cloudbeds.com/api/docs/
   Cloudbeds OAuth guide: https://hotels.cloudbeds.com/api/docs/#section/Authentication
   Cloudbeds rate limits: https://hotels.cloudbeds.com/api/docs/#section/Rate-Limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/cloudbeds
 
 CONFIGURATION
   api_key (string) required secret
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/cloudbeds
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Cloudbeds documentation: https://docs.airbyte.com/integrations/sources/cloudbeds
+  Cloudbeds API reference: https://hotels.cloudbeds.com/api/docs/
+  Cloudbeds OAuth guide: https://hotels.cloudbeds.com/api/docs/#section/Authentication
+  Cloudbeds rate limits: https://hotels.cloudbeds.com/api/docs/#section/Rate-Limiting
 
 EXIT STATUS
   0 success

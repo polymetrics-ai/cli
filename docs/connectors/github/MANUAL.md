@@ -12,6 +12,12 @@ SYNOPSIS
 DESCRIPTION
   Reads GitHub repository, issue, pull request, code, release, collaboration, and Actions data, and writes approved reverse ETL actions through the GitHub REST API.
 
+ICON
+  asset: icons/github.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.github.com/en/rest/about-the-rest-api/breaking-changes
+
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
   Integration type: api

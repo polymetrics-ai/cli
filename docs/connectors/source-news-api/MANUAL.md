@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-news-api [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  News Api catalog connector for https://docs.airbyte.com/integrations/sources/news-api. Native implementation status: planned_native_port.
+  News Api catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/newsapi.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://newsapi.org/docs
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-news-api:0.2.23 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   News API documentation: https://newsapi.org/docs
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/news-api
 
 CONFIGURATION
   api_key (string) required secret: API Key
@@ -67,11 +71,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/news-api
 
 EXAMPLES
   # Inspect catalog entry
@@ -86,7 +87,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  News Api documentation: https://docs.airbyte.com/integrations/sources/news-api
+  News API documentation: https://newsapi.org/docs
 
 EXIT STATUS
   0 success

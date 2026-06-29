@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-datadog [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Datadog catalog connector for https://docs.airbyte.com/integrations/sources/datadog. Native implementation status: planned_native_port.
+  Datadog catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/datadog.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.datadoghq.com/api/latest/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-datadog:2.0.24 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Datadog authentication: https://docs.datadoghq.com/account_management/api-app-keys/
   Datadog rate limits: https://docs.datadoghq.com/api/latest/rate-limits/
   Datadog Status: https://status.datadoghq.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/datadog
 
 CONFIGURATION
   api_key (string) required secret: Datadog API key
@@ -66,11 +70,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/datadog
 
 EXAMPLES
   # Inspect catalog entry
@@ -85,7 +86,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Datadog documentation: https://docs.airbyte.com/integrations/sources/datadog
+  Datadog API reference: https://docs.datadoghq.com/api/latest/
+  Datadog authentication: https://docs.datadoghq.com/account_management/api-app-keys/
+  Datadog rate limits: https://docs.datadoghq.com/api/latest/rate-limits/
+  Datadog Status: https://status.datadoghq.com/
 
 EXIT STATUS
   0 success

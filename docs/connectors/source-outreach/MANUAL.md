@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-outreach [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Outreach catalog connector for https://docs.airbyte.com/integrations/sources/outreach. Native implementation status: planned_native_port.
+  Outreach catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/outreach.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://api.outreach.io/api/v2/docs
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-outreach:1.1.34 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Outreach API reference: https://api.outreach.io/api/v2/docs
   Outreach authentication: https://api.outreach.io/api/v2/docs#authentication
   Outreach rate limits: https://api.outreach.io/api/v2/docs#rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/outreach
 
 CONFIGURATION
   client_id (string) required: The Client ID of your Outreach developer application.
@@ -62,11 +66,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/outreach
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +82,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Outreach documentation: https://docs.airbyte.com/integrations/sources/outreach
+  Outreach API reference: https://api.outreach.io/api/v2/docs
+  Outreach authentication: https://api.outreach.io/api/v2/docs#authentication
+  Outreach rate limits: https://api.outreach.io/api/v2/docs#rate-limiting
 
 EXIT STATUS
   0 success

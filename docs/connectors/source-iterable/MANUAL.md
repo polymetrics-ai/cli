@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-iterable [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Iterable catalog connector for https://docs.airbyte.com/integrations/sources/iterable. Native implementation status: planned_native_port.
+  Iterable catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/iterable.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://api.iterable.com/api/docs
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-iterable:0.7.2 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,10 +52,9 @@ OFFICIAL APPLICATION DOCUMENTATION
   Iterable authentication: https://support.iterable.com/hc/en-us/articles/360043464871-API-Keys-
   Iterable rate limits: https://support.iterable.com/hc/en-us/articles/360045714132-API-Rate-Limits
   Iterable Status: https://status.iterable.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/iterable
 
 CONFIGURATION
-  api_key (string) required secret: Iterable API Key. See the <a href=\"https://docs.airbyte.com/integrations/sources/iterable\">docs</a> for more information on how to obtain this key.
+  api_key (string) required secret: manual intervention needed
   lookback_window (integer): Number of minutes to re-read from the current time when determining the end of each sync window for export-based streams. This accounts for eventual consistency delays in Iterab...
   region (string): The region where your Iterable account is hosted. Select 'EU' if your account is on the European data center.
   start_date (string) required: The date from which you'd like to replicate data for Iterable, in the format YYYY-MM-DDT00:00:00Z. All data generated after this date will be replicated.
@@ -62,11 +66,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/iterable
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +82,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Iterable documentation: https://docs.airbyte.com/integrations/sources/iterable
+  Iterable API reference: https://api.iterable.com/api/docs
+  Iterable authentication: https://support.iterable.com/hc/en-us/articles/360043464871-API-Keys-
+  Iterable rate limits: https://support.iterable.com/hc/en-us/articles/360045714132-API-Rate-Limits
+  Iterable Status: https://status.iterable.com/
 
 EXIT STATUS
   0 success

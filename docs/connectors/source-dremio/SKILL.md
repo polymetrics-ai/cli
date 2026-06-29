@@ -7,7 +7,14 @@ description: Dremio connector knowledge and safe action guide.
 
 ## Purpose
 
-Dremio catalog connector for https://docs.airbyte.com/integrations/sources/dremio. Native implementation status: planned_native_port.
+Dremio catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/dremio.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.dremio.com/software/rest-api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Dremio catalog connector for https://docs.airbyte.com/integrations/sources/dremi
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-dremio:0.2.24 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Dremio catalog connector for https://docs.airbyte.com/integrations/sources/dremi
 - Dremio REST API: https://docs.dremio.com/software/rest-api/
 - Dremio SQL reference: https://docs.dremio.com/software/sql-reference/
 - Dremio authentication: https://docs.dremio.com/software/rest-api/authentication/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/dremio
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Dremio catalog connector for https://docs.airbyte.com/integrations/sources/dremi
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/dremio
 
 ## Commands
 
@@ -93,4 +94,6 @@ pm connectors inspect source-dremio --json
 
 ## References
 
-- [Dremio documentation](https://docs.airbyte.com/integrations/sources/dremio)
+- [Dremio REST API](https://docs.dremio.com/software/rest-api/)
+- [Dremio SQL reference](https://docs.dremio.com/software/sql-reference/)
+- [Dremio authentication](https://docs.dremio.com/software/rest-api/authentication/)

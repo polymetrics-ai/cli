@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-sap-hana-enterprise [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  SAP HANA catalog connector for https://docs.airbyte.com/integrations/enterprise-connectors/source-sap-hana. Native implementation status: planned_native_port.
+  SAP HANA catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/sap.svg
+  source: official
+  review_status: official_verified
+  review_url: https://help.sap.com/docs/SAP_HANA_PLATFORM
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: database_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-sap-hana-enterprise:0.0.18 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +48,7 @@ NATIVE PORT PLAN
   conformance: catalog, check, cursor_incremental, docs_skill, query_safety, read_fixture, secret_redaction, spec, state_checkpoint, type_mapping
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/enterprise-connectors/source-sap-hana
+  SAP HANA documentation: https://help.sap.com/docs/SAP_HANA_PLATFORM
 
 CONFIGURATION
   check_privileges (boolean): When this feature is enabled, during schema discovery the connector will query each table or view individually to check access privileges and inaccessible tables, views, or colu...
@@ -69,11 +73,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/enterprise-connectors/source-sap-hana
 
 EXAMPLES
   # Inspect catalog entry
@@ -88,7 +89,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  SAP HANA documentation: https://docs.airbyte.com/integrations/enterprise-connectors/source-sap-hana
+  SAP HANA documentation: https://help.sap.com/docs/SAP_HANA_PLATFORM
 
 EXIT STATUS
   0 success

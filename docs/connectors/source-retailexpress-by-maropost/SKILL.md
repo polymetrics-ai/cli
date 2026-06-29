@@ -7,7 +7,13 @@ description: Retail Express by Maropost connector knowledge and safe action guid
 
 ## Purpose
 
-Retail Express by Maropost catalog connector for https://docs.airbyte.com/integrations/sources/retailexpress-by-maropost. Native implementation status: planned_native_port.
+Retail Express by Maropost catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Retail Express by Maropost catalog connector for https://docs.airbyte.com/integr
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-retailexpress-by-maropost:0.0.45 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Retail Express by Maropost catalog connector for https://docs.airbyte.com/integr
 ## Official Application Documentation
 
 - Retail Express API: https://retailexpress.atlassian.net/wiki/spaces/APIDOC/overview
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/retailexpress-by-maropost
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Retail Express by Maropost catalog connector for https://docs.airbyte.com/integr
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/retailexpress-by-maropost
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-retailexpress-by-maropost --json
 
 ## References
 
-- [Retail Express by Maropost documentation](https://docs.airbyte.com/integrations/sources/retailexpress-by-maropost)
+- [Retail Express API](https://retailexpress.atlassian.net/wiki/spaces/APIDOC/overview)

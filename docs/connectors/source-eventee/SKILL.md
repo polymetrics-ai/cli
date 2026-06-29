@@ -7,7 +7,13 @@ description: Eventee connector knowledge and safe action guide.
 
 ## Purpose
 
-Eventee catalog connector for https://docs.airbyte.com/integrations/sources/eventee. Native implementation status: planned_native_port.
+Eventee catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Eventee catalog connector for https://docs.airbyte.com/integrations/sources/even
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-eventee:0.0.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Eventee catalog connector for https://docs.airbyte.com/integrations/sources/even
 
 - Eventee API documentation: https://eventee.co/api-documentation
 - Eventee authentication: https://eventee.co/api-documentation#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/eventee
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Eventee catalog connector for https://docs.airbyte.com/integrations/sources/even
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/eventee
 
 ## Commands
 
@@ -91,4 +91,5 @@ pm connectors inspect source-eventee --json
 
 ## References
 
-- [Eventee documentation](https://docs.airbyte.com/integrations/sources/eventee)
+- [Eventee API documentation](https://eventee.co/api-documentation)
+- [Eventee authentication](https://eventee.co/api-documentation#authentication)

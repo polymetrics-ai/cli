@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-lemlist [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Lemlist catalog connector for https://docs.airbyte.com/integrations/sources/lemlist. Native implementation status: planned_native_port.
+  Lemlist catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/lemlist.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.lemlist.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-lemlist:0.3.27 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Lemlist API documentation: https://developer.lemlist.com/
   Lemlist authentication: https://developer.lemlist.com/#authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/lemlist
 
 CONFIGURATION
   api_key (string) required secret: Lemlist API key,
@@ -57,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/lemlist
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +77,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Lemlist documentation: https://docs.airbyte.com/integrations/sources/lemlist
+  Lemlist API documentation: https://developer.lemlist.com/
+  Lemlist authentication: https://developer.lemlist.com/#authentication
 
 EXIT STATUS
   0 success

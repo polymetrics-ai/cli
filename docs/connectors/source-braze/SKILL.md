@@ -7,7 +7,14 @@ description: Braze connector knowledge and safe action guide.
 
 ## Purpose
 
-Braze catalog connector for https://docs.airbyte.com/integrations/sources/braze. Native implementation status: planned_native_port.
+Braze catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/braze.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.braze.com/docs/api/home
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Braze catalog connector for https://docs.airbyte.com/integrations/sources/braze.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-braze:0.4.20 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Braze catalog connector for https://docs.airbyte.com/integrations/sources/braze.
 - Braze API authentication: https://www.braze.com/docs/api/basics/
 - Braze API rate limits: https://www.braze.com/docs/api/api_limits/
 - Braze Status: https://status.braze.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/braze
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Braze catalog connector for https://docs.airbyte.com/integrations/sources/braze.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/braze
 
 ## Commands
 
@@ -95,4 +96,7 @@ pm connectors inspect source-braze --json
 
 ## References
 
-- [Braze documentation](https://docs.airbyte.com/integrations/sources/braze)
+- [Braze REST API reference](https://www.braze.com/docs/api/home)
+- [Braze API authentication](https://www.braze.com/docs/api/basics/)
+- [Braze API rate limits](https://www.braze.com/docs/api/api_limits/)
+- [Braze Status](https://status.braze.com/)

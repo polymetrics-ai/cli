@@ -7,7 +7,14 @@ description: Monday connector knowledge and safe action guide.
 
 ## Purpose
 
-Monday catalog connector for https://docs.airbyte.com/integrations/sources/monday. Native implementation status: planned_native_port.
+Monday catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/monday.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.monday.com/api-reference/docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Monday catalog connector for https://docs.airbyte.com/integrations/sources/monda
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-monday:2.5.11 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Monday catalog connector for https://docs.airbyte.com/integrations/sources/monda
 - monday.com authentication: https://developer.monday.com/api-reference/docs/authentication
 - monday.com rate limits: https://developer.monday.com/api-reference/docs/rate-limits
 - monday.com Status: https://status.monday.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/monday
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Monday catalog connector for https://docs.airbyte.com/integrations/sources/monda
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/monday
 
 ## Commands
 
@@ -95,4 +96,7 @@ pm connectors inspect source-monday --json
 
 ## References
 
-- [Monday documentation](https://docs.airbyte.com/integrations/sources/monday)
+- [monday.com API reference](https://developer.monday.com/api-reference/docs)
+- [monday.com authentication](https://developer.monday.com/api-reference/docs/authentication)
+- [monday.com rate limits](https://developer.monday.com/api-reference/docs/rate-limits)
+- [monday.com Status](https://status.monday.com/)

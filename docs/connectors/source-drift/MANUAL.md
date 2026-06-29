@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-drift [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Drift catalog connector for https://docs.airbyte.com/integrations/sources/drift. Native implementation status: planned_native_port.
+  Drift catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/drift.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://devdocs.drift.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-drift:0.4.53 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Drift API reference: https://devdocs.drift.com/
   Drift authentication: https://devdocs.drift.com/#authentication
   Drift rate limits: https://devdocs.drift.com/#rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/drift
 
 CONFIGURATION
   credentials (object)
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/drift
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Drift documentation: https://docs.airbyte.com/integrations/sources/drift
+  Drift API reference: https://devdocs.drift.com/
+  Drift authentication: https://devdocs.drift.com/#authentication
+  Drift rate limits: https://devdocs.drift.com/#rate-limiting
 
 EXIT STATUS
   0 success

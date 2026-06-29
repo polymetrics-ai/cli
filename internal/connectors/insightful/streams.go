@@ -18,7 +18,7 @@ type streamEndpoint struct {
 
 // insightfulStreamEndpoints is the per-stream routing table. The Insightful API
 // uses singular resource paths (employee, team, project, directory) even though
-// the published stream names follow the upstream Airbyte connector naming.
+// the published stream names follow the upstream upstream connector naming.
 var insightfulStreamEndpoints = map[string]streamEndpoint{
 	"employee":  {resource: "employee", mapRecord: insightfulEmployeeRecord},
 	"team":      {resource: "team", mapRecord: insightfulTeamRecord},

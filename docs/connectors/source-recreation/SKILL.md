@@ -7,7 +7,13 @@ description: Recreation connector knowledge and safe action guide.
 
 ## Purpose
 
-Recreation catalog connector for https://docs.airbyte.com/integrations/sources/recreation. Native implementation status: planned_native_port.
+Recreation catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/recreation.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Recreation catalog connector for https://docs.airbyte.com/integrations/sources/r
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-recreation:0.2.25 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Recreation catalog connector for https://docs.airbyte.com/integrations/sources/r
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/recreation
+- Recreation documentation: https://ridb.recreation.gov/docs
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Recreation catalog connector for https://docs.airbyte.com/integrations/sources/r
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/recreation
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-recreation --json
 
 ## References
 
-- [Recreation documentation](https://docs.airbyte.com/integrations/sources/recreation)
+- [Recreation documentation](https://ridb.recreation.gov/docs)

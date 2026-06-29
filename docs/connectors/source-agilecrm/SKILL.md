@@ -7,7 +7,13 @@ description: AgileCRM connector knowledge and safe action guide.
 
 ## Purpose
 
-AgileCRM catalog connector for https://docs.airbyte.com/integrations/sources/agilecrm. Native implementation status: planned_native_port.
+AgileCRM catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ AgileCRM catalog connector for https://docs.airbyte.com/integrations/sources/agi
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-agilecrm:0.0.43 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ AgileCRM catalog connector for https://docs.airbyte.com/integrations/sources/agi
 ## Official Application Documentation
 
 - API documentation: https://github.com/agilecrm/rest-api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/agilecrm
 
 ## Configuration
 
@@ -63,12 +67,8 @@ AgileCRM catalog connector for https://docs.airbyte.com/integrations/sources/agi
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/agilecrm
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-agilecrm --json
 
 ## References
 
-- [AgileCRM documentation](https://docs.airbyte.com/integrations/sources/agilecrm)
+- [API documentation](https://github.com/agilecrm/rest-api)

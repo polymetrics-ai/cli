@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-wikipedia-pageviews [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Wikipedia Pageviews catalog connector for https://docs.airbyte.com/integrations/sources/wikipedia-pageviews. Native implementation status: planned_native_port.
+  Wikipedia Pageviews catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/wikipedia-pageviews.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-wikipedia-pageviews:0.2.22 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Wikimedia Pageviews API: https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/wikipedia-pageviews
 
 CONFIGURATION
   access (string) required: If you want to filter by access method, use one of desktop, mobile-app or mobile-web. If you are interested in pageviews regardless of access method, use all-access.
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/wikipedia-pageviews
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Wikipedia Pageviews documentation: https://docs.airbyte.com/integrations/sources/wikipedia-pageviews
+  Wikimedia Pageviews API: https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews
 
 EXIT STATUS
   0 success

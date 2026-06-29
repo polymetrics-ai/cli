@@ -6,7 +6,7 @@
 // Cloudbeds is a hospitality platform; the API (v1.2) is read-only here:
 // Bearer-token auth, page-increment pagination via pageNumber/pageSize, and
 // records returned under the top-level "data" array. The connector is
-// full-refresh only, matching the upstream Airbyte source.
+// full-refresh only, matching the upstream upstream source.
 //
 // Like stripe, it self-registers with the connectors registry via
 // RegisterFactory in init(); the registryset package blank-imports this package

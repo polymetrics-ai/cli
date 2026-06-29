@@ -7,7 +7,14 @@ description: Chargify connector knowledge and safe action guide.
 
 ## Purpose
 
-Chargify catalog connector for https://docs.airbyte.com/integrations/sources/chargify. Native implementation status: planned_native_port.
+Chargify catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/chargify.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Chargify catalog connector for https://docs.airbyte.com/integrations/sources/cha
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-chargify:0.5.22 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Chargify catalog connector for https://docs.airbyte.com/integrations/sources/cha
 - Chargify API reference: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api
 - Chargify authentication: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-authentication
 - Chargify rate limits: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/chargify
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Chargify catalog connector for https://docs.airbyte.com/integrations/sources/cha
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/chargify
 
 ## Commands
 
@@ -95,4 +96,6 @@ pm connectors inspect source-chargify --json
 
 ## References
 
-- [Chargify documentation](https://docs.airbyte.com/integrations/sources/chargify)
+- [Chargify API reference](https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api)
+- [Chargify authentication](https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-authentication)
+- [Chargify rate limits](https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-rate-limiting)

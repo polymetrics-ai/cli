@@ -7,7 +7,13 @@ description: Outlook connector knowledge and safe action guide.
 
 ## Purpose
 
-Outlook catalog connector for https://docs.airbyte.com/integrations/sources/outlook. Native implementation status: planned_native_port.
+Outlook catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Outlook catalog connector for https://docs.airbyte.com/integrations/sources/outl
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-outlook:0.0.22 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Outlook catalog connector for https://docs.airbyte.com/integrations/sources/outl
 - Microsoft Graph authentication: https://learn.microsoft.com/en-us/graph/auth/
 - Microsoft Graph throttling: https://learn.microsoft.com/en-us/graph/throttling
 - Microsoft 365 Status: https://status.office365.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/outlook
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Outlook catalog connector for https://docs.airbyte.com/integrations/sources/outl
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/outlook
 
 ## Commands
 
@@ -96,4 +96,7 @@ pm connectors inspect source-outlook --json
 
 ## References
 
-- [Outlook documentation](https://docs.airbyte.com/integrations/sources/outlook)
+- [Outlook Mail API](https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview)
+- [Microsoft Graph authentication](https://learn.microsoft.com/en-us/graph/auth/)
+- [Microsoft Graph throttling](https://learn.microsoft.com/en-us/graph/throttling)
+- [Microsoft 365 Status](https://status.office365.com/)

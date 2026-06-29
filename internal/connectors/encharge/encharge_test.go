@@ -18,7 +18,7 @@ import (
 // the people[] array, and record mapping. Red until internal/connectors/encharge
 // exists.
 //
-// Pagination contract (from the Airbyte manifest): /people/all returns
+// Pagination contract (from the upstream manifest): /people/all returns
 // {"people":[...]} paged with limit/offset, page_size 100. A short page (fewer
 // than limit records) signals the end. The server below returns a full first
 // page (100 records) so the offset paginator requests a second page, then a

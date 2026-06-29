@@ -7,7 +7,14 @@ description: Clazar connector knowledge and safe action guide.
 
 ## Purpose
 
-Clazar catalog connector for https://docs.airbyte.com/integrations/sources/clazar. Native implementation status: planned_native_port.
+Clazar catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/clazar.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://clazar.io/api-docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Clazar catalog connector for https://docs.airbyte.com/integrations/sources/claza
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-clazar:0.4.58 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Clazar catalog connector for https://docs.airbyte.com/integrations/sources/claza
 ## Official Application Documentation
 
 - Clazar API documentation: https://clazar.io/api-docs
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/clazar
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Clazar catalog connector for https://docs.airbyte.com/integrations/sources/claza
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/clazar
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-clazar --json
 
 ## References
 
-- [Clazar documentation](https://docs.airbyte.com/integrations/sources/clazar)
+- [Clazar API documentation](https://clazar.io/api-docs)

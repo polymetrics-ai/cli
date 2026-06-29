@@ -7,7 +7,14 @@ description: AppsFlyer connector knowledge and safe action guide.
 
 ## Purpose
 
-AppsFlyer catalog connector for https://docs.airbyte.com/integrations/sources/appsflyer. Native implementation status: planned_native_port.
+AppsFlyer catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/appsflyer.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://dev.appsflyer.com/hc/reference
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ AppsFlyer catalog connector for https://docs.airbyte.com/integrations/sources/ap
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-appsflyer:0.3.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ AppsFlyer catalog connector for https://docs.airbyte.com/integrations/sources/ap
 
 - API documentation: https://dev.appsflyer.com/hc/reference
 - Authentication: https://dev.appsflyer.com/hc/docs/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/appsflyer
 
 ## Configuration
 
@@ -65,12 +70,8 @@ AppsFlyer catalog connector for https://docs.airbyte.com/integrations/sources/ap
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/appsflyer
 
 ## Commands
 
@@ -94,4 +95,5 @@ pm connectors inspect source-appsflyer --json
 
 ## References
 
-- [AppsFlyer documentation](https://docs.airbyte.com/integrations/sources/appsflyer)
+- [API documentation](https://dev.appsflyer.com/hc/reference)
+- [Authentication](https://dev.appsflyer.com/hc/docs/authentication)

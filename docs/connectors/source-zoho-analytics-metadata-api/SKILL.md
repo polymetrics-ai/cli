@@ -7,7 +7,13 @@ description: Zoho Analytics metadata api connector knowledge and safe action gui
 
 ## Purpose
 
-Zoho Analytics metadata api catalog connector for https://docs.airbyte.com/integrations/sources/zoho-analytics-metadata-api. Native implementation status: planned_native_port.
+Zoho Analytics metadata api catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Zoho Analytics metadata api catalog connector for https://docs.airbyte.com/integ
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-zoho-analytics-metadata-api:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Zoho Analytics metadata api catalog connector for https://docs.airbyte.com/integ
 ## Official Application Documentation
 
 - Zoho Analytics Metadata API: https://www.zoho.com/analytics/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zoho-analytics-metadata-api
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Zoho Analytics metadata api catalog connector for https://docs.airbyte.com/integ
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/zoho-analytics-metadata-api
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-zoho-analytics-metadata-api --json
 
 ## References
 
-- [Zoho Analytics metadata api documentation](https://docs.airbyte.com/integrations/sources/zoho-analytics-metadata-api)
+- [Zoho Analytics Metadata API](https://www.zoho.com/analytics/api/)

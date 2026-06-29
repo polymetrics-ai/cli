@@ -7,7 +7,13 @@ description: Open Data DC connector knowledge and safe action guide.
 
 ## Purpose
 
-Open Data DC catalog connector for https://docs.airbyte.com/integrations/sources/open-data-dc. Native implementation status: planned_native_port.
+Open Data DC catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Open Data DC catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-open-data-dc:0.0.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Open Data DC catalog connector for https://docs.airbyte.com/integrations/sources
 ## Official Application Documentation
 
 - Open Data DC: https://opendata.dc.gov/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/open-data-dc
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Open Data DC catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/open-data-dc
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-open-data-dc --json
 
 ## References
 
-- [Open Data DC documentation](https://docs.airbyte.com/integrations/sources/open-data-dc)
+- [Open Data DC](https://opendata.dc.gov/)

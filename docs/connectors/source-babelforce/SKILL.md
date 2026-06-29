@@ -7,7 +7,14 @@ description: Babelforce connector knowledge and safe action guide.
 
 ## Purpose
 
-Babelforce catalog connector for https://docs.airbyte.com/integrations/sources/babelforce. Native implementation status: planned_native_port.
+Babelforce catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/babelforce.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://api.babelforce.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Babelforce catalog connector for https://docs.airbyte.com/integrations/sources/b
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-babelforce:0.3.30 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Babelforce catalog connector for https://docs.airbyte.com/integrations/sources/b
 ## Official Application Documentation
 
 - API documentation: https://api.babelforce.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/babelforce
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Babelforce catalog connector for https://docs.airbyte.com/integrations/sources/b
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/babelforce
 
 ## Commands
 
@@ -94,4 +95,4 @@ pm connectors inspect source-babelforce --json
 
 ## References
 
-- [Babelforce documentation](https://docs.airbyte.com/integrations/sources/babelforce)
+- [API documentation](https://api.babelforce.com/)

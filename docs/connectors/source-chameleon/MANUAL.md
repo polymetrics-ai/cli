@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-chameleon [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Chameleon catalog connector for https://docs.airbyte.com/integrations/sources/chameleon. Native implementation status: planned_native_port.
+  Chameleon catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-chameleon:0.1.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Chameleon API reference: https://developers.chameleon.io/reference/introduction
   Chameleon authentication: https://developers.chameleon.io/reference/authentication
   Chameleon rate limits: https://developers.chameleon.io/reference/rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/chameleon
 
 CONFIGURATION
   api_key (string) required secret
@@ -62,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/chameleon
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +81,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Chameleon documentation: https://docs.airbyte.com/integrations/sources/chameleon
+  Chameleon API reference: https://developers.chameleon.io/reference/introduction
+  Chameleon authentication: https://developers.chameleon.io/reference/authentication
+  Chameleon rate limits: https://developers.chameleon.io/reference/rate-limiting
 
 EXIT STATUS
   0 success

@@ -7,7 +7,14 @@ description: Printify connector knowledge and safe action guide.
 
 ## Purpose
 
-Printify catalog connector for https://docs.airbyte.com/integrations/sources/printify. Native implementation status: planned_native_port.
+Printify catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/printify.svg
+- source: official
+- review_status: official_verified
+- review_url: https://developers.printify.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Printify catalog connector for https://docs.airbyte.com/integrations/sources/pri
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-printify:0.0.40 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Printify catalog connector for https://docs.airbyte.com/integrations/sources/pri
 
 ## Official Application Documentation
 
-- Printify API documentation: https://developers.printify.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/printify
+- Printify documentation: https://developers.printify.com/
 
 ## Configuration
 
@@ -61,12 +66,8 @@ Printify catalog connector for https://docs.airbyte.com/integrations/sources/pri
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/printify
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-printify --json
 
 ## References
 
-- [Printify documentation](https://docs.airbyte.com/integrations/sources/printify)
+- [Printify documentation](https://developers.printify.com/)

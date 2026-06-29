@@ -7,7 +7,14 @@ description: Timely connector knowledge and safe action guide.
 
 ## Purpose
 
-Timely catalog connector for https://docs.airbyte.com/integrations/sources/timely. Native implementation status: planned_native_port.
+Timely catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/timely.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://dev.timelyapp.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Timely catalog connector for https://docs.airbyte.com/integrations/sources/timel
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-timely:1.0.44 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Timely catalog connector for https://docs.airbyte.com/integrations/sources/timel
 ## Official Application Documentation
 
 - Timely API documentation: https://dev.timelyapp.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/timely
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Timely catalog connector for https://docs.airbyte.com/integrations/sources/timel
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/timely
 
 ## Commands
 
@@ -92,4 +93,4 @@ pm connectors inspect source-timely --json
 
 ## References
 
-- [Timely documentation](https://docs.airbyte.com/integrations/sources/timely)
+- [Timely API documentation](https://dev.timelyapp.com/)

@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-ringcentral [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Ringcentral catalog connector for https://docs.airbyte.com/integrations/sources/ringcentral. Native implementation status: planned_native_port.
+  Ringcentral catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-ringcentral:0.2.22 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/ringcentral
+  Ringcentral documentation: https://developers.ringcentral.com/api-reference
 
 CONFIGURATION
   account_id (string) required secret: Could be seen at response to basic api call to an endpoint with ~ operator. Example- (https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/business-hours)
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/ringcentral
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Ringcentral documentation: https://docs.airbyte.com/integrations/sources/ringcentral
+  Ringcentral documentation: https://developers.ringcentral.com/api-reference
 
 EXIT STATUS
   0 success

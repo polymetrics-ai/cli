@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-weaviate [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Weaviate catalog connector for https://docs.airbyte.com/integrations/destinations/weaviate. Native implementation status: planned_native_port.
+  Weaviate catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/weaviate.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://weaviate.io/developers/weaviate
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-weaviate:0.2.61 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Weaviate documentation: https://weaviate.io/developers/weaviate
   Authentication: https://weaviate.io/developers/weaviate/configuration/authentication
   Release notes: https://weaviate.io/developers/weaviate/release-notes
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/weaviate
 
 CONFIGURATION
   embedding (object) required: Embedding configuration
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/weaviate
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Weaviate documentation: https://docs.airbyte.com/integrations/destinations/weaviate
+  Weaviate documentation: https://weaviate.io/developers/weaviate
+  Authentication: https://weaviate.io/developers/weaviate/configuration/authentication
+  Release notes: https://weaviate.io/developers/weaviate/release-notes
 
 EXIT STATUS
   0 success

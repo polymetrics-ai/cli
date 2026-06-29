@@ -4,7 +4,7 @@
 // cursor state) with Zendesk-specific stream definitions, endpoints, and auth.
 //
 // Zendesk has two notable traits versus a vanilla bearer API:
-//   - Auth has two supported modes. The Airbyte Open Source default is an API
+//   - Auth has two supported modes. The upstream Open Source default is an API
 //     token sent via HTTP Basic as "<email>/token:<api_token>". The OAuth modes
 //     send an access_token via Authorization: Bearer. This connector resolves
 //     whichever secret is present, preferring the OAuth access_token.

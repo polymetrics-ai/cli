@@ -7,7 +7,13 @@ description: DBT connector knowledge and safe action guide.
 
 ## Purpose
 
-DBT catalog connector for https://docs.airbyte.com/integrations/sources/dbt. Native implementation status: planned_native_port.
+DBT catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ DBT catalog connector for https://docs.airbyte.com/integrations/sources/dbt. Nat
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-dbt:0.0.43 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ DBT catalog connector for https://docs.airbyte.com/integrations/sources/dbt. Nat
 - dbt Cloud API reference: https://docs.getdbt.com/dbt-cloud/api-v2
 - dbt Cloud authentication: https://docs.getdbt.com/dbt-cloud/api-v2#section/Authentication
 - dbt Cloud Status: https://status.getdbt.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/dbt
 
 ## Configuration
 
@@ -64,12 +68,8 @@ DBT catalog connector for https://docs.airbyte.com/integrations/sources/dbt. Nat
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/dbt
 
 ## Commands
 
@@ -93,4 +93,6 @@ pm connectors inspect source-dbt --json
 
 ## References
 
-- [DBT documentation](https://docs.airbyte.com/integrations/sources/dbt)
+- [dbt Cloud API reference](https://docs.getdbt.com/dbt-cloud/api-v2)
+- [dbt Cloud authentication](https://docs.getdbt.com/dbt-cloud/api-v2#section/Authentication)
+- [dbt Cloud Status](https://status.getdbt.com/)

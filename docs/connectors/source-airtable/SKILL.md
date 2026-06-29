@@ -7,7 +7,14 @@ description: Airtable connector knowledge and safe action guide.
 
 ## Purpose
 
-Airtable catalog connector for https://docs.airbyte.com/integrations/sources/airtable. Native implementation status: planned_native_port.
+Airtable catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/airtable.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://airtable.com/developers/web/api/changelog
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Airtable catalog connector for https://docs.airbyte.com/integrations/sources/air
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-airtable:4.6.30 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Airtable catalog connector for https://docs.airbyte.com/integrations/sources/air
 - Changelog: https://airtable.com/developers/web/api/changelog
 - Community blog: https://community.airtable.com/development-apis-11
 - OAuth reference: https://airtable.com/developers/web/api/oauth-reference#authorization-request
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/airtable
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Airtable catalog connector for https://docs.airbyte.com/integrations/sources/air
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/airtable
 
 ## Commands
 
@@ -95,4 +96,7 @@ pm connectors inspect source-airtable --json
 
 ## References
 
-- [Airtable documentation](https://docs.airbyte.com/integrations/sources/airtable)
+- [API Deprecation Guidelines](https://support.airtable.com/docs/airtable-api-deprecation-guidelines)
+- [Changelog](https://airtable.com/developers/web/api/changelog)
+- [Community blog](https://community.airtable.com/development-apis-11)
+- [OAuth reference](https://airtable.com/developers/web/api/oauth-reference#authorization-request)

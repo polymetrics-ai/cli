@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-keka [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Keka catalog connector for https://docs.airbyte.com/integrations/sources/keka. Native implementation status: planned_native_port.
+  Keka catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-keka:0.0.44 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Keka API documentation: https://developers.keka.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/keka
 
 CONFIGURATION
   api_key (string) required
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/keka
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Keka documentation: https://docs.airbyte.com/integrations/sources/keka
+  Keka API documentation: https://developers.keka.com/
 
 EXIT STATUS
   0 success

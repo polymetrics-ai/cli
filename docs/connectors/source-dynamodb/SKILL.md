@@ -7,7 +7,14 @@ description: DynamoDB connector knowledge and safe action guide.
 
 ## Purpose
 
-DynamoDB catalog connector for https://docs.airbyte.com/integrations/sources/dynamodb. Native implementation status: planned_native_port.
+DynamoDB catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/dynamodb.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ DynamoDB catalog connector for https://docs.airbyte.com/integrations/sources/dyn
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-dynamodb:0.3.11 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ DynamoDB catalog connector for https://docs.airbyte.com/integrations/sources/dyn
 - DynamoDB authentication: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/authentication-and-access-control.html
 - DynamoDB rate limits: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html
 - AWS Service Health Dashboard: https://health.aws.amazon.com/health/status
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/dynamodb
 
 ## Configuration
 
@@ -68,12 +73,8 @@ DynamoDB catalog connector for https://docs.airbyte.com/integrations/sources/dyn
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/dynamodb
 
 ## Commands
 
@@ -97,4 +98,7 @@ pm connectors inspect source-dynamodb --json
 
 ## References
 
-- [DynamoDB documentation](https://docs.airbyte.com/integrations/sources/dynamodb)
+- [Amazon DynamoDB API reference](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/)
+- [DynamoDB authentication](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/authentication-and-access-control.html)
+- [DynamoDB rate limits](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html)
+- [AWS Service Health Dashboard](https://health.aws.amazon.com/health/status)

@@ -7,7 +7,13 @@ description: Oveit connector knowledge and safe action guide.
 
 ## Purpose
 
-Oveit catalog connector for https://docs.airbyte.com/integrations/sources/oveit. Native implementation status: planned_native_port.
+Oveit catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Oveit catalog connector for https://docs.airbyte.com/integrations/sources/oveit.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-oveit:0.0.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Oveit catalog connector for https://docs.airbyte.com/integrations/sources/oveit.
 ## Official Application Documentation
 
 - Oveit API documentation: https://oveit.com/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/oveit
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Oveit catalog connector for https://docs.airbyte.com/integrations/sources/oveit.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/oveit
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-oveit --json
 
 ## References
 
-- [Oveit documentation](https://docs.airbyte.com/integrations/sources/oveit)
+- [Oveit API documentation](https://oveit.com/api/)

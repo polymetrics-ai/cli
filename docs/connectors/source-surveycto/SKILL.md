@@ -7,7 +7,14 @@ description: SurveyCTO connector knowledge and safe action guide.
 
 ## Purpose
 
-SurveyCTO catalog connector for https://docs.airbyte.com/integrations/sources/surveycto. Native implementation status: planned_native_port.
+SurveyCTO catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/surveycto.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.surveycto.com/05-exporting-and-publishing-data/02-api-access/01.api-access.html
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ SurveyCTO catalog connector for https://docs.airbyte.com/integrations/sources/su
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-surveycto:0.1.46 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ SurveyCTO catalog connector for https://docs.airbyte.com/integrations/sources/su
 ## Official Application Documentation
 
 - SurveyCTO API documentation: https://docs.surveycto.com/05-exporting-and-publishing-data/02-api-access/01.api-access.html
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/surveycto
 
 ## Configuration
 
@@ -65,12 +70,8 @@ SurveyCTO catalog connector for https://docs.airbyte.com/integrations/sources/su
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/surveycto
 
 ## Commands
 
@@ -94,4 +95,4 @@ pm connectors inspect source-surveycto --json
 
 ## References
 
-- [SurveyCTO documentation](https://docs.airbyte.com/integrations/sources/surveycto)
+- [SurveyCTO API documentation](https://docs.surveycto.com/05-exporting-and-publishing-data/02-api-access/01.api-access.html)

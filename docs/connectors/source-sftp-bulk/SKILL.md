@@ -7,7 +7,14 @@ description: SFTP Bulk connector knowledge and safe action guide.
 
 ## Purpose
 
-SFTP Bulk catalog connector for https://docs.airbyte.com/integrations/sources/sftp-bulk. Native implementation status: planned_native_port.
+SFTP Bulk catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/sftp.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://datatracker.ietf.org/doc/html/draft-ietf-secsh-filexfer-02
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ SFTP Bulk catalog connector for https://docs.airbyte.com/integrations/sources/sf
 - implementation_status: planned_native_port
 - runtime_kind: file_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sftp-bulk:1.9.2 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ SFTP Bulk catalog connector for https://docs.airbyte.com/integrations/sources/sf
 ## Official Application Documentation
 
 - SFTP protocol documentation: https://datatracker.ietf.org/doc/html/draft-ietf-secsh-filexfer-02
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sftp-bulk
 
 ## Configuration
 
@@ -56,7 +61,7 @@ SFTP Bulk catalog connector for https://docs.airbyte.com/integrations/sources/sf
 - host (string) required: The server host address
 - port (integer): The server port
 - start_date (string): UTC date and time in the format 2017-01-25T00:00:00.000000Z. Any file modified before this date will not be replicated.
-- streams (array) required: Each instance of this configuration defines a <a href="https://docs.airbyte.com/cloud/core-concepts#stream">stream</a>. Use this to define which files belong in the stream, thei...
+- streams (array) required: manual intervention needed
 - username (string) required: The server user
 - secret fields: credentials.password, credentials.private_key, streams[].format.processing.api_key
 
@@ -68,12 +73,8 @@ SFTP Bulk catalog connector for https://docs.airbyte.com/integrations/sources/sf
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/sftp-bulk
 
 ## Commands
 
@@ -97,4 +98,4 @@ pm connectors inspect source-sftp-bulk --json
 
 ## References
 
-- [SFTP Bulk documentation](https://docs.airbyte.com/integrations/sources/sftp-bulk)
+- [SFTP protocol documentation](https://datatracker.ietf.org/doc/html/draft-ietf-secsh-filexfer-02)

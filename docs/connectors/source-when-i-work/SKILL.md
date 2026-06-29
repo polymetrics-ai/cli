@@ -7,7 +7,13 @@ description: When_i_work connector knowledge and safe action guide.
 
 ## Purpose
 
-When_i_work catalog connector for https://docs.airbyte.com/integrations/sources/when-i-work. Native implementation status: planned_native_port.
+When_i_work catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ When_i_work catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-when-i-work:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ When_i_work catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Official Application Documentation
 
 - When I Work API: https://apidocs.wheniwork.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/when-i-work
 
 ## Configuration
 
@@ -62,12 +66,8 @@ When_i_work catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/when-i-work
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-when-i-work --json
 
 ## References
 
-- [When_i_work documentation](https://docs.airbyte.com/integrations/sources/when-i-work)
+- [When I Work API](https://apidocs.wheniwork.com/)

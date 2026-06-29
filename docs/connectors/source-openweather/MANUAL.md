@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-openweather [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Openweather catalog connector for https://docs.airbyte.com/integrations/sources/openweather. Native implementation status: planned_native_port.
+  Openweather catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/openweather.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://openweathermap.org/api
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-openweather:0.3.54 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   OpenWeather API documentation: https://openweathermap.org/api
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/openweather
 
 CONFIGURATION
   appid (string) required secret: API KEY
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/openweather
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Openweather documentation: https://docs.airbyte.com/integrations/sources/openweather
+  OpenWeather API documentation: https://openweathermap.org/api
 
 EXIT STATUS
   0 success

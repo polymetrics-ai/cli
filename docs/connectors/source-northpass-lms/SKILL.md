@@ -7,7 +7,13 @@ description: Northpass LMS connector knowledge and safe action guide.
 
 ## Purpose
 
-Northpass LMS catalog connector for https://docs.airbyte.com/integrations/sources/northpass-lms. Native implementation status: planned_native_port.
+Northpass LMS catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Northpass LMS catalog connector for https://docs.airbyte.com/integrations/source
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-northpass-lms:0.2.25 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Northpass LMS catalog connector for https://docs.airbyte.com/integrations/source
 ## Official Application Documentation
 
 - Northpass API documentation: https://developers.northpass.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/northpass-lms
 
 ## Configuration
 
@@ -61,12 +65,8 @@ Northpass LMS catalog connector for https://docs.airbyte.com/integrations/source
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/northpass-lms
 
 ## Commands
 
@@ -90,4 +90,4 @@ pm connectors inspect source-northpass-lms --json
 
 ## References
 
-- [Northpass LMS documentation](https://docs.airbyte.com/integrations/sources/northpass-lms)
+- [Northpass API documentation](https://developers.northpass.com/)

@@ -7,7 +7,13 @@ description: Fillout connector knowledge and safe action guide.
 
 ## Purpose
 
-Fillout catalog connector for https://docs.airbyte.com/integrations/sources/fillout. Native implementation status: planned_native_port.
+Fillout catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Fillout catalog connector for https://docs.airbyte.com/integrations/sources/fill
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-fillout:0.2.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Fillout catalog connector for https://docs.airbyte.com/integrations/sources/fill
 ## Official Application Documentation
 
 - Fillout API documentation: https://www.fillout.com/help/fillout-rest-api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/fillout
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Fillout catalog connector for https://docs.airbyte.com/integrations/sources/fill
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/fillout
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-fillout --json
 
 ## References
 
-- [Fillout documentation](https://docs.airbyte.com/integrations/sources/fillout)
+- [Fillout API documentation](https://www.fillout.com/help/fillout-rest-api)

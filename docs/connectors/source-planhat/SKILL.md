@@ -7,7 +7,13 @@ description: Planhat connector knowledge and safe action guide.
 
 ## Purpose
 
-Planhat catalog connector for https://docs.airbyte.com/integrations/sources/planhat. Native implementation status: planned_native_port.
+Planhat catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Planhat catalog connector for https://docs.airbyte.com/integrations/sources/plan
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-planhat:0.0.58 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Planhat catalog connector for https://docs.airbyte.com/integrations/sources/plan
 ## Official Application Documentation
 
 - Planhat API documentation: https://docs.planhat.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/planhat
 
 ## Configuration
 
@@ -61,12 +65,8 @@ Planhat catalog connector for https://docs.airbyte.com/integrations/sources/plan
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/planhat
 
 ## Commands
 
@@ -90,4 +90,4 @@ pm connectors inspect source-planhat --json
 
 ## References
 
-- [Planhat documentation](https://docs.airbyte.com/integrations/sources/planhat)
+- [Planhat API documentation](https://docs.planhat.com/)

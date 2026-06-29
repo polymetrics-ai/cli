@@ -68,7 +68,7 @@ func bunnyStreams() []connectors.Stream {
 	}
 }
 
-// The GraphQL documents below mirror the upstream Airbyte manifest (one $after
+// The GraphQL documents below mirror the upstream upstream manifest (one $after
 // String variable, first: pageSize injected at request time, and a pageInfo block
 // for cursor pagination). The selected fields are the stable subset the connector
 // maps; %d is replaced by the configured page size before sending.

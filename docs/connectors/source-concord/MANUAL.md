@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-concord [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Concord catalog connector for https://docs.airbyte.com/integrations/sources/concord. Native implementation status: planned_native_port.
+  Concord catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-concord:0.0.44 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Concord API documentation: https://concord.walmartlabs.com/docs/api/
   Concord authentication: https://concord.walmartlabs.com/docs/getting-started/authentication.html
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/concord
 
 CONFIGURATION
   api_key (string) required secret
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/concord
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Concord documentation: https://docs.airbyte.com/integrations/sources/concord
+  Concord API documentation: https://concord.walmartlabs.com/docs/api/
+  Concord authentication: https://concord.walmartlabs.com/docs/getting-started/authentication.html
 
 EXIT STATUS
   0 success

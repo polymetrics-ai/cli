@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-chargify [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Chargify catalog connector for https://docs.airbyte.com/integrations/sources/chargify. Native implementation status: planned_native_port.
+  Chargify catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/chargify.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-chargify:0.5.22 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Chargify API reference: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api
   Chargify authentication: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-authentication
   Chargify rate limits: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/chargify
 
 CONFIGURATION
   api_key (string) required secret: Maxio Advanced Billing/Chargify API Key.
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/chargify
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Chargify documentation: https://docs.airbyte.com/integrations/sources/chargify
+  Chargify API reference: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api
+  Chargify authentication: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-authentication
+  Chargify rate limits: https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-rate-limiting
 
 EXIT STATUS
   0 success

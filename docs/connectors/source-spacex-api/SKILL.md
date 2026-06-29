@@ -7,7 +7,14 @@ description: SpaceX API connector knowledge and safe action guide.
 
 ## Purpose
 
-SpaceX API catalog connector for https://docs.airbyte.com/integrations/sources/spacex-api. Native implementation status: planned_native_port.
+SpaceX API catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/spacex.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://github.com/r-spacex/SpaceX-API/tree/master/docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ SpaceX API catalog connector for https://docs.airbyte.com/integrations/sources/s
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-spacex-api:0.2.22 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ SpaceX API catalog connector for https://docs.airbyte.com/integrations/sources/s
 ## Official Application Documentation
 
 - SpaceX API documentation: https://github.com/r-spacex/SpaceX-API/tree/master/docs
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/spacex-api
 
 ## Configuration
 
@@ -61,12 +66,8 @@ SpaceX API catalog connector for https://docs.airbyte.com/integrations/sources/s
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/spacex-api
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-spacex-api --json
 
 ## References
 
-- [SpaceX API documentation](https://docs.airbyte.com/integrations/sources/spacex-api)
+- [SpaceX API documentation](https://github.com/r-spacex/SpaceX-API/tree/master/docs)

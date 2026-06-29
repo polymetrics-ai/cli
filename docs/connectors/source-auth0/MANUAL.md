@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-auth0 [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Auth0 catalog connector for https://docs.airbyte.com/integrations/sources/auth0. Native implementation status: planned_native_port.
+  Auth0 catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/auth0.svg
+  source: official
+  review_status: official_verified
+  review_url: https://auth0.com/docs/api/management/v2
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-auth0:0.6.2 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +48,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/auth0
+  Auth0 documentation: https://auth0.com/docs/api/management/v2
 
 CONFIGURATION
   base_url (string) required: The Authentication API is served over HTTPS. All URLs referenced in the documentation have the following base `https://YOUR_DOMAIN`
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/auth0
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Auth0 documentation: https://docs.airbyte.com/integrations/sources/auth0
+  Auth0 documentation: https://auth0.com/docs/api/management/v2
 
 EXIT STATUS
   0 success

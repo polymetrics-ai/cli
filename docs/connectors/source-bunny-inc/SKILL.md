@@ -7,7 +7,13 @@ description: Bunny, Inc. connector knowledge and safe action guide.
 
 ## Purpose
 
-Bunny, Inc. catalog connector for https://docs.airbyte.com/integrations/sources/bunny-inc. Native implementation status: planned_native_port.
+Bunny, Inc. catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Bunny, Inc. catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-bunny-inc:0.0.45 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Bunny, Inc. catalog connector for https://docs.airbyte.com/integrations/sources/
 
 - Bunny.net API documentation: https://docs.bunny.net/reference/bunnynet-api-overview
 - Bunny.net authentication: https://docs.bunny.net/reference/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/bunny-inc
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Bunny, Inc. catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/bunny-inc
 
 ## Commands
 
@@ -93,4 +93,5 @@ pm connectors inspect source-bunny-inc --json
 
 ## References
 
-- [Bunny, Inc. documentation](https://docs.airbyte.com/integrations/sources/bunny-inc)
+- [Bunny.net API documentation](https://docs.bunny.net/reference/bunnynet-api-overview)
+- [Bunny.net authentication](https://docs.bunny.net/reference/authentication)

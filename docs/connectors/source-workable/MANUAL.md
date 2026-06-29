@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-workable [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Workable catalog connector for https://docs.airbyte.com/integrations/sources/workable. Native implementation status: planned_native_port.
+  Workable catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/workable.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://workable.readme.io/reference
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-workable:0.2.17 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Workable API reference: https://workable.readme.io/reference
   Workable authentication: https://workable.readme.io/reference/generate-an-access-token
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/workable
 
 CONFIGURATION
   account_subdomain (string) required: Your Workable account subdomain, e.g. https://your_account_subdomain.workable.com.
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/workable
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Workable documentation: https://docs.airbyte.com/integrations/sources/workable
+  Workable API reference: https://workable.readme.io/reference
+  Workable authentication: https://workable.readme.io/reference/generate-an-access-token
 
 EXIT STATUS
   0 success

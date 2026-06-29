@@ -7,7 +7,13 @@ description: cimis connector knowledge and safe action guide.
 
 ## Purpose
 
-cimis catalog connector for https://docs.airbyte.com/integrations/sources/cimis. Native implementation status: planned_native_port.
+cimis catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ cimis catalog connector for https://docs.airbyte.com/integrations/sources/cimis.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-cimis:0.0.58 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ cimis catalog connector for https://docs.airbyte.com/integrations/sources/cimis.
 ## Official Application Documentation
 
 - CIMIS Web API: https://cimis.water.ca.gov/WSNReportCriteria.aspx
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/cimis
 
 ## Configuration
 
@@ -68,12 +72,8 @@ cimis catalog connector for https://docs.airbyte.com/integrations/sources/cimis.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/cimis
 
 ## Commands
 
@@ -97,4 +97,4 @@ pm connectors inspect source-cimis --json
 
 ## References
 
-- [cimis documentation](https://docs.airbyte.com/integrations/sources/cimis)
+- [CIMIS Web API](https://cimis.water.ca.gov/WSNReportCriteria.aspx)

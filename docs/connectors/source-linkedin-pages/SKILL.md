@@ -7,7 +7,14 @@ description: Linkedin Pages connector knowledge and safe action guide.
 
 ## Purpose
 
-Linkedin Pages catalog connector for https://docs.airbyte.com/integrations/sources/linkedin-pages. Native implementation status: planned_native_port.
+Linkedin Pages catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/linkedin.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://learn.microsoft.com/en-us/linkedin/marketing/integrations/community-management/organizations
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Linkedin Pages catalog connector for https://docs.airbyte.com/integrations/sourc
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-linkedin-pages:1.1.25 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Linkedin Pages catalog connector for https://docs.airbyte.com/integrations/sourc
 - LinkedIn Pages API: https://learn.microsoft.com/en-us/linkedin/marketing/integrations/community-management/organizations
 - LinkedIn authentication: https://learn.microsoft.com/en-us/linkedin/shared/authentication/authentication
 - LinkedIn rate limits: https://learn.microsoft.com/en-us/linkedin/shared/api-guide/concepts/rate-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/linkedin-pages
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Linkedin Pages catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/linkedin-pages
 
 ## Commands
 
@@ -95,4 +96,6 @@ pm connectors inspect source-linkedin-pages --json
 
 ## References
 
-- [Linkedin Pages documentation](https://docs.airbyte.com/integrations/sources/linkedin-pages)
+- [LinkedIn Pages API](https://learn.microsoft.com/en-us/linkedin/marketing/integrations/community-management/organizations)
+- [LinkedIn authentication](https://learn.microsoft.com/en-us/linkedin/shared/authentication/authentication)
+- [LinkedIn rate limits](https://learn.microsoft.com/en-us/linkedin/shared/api-guide/concepts/rate-limits)

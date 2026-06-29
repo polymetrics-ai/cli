@@ -7,7 +7,14 @@ description: Shopify connector knowledge and safe action guide.
 
 ## Purpose
 
-Shopify catalog connector for https://docs.airbyte.com/integrations/sources/shopify. Native implementation status: planned_native_port.
+Shopify catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/shopify.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://shopify.dev/docs/api/admin-rest
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Shopify catalog connector for https://docs.airbyte.com/integrations/sources/shop
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-shopify:3.5.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -52,7 +58,6 @@ Shopify catalog connector for https://docs.airbyte.com/integrations/sources/shop
 - Shopify API versioning and deprecation policy: https://shopify.dev/docs/api/usage/versioning
 - Shopify rate limits: https://shopify.dev/docs/api/usage/rate-limits
 - Shopify Status: https://www.shopifystatus.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/shopify
 
 ## Configuration
 
@@ -76,12 +81,8 @@ Shopify catalog connector for https://docs.airbyte.com/integrations/sources/shop
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/shopify
 
 ## Commands
 
@@ -105,4 +106,10 @@ pm connectors inspect source-shopify --json
 
 ## References
 
-- [Shopify documentation](https://docs.airbyte.com/integrations/sources/shopify)
+- [Shopify Admin API](https://shopify.dev/docs/api/admin-rest)
+- [Shopify authentication](https://shopify.dev/docs/apps/auth)
+- [Developer changelog](https://shopify.dev/changelog)
+- [Shopify API changelog](https://shopify.dev/docs/api/release-notes)
+- [Shopify API versioning and deprecation policy](https://shopify.dev/docs/api/usage/versioning)
+- [Shopify rate limits](https://shopify.dev/docs/api/usage/rate-limits)
+- [Shopify Status](https://www.shopifystatus.com/)

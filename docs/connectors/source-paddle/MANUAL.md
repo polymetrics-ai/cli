@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-paddle [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Paddle catalog connector for https://docs.airbyte.com/integrations/sources/paddle. Native implementation status: planned_native_port.
+  Paddle catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/paddle.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developer.paddle.com/api-reference/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-paddle:0.2.21 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,11 +48,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  Paddle API reference: https://developer.paddle.com/api-reference/overview
-  Paddle authentication: https://developer.paddle.com/api-reference/authentication
-  Paddle rate limits: https://developer.paddle.com/api-reference/rate-limits
-  Paddle Status: https://status.paddle.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/paddle
+  Paddle documentation: https://developer.paddle.com/api-reference/
 
 CONFIGURATION
   api_key (string) required secret: Your Paddle API key. You can generate it by navigating to Paddle > Developer tools > Authentication > Generate API key. Treat this key like a password and keep it secure.
@@ -61,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/paddle
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +78,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Paddle documentation: https://docs.airbyte.com/integrations/sources/paddle
+  Paddle documentation: https://developer.paddle.com/api-reference/
 
 EXIT STATUS
   0 success

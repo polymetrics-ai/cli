@@ -7,7 +7,13 @@ description: Mercado Ads connector knowledge and safe action guide.
 
 ## Purpose
 
-Mercado Ads catalog connector for https://docs.airbyte.com/integrations/sources/mercado-ads. Native implementation status: planned_native_port.
+Mercado Ads catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Mercado Ads catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mercado-ads:0.0.33 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Mercado Ads catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Official Application Documentation
 
 - Mercado Libre Ads API: https://developers.mercadolibre.com.ar/en_us/advertising
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mercado-ads
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Mercado Ads catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mercado-ads
 
 ## Commands
 
@@ -95,4 +95,4 @@ pm connectors inspect source-mercado-ads --json
 
 ## References
 
-- [Mercado Ads documentation](https://docs.airbyte.com/integrations/sources/mercado-ads)
+- [Mercado Libre Ads API](https://developers.mercadolibre.com.ar/en_us/advertising)

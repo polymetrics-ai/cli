@@ -7,7 +7,13 @@ description: Aviationstack connector knowledge and safe action guide.
 
 ## Purpose
 
-Aviationstack catalog connector for https://docs.airbyte.com/integrations/sources/aviationstack. Native implementation status: planned_native_port.
+Aviationstack catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Aviationstack catalog connector for https://docs.airbyte.com/integrations/source
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-aviationstack:0.0.32 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Aviationstack catalog connector for https://docs.airbyte.com/integrations/source
 ## Official Application Documentation
 
 - API documentation: https://aviationstack.com/documentation
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/aviationstack
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Aviationstack catalog connector for https://docs.airbyte.com/integrations/source
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/aviationstack
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-aviationstack --json
 
 ## References
 
-- [Aviationstack documentation](https://docs.airbyte.com/integrations/sources/aviationstack)
+- [API documentation](https://aviationstack.com/documentation)

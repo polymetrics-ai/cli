@@ -7,7 +7,13 @@ description: Brex connector knowledge and safe action guide.
 
 ## Purpose
 
-Brex catalog connector for https://docs.airbyte.com/integrations/sources/brex. Native implementation status: planned_native_port.
+Brex catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Brex catalog connector for https://docs.airbyte.com/integrations/sources/brex. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-brex:0.0.47 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Brex catalog connector for https://docs.airbyte.com/integrations/sources/brex. N
 - Brex API reference: https://developer.brex.com/openapi/
 - Brex authentication guide: https://developer.brex.com/docs/authentication/
 - Brex API rate limits: https://developer.brex.com/docs/rate_limits/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/brex
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Brex catalog connector for https://docs.airbyte.com/integrations/sources/brex. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/brex
 
 ## Commands
 
@@ -93,4 +93,6 @@ pm connectors inspect source-brex --json
 
 ## References
 
-- [Brex documentation](https://docs.airbyte.com/integrations/sources/brex)
+- [Brex API reference](https://developer.brex.com/openapi/)
+- [Brex authentication guide](https://developer.brex.com/docs/authentication/)
+- [Brex API rate limits](https://developer.brex.com/docs/rate_limits/)

@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-appfigures [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Appfigures catalog connector for https://docs.airbyte.com/integrations/sources/appfigures. Native implementation status: planned_native_port.
+  Appfigures catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-appfigures:0.0.47 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   API documentation: https://docs.appfigures.com/
   Authentication: https://docs.appfigures.com/authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/appfigures
 
 CONFIGURATION
   api_key (string) required secret
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/appfigures
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Appfigures documentation: https://docs.airbyte.com/integrations/sources/appfigures
+  API documentation: https://docs.appfigures.com/
+  Authentication: https://docs.appfigures.com/authentication
 
 EXIT STATUS
   0 success

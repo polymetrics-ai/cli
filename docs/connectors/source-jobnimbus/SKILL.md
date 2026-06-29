@@ -7,7 +7,13 @@ description: JobNimbus connector knowledge and safe action guide.
 
 ## Purpose
 
-JobNimbus catalog connector for https://docs.airbyte.com/integrations/sources/jobnimbus. Native implementation status: planned_native_port.
+JobNimbus catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ JobNimbus catalog connector for https://docs.airbyte.com/integrations/sources/jo
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-jobnimbus:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ JobNimbus catalog connector for https://docs.airbyte.com/integrations/sources/jo
 ## Official Application Documentation
 
 - JobNimbus API documentation: https://documenter.getpostman.com/view/3919598/S11PpG4x
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/jobnimbus
 
 ## Configuration
 
@@ -61,12 +65,8 @@ JobNimbus catalog connector for https://docs.airbyte.com/integrations/sources/jo
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/jobnimbus
 
 ## Commands
 
@@ -90,4 +90,4 @@ pm connectors inspect source-jobnimbus --json
 
 ## References
 
-- [JobNimbus documentation](https://docs.airbyte.com/integrations/sources/jobnimbus)
+- [JobNimbus API documentation](https://documenter.getpostman.com/view/3919598/S11PpG4x)

@@ -7,7 +7,14 @@ description: Eventzilla connector knowledge and safe action guide.
 
 ## Purpose
 
-Eventzilla catalog connector for https://docs.airbyte.com/integrations/sources/eventzilla. Native implementation status: planned_native_port.
+Eventzilla catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/eventzilla.svg
+- source: official
+- review_status: official_verified
+- review_url: https://www.eventzilla.net/api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Eventzilla catalog connector for https://docs.airbyte.com/integrations/sources/e
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-eventzilla:0.0.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,9 +51,7 @@ Eventzilla catalog connector for https://docs.airbyte.com/integrations/sources/e
 
 ## Official Application Documentation
 
-- Eventzilla API documentation: https://www.eventzilla.net/api/
-- Eventzilla authentication: https://www.eventzilla.net/api/#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/eventzilla
+- Eventzilla documentation: https://www.eventzilla.net/api/
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Eventzilla catalog connector for https://docs.airbyte.com/integrations/sources/e
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/eventzilla
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-eventzilla --json
 
 ## References
 
-- [Eventzilla documentation](https://docs.airbyte.com/integrations/sources/eventzilla)
+- [Eventzilla documentation](https://www.eventzilla.net/api/)

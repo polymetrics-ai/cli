@@ -7,7 +7,14 @@ description: OneSignal connector knowledge and safe action guide.
 
 ## Purpose
 
-OneSignal catalog connector for https://docs.airbyte.com/integrations/sources/onesignal. Native implementation status: planned_native_port.
+OneSignal catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/onesignal.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://documentation.onesignal.com/reference
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ OneSignal catalog connector for https://docs.airbyte.com/integrations/sources/on
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-onesignal:1.2.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ OneSignal catalog connector for https://docs.airbyte.com/integrations/sources/on
 - OneSignal authentication: https://documentation.onesignal.com/docs/accounts-and-keys
 - OneSignal rate limits: https://documentation.onesignal.com/docs/rate-limits
 - OneSignal Status: https://status.onesignal.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/onesignal
 
 ## Configuration
 
@@ -67,12 +72,8 @@ OneSignal catalog connector for https://docs.airbyte.com/integrations/sources/on
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/onesignal
 
 ## Commands
 
@@ -96,4 +97,7 @@ pm connectors inspect source-onesignal --json
 
 ## References
 
-- [OneSignal documentation](https://docs.airbyte.com/integrations/sources/onesignal)
+- [OneSignal API reference](https://documentation.onesignal.com/reference)
+- [OneSignal authentication](https://documentation.onesignal.com/docs/accounts-and-keys)
+- [OneSignal rate limits](https://documentation.onesignal.com/docs/rate-limits)
+- [OneSignal Status](https://status.onesignal.com/)

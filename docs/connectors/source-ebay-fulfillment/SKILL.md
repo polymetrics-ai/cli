@@ -7,7 +7,13 @@ description: Ebay Fulfillment connector knowledge and safe action guide.
 
 ## Purpose
 
-Ebay Fulfillment catalog connector for https://docs.airbyte.com/integrations/sources/ebay-fulfillment. Native implementation status: planned_native_port.
+Ebay Fulfillment catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Ebay Fulfillment catalog connector for https://docs.airbyte.com/integrations/sou
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-ebay-fulfillment:0.0.28 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Ebay Fulfillment catalog connector for https://docs.airbyte.com/integrations/sou
 - eBay authentication: https://developer.ebay.com/api-docs/static/oauth-tokens.html
 - eBay rate limits: https://developer.ebay.com/support/app-check
 - eBay Developer Status: https://developer.ebay.com/support/api-status
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/ebay-fulfillment
 
 ## Configuration
 
@@ -70,12 +74,8 @@ Ebay Fulfillment catalog connector for https://docs.airbyte.com/integrations/sou
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/ebay-fulfillment
 
 ## Commands
 
@@ -99,4 +99,7 @@ pm connectors inspect source-ebay-fulfillment --json
 
 ## References
 
-- [Ebay Fulfillment documentation](https://docs.airbyte.com/integrations/sources/ebay-fulfillment)
+- [eBay Fulfillment API](https://developer.ebay.com/api-docs/sell/fulfillment/overview.html)
+- [eBay authentication](https://developer.ebay.com/api-docs/static/oauth-tokens.html)
+- [eBay rate limits](https://developer.ebay.com/support/app-check)
+- [eBay Developer Status](https://developer.ebay.com/support/api-status)

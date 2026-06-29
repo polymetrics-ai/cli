@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-greenhouse [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Greenhouse catalog connector for https://docs.airbyte.com/integrations/sources/greenhouse. Native implementation status: planned_native_port.
+  Greenhouse catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/greenhouse.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.greenhouse.io/harvest.html
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-greenhouse:0.7.26 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,10 +51,9 @@ OFFICIAL APPLICATION DOCUMENTATION
   Greenhouse Harvest API: https://developers.greenhouse.io/harvest.html
   Greenhouse authentication: https://developers.greenhouse.io/harvest.html#authentication
   Greenhouse rate limits: https://developers.greenhouse.io/harvest.html#throttling
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/greenhouse
 
 CONFIGURATION
-  api_key (string) required secret: Greenhouse API Key. See the <a href="https://docs.airbyte.com/integrations/sources/greenhouse">docs</a> for more information on how to generate this key.
+  api_key (string) required secret: manual intervention needed
   num_workers (integer): The number of worker threads to use for syncing. The default is tuned against Greenhouse's documented limit of 50 requests per 10 seconds. Increase this only if your Greenhouse ...
   secret fields: api_key
 
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/greenhouse
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Greenhouse documentation: https://docs.airbyte.com/integrations/sources/greenhouse
+  Greenhouse Harvest API: https://developers.greenhouse.io/harvest.html
+  Greenhouse authentication: https://developers.greenhouse.io/harvest.html#authentication
+  Greenhouse rate limits: https://developers.greenhouse.io/harvest.html#throttling
 
 EXIT STATUS
   0 success

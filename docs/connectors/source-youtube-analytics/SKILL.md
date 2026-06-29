@@ -7,7 +7,14 @@ description: YouTube Analytics connector knowledge and safe action guide.
 
 ## Purpose
 
-YouTube Analytics catalog connector for https://docs.airbyte.com/integrations/sources/youtube-analytics. Native implementation status: planned_native_port.
+YouTube Analytics catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/youtube-analytics.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.google.com/youtube/analytics
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ YouTube Analytics catalog connector for https://docs.airbyte.com/integrations/so
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-youtube-analytics:1.2.9 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ YouTube Analytics catalog connector for https://docs.airbyte.com/integrations/so
 - Google OAuth 2.0: https://developers.google.com/identity/protocols/oauth2
 - YouTube API changelog: https://developers.google.com/youtube/v3/revision_history
 - YouTube API quotas: https://developers.google.com/youtube/v3/getting-started#quota
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/youtube-analytics
 
 ## Configuration
 
@@ -65,12 +70,8 @@ YouTube Analytics catalog connector for https://docs.airbyte.com/integrations/so
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/youtube-analytics
 
 ## Commands
 
@@ -94,4 +95,7 @@ pm connectors inspect source-youtube-analytics --json
 
 ## References
 
-- [YouTube Analytics documentation](https://docs.airbyte.com/integrations/sources/youtube-analytics)
+- [YouTube Analytics API](https://developers.google.com/youtube/analytics)
+- [Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2)
+- [YouTube API changelog](https://developers.google.com/youtube/v3/revision_history)
+- [YouTube API quotas](https://developers.google.com/youtube/v3/getting-started#quota)

@@ -7,7 +7,14 @@ description: TPLcentral connector knowledge and safe action guide.
 
 ## Purpose
 
-TPLcentral catalog connector for https://docs.airbyte.com/integrations/sources/tplcentral. Native implementation status: planned_native_port.
+TPLcentral catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/tplcentral.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://api.3plcentral.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ TPLcentral catalog connector for https://docs.airbyte.com/integrations/sources/t
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-tplcentral:0.1.47 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ TPLcentral catalog connector for https://docs.airbyte.com/integrations/sources/t
 ## Official Application Documentation
 
 - TPL Central API: https://api.3plcentral.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tplcentral
 
 ## Configuration
 
@@ -69,12 +74,8 @@ TPLcentral catalog connector for https://docs.airbyte.com/integrations/sources/t
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/tplcentral
 
 ## Commands
 
@@ -98,4 +99,4 @@ pm connectors inspect source-tplcentral --json
 
 ## References
 
-- [TPLcentral documentation](https://docs.airbyte.com/integrations/sources/tplcentral)
+- [TPL Central API](https://api.3plcentral.com/)

@@ -2,7 +2,7 @@
 
 Status: implementation plan
 Owner: Polymetrics engineering
-Scope: all 647 catalog connectors
+Scope: all 646 catalog connectors
 
 ## Why This Exists
 
@@ -324,9 +324,9 @@ Live enablement:
 
 ## Source References
 
-- Stripe manifest: https://github.com/airbytehq/airbyte/blob/master/airbyte-integrations/connectors/source-stripe/manifest.yaml
-- GitHub source: https://github.com/airbytehq/airbyte/tree/master/airbyte-integrations/connectors/source-github
-- GitHub spec: https://github.com/airbytehq/airbyte/blob/master/airbyte-integrations/connectors/source-github/source_github/spec.json
-- Postgres source: https://github.com/airbytehq/airbyte/tree/master/airbyte-integrations/connectors/source-postgres
-- Postgres destination: https://github.com/airbytehq/airbyte/tree/master/airbyte-integrations/connectors/destination-postgres
-- S3 source: https://github.com/airbytehq/airbyte/tree/master/airbyte-integrations/connectors/source-s3
+- Stripe manifest: https://github.com/connector-registryhq/registry artifact
+- GitHub source: https://github.com/connector-registryhq/registry artifact
+- GitHub spec: https://github.com/connector-registryhq/registry artifact
+- Postgres source: https://github.com/connector-registryhq/registry artifact
+- Postgres destination: https://github.com/connector-registryhq/registry artifact
+- S3 source: https://github.com/connector-registryhq/registry artifact

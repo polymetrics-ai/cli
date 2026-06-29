@@ -7,7 +7,13 @@ description: Height connector knowledge and safe action guide.
 
 ## Purpose
 
-Height catalog connector for https://docs.airbyte.com/integrations/sources/height. Native implementation status: planned_native_port.
+Height catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Height catalog connector for https://docs.airbyte.com/integrations/sources/heigh
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-height:0.0.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Height catalog connector for https://docs.airbyte.com/integrations/sources/heigh
 ## Official Application Documentation
 
 - Height API documentation: https://www.height.app/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/height
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Height catalog connector for https://docs.airbyte.com/integrations/sources/heigh
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/height
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-height --json
 
 ## References
 
-- [Height documentation](https://docs.airbyte.com/integrations/sources/height)
+- [Height API documentation](https://www.height.app/api)

@@ -4,14 +4,14 @@
 // cursor state) with Beamer-specific stream definitions, endpoints, and the
 // Beamer page-increment pagination over root-level JSON arrays.
 //
-// The contract is taken from the upstream Airbyte source-beamer manifest:
+// The contract is taken from the upstream upstream source-beamer manifest:
 //   - base URL https://api.getbeamer.com/v0/
 //   - BearerAuthenticator with the api_key as the token (Authorization: Bearer)
 //   - PageIncrement pagination: page=0,1,... with maxResults as the page size
 //   - record selector at the root (responses are bare JSON arrays)
 //   - the nps stream is incremental on the "date" field, filtered via dateFrom
 //
-// Beamer's REST API is a read-only feedback/changelog surface (the Airbyte source
+// Beamer's REST API is a read-only feedback/changelog surface (the upstream source
 // supports full_refresh only and there is no safe reverse-ETL write target), so
 // Capabilities.Write is false and there is no write.go.
 //

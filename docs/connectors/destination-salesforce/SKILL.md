@@ -7,7 +7,14 @@ description: Salesforce connector knowledge and safe action guide.
 
 ## Purpose
 
-Salesforce catalog connector for https://docs.airbyte.com/integrations/enterprise-connectors/destination-salesforce. Native implementation status: planned_native_port.
+Salesforce catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/salesforce.svg
+- source: official
+- review_status: official_verified
+- review_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Salesforce catalog connector for https://docs.airbyte.com/integrations/enterpris
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-salesforce:0.0.8 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Salesforce catalog connector for https://docs.airbyte.com/integrations/enterpris
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/enterprise-connectors/destination-salesforce
+- Salesforce documentation: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm
 
 ## Configuration
 
@@ -55,7 +60,7 @@ Salesforce catalog connector for https://docs.airbyte.com/integrations/enterpris
 - client_secret (string) required secret: Enter your Salesforce developer application's <a href="https://developer.salesforce.com/forums/?id=9062I000000DLgbQAG">Client secret</a>.
 - is_sandbox (boolean) required: Toggle if you're using a <a href="https://help.salesforce.com/s/articleView?id=sf.deploy_sandboxes_parent.htm&type=5">Salesforce Sandbox</a>.
 - object_storage_config (object)
-- refresh_token (string) required secret: Enter your application's <a href="https://developer.salesforce.com/docs/atlas.en-us.mobile_sdk.meta/mobile_sdk/oauth_refresh_token_flow.htm">Salesforce Refresh Token</a> used fo...
+- refresh_token (string) required secret: manual intervention needed
 - secret fields: client_secret, object_storage_config.access_key_id, object_storage_config.secret_access_key, refresh_token
 
 ## Sync Modes
@@ -66,12 +71,8 @@ Salesforce catalog connector for https://docs.airbyte.com/integrations/enterpris
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/enterprise-connectors/destination-salesforce
 
 ## Commands
 
@@ -95,4 +96,4 @@ pm connectors inspect destination-salesforce --json
 
 ## References
 
-- [Salesforce documentation](https://docs.airbyte.com/integrations/enterprise-connectors/destination-salesforce)
+- [Salesforce documentation](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm)

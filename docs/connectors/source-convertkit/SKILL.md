@@ -7,7 +7,14 @@ description: ConvertKit connector knowledge and safe action guide.
 
 ## Purpose
 
-ConvertKit catalog connector for https://docs.airbyte.com/integrations/sources/convertkit. Native implementation status: planned_native_port.
+ConvertKit catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/convertkit.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.convertkit.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ ConvertKit catalog connector for https://docs.airbyte.com/integrations/sources/c
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-convertkit:0.3.3 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ ConvertKit catalog connector for https://docs.airbyte.com/integrations/sources/c
 
 - ConvertKit API reference: https://developers.convertkit.com/
 - ConvertKit authentication: https://developers.convertkit.com/#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/convertkit
 
 ## Configuration
 
@@ -64,12 +69,8 @@ ConvertKit catalog connector for https://docs.airbyte.com/integrations/sources/c
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/convertkit
 
 ## Commands
 
@@ -93,4 +94,5 @@ pm connectors inspect source-convertkit --json
 
 ## References
 
-- [ConvertKit documentation](https://docs.airbyte.com/integrations/sources/convertkit)
+- [ConvertKit API reference](https://developers.convertkit.com/)
+- [ConvertKit authentication](https://developers.convertkit.com/#authentication)

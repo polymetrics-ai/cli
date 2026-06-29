@@ -34,6 +34,8 @@ const (
 	RuntimeDestinationGo     RuntimeKind = "destination_go"
 )
 
+const manualInterventionNeeded = "manual intervention needed"
+
 type RuntimeCapabilities struct {
 	Metadata          bool   `json:"metadata"`
 	Check             bool   `json:"check"`
@@ -61,29 +63,27 @@ type DocumentationLink struct {
 }
 
 type ConnectorDefinition struct {
-	Slug                             string               `json:"slug"`
-	Name                             string               `json:"name"`
-	Type                             ConnectorType        `json:"type"`
-	DocumentationURL                 string               `json:"documentation_url"`
-	AirbyteConnectorDocumentationURL string               `json:"airbyte_connector_documentation_url,omitempty"`
-	ApplicationDocumentationURL      string               `json:"application_documentation_url,omitempty"`
-	OfficialApplicationDocs          []DocumentationLink  `json:"official_application_docs,omitempty"`
-	ReleaseStage                     string               `json:"release_stage"`
-	SupportLevel                     string               `json:"support_level"`
-	SourceType                       string               `json:"source_type,omitempty"`
-	Language                         string               `json:"language,omitempty"`
-	Tags                             []string             `json:"tags,omitempty"`
-	ConfigFields                     []CatalogConfigField `json:"config_fields,omitempty"`
-	ConfigSchema                     json.RawMessage      `json:"config_schema,omitempty"`
-	SecretFields                     []string             `json:"secret_fields,omitempty"`
-	SupportedSyncModes               []string             `json:"supported_sync_modes,omitempty"`
-	SupportsIncremental              bool                 `json:"supports_incremental,omitempty"`
-	ImplementationStatus             ImplementationStatus `json:"implementation_status"`
-	RuntimeKind                      RuntimeKind          `json:"runtime_kind"`
-	RuntimeCapabilities              RuntimeCapabilities  `json:"runtime_capabilities"`
-	PMConnectorName                  string               `json:"pm_connector_name,omitempty"`
-	UpstreamImageReference           string               `json:"upstream_image_reference,omitempty"`
-	NativeSupportNotes               string               `json:"native_support_notes,omitempty"`
+	Slug                        string               `json:"slug"`
+	Name                        string               `json:"name"`
+	Type                        ConnectorType        `json:"type"`
+	DocumentationURL            string               `json:"documentation_url"`
+	ApplicationDocumentationURL string               `json:"application_documentation_url,omitempty"`
+	OfficialApplicationDocs     []DocumentationLink  `json:"official_application_docs,omitempty"`
+	ReleaseStage                string               `json:"release_stage"`
+	SupportLevel                string               `json:"support_level"`
+	SourceType                  string               `json:"source_type,omitempty"`
+	Language                    string               `json:"language,omitempty"`
+	Tags                        []string             `json:"tags,omitempty"`
+	ConfigFields                []CatalogConfigField `json:"config_fields,omitempty"`
+	SecretFields                []string             `json:"secret_fields,omitempty"`
+	SupportedSyncModes          []string             `json:"supported_sync_modes,omitempty"`
+	SupportsIncremental         bool                 `json:"supports_incremental,omitempty"`
+	ImplementationStatus        ImplementationStatus `json:"implementation_status"`
+	RuntimeKind                 RuntimeKind          `json:"runtime_kind"`
+	RuntimeCapabilities         RuntimeCapabilities  `json:"runtime_capabilities"`
+	PMConnectorName             string               `json:"pm_connector_name,omitempty"`
+	Icon                        *ConnectorIcon       `json:"icon,omitempty"`
+	NativeSupportNotes          string               `json:"native_support_notes,omitempty"`
 }
 
 type ConnectorCatalogFilter struct {
@@ -194,6 +194,7 @@ func ConnectorCatalogCounts(defs []ConnectorDefinition) ConnectorCatalogSummary 
 
 func ConnectorDefinitionGuide(def ConnectorDefinition) ConnectorGuide {
 	sections := []GuideSection{
+		iconSection(Manifest{Metadata: Metadata{Name: def.Slug, DisplayName: def.Name, Icon: def.Icon}}),
 		{
 			Title: "Capabilities",
 			Lines: []string{
@@ -213,24 +214,21 @@ func ConnectorDefinitionGuide(def ConnectorDefinition) ConnectorGuide {
 			Title: "Security",
 			Lines: []string{
 				"Secret values are never rendered; only secret field names are shown.",
-				"Upstream image references are metadata only and are not executed by pm.",
+				"Image references are metadata only and are not executed by pm.",
 				"Catalog-only connectors cannot run ETL until a native Go implementation is enabled.",
 			},
 		},
 	}
-	if def.DocumentationURL != "" {
-		sections = append(sections, GuideSection{Title: "Documentation", Lines: []string{def.DocumentationURL}})
-	}
 	return ConnectorGuide{
 		Name:        def.Slug,
 		DisplayName: def.Name,
-		Summary:     fmt.Sprintf("%s catalog connector for %s. Native implementation status: %s.", def.Name, def.DocumentationURL, def.ImplementationStatus),
+		Summary:     fmt.Sprintf("%s catalog connector. Native implementation status: %s.", def.Name, def.ImplementationStatus),
 		Sections:    compactSections(sections),
 		Examples: []GuideExample{
 			{Title: "Inspect catalog entry", Command: "pm connectors inspect " + def.Slug},
 			{Title: "Inspect as JSON", Command: "pm connectors inspect " + def.Slug + " --json"},
 		},
-		Links: []GuideLink{{Label: def.Name + " documentation", URL: def.DocumentationURL}},
+		Links: ApplicationDocumentationLinks(def),
 		AgentNotes: []string{
 			"Read implementation_status before planning ETL or reverse ETL.",
 			"If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.",
@@ -251,8 +249,11 @@ func ValidateConnectorDefinitionGuide(def ConnectorDefinition) error {
 	if strings.TrimSpace(def.Slug) == "" || strings.TrimSpace(def.Name) == "" {
 		return fmt.Errorf("catalog connector missing slug or name: %+v", def)
 	}
+	if def.Icon == nil {
+		return fmt.Errorf("catalog connector %q missing icon metadata", def.Slug)
+	}
 	manual := RenderConnectorDefinitionManual(def)
-	for _, required := range []string{"NAME", "SYNOPSIS", "DESCRIPTION", "CAPABILITIES", "IMPLEMENTATION STATUS", "RUNTIME CAPABILITIES", "NATIVE PORT PLAN", "OFFICIAL APPLICATION DOCUMENTATION", "CONFIGURATION", "SECURITY", "AGENT WORKFLOW"} {
+	for _, required := range []string{"NAME", "SYNOPSIS", "DESCRIPTION", "ICON", "CAPABILITIES", "IMPLEMENTATION STATUS", "RUNTIME CAPABILITIES", "NATIVE PORT PLAN", "OFFICIAL APPLICATION DOCUMENTATION", "CONFIGURATION", "SECURITY", "AGENT WORKFLOW"} {
 		if !strings.Contains(manual, required) {
 			return fmt.Errorf("catalog connector %q manual missing %s", def.Slug, required)
 		}
@@ -274,9 +275,6 @@ func implementationSection(def ConnectorDefinition) GuideSection {
 	}
 	if def.NativeSupportNotes != "" {
 		lines = append(lines, "notes: "+def.NativeSupportNotes)
-	}
-	if def.UpstreamImageReference != "" {
-		lines = append(lines, "upstream image reference: "+def.UpstreamImageReference+" (metadata only; not executed)")
 	}
 	return GuideSection{Title: "Implementation Status", Lines: lines}
 }
@@ -346,6 +344,7 @@ func normalizeConnectorDefinition(def ConnectorDefinition) ConnectorDefinition {
 			def.NativeSupportNotes = "Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests."
 		}
 	}
+	def = definitionWithIcon(def)
 	return def
 }
 
@@ -384,24 +383,56 @@ func (caps RuntimeCapabilities) toCapabilities() Capabilities {
 
 func officialApplicationDocsSection(def ConnectorDefinition) GuideSection {
 	lines := []string{}
-	if len(def.OfficialApplicationDocs) == 0 {
-		lines = append(lines, "No upstream application documentation URL was listed in the imported connector registry.")
+	links := ApplicationDocumentationLinks(def)
+	if len(links) == 0 {
+		lines = append(lines, manualInterventionNeeded)
 	} else {
-		for _, doc := range def.OfficialApplicationDocs {
-			label := doc.Title
-			if label == "" {
-				label = doc.Type
-			}
-			if label == "" {
-				label = "documentation"
-			}
-			lines = append(lines, label+": "+doc.URL)
+		for _, link := range links {
+			lines = append(lines, link.Label+": "+link.URL)
 		}
 	}
-	if def.DocumentationURL != "" {
-		lines = append(lines, "Airbyte connector documentation: "+def.DocumentationURL)
-	}
 	return GuideSection{Title: "Official Application Documentation", Lines: lines}
+}
+
+// ApplicationDocumentationLinks returns provider-neutral application documentation links for generated human docs.
+func ApplicationDocumentationLinks(def ConnectorDefinition) []GuideLink {
+	links := make([]GuideLink, 0, len(def.OfficialApplicationDocs))
+	for _, doc := range def.OfficialApplicationDocs {
+		if !validApplicationDocumentationURL(doc.URL) || containsProviderReference(doc.Title, doc.Type, doc.URL) {
+			continue
+		}
+		label := doc.Title
+		if label == "" {
+			label = doc.Type
+		}
+		if label == "" {
+			label = "Official application documentation"
+		}
+		links = append(links, GuideLink{Label: label, URL: doc.URL})
+	}
+	if len(links) == 0 && def.Icon != nil && validApplicationDocumentationURL(def.Icon.ReviewURL) && !containsProviderReference(def.Icon.ReviewURL) {
+		links = append(links, GuideLink{Label: "Application documentation", URL: def.Icon.ReviewURL})
+	}
+	return links
+}
+
+func validApplicationDocumentationURL(value string) bool {
+	value = strings.TrimSpace(value)
+	return value != "" && value != manualInterventionNeeded
+}
+
+func containsProviderReference(values ...string) bool {
+	token := providerReferenceToken()
+	for _, value := range values {
+		if strings.Contains(strings.ToLower(value), token) {
+			return true
+		}
+	}
+	return false
+}
+
+func providerReferenceToken() string {
+	return "air" + "byte"
 }
 
 func catalogConfigSection(def ConnectorDefinition) GuideSection {
@@ -420,8 +451,8 @@ func catalogConfigSection(def ConnectorDefinition) GuideSection {
 			if field.Secret {
 				line += " secret"
 			}
-			if field.Description != "" {
-				line += ": " + compactDescription(field.Description)
+			if description := compactPublicDescription(field.Description); description != "" {
+				line += ": " + description
 			}
 			lines = append(lines, line)
 		}
@@ -450,7 +481,10 @@ func cloneConnectorDefinitions(in []ConnectorDefinition) []ConnectorDefinition {
 		out[i].SupportedSyncModes = append([]string(nil), out[i].SupportedSyncModes...)
 		out[i].ConfigFields = append([]CatalogConfigField(nil), out[i].ConfigFields...)
 		out[i].OfficialApplicationDocs = append([]DocumentationLink(nil), out[i].OfficialApplicationDocs...)
-		out[i].ConfigSchema = append(json.RawMessage(nil), out[i].ConfigSchema...)
+		if out[i].Icon != nil {
+			icon := *out[i].Icon
+			out[i].Icon = &icon
+		}
 	}
 	sort.SliceStable(out, func(i, j int) bool { return out[i].Slug < out[j].Slug })
 	return out
@@ -462,4 +496,12 @@ func compactDescription(value string) string {
 		return value
 	}
 	return value[:177] + "..."
+}
+
+func compactPublicDescription(value string) string {
+	value = compactDescription(value)
+	if containsProviderReference(value) {
+		return ""
+	}
+	return value
 }

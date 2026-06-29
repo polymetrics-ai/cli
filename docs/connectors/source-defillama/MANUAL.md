@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-defillama [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Curve catalog connector for https://docs.airbyte.com/integrations/sources/defillama. Native implementation status: planned_native_port.
+  Curve catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-defillama:0.0.2 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   DefiLlama API documentation: https://defillama.com/docs/api
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/defillama
 
 CONFIGURATION
   No config schema fields were advertised in the catalog.
@@ -55,11 +58,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/defillama
 
 EXAMPLES
   # Inspect catalog entry
@@ -74,7 +74,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Curve documentation: https://docs.airbyte.com/integrations/sources/defillama
+  DefiLlama API documentation: https://defillama.com/docs/api
 
 EXIT STATUS
   0 success

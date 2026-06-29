@@ -7,7 +7,13 @@ description: Zoho Bigin connector knowledge and safe action guide.
 
 ## Purpose
 
-Zoho Bigin catalog connector for https://docs.airbyte.com/integrations/sources/zoho-bigin. Native implementation status: planned_native_port.
+Zoho Bigin catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Zoho Bigin catalog connector for https://docs.airbyte.com/integrations/sources/z
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-zoho-bigin:0.0.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Zoho Bigin catalog connector for https://docs.airbyte.com/integrations/sources/z
 ## Official Application Documentation
 
 - Zoho Bigin API: https://www.zoho.com/bigin/developer/api.html
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zoho-bigin
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Zoho Bigin catalog connector for https://docs.airbyte.com/integrations/sources/z
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/zoho-bigin
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-zoho-bigin --json
 
 ## References
 
-- [Zoho Bigin documentation](https://docs.airbyte.com/integrations/sources/zoho-bigin)
+- [Zoho Bigin API](https://www.zoho.com/bigin/developer/api.html)

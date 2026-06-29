@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-insightly [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Insightly catalog connector for https://docs.airbyte.com/integrations/sources/insightly. Native implementation status: planned_native_port.
+  Insightly catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/insightly.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-insightly:0.3.26 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/insightly
+  Insightly documentation: https://api.na1.insightly.com/v3.1/
 
 CONFIGURATION
   start_date ([string null]) required: The date from which you'd like to replicate data for Insightly in the format YYYY-MM-DDT00:00:00Z. All data generated after this date will be replicated. Note that it will be us...
@@ -57,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/insightly
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Insightly documentation: https://docs.airbyte.com/integrations/sources/insightly
+  Insightly documentation: https://api.na1.insightly.com/v3.1/
 
 EXIT STATUS
   0 success

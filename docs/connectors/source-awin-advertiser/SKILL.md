@@ -7,7 +7,13 @@ description: AWIN Advertiser connector knowledge and safe action guide.
 
 ## Purpose
 
-AWIN Advertiser catalog connector for https://docs.airbyte.com/integrations/sources/awin-advertiser. Native implementation status: planned_native_port.
+AWIN Advertiser catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ AWIN Advertiser catalog connector for https://docs.airbyte.com/integrations/sour
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-awin-advertiser:0.0.27 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ AWIN Advertiser catalog connector for https://docs.airbyte.com/integrations/sour
 ## Official Application Documentation
 
 - API documentation: https://wiki.awin.com/index.php/Advertiser_API
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/awin-advertiser
 
 ## Configuration
 
@@ -65,12 +69,8 @@ AWIN Advertiser catalog connector for https://docs.airbyte.com/integrations/sour
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/awin-advertiser
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-awin-advertiser --json
 
 ## References
 
-- [AWIN Advertiser documentation](https://docs.airbyte.com/integrations/sources/awin-advertiser)
+- [API documentation](https://wiki.awin.com/index.php/Advertiser_API)

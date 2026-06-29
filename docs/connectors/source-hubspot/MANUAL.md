@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-hubspot [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  HubSpot catalog connector for https://docs.airbyte.com/integrations/sources/hubspot. Native implementation status: planned_native_port.
+  HubSpot catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/hubspot.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.hubspot.com/docs/api/overview
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-hubspot:6.7.0 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,7 +53,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   HubSpot API changelog: https://developers.hubspot.com/changelog
   HubSpot rate limits: https://developers.hubspot.com/docs/api/usage-details
   HubSpot Status: https://status.hubspot.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/hubspot
 
 CONFIGURATION
   association_streams (array)
@@ -68,11 +72,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/hubspot
 
 EXAMPLES
   # Inspect catalog entry
@@ -87,7 +88,11 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  HubSpot documentation: https://docs.airbyte.com/integrations/sources/hubspot
+  HubSpot API reference: https://developers.hubspot.com/docs/api/overview
+  HubSpot authentication: https://developers.hubspot.com/docs/api/oauth-quickstart-guide
+  HubSpot API changelog: https://developers.hubspot.com/changelog
+  HubSpot rate limits: https://developers.hubspot.com/docs/api/usage-details
+  HubSpot Status: https://status.hubspot.com/
 
 EXIT STATUS
   0 success

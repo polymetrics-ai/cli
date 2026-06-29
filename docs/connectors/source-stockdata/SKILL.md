@@ -7,7 +7,14 @@ description: StockData connector knowledge and safe action guide.
 
 ## Purpose
 
-StockData catalog connector for https://docs.airbyte.com/integrations/sources/stockdata. Native implementation status: planned_native_port.
+StockData catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/stockdata.svg
+- source: official
+- review_status: official_verified
+- review_url: https://www.stockdata.org/documentation
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ StockData catalog connector for https://docs.airbyte.com/integrations/sources/st
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-stockdata:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ StockData catalog connector for https://docs.airbyte.com/integrations/sources/st
 
 ## Official Application Documentation
 
-- StockData.org API: https://www.stockdata.org/documentation
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/stockdata
+- StockData documentation: https://www.stockdata.org/documentation
 
 ## Configuration
 
@@ -65,12 +70,8 @@ StockData catalog connector for https://docs.airbyte.com/integrations/sources/st
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/stockdata
 
 ## Commands
 
@@ -94,4 +95,4 @@ pm connectors inspect source-stockdata --json
 
 ## References
 
-- [StockData documentation](https://docs.airbyte.com/integrations/sources/stockdata)
+- [StockData documentation](https://www.stockdata.org/documentation)

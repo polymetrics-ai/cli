@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-shopify [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Shopify catalog connector for https://docs.airbyte.com/integrations/sources/shopify. Native implementation status: planned_native_port.
+  Shopify catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/shopify.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://shopify.dev/docs/api/admin-rest
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-shopify:3.5.1 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -50,7 +55,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Shopify API versioning and deprecation policy: https://shopify.dev/docs/api/usage/versioning
   Shopify rate limits: https://shopify.dev/docs/api/usage/rate-limits
   Shopify Status: https://www.shopifystatus.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/shopify
 
 CONFIGURATION
   bulk_window_in_days (integer): Defines what would be a date range per single BULK Job
@@ -71,11 +75,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/shopify
 
 EXAMPLES
   # Inspect catalog entry
@@ -90,7 +91,13 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Shopify documentation: https://docs.airbyte.com/integrations/sources/shopify
+  Shopify Admin API: https://shopify.dev/docs/api/admin-rest
+  Shopify authentication: https://shopify.dev/docs/apps/auth
+  Developer changelog: https://shopify.dev/changelog
+  Shopify API changelog: https://shopify.dev/docs/api/release-notes
+  Shopify API versioning and deprecation policy: https://shopify.dev/docs/api/usage/versioning
+  Shopify rate limits: https://shopify.dev/docs/api/usage/rate-limits
+  Shopify Status: https://www.shopifystatus.com/
 
 EXIT STATUS
   0 success

@@ -7,7 +7,14 @@ description: Vectara connector knowledge and safe action guide.
 
 ## Purpose
 
-Vectara catalog connector for https://docs.airbyte.com/integrations/destinations/vectara. Native implementation status: planned_native_port.
+Vectara catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/vectara.svg
+- source: official
+- review_status: official_verified
+- review_url: https://docs.vectara.com/docs/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Vectara catalog connector for https://docs.airbyte.com/integrations/destinations
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-vectara:0.2.31 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Vectara catalog connector for https://docs.airbyte.com/integrations/destinations
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/vectara
+- Vectara documentation: https://docs.vectara.com/docs/
 
 ## Configuration
 
@@ -67,12 +72,8 @@ Vectara catalog connector for https://docs.airbyte.com/integrations/destinations
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/vectara
 
 ## Commands
 
@@ -96,4 +97,4 @@ pm connectors inspect destination-vectara --json
 
 ## References
 
-- [Vectara documentation](https://docs.airbyte.com/integrations/destinations/vectara)
+- [Vectara documentation](https://docs.vectara.com/docs/)

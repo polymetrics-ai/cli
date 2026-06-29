@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-google-forms [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Google Forms catalog connector for https://docs.airbyte.com/integrations/sources/google-forms. Native implementation status: planned_native_port.
+  Google Forms catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-google-forms:0.0.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Google Forms API reference: https://developers.google.com/forms/api/reference/rest
   Google Forms authentication: https://developers.google.com/forms/api/guides/auth
   Google Workspace Status: https://www.google.com/appsstatus/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-forms
 
 CONFIGURATION
   client_id (string) required secret
@@ -61,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/google-forms
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +80,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Google Forms documentation: https://docs.airbyte.com/integrations/sources/google-forms
+  Google Forms API reference: https://developers.google.com/forms/api/reference/rest
+  Google Forms authentication: https://developers.google.com/forms/api/guides/auth
+  Google Workspace Status: https://www.google.com/appsstatus/
 
 EXIT STATUS
   0 success

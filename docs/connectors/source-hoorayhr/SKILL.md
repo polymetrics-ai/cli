@@ -7,7 +7,14 @@ description: HoorayHR connector knowledge and safe action guide.
 
 ## Purpose
 
-HoorayHR catalog connector for https://docs.airbyte.com/integrations/sources/hoorayhr. Native implementation status: planned_native_port.
+HoorayHR catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/hoorayhr.svg
+- source: official
+- review_status: official_verified
+- review_url: https://api.hoorayhr.io/swagger.json
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ HoorayHR catalog connector for https://docs.airbyte.com/integrations/sources/hoo
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-hoorayhr:0.1.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ HoorayHR catalog connector for https://docs.airbyte.com/integrations/sources/hoo
 
 ## Official Application Documentation
 
-- HoorayHR API documentation: https://api.hoorayhr.io/docs/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/hoorayhr
+- HoorayHR documentation: https://api.hoorayhr.io/swagger.json
 
 ## Configuration
 
@@ -62,12 +67,8 @@ HoorayHR catalog connector for https://docs.airbyte.com/integrations/sources/hoo
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/hoorayhr
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-hoorayhr --json
 
 ## References
 
-- [HoorayHR documentation](https://docs.airbyte.com/integrations/sources/hoorayhr)
+- [HoorayHR documentation](https://api.hoorayhr.io/swagger.json)

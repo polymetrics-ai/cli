@@ -7,7 +7,13 @@ description: Rollbar connector knowledge and safe action guide.
 
 ## Purpose
 
-Rollbar catalog connector for https://docs.airbyte.com/integrations/sources/rollbar. Native implementation status: planned_native_port.
+Rollbar catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Rollbar catalog connector for https://docs.airbyte.com/integrations/sources/roll
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-rollbar:0.0.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Rollbar catalog connector for https://docs.airbyte.com/integrations/sources/roll
 - Rollbar authentication: https://docs.rollbar.com/reference/authentication
 - Rollbar rate limits: https://docs.rollbar.com/reference/rate-limits
 - Rollbar Status: https://status.rollbar.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/rollbar
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Rollbar catalog connector for https://docs.airbyte.com/integrations/sources/roll
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/rollbar
 
 ## Commands
 
@@ -95,4 +95,7 @@ pm connectors inspect source-rollbar --json
 
 ## References
 
-- [Rollbar documentation](https://docs.airbyte.com/integrations/sources/rollbar)
+- [Rollbar API reference](https://docs.rollbar.com/reference/getting-started)
+- [Rollbar authentication](https://docs.rollbar.com/reference/authentication)
+- [Rollbar rate limits](https://docs.rollbar.com/reference/rate-limits)
+- [Rollbar Status](https://status.rollbar.com/)

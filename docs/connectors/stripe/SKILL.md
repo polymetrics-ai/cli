@@ -9,6 +9,13 @@ description: Stripe connector knowledge and safe action guide.
 
 Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse ETL customer actions through the Stripe REST API.
 
+## Icon
+
+- asset: icons/stripe.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://stripe.com/docs/api
+
 ## Capabilities
 
 - check=true catalog=true read=true write=true query=false
@@ -108,4 +115,3 @@ pm connectors inspect stripe --json
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
 - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
-

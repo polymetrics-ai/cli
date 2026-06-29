@@ -7,7 +7,7 @@
 // RegisterFactory in init(); the registryset package blank-imports this package
 // in the production binary to run that side effect.
 //
-// Square is read-only here: the upstream Airbyte source supports full_refresh
+// Square is read-only here: the upstream upstream source supports full_refresh
 // only and there is no obviously safe reverse-ETL write surface, so
 // Capabilities.Write is false.
 package square

@@ -7,7 +7,13 @@ description: Google PubSub connector knowledge and safe action guide.
 
 ## Purpose
 
-Google PubSub catalog connector for https://docs.airbyte.com/integrations/destinations/pubsub. Native implementation status: planned_native_port.
+Google PubSub catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/googlepubsub.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Google PubSub catalog connector for https://docs.airbyte.com/integrations/destin
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-pubsub:0.2.3 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Google PubSub catalog connector for https://docs.airbyte.com/integrations/destin
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/pubsub
+- Google PubSub documentation: https://cloud.google.com/pubsub/docs
 
 ## Configuration
 
@@ -54,7 +58,7 @@ Google PubSub catalog connector for https://docs.airbyte.com/integrations/destin
 - batching_element_count_threshold (integer): Number of messages before the buffer is flushed
 - batching_enabled (boolean) required: If TRUE messages will be buffered instead of sending them one by one
 - batching_request_bytes_threshold (integer): Number of bytes before the buffer is flushed
-- credentials_json (string) required secret: The contents of the JSON service account key. Check out the <a href="https://docs.airbyte.com/integrations/destinations/pubsub">docs</a> if you need help generating this key.
+- credentials_json (string) required secret: manual intervention needed
 - ordering_enabled (boolean) required: If TRUE PubSub publisher will have <a href="https://cloud.google.com/pubsub/docs/ordering">message ordering</a> enabled. Every message will have an ordering key of stream
 - project_id (string) required: The GCP project ID for the project containing the target PubSub.
 - topic_id (string) required: The PubSub topic ID in the given GCP project ID.
@@ -68,12 +72,8 @@ Google PubSub catalog connector for https://docs.airbyte.com/integrations/destin
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/pubsub
 
 ## Commands
 
@@ -97,4 +97,4 @@ pm connectors inspect destination-pubsub --json
 
 ## References
 
-- [Google PubSub documentation](https://docs.airbyte.com/integrations/destinations/pubsub)
+- [Google PubSub documentation](https://cloud.google.com/pubsub/docs)

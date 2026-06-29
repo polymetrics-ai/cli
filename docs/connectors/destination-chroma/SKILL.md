@@ -7,7 +7,14 @@ description: Chroma connector knowledge and safe action guide.
 
 ## Purpose
 
-Chroma catalog connector for https://docs.airbyte.com/integrations/destinations/chroma. Native implementation status: planned_native_port.
+Chroma catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/chroma.svg
+- source: official
+- review_status: official_verified
+- review_url: https://docs.trychroma.com/docs/overview/getting-started
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Chroma catalog connector for https://docs.airbyte.com/integrations/destinations/
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-chroma:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Chroma catalog connector for https://docs.airbyte.com/integrations/destinations/
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/chroma
+- Chroma documentation: https://docs.trychroma.com/docs/overview/getting-started
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Chroma catalog connector for https://docs.airbyte.com/integrations/destinations/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/chroma
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect destination-chroma --json
 
 ## References
 
-- [Chroma documentation](https://docs.airbyte.com/integrations/destinations/chroma)
+- [Chroma documentation](https://docs.trychroma.com/docs/overview/getting-started)

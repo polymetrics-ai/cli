@@ -7,7 +7,13 @@ description: Sigma Computing connector knowledge and safe action guide.
 
 ## Purpose
 
-Sigma Computing catalog connector for https://docs.airbyte.com/integrations/sources/sigma-computing. Native implementation status: planned_native_port.
+Sigma Computing catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Sigma Computing catalog connector for https://docs.airbyte.com/integrations/sour
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sigma-computing:0.0.50 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Sigma Computing catalog connector for https://docs.airbyte.com/integrations/sour
 ## Official Application Documentation
 
 - Sigma Computing API: https://help.sigmacomputing.com/reference/api-overview
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sigma-computing
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Sigma Computing catalog connector for https://docs.airbyte.com/integrations/sour
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/sigma-computing
 
 ## Commands
 
@@ -95,4 +95,4 @@ pm connectors inspect source-sigma-computing --json
 
 ## References
 
-- [Sigma Computing documentation](https://docs.airbyte.com/integrations/sources/sigma-computing)
+- [Sigma Computing API](https://help.sigmacomputing.com/reference/api-overview)

@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-free-agent-connector [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  FreeAgent catalog connector for https://docs.airbyte.com/integrations/sources/free-agent-connector. Native implementation status: planned_native_port.
+  FreeAgent catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-free-agent-connector:0.1.16 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   FreeAgent API documentation: https://dev.freeagent.com/
   FreeAgent OAuth guide: https://dev.freeagent.com/docs/quick_start
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/free-agent-connector
 
 CONFIGURATION
   client_id (string) required secret
@@ -61,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/free-agent-connector
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +80,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  FreeAgent documentation: https://docs.airbyte.com/integrations/sources/free-agent-connector
+  FreeAgent API documentation: https://dev.freeagent.com/
+  FreeAgent OAuth guide: https://dev.freeagent.com/docs/quick_start
 
 EXIT STATUS
   0 success

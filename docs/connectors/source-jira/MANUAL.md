@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-jira [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Jira catalog connector for https://docs.airbyte.com/integrations/sources/jira. Native implementation status: planned_native_port.
+  Jira catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/jira.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.atlassian.com/changelog/#
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-jira:6.0.0 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,11 +52,10 @@ OFFICIAL APPLICATION DOCUMENTATION
   Jira Platform API Changelog: https://developer.atlassian.com/cloud/jira/platform/changelog/
   Jira Software API Changelog: https://developer.atlassian.com/cloud/jira/software/changelog/
   Jira Cloud Platform API OpenAPI specification: https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/jira
 
 CONFIGURATION
   credentials (object) required: Choose how to authenticate to Jira.
-  domain (string) required: Your Jira host (full domain — do not include 'https://' or paths). Examples: airbyteio.atlassian.net, airbyteio.jira.com, jira.your-domain.com.
+  domain (string) required: manual intervention needed
   expand_issue_changelog (boolean): (DEPRECATED) Expand the changelog when replicating issues.
   expand_issue_transition (boolean): (DEPRECATED) Expand the transitions when replicating issues.
   issues_stream_expand_with (array): Select fields to Expand the `Issues` stream when replicating with:
@@ -59,7 +63,7 @@ CONFIGURATION
   num_workers (integer): The number of worker threads to use for the sync.
   projects (array): List of Jira project keys to replicate data for, or leave it empty if you want to replicate data for all projects.
   render_fields (boolean): (DEPRECATED) Render issue fields in HTML format in addition to Jira JSON-like format.
-  start_date (string): The date from which you want to replicate data from Jira, use the format YYYY-MM-DDT00:00:00Z. Note that this field only applies to certain streams, and only data generated on o...
+  start_date (string): manual intervention needed
   secret fields: credentials.api_token, credentials.client_id, credentials.client_secret, credentials.refresh_token, credentials.service_account_token
 
 SYNC MODES
@@ -68,11 +72,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/jira
 
 EXAMPLES
   # Inspect catalog entry
@@ -87,7 +88,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Jira documentation: https://docs.airbyte.com/integrations/sources/jira
+  Changelog: https://developer.atlassian.com/changelog/#
+  Jira Platform API Changelog: https://developer.atlassian.com/cloud/jira/platform/changelog/
+  Jira Software API Changelog: https://developer.atlassian.com/cloud/jira/software/changelog/
+  Jira Cloud Platform API OpenAPI specification: https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json
 
 EXIT STATUS
   0 success

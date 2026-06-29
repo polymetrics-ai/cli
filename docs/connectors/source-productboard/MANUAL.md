@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-productboard [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Productboard catalog connector for https://docs.airbyte.com/integrations/sources/productboard. Native implementation status: planned_native_port.
+  Productboard catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-productboard:0.0.60 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Productboard API reference: https://developer.productboard.com/
   Productboard authentication: https://developer.productboard.com/#section/Authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/productboard
 
 CONFIGURATION
   access_token (string) required secret: Your Productboard access token. See https://developer.productboard.com/reference/authentication for steps to generate one.
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/productboard
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Productboard documentation: https://docs.airbyte.com/integrations/sources/productboard
+  Productboard API reference: https://developer.productboard.com/
+  Productboard authentication: https://developer.productboard.com/#section/Authentication
 
 EXIT STATUS
   0 success

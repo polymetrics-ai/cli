@@ -7,7 +7,14 @@ description: Merge connector knowledge and safe action guide.
 
 ## Purpose
 
-Merge catalog connector for https://docs.airbyte.com/integrations/sources/merge. Native implementation status: planned_native_port.
+Merge catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/merge.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.merge.dev/api-reference/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Merge catalog connector for https://docs.airbyte.com/integrations/sources/merge.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-merge:0.2.24 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Merge catalog connector for https://docs.airbyte.com/integrations/sources/merge.
 - Merge authentication: https://docs.merge.dev/basics/authentication/
 - Merge rate limits: https://docs.merge.dev/basics/rate-limits/
 - Merge Status: https://status.merge.dev/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/merge
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Merge catalog connector for https://docs.airbyte.com/integrations/sources/merge.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/merge
 
 ## Commands
 
@@ -95,4 +96,7 @@ pm connectors inspect source-merge --json
 
 ## References
 
-- [Merge documentation](https://docs.airbyte.com/integrations/sources/merge)
+- [Merge API reference](https://docs.merge.dev/api-reference/)
+- [Merge authentication](https://docs.merge.dev/basics/authentication/)
+- [Merge rate limits](https://docs.merge.dev/basics/rate-limits/)
+- [Merge Status](https://status.merge.dev/)

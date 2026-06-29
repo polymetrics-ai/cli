@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-merge [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Merge catalog connector for https://docs.airbyte.com/integrations/sources/merge. Native implementation status: planned_native_port.
+  Merge catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/merge.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.merge.dev/api-reference/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-merge:0.2.24 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Merge authentication: https://docs.merge.dev/basics/authentication/
   Merge rate limits: https://docs.merge.dev/basics/rate-limits/
   Merge Status: https://status.merge.dev/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/merge
 
 CONFIGURATION
   account_token (string) required secret: Link your other integrations with account credentials on accounts section to get account token (ref - https://app.merge.dev/linked-accounts/accounts)
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/merge
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Merge documentation: https://docs.airbyte.com/integrations/sources/merge
+  Merge API reference: https://docs.merge.dev/api-reference/
+  Merge authentication: https://docs.merge.dev/basics/authentication/
+  Merge rate limits: https://docs.merge.dev/basics/rate-limits/
+  Merge Status: https://status.merge.dev/
 
 EXIT STATUS
   0 success

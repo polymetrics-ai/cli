@@ -7,7 +7,14 @@ description: Lokalise connector knowledge and safe action guide.
 
 ## Purpose
 
-Lokalise catalog connector for https://docs.airbyte.com/integrations/sources/lokalise. Native implementation status: planned_native_port.
+Lokalise catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/lokalise.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.lokalise.com/reference/api-introduction
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Lokalise catalog connector for https://docs.airbyte.com/integrations/sources/lok
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-lokalise:0.2.22 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Lokalise catalog connector for https://docs.airbyte.com/integrations/sources/lok
 - Lokalise API reference: https://developers.lokalise.com/reference/api-introduction
 - Lokalise authentication: https://developers.lokalise.com/reference/api-authentication
 - Lokalise rate limits: https://developers.lokalise.com/reference/api-rate-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/lokalise
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Lokalise catalog connector for https://docs.airbyte.com/integrations/sources/lok
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/lokalise
 
 ## Commands
 
@@ -93,4 +94,6 @@ pm connectors inspect source-lokalise --json
 
 ## References
 
-- [Lokalise documentation](https://docs.airbyte.com/integrations/sources/lokalise)
+- [Lokalise API reference](https://developers.lokalise.com/reference/api-introduction)
+- [Lokalise authentication](https://developers.lokalise.com/reference/api-authentication)
+- [Lokalise rate limits](https://developers.lokalise.com/reference/api-rate-limits)

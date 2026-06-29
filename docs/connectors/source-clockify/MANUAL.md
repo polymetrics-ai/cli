@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-clockify [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Clockify catalog connector for https://docs.airbyte.com/integrations/sources/clockify. Native implementation status: planned_native_port.
+  Clockify catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/clockify.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.clockify.me/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-clockify:0.4.55 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Clockify API reference: https://docs.clockify.me/
   Clockify authentication: https://docs.clockify.me/#section/Introduction/Authentication
   Clockify rate limits: https://docs.clockify.me/#section/Introduction/Rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/clockify
 
 CONFIGURATION
   api_key (string) required secret: You can get your api access_key <a href="https://app.clockify.me/user/settings">here</a> This API is Case Sensitive.
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/clockify
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Clockify documentation: https://docs.airbyte.com/integrations/sources/clockify
+  Clockify API reference: https://docs.clockify.me/
+  Clockify authentication: https://docs.clockify.me/#section/Introduction/Authentication
+  Clockify rate limits: https://docs.clockify.me/#section/Introduction/Rate-limiting
 
 EXIT STATUS
   0 success

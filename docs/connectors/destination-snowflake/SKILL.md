@@ -7,7 +7,14 @@ description: Snowflake connector knowledge and safe action guide.
 
 ## Purpose
 
-Snowflake catalog connector for https://docs.airbyte.com/integrations/destinations/snowflake. Native implementation status: planned_native_port.
+Snowflake catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/snowflake.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.snowflake.com/en/release-notes
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Snowflake catalog connector for https://docs.airbyte.com/integrations/destinatio
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-snowflake:4.0.43 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -51,7 +57,6 @@ Snowflake catalog connector for https://docs.airbyte.com/integrations/destinatio
 - Release notes: https://docs.snowflake.com/en/release-notes
 - Snowflake server release notes and feature updates: https://docs.snowflake.com/en/release-notes/new-features
 - Snowflake Status: https://status.snowflake.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/snowflake
 
 ## Configuration
 
@@ -61,7 +66,7 @@ Snowflake catalog connector for https://docs.airbyte.com/integrations/destinatio
 - disable_type_dedupe (boolean): Write the legacy "raw tables" format, to enable backwards compatibility with older versions of this connector.
 - host (string) required: Enter your Snowflake account's <a href="https://docs.snowflake.com/en/user-guide/admin-account-identifier.html#using-an-account-locator-as-an-identifier">locator</a> (in the for...
 - jdbc_url_params (string): Enter the additional properties to pass to the JDBC URL string when connecting to the database (formatted as key=value pairs separated by the symbol &). Example: key1=value1&key...
-- raw_data_schema (string): Airbyte will use this dataset for various internal tables. In legacy raw tables mode, the raw tables will be stored in this dataset. Defaults to "airbyte_internal".
+- raw_data_schema (string): manual intervention needed
 - retention_period_days (integer): The number of days of Snowflake Time Travel to enable on the tables. See <a href="https://docs.snowflake.com/en/user-guide/data-time-travel#data-retention-period">Snowflake's do...
 - role (string) required: Enter the <a href="https://docs.snowflake.com/en/user-guide/security-access-control-overview.html#roles">role</a> that you want to use to access Snowflake
 - schema (string) required: Enter the name of the default <a href="https://docs.snowflake.com/en/sql-reference/ddl-database.html#database-schema-share-ddl">schema</a>
@@ -78,12 +83,8 @@ Snowflake catalog connector for https://docs.airbyte.com/integrations/destinatio
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/snowflake
 
 ## Commands
 
@@ -107,4 +108,9 @@ pm connectors inspect destination-snowflake --json
 
 ## References
 
-- [Snowflake documentation](https://docs.airbyte.com/integrations/destinations/snowflake)
+- [SQL reference](https://docs.snowflake.com/en/sql-reference)
+- [Key pair authentication](https://docs.snowflake.com/en/user-guide/key-pair-auth)
+- [Access control](https://docs.snowflake.com/en/user-guide/security-access-control)
+- [Release notes](https://docs.snowflake.com/en/release-notes)
+- [Snowflake server release notes and feature updates](https://docs.snowflake.com/en/release-notes/new-features)
+- [Snowflake Status](https://status.snowflake.com/)

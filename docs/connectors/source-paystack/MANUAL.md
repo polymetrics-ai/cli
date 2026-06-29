@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-paystack [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Paystack catalog connector for https://docs.airbyte.com/integrations/sources/paystack. Native implementation status: planned_native_port.
+  Paystack catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/paystack.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://paystack.com/docs/api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-paystack:1.1.31 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Paystack API reference: https://paystack.com/docs/api/
   Paystack authentication: https://paystack.com/docs/api/#authentication
   Paystack rate limits: https://paystack.com/docs/api/#rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/paystack
 
 CONFIGURATION
   lookback_window_days (integer): When set, the connector will always reload data from the past N days, where N is the value set here. This is useful if your data is updated after creation.
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/paystack
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Paystack documentation: https://docs.airbyte.com/integrations/sources/paystack
+  Paystack API reference: https://paystack.com/docs/api/
+  Paystack authentication: https://paystack.com/docs/api/#authentication
+  Paystack rate limits: https://paystack.com/docs/api/#rate-limiting
 
 EXIT STATUS
   0 success

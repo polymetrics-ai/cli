@@ -7,7 +7,13 @@ description: Clarif-ai connector knowledge and safe action guide.
 
 ## Purpose
 
-Clarif-ai catalog connector for https://docs.airbyte.com/integrations/sources/clarif-ai. Native implementation status: planned_native_port.
+Clarif-ai catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Clarif-ai catalog connector for https://docs.airbyte.com/integrations/sources/cl
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-clarif-ai:0.0.59 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Clarif-ai catalog connector for https://docs.airbyte.com/integrations/sources/cl
 - Clarifai API reference: https://docs.clarifai.com/api-guide/api-overview
 - Clarifai authentication: https://docs.clarifai.com/api-guide/api-overview/api-clients
 - Clarifai Status: https://status.clarifai.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/clarif-ai
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Clarif-ai catalog connector for https://docs.airbyte.com/integrations/sources/cl
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/clarif-ai
 
 ## Commands
 
@@ -94,4 +94,6 @@ pm connectors inspect source-clarif-ai --json
 
 ## References
 
-- [Clarif-ai documentation](https://docs.airbyte.com/integrations/sources/clarif-ai)
+- [Clarifai API reference](https://docs.clarifai.com/api-guide/api-overview)
+- [Clarifai authentication](https://docs.clarifai.com/api-guide/api-overview/api-clients)
+- [Clarifai Status](https://status.clarifai.com/)

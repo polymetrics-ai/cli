@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-pylon [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Pylon catalog connector for https://docs.airbyte.com/integrations/sources/pylon. Native implementation status: planned_native_port.
+  Pylon catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-pylon:0.0.12 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Pylon API reference: https://docs.usepylon.com/pylon-docs/developer/api/api-reference
   Pylon authentication: https://docs.usepylon.com/pylon-docs/developer/api/authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pylon
 
 CONFIGURATION
   api_token (string) required secret: Your Pylon API token. Generate one in the Pylon dashboard under Settings > API.
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/pylon
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Pylon documentation: https://docs.airbyte.com/integrations/sources/pylon
+  Pylon API reference: https://docs.usepylon.com/pylon-docs/developer/api/api-reference
+  Pylon authentication: https://docs.usepylon.com/pylon-docs/developer/api/authentication
 
 EXIT STATUS
   0 success

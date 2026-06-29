@@ -7,7 +7,13 @@ description: Ringcentral connector knowledge and safe action guide.
 
 ## Purpose
 
-Ringcentral catalog connector for https://docs.airbyte.com/integrations/sources/ringcentral. Native implementation status: planned_native_port.
+Ringcentral catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Ringcentral catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-ringcentral:0.2.22 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Ringcentral catalog connector for https://docs.airbyte.com/integrations/sources/
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/ringcentral
+- Ringcentral documentation: https://developers.ringcentral.com/api-reference
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Ringcentral catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/ringcentral
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-ringcentral --json
 
 ## References
 
-- [Ringcentral documentation](https://docs.airbyte.com/integrations/sources/ringcentral)
+- [Ringcentral documentation](https://developers.ringcentral.com/api-reference)

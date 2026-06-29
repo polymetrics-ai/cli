@@ -7,7 +7,14 @@ description: Thinkific Courses connector knowledge and safe action guide.
 
 ## Purpose
 
-Thinkific Courses catalog connector for https://docs.airbyte.com/integrations/sources/thinkific-courses. Native implementation status: planned_native_port.
+Thinkific Courses catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/thinkific.svg
+- source: official
+- review_status: official_verified
+- review_url: https://developers.thinkific.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Thinkific Courses catalog connector for https://docs.airbyte.com/integrations/so
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-thinkific-courses:0.0.43 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Thinkific Courses catalog connector for https://docs.airbyte.com/integrations/so
 
 ## Official Application Documentation
 
-- Thinkific API documentation: https://developers.thinkific.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/thinkific-courses
+- Thinkific Courses documentation: https://developers.thinkific.com/
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Thinkific Courses catalog connector for https://docs.airbyte.com/integrations/so
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/thinkific-courses
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-thinkific-courses --json
 
 ## References
 
-- [Thinkific Courses documentation](https://docs.airbyte.com/integrations/sources/thinkific-courses)
+- [Thinkific Courses documentation](https://developers.thinkific.com/)

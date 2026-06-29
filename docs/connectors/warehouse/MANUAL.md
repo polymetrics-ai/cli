@@ -12,6 +12,12 @@ SYNOPSIS
 DESCRIPTION
   Local JSONL warehouse destination used by the dependency-free MVP.
 
+ICON
+  asset: icons/pm-warehouse.svg
+  source: polymetrics
+  review_status: polymetrics
+  review_url: https://github.com/karthik-sivadas/polymetrics-cli
+
 CAPABILITIES
   check=true catalog=true read=true write=true query=true
   Integration type: database

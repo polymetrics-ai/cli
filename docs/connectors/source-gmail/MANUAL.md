@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-gmail [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Gmail catalog connector for https://docs.airbyte.com/integrations/sources/gmail. Native implementation status: planned_native_port.
+  Gmail catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-gmail:0.1.5 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Gmail authentication: https://developers.google.com/gmail/api/auth/about-auth
   Gmail API quotas: https://developers.google.com/gmail/api/reference/quota
   Google Workspace Status: https://www.google.com/appsstatus/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/gmail
 
 CONFIGURATION
   credentials (object) required: Credentials for connecting to the Gmail API
@@ -62,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/gmail
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +81,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Gmail documentation: https://docs.airbyte.com/integrations/sources/gmail
+  Gmail API reference: https://developers.google.com/gmail/api/reference/rest
+  Gmail authentication: https://developers.google.com/gmail/api/auth/about-auth
+  Gmail API quotas: https://developers.google.com/gmail/api/reference/quota
+  Google Workspace Status: https://www.google.com/appsstatus/
 
 EXIT STATUS
   0 success

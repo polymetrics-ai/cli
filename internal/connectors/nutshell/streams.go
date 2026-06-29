@@ -23,7 +23,7 @@ type streamEndpoint struct {
 // path is fully data-driven from this table.
 //
 // Endpoints, envelope keys, and pagination are taken from the Nutshell REST API
-// (https://app.nutshell.com/rest/) as exercised by the upstream Airbyte
+// (https://app.nutshell.com/rest/) as exercised by the upstream upstream
 // source-nutshell manifest.
 var nutshellStreamEndpoints = map[string]streamEndpoint{
 	"accounts":   {resource: "accounts", recordsKey: "accounts", mapRecord: nutshellAccountRecord, paginated: true},

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-snapchat-marketing [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Snapchat Marketing catalog connector for https://docs.airbyte.com/integrations/sources/snapchat-marketing. Native implementation status: planned_native_port.
+  Snapchat Marketing catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/snapchat.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.snap.com/api/marketing-api/Ads-API/announcements
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-snapchat-marketing:1.5.40 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Ads API announcements: https://developers.snap.com/api/marketing-api/Ads-API/announcements
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/snapchat-marketing
 
 CONFIGURATION
   action_report_time (string): Specifies the principle for conversion reporting.
@@ -65,11 +69,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/snapchat-marketing
 
 EXAMPLES
   # Inspect catalog entry
@@ -84,7 +85,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Snapchat Marketing documentation: https://docs.airbyte.com/integrations/sources/snapchat-marketing
+  Ads API announcements: https://developers.snap.com/api/marketing-api/Ads-API/announcements
 
 EXIT STATUS
   0 success

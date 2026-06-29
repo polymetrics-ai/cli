@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-my-hours [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  My Hours catalog connector for https://docs.airbyte.com/integrations/sources/my-hours. Native implementation status: planned_native_port.
+  My Hours catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/my-hours.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://myhours.com/api
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-my-hours:0.3.46 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   My Hours API documentation: https://myhours.com/api
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/my-hours
 
 CONFIGURATION
   email (string) required: Your My Hours username
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/my-hours
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  My Hours documentation: https://docs.airbyte.com/integrations/sources/my-hours
+  My Hours API documentation: https://myhours.com/api
 
 EXIT STATUS
   0 success

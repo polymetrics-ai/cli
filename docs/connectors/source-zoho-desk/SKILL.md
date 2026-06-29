@@ -7,7 +7,13 @@ description: Zoho Desk connector knowledge and safe action guide.
 
 ## Purpose
 
-Zoho Desk catalog connector for https://docs.airbyte.com/integrations/sources/zoho-desk. Native implementation status: planned_native_port.
+Zoho Desk catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Zoho Desk catalog connector for https://docs.airbyte.com/integrations/sources/zo
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-zoho-desk:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Zoho Desk catalog connector for https://docs.airbyte.com/integrations/sources/zo
 ## Official Application Documentation
 
 - Zoho Desk API: https://desk.zoho.com/DeskAPIDocument
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zoho-desk
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Zoho Desk catalog connector for https://docs.airbyte.com/integrations/sources/zo
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/zoho-desk
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-zoho-desk --json
 
 ## References
 
-- [Zoho Desk documentation](https://docs.airbyte.com/integrations/sources/zoho-desk)
+- [Zoho Desk API](https://desk.zoho.com/DeskAPIDocument)

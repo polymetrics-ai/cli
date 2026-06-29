@@ -7,7 +7,13 @@ description: Codefresh connector knowledge and safe action guide.
 
 ## Purpose
 
-Codefresh catalog connector for https://docs.airbyte.com/integrations/sources/codefresh. Native implementation status: planned_native_port.
+Codefresh catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Codefresh catalog connector for https://docs.airbyte.com/integrations/sources/co
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-codefresh:0.0.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Codefresh catalog connector for https://docs.airbyte.com/integrations/sources/co
 - Codefresh API reference: https://g.codefresh.io/api/
 - Codefresh authentication: https://codefresh.io/docs/docs/integrations/codefresh-api/#authentication
 - Codefresh Status: https://status.codefresh.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/codefresh
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Codefresh catalog connector for https://docs.airbyte.com/integrations/sources/co
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/codefresh
 
 ## Commands
 
@@ -96,4 +96,6 @@ pm connectors inspect source-codefresh --json
 
 ## References
 
-- [Codefresh documentation](https://docs.airbyte.com/integrations/sources/codefresh)
+- [Codefresh API reference](https://g.codefresh.io/api/)
+- [Codefresh authentication](https://codefresh.io/docs/docs/integrations/codefresh-api/#authentication)
+- [Codefresh Status](https://status.codefresh.io/)

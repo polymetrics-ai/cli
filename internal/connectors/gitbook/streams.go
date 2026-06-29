@@ -33,7 +33,7 @@ var gitbookStreamEndpoints = map[string]streamEndpoint{
 }
 
 // gitbookStreams returns the connector's published stream catalog. GitBook
-// objects are identified by a string id and are full-refresh only (the Airbyte
+// objects are identified by a string id and are full-refresh only (the upstream
 // source declares no incremental cursors), so CursorFields is empty.
 func gitbookStreams() []connectors.Stream {
 	return []connectors.Stream{

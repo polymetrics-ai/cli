@@ -7,7 +7,13 @@ description: UpPromote connector knowledge and safe action guide.
 
 ## Purpose
 
-UpPromote catalog connector for https://docs.airbyte.com/integrations/sources/uppromote. Native implementation status: planned_native_port.
+UpPromote catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ UpPromote catalog connector for https://docs.airbyte.com/integrations/sources/up
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-uppromote:0.0.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ UpPromote catalog connector for https://docs.airbyte.com/integrations/sources/up
 ## Official Application Documentation
 
 - UpPromote API documentation: https://uppromote.com/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/uppromote
 
 ## Configuration
 
@@ -62,12 +66,8 @@ UpPromote catalog connector for https://docs.airbyte.com/integrations/sources/up
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/uppromote
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-uppromote --json
 
 ## References
 
-- [UpPromote documentation](https://docs.airbyte.com/integrations/sources/uppromote)
+- [UpPromote API documentation](https://uppromote.com/api)

@@ -7,7 +7,14 @@ description: Databricks Lakehouse connector knowledge and safe action guide.
 
 ## Purpose
 
-Databricks Lakehouse catalog connector for https://docs.airbyte.com/integrations/destinations/databricks. Native implementation status: planned_native_port.
+Databricks Lakehouse catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/databricks.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.databricks.com/release-notes/index.html
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Databricks Lakehouse catalog connector for https://docs.airbyte.com/integrations
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-databricks:3.3.8 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ Databricks Lakehouse catalog connector for https://docs.airbyte.com/integrations
 - Access control: https://docs.databricks.com/security/access-control/index.html
 - Release notes: https://docs.databricks.com/release-notes/index.html
 - Databricks Status: https://status.databricks.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/databricks
 
 ## Configuration
 
@@ -61,7 +66,7 @@ Databricks Lakehouse catalog connector for https://docs.airbyte.com/integrations
 - http_path (string) required: Databricks Cluster HTTP Path.
 - port (string): Databricks Cluster Port.
 - purge_staging_data (boolean): Default to 'true'. Switch it to 'false' for debugging purpose.
-- raw_schema_override (string): The schema to write raw tables into (default: airbyte_internal)
+- raw_schema_override (string): manual intervention needed
 - schema (string): The default schema tables are written. If not specified otherwise, the "default" will be used.
 - secret fields: authentication.personal_access_token, authentication.secret
 
@@ -73,12 +78,8 @@ Databricks Lakehouse catalog connector for https://docs.airbyte.com/integrations
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/databricks
 
 ## Commands
 
@@ -102,4 +103,8 @@ pm connectors inspect destination-databricks --json
 
 ## References
 
-- [Databricks Lakehouse documentation](https://docs.airbyte.com/integrations/destinations/databricks)
+- [SQL reference](https://docs.databricks.com/sql/language-manual/index.html)
+- [Authentication](https://docs.databricks.com/dev-tools/auth.html)
+- [Access control](https://docs.databricks.com/security/access-control/index.html)
+- [Release notes](https://docs.databricks.com/release-notes/index.html)
+- [Databricks Status](https://status.databricks.com/)

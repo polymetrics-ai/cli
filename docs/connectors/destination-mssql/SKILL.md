@@ -7,7 +7,13 @@ description: MS SQL Server connector knowledge and safe action guide.
 
 ## Purpose
 
-MS SQL Server catalog connector for https://docs.airbyte.com/integrations/destinations/mssql. Native implementation status: planned_native_port.
+MS SQL Server catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-warehouse.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ MS SQL Server catalog connector for https://docs.airbyte.com/integrations/destin
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-mssql:2.2.17 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +55,6 @@ MS SQL Server catalog connector for https://docs.airbyte.com/integrations/destin
 - Authentication and authorization: https://learn.microsoft.com/en-us/sql/relational-databases/security/authentication-access/getting-started-with-database-engine-permissions
 - Permissions: https://learn.microsoft.com/en-us/sql/relational-databases/security/permissions-database-engine
 - SQL Server 2022 release notes: https://learn.microsoft.com/en-us/sql/sql-server/sql-server-2022-release-notes
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/mssql
 
 ## Configuration
 
@@ -74,12 +78,8 @@ MS SQL Server catalog connector for https://docs.airbyte.com/integrations/destin
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/mssql
 
 ## Commands
 
@@ -103,4 +103,8 @@ pm connectors inspect destination-mssql --json
 
 ## References
 
-- [MS SQL Server documentation](https://docs.airbyte.com/integrations/destinations/mssql)
+- [SQL Server documentation](https://learn.microsoft.com/en-us/sql/sql-server/)
+- [Transact-SQL reference](https://learn.microsoft.com/en-us/sql/t-sql/language-reference)
+- [Authentication and authorization](https://learn.microsoft.com/en-us/sql/relational-databases/security/authentication-access/getting-started-with-database-engine-permissions)
+- [Permissions](https://learn.microsoft.com/en-us/sql/relational-databases/security/permissions-database-engine)
+- [SQL Server 2022 release notes](https://learn.microsoft.com/en-us/sql/sql-server/sql-server-2022-release-notes)

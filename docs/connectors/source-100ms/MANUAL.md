@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-100ms [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  100ms catalog connector for https://docs.airbyte.com/integrations/sources/100ms. Native implementation status: planned_native_port.
+  100ms catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-100ms:0.0.28 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   API reference: https://www.100ms.live/docs/api-reference/javascript/v2/home/content
   Authentication and tokens: https://www.100ms.live/docs/get-started/v2/get-started/security-and-tokens
   100ms Status: https://status.100ms.live
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/100ms
 
 CONFIGURATION
   management_token (string) required secret: The management token used for authenticating API requests. You can find or generate this token in your 100ms dashboard under the API section. Refer to the documentation at https...
@@ -59,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/100ms
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +78,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  100ms documentation: https://docs.airbyte.com/integrations/sources/100ms
+  API reference: https://www.100ms.live/docs/api-reference/javascript/v2/home/content
+  Authentication and tokens: https://www.100ms.live/docs/get-started/v2/get-started/security-and-tokens
+  100ms Status: https://status.100ms.live
 
 EXIT STATUS
   0 success

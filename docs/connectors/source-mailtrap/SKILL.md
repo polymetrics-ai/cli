@@ -7,7 +7,13 @@ description: Mailtrap connector knowledge and safe action guide.
 
 ## Purpose
 
-Mailtrap catalog connector for https://docs.airbyte.com/integrations/sources/mailtrap. Native implementation status: planned_native_port.
+Mailtrap catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Mailtrap catalog connector for https://docs.airbyte.com/integrations/sources/mai
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mailtrap:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Mailtrap catalog connector for https://docs.airbyte.com/integrations/sources/mai
 
 - Mailtrap API documentation: https://api-docs.mailtrap.io/
 - Mailtrap authentication: https://api-docs.mailtrap.io/docs/mailtrap-api-docs/ZG9jOjI2MjA1MzI2-authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mailtrap
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Mailtrap catalog connector for https://docs.airbyte.com/integrations/sources/mai
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mailtrap
 
 ## Commands
 
@@ -91,4 +91,5 @@ pm connectors inspect source-mailtrap --json
 
 ## References
 
-- [Mailtrap documentation](https://docs.airbyte.com/integrations/sources/mailtrap)
+- [Mailtrap API documentation](https://api-docs.mailtrap.io/)
+- [Mailtrap authentication](https://api-docs.mailtrap.io/docs/mailtrap-api-docs/ZG9jOjI2MjA1MzI2-authentication)

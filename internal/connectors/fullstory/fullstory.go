@@ -244,7 +244,7 @@ func (c Connector) requester(cfg connectors.RuntimeConfig) (*connsdk.Requester, 
 		Auth:      connsdk.APIKeyHeader("Authorization", apiKey, "Basic "),
 		UserAgent: fullstoryUserAgent,
 		// FullStory issues legacy v1 (no prefix) and v2 (Basic) keys; the
-		// Airbyte connector sends the raw key with a "Basic " prefix, which we
+		// upstream connector sends the raw key with a "Basic " prefix, which we
 		// mirror via APIKeyHeader above. DefaultHeaders carries the uid.
 		DefaultHeaders: headers,
 	}, nil

@@ -7,7 +7,13 @@ description: Brevo connector knowledge and safe action guide.
 
 ## Purpose
 
-Brevo catalog connector for https://docs.airbyte.com/integrations/sources/brevo. Native implementation status: planned_native_port.
+Brevo catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Brevo catalog connector for https://docs.airbyte.com/integrations/sources/brevo.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-brevo:0.2.36 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Brevo catalog connector for https://docs.airbyte.com/integrations/sources/brevo.
 - Brevo authentication guide: https://developers.brevo.com/docs/getting-started
 - Brevo API rate limits: https://developers.brevo.com/docs/api-limits
 - Brevo Status: https://status.brevo.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/brevo
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Brevo catalog connector for https://docs.airbyte.com/integrations/sources/brevo.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/brevo
 
 ## Commands
 
@@ -94,4 +94,7 @@ pm connectors inspect source-brevo --json
 
 ## References
 
-- [Brevo documentation](https://docs.airbyte.com/integrations/sources/brevo)
+- [Brevo API reference](https://developers.brevo.com/reference)
+- [Brevo authentication guide](https://developers.brevo.com/docs/getting-started)
+- [Brevo API rate limits](https://developers.brevo.com/docs/api-limits)
+- [Brevo Status](https://status.brevo.com/)

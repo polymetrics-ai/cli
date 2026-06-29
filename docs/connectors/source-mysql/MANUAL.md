@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-mysql [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  MySQL catalog connector for https://docs.airbyte.com/integrations/sources/mysql. Native implementation status: planned_native_port.
+  MySQL catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/mysql.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://dev.mysql.com/doc/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: database_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-mysql:3.52.3 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,7 +53,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   MySQL documentation: https://dev.mysql.com/doc/
   MySQL authentication: https://dev.mysql.com/doc/refman/8.0/en/access-control.html
   MySQL Release Notes: https://dev.mysql.com/doc/relnotes/mysql/en/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mysql
 
 CONFIGURATION
   check_privileges (boolean): When this feature is enabled, during schema discovery the connector will query each table or view individually to check access privileges and inaccessible tables, views, or colu...
@@ -57,7 +61,7 @@ CONFIGURATION
   database (string) required: The database name.
   host (string) required: Hostname of the database.
   jdbc_url_params (string): Additional properties to pass to the JDBC URL string when connecting to the database formatted as 'key=value' pairs separated by the symbol '&'. (example: key1=value1&key2=value...
-  max_db_connections (integer): Maximum number of concurrent queries to the database. Leave empty to let Airbyte optimize performance.
+  max_db_connections (integer): manual intervention needed
   password (string) secret: The password associated with the username.
   port (integer) required: Port of the database.
   replication_method (object) required: Configures how data is extracted from the database.
@@ -74,11 +78,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/mysql
 
 EXAMPLES
   # Inspect catalog entry
@@ -93,7 +94,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  MySQL documentation: https://docs.airbyte.com/integrations/sources/mysql
+  MySQL documentation: https://dev.mysql.com/doc/
+  MySQL authentication: https://dev.mysql.com/doc/refman/8.0/en/access-control.html
+  MySQL Release Notes: https://dev.mysql.com/doc/relnotes/mysql/en/
 
 EXIT STATUS
   0 success

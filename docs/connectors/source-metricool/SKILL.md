@@ -7,7 +7,13 @@ description: Metricool connector knowledge and safe action guide.
 
 ## Purpose
 
-Metricool catalog connector for https://docs.airbyte.com/integrations/sources/metricool. Native implementation status: planned_native_port.
+Metricool catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Metricool catalog connector for https://docs.airbyte.com/integrations/sources/me
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-metricool:0.0.26 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Metricool catalog connector for https://docs.airbyte.com/integrations/sources/me
 ## Official Application Documentation
 
 - Metricool API documentation: https://metricool.com/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/metricool
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Metricool catalog connector for https://docs.airbyte.com/integrations/sources/me
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/metricool
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-metricool --json
 
 ## References
 
-- [Metricool documentation](https://docs.airbyte.com/integrations/sources/metricool)
+- [Metricool API documentation](https://metricool.com/api/)

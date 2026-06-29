@@ -7,7 +7,14 @@ description: Polygon Stock API connector knowledge and safe action guide.
 
 ## Purpose
 
-Polygon Stock API catalog connector for https://docs.airbyte.com/integrations/sources/polygon-stock-api. Native implementation status: planned_native_port.
+Polygon Stock API catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/polygon.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://polygon.io/docs/stocks/getting-started
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Polygon Stock API catalog connector for https://docs.airbyte.com/integrations/so
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-polygon-stock-api:0.2.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Polygon Stock API catalog connector for https://docs.airbyte.com/integrations/so
 
 - Polygon.io API reference: https://polygon.io/docs/stocks/getting-started
 - Polygon.io rate limits: https://polygon.io/pricing
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/polygon-stock-api
 
 ## Configuration
 
@@ -70,12 +75,8 @@ Polygon Stock API catalog connector for https://docs.airbyte.com/integrations/so
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/polygon-stock-api
 
 ## Commands
 
@@ -99,4 +100,5 @@ pm connectors inspect source-polygon-stock-api --json
 
 ## References
 
-- [Polygon Stock API documentation](https://docs.airbyte.com/integrations/sources/polygon-stock-api)
+- [Polygon.io API reference](https://polygon.io/docs/stocks/getting-started)
+- [Polygon.io rate limits](https://polygon.io/pricing)

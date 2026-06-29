@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-exchange-rates [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Exchange Rates Api catalog connector for https://docs.airbyte.com/integrations/sources/exchange-rates. Native implementation status: planned_native_port.
+  Exchange Rates Api catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/exchangeratesapi.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://exchangeratesapi.io/documentation/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-exchange-rates:1.4.53 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Exchange Rates API documentation: https://exchangeratesapi.io/documentation/
   Exchange Rates authentication: https://exchangeratesapi.io/documentation/#authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/exchange-rates
 
 CONFIGURATION
   access_key (string) required secret: Your API Key. See <a href="https://apilayer.com/marketplace/exchangerates_data-api">here</a>. The key is case sensitive.
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/exchange-rates
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Exchange Rates Api documentation: https://docs.airbyte.com/integrations/sources/exchange-rates
+  Exchange Rates API documentation: https://exchangeratesapi.io/documentation/
+  Exchange Rates authentication: https://exchangeratesapi.io/documentation/#authentication
 
 EXIT STATUS
   0 success

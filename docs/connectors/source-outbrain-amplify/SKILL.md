@@ -7,7 +7,13 @@ description: Outbrain Amplify connector knowledge and safe action guide.
 
 ## Purpose
 
-Outbrain Amplify catalog connector for https://docs.airbyte.com/integrations/sources/outbrain-amplify. Native implementation status: planned_native_port.
+Outbrain Amplify catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Outbrain Amplify catalog connector for https://docs.airbyte.com/integrations/sou
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-outbrain-amplify:0.2.21 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Outbrain Amplify catalog connector for https://docs.airbyte.com/integrations/sou
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/outbrain-amplify
+- Outbrain Amplify documentation: https://developer.outbrain.com/home-page/amplify-api/documentation/
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Outbrain Amplify catalog connector for https://docs.airbyte.com/integrations/sou
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/outbrain-amplify
 
 ## Commands
 
@@ -95,4 +95,4 @@ pm connectors inspect source-outbrain-amplify --json
 
 ## References
 
-- [Outbrain Amplify documentation](https://docs.airbyte.com/integrations/sources/outbrain-amplify)
+- [Outbrain Amplify documentation](https://developer.outbrain.com/home-page/amplify-api/documentation/)

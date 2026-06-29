@@ -7,7 +7,14 @@ description: Weatherstack connector knowledge and safe action guide.
 
 ## Purpose
 
-Weatherstack catalog connector for https://docs.airbyte.com/integrations/sources/weatherstack. Native implementation status: planned_native_port.
+Weatherstack catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/weatherstack.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://weatherstack.com/documentation
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Weatherstack catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-weatherstack:1.1.14 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Weatherstack catalog connector for https://docs.airbyte.com/integrations/sources
 ## Official Application Documentation
 
 - Weatherstack API documentation: https://weatherstack.com/documentation
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/weatherstack
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Weatherstack catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/weatherstack
 
 ## Commands
 
@@ -92,4 +93,4 @@ pm connectors inspect source-weatherstack --json
 
 ## References
 
-- [Weatherstack documentation](https://docs.airbyte.com/integrations/sources/weatherstack)
+- [Weatherstack API documentation](https://weatherstack.com/documentation)

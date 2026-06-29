@@ -7,7 +7,13 @@ description: KYVE connector knowledge and safe action guide.
 
 ## Purpose
 
-KYVE catalog connector for https://docs.airbyte.com/integrations/sources/kyve. Native implementation status: planned_native_port.
+KYVE catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ KYVE catalog connector for https://docs.airbyte.com/integrations/sources/kyve. N
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-kyve:0.2.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ KYVE catalog connector for https://docs.airbyte.com/integrations/sources/kyve. N
 ## Official Application Documentation
 
 - KYVE documentation: https://docs.kyve.network/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/kyve
 
 ## Configuration
 
@@ -64,12 +68,8 @@ KYVE catalog connector for https://docs.airbyte.com/integrations/sources/kyve. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/kyve
 
 ## Commands
 
@@ -93,4 +93,4 @@ pm connectors inspect source-kyve --json
 
 ## References
 
-- [KYVE documentation](https://docs.airbyte.com/integrations/sources/kyve)
+- [KYVE documentation](https://docs.kyve.network/)

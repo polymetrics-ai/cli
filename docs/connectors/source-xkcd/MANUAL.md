@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-xkcd [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Xkcd catalog connector for https://docs.airbyte.com/integrations/sources/xkcd. Native implementation status: planned_native_port.
+  Xkcd catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/xkcd.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://xkcd.com/json.html
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-xkcd:0.2.45 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   xkcd JSON API: https://xkcd.com/json.html
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/xkcd
 
 CONFIGURATION
   comic_number (string): Specifies the comic number in which details are to be extracted, pagination will begin with that number to end of available comics
@@ -55,11 +59,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/xkcd
 
 EXAMPLES
   # Inspect catalog entry
@@ -74,7 +75,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Xkcd documentation: https://docs.airbyte.com/integrations/sources/xkcd
+  xkcd JSON API: https://xkcd.com/json.html
 
 EXIT STATUS
   0 success

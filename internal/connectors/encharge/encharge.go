@@ -6,7 +6,7 @@
 // Encharge (https://encharge.io) is a marketing automation platform. The API
 // (https://api.encharge.io/v1) authenticates with an X-Encharge-Token header and
 // pages list endpoints with limit/offset. This connector is read-only: the
-// upstream Airbyte source supports full-refresh extraction only, and there is no
+// upstream upstream source supports full-refresh extraction only, and there is no
 // obviously safe reverse-ETL write surface, so Capabilities.Write is false.
 //
 // Like stripe, it self-registers with the connectors registry via RegisterFactory

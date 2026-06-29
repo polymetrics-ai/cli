@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-freshbooks [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  FreshBooks catalog connector for https://docs.airbyte.com/integrations/sources/freshbooks. Native implementation status: planned_native_port.
+  FreshBooks catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-freshbooks:0.0.57 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   FreshBooks API reference: https://www.freshbooks.com/api/start
   FreshBooks authentication: https://www.freshbooks.com/api/authentication
   FreshBooks rate limits: https://www.freshbooks.com/api/rate_limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/freshbooks
 
 CONFIGURATION
   account_id (string) required
@@ -65,11 +68,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/freshbooks
 
 EXAMPLES
   # Inspect catalog entry
@@ -84,7 +84,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  FreshBooks documentation: https://docs.airbyte.com/integrations/sources/freshbooks
+  FreshBooks API reference: https://www.freshbooks.com/api/start
+  FreshBooks authentication: https://www.freshbooks.com/api/authentication
+  FreshBooks rate limits: https://www.freshbooks.com/api/rate_limiting
 
 EXIT STATUS
   0 success

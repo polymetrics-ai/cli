@@ -7,7 +7,13 @@ description: Clockodo connector knowledge and safe action guide.
 
 ## Purpose
 
-Clockodo catalog connector for https://docs.airbyte.com/integrations/sources/clockodo. Native implementation status: planned_native_port.
+Clockodo catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Clockodo catalog connector for https://docs.airbyte.com/integrations/sources/clo
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-clockodo:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Clockodo catalog connector for https://docs.airbyte.com/integrations/sources/clo
 
 - Clockodo API documentation: https://www.clockodo.com/en/api/
 - Clockodo authentication: https://www.clockodo.com/en/api/#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/clockodo
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Clockodo catalog connector for https://docs.airbyte.com/integrations/sources/clo
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/clockodo
 
 ## Commands
 
@@ -95,4 +95,5 @@ pm connectors inspect source-clockodo --json
 
 ## References
 
-- [Clockodo documentation](https://docs.airbyte.com/integrations/sources/clockodo)
+- [Clockodo API documentation](https://www.clockodo.com/en/api/)
+- [Clockodo authentication](https://www.clockodo.com/en/api/#authentication)

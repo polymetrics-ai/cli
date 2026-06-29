@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector destination-csv [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Local CSV catalog connector for https://docs.airbyte.com/integrations/destinations/csv. Native implementation status: planned_native_port.
+  Local CSV catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/file-csv.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-csv:1.0.2 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,12 +47,11 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/csv
+  manual intervention needed
 
 CONFIGURATION
   delimiter_type (object): The character delimiting individual cells in the CSV data.
-  destination_path (string) required: Path to the directory where csv files will be written. The destination uses the local mount "/local" and any data files will be placed inside that local mount. For more informat...
+  destination_path (string) required: manual intervention needed
 
 SYNC MODES
   supported sync modes: append, overwrite
@@ -56,11 +59,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/csv
 
 EXAMPLES
   # Inspect catalog entry
@@ -73,9 +73,6 @@ AGENT WORKFLOW
   - Read implementation_status before planning ETL or reverse ETL.
   - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-SEE ALSO
-  Local CSV documentation: https://docs.airbyte.com/integrations/destinations/csv
 
 EXIT STATUS
   0 success

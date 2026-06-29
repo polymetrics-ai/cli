@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-mailjet-mail [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Mailjet Mail catalog connector for https://docs.airbyte.com/integrations/sources/mailjet-mail. Native implementation status: planned_native_port.
+  Mailjet Mail catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/mailjetmail.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://dev.mailjet.com/email/reference/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-mailjet-mail:0.2.13 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Mailjet API reference: https://dev.mailjet.com/email/reference/
   Mailjet authentication: https://dev.mailjet.com/email/guides/#authentication
   Mailjet rate limits: https://dev.mailjet.com/email/guides/rate-limits/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mailjet-mail
 
 CONFIGURATION
   api_key (string) required: Your API Key. See <a href="https://dev.mailjet.com/email/guides/#authentication">here</a>.
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/mailjet-mail
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Mailjet Mail documentation: https://docs.airbyte.com/integrations/sources/mailjet-mail
+  Mailjet API reference: https://dev.mailjet.com/email/reference/
+  Mailjet authentication: https://dev.mailjet.com/email/guides/#authentication
+  Mailjet rate limits: https://dev.mailjet.com/email/guides/rate-limits/
 
 EXIT STATUS
   0 success

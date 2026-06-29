@@ -8,7 +8,7 @@
 // https://api.ashbyhq.com; every list endpoint is a POST to "<resource>/list"
 // authenticated with HTTP Basic auth (the API key is the username, the password
 // is blank) and returns {success, results:[...], moreDataAvailable, nextCursor}.
-// The Ashby Airbyte source is read-only (full_refresh), so this connector is
+// The Ashby upstream source is read-only (full_refresh), so this connector is
 // read-only too.
 //
 // Like stripe, it self-registers with the connectors registry via
@@ -100,7 +100,7 @@ func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 }
 
 // Write satisfies the connectors.Connector interface. The Ashby source is
-// read-only (its Airbyte source supports full_refresh only and exposes no safe
+// read-only (its upstream source supports full_refresh only and exposes no safe
 // reverse-ETL writes), so writes are rejected. Capabilities.Write is false.
 func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation

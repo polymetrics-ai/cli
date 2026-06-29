@@ -16,7 +16,7 @@ type streamEndpoint struct {
 // data-driven from this table; adding a stream means adding one entry here plus
 // a Stream definition in streamCatalog.
 //
-// Source: the official manifest-only Airbyte connector
+// Source: the official manifest-only upstream connector
 // (source-countercyclical) defines exactly these three streams, each a GET on
 // /<resource> returning a root-level JSON array (DpathExtractor field_path: [])
 // with primary key id and no pagination.

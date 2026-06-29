@@ -23,8 +23,8 @@ type streamEndpoint struct {
 }
 
 // interzoidStreamEndpoints is the per-stream routing table. Endpoints and
-// parameter names mirror the upstream Airbyte manifest
-// (airbyte/source-interzoid): getcompanymatchadvanced, getfullnamematch,
+// parameter names mirror the upstream upstream manifest
+// (upstream/source-interzoid): getcompanymatchadvanced, getfullnamematch,
 // getaddressmatchadvanced, getorgstandard.
 var interzoidStreamEndpoints = map[string]streamEndpoint{
 	"company_name_matching": {

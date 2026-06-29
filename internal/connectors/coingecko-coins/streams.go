@@ -5,7 +5,7 @@ import "polymetrics.ai/internal/connectors"
 // coingeckoStreams is the set of streams this connector publishes. CoinGecko's
 // coin endpoints are not list-paginated; each stream is driven by config
 // (coin_id, vs_currency, days, start_date/end_date) and shaped by the read path
-// in coingecko_coins.go. The three streams mirror the upstream Airbyte connector
+// in coingecko_coins.go. The three streams mirror the upstream upstream connector
 // (market_chart, history) plus a coin metadata snapshot.
 func coingeckoStreams() []connectors.Stream {
 	return []connectors.Stream{

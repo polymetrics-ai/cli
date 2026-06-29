@@ -356,7 +356,7 @@ func readBestLocalRawRecords(ctx context.Context, path string) (map[string]local
 }
 
 func isDeletedRecord(record connectors.Record) bool {
-	for _, key := range []string{"_polymetrics_deleted", "_ab_cdc_deleted_at", "_airbyte_deleted", "_deleted"} {
+	for _, key := range []string{"_polymetrics_deleted", "_ab_cdc_deleted_at", "_upstream_deleted", "_deleted"} {
 		value, ok := record[key]
 		if !ok || value == nil {
 			continue

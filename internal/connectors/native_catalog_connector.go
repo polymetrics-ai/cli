@@ -24,13 +24,13 @@ func NewNativeCatalogConnector(def ConnectorDefinition) NativeCatalogConnector {
 func (c NativeCatalogConnector) Name() string { return c.def.Slug }
 
 func (c NativeCatalogConnector) Metadata() Metadata {
-	return Metadata{
+	return MetadataWithIcon(Metadata{
 		Name:            c.def.Slug,
 		DisplayName:     c.def.Name,
 		IntegrationType: nativeIntegrationType(c.def),
 		Description:     nativeDescription(c.def),
 		Capabilities:    c.def.RuntimeCapabilities.toCapabilities(),
-	}
+	})
 }
 
 func (c NativeCatalogConnector) Check(ctx context.Context, cfg RuntimeConfig) error {
@@ -351,7 +351,7 @@ func nativeIntegrationType(def ConnectorDefinition) string {
 }
 
 func nativeDescription(def ConnectorDefinition) string {
-	return fmt.Sprintf("%s native Go %s connector. Runtime family: %s. Documentation: %s.", def.Name, def.Type, def.RuntimeKind, def.DocumentationURL)
+	return fmt.Sprintf("%s native Go %s connector. Runtime family: %s.", def.Name, def.Type, def.RuntimeKind)
 }
 
 func nativeConfigFields(def ConnectorDefinition) []ConfigField {
@@ -364,7 +364,7 @@ func nativeConfigFields(def ConnectorDefinition) []ConfigField {
 		if field.Secret {
 			continue
 		}
-		fields = append(fields, ConfigField{Name: field.Name, Description: compactDescription(field.Description), Required: field.Required})
+		fields = append(fields, ConfigField{Name: field.Name, Description: compactPublicDescription(field.Description), Required: field.Required})
 	}
 	sort.SliceStable(fields, func(i, j int) bool { return fields[i].Name < fields[j].Name })
 	return fields
@@ -378,14 +378,14 @@ func nativeSecretFields(def ConnectorDefinition) []SecretField {
 			continue
 		}
 		seen[name] = true
-		fields = append(fields, SecretField{Name: name, Description: "Secret field imported from connector schema."})
+		fields = append(fields, SecretField{Name: name, Description: "Secret field from connector schema."})
 	}
 	for _, field := range def.ConfigFields {
 		if !field.Secret || field.Name == "" || seen[field.Name] {
 			continue
 		}
 		seen[field.Name] = true
-		fields = append(fields, SecretField{Name: field.Name, Description: compactDescription(field.Description), Required: field.Required})
+		fields = append(fields, SecretField{Name: field.Name, Description: compactPublicDescription(field.Description), Required: field.Required})
 	}
 	sort.SliceStable(fields, func(i, j int) bool { return fields[i].Name < fields[j].Name })
 	return fields
@@ -435,21 +435,7 @@ func nativePaginationType(def ConnectorDefinition) string {
 }
 
 func nativeGuideLinks(def ConnectorDefinition) []GuideLink {
-	links := []GuideLink{}
-	if def.DocumentationURL != "" {
-		links = append(links, GuideLink{Label: def.Name + " connector documentation", URL: def.DocumentationURL})
-	}
-	for _, doc := range def.OfficialApplicationDocs {
-		if doc.URL == "" {
-			continue
-		}
-		label := doc.Title
-		if label == "" {
-			label = "Official application documentation"
-		}
-		links = append(links, GuideLink{Label: label, URL: doc.URL})
-	}
-	return links
+	return ApplicationDocumentationLinks(def)
 }
 
 func validateNativeSelect(sql string) error {

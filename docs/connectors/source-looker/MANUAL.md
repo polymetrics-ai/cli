@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-looker [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Looker catalog connector for https://docs.airbyte.com/integrations/sources/looker. Native implementation status: planned_native_port.
+  Looker catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/looker.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://cloud.google.com/looker/docs/reference/looker-api/latest
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-looker:1.0.34 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,12 +51,11 @@ OFFICIAL APPLICATION DOCUMENTATION
   Looker API reference: https://cloud.google.com/looker/docs/reference/looker-api/latest
   Looker authentication: https://cloud.google.com/looker/docs/api-auth
   Looker rate limits: https://cloud.google.com/looker/docs/api-rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/looker
 
 CONFIGURATION
-  client_id (string) required: The Client ID is first part of an API3 key that is specific to each Looker user. See the <a href="https://docs.airbyte.com/integrations/sources/looker">docs</a> for more informa...
+  client_id (string) required: manual intervention needed
   client_secret (string) required secret: The Client Secret is second part of an API3 key.
-  domain (string) required: Domain for your Looker account, e.g. airbyte.cloud.looker.com,looker.[clientname].com,IP address
+  domain (string) required: manual intervention needed
   run_look_ids (array): The IDs of any Looks to run
   secret fields: client_secret
 
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/looker
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Looker documentation: https://docs.airbyte.com/integrations/sources/looker
+  Looker API reference: https://cloud.google.com/looker/docs/reference/looker-api/latest
+  Looker authentication: https://cloud.google.com/looker/docs/api-auth
+  Looker rate limits: https://cloud.google.com/looker/docs/api-rate-limits
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-google-directory [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Google Directory catalog connector for https://docs.airbyte.com/integrations/sources/google-directory. Native implementation status: planned_native_port.
+  Google Directory catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/googledirectory.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.google.com/admin-sdk/directory/reference/rest
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-google-directory:0.2.45 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Google Directory API reference: https://developers.google.com/admin-sdk/directory/reference/rest
   Google Directory authentication: https://developers.google.com/admin-sdk/directory/v1/guides/authorizing
   Google Workspace Status: https://www.google.com/appsstatus/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-directory
 
 CONFIGURATION
   credentials (object): Google APIs use the OAuth 2.0 protocol for authentication and authorization. The Source supports <a href="https://developers.google.com/identity/protocols/oauth2#webserver" targ...
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/google-directory
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Google Directory documentation: https://docs.airbyte.com/integrations/sources/google-directory
+  Google Directory API reference: https://developers.google.com/admin-sdk/directory/reference/rest
+  Google Directory authentication: https://developers.google.com/admin-sdk/directory/v1/guides/authorizing
+  Google Workspace Status: https://www.google.com/appsstatus/
 
 EXIT STATUS
   0 success

@@ -7,7 +7,14 @@ description: Sonar Cloud connector knowledge and safe action guide.
 
 ## Purpose
 
-Sonar Cloud catalog connector for https://docs.airbyte.com/integrations/sources/sonar-cloud. Native implementation status: planned_native_port.
+Sonar Cloud catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/sonarcloud.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://sonarcloud.io/web_api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Sonar Cloud catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sonar-cloud:0.2.50 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Sonar Cloud catalog connector for https://docs.airbyte.com/integrations/sources/
 
 - SonarCloud Web API: https://sonarcloud.io/web_api
 - SonarCloud authentication: https://docs.sonarsource.com/sonarcloud/advanced-setup/user-accounts/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sonar-cloud
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Sonar Cloud catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/sonar-cloud
 
 ## Commands
 
@@ -95,4 +96,5 @@ pm connectors inspect source-sonar-cloud --json
 
 ## References
 
-- [Sonar Cloud documentation](https://docs.airbyte.com/integrations/sources/sonar-cloud)
+- [SonarCloud Web API](https://sonarcloud.io/web_api)
+- [SonarCloud authentication](https://docs.sonarsource.com/sonarcloud/advanced-setup/user-accounts/)

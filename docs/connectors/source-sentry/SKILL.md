@@ -7,7 +7,14 @@ description: Sentry connector knowledge and safe action guide.
 
 ## Purpose
 
-Sentry catalog connector for https://docs.airbyte.com/integrations/sources/sentry. Native implementation status: planned_native_port.
+Sentry catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/sentry.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.sentry.io/api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Sentry catalog connector for https://docs.airbyte.com/integrations/sources/sentr
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sentry:0.9.26 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Sentry catalog connector for https://docs.airbyte.com/integrations/sources/sentr
 - API Reference: https://docs.sentry.io/api/
 - Changelog: https://sentry.io/changelog/
 - Sentry API OpenAPI specification: https://github.com/getsentry/sentry-api-schema
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sentry
 
 ## Configuration
 
@@ -68,12 +73,8 @@ Sentry catalog connector for https://docs.airbyte.com/integrations/sources/sentr
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/sentry
 
 ## Commands
 
@@ -97,4 +98,6 @@ pm connectors inspect source-sentry --json
 
 ## References
 
-- [Sentry documentation](https://docs.airbyte.com/integrations/sources/sentry)
+- [API Reference](https://docs.sentry.io/api/)
+- [Changelog](https://sentry.io/changelog/)
+- [Sentry API OpenAPI specification](https://github.com/getsentry/sentry-api-schema)

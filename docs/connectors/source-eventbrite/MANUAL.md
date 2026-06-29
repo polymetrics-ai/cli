@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-eventbrite [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Eventbrite catalog connector for https://docs.airbyte.com/integrations/sources/eventbrite. Native implementation status: planned_native_port.
+  Eventbrite catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-eventbrite:0.0.55 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Eventbrite authentication: https://www.eventbrite.com/platform/api#/introduction/authentication
   Eventbrite rate limits: https://www.eventbrite.com/platform/api#/introduction/rate-limits
   Eventbrite Status: https://status.eventbrite.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/eventbrite
 
 CONFIGURATION
   private_token (string) required secret: The private token to use for authenticating API requests.
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/eventbrite
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Eventbrite documentation: https://docs.airbyte.com/integrations/sources/eventbrite
+  Eventbrite API reference: https://www.eventbrite.com/platform/api
+  Eventbrite authentication: https://www.eventbrite.com/platform/api#/introduction/authentication
+  Eventbrite rate limits: https://www.eventbrite.com/platform/api#/introduction/rate-limits
+  Eventbrite Status: https://status.eventbrite.com/
 
 EXIT STATUS
   0 success

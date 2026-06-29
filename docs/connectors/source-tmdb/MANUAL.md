@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-tmdb [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  TMDb catalog connector for https://docs.airbyte.com/integrations/sources/tmdb. Native implementation status: planned_native_port.
+  TMDb catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/tmdb.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.themoviedb.org/reference/intro/getting-started
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-tmdb:1.1.49 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   TMDB API reference: https://developer.themoviedb.org/reference/intro/getting-started
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tmdb
 
 CONFIGURATION
   api_key (string) required secret: API Key from tmdb account
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/tmdb
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  TMDb documentation: https://docs.airbyte.com/integrations/sources/tmdb
+  TMDB API reference: https://developer.themoviedb.org/reference/intro/getting-started
 
 EXIT STATUS
   0 success

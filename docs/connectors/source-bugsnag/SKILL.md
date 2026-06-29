@@ -7,7 +7,13 @@ description: Bugsnag connector knowledge and safe action guide.
 
 ## Purpose
 
-Bugsnag catalog connector for https://docs.airbyte.com/integrations/sources/bugsnag. Native implementation status: planned_native_port.
+Bugsnag catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Bugsnag catalog connector for https://docs.airbyte.com/integrations/sources/bugs
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-bugsnag:0.0.50 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Bugsnag catalog connector for https://docs.airbyte.com/integrations/sources/bugs
 - Bugsnag Data Access API: https://bugsnagapiv2.docs.apiary.io/
 - Bugsnag authentication: https://docs.bugsnag.com/api/data-access/#authentication
 - Bugsnag Status: https://status.bugsnag.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/bugsnag
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Bugsnag catalog connector for https://docs.airbyte.com/integrations/sources/bugs
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/bugsnag
 
 ## Commands
 
@@ -93,4 +93,6 @@ pm connectors inspect source-bugsnag --json
 
 ## References
 
-- [Bugsnag documentation](https://docs.airbyte.com/integrations/sources/bugsnag)
+- [Bugsnag Data Access API](https://bugsnagapiv2.docs.apiary.io/)
+- [Bugsnag authentication](https://docs.bugsnag.com/api/data-access/#authentication)
+- [Bugsnag Status](https://status.bugsnag.com/)

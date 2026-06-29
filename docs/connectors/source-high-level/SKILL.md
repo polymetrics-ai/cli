@@ -7,7 +7,13 @@ description: High Level connector knowledge and safe action guide.
 
 ## Purpose
 
-High Level catalog connector for https://docs.airbyte.com/integrations/sources/high-level. Native implementation status: planned_native_port.
+High Level catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ High Level catalog connector for https://docs.airbyte.com/integrations/sources/h
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-high-level:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ High Level catalog connector for https://docs.airbyte.com/integrations/sources/h
 
 - HighLevel API documentation: https://highlevel.stoplight.io/
 - HighLevel authentication: https://highlevel.stoplight.io/docs/integrations/0443d7d1a4bd0-overview
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/high-level
 
 ## Configuration
 
@@ -64,12 +68,8 @@ High Level catalog connector for https://docs.airbyte.com/integrations/sources/h
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/high-level
 
 ## Commands
 
@@ -93,4 +93,5 @@ pm connectors inspect source-high-level --json
 
 ## References
 
-- [High Level documentation](https://docs.airbyte.com/integrations/sources/high-level)
+- [HighLevel API documentation](https://highlevel.stoplight.io/)
+- [HighLevel authentication](https://highlevel.stoplight.io/docs/integrations/0443d7d1a4bd0-overview)

@@ -7,7 +7,13 @@ description: Pretix connector knowledge and safe action guide.
 
 ## Purpose
 
-Pretix catalog connector for https://docs.airbyte.com/integrations/sources/pretix. Native implementation status: planned_native_port.
+Pretix catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Pretix catalog connector for https://docs.airbyte.com/integrations/sources/preti
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-pretix:0.0.58 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Pretix catalog connector for https://docs.airbyte.com/integrations/sources/preti
 ## Official Application Documentation
 
 - pretix API documentation: https://docs.pretix.eu/en/latest/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pretix
 
 ## Configuration
 
@@ -61,12 +65,8 @@ Pretix catalog connector for https://docs.airbyte.com/integrations/sources/preti
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/pretix
 
 ## Commands
 
@@ -90,4 +90,4 @@ pm connectors inspect source-pretix --json
 
 ## References
 
-- [Pretix documentation](https://docs.airbyte.com/integrations/sources/pretix)
+- [pretix API documentation](https://docs.pretix.eu/en/latest/api/)

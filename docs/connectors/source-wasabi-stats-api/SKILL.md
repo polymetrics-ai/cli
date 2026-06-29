@@ -7,7 +7,13 @@ description: Wasabi connector knowledge and safe action guide.
 
 ## Purpose
 
-Wasabi catalog connector for https://docs.airbyte.com/integrations/sources/wasabi-stats-api. Native implementation status: planned_native_port.
+Wasabi catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Wasabi catalog connector for https://docs.airbyte.com/integrations/sources/wasab
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-wasabi-stats-api:0.0.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Wasabi catalog connector for https://docs.airbyte.com/integrations/sources/wasab
 ## Official Application Documentation
 
 - Wasabi Stats API: https://docs.wasabi.com/docs/stats-api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/wasabi-stats-api
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Wasabi catalog connector for https://docs.airbyte.com/integrations/sources/wasab
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/wasabi-stats-api
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-wasabi-stats-api --json
 
 ## References
 
-- [Wasabi documentation](https://docs.airbyte.com/integrations/sources/wasabi-stats-api)
+- [Wasabi Stats API](https://docs.wasabi.com/docs/stats-api)

@@ -41,7 +41,7 @@ func TestNativeRegistryBindsOnlyEnabledCatalogConnectors(t *testing.T) {
 
 func TestNativeFixtureConformancePassesForEveryCatalogConnector(t *testing.T) {
 	reports := NativeConformanceReports(context.Background(), ConnectorCatalog())
-	if got, want := len(reports), 647; got != want {
+	if got, want := len(reports), 646; got != want {
 		t.Fatalf("NativeConformanceReports len = %d, want %d", got, want)
 	}
 	for _, report := range reports {

@@ -7,7 +7,13 @@ description: Buildkite connector knowledge and safe action guide.
 
 ## Purpose
 
-Buildkite catalog connector for https://docs.airbyte.com/integrations/sources/buildkite. Native implementation status: planned_native_port.
+Buildkite catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Buildkite catalog connector for https://docs.airbyte.com/integrations/sources/bu
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-buildkite:0.0.49 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Buildkite catalog connector for https://docs.airbyte.com/integrations/sources/bu
 - Buildkite authentication: https://buildkite.com/docs/apis/rest-api#authentication
 - Buildkite API rate limits: https://buildkite.com/docs/apis/rest-api#rate-limiting
 - Buildkite Status: https://www.buildkitestatus.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/buildkite
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Buildkite catalog connector for https://docs.airbyte.com/integrations/sources/bu
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/buildkite
 
 ## Commands
 
@@ -94,4 +94,7 @@ pm connectors inspect source-buildkite --json
 
 ## References
 
-- [Buildkite documentation](https://docs.airbyte.com/integrations/sources/buildkite)
+- [Buildkite REST API](https://buildkite.com/docs/apis/rest-api)
+- [Buildkite authentication](https://buildkite.com/docs/apis/rest-api#authentication)
+- [Buildkite API rate limits](https://buildkite.com/docs/apis/rest-api#rate-limiting)
+- [Buildkite Status](https://www.buildkitestatus.com/)

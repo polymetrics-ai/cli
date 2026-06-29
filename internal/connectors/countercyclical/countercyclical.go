@@ -7,7 +7,7 @@
 // a thin package that composes the connsdk toolkit (Requester + API-key query
 // auth + root-array extraction) with Countercyclical-specific stream
 // definitions and endpoints. The upstream API authenticates with an `apiKey`
-// query parameter (Airbyte ApiKeyAuthenticator, inject_into request_parameter),
+// query parameter (upstream ApiKeyAuthenticator, inject_into request_parameter),
 // returns each stream as a root-level JSON array, and exposes no pagination.
 //
 // Like stripe, it self-registers with the connectors registry via

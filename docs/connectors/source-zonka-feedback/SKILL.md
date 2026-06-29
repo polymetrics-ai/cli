@@ -7,7 +7,13 @@ description: Zonka Feedback connector knowledge and safe action guide.
 
 ## Purpose
 
-Zonka Feedback catalog connector for https://docs.airbyte.com/integrations/sources/zonka-feedback. Native implementation status: planned_native_port.
+Zonka Feedback catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Zonka Feedback catalog connector for https://docs.airbyte.com/integrations/sourc
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-zonka-feedback:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Zonka Feedback catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Official Application Documentation
 
 - Zonka Feedback API: https://help.zonkafeedback.com/en/articles/6273783-api-documentation
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zonka-feedback
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Zonka Feedback catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/zonka-feedback
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-zonka-feedback --json
 
 ## References
 
-- [Zonka Feedback documentation](https://docs.airbyte.com/integrations/sources/zonka-feedback)
+- [Zonka Feedback API](https://help.zonkafeedback.com/en/articles/6273783-api-documentation)

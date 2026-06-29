@@ -7,7 +7,14 @@ description: Google Sheets connector knowledge and safe action guide.
 
 ## Purpose
 
-Google Sheets catalog connector for https://docs.airbyte.com/integrations/sources/google-sheets. Native implementation status: planned_native_port.
+Google Sheets catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/google-sheets.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.google.com/workspace/release-notes
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Google Sheets catalog connector for https://docs.airbyte.com/integrations/source
 - implementation_status: planned_native_port
 - runtime_kind: file_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-google-sheets:0.12.31 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Google Sheets catalog connector for https://docs.airbyte.com/integrations/source
 
 - Google Workspace developer release notes: https://developers.google.com/workspace/release-notes
 - Release notes: https://developers.google.com/sheets/docs/release-notes
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-sheets
 
 ## Configuration
 
@@ -62,7 +67,7 @@ Google Sheets catalog connector for https://docs.airbyte.com/integrations/source
 - remove_leading_trailing_underscores (boolean): Removes leading and trailing underscores from column names. Does not remove leading underscores from column names that start with a number. Example: "50th Percentile? "→ "_50_...
 - remove_special_characters (boolean): Removes all special characters from column names. Example: "Example ID*" → "example_id" This option will only work if "Convert Column Names to SQL-Compliant Format (names_conv...
 - spreadsheet_id (string) required: Enter the link to the Google spreadsheet you want to sync. To copy the link, click the 'Share' button in the top-right corner of the spreadsheet, then click 'Copy link'.
-- stream_name_overrides (array): **Overridden streams will default to Sync Mode: Full Refresh (Append), which does not support primary keys. If you want to use primary keys and deduplication, update the sync mo...
+- stream_name_overrides (array): manual intervention needed
 - secret fields: credentials.client_id, credentials.client_secret, credentials.refresh_token, credentials.service_account_info
 
 ## Sync Modes
@@ -73,12 +78,8 @@ Google Sheets catalog connector for https://docs.airbyte.com/integrations/source
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/google-sheets
 
 ## Commands
 
@@ -102,4 +103,5 @@ pm connectors inspect source-google-sheets --json
 
 ## References
 
-- [Google Sheets documentation](https://docs.airbyte.com/integrations/sources/google-sheets)
+- [Google Workspace developer release notes](https://developers.google.com/workspace/release-notes)
+- [Release notes](https://developers.google.com/sheets/docs/release-notes)

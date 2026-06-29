@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-reddit [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reddit catalog connector for https://docs.airbyte.com/integrations/sources/reddit. Native implementation status: planned_native_port.
+  Reddit catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-reddit:0.0.54 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Reddit API documentation: https://www.reddit.com/dev/api/
   Reddit OAuth guide: https://github.com/reddit-archive/reddit/wiki/OAuth2
   Reddit rate limits: https://github.com/reddit-archive/reddit/wiki/API#rules
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/reddit
 
 CONFIGURATION
   api_key (string) required secret
@@ -64,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/reddit
 
 EXAMPLES
   # Inspect catalog entry
@@ -83,7 +83,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Reddit documentation: https://docs.airbyte.com/integrations/sources/reddit
+  Reddit API documentation: https://www.reddit.com/dev/api/
+  Reddit OAuth guide: https://github.com/reddit-archive/reddit/wiki/OAuth2
+  Reddit rate limits: https://github.com/reddit-archive/reddit/wiki/API#rules
 
 EXIT STATUS
   0 success

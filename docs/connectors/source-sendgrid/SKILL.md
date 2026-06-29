@@ -7,7 +7,14 @@ description: Sendgrid connector knowledge and safe action guide.
 
 ## Purpose
 
-Sendgrid catalog connector for https://docs.airbyte.com/integrations/sources/sendgrid. Native implementation status: planned_native_port.
+Sendgrid catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/sendgrid.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.sendgrid.com/api-reference/how-to-use-the-sendgrid-v3-api/authentication
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Sendgrid catalog connector for https://docs.airbyte.com/integrations/sources/sen
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sendgrid:1.3.35 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Sendgrid catalog connector for https://docs.airbyte.com/integrations/sources/sen
 
 - API overview: https://docs.sendgrid.com/api-reference/how-to-use-the-sendgrid-v3-api/authentication
 - SendGrid API OpenAPI specification: https://github.com/sendgrid/sendgrid-oai
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sendgrid
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Sendgrid catalog connector for https://docs.airbyte.com/integrations/sources/sen
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/sendgrid
 
 ## Commands
 
@@ -92,4 +93,5 @@ pm connectors inspect source-sendgrid --json
 
 ## References
 
-- [Sendgrid documentation](https://docs.airbyte.com/integrations/sources/sendgrid)
+- [API overview](https://docs.sendgrid.com/api-reference/how-to-use-the-sendgrid-v3-api/authentication)
+- [SendGrid API OpenAPI specification](https://github.com/sendgrid/sendgrid-oai)

@@ -7,7 +7,13 @@ description: Financial Modelling connector knowledge and safe action guide.
 
 ## Purpose
 
-Financial Modelling catalog connector for https://docs.airbyte.com/integrations/sources/financial-modelling. Native implementation status: planned_native_port.
+Financial Modelling catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Financial Modelling catalog connector for https://docs.airbyte.com/integrations/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-financial-modelling:0.0.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Financial Modelling catalog connector for https://docs.airbyte.com/integrations/
 ## Official Application Documentation
 
 - Financial Modeling Prep API: https://site.financialmodelingprep.com/developer/docs
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/financial-modelling
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Financial Modelling catalog connector for https://docs.airbyte.com/integrations/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/financial-modelling
 
 ## Commands
 
@@ -95,4 +95,4 @@ pm connectors inspect source-financial-modelling --json
 
 ## References
 
-- [Financial Modelling documentation](https://docs.airbyte.com/integrations/sources/financial-modelling)
+- [Financial Modeling Prep API](https://site.financialmodelingprep.com/developer/docs)

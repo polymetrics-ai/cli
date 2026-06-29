@@ -7,7 +7,14 @@ description: Retently connector knowledge and safe action guide.
 
 ## Purpose
 
-Retently catalog connector for https://docs.airbyte.com/integrations/sources/retently. Native implementation status: planned_native_port.
+Retently catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/retently.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.retently.com/api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Retently catalog connector for https://docs.airbyte.com/integrations/sources/ret
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-retently:0.3.49 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Retently catalog connector for https://docs.airbyte.com/integrations/sources/ret
 ## Official Application Documentation
 
 - Retently API documentation: https://www.retently.com/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/retently
 
 ## Configuration
 
@@ -61,12 +66,8 @@ Retently catalog connector for https://docs.airbyte.com/integrations/sources/ret
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/retently
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-retently --json
 
 ## References
 
-- [Retently documentation](https://docs.airbyte.com/integrations/sources/retently)
+- [Retently API documentation](https://www.retently.com/api/)

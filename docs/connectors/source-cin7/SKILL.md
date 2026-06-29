@@ -7,7 +7,13 @@ description: Cin7 connector knowledge and safe action guide.
 
 ## Purpose
 
-Cin7 catalog connector for https://docs.airbyte.com/integrations/sources/cin7. Native implementation status: planned_native_port.
+Cin7 catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Cin7 catalog connector for https://docs.airbyte.com/integrations/sources/cin7. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-cin7:0.3.37 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Cin7 catalog connector for https://docs.airbyte.com/integrations/sources/cin7. N
 
 - Cin7 Core API reference: https://api.cin7.com/api/v1
 - Cin7 authentication: https://support.cin7.com/hc/en-us/articles/360002477115-API-Overview
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/cin7
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Cin7 catalog connector for https://docs.airbyte.com/integrations/sources/cin7. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/cin7
 
 ## Commands
 
@@ -92,4 +92,5 @@ pm connectors inspect source-cin7 --json
 
 ## References
 
-- [Cin7 documentation](https://docs.airbyte.com/integrations/sources/cin7)
+- [Cin7 Core API reference](https://api.cin7.com/api/v1)
+- [Cin7 authentication](https://support.cin7.com/hc/en-us/articles/360002477115-API-Overview)

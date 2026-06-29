@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-snowflake-cortex [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Snowflake Cortex catalog connector for https://docs.airbyte.com/integrations/destinations/snowflake-cortex. Native implementation status: planned_native_port.
+  Snowflake Cortex catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/snowflake-cortex.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.snowflake.com/en/user-guide/snowflake-cortex
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-snowflake-cortex:0.2.28 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Snowflake Cortex documentation: https://docs.snowflake.com/en/user-guide/snowflake-cortex
   Snowflake SQL reference: https://docs.snowflake.com/en/sql-reference
   Key pair authentication: https://docs.snowflake.com/en/user-guide/key-pair-auth
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/snowflake-cortex
 
 CONFIGURATION
   embedding (object) required: Embedding configuration
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/snowflake-cortex
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Snowflake Cortex documentation: https://docs.airbyte.com/integrations/destinations/snowflake-cortex
+  Snowflake Cortex documentation: https://docs.snowflake.com/en/user-guide/snowflake-cortex
+  Snowflake SQL reference: https://docs.snowflake.com/en/sql-reference
+  Key pair authentication: https://docs.snowflake.com/en/user-guide/key-pair-auth
 
 EXIT STATUS
   0 success

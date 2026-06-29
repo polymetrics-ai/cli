@@ -7,18 +7,18 @@ import (
 
 func TestConnectorCatalogGeneratedBaseline(t *testing.T) {
 	catalog := ConnectorCatalog()
-	if got, want := len(catalog), 647; got != want {
+	if got, want := len(catalog), 646; got != want {
 		t.Fatalf("catalog len = %d, want %d", got, want)
 	}
 	counts := ConnectorCatalogCounts(catalog)
-	if counts.Sources != 591 || counts.Destinations != 56 {
-		t.Fatalf("counts = %+v, want 591 sources and 56 destinations", counts)
+	if counts.Sources != 590 || counts.Destinations != 56 {
+		t.Fatalf("counts = %+v, want 590 sources and 56 destinations", counts)
 	}
-	if counts.DocsPresent != 647 {
-		t.Fatalf("docs_present = %d, want 647", counts.DocsPresent)
+	if counts.DocsPresent != 646 {
+		t.Fatalf("docs_present = %d, want 646", counts.DocsPresent)
 	}
-	if counts.Enabled != 2 || counts.PlannedNativePort != 645 || counts.UnsupportedDeprecated != 0 {
-		t.Fatalf("native enablement counts = %+v, want 2 enabled and 645 planned native ports", counts)
+	if counts.Enabled != 2 || counts.PlannedNativePort != 644 || counts.UnsupportedDeprecated != 0 {
+		t.Fatalf("native enablement counts = %+v, want 2 enabled and 644 planned native ports", counts)
 	}
 	for _, entry := range catalog {
 		if entry.Slug == "" || entry.Name == "" || entry.Type == "" || entry.DocumentationURL == "" || entry.ReleaseStage == "" || entry.SupportLevel == "" {
@@ -67,8 +67,8 @@ func TestConnectorCatalogLookupAndFilters(t *testing.T) {
 	if len(github.SecretFields) == 0 {
 		t.Fatalf("github secret fields were not extracted: %+v", github)
 	}
-	if github.DocumentationURL == "" || !strings.Contains(github.DocumentationURL, "docs.airbyte.com") {
-		t.Fatalf("github documentation_url = %q, want Airbyte connector docs", github.DocumentationURL)
+	if github.DocumentationURL == "" || !strings.Contains(github.DocumentationURL, "docs.github.com") {
+		t.Fatalf("github documentation_url = %q, want GitHub official docs", github.DocumentationURL)
 	}
 	if github.ApplicationDocumentationURL == "" || !strings.Contains(github.ApplicationDocumentationURL, "docs.github.com") {
 		t.Fatalf("github application_documentation_url = %q, want GitHub official docs", github.ApplicationDocumentationURL)

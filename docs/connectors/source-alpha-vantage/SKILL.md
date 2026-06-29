@@ -7,7 +7,13 @@ description: Alpha Vantage connector knowledge and safe action guide.
 
 ## Purpose
 
-Alpha Vantage catalog connector for https://docs.airbyte.com/integrations/sources/alpha-vantage. Native implementation status: planned_native_port.
+Alpha Vantage catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/alpha-vantage.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Alpha Vantage catalog connector for https://docs.airbyte.com/integrations/source
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-alpha-vantage:0.2.14 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Alpha Vantage catalog connector for https://docs.airbyte.com/integrations/source
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/alpha-vantage
+- Alpha Vantage documentation: https://www.alphavantage.co/documentation/
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Alpha Vantage catalog connector for https://docs.airbyte.com/integrations/source
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/alpha-vantage
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-alpha-vantage --json
 
 ## References
 
-- [Alpha Vantage documentation](https://docs.airbyte.com/integrations/sources/alpha-vantage)
+- [Alpha Vantage documentation](https://www.alphavantage.co/documentation/)

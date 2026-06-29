@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-youtube-data [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Youtube Data catalog connector for https://docs.airbyte.com/integrations/sources/youtube-data. Native implementation status: planned_native_port.
+  Youtube Data catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-youtube-data:0.0.58 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Google OAuth 2.0: https://developers.google.com/identity/protocols/oauth2
   YouTube API changelog: https://developers.google.com/youtube/v3/revision_history
   YouTube API quotas: https://developers.google.com/youtube/v3/getting-started#quota
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/youtube-data
 
 CONFIGURATION
   channel_ids (array) required
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/youtube-data
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Youtube Data documentation: https://docs.airbyte.com/integrations/sources/youtube-data
+  YouTube Data API v3: https://developers.google.com/youtube/v3
+  Google OAuth 2.0: https://developers.google.com/identity/protocols/oauth2
+  YouTube API changelog: https://developers.google.com/youtube/v3/revision_history
+  YouTube API quotas: https://developers.google.com/youtube/v3/getting-started#quota
 
 EXIT STATUS
   0 success

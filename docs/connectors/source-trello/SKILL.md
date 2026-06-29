@@ -7,7 +7,14 @@ description: Trello connector knowledge and safe action guide.
 
 ## Purpose
 
-Trello catalog connector for https://docs.airbyte.com/integrations/sources/trello. Native implementation status: planned_native_port.
+Trello catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/trello.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.atlassian.com/cloud/trello/rest/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Trello catalog connector for https://docs.airbyte.com/integrations/sources/trell
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-trello:1.3.10 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Trello catalog connector for https://docs.airbyte.com/integrations/sources/trell
 - Trello REST API: https://developer.atlassian.com/cloud/trello/rest/
 - Trello authentication: https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/
 - Trello rate limits: https://developer.atlassian.com/cloud/trello/guides/rest-api/rate-limits/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/trello
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Trello catalog connector for https://docs.airbyte.com/integrations/sources/trell
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/trello
 
 ## Commands
 
@@ -95,4 +96,6 @@ pm connectors inspect source-trello --json
 
 ## References
 
-- [Trello documentation](https://docs.airbyte.com/integrations/sources/trello)
+- [Trello REST API](https://developer.atlassian.com/cloud/trello/rest/)
+- [Trello authentication](https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/)
+- [Trello rate limits](https://developer.atlassian.com/cloud/trello/guides/rest-api/rate-limits/)

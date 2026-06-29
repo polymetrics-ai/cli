@@ -7,7 +7,13 @@ description: Freshchat connector knowledge and safe action guide.
 
 ## Purpose
 
-Freshchat catalog connector for https://docs.airbyte.com/integrations/sources/freshchat. Native implementation status: planned_native_port.
+Freshchat catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Freshchat catalog connector for https://docs.airbyte.com/integrations/sources/fr
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-freshchat:0.0.47 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Freshchat catalog connector for https://docs.airbyte.com/integrations/sources/fr
 - Freshchat API reference: https://developers.freshchat.com/api/
 - Freshchat authentication: https://developers.freshchat.com/api/#authentication
 - Freshworks Status: https://status.freshworks.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/freshchat
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Freshchat catalog connector for https://docs.airbyte.com/integrations/sources/fr
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/freshchat
 
 ## Commands
 
@@ -94,4 +94,6 @@ pm connectors inspect source-freshchat --json
 
 ## References
 
-- [Freshchat documentation](https://docs.airbyte.com/integrations/sources/freshchat)
+- [Freshchat API reference](https://developers.freshchat.com/api/)
+- [Freshchat authentication](https://developers.freshchat.com/api/#authentication)
+- [Freshworks Status](https://status.freshworks.com/)

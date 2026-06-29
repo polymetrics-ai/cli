@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-awin-advertiser [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  AWIN Advertiser catalog connector for https://docs.airbyte.com/integrations/sources/awin-advertiser. Native implementation status: planned_native_port.
+  AWIN Advertiser catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-awin-advertiser:0.0.27 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   API documentation: https://wiki.awin.com/index.php/Advertiser_API
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/awin-advertiser
 
 CONFIGURATION
   advertiserId (string) required: Your Awin Advertiser ID. You can find this in your Awin dashboard or account settings.
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/awin-advertiser
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  AWIN Advertiser documentation: https://docs.airbyte.com/integrations/sources/awin-advertiser
+  API documentation: https://wiki.awin.com/index.php/Advertiser_API
 
 EXIT STATUS
   0 success

@@ -7,7 +7,13 @@ description: Zoho Billing connector knowledge and safe action guide.
 
 ## Purpose
 
-Zoho Billing catalog connector for https://docs.airbyte.com/integrations/sources/zoho-billing. Native implementation status: planned_native_port.
+Zoho Billing catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Zoho Billing catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-zoho-billing:0.0.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Zoho Billing catalog connector for https://docs.airbyte.com/integrations/sources
 ## Official Application Documentation
 
 - Zoho Billing API: https://www.zoho.com/billing/api/v1/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zoho-billing
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Zoho Billing catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/zoho-billing
 
 ## Commands
 
@@ -93,4 +93,4 @@ pm connectors inspect source-zoho-billing --json
 
 ## References
 
-- [Zoho Billing documentation](https://docs.airbyte.com/integrations/sources/zoho-billing)
+- [Zoho Billing API](https://www.zoho.com/billing/api/v1/)

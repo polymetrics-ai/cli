@@ -5,7 +5,7 @@ import "polymetrics.ai/internal/connectors"
 // reportSpec describes a GA4 runReport "stream": a fixed set of dimensions and
 // metrics that are projected onto flat record fields. The GA4 Data API has no
 // fixed REST resources; instead each report is a dimension x metric query, so a
-// stream is modeled as a canned report spec (mirroring how Airbyte ships preset
+// stream is modeled as a canned report spec (mirroring how upstream ships preset
 // reports plus user-defined custom_reports).
 type reportSpec struct {
 	// name is the published stream name.

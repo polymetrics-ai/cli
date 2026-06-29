@@ -7,7 +7,14 @@ description: Notion connector knowledge and safe action guide.
 
 ## Purpose
 
-Notion catalog connector for https://docs.airbyte.com/integrations/sources/notion. Native implementation status: planned_native_port.
+Notion catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/notion.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.notion.com/reference/changes-by-version
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Notion catalog connector for https://docs.airbyte.com/integrations/sources/notio
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-notion:4.0.13 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,11 +53,10 @@ Notion catalog connector for https://docs.airbyte.com/integrations/sources/notio
 
 - Changes by version: https://developers.notion.com/reference/changes-by-version
 - Changelog: https://developers.notion.com/page/changelog
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/notion
 
 ## Configuration
 
-- credentials (object): Choose either OAuth (recommended for Airbyte Cloud) or Access Token. See our <a href='https://docs.airbyte.com/integrations/sources/notion#setup-guide'>docs</a> for more informa...
+- credentials (object): manual intervention needed
 - num_workers (integer): Number of worker threads to use for the sync. Higher values can speed up large syncs but may increase rate-limit pressure against Notion's limit of approximately three requests ...
 - start_date (string): UTC date and time in the format YYYY-MM-DDTHH:MM:SS.000Z. During incremental sync, any data generated before this date will not be replicated. If left blank, the start date will...
 - secret fields: credentials.access_token, credentials.client_id, credentials.client_secret, credentials.token
@@ -64,12 +69,8 @@ Notion catalog connector for https://docs.airbyte.com/integrations/sources/notio
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/notion
 
 ## Commands
 
@@ -93,4 +94,5 @@ pm connectors inspect source-notion --json
 
 ## References
 
-- [Notion documentation](https://docs.airbyte.com/integrations/sources/notion)
+- [Changes by version](https://developers.notion.com/reference/changes-by-version)
+- [Changelog](https://developers.notion.com/page/changelog)

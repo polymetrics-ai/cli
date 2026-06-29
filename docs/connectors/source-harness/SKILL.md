@@ -7,7 +7,13 @@ description: Harness connector knowledge and safe action guide.
 
 ## Purpose
 
-Harness catalog connector for https://docs.airbyte.com/integrations/sources/harness. Native implementation status: planned_native_port.
+Harness catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/harness.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Harness catalog connector for https://docs.airbyte.com/integrations/sources/harn
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-harness:0.2.10 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Harness catalog connector for https://docs.airbyte.com/integrations/sources/harn
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/harness
+- Harness documentation: https://developer.harness.io/docs/platform/automation/api/api-quickstart/
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Harness catalog connector for https://docs.airbyte.com/integrations/sources/harn
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/harness
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-harness --json
 
 ## References
 
-- [Harness documentation](https://docs.airbyte.com/integrations/sources/harness)
+- [Harness documentation](https://developer.harness.io/docs/platform/automation/api/api-quickstart/)

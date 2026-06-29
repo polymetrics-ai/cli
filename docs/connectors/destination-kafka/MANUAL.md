@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector destination-kafka [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Kafka catalog connector for https://docs.airbyte.com/integrations/destinations/kafka. Native implementation status: planned_native_port.
+  Kafka catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/kafka.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-kafka:0.1.11 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/kafka
+  Kafka documentation: https://kafka.apache.org/documentation/
 
 CONFIGURATION
   acks (string) required: The number of acknowledgments the producer requires the leader to have received before considering a request complete. This controls the durability of records that are sent.
@@ -68,7 +71,7 @@ CONFIGURATION
   socket_connection_setup_timeout_max_ms (string) required: The maximum amount of time the client will wait for the socket connection to be established. The connection setup timeout will increase exponentially for each consecutive connec...
   socket_connection_setup_timeout_ms (string) required: The amount of time the client will wait for the socket connection to be established.
   sync_producer (boolean): Wait synchronously until the record has been sent to Kafka.
-  test_topic (string): Topic to test if Airbyte can produce messages.
+  test_topic (string): manual intervention needed
   topic_pattern (string) required: Topic pattern in which the records will be sent. You can use patterns like '{namespace}' and/or '{stream}' to send the message to a specific topic based on these values. Notice ...
   secret fields: protocol.sasl_jaas_config
 
@@ -78,11 +81,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/kafka
 
 EXAMPLES
   # Inspect catalog entry
@@ -97,7 +97,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Kafka documentation: https://docs.airbyte.com/integrations/destinations/kafka
+  Kafka documentation: https://kafka.apache.org/documentation/
 
 EXIT STATUS
   0 success

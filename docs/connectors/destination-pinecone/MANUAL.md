@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-pinecone [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Pinecone catalog connector for https://docs.airbyte.com/integrations/destinations/pinecone. Native implementation status: planned_native_port.
+  Pinecone catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pinecone.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.pinecone.io/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-pinecone:0.1.48 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,7 +53,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Release notes: https://docs.pinecone.io/release-notes
   Rate limits: https://docs.pinecone.io/troubleshooting/rate-limits
   Pinecone Status: https://status.pinecone.io/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/pinecone
 
 CONFIGURATION
   embedding (object) required: Embedding configuration
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/pinecone
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,11 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Pinecone documentation: https://docs.airbyte.com/integrations/destinations/pinecone
+  Pinecone documentation: https://docs.pinecone.io/
+  Authentication: https://docs.pinecone.io/guides/get-started/authentication
+  Release notes: https://docs.pinecone.io/release-notes
+  Rate limits: https://docs.pinecone.io/troubleshooting/rate-limits
+  Pinecone Status: https://status.pinecone.io/
 
 EXIT STATUS
   0 success

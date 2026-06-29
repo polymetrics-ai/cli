@@ -7,7 +7,13 @@ description: Local CSV connector knowledge and safe action guide.
 
 ## Purpose
 
-Local CSV catalog connector for https://docs.airbyte.com/integrations/destinations/csv. Native implementation status: planned_native_port.
+Local CSV catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/file-csv.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Local CSV catalog connector for https://docs.airbyte.com/integrations/destinatio
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-csv:1.0.2 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,13 +50,12 @@ Local CSV catalog connector for https://docs.airbyte.com/integrations/destinatio
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/csv
+- manual intervention needed
 
 ## Configuration
 
 - delimiter_type (object): The character delimiting individual cells in the CSV data.
-- destination_path (string) required: Path to the directory where csv files will be written. The destination uses the local mount "/local" and any data files will be placed inside that local mount. For more informat...
+- destination_path (string) required: manual intervention needed
 
 ## Sync Modes
 
@@ -61,12 +65,8 @@ Local CSV catalog connector for https://docs.airbyte.com/integrations/destinatio
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/csv
 
 ## Commands
 
@@ -87,7 +87,3 @@ pm connectors inspect destination-csv --json
 - Read implementation_status before planning ETL or reverse ETL.
 - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
 - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-## References
-
-- [Local CSV documentation](https://docs.airbyte.com/integrations/destinations/csv)

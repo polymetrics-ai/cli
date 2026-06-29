@@ -12,6 +12,12 @@ SYNOPSIS
 DESCRIPTION
   Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse ETL customer actions through the Stripe REST API.
 
+ICON
+  asset: icons/stripe.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://stripe.com/docs/api
+
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
   Integration type: api

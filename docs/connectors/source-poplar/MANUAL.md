@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-poplar [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Poplar catalog connector for https://docs.airbyte.com/integrations/sources/poplar. Native implementation status: planned_native_port.
+  Poplar catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-poplar:0.0.41 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Poplar API documentation: https://docs.poplar.studio/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/poplar
 
 CONFIGURATION
   access_token (string) required secret: Your Poplar API Access Token. Generate it from the [API Credentials page](https://app.heypoplar.com/credentials) in your account. Use a production token for live data or a test ...
@@ -57,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/poplar
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Poplar documentation: https://docs.airbyte.com/integrations/sources/poplar
+  Poplar API documentation: https://docs.poplar.studio/
 
 EXIT STATUS
   0 success

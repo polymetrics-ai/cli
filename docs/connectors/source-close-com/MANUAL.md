@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-close-com [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Close.com catalog connector for https://docs.airbyte.com/integrations/sources/close-com. Native implementation status: planned_native_port.
+  Close.com catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/close.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.close.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-close-com:0.6.15 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Close authentication: https://developer.close.com/#authentication
   Close API rate limits: https://developer.close.com/#rate-limiting
   Close Status: https://status.close.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/close-com
 
 CONFIGURATION
   api_key (string) required secret: Close.com API key (usually starts with 'api_'; find yours <a href="https://app.close.com/settings/api/">here</a>).
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/close-com
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Close.com documentation: https://docs.airbyte.com/integrations/sources/close-com
+  Close API reference: https://developer.close.com/
+  Close authentication: https://developer.close.com/#authentication
+  Close API rate limits: https://developer.close.com/#rate-limiting
+  Close Status: https://status.close.com/
 
 EXIT STATUS
   0 success

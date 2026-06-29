@@ -7,7 +7,13 @@ description: Sample Data connector knowledge and safe action guide.
 
 ## Purpose
 
-Sample Data catalog connector for https://docs.airbyte.com/integrations/sources/faker. Native implementation status: planned_native_port.
+Sample Data catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Sample Data catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-faker:7.1.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Sample Data catalog connector for https://docs.airbyte.com/integrations/sources/
 
 - Python Faker Library Documentation: https://faker.readthedocs.io/en/master/
 - Faker Changelog: https://github.com/joke2k/faker/blob/master/CHANGELOG.md
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/faker
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Sample Data catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/faker
 
 ## Commands
 
@@ -94,4 +94,5 @@ pm connectors inspect source-faker --json
 
 ## References
 
-- [Sample Data documentation](https://docs.airbyte.com/integrations/sources/faker)
+- [Python Faker Library Documentation](https://faker.readthedocs.io/en/master/)
+- [Faker Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)

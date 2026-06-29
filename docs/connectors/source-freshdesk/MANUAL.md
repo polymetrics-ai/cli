@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-freshdesk [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Freshdesk catalog connector for https://docs.airbyte.com/integrations/sources/freshdesk. Native implementation status: planned_native_port.
+  Freshdesk catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/freshdesk.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.freshdesk.com/api/#change_log
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-freshdesk:3.2.20 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,10 +49,9 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Changelog: https://developers.freshdesk.com/api/#change_log
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/freshdesk
 
 CONFIGURATION
-  api_key (string) required secret: Freshdesk API Key. See the <a href="https://docs.airbyte.com/integrations/sources/freshdesk">docs</a> for more information on how to obtain this key.
+  api_key (string) required secret: manual intervention needed
   domain (string) required: Freshdesk domain
   lookback_window_in_days (integer): Number of days for lookback window for the stream Satisfaction Ratings
   num_workers (integer): Number of concurrent threads for syncing. Higher values can speed up syncs but may increase API rate limit usage. Adjust based on your Freshdesk API plan.
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/freshdesk
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Freshdesk documentation: https://docs.airbyte.com/integrations/sources/freshdesk
+  Changelog: https://developers.freshdesk.com/api/#change_log
 
 EXIT STATUS
   0 success

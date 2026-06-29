@@ -7,7 +7,14 @@ description: Mixpanel connector knowledge and safe action guide.
 
 ## Purpose
 
-Mixpanel catalog connector for https://docs.airbyte.com/integrations/sources/mixpanel. Native implementation status: planned_native_port.
+Mixpanel catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/mixpanel.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.mixpanel.com/reference/overview
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Mixpanel catalog connector for https://docs.airbyte.com/integrations/sources/mix
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mixpanel:4.0.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Mixpanel catalog connector for https://docs.airbyte.com/integrations/sources/mix
 - Mixpanel authentication: https://developer.mixpanel.com/reference/authentication
 - Mixpanel rate limits: https://developer.mixpanel.com/reference/rate-limits
 - Mixpanel Status: https://status.mixpanel.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mixpanel
 
 ## Configuration
 
@@ -74,12 +79,8 @@ Mixpanel catalog connector for https://docs.airbyte.com/integrations/sources/mix
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mixpanel
 
 ## Commands
 
@@ -103,4 +104,7 @@ pm connectors inspect source-mixpanel --json
 
 ## References
 
-- [Mixpanel documentation](https://docs.airbyte.com/integrations/sources/mixpanel)
+- [Mixpanel API reference](https://developer.mixpanel.com/reference/overview)
+- [Mixpanel authentication](https://developer.mixpanel.com/reference/authentication)
+- [Mixpanel rate limits](https://developer.mixpanel.com/reference/rate-limits)
+- [Mixpanel Status](https://status.mixpanel.com/)

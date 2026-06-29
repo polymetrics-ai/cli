@@ -7,7 +7,14 @@ description: RevenueCat connector knowledge and safe action guide.
 
 ## Purpose
 
-RevenueCat catalog connector for https://docs.airbyte.com/integrations/sources/revenuecat. Native implementation status: planned_native_port.
+RevenueCat catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/revenuecat.svg
+- source: official
+- review_status: official_verified
+- review_url: https://www.revenuecat.com/docs/api-v1
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ RevenueCat catalog connector for https://docs.airbyte.com/integrations/sources/r
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-revenuecat:0.1.39 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,10 +51,7 @@ RevenueCat catalog connector for https://docs.airbyte.com/integrations/sources/r
 
 ## Official Application Documentation
 
-- RevenueCat API reference: https://www.revenuecat.com/docs/api-v1
-- RevenueCat authentication: https://www.revenuecat.com/docs/authentication
-- RevenueCat Status: https://status.revenuecat.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/revenuecat
+- RevenueCat documentation: https://www.revenuecat.com/docs/api-v1
 
 ## Configuration
 
@@ -64,12 +67,8 @@ RevenueCat catalog connector for https://docs.airbyte.com/integrations/sources/r
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/revenuecat
 
 ## Commands
 
@@ -93,4 +92,4 @@ pm connectors inspect source-revenuecat --json
 
 ## References
 
-- [RevenueCat documentation](https://docs.airbyte.com/integrations/sources/revenuecat)
+- [RevenueCat documentation](https://www.revenuecat.com/docs/api-v1)

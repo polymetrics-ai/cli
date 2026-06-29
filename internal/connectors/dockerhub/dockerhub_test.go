@@ -22,16 +22,16 @@ func TestReadRepositoriesPaginates(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		sawAuth = r.Header.Get("Authorization")
 		paths = append(paths, r.URL.Path+"?"+r.URL.RawQuery)
-		if r.URL.Path != "/v2/repositories/airbyte/" {
+		if r.URL.Path != "/v2/repositories/upstream/" {
 			http.NotFound(w, r)
 			return
 		}
 		switch r.URL.Query().Get("page") {
 		case "", "1":
 			// next points at an absolute URL the connector must follow as-is.
-			_, _ = w.Write([]byte(`{"count":3,"next":"` + srvURL + `/v2/repositories/airbyte/?page=2&page_size=2","previous":null,"results":[{"name":"source-a","namespace":"airbyte","pull_count":10,"star_count":1,"last_updated":"2026-01-01T00:00:00Z","is_private":false},{"name":"source-b","namespace":"airbyte","pull_count":20,"star_count":2,"last_updated":"2026-01-02T00:00:00Z","is_private":false}]}`))
+			_, _ = w.Write([]byte(`{"count":3,"next":"` + srvURL + `/v2/repositories/upstream/?page=2&page_size=2","previous":null,"results":[{"name":"source-a","namespace":"upstream","pull_count":10,"star_count":1,"last_updated":"2026-01-01T00:00:00Z","is_private":false},{"name":"source-b","namespace":"upstream","pull_count":20,"star_count":2,"last_updated":"2026-01-02T00:00:00Z","is_private":false}]}`))
 		case "2":
-			_, _ = w.Write([]byte(`{"count":3,"next":null,"previous":null,"results":[{"name":"source-c","namespace":"airbyte","pull_count":30,"star_count":3,"last_updated":"2026-01-03T00:00:00Z","is_private":false}]}`))
+			_, _ = w.Write([]byte(`{"count":3,"next":null,"previous":null,"results":[{"name":"source-c","namespace":"upstream","pull_count":30,"star_count":3,"last_updated":"2026-01-03T00:00:00Z","is_private":false}]}`))
 		default:
 			t.Errorf("unexpected page=%q", r.URL.Query().Get("page"))
 		}
@@ -41,7 +41,7 @@ func TestReadRepositoriesPaginates(t *testing.T) {
 
 	c := dockerhub.New()
 	cfg := connectors.RuntimeConfig{
-		Config: map[string]string{"base_url": srv.URL + "/v2", "docker_username": "airbyte", "page_size": "2"},
+		Config: map[string]string{"base_url": srv.URL + "/v2", "docker_username": "upstream", "page_size": "2"},
 	}
 
 	var got []connectors.Record
@@ -73,7 +73,7 @@ func TestReadRepositoriesPaginates(t *testing.T) {
 // /repositories/{username}/{repository}/tags.
 func TestReadTagsPerRepository(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/v2/repositories/airbyte/source-dockerhub/tags" {
+		if r.URL.Path != "/v2/repositories/upstream/source-dockerhub/tags" {
 			http.NotFound(w, r)
 			return
 		}
@@ -83,7 +83,7 @@ func TestReadTagsPerRepository(t *testing.T) {
 
 	c := dockerhub.New()
 	cfg := connectors.RuntimeConfig{
-		Config: map[string]string{"base_url": srv.URL + "/v2", "docker_username": "airbyte", "repository": "source-dockerhub"},
+		Config: map[string]string{"base_url": srv.URL + "/v2", "docker_username": "upstream", "repository": "source-dockerhub"},
 	}
 
 	var got []connectors.Record
@@ -103,7 +103,7 @@ func TestReadTagsPerRepository(t *testing.T) {
 // records without any network access.
 func TestFixtureMode(t *testing.T) {
 	c := dockerhub.New()
-	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture", "docker_username": "airbyte"}}
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture", "docker_username": "upstream"}}
 	for _, stream := range []string{"repositories", "tags", "namespace"} {
 		var got []connectors.Record
 		err := c.Read(context.Background(), connectors.ReadRequest{Stream: stream, Config: cfg}, func(rec connectors.Record) error {
@@ -125,7 +125,7 @@ func TestFixtureMode(t *testing.T) {
 // TestCheckRejectsSSRFBaseURL ensures an override base URL must be http/https.
 func TestCheckRejectsSSRFBaseURL(t *testing.T) {
 	c := dockerhub.New()
-	cfg := connectors.RuntimeConfig{Config: map[string]string{"base_url": "file:///etc/passwd", "docker_username": "airbyte"}}
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"base_url": "file:///etc/passwd", "docker_username": "upstream"}}
 	if err := c.Check(context.Background(), cfg); err == nil {
 		t.Fatal("Check should reject a non-http(s) base_url")
 	}
@@ -165,7 +165,7 @@ func TestCatalogAndRegistry(t *testing.T) {
 
 func TestUnknownStream(t *testing.T) {
 	c := dockerhub.New()
-	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture", "docker_username": "airbyte"}}
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture", "docker_username": "upstream"}}
 	err := c.Read(context.Background(), connectors.ReadRequest{Stream: "nope", Config: cfg}, func(connectors.Record) error { return nil })
 	if err == nil || !strings.Contains(err.Error(), "nope") {
 		t.Fatalf("expected unknown-stream error, got %v", err)

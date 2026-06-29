@@ -7,7 +7,14 @@ description: Instagram connector knowledge and safe action guide.
 
 ## Purpose
 
-Instagram catalog connector for https://docs.airbyte.com/integrations/sources/instagram. Native implementation status: planned_native_port.
+Instagram catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/instagram.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.facebook.com/docs/instagram-platform/changelog
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Instagram catalog connector for https://docs.airbyte.com/integrations/sources/in
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-instagram:4.2.32 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,11 +53,10 @@ Instagram catalog connector for https://docs.airbyte.com/integrations/sources/in
 
 - Instagram Platform Changelog: https://developers.facebook.com/docs/instagram-platform/changelog
 - Release notes: https://developers.facebook.com/docs/instagram-api/changelog
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/instagram
 
 ## Configuration
 
-- access_token (string) required secret: The value of the access token generated with <b>instagram_basic, instagram_manage_insights, pages_show_list, pages_read_engagement, Instagram Public Content Access</b> permissio...
+- access_token (string) required secret: manual intervention needed
 - client_id (string) secret: The Client ID for your Oauth application
 - client_secret (string) secret: The Client Secret for your Oauth application
 - num_workers (integer): The number of worker threads to use for the sync.
@@ -66,12 +71,8 @@ Instagram catalog connector for https://docs.airbyte.com/integrations/sources/in
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/instagram
 
 ## Commands
 
@@ -95,4 +96,5 @@ pm connectors inspect source-instagram --json
 
 ## References
 
-- [Instagram documentation](https://docs.airbyte.com/integrations/sources/instagram)
+- [Instagram Platform Changelog](https://developers.facebook.com/docs/instagram-platform/changelog)
+- [Release notes](https://developers.facebook.com/docs/instagram-api/changelog)

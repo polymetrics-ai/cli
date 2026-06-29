@@ -7,7 +7,14 @@ description: Datadog connector knowledge and safe action guide.
 
 ## Purpose
 
-Datadog catalog connector for https://docs.airbyte.com/integrations/sources/datadog. Native implementation status: planned_native_port.
+Datadog catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/datadog.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.datadoghq.com/api/latest/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Datadog catalog connector for https://docs.airbyte.com/integrations/sources/data
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-datadog:2.0.24 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Datadog catalog connector for https://docs.airbyte.com/integrations/sources/data
 - Datadog authentication: https://docs.datadoghq.com/account_management/api-app-keys/
 - Datadog rate limits: https://docs.datadoghq.com/api/latest/rate-limits/
 - Datadog Status: https://status.datadoghq.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/datadog
 
 ## Configuration
 
@@ -71,12 +76,8 @@ Datadog catalog connector for https://docs.airbyte.com/integrations/sources/data
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/datadog
 
 ## Commands
 
@@ -100,4 +101,7 @@ pm connectors inspect source-datadog --json
 
 ## References
 
-- [Datadog documentation](https://docs.airbyte.com/integrations/sources/datadog)
+- [Datadog API reference](https://docs.datadoghq.com/api/latest/)
+- [Datadog authentication](https://docs.datadoghq.com/account_management/api-app-keys/)
+- [Datadog rate limits](https://docs.datadoghq.com/api/latest/rate-limits/)
+- [Datadog Status](https://status.datadoghq.com/)

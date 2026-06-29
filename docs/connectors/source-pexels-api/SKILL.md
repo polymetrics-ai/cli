@@ -7,7 +7,14 @@ description: Pexels API connector knowledge and safe action guide.
 
 ## Purpose
 
-Pexels API catalog connector for https://docs.airbyte.com/integrations/sources/pexels-api. Native implementation status: planned_native_port.
+Pexels API catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pexels.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.pexels.com/api/documentation/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Pexels API catalog connector for https://docs.airbyte.com/integrations/sources/p
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-pexels-api:0.2.41 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Pexels API catalog connector for https://docs.airbyte.com/integrations/sources/p
 ## Official Application Documentation
 
 - Pexels API documentation: https://www.pexels.com/api/documentation/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pexels-api
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Pexels API catalog connector for https://docs.airbyte.com/integrations/sources/p
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/pexels-api
 
 ## Commands
 
@@ -95,4 +96,4 @@ pm connectors inspect source-pexels-api --json
 
 ## References
 
-- [Pexels API documentation](https://docs.airbyte.com/integrations/sources/pexels-api)
+- [Pexels API documentation](https://www.pexels.com/api/documentation/)

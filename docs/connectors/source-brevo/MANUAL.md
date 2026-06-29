@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-brevo [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Brevo catalog connector for https://docs.airbyte.com/integrations/sources/brevo. Native implementation status: planned_native_port.
+  Brevo catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-brevo:0.2.36 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Brevo authentication guide: https://developers.brevo.com/docs/getting-started
   Brevo API rate limits: https://developers.brevo.com/docs/api-limits
   Brevo Status: https://status.brevo.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/brevo
 
 CONFIGURATION
   api_key (string) required secret
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/brevo
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Brevo documentation: https://docs.airbyte.com/integrations/sources/brevo
+  Brevo API reference: https://developers.brevo.com/reference
+  Brevo authentication guide: https://developers.brevo.com/docs/getting-started
+  Brevo API rate limits: https://developers.brevo.com/docs/api-limits
+  Brevo Status: https://status.brevo.com/
 
 EXIT STATUS
   0 success

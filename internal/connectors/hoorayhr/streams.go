@@ -14,7 +14,7 @@ type streamEndpoint struct {
 }
 
 // hoorayhrStreamEndpoints is the per-stream routing table. The catalog stream
-// names follow the Airbyte source (sick-leaves, time-off, ...) while the API
+// names follow the upstream source (sick-leaves, time-off, ...) while the API
 // paths are the underlying HoorayHR resources (/sick-leave, /time-off, ...).
 var hoorayhrStreamEndpoints = map[string]streamEndpoint{
 	"users":       {resource: "users", mapRecord: hoorayhrUserRecord},

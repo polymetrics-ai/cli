@@ -7,7 +7,14 @@ description: Twilio connector knowledge and safe action guide.
 
 ## Purpose
 
-Twilio catalog connector for https://docs.airbyte.com/integrations/sources/twilio. Native implementation status: planned_native_port.
+Twilio catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/twilio.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.twilio.com/docs/usage/api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Twilio catalog connector for https://docs.airbyte.com/integrations/sources/twili
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-twilio:1.0.5 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -51,7 +57,6 @@ Twilio catalog connector for https://docs.airbyte.com/integrations/sources/twili
 - Twilio rate limits: https://www.twilio.com/docs/usage/api#rate-limiting
 - Twilio API OpenAPI specification: https://github.com/twilio/twilio-oai
 - Twilio Status: https://status.twilio.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/twilio
 
 ## Configuration
 
@@ -71,12 +76,8 @@ Twilio catalog connector for https://docs.airbyte.com/integrations/sources/twili
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/twilio
 
 ## Commands
 
@@ -100,4 +101,9 @@ pm connectors inspect source-twilio --json
 
 ## References
 
-- [Twilio documentation](https://docs.airbyte.com/integrations/sources/twilio)
+- [Twilio API reference](https://www.twilio.com/docs/usage/api)
+- [Twilio authentication](https://www.twilio.com/docs/iam/api-keys)
+- [Twilio Changelog](https://www.twilio.com/en-us/changelog)
+- [Twilio rate limits](https://www.twilio.com/docs/usage/api#rate-limiting)
+- [Twilio API OpenAPI specification](https://github.com/twilio/twilio-oai)
+- [Twilio Status](https://status.twilio.com/)

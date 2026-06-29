@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-gcs [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Google Cloud Storage (GCS) catalog connector for https://docs.airbyte.com/integrations/destinations/gcs. Native implementation status: planned_native_port.
+  Google Cloud Storage (GCS) catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/googlecloudstorage.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://cloud.google.com/storage/docs
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-gcs:0.4.9 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -49,7 +54,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Google Cloud Release Notes: https://cloud.google.com/release-notes
   Quotas and limits: https://cloud.google.com/storage/quotas
   Google Cloud Status: https://status.cloud.google.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/gcs
 
 CONFIGURATION
   credential (object) required: An HMAC key is a type of credential and can be associated with a service account or a user account in Cloud Storage. Read more <a href="https://cloud.google.com/storage/docs/aut...
@@ -65,11 +69,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/gcs
 
 EXAMPLES
   # Inspect catalog entry
@@ -84,7 +85,12 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Google Cloud Storage (GCS) documentation: https://docs.airbyte.com/integrations/destinations/gcs
+  Cloud Storage documentation: https://cloud.google.com/storage/docs
+  Service account authentication: https://cloud.google.com/iam/docs/service-accounts
+  Access control: https://cloud.google.com/storage/docs/access-control
+  Google Cloud Release Notes: https://cloud.google.com/release-notes
+  Quotas and limits: https://cloud.google.com/storage/quotas
+  Google Cloud Status: https://status.cloud.google.com/
 
 EXIT STATUS
   0 success

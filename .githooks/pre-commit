@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+set -eu
+
+export GOTOOLCHAIN="${GOTOOLCHAIN:-auto}"
+
+gofmt -w cmd internal
+go test ./internal/connectors ./internal/cli ./cmd/iconregistrygen
+go build ./cmd/pm
+./pm docs validate --connectors-dir docs/connectors

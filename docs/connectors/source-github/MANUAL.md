@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-github [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  GitHub native Go source connector. Runtime family: native_go. Documentation: https://docs.airbyte.com/integrations/sources/github.
+  GitHub native Go source connector. Runtime family: native_go.
+
+ICON
+  asset: icons/github.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.github.com/en/rest/about-the-rest-api/breaking-changes
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -21,7 +27,6 @@ IMPLEMENTATION STATUS
   runtime_kind: native_go
   pm connector: github
   notes: Implemented as the built-in GitHub connector.
-  upstream image reference: airbyte/source-github:2.1.33 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -49,7 +54,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   GitHub rate limits: https://docs.github.com/en/rest/overview/rate-limits-for-the-rest-api
   GitHub REST API OpenAPI specification: https://github.com/github/rest-api-description
   GitHub Status: https://www.githubstatus.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/github
 
 AUTHENTICATION
   public: Unauthenticated public repository reads. Writes are not allowed.
@@ -323,7 +327,6 @@ AGENT WORKFLOW
   - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 SEE ALSO
-  GitHub connector documentation: https://docs.airbyte.com/integrations/sources/github
   GitHub REST API reference: https://docs.github.com/en/rest
   GitHub authentication: https://docs.github.com/en/rest/overview/authenticating-to-the-rest-api
   API Versions: https://docs.github.com/en/rest/about-the-rest-api/api-versions

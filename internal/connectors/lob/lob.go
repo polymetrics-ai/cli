@@ -4,7 +4,7 @@
 // RecordsAt extraction + cursor state) with Lob-specific stream definitions,
 // endpoints, and pagination.
 //
-// Lob is read-only (the upstream Airbyte source supports full_refresh only and
+// Lob is read-only (the upstream upstream source supports full_refresh only and
 // the print/mail API has no safe reverse-ETL surface), so Capabilities.Write is
 // false. It self-registers with the connectors registry via RegisterFactory in
 // init(); the registryset package blank-imports this package in the production
@@ -294,7 +294,7 @@ func lobBaseURL(cfg connectors.RuntimeConfig) (string, error) {
 func lobPageSize(cfg connectors.RuntimeConfig) (int, error) {
 	raw := strings.TrimSpace(cfg.Config["page_size"])
 	if raw == "" {
-		// Lob's Airbyte source exposes this as `limit`; accept either key.
+		// Lob's upstream source exposes this as `limit`; accept either key.
 		raw = strings.TrimSpace(cfg.Config["limit"])
 	}
 	if raw == "" {

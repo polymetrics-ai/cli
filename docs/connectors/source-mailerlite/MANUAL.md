@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-mailerlite [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  MailerLite catalog connector for https://docs.airbyte.com/integrations/sources/mailerlite. Native implementation status: planned_native_port.
+  MailerLite catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/mailerlite.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.mailerlite.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-mailerlite:1.1.31 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   MailerLite API reference: https://developers.mailerlite.com/
   MailerLite authentication: https://developers.mailerlite.com/docs/authentication
   MailerLite rate limits: https://developers.mailerlite.com/docs/rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mailerlite
 
 CONFIGURATION
   api_token (string) required secret: Your API Token. See <a href="https://developers.mailerlite.com/docs/#authentication">here</a>.
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/mailerlite
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  MailerLite documentation: https://docs.airbyte.com/integrations/sources/mailerlite
+  MailerLite API reference: https://developers.mailerlite.com/
+  MailerLite authentication: https://developers.mailerlite.com/docs/authentication
+  MailerLite rate limits: https://developers.mailerlite.com/docs/rate-limits
 
 EXIT STATUS
   0 success

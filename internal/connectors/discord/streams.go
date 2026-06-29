@@ -38,7 +38,7 @@ var discordStreamEndpoints = map[string]streamEndpoint{
 }
 
 // discordStreams returns the connector's published stream catalog. Discord is
-// full-refresh only (the upstream Airbyte source supports full_refresh), so no
+// full-refresh only (the upstream upstream source supports full_refresh), so no
 // cursor fields are advertised; each object exposes a snowflake string id.
 func discordStreams() []connectors.Stream {
 	return []connectors.Stream{

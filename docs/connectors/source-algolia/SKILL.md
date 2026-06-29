@@ -7,7 +7,13 @@ description: Algolia connector knowledge and safe action guide.
 
 ## Purpose
 
-Algolia catalog connector for https://docs.airbyte.com/integrations/sources/algolia. Native implementation status: planned_native_port.
+Algolia catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Algolia catalog connector for https://docs.airbyte.com/integrations/sources/algo
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-algolia:0.0.42 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Algolia catalog connector for https://docs.airbyte.com/integrations/sources/algo
 - API reference: https://www.algolia.com/doc/rest-api/search/
 - Authentication: https://www.algolia.com/doc/guides/security/api-keys/
 - Rate limits: https://www.algolia.com/doc/guides/scaling/servers-clusters/#rate-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/algolia
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Algolia catalog connector for https://docs.airbyte.com/integrations/sources/algo
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/algolia
 
 ## Commands
 
@@ -96,4 +96,6 @@ pm connectors inspect source-algolia --json
 
 ## References
 
-- [Algolia documentation](https://docs.airbyte.com/integrations/sources/algolia)
+- [API reference](https://www.algolia.com/doc/rest-api/search/)
+- [Authentication](https://www.algolia.com/doc/guides/security/api-keys/)
+- [Rate limits](https://www.algolia.com/doc/guides/scaling/servers-clusters/#rate-limits)

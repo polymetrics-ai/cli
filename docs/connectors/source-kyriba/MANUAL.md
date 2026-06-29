@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-kyriba [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Kyriba catalog connector for https://docs.airbyte.com/integrations/sources/kyriba. Native implementation status: planned_native_port.
+  Kyriba catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/kyriba.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.kyriba.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-kyriba:0.1.59 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Kyriba API documentation: https://developer.kyriba.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/kyriba
 
 CONFIGURATION
   domain (string) required: Kyriba domain
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/kyriba
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Kyriba documentation: https://docs.airbyte.com/integrations/sources/kyriba
+  Kyriba API documentation: https://developer.kyriba.com/
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-coda [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Coda catalog connector for https://docs.airbyte.com/integrations/sources/coda. Native implementation status: planned_native_port.
+  Coda catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/coda.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://coda.io/developers/apis/v1
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-coda:1.3.54 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Coda API reference: https://coda.io/developers/apis/v1
   Coda authentication: https://coda.io/developers/apis/v1#section/Authentication
   Coda rate limits: https://coda.io/developers/apis/v1#section/Rate-Limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/coda
 
 CONFIGURATION
   auth_token (string) required secret: Bearer token
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/coda
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Coda documentation: https://docs.airbyte.com/integrations/sources/coda
+  Coda API reference: https://coda.io/developers/apis/v1
+  Coda authentication: https://coda.io/developers/apis/v1#section/Authentication
+  Coda rate limits: https://coda.io/developers/apis/v1#section/Rate-Limiting
 
 EXIT STATUS
   0 success

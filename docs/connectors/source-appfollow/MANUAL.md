@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-appfollow [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Appfollow catalog connector for https://docs.airbyte.com/integrations/sources/appfollow. Native implementation status: planned_native_port.
+  Appfollow catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/appfollow.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://appfollow.docs.apiary.io/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-appfollow:1.1.49 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   API documentation: https://appfollow.docs.apiary.io/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/appfollow
 
 CONFIGURATION
   api_secret (string) secret: API Key provided by Appfollow
@@ -56,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/appfollow
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Appfollow documentation: https://docs.airbyte.com/integrations/sources/appfollow
+  API documentation: https://appfollow.docs.apiary.io/
 
 EXIT STATUS
   0 success

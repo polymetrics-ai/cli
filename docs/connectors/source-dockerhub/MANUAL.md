@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-dockerhub [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Dockerhub catalog connector for https://docs.airbyte.com/integrations/sources/dockerhub. Native implementation status: planned_native_port.
+  Dockerhub catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/dockerhub.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.docker.com/docker-hub/api/latest/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-dockerhub:0.3.26 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Docker Hub authentication: https://docs.docker.com/docker-hub/api/latest/#section/Authentication
   Docker Hub rate limits: https://docs.docker.com/docker-hub/download-rate-limit/
   Docker Status: https://www.dockerstatus.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/dockerhub
 
 CONFIGURATION
   docker_username (string) required: Username of DockerHub person or organization (for https://hub.docker.com/v2/repositories/USERNAME/ API call)
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/dockerhub
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Dockerhub documentation: https://docs.airbyte.com/integrations/sources/dockerhub
+  Docker Hub API reference: https://docs.docker.com/docker-hub/api/latest/
+  Docker Hub authentication: https://docs.docker.com/docker-hub/api/latest/#section/Authentication
+  Docker Hub rate limits: https://docs.docker.com/docker-hub/download-rate-limit/
+  Docker Status: https://www.dockerstatus.com/
 
 EXIT STATUS
   0 success

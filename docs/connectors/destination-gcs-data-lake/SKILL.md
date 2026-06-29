@@ -7,7 +7,14 @@ description: GCS Data Lake connector knowledge and safe action guide.
 
 ## Purpose
 
-GCS Data Lake catalog connector for https://docs.airbyte.com/integrations/destinations/gcs-data-lake. Native implementation status: planned_native_port.
+GCS Data Lake catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/googlecloudstorage.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://cloud.google.com/storage/docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ GCS Data Lake catalog connector for https://docs.airbyte.com/integrations/destin
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-gcs-data-lake:1.0.10 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ GCS Data Lake catalog connector for https://docs.airbyte.com/integrations/destin
 - Cloud Storage documentation: https://cloud.google.com/storage/docs
 - Service account authentication: https://cloud.google.com/iam/docs/service-accounts
 - Access control: https://cloud.google.com/storage/docs/access-control
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/gcs-data-lake
 
 ## Configuration
 
@@ -71,12 +76,8 @@ GCS Data Lake catalog connector for https://docs.airbyte.com/integrations/destin
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/gcs-data-lake
 
 ## Commands
 
@@ -100,4 +101,6 @@ pm connectors inspect destination-gcs-data-lake --json
 
 ## References
 
-- [GCS Data Lake documentation](https://docs.airbyte.com/integrations/destinations/gcs-data-lake)
+- [Cloud Storage documentation](https://cloud.google.com/storage/docs)
+- [Service account authentication](https://cloud.google.com/iam/docs/service-accounts)
+- [Access control](https://cloud.google.com/storage/docs/access-control)

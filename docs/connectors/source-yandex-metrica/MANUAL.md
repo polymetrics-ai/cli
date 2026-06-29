@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-yandex-metrica [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Yandex Metrica catalog connector for https://docs.airbyte.com/integrations/sources/yandex-metrica. Native implementation status: planned_native_port.
+  Yandex Metrica catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/yandexmetrica.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://yandex.com/dev/metrica/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-yandex-metrica:1.0.44 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Yandex Metrica API: https://yandex.com/dev/metrica/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/yandex-metrica
 
 CONFIGURATION
   auth_token (string) required secret: Your Yandex Metrica API access token
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/yandex-metrica
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Yandex Metrica documentation: https://docs.airbyte.com/integrations/sources/yandex-metrica
+  Yandex Metrica API: https://yandex.com/dev/metrica/
 
 EXIT STATUS
   0 success

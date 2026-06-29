@@ -7,7 +7,14 @@ description: Picqer connector knowledge and safe action guide.
 
 ## Purpose
 
-Picqer catalog connector for https://docs.airbyte.com/integrations/sources/picqer. Native implementation status: planned_native_port.
+Picqer catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/picqer.svg
+- source: official
+- review_status: official_verified
+- review_url: https://picqer.com/en/api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Picqer catalog connector for https://docs.airbyte.com/integrations/sources/picqe
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-picqer:0.0.58 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Picqer catalog connector for https://docs.airbyte.com/integrations/sources/picqe
 
 ## Official Application Documentation
 
-- Picqer API documentation: https://picqer.com/en/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/picqer
+- Picqer documentation: https://picqer.com/en/api
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Picqer catalog connector for https://docs.airbyte.com/integrations/sources/picqe
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/picqer
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect source-picqer --json
 
 ## References
 
-- [Picqer documentation](https://docs.airbyte.com/integrations/sources/picqer)
+- [Picqer documentation](https://picqer.com/en/api)

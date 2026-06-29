@@ -7,7 +7,13 @@ description: Statsig connector knowledge and safe action guide.
 
 ## Purpose
 
-Statsig catalog connector for https://docs.airbyte.com/integrations/sources/statsig. Native implementation status: planned_native_port.
+Statsig catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Statsig catalog connector for https://docs.airbyte.com/integrations/sources/stat
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-statsig:0.0.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Statsig catalog connector for https://docs.airbyte.com/integrations/sources/stat
 ## Official Application Documentation
 
 - Statsig Console API: https://docs.statsig.com/console-api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/statsig
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Statsig catalog connector for https://docs.airbyte.com/integrations/sources/stat
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/statsig
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-statsig --json
 
 ## References
 
-- [Statsig documentation](https://docs.airbyte.com/integrations/sources/statsig)
+- [Statsig Console API](https://docs.statsig.com/console-api)

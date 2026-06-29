@@ -7,7 +7,14 @@ description: GitHub connector knowledge and safe action guide.
 
 ## Purpose
 
-GitHub native Go source connector. Runtime family: native_go. Documentation: https://docs.airbyte.com/integrations/sources/github.
+GitHub native Go source connector. Runtime family: native_go.
+
+## Icon
+
+- asset: icons/github.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.github.com/en/rest/about-the-rest-api/breaking-changes
 
 ## Capabilities
 
@@ -20,7 +27,6 @@ GitHub native Go source connector. Runtime family: native_go. Documentation: htt
 - runtime_kind: native_go
 - pm connector: github
 - notes: Implemented as the built-in GitHub connector.
-- upstream image reference: airbyte/source-github:2.1.33 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -51,7 +57,6 @@ GitHub native Go source connector. Runtime family: native_go. Documentation: htt
 - GitHub rate limits: https://docs.github.com/en/rest/overview/rate-limits-for-the-rest-api
 - GitHub REST API OpenAPI specification: https://github.com/github/rest-api-description
 - GitHub Status: https://www.githubstatus.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/github
 
 ## Authentication
 
@@ -341,7 +346,6 @@ pm connectors inspect source-github --json
 
 ## References
 
-- [GitHub connector documentation](https://docs.airbyte.com/integrations/sources/github)
 - [GitHub REST API reference](https://docs.github.com/en/rest)
 - [GitHub authentication](https://docs.github.com/en/rest/overview/authenticating-to-the-rest-api)
 - [API Versions](https://docs.github.com/en/rest/about-the-rest-api/api-versions)

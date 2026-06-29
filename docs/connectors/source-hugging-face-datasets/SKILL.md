@@ -7,7 +7,13 @@ description: Hugging Face - Datasets connector knowledge and safe action guide.
 
 ## Purpose
 
-Hugging Face - Datasets catalog connector for https://docs.airbyte.com/integrations/sources/hugging-face-datasets. Native implementation status: planned_native_port.
+Hugging Face - Datasets catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Hugging Face - Datasets catalog connector for https://docs.airbyte.com/integrati
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-hugging-face-datasets:0.0.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Hugging Face - Datasets catalog connector for https://docs.airbyte.com/integrati
 ## Official Application Documentation
 
 - Hugging Face Datasets documentation: https://huggingface.co/docs/datasets/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/hugging-face-datasets
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Hugging Face - Datasets catalog connector for https://docs.airbyte.com/integrati
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/hugging-face-datasets
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-hugging-face-datasets --json
 
 ## References
 
-- [Hugging Face - Datasets documentation](https://docs.airbyte.com/integrations/sources/hugging-face-datasets)
+- [Hugging Face Datasets documentation](https://huggingface.co/docs/datasets/)

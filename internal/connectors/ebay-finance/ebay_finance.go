@@ -351,7 +351,7 @@ func ebaySecret(cfg connectors.RuntimeConfig) string {
 func ebayBaseURL(cfg connectors.RuntimeConfig) (string, error) {
 	base := strings.TrimSpace(cfg.Config["base_url"])
 	if base == "" {
-		// api_host config mirrors the upstream Airbyte connector's prod/sandbox
+		// api_host config mirrors the upstream upstream connector's prod/sandbox
 		// switch; honour it when base_url is not explicitly overridden.
 		if host := strings.TrimSpace(cfg.Config["api_host"]); host != "" {
 			parsed, err := url.Parse(host)

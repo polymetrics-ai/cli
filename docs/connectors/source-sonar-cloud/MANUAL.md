@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-sonar-cloud [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Sonar Cloud catalog connector for https://docs.airbyte.com/integrations/sources/sonar-cloud. Native implementation status: planned_native_port.
+  Sonar Cloud catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/sonarcloud.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://sonarcloud.io/web_api
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-sonar-cloud:0.2.50 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   SonarCloud Web API: https://sonarcloud.io/web_api
   SonarCloud authentication: https://docs.sonarsource.com/sonarcloud/advanced-setup/user-accounts/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sonar-cloud
 
 CONFIGURATION
   component_keys (array) required: Comma-separated list of component keys.
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/sonar-cloud
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Sonar Cloud documentation: https://docs.airbyte.com/integrations/sources/sonar-cloud
+  SonarCloud Web API: https://sonarcloud.io/web_api
+  SonarCloud authentication: https://docs.sonarsource.com/sonarcloud/advanced-setup/user-accounts/
 
 EXIT STATUS
   0 success

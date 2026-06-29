@@ -7,7 +7,13 @@ description: OPUSWatch connector knowledge and safe action guide.
 
 ## Purpose
 
-OPUSWatch catalog connector for https://docs.airbyte.com/integrations/sources/opuswatch. Native implementation status: planned_native_port.
+OPUSWatch catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ OPUSWatch catalog connector for https://docs.airbyte.com/integrations/sources/op
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-opuswatch:0.0.34 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ OPUSWatch catalog connector for https://docs.airbyte.com/integrations/sources/op
 ## Official Application Documentation
 
 - OpusWatch API documentation: https://opuswatch.com/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/opuswatch
 
 ## Configuration
 
@@ -62,12 +66,8 @@ OPUSWatch catalog connector for https://docs.airbyte.com/integrations/sources/op
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/opuswatch
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-opuswatch --json
 
 ## References
 
-- [OPUSWatch documentation](https://docs.airbyte.com/integrations/sources/opuswatch)
+- [OpusWatch API documentation](https://opuswatch.com/api)

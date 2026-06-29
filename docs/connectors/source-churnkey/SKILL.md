@@ -7,7 +7,13 @@ description: churnkey connector knowledge and safe action guide.
 
 ## Purpose
 
-churnkey catalog connector for https://docs.airbyte.com/integrations/sources/churnkey. Native implementation status: planned_native_port.
+churnkey catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ churnkey catalog connector for https://docs.airbyte.com/integrations/sources/chu
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-churnkey:0.0.31 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ churnkey catalog connector for https://docs.airbyte.com/integrations/sources/chu
 
 - Churnkey API documentation: https://docs.churnkey.co/api
 - Churnkey authentication: https://docs.churnkey.co/api/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/churnkey
 
 ## Configuration
 
@@ -63,12 +67,8 @@ churnkey catalog connector for https://docs.airbyte.com/integrations/sources/chu
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/churnkey
 
 ## Commands
 
@@ -92,4 +92,5 @@ pm connectors inspect source-churnkey --json
 
 ## References
 
-- [churnkey documentation](https://docs.airbyte.com/integrations/sources/churnkey)
+- [Churnkey API documentation](https://docs.churnkey.co/api)
+- [Churnkey authentication](https://docs.churnkey.co/api/authentication)

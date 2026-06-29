@@ -7,7 +7,14 @@ description: Qonto My connector knowledge and safe action guide.
 
 ## Purpose
 
-Qonto My catalog connector for https://docs.airbyte.com/integrations/sources/qonto. Native implementation status: planned_native_port.
+Qonto My catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/qonto.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://api-doc.qonto.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Qonto My catalog connector for https://docs.airbyte.com/integrations/sources/qon
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-qonto:0.3.22 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Qonto My catalog connector for https://docs.airbyte.com/integrations/sources/qon
 
 - Qonto API documentation: https://api-doc.qonto.com/
 - Qonto authentication: https://api-doc.qonto.com/#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/qonto
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Qonto My catalog connector for https://docs.airbyte.com/integrations/sources/qon
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/qonto
 
 ## Commands
 
@@ -94,4 +95,5 @@ pm connectors inspect source-qonto --json
 
 ## References
 
-- [Qonto My documentation](https://docs.airbyte.com/integrations/sources/qonto)
+- [Qonto API documentation](https://api-doc.qonto.com/)
+- [Qonto authentication](https://api-doc.qonto.com/#authentication)

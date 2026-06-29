@@ -31,7 +31,7 @@ var basespaceStreamEndpoints = map[string]streamEndpoint{
 // basespaceStreams returns the connector's published stream catalog. Every
 // BaseSpace object exposes a string Id and a DateCreated timestamp, so the
 // primary key is ["id"] and the cursor field is ["date_created"] across the
-// board (the upstream Airbyte source is full-refresh only; cursor_fields are
+// board (the upstream upstream source is full-refresh only; cursor_fields are
 // published for downstream incremental use but reads do not require them).
 func basespaceStreams() []connectors.Stream {
 	return []connectors.Stream{

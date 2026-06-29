@@ -7,7 +7,14 @@ description: Facebook Marketing connector knowledge and safe action guide.
 
 ## Purpose
 
-Facebook Marketing catalog connector for https://docs.airbyte.com/integrations/sources/facebook-marketing. Native implementation status: planned_native_port.
+Facebook Marketing catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/facebook.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.facebook.com/docs/marketing-api/marketing-api-changelog
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Facebook Marketing catalog connector for https://docs.airbyte.com/integrations/s
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-facebook-marketing:6.0.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,11 +55,10 @@ Facebook Marketing catalog connector for https://docs.airbyte.com/integrations/s
 - Changelog: https://developers.facebook.com/docs/marketing-api/marketing-api-changelog
 - Graph API Changelog: https://developers.facebook.com/docs/graph-api/changelog
 - 2026 Out-Of-Cycle Changes: https://developers.facebook.com/documentation/ads-commerce/marketing-api/out-of-cycle-changes/occ-2026
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/facebook-marketing
 
 ## Configuration
 
-- access_token (string) secret: The value of the generated access token. From your App’s Dashboard, click on "Marketing API" then "Tools". Select permissions <b>ads_management, ads_read, read_insights, busin...
+- access_token (string) secret: manual intervention needed
 - account_ids (array) required: The Facebook Ad account ID(s) to pull data from. The Ad account ID number is in the account dropdown menu or in your browser's address bar of your <a href="https://adsmanager.fa...
 - action_breakdowns_allow_empty (boolean): Allows action_breakdowns to be an empty list
 - ad_statuses (array): Select the statuses you want to be loaded in the stream. If no specific statuses are selected, the API's default behavior applies, and some statuses may be filtered out.
@@ -81,12 +86,8 @@ Facebook Marketing catalog connector for https://docs.airbyte.com/integrations/s
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/facebook-marketing
 
 ## Commands
 
@@ -110,4 +111,7 @@ pm connectors inspect source-facebook-marketing --json
 
 ## References
 
-- [Facebook Marketing documentation](https://docs.airbyte.com/integrations/sources/facebook-marketing)
+- [API Upgrade Tool](https://developers.facebook.com/tools/api_versioning/600551260845577/)
+- [Changelog](https://developers.facebook.com/docs/marketing-api/marketing-api-changelog)
+- [Graph API Changelog](https://developers.facebook.com/docs/graph-api/changelog)
+- [2026 Out-Of-Cycle Changes](https://developers.facebook.com/documentation/ads-commerce/marketing-api/out-of-cycle-changes/occ-2026)

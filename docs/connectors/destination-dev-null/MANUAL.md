@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector destination-dev-null [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  End-to-End Testing (/dev/null) catalog connector for https://docs.airbyte.com/integrations/destinations/dev-null. Native implementation status: planned_native_port.
+  End-to-End Testing (/dev/null) catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-outbox.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-dev-null:0.9.4 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/dev-null
+  manual intervention needed
 
 CONFIGURATION
   test_destination (object) required: The type of destination to be used
@@ -55,11 +58,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/dev-null
 
 EXAMPLES
   # Inspect catalog entry
@@ -72,9 +72,6 @@ AGENT WORKFLOW
   - Read implementation_status before planning ETL or reverse ETL.
   - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-SEE ALSO
-  End-to-End Testing (/dev/null) documentation: https://docs.airbyte.com/integrations/destinations/dev-null
 
 EXIT STATUS
   0 success

@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-bugsnag [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Bugsnag catalog connector for https://docs.airbyte.com/integrations/sources/bugsnag. Native implementation status: planned_native_port.
+  Bugsnag catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-bugsnag:0.0.50 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Bugsnag Data Access API: https://bugsnagapiv2.docs.apiary.io/
   Bugsnag authentication: https://docs.bugsnag.com/api/data-access/#authentication
   Bugsnag Status: https://status.bugsnag.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/bugsnag
 
 CONFIGURATION
   auth_token (string) required secret: Personal auth token for accessing the Bugsnag API. Generate it in the My Account section of Bugsnag settings.
@@ -59,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/bugsnag
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +78,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Bugsnag documentation: https://docs.airbyte.com/integrations/sources/bugsnag
+  Bugsnag Data Access API: https://bugsnagapiv2.docs.apiary.io/
+  Bugsnag authentication: https://docs.bugsnag.com/api/data-access/#authentication
+  Bugsnag Status: https://status.bugsnag.com/
 
 EXIT STATUS
   0 success

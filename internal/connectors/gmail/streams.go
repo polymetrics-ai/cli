@@ -30,7 +30,7 @@ var streamEndpoints = map[string]streamEndpoint{
 
 // gmailStreams returns the connector's published stream catalog. The Gmail list
 // endpoints return lightweight id-bearing resources; the primary key is ["id"]
-// across the board. The upstream Airbyte source only supports full_refresh, so
+// across the board. The upstream upstream source only supports full_refresh, so
 // no incremental cursor field is published.
 func gmailStreams() []connectors.Stream {
 	return []connectors.Stream{

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-open-exchange-rates [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Open Exchange Rates catalog connector for https://docs.airbyte.com/integrations/sources/open-exchange-rates. Native implementation status: planned_native_port.
+  Open Exchange Rates catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/open-exchange-rates.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.openexchangerates.org/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-open-exchange-rates:0.3.13 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Open Exchange Rates API: https://docs.openexchangerates.org/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/open-exchange-rates
 
 CONFIGURATION
   app_id (string) required secret: App ID provided by Open Exchange Rates
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/open-exchange-rates
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Open Exchange Rates documentation: https://docs.airbyte.com/integrations/sources/open-exchange-rates
+  Open Exchange Rates API: https://docs.openexchangerates.org/
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-klaviyo [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Klaviyo catalog connector for https://docs.airbyte.com/integrations/sources/klaviyo. Native implementation status: planned_native_port.
+  Klaviyo catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/klaviyo.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-klaviyo:2.18.4 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,10 +52,9 @@ OFFICIAL APPLICATION DOCUMENTATION
   Changelog: https://developers.klaviyo.com/en/docs/changelog_
   Changelog: https://developers.klaviyo.com/en/docs/changelog
   Developer Group: https://community.klaviyo.com/groups/developer-group-64
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/klaviyo
 
 CONFIGURATION
-  api_key (string) required secret: Klaviyo API Key. See our <a href="https://docs.airbyte.com/integrations/sources/klaviyo">docs</a> if you need help finding this key.
+  api_key (string) required secret: manual intervention needed
   disable_fetching_predictive_analytics (boolean): Certain streams like the profiles stream can retrieve predictive analytics data from Klaviyo's API. However, at high volume, this can lead to service availability issues on the ...
   lookback_window (integer): The number of days to look back when syncing data in incremental mode. This helps capture any late-arriving data. Only applies to the events_detailed stream.
   metric_ids (string): OPTIONAL: Comma-separated list of specific metric IDs to use for flow_series_reports and campaign_values_reports streams. If left empty, the connector will automatically fetch r...
@@ -64,11 +68,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/klaviyo
 
 EXAMPLES
   # Inspect catalog entry
@@ -83,7 +84,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Klaviyo documentation: https://docs.airbyte.com/integrations/sources/klaviyo
+  Versioning docs: https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy
+  Changelog: https://developers.klaviyo.com/en/docs/changelog_
+  Changelog: https://developers.klaviyo.com/en/docs/changelog
+  Developer Group: https://community.klaviyo.com/groups/developer-group-64
 
 EXIT STATUS
   0 success

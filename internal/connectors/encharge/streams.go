@@ -22,7 +22,7 @@ type streamEndpoint struct {
 // path is fully data-driven from this table.
 //
 // Endpoints, record paths, and pagination come from the Encharge API and the
-// Airbyte source-encharge manifest:
+// upstream source-encharge manifest:
 //   - peoples       GET /people/all     records at "people"   offset paginated
 //   - segments      GET /segments       records at "segments"
 //   - fields        GET /fields         records at "items"

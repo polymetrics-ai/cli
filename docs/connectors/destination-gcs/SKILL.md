@@ -7,7 +7,14 @@ description: Google Cloud Storage (GCS) connector knowledge and safe action guid
 
 ## Purpose
 
-Google Cloud Storage (GCS) catalog connector for https://docs.airbyte.com/integrations/destinations/gcs. Native implementation status: planned_native_port.
+Google Cloud Storage (GCS) catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/googlecloudstorage.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://cloud.google.com/storage/docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Google Cloud Storage (GCS) catalog connector for https://docs.airbyte.com/integr
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-gcs:0.4.9 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -51,7 +57,6 @@ Google Cloud Storage (GCS) catalog connector for https://docs.airbyte.com/integr
 - Google Cloud Release Notes: https://cloud.google.com/release-notes
 - Quotas and limits: https://cloud.google.com/storage/quotas
 - Google Cloud Status: https://status.cloud.google.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/gcs
 
 ## Configuration
 
@@ -70,12 +75,8 @@ Google Cloud Storage (GCS) catalog connector for https://docs.airbyte.com/integr
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/gcs
 
 ## Commands
 
@@ -99,4 +100,9 @@ pm connectors inspect destination-gcs --json
 
 ## References
 
-- [Google Cloud Storage (GCS) documentation](https://docs.airbyte.com/integrations/destinations/gcs)
+- [Cloud Storage documentation](https://cloud.google.com/storage/docs)
+- [Service account authentication](https://cloud.google.com/iam/docs/service-accounts)
+- [Access control](https://cloud.google.com/storage/docs/access-control)
+- [Google Cloud Release Notes](https://cloud.google.com/release-notes)
+- [Quotas and limits](https://cloud.google.com/storage/quotas)
+- [Google Cloud Status](https://status.cloud.google.com/)

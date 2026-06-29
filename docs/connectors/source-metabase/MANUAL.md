@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-metabase [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Metabase catalog connector for https://docs.airbyte.com/integrations/sources/metabase. Native implementation status: planned_native_port.
+  Metabase catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/metabase.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.metabase.com/docs/latest/api-documentation
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-metabase:2.1.49 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Metabase API reference: https://www.metabase.com/docs/latest/api-documentation
   Metabase authentication: https://www.metabase.com/docs/latest/api/session
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/metabase
 
 CONFIGURATION
   instance_api_url (string) required: URL to your metabase instance API
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/metabase
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Metabase documentation: https://docs.airbyte.com/integrations/sources/metabase
+  Metabase API reference: https://www.metabase.com/docs/latest/api-documentation
+  Metabase authentication: https://www.metabase.com/docs/latest/api/session
 
 EXIT STATUS
   0 success

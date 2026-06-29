@@ -7,7 +7,13 @@ description: Basecamp connector knowledge and safe action guide.
 
 ## Purpose
 
-Basecamp catalog connector for https://docs.airbyte.com/integrations/sources/basecamp. Native implementation status: planned_native_port.
+Basecamp catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Basecamp catalog connector for https://docs.airbyte.com/integrations/sources/bas
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-basecamp:0.0.41 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Basecamp catalog connector for https://docs.airbyte.com/integrations/sources/bas
 - Basecamp 3 API: https://github.com/basecamp/bc3-api
 - Authentication: https://github.com/basecamp/api/blob/master/sections/authentication.md
 - Rate limiting: https://github.com/basecamp/bc3-api#rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/basecamp
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Basecamp catalog connector for https://docs.airbyte.com/integrations/sources/bas
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/basecamp
 
 ## Commands
 
@@ -96,4 +96,6 @@ pm connectors inspect source-basecamp --json
 
 ## References
 
-- [Basecamp documentation](https://docs.airbyte.com/integrations/sources/basecamp)
+- [Basecamp 3 API](https://github.com/basecamp/bc3-api)
+- [Authentication](https://github.com/basecamp/api/blob/master/sections/authentication.md)
+- [Rate limiting](https://github.com/basecamp/bc3-api#rate-limiting)

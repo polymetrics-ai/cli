@@ -7,7 +7,14 @@ description: Customer IO connector knowledge and safe action guide.
 
 ## Purpose
 
-Customer IO catalog connector for https://docs.airbyte.com/integrations/destinations/customer-io. Native implementation status: planned_native_port.
+Customer IO catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/customer-io.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://customer.io/docs/api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Customer IO catalog connector for https://docs.airbyte.com/integrations/destinat
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-customer-io:0.0.11 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Customer IO catalog connector for https://docs.airbyte.com/integrations/destinat
 - Authentication: https://customer.io/docs/api/app/#tag/Authentication
 - Rate limits: https://customer.io/docs/api/app/#tag/Rate-Limits
 - Customer.io Status: https://status.customer.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/customer-io
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Customer IO catalog connector for https://docs.airbyte.com/integrations/destinat
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/customer-io
 
 ## Commands
 
@@ -94,4 +95,7 @@ pm connectors inspect destination-customer-io --json
 
 ## References
 
-- [Customer IO documentation](https://docs.airbyte.com/integrations/destinations/customer-io)
+- [Customer.io API documentation](https://customer.io/docs/api/)
+- [Authentication](https://customer.io/docs/api/app/#tag/Authentication)
+- [Rate limits](https://customer.io/docs/api/app/#tag/Rate-Limits)
+- [Customer.io Status](https://status.customer.io/)

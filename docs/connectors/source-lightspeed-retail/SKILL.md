@@ -7,7 +7,13 @@ description: Lightspeed Retail connector knowledge and safe action guide.
 
 ## Purpose
 
-Lightspeed Retail catalog connector for https://docs.airbyte.com/integrations/sources/lightspeed-retail. Native implementation status: planned_native_port.
+Lightspeed Retail catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Lightspeed Retail catalog connector for https://docs.airbyte.com/integrations/so
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-lightspeed-retail:0.0.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Lightspeed Retail catalog connector for https://docs.airbyte.com/integrations/so
 - Lightspeed Retail API: https://developers.lightspeedhq.com/retail/introduction/introduction/
 - Lightspeed authentication: https://developers.lightspeedhq.com/retail/authentication/authentication/
 - Lightspeed rate limits: https://developers.lightspeedhq.com/retail/introduction/rate-limiting/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/lightspeed-retail
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Lightspeed Retail catalog connector for https://docs.airbyte.com/integrations/so
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/lightspeed-retail
 
 ## Commands
 
@@ -93,4 +93,6 @@ pm connectors inspect source-lightspeed-retail --json
 
 ## References
 
-- [Lightspeed Retail documentation](https://docs.airbyte.com/integrations/sources/lightspeed-retail)
+- [Lightspeed Retail API](https://developers.lightspeedhq.com/retail/introduction/introduction/)
+- [Lightspeed authentication](https://developers.lightspeedhq.com/retail/authentication/authentication/)
+- [Lightspeed rate limits](https://developers.lightspeedhq.com/retail/introduction/rate-limiting/)

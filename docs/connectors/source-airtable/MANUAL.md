@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-airtable [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Airtable catalog connector for https://docs.airbyte.com/integrations/sources/airtable. Native implementation status: planned_native_port.
+  Airtable catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/airtable.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://airtable.com/developers/web/api/changelog
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-airtable:4.6.30 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Changelog: https://airtable.com/developers/web/api/changelog
   Community blog: https://community.airtable.com/development-apis-11
   OAuth reference: https://airtable.com/developers/web/api/oauth-reference#authorization-request
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/airtable
 
 CONFIGURATION
   add_base_id_to_stream_name (boolean): When enabled, includes the base ID in stream names to ensure uniqueness. Use this if you have cloned Airtable bases with duplicate table names. Note that enabling this will chan...
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/airtable
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Airtable documentation: https://docs.airbyte.com/integrations/sources/airtable
+  API Deprecation Guidelines: https://support.airtable.com/docs/airtable-api-deprecation-guidelines
+  Changelog: https://airtable.com/developers/web/api/changelog
+  Community blog: https://community.airtable.com/development-apis-11
+  OAuth reference: https://airtable.com/developers/web/api/oauth-reference#authorization-request
 
 EXIT STATUS
   0 success

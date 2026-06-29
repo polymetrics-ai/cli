@@ -8,7 +8,7 @@
 // returns a top-level JSON array of rich conversation objects. There is no
 // per-request paginator; instead the export is walked by advancing a
 // [updated_after, updated_before) date window by batch_size days, mirroring the
-// upstream Airbyte DatetimeBasedCursor. The connector projects that one payload
+// upstream upstream DatetimeBasedCursor. The connector projects that one payload
 // into a few focused, well-keyed streams (conversations, queue, rating,
 // assignment).
 //

@@ -24,7 +24,7 @@ type streamEndpoint struct {
 }
 
 // instatusStreamEndpoints is the per-stream routing table. Adding a stream means
-// adding one entry here plus a Stream definition in instatusStreams. The Airbyte
+// adding one entry here plus a Stream definition in instatusStreams. The upstream
 // source exposes pages plus parent-scoped components/incidents/maintenances; we
 // ship that core set.
 var instatusStreamEndpoints = map[string]streamEndpoint{

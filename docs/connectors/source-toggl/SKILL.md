@@ -7,7 +7,14 @@ description: Toggl connector knowledge and safe action guide.
 
 ## Purpose
 
-Toggl catalog connector for https://docs.airbyte.com/integrations/sources/toggl. Native implementation status: planned_native_port.
+Toggl catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/toggl.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.track.toggl.com/docs/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Toggl catalog connector for https://docs.airbyte.com/integrations/sources/toggl.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-toggl:0.2.23 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Toggl catalog connector for https://docs.airbyte.com/integrations/sources/toggl.
 - Toggl Track API: https://developers.track.toggl.com/docs/
 - Toggl authentication: https://developers.track.toggl.com/docs/authentication
 - Toggl rate limits: https://developers.track.toggl.com/docs/rate_limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/toggl
 
 ## Configuration
 
@@ -67,12 +72,8 @@ Toggl catalog connector for https://docs.airbyte.com/integrations/sources/toggl.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/toggl
 
 ## Commands
 
@@ -96,4 +97,6 @@ pm connectors inspect source-toggl --json
 
 ## References
 
-- [Toggl documentation](https://docs.airbyte.com/integrations/sources/toggl)
+- [Toggl Track API](https://developers.track.toggl.com/docs/)
+- [Toggl authentication](https://developers.track.toggl.com/docs/authentication)
+- [Toggl rate limits](https://developers.track.toggl.com/docs/rate_limiting)

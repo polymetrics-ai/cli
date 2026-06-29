@@ -7,7 +7,14 @@ description: Yellowbrick connector knowledge and safe action guide.
 
 ## Purpose
 
-Yellowbrick catalog connector for https://docs.airbyte.com/integrations/destinations/yellowbrick. Native implementation status: planned_native_port.
+Yellowbrick catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/yellowbrick.svg
+- source: official
+- review_status: official_verified
+- review_url: https://docs.yellowbrick.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Yellowbrick catalog connector for https://docs.airbyte.com/integrations/destinat
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-yellowbrick:0.0.4 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Yellowbrick catalog connector for https://docs.airbyte.com/integrations/destinat
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/yellowbrick
+- Yellowbrick documentation: https://docs.yellowbrick.com/
 
 ## Configuration
 
@@ -57,7 +62,7 @@ Yellowbrick catalog connector for https://docs.airbyte.com/integrations/destinat
 - port (integer) required: Port of the database.
 - schema (string) required: The default schema tables are written to if the source does not specify a namespace. The usual value for this field is "public".
 - ssl (boolean): Encrypt data using SSL. When activating SSL, please select one of the connection modes.
-- ssl_mode (object): SSL connection modes. <b>disable</b> - Chose this mode to disable encryption of communication between Airbyte and destination database <b>allow</b> - Chose this mode to enable e...
+- ssl_mode (object): manual intervention needed
 - tunnel_method (object): Whether to initiate an SSH tunnel before connecting to the database, and if so, which kind of authentication to use.
 - username (string) required: Username to use to access the database.
 - secret fields: password, ssl_mode.ca_certificate, ssl_mode.client_certificate, ssl_mode.client_key, ssl_mode.client_key_password, tunnel_method.ssh_key, tunnel_method.tunnel_user_password
@@ -70,12 +75,8 @@ Yellowbrick catalog connector for https://docs.airbyte.com/integrations/destinat
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/yellowbrick
 
 ## Commands
 
@@ -99,4 +100,4 @@ pm connectors inspect destination-yellowbrick --json
 
 ## References
 
-- [Yellowbrick documentation](https://docs.airbyte.com/integrations/destinations/yellowbrick)
+- [Yellowbrick documentation](https://docs.yellowbrick.com/)

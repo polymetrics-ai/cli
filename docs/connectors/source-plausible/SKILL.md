@@ -7,7 +7,14 @@ description: Plausible connector knowledge and safe action guide.
 
 ## Purpose
 
-Plausible catalog connector for https://docs.airbyte.com/integrations/sources/plausible. Native implementation status: planned_native_port.
+Plausible catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/plausible.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://plausible.io/docs/stats-api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Plausible catalog connector for https://docs.airbyte.com/integrations/sources/pl
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-plausible:0.2.15 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Plausible catalog connector for https://docs.airbyte.com/integrations/sources/pl
 ## Official Application Documentation
 
 - Plausible Analytics API: https://plausible.io/docs/stats-api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/plausible
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Plausible catalog connector for https://docs.airbyte.com/integrations/sources/pl
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/plausible
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect source-plausible --json
 
 ## References
 
-- [Plausible documentation](https://docs.airbyte.com/integrations/sources/plausible)
+- [Plausible Analytics API](https://plausible.io/docs/stats-api)

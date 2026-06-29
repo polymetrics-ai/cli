@@ -7,7 +7,14 @@ description: MongoDb connector knowledge and safe action guide.
 
 ## Purpose
 
-MongoDb catalog connector for https://docs.airbyte.com/integrations/sources/mongodb-v2. Native implementation status: planned_native_port.
+MongoDb catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/mongodb.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.mongodb.com/docs/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ MongoDb catalog connector for https://docs.airbyte.com/integrations/sources/mong
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mongodb-v2:2.0.7 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ MongoDb catalog connector for https://docs.airbyte.com/integrations/sources/mong
 - MongoDB documentation: https://www.mongodb.com/docs/
 - MongoDB authentication: https://www.mongodb.com/docs/manual/core/authentication/
 - Release Notes: https://www.mongodb.com/docs/manual/release-notes/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mongodb-v2
 
 ## Configuration
 
@@ -59,9 +64,9 @@ MongoDb catalog connector for https://docs.airbyte.com/integrations/sources/mong
 - discover_timeout_seconds (integer): The amount of time the connector will wait when it discovers a document. Defaults to 600 seconds. Valid range: 5 seconds to 1200 seconds.
 - initial_load_timeout_hours (integer): The amount of time an initial load is allowed to continue for before catching up on CDC logs.
 - initial_waiting_seconds (integer): The amount of time the connector will wait when it launches to determine if there is new data to sync or not. Defaults to 300 seconds. Valid range: 120 seconds to 1200 seconds.
-- invalid_cdc_cursor_position_behavior (string): Determines whether Airbyte should fail or re-sync data in case of an stale/invalid cursor value into the WAL. If 'Fail sync' is chosen, a user will have to manually reset the co...
+- invalid_cdc_cursor_position_behavior (string): manual intervention needed
 - queue_size (integer): The size of the internal queue. This may interfere with memory consumption and efficiency of the connector, please be careful.
-- update_capture_mode (string): Determines how Airbyte looks up the value of an updated document. If 'Lookup' is chosen, the current value of the document will be read. If 'Post Image' is chosen, then the vers...
+- update_capture_mode (string): manual intervention needed
 - secret fields: database_config.password
 
 ## Sync Modes
@@ -72,12 +77,8 @@ MongoDb catalog connector for https://docs.airbyte.com/integrations/sources/mong
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mongodb-v2
 
 ## Commands
 
@@ -101,4 +102,6 @@ pm connectors inspect source-mongodb-v2 --json
 
 ## References
 
-- [MongoDb documentation](https://docs.airbyte.com/integrations/sources/mongodb-v2)
+- [MongoDB documentation](https://www.mongodb.com/docs/)
+- [MongoDB authentication](https://www.mongodb.com/docs/manual/core/authentication/)
+- [Release Notes](https://www.mongodb.com/docs/manual/release-notes/)

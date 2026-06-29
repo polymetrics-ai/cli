@@ -25,7 +25,7 @@ var dingStreamEndpoints = map[string]streamEndpoint{
 }
 
 // dingStreams returns the connector's published stream catalog. DingConnect
-// reference resources do not carry a natural id; the Airbyte source assigns a
+// reference resources do not carry a natural id; the upstream source assigns a
 // synthetic primary key "uuid", which this connector mirrors. These resources are
 // full-refresh (no incremental cursor).
 func dingStreams() []connectors.Stream {

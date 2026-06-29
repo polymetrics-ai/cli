@@ -7,7 +7,13 @@ description: Flowlu connector knowledge and safe action guide.
 
 ## Purpose
 
-Flowlu catalog connector for https://docs.airbyte.com/integrations/sources/flowlu. Native implementation status: planned_native_port.
+Flowlu catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Flowlu catalog connector for https://docs.airbyte.com/integrations/sources/flowl
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-flowlu:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Flowlu catalog connector for https://docs.airbyte.com/integrations/sources/flowl
 ## Official Application Documentation
 
 - Flowlu API documentation: https://www.flowlu.com/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/flowlu
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Flowlu catalog connector for https://docs.airbyte.com/integrations/sources/flowl
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/flowlu
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-flowlu --json
 
 ## References
 
-- [Flowlu documentation](https://docs.airbyte.com/integrations/sources/flowlu)
+- [Flowlu API documentation](https://www.flowlu.com/api/)

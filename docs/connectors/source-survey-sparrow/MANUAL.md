@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-survey-sparrow [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  SurveySparrow catalog connector for https://docs.airbyte.com/integrations/sources/survey-sparrow. Native implementation status: planned_native_port.
+  SurveySparrow catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/surveysparrow.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.surveysparrow.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-survey-sparrow:0.3.23 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   SurveySparrow API documentation: https://developers.surveysparrow.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/survey-sparrow
 
 CONFIGURATION
   access_token (string) required secret: Your access token. See <a href="https://developers.surveysparrow.com/rest-apis#authentication">here</a>. The key is case sensitive.
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/survey-sparrow
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  SurveySparrow documentation: https://docs.airbyte.com/integrations/sources/survey-sparrow
+  SurveySparrow API documentation: https://developers.surveysparrow.com/
 
 EXIT STATUS
   0 success

@@ -263,7 +263,7 @@ func (c Connector) requester(cfg connectors.RuntimeConfig) (*connsdk.Requester, 
 }
 
 // requireCredentials enforces that the secrets needed for the client-credentials
-// grant are present. The refresh_token is part of the Airbyte OAuth config but
+// grant are present. The refresh_token is part of the upstream OAuth config but
 // the native port uses the application-permission client-credentials flow.
 func requireCredentials(cfg connectors.RuntimeConfig) error {
 	if strings.TrimSpace(graphClientSecret(cfg)) == "" {

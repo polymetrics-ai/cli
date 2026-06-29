@@ -5,7 +5,7 @@ import "polymetrics.ai/internal/connectors"
 // nexusStreams returns the connector's published stream catalog. The Infor Nexus
 // Data API (v3.1) exposes a single configurable export dataset whose records are
 // returned in a raw_data envelope; the stream name "datasets" mirrors the
-// upstream Airbyte connector. The dataset payload is opaque, so the cursor is the
+// upstream upstream connector. The dataset payload is opaque, so the cursor is the
 // record updated_at timestamp and the primary key is the record id.
 func nexusStreams() []connectors.Stream {
 	return []connectors.Stream{
@@ -32,7 +32,7 @@ func nexusDatasetFields() []connectors.Field {
 // nexusDatasetRecord flattens a raw Infor Nexus dataset record into a
 // connectors.Record. The record payload is preserved verbatim under raw_data
 // (and stringified under raw_data_string) so downstream consumers keep the full,
-// schema-less dataset row, mirroring the upstream Airbyte connector contract.
+// schema-less dataset row, mirroring the upstream upstream connector contract.
 func nexusDatasetRecord(item map[string]any) connectors.Record {
 	rec := connectors.Record{
 		"id":         stringField(item, "id"),

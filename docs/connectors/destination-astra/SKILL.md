@@ -7,7 +7,13 @@ description: Astra DB connector knowledge and safe action guide.
 
 ## Purpose
 
-Astra DB catalog connector for https://docs.airbyte.com/integrations/destinations/astra. Native implementation status: planned_native_port.
+Astra DB catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/astra.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Astra DB catalog connector for https://docs.airbyte.com/integrations/destination
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-astra:0.1.44 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Astra DB catalog connector for https://docs.airbyte.com/integrations/destination
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/astra
+- Astra DB documentation: https://docs.datastax.com/en/astra-db-serverless/index.html
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Astra DB catalog connector for https://docs.airbyte.com/integrations/destination
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/astra
 
 ## Commands
 
@@ -93,4 +93,4 @@ pm connectors inspect destination-astra --json
 
 ## References
 
-- [Astra DB documentation](https://docs.airbyte.com/integrations/destinations/astra)
+- [Astra DB documentation](https://docs.datastax.com/en/astra-db-serverless/index.html)

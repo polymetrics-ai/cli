@@ -7,7 +7,14 @@ description: HubSpot connector knowledge and safe action guide.
 
 ## Purpose
 
-HubSpot catalog connector for https://docs.airbyte.com/integrations/sources/hubspot. Native implementation status: planned_native_port.
+HubSpot catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/hubspot.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.hubspot.com/docs/api/overview
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ HubSpot catalog connector for https://docs.airbyte.com/integrations/sources/hubs
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-hubspot:6.7.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ HubSpot catalog connector for https://docs.airbyte.com/integrations/sources/hubs
 - HubSpot API changelog: https://developers.hubspot.com/changelog
 - HubSpot rate limits: https://developers.hubspot.com/docs/api/usage-details
 - HubSpot Status: https://status.hubspot.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/hubspot
 
 ## Configuration
 
@@ -73,12 +78,8 @@ HubSpot catalog connector for https://docs.airbyte.com/integrations/sources/hubs
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/hubspot
 
 ## Commands
 
@@ -102,4 +103,8 @@ pm connectors inspect source-hubspot --json
 
 ## References
 
-- [HubSpot documentation](https://docs.airbyte.com/integrations/sources/hubspot)
+- [HubSpot API reference](https://developers.hubspot.com/docs/api/overview)
+- [HubSpot authentication](https://developers.hubspot.com/docs/api/oauth-quickstart-guide)
+- [HubSpot API changelog](https://developers.hubspot.com/changelog)
+- [HubSpot rate limits](https://developers.hubspot.com/docs/api/usage-details)
+- [HubSpot Status](https://status.hubspot.com/)

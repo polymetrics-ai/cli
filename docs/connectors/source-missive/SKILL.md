@@ -7,7 +7,13 @@ description: Missive connector knowledge and safe action guide.
 
 ## Purpose
 
-Missive catalog connector for https://docs.airbyte.com/integrations/sources/missive. Native implementation status: planned_native_port.
+Missive catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Missive catalog connector for https://docs.airbyte.com/integrations/sources/miss
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-missive:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Missive catalog connector for https://docs.airbyte.com/integrations/sources/miss
 ## Official Application Documentation
 
 - Missive API documentation: https://missiveapp.com/help/api-documentation
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/missive
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Missive catalog connector for https://docs.airbyte.com/integrations/sources/miss
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/missive
 
 ## Commands
 
@@ -93,4 +93,4 @@ pm connectors inspect source-missive --json
 
 ## References
 
-- [Missive documentation](https://docs.airbyte.com/integrations/sources/missive)
+- [Missive API documentation](https://missiveapp.com/help/api-documentation)

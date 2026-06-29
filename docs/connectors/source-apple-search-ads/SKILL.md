@@ -7,7 +7,13 @@ description: Apple Ads connector knowledge and safe action guide.
 
 ## Purpose
 
-Apple Ads catalog connector for https://docs.airbyte.com/integrations/sources/apple-search-ads. Native implementation status: planned_native_port.
+Apple Ads catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Apple Ads catalog connector for https://docs.airbyte.com/integrations/sources/ap
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-apple-search-ads:1.1.8 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Apple Ads catalog connector for https://docs.airbyte.com/integrations/sources/ap
 
 - API reference: https://developer.apple.com/documentation/apple_search_ads
 - Authentication: https://developer.apple.com/documentation/apple_search_ads/implementing_oauth_for_the_apple_search_ads_api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/apple-search-ads
 
 ## Configuration
 
@@ -71,12 +75,8 @@ Apple Ads catalog connector for https://docs.airbyte.com/integrations/sources/ap
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/apple-search-ads
 
 ## Commands
 
@@ -100,4 +100,5 @@ pm connectors inspect source-apple-search-ads --json
 
 ## References
 
-- [Apple Ads documentation](https://docs.airbyte.com/integrations/sources/apple-search-ads)
+- [API reference](https://developer.apple.com/documentation/apple_search_ads)
+- [Authentication](https://developer.apple.com/documentation/apple_search_ads/implementing_oauth_for_the_apple_search_ads_api)

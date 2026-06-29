@@ -25,7 +25,7 @@ var mantleStreamEndpoints = map[string]streamEndpoint{
 
 // mantleStreams returns the connector's published stream catalog. Mantle objects
 // carry a string id and ISO-8601 timestamps; customers are incremental on
-// updatedAt and subscriptions on createdAt, matching the upstream Airbyte
+// updatedAt and subscriptions on createdAt, matching the upstream upstream
 // manifest.
 func mantleStreams() []connectors.Stream {
 	return []connectors.Stream{

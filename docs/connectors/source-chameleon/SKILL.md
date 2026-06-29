@@ -7,7 +7,13 @@ description: Chameleon connector knowledge and safe action guide.
 
 ## Purpose
 
-Chameleon catalog connector for https://docs.airbyte.com/integrations/sources/chameleon. Native implementation status: planned_native_port.
+Chameleon catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Chameleon catalog connector for https://docs.airbyte.com/integrations/sources/ch
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-chameleon:0.1.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Chameleon catalog connector for https://docs.airbyte.com/integrations/sources/ch
 - Chameleon API reference: https://developers.chameleon.io/reference/introduction
 - Chameleon authentication: https://developers.chameleon.io/reference/authentication
 - Chameleon rate limits: https://developers.chameleon.io/reference/rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/chameleon
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Chameleon catalog connector for https://docs.airbyte.com/integrations/sources/ch
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/chameleon
 
 ## Commands
 
@@ -96,4 +96,6 @@ pm connectors inspect source-chameleon --json
 
 ## References
 
-- [Chameleon documentation](https://docs.airbyte.com/integrations/sources/chameleon)
+- [Chameleon API reference](https://developers.chameleon.io/reference/introduction)
+- [Chameleon authentication](https://developers.chameleon.io/reference/authentication)
+- [Chameleon rate limits](https://developers.chameleon.io/reference/rate-limiting)

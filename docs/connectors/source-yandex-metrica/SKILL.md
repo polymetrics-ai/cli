@@ -7,7 +7,14 @@ description: Yandex Metrica connector knowledge and safe action guide.
 
 ## Purpose
 
-Yandex Metrica catalog connector for https://docs.airbyte.com/integrations/sources/yandex-metrica. Native implementation status: planned_native_port.
+Yandex Metrica catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/yandexmetrica.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://yandex.com/dev/metrica/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Yandex Metrica catalog connector for https://docs.airbyte.com/integrations/sourc
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-yandex-metrica:1.0.44 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Yandex Metrica catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Official Application Documentation
 
 - Yandex Metrica API: https://yandex.com/dev/metrica/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/yandex-metrica
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Yandex Metrica catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/yandex-metrica
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect source-yandex-metrica --json
 
 ## References
 
-- [Yandex Metrica documentation](https://docs.airbyte.com/integrations/sources/yandex-metrica)
+- [Yandex Metrica API](https://yandex.com/dev/metrica/)

@@ -39,7 +39,7 @@ const (
 )
 
 // babelforceRegions is the allow-list of region subdomains the default base URL
-// may use, matching the upstream Airbyte spec enum.
+// may use, matching the upstream upstream spec enum.
 var babelforceRegions = map[string]bool{
 	"services":     true,
 	"us-east":      true,

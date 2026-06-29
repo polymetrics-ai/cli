@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-tplcentral [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  TPLcentral catalog connector for https://docs.airbyte.com/integrations/sources/tplcentral. Native implementation status: planned_native_port.
+  TPLcentral catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/tplcentral.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://api.3plcentral.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-tplcentral:0.1.47 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   TPL Central API: https://api.3plcentral.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tplcentral
 
 CONFIGURATION
   client_id (string) required
@@ -64,11 +68,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/tplcentral
 
 EXAMPLES
   # Inspect catalog entry
@@ -83,7 +84,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  TPLcentral documentation: https://docs.airbyte.com/integrations/sources/tplcentral
+  TPL Central API: https://api.3plcentral.com/
 
 EXIT STATUS
   0 success

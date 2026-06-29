@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-commercetools [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Commercetools catalog connector for https://docs.airbyte.com/integrations/sources/commercetools. Native implementation status: planned_native_port.
+  Commercetools catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/commercetools.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.commercetools.com/api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-commercetools:0.3.11 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   commercetools authentication: https://docs.commercetools.com/api/authorization
   commercetools rate limits: https://docs.commercetools.com/api/general-concepts#rate-limits
   commercetools Status: https://status.commercetools.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/commercetools
 
 CONFIGURATION
   client_id (string) required secret: Id of API Client.
@@ -64,11 +68,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/commercetools
 
 EXAMPLES
   # Inspect catalog entry
@@ -83,7 +84,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Commercetools documentation: https://docs.airbyte.com/integrations/sources/commercetools
+  commercetools API reference: https://docs.commercetools.com/api/
+  commercetools authentication: https://docs.commercetools.com/api/authorization
+  commercetools rate limits: https://docs.commercetools.com/api/general-concepts#rate-limits
+  commercetools Status: https://status.commercetools.com/
 
 EXIT STATUS
   0 success

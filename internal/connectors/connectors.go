@@ -44,7 +44,7 @@ var nativeLiveNames = struct {
 // RegisterNativeLive marks a self-registered connector as live so NewLiveRegistry
 // (and therefore the CLI) exposes it without a catalog entry. It is intended for
 // pm-native connectors built directly on connsdk — e.g. searxng — that are not
-// part of the imported airbyte-style catalog. Call it from init() next to
+// part of the imported upstream-style catalog. Call it from init() next to
 // RegisterFactory. Safe to call before the live-name cache is built.
 func RegisterNativeLive(name string) {
 	nativeLiveNames.mu.Lock()
@@ -114,11 +114,12 @@ type Capabilities struct {
 }
 
 type Metadata struct {
-	Name            string       `json:"name"`
-	DisplayName     string       `json:"display_name"`
-	IntegrationType string       `json:"integration_type"`
-	Description     string       `json:"description"`
-	Capabilities    Capabilities `json:"capabilities"`
+	Name            string         `json:"name"`
+	DisplayName     string         `json:"display_name"`
+	IntegrationType string         `json:"integration_type"`
+	Description     string         `json:"description"`
+	Capabilities    Capabilities   `json:"capabilities"`
+	Icon            *ConnectorIcon `json:"icon,omitempty"`
 }
 
 type Field struct {
@@ -352,7 +353,7 @@ func (r *Registry) Get(name string) (Connector, bool) {
 func (r *Registry) List() []Metadata {
 	out := make([]Metadata, 0, len(r.connectors))
 	for _, connector := range r.connectors {
-		out = append(out, connector.Metadata())
+		out = append(out, MetadataWithIcon(connector.Metadata()))
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
@@ -367,13 +368,13 @@ func (c CatalogAliasConnector) Name() string { return c.def.Slug }
 
 func (c CatalogAliasConnector) Metadata() Metadata {
 	target := c.target.Metadata()
-	return Metadata{
+	return MetadataWithIcon(Metadata{
 		Name:            c.def.Slug,
 		DisplayName:     valueOrDefault(c.def.Name, target.DisplayName),
 		IntegrationType: target.IntegrationType,
 		Description:     nativeDescription(c.def),
 		Capabilities:    c.def.RuntimeCapabilities.toCapabilities(),
-	}
+	})
 }
 
 func (c CatalogAliasConnector) Check(ctx context.Context, cfg RuntimeConfig) error {

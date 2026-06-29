@@ -7,7 +7,13 @@ description: Curve connector knowledge and safe action guide.
 
 ## Purpose
 
-Curve catalog connector for https://docs.airbyte.com/integrations/sources/defillama. Native implementation status: planned_native_port.
+Curve catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Curve catalog connector for https://docs.airbyte.com/integrations/sources/defill
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-defillama:0.0.2 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Curve catalog connector for https://docs.airbyte.com/integrations/sources/defill
 ## Official Application Documentation
 
 - DefiLlama API documentation: https://defillama.com/docs/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/defillama
 
 ## Configuration
 
@@ -60,12 +64,8 @@ Curve catalog connector for https://docs.airbyte.com/integrations/sources/defill
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/defillama
 
 ## Commands
 
@@ -89,4 +89,4 @@ pm connectors inspect source-defillama --json
 
 ## References
 
-- [Curve documentation](https://docs.airbyte.com/integrations/sources/defillama)
+- [DefiLlama API documentation](https://defillama.com/docs/api)

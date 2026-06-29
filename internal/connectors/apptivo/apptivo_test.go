@@ -153,7 +153,7 @@ func TestCatalogStreams(t *testing.T) {
 	}
 }
 
-// TestReadIsReadOnly confirms Write is unsupported (Airbyte source is
+// TestReadIsReadOnly confirms Write is unsupported (upstream source is
 // full_refresh read-only).
 func TestReadOnlyCapabilities(t *testing.T) {
 	c := apptivo.New()

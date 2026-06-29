@@ -7,7 +7,13 @@ description: Zenefits connector knowledge and safe action guide.
 
 ## Purpose
 
-Zenefits catalog connector for https://docs.airbyte.com/integrations/sources/zenefits. Native implementation status: planned_native_port.
+Zenefits catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Zenefits catalog connector for https://docs.airbyte.com/integrations/sources/zen
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-zenefits:0.3.20 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Zenefits catalog connector for https://docs.airbyte.com/integrations/sources/zen
 ## Official Application Documentation
 
 - Zenefits API documentation: https://developers.zenefits.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zenefits
 
 ## Configuration
 
@@ -61,12 +65,8 @@ Zenefits catalog connector for https://docs.airbyte.com/integrations/sources/zen
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/zenefits
 
 ## Commands
 
@@ -90,4 +90,4 @@ pm connectors inspect source-zenefits --json
 
 ## References
 
-- [Zenefits documentation](https://docs.airbyte.com/integrations/sources/zenefits)
+- [Zenefits API documentation](https://developers.zenefits.com/)

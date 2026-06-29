@@ -6,7 +6,7 @@ import "polymetrics.ai/internal/connectors"
 // applied to narrow the event set, and the record mapper that flattens an event.
 //
 // AWS CloudTrail exposes a single read action, LookupEvents, which returns
-// management events for the last 90 days. The Airbyte source models distinct
+// management events for the last 90 days. The upstream source models distinct
 // "streams" as the same LookupEvents call with a different LookupAttributes
 // filter (by EventName, EventSource, ReadOnly, etc.). We mirror that: every
 // stream maps to the LookupEvents action, differing only by its server-side

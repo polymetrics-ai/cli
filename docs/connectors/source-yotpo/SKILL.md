@@ -7,7 +7,14 @@ description: Yotpo connector knowledge and safe action guide.
 
 ## Purpose
 
-Yotpo catalog connector for https://docs.airbyte.com/integrations/sources/yotpo. Native implementation status: planned_native_port.
+Yotpo catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/yotpo.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://apidocs.yotpo.com/reference
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Yotpo catalog connector for https://docs.airbyte.com/integrations/sources/yotpo.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-yotpo:0.2.16 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Yotpo catalog connector for https://docs.airbyte.com/integrations/sources/yotpo.
 ## Official Application Documentation
 
 - Yotpo API documentation: https://apidocs.yotpo.com/reference
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/yotpo
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Yotpo catalog connector for https://docs.airbyte.com/integrations/sources/yotpo.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/yotpo
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect source-yotpo --json
 
 ## References
 
-- [Yotpo documentation](https://docs.airbyte.com/integrations/sources/yotpo)
+- [Yotpo API documentation](https://apidocs.yotpo.com/reference)

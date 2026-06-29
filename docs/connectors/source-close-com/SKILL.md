@@ -7,7 +7,14 @@ description: Close.com connector knowledge and safe action guide.
 
 ## Purpose
 
-Close.com catalog connector for https://docs.airbyte.com/integrations/sources/close-com. Native implementation status: planned_native_port.
+Close.com catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/close.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.close.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Close.com catalog connector for https://docs.airbyte.com/integrations/sources/cl
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-close-com:0.6.15 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Close.com catalog connector for https://docs.airbyte.com/integrations/sources/cl
 - Close authentication: https://developer.close.com/#authentication
 - Close API rate limits: https://developer.close.com/#rate-limiting
 - Close Status: https://status.close.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/close-com
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Close.com catalog connector for https://docs.airbyte.com/integrations/sources/cl
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/close-com
 
 ## Commands
 
@@ -94,4 +95,7 @@ pm connectors inspect source-close-com --json
 
 ## References
 
-- [Close.com documentation](https://docs.airbyte.com/integrations/sources/close-com)
+- [Close API reference](https://developer.close.com/)
+- [Close authentication](https://developer.close.com/#authentication)
+- [Close API rate limits](https://developer.close.com/#rate-limiting)
+- [Close Status](https://status.close.com/)

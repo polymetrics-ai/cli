@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-gcs-data-lake [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  GCS Data Lake catalog connector for https://docs.airbyte.com/integrations/destinations/gcs-data-lake. Native implementation status: planned_native_port.
+  GCS Data Lake catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/googlecloudstorage.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://cloud.google.com/storage/docs
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-gcs-data-lake:1.0.10 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Cloud Storage documentation: https://cloud.google.com/storage/docs
   Service account authentication: https://cloud.google.com/iam/docs/service-accounts
   Access control: https://cloud.google.com/storage/docs/access-control
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/gcs-data-lake
 
 CONFIGURATION
   catalog_type (object) required: Specifies the type of Iceberg catalog (BigLake or Polaris).
@@ -66,11 +70,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/gcs-data-lake
 
 EXAMPLES
   # Inspect catalog entry
@@ -85,7 +86,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  GCS Data Lake documentation: https://docs.airbyte.com/integrations/destinations/gcs-data-lake
+  Cloud Storage documentation: https://cloud.google.com/storage/docs
+  Service account authentication: https://cloud.google.com/iam/docs/service-accounts
+  Access control: https://cloud.google.com/storage/docs/access-control
 
 EXIT STATUS
   0 success

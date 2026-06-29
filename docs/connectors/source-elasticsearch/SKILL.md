@@ -7,7 +7,14 @@ description: Elasticsearch connector knowledge and safe action guide.
 
 ## Purpose
 
-Elasticsearch catalog connector for https://docs.airbyte.com/integrations/sources/elasticsearch. Native implementation status: planned_native_port.
+Elasticsearch catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/elasticsearch.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Elasticsearch catalog connector for https://docs.airbyte.com/integrations/source
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-elasticsearch:0.1.5 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Elasticsearch catalog connector for https://docs.airbyte.com/integrations/source
 - Elasticsearch authentication: https://www.elastic.co/guide/en/elasticsearch/reference/current/setting-up-authentication.html
 - Elasticsearch Release Notes: https://www.elastic.co/docs/release-notes/elasticsearch
 - Elastic Cloud Status: https://status.elastic.co/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/elasticsearch
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Elasticsearch catalog connector for https://docs.airbyte.com/integrations/source
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/elasticsearch
 
 ## Commands
 
@@ -94,4 +95,7 @@ pm connectors inspect source-elasticsearch --json
 
 ## References
 
-- [Elasticsearch documentation](https://docs.airbyte.com/integrations/sources/elasticsearch)
+- [Elasticsearch REST APIs](https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html)
+- [Elasticsearch authentication](https://www.elastic.co/guide/en/elasticsearch/reference/current/setting-up-authentication.html)
+- [Elasticsearch Release Notes](https://www.elastic.co/docs/release-notes/elasticsearch)
+- [Elastic Cloud Status](https://status.elastic.co/)

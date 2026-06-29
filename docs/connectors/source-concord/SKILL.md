@@ -7,7 +7,13 @@ description: Concord connector knowledge and safe action guide.
 
 ## Purpose
 
-Concord catalog connector for https://docs.airbyte.com/integrations/sources/concord. Native implementation status: planned_native_port.
+Concord catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Concord catalog connector for https://docs.airbyte.com/integrations/sources/conc
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-concord:0.0.44 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Concord catalog connector for https://docs.airbyte.com/integrations/sources/conc
 
 - Concord API documentation: https://concord.walmartlabs.com/docs/api/
 - Concord authentication: https://concord.walmartlabs.com/docs/getting-started/authentication.html
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/concord
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Concord catalog connector for https://docs.airbyte.com/integrations/sources/conc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/concord
 
 ## Commands
 
@@ -92,4 +92,5 @@ pm connectors inspect source-concord --json
 
 ## References
 
-- [Concord documentation](https://docs.airbyte.com/integrations/sources/concord)
+- [Concord API documentation](https://concord.walmartlabs.com/docs/api/)
+- [Concord authentication](https://concord.walmartlabs.com/docs/getting-started/authentication.html)

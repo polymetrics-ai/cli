@@ -7,7 +7,13 @@ description: Chargedesk connector knowledge and safe action guide.
 
 ## Purpose
 
-Chargedesk catalog connector for https://docs.airbyte.com/integrations/sources/chargedesk. Native implementation status: planned_native_port.
+Chargedesk catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Chargedesk catalog connector for https://docs.airbyte.com/integrations/sources/c
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-chargedesk:0.0.58 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Chargedesk catalog connector for https://docs.airbyte.com/integrations/sources/c
 
 - Chargedesk API documentation: https://chargedesk.com/api-docs
 - Chargedesk authentication: https://chargedesk.com/api-docs/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/chargedesk
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Chargedesk catalog connector for https://docs.airbyte.com/integrations/sources/c
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/chargedesk
 
 ## Commands
 
@@ -93,4 +93,5 @@ pm connectors inspect source-chargedesk --json
 
 ## References
 
-- [Chargedesk documentation](https://docs.airbyte.com/integrations/sources/chargedesk)
+- [Chargedesk API documentation](https://chargedesk.com/api-docs)
+- [Chargedesk authentication](https://chargedesk.com/api-docs/authentication)

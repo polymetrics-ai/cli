@@ -7,7 +7,13 @@ description: Track PMS connector knowledge and safe action guide.
 
 ## Purpose
 
-Track PMS catalog connector for https://docs.airbyte.com/integrations/sources/track-pms. Native implementation status: planned_native_port.
+Track PMS catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Track PMS catalog connector for https://docs.airbyte.com/integrations/sources/tr
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-track-pms:4.3.7 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Track PMS catalog connector for https://docs.airbyte.com/integrations/sources/tr
 ## Official Application Documentation
 
 - Track PMS API: https://www.trackhs.com/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/track-pms
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Track PMS catalog connector for https://docs.airbyte.com/integrations/sources/tr
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/track-pms
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-track-pms --json
 
 ## References
 
-- [Track PMS documentation](https://docs.airbyte.com/integrations/sources/track-pms)
+- [Track PMS API](https://www.trackhs.com/api)

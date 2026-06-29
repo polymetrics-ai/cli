@@ -185,7 +185,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, resource s
 
 // readOccurrences reads the occurrences substream: it first lists every issue
 // id, then reads /issues/{id}/occurrences for each, tagging every occurrence
-// with its parent issue_id. This mirrors the Airbyte SubstreamPartitionRouter.
+// with its parent issue_id. This mirrors the upstream SubstreamPartitionRouter.
 func (c Connector) readOccurrences(ctx context.Context, r *connsdk.Requester, endpoint streamEndpoint, pageSize, maxPages int, emit func(connectors.Record) error) error {
 	issueIDs, err := c.collectIssueIDs(ctx, r, pageSize, maxPages)
 	if err != nil {

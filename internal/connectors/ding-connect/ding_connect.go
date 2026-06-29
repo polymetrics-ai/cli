@@ -298,7 +298,7 @@ func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, recor
 }
 
 // dingUUID builds a stable synthetic primary key from the given item fields,
-// mirroring the synthetic "uuid" the Airbyte source assigns to these keyless
+// mirroring the synthetic "uuid" the upstream source assigns to these keyless
 // reference resources. Empty/missing components are skipped.
 func dingUUID(item map[string]any, keys ...string) string {
 	parts := make([]string, 0, len(keys))

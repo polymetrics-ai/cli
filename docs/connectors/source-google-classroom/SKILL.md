@@ -7,7 +7,13 @@ description: Google Classroom connector knowledge and safe action guide.
 
 ## Purpose
 
-Google Classroom catalog connector for https://docs.airbyte.com/integrations/sources/google-classroom. Native implementation status: planned_native_port.
+Google Classroom catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Google Classroom catalog connector for https://docs.airbyte.com/integrations/sou
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-google-classroom:0.0.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Google Classroom catalog connector for https://docs.airbyte.com/integrations/sou
 - Google Classroom API reference: https://developers.google.com/classroom/reference/rest
 - Google Classroom authentication: https://developers.google.com/classroom/guides/auth
 - Google Workspace Status: https://www.google.com/appsstatus/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-classroom
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Google Classroom catalog connector for https://docs.airbyte.com/integrations/sou
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/google-classroom
 
 ## Commands
 
@@ -94,4 +94,6 @@ pm connectors inspect source-google-classroom --json
 
 ## References
 
-- [Google Classroom documentation](https://docs.airbyte.com/integrations/sources/google-classroom)
+- [Google Classroom API reference](https://developers.google.com/classroom/reference/rest)
+- [Google Classroom authentication](https://developers.google.com/classroom/guides/auth)
+- [Google Workspace Status](https://www.google.com/appsstatus/)

@@ -7,7 +7,14 @@ description: Captain Data connector knowledge and safe action guide.
 
 ## Purpose
 
-Captain Data catalog connector for https://docs.airbyte.com/integrations/sources/captain-data. Native implementation status: planned_native_port.
+Captain Data catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/captain-data.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.captaindata.co/api-documentation
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Captain Data catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-captain-data:0.2.25 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Captain Data catalog connector for https://docs.airbyte.com/integrations/sources
 
 - Captain Data API documentation: https://docs.captaindata.co/api-documentation
 - Captain Data authentication: https://docs.captaindata.co/api-documentation/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/captain-data
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Captain Data catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/captain-data
 
 ## Commands
 
@@ -92,4 +93,5 @@ pm connectors inspect source-captain-data --json
 
 ## References
 
-- [Captain Data documentation](https://docs.airbyte.com/integrations/sources/captain-data)
+- [Captain Data API documentation](https://docs.captaindata.co/api-documentation)
+- [Captain Data authentication](https://docs.captaindata.co/api-documentation/authentication)

@@ -7,7 +7,14 @@ description: Revolut Merchant connector knowledge and safe action guide.
 
 ## Purpose
 
-Revolut Merchant catalog connector for https://docs.airbyte.com/integrations/sources/revolut-merchant. Native implementation status: planned_native_port.
+Revolut Merchant catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/revolut.svg
+- source: official
+- review_status: official_verified
+- review_url: https://developer.revolut.com/docs/guides/merchant/reference/api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Revolut Merchant catalog connector for https://docs.airbyte.com/integrations/sou
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-revolut-merchant:0.0.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,9 +51,7 @@ Revolut Merchant catalog connector for https://docs.airbyte.com/integrations/sou
 
 ## Official Application Documentation
 
-- Revolut Merchant API: https://developer.revolut.com/docs/merchant-api/
-- Revolut authentication: https://developer.revolut.com/docs/merchant-api/#merchant-api-authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/revolut-merchant
+- Revolut Merchant documentation: https://developer.revolut.com/docs/guides/merchant/reference/api
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Revolut Merchant catalog connector for https://docs.airbyte.com/integrations/sou
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/revolut-merchant
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-revolut-merchant --json
 
 ## References
 
-- [Revolut Merchant documentation](https://docs.airbyte.com/integrations/sources/revolut-merchant)
+- [Revolut Merchant documentation](https://developer.revolut.com/docs/guides/merchant/reference/api)

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-printify [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Printify catalog connector for https://docs.airbyte.com/integrations/sources/printify. Native implementation status: planned_native_port.
+  Printify catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/printify.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developers.printify.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-printify:0.0.40 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +48,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  Printify API documentation: https://developers.printify.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/printify
+  Printify documentation: https://developers.printify.com/
 
 CONFIGURATION
   api_token (string) required secret: Your Printify API token. Obtain it from your Printify account settings.
@@ -56,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/printify
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Printify documentation: https://docs.airbyte.com/integrations/sources/printify
+  Printify documentation: https://developers.printify.com/
 
 EXIT STATUS
   0 success

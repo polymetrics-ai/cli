@@ -7,7 +7,14 @@ description: Zendesk Support connector knowledge and safe action guide.
 
 ## Purpose
 
-Zendesk Support catalog connector for https://docs.airbyte.com/integrations/sources/zendesk-support. Native implementation status: planned_native_port.
+Zendesk Support catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/zendesk-support.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.zendesk.com/api-reference/ticketing/introduction/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Zendesk Support catalog connector for https://docs.airbyte.com/integrations/sour
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-zendesk-support:5.2.12 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -51,11 +57,10 @@ Zendesk Support catalog connector for https://docs.airbyte.com/integrations/sour
 - Zendesk API changelog: https://developer.zendesk.com/api-reference/ticketing/introduction/#changes
 - Zendesk rate limits: https://developer.zendesk.com/api-reference/ticketing/account-configuration/usage_limits/
 - Zendesk Status: https://status.zendesk.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zendesk-support
 
 ## Configuration
 
-- credentials (object): Zendesk allows three authentication methods. We recommend using `OAuth2.0 with Refresh Token` for Airbyte Cloud users (recommended), `OAuth2.0 (Legacy)` for existing OAuth conne...
+- credentials (object): manual intervention needed
 - ignore_pagination (boolean): [Deprecated] Makes each stream read a single page of data.
 - num_workers (integer): The number of worker threads to use for the sync. Higher values can improve sync throughput on large workspaces; lower values reduce load on the source.
 - page_size (integer): The number of records per page for the ticket_comments stream API requests. Lower values may help prevent timeouts on large datasets. The maximum value is 1000.
@@ -71,12 +76,8 @@ Zendesk Support catalog connector for https://docs.airbyte.com/integrations/sour
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/zendesk-support
 
 ## Commands
 
@@ -100,4 +101,9 @@ pm connectors inspect source-zendesk-support --json
 
 ## References
 
-- [Zendesk Support documentation](https://docs.airbyte.com/integrations/sources/zendesk-support)
+- [Zendesk Support API](https://developer.zendesk.com/api-reference/ticketing/introduction/)
+- [Zendesk authentication](https://developer.zendesk.com/api-reference/ticketing/introduction/#security-and-authentication)
+- [API Changelog](https://developer.zendesk.com/api-reference/changelog/changelog/)
+- [Zendesk API changelog](https://developer.zendesk.com/api-reference/ticketing/introduction/#changes)
+- [Zendesk rate limits](https://developer.zendesk.com/api-reference/ticketing/account-configuration/usage_limits/)
+- [Zendesk Status](https://status.zendesk.com/)

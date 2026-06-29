@@ -7,7 +7,14 @@ description: Apify Dataset connector knowledge and safe action guide.
 
 ## Purpose
 
-Apify Dataset catalog connector for https://docs.airbyte.com/integrations/sources/apify-dataset. Native implementation status: planned_native_port.
+Apify Dataset catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/apify.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.apify.com/api/v2
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Apify Dataset catalog connector for https://docs.airbyte.com/integrations/source
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-apify-dataset:2.2.49 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,11 +54,10 @@ Apify Dataset catalog connector for https://docs.airbyte.com/integrations/source
 - API reference: https://docs.apify.com/api/v2
 - Authentication: https://docs.apify.com/api/v2#/introduction/authentication
 - Rate limiting: https://docs.apify.com/api/v2#/introduction/rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/apify-dataset
 
 ## Configuration
 
-- dataset_id (string) required: ID of the dataset you would like to load to Airbyte. In Apify Console, you can view your datasets in the <a href="https://console.apify.com/storage/datasets">Storage section und...
+- dataset_id (string) required: manual intervention needed
 - token (string) required secret: Personal API token of your Apify account. In Apify Console, you can find your API token in the <a href="https://console.apify.com/account/integrations">Settings section under th...
 - secret fields: token
 
@@ -64,12 +69,8 @@ Apify Dataset catalog connector for https://docs.airbyte.com/integrations/source
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/apify-dataset
 
 ## Commands
 
@@ -93,4 +94,6 @@ pm connectors inspect source-apify-dataset --json
 
 ## References
 
-- [Apify Dataset documentation](https://docs.airbyte.com/integrations/sources/apify-dataset)
+- [API reference](https://docs.apify.com/api/v2)
+- [Authentication](https://docs.apify.com/api/v2#/introduction/authentication)
+- [Rate limiting](https://docs.apify.com/api/v2#/introduction/rate-limiting)
