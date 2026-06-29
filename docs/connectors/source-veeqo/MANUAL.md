@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-veeqo [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Veeqo catalog connector for https://docs.airbyte.com/integrations/sources/veeqo. Native implementation status: planned_native_port.
+  Veeqo catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/veeqo.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developers.veeqo.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-veeqo:0.0.54 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +48,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  Veeqo API documentation: https://developer.veeqo.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/veeqo
+  Veeqo documentation: https://developers.veeqo.com/
 
 CONFIGURATION
   api_key (string) required secret
@@ -57,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/veeqo
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +77,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Veeqo documentation: https://docs.airbyte.com/integrations/sources/veeqo
+  Veeqo documentation: https://developers.veeqo.com/
 
 EXIT STATUS
   0 success

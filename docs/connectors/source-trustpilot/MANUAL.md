@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-trustpilot [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  TrustPilot catalog connector for https://docs.airbyte.com/integrations/sources/trustpilot. Native implementation status: planned_native_port.
+  TrustPilot catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/trustpilot.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.trustpilot.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-trustpilot:0.4.12 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Trustpilot API documentation: https://developers.trustpilot.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/trustpilot
 
 CONFIGURATION
   business_units (array) required: The names of business units which shall be synchronized. Some streams e.g. configured_business_units or private_reviews use this configuration.
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/trustpilot
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  TrustPilot documentation: https://docs.airbyte.com/integrations/sources/trustpilot
+  Trustpilot API documentation: https://developers.trustpilot.com/
 
 EXIT STATUS
   0 success

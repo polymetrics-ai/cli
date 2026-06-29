@@ -8,7 +8,7 @@
 // RegisterFactory in init(); the registryset package blank-imports this package
 // in the production binary to run that side effect.
 //
-// Auth0 is a read-only source (the upstream Airbyte connector supports only
+// Auth0 is a read-only source (the upstream upstream connector supports only
 // full-refresh/incremental reads), so Capabilities.Write is false and there is
 // no write.go.
 package auth0

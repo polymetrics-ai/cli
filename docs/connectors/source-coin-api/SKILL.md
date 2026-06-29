@@ -7,7 +7,14 @@ description: Coin API connector knowledge and safe action guide.
 
 ## Purpose
 
-Coin API catalog connector for https://docs.airbyte.com/integrations/sources/coin-api. Native implementation status: planned_native_port.
+Coin API catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/coinapi.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.coinapi.io/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Coin API catalog connector for https://docs.airbyte.com/integrations/sources/coi
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-coin-api:0.3.22 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Coin API catalog connector for https://docs.airbyte.com/integrations/sources/coi
 - CoinAPI authentication: https://docs.coinapi.io/#authentication
 - CoinAPI rate limits: https://docs.coinapi.io/#rate-limits
 - CoinAPI Status: https://status.coinapi.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/coin-api
 
 ## Configuration
 
@@ -70,12 +75,8 @@ Coin API catalog connector for https://docs.airbyte.com/integrations/sources/coi
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/coin-api
 
 ## Commands
 
@@ -99,4 +100,7 @@ pm connectors inspect source-coin-api --json
 
 ## References
 
-- [Coin API documentation](https://docs.airbyte.com/integrations/sources/coin-api)
+- [CoinAPI documentation](https://docs.coinapi.io/)
+- [CoinAPI authentication](https://docs.coinapi.io/#authentication)
+- [CoinAPI rate limits](https://docs.coinapi.io/#rate-limits)
+- [CoinAPI Status](https://status.coinapi.io/)

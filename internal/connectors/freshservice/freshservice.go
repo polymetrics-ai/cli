@@ -263,7 +263,7 @@ func freshserviceBaseURL(cfg connectors.RuntimeConfig) (string, error) {
 		return strings.TrimRight(base, "/") + "/api/v2", nil
 	}
 
-	// The Airbyte catalog names this config field domain_name; accept the
+	// The upstream catalog names this config field domain_name; accept the
 	// shorter "domain" alias too for ergonomics.
 	domain := strings.TrimSpace(cfg.Config["domain_name"])
 	if domain == "" {

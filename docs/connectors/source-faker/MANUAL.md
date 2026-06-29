@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-faker [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Sample Data catalog connector for https://docs.airbyte.com/integrations/sources/faker. Native implementation status: planned_native_port.
+  Sample Data catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-faker:7.1.1 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Python Faker Library Documentation: https://faker.readthedocs.io/en/master/
   Faker Changelog: https://github.com/joke2k/faker/blob/master/CHANGELOG.md
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/faker
 
 CONFIGURATION
   always_updated (boolean): Should the updated_at values for every record be new each sync? Setting this to false will case the source to stop emitting records after COUNT records have been emitted.
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/faker
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Sample Data documentation: https://docs.airbyte.com/integrations/sources/faker
+  Python Faker Library Documentation: https://faker.readthedocs.io/en/master/
+  Faker Changelog: https://github.com/joke2k/faker/blob/master/CHANGELOG.md
 
 EXIT STATUS
   0 success

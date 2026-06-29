@@ -7,7 +7,13 @@ description: Lob connector knowledge and safe action guide.
 
 ## Purpose
 
-Lob catalog connector for https://docs.airbyte.com/integrations/sources/lob. Native implementation status: planned_native_port.
+Lob catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Lob catalog connector for https://docs.airbyte.com/integrations/sources/lob. Nat
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-lob:0.0.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Lob catalog connector for https://docs.airbyte.com/integrations/sources/lob. Nat
 - Lob authentication: https://docs.lob.com/#authentication
 - Lob rate limits: https://docs.lob.com/#rate-limiting
 - Lob Status: https://status.lob.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/lob
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Lob catalog connector for https://docs.airbyte.com/integrations/sources/lob. Nat
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/lob
 
 ## Commands
 
@@ -95,4 +95,7 @@ pm connectors inspect source-lob --json
 
 ## References
 
-- [Lob documentation](https://docs.airbyte.com/integrations/sources/lob)
+- [Lob API reference](https://docs.lob.com/)
+- [Lob authentication](https://docs.lob.com/#authentication)
+- [Lob rate limits](https://docs.lob.com/#rate-limiting)
+- [Lob Status](https://status.lob.com/)

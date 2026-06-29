@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-ezofficeinventory [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  EZOfficeInventory catalog connector for https://docs.airbyte.com/integrations/sources/ezofficeinventory. Native implementation status: planned_native_port.
+  EZOfficeInventory catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-ezofficeinventory:0.0.56 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   EZOfficeInventory API reference: https://ezofficeinventory.com/developers
   EZOfficeInventory authentication: https://ezofficeinventory.com/developers/docs/authentication
   EZOfficeInventory rate limits: https://ezofficeinventory.com/developers/docs/rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/ezofficeinventory
 
 CONFIGURATION
   api_key (string) required secret: Your EZOfficeInventory Access Token. API Access is disabled by default. Enable API Access in Settings > Integrations > API Integration and click on Update to generate a new acce...
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/ezofficeinventory
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  EZOfficeInventory documentation: https://docs.airbyte.com/integrations/sources/ezofficeinventory
+  EZOfficeInventory API reference: https://ezofficeinventory.com/developers
+  EZOfficeInventory authentication: https://ezofficeinventory.com/developers/docs/authentication
+  EZOfficeInventory rate limits: https://ezofficeinventory.com/developers/docs/rate-limiting
 
 EXIT STATUS
   0 success

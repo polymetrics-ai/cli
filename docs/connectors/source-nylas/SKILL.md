@@ -7,7 +7,13 @@ description: Nylas connector knowledge and safe action guide.
 
 ## Purpose
 
-Nylas catalog connector for https://docs.airbyte.com/integrations/sources/nylas. Native implementation status: planned_native_port.
+Nylas catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Nylas catalog connector for https://docs.airbyte.com/integrations/sources/nylas.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-nylas:0.0.59 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Nylas catalog connector for https://docs.airbyte.com/integrations/sources/nylas.
 - Nylas authentication: https://developer.nylas.com/docs/the-basics/authentication/
 - Nylas rate limits: https://developer.nylas.com/docs/dev-guide/platform/rate-limits/
 - Nylas Status: https://status.nylas.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/nylas
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Nylas catalog connector for https://docs.airbyte.com/integrations/sources/nylas.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/nylas
 
 ## Commands
 
@@ -96,4 +96,7 @@ pm connectors inspect source-nylas --json
 
 ## References
 
-- [Nylas documentation](https://docs.airbyte.com/integrations/sources/nylas)
+- [Nylas API reference](https://developer.nylas.com/docs/api/)
+- [Nylas authentication](https://developer.nylas.com/docs/the-basics/authentication/)
+- [Nylas rate limits](https://developer.nylas.com/docs/dev-guide/platform/rate-limits/)
+- [Nylas Status](https://status.nylas.com/)

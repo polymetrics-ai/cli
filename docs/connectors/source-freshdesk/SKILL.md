@@ -7,7 +7,14 @@ description: Freshdesk connector knowledge and safe action guide.
 
 ## Purpose
 
-Freshdesk catalog connector for https://docs.airbyte.com/integrations/sources/freshdesk. Native implementation status: planned_native_port.
+Freshdesk catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/freshdesk.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.freshdesk.com/api/#change_log
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Freshdesk catalog connector for https://docs.airbyte.com/integrations/sources/fr
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-freshdesk:3.2.20 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,11 +52,10 @@ Freshdesk catalog connector for https://docs.airbyte.com/integrations/sources/fr
 ## Official Application Documentation
 
 - Changelog: https://developers.freshdesk.com/api/#change_log
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/freshdesk
 
 ## Configuration
 
-- api_key (string) required secret: Freshdesk API Key. See the <a href="https://docs.airbyte.com/integrations/sources/freshdesk">docs</a> for more information on how to obtain this key.
+- api_key (string) required secret: manual intervention needed
 - domain (string) required: Freshdesk domain
 - lookback_window_in_days (integer): Number of days for lookback window for the stream Satisfaction Ratings
 - num_workers (integer): Number of concurrent threads for syncing. Higher values can speed up syncs but may increase API rate limit usage. Adjust based on your Freshdesk API plan.
@@ -68,12 +73,8 @@ Freshdesk catalog connector for https://docs.airbyte.com/integrations/sources/fr
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/freshdesk
 
 ## Commands
 
@@ -97,4 +98,4 @@ pm connectors inspect source-freshdesk --json
 
 ## References
 
-- [Freshdesk documentation](https://docs.airbyte.com/integrations/sources/freshdesk)
+- [Changelog](https://developers.freshdesk.com/api/#change_log)

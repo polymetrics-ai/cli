@@ -7,7 +7,14 @@ description: Pipedrive connector knowledge and safe action guide.
 
 ## Purpose
 
-Pipedrive catalog connector for https://docs.airbyte.com/integrations/sources/pipedrive. Native implementation status: planned_native_port.
+Pipedrive catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pipedrive.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.pipedrive.com/docs/api/v1
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Pipedrive catalog connector for https://docs.airbyte.com/integrations/sources/pi
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-pipedrive:2.4.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Pipedrive catalog connector for https://docs.airbyte.com/integrations/sources/pi
 - Pipedrive authentication: https://pipedrive.readme.io/docs/core-api-concepts-authentication
 - Changelog: https://developers.pipedrive.com/changelog
 - Pipedrive rate limits: https://pipedrive.readme.io/docs/core-api-concepts-rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pipedrive
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Pipedrive catalog connector for https://docs.airbyte.com/integrations/sources/pi
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/pipedrive
 
 ## Commands
 
@@ -94,4 +95,7 @@ pm connectors inspect source-pipedrive --json
 
 ## References
 
-- [Pipedrive documentation](https://docs.airbyte.com/integrations/sources/pipedrive)
+- [Pipedrive API reference](https://developers.pipedrive.com/docs/api/v1)
+- [Pipedrive authentication](https://pipedrive.readme.io/docs/core-api-concepts-authentication)
+- [Changelog](https://developers.pipedrive.com/changelog)
+- [Pipedrive rate limits](https://pipedrive.readme.io/docs/core-api-concepts-rate-limiting)

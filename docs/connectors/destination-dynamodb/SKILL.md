@@ -7,7 +7,13 @@ description: DynamoDB connector knowledge and safe action guide.
 
 ## Purpose
 
-DynamoDB catalog connector for https://docs.airbyte.com/integrations/destinations/dynamodb. Native implementation status: planned_native_port.
+DynamoDB catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/dynamodb.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ DynamoDB catalog connector for https://docs.airbyte.com/integrations/destination
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-dynamodb:0.1.8 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,12 +50,11 @@ DynamoDB catalog connector for https://docs.airbyte.com/integrations/destination
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/dynamodb
+- DynamoDB documentation: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html
 
 ## Configuration
 
-- access_key_id (string) required secret: The access key id to access the DynamoDB. Airbyte requires Read and Write permissions to the DynamoDB.
+- access_key_id (string) required secret: manual intervention needed
 - dynamodb_endpoint (string): This is your DynamoDB endpoint url.(if you are working with AWS DynamoDB, just leave empty).
 - dynamodb_region (string) required: The region of the DynamoDB.
 - dynamodb_table_name_prefix (string) required: The prefix to use when naming DynamoDB tables.
@@ -65,12 +69,8 @@ DynamoDB catalog connector for https://docs.airbyte.com/integrations/destination
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/dynamodb
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect destination-dynamodb --json
 
 ## References
 
-- [DynamoDB documentation](https://docs.airbyte.com/integrations/destinations/dynamodb)
+- [DynamoDB documentation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)

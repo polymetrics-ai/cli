@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-milvus [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Milvus catalog connector for https://docs.airbyte.com/integrations/destinations/milvus. Native implementation status: planned_native_port.
+  Milvus catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/milvus.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://milvus.io/docs
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-milvus:0.0.58 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Milvus documentation: https://milvus.io/docs
   Authentication: https://milvus.io/docs/authenticate.md
   Release notes: https://milvus.io/docs/release_notes.md
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/milvus
 
 CONFIGURATION
   embedding (object) required: Embedding configuration
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/milvus
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Milvus documentation: https://docs.airbyte.com/integrations/destinations/milvus
+  Milvus documentation: https://milvus.io/docs
+  Authentication: https://milvus.io/docs/authenticate.md
+  Release notes: https://milvus.io/docs/release_notes.md
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-weatherstack [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Weatherstack catalog connector for https://docs.airbyte.com/integrations/sources/weatherstack. Native implementation status: planned_native_port.
+  Weatherstack catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/weatherstack.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://weatherstack.com/documentation
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-weatherstack:1.1.14 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Weatherstack API documentation: https://weatherstack.com/documentation
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/weatherstack
 
 CONFIGURATION
   access_key (string) required secret: API access key used to retrieve data from the Weatherstack API.(https://weatherstack.com/product)
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/weatherstack
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Weatherstack documentation: https://docs.airbyte.com/integrations/sources/weatherstack
+  Weatherstack API documentation: https://weatherstack.com/documentation
 
 EXIT STATUS
   0 success

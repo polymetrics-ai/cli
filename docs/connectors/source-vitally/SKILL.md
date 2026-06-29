@@ -7,7 +7,13 @@ description: Vitally connector knowledge and safe action guide.
 
 ## Purpose
 
-Vitally catalog connector for https://docs.airbyte.com/integrations/sources/vitally. Native implementation status: planned_native_port.
+Vitally catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Vitally catalog connector for https://docs.airbyte.com/integrations/sources/vita
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-vitally:0.4.3 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Vitally catalog connector for https://docs.airbyte.com/integrations/sources/vita
 ## Official Application Documentation
 
 - Vitally API documentation: https://docs.vitally.io/pushing-data-to-vitally/rest-api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/vitally
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Vitally catalog connector for https://docs.airbyte.com/integrations/sources/vita
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/vitally
 
 ## Commands
 
@@ -93,4 +93,4 @@ pm connectors inspect source-vitally --json
 
 ## References
 
-- [Vitally documentation](https://docs.airbyte.com/integrations/sources/vitally)
+- [Vitally API documentation](https://docs.vitally.io/pushing-data-to-vitally/rest-api)

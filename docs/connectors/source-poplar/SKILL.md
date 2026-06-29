@@ -7,7 +7,13 @@ description: Poplar connector knowledge and safe action guide.
 
 ## Purpose
 
-Poplar catalog connector for https://docs.airbyte.com/integrations/sources/poplar. Native implementation status: planned_native_port.
+Poplar catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Poplar catalog connector for https://docs.airbyte.com/integrations/sources/popla
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-poplar:0.0.41 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Poplar catalog connector for https://docs.airbyte.com/integrations/sources/popla
 ## Official Application Documentation
 
 - Poplar API documentation: https://docs.poplar.studio/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/poplar
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Poplar catalog connector for https://docs.airbyte.com/integrations/sources/popla
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/poplar
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-poplar --json
 
 ## References
 
-- [Poplar documentation](https://docs.airbyte.com/integrations/sources/poplar)
+- [Poplar API documentation](https://docs.poplar.studio/)

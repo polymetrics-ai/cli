@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-rabbitmq [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  RabbitMQ catalog connector for https://docs.airbyte.com/integrations/destinations/rabbitmq. Native implementation status: planned_native_port.
+  RabbitMQ catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/rabbitmq.svg
+  source: official
+  review_status: official_verified
+  review_url: https://www.rabbitmq.com/docs
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-rabbitmq:0.1.43 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +48,7 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/rabbitmq
+  RabbitMQ documentation: https://www.rabbitmq.com/docs
 
 CONFIGURATION
   exchange (string): The exchange name.
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/rabbitmq
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  RabbitMQ documentation: https://docs.airbyte.com/integrations/destinations/rabbitmq
+  RabbitMQ documentation: https://www.rabbitmq.com/docs
 
 EXIT STATUS
   0 success

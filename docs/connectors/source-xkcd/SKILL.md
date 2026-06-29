@@ -7,7 +7,14 @@ description: Xkcd connector knowledge and safe action guide.
 
 ## Purpose
 
-Xkcd catalog connector for https://docs.airbyte.com/integrations/sources/xkcd. Native implementation status: planned_native_port.
+Xkcd catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/xkcd.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://xkcd.com/json.html
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Xkcd catalog connector for https://docs.airbyte.com/integrations/sources/xkcd. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-xkcd:0.2.45 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Xkcd catalog connector for https://docs.airbyte.com/integrations/sources/xkcd. N
 ## Official Application Documentation
 
 - xkcd JSON API: https://xkcd.com/json.html
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/xkcd
 
 ## Configuration
 
@@ -60,12 +65,8 @@ Xkcd catalog connector for https://docs.airbyte.com/integrations/sources/xkcd. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/xkcd
 
 ## Commands
 
@@ -89,4 +90,4 @@ pm connectors inspect source-xkcd --json
 
 ## References
 
-- [Xkcd documentation](https://docs.airbyte.com/integrations/sources/xkcd)
+- [xkcd JSON API](https://xkcd.com/json.html)

@@ -7,7 +7,13 @@ description: Perk connector knowledge and safe action guide.
 
 ## Purpose
 
-Perk catalog connector for https://docs.airbyte.com/integrations/sources/perk. Native implementation status: planned_native_port.
+Perk catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Perk catalog connector for https://docs.airbyte.com/integrations/sources/perk. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-perk:0.0.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Perk catalog connector for https://docs.airbyte.com/integrations/sources/perk. N
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/perk
+- manual intervention needed
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Perk catalog connector for https://docs.airbyte.com/integrations/sources/perk. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/perk
 
 ## Commands
 
@@ -88,7 +88,3 @@ pm connectors inspect source-perk --json
 - Read implementation_status before planning ETL or reverse ETL.
 - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
 - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-## References
-
-- [Perk documentation](https://docs.airbyte.com/integrations/sources/perk)

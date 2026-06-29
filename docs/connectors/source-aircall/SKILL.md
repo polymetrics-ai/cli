@@ -7,7 +7,14 @@ description: Aircall connector knowledge and safe action guide.
 
 ## Purpose
 
-Aircall catalog connector for https://docs.airbyte.com/integrations/sources/aircall. Native implementation status: planned_native_port.
+Aircall catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/aircall.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.aircall.io/api-references/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Aircall catalog connector for https://docs.airbyte.com/integrations/sources/airc
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-aircall:0.4.13 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Aircall catalog connector for https://docs.airbyte.com/integrations/sources/airc
 - API documentation: https://developer.aircall.io/api-references/
 - Authentication: https://developer.aircall.io/api-references/#authentication
 - Rate limits: https://developer.aircall.io/api-references/#rate-limit
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/aircall
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Aircall catalog connector for https://docs.airbyte.com/integrations/sources/airc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/aircall
 
 ## Commands
 
@@ -94,4 +95,6 @@ pm connectors inspect source-aircall --json
 
 ## References
 
-- [Aircall documentation](https://docs.airbyte.com/integrations/sources/aircall)
+- [API documentation](https://developer.aircall.io/api-references/)
+- [Authentication](https://developer.aircall.io/api-references/#authentication)
+- [Rate limits](https://developer.aircall.io/api-references/#rate-limit)

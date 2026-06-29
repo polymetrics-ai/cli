@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-pexels-api [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Pexels API catalog connector for https://docs.airbyte.com/integrations/sources/pexels-api. Native implementation status: planned_native_port.
+  Pexels API catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pexels.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.pexels.com/api/documentation/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-pexels-api:0.2.41 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Pexels API documentation: https://www.pexels.com/api/documentation/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pexels-api
 
 CONFIGURATION
   api_key (string) required secret: API key is required to access pexels api, For getting your's goto https://www.pexels.com/api/documentation and create account for free.
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/pexels-api
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Pexels API documentation: https://docs.airbyte.com/integrations/sources/pexels-api
+  Pexels API documentation: https://www.pexels.com/api/documentation/
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-lokalise [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Lokalise catalog connector for https://docs.airbyte.com/integrations/sources/lokalise. Native implementation status: planned_native_port.
+  Lokalise catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/lokalise.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.lokalise.com/reference/api-introduction
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-lokalise:0.2.22 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Lokalise API reference: https://developers.lokalise.com/reference/api-introduction
   Lokalise authentication: https://developers.lokalise.com/reference/api-authentication
   Lokalise rate limits: https://developers.lokalise.com/reference/api-rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/lokalise
 
 CONFIGURATION
   api_key (string) required secret: Lokalise API Key with read-access. Available at Profile settings > API tokens. See <a href="https://docs.lokalise.com/en/articles/1929556-api-tokens">here</a>.
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/lokalise
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Lokalise documentation: https://docs.airbyte.com/integrations/sources/lokalise
+  Lokalise API reference: https://developers.lokalise.com/reference/api-introduction
+  Lokalise authentication: https://developers.lokalise.com/reference/api-authentication
+  Lokalise rate limits: https://developers.lokalise.com/reference/api-rate-limits
 
 EXIT STATUS
   0 success

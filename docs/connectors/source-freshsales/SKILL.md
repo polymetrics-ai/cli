@@ -7,7 +7,14 @@ description: Freshsales connector knowledge and safe action guide.
 
 ## Purpose
 
-Freshsales catalog connector for https://docs.airbyte.com/integrations/sources/freshsales. Native implementation status: planned_native_port.
+Freshsales catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/freshsales.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.freshworks.com/crm/api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Freshsales catalog connector for https://docs.airbyte.com/integrations/sources/f
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-freshsales:1.1.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Freshsales catalog connector for https://docs.airbyte.com/integrations/sources/f
 - Freshsales API reference: https://developers.freshworks.com/crm/api/
 - Freshsales authentication: https://developers.freshworks.com/crm/api/#authentication
 - Freshworks Status: https://status.freshworks.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/freshsales
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Freshsales catalog connector for https://docs.airbyte.com/integrations/sources/f
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/freshsales
 
 ## Commands
 
@@ -93,4 +94,6 @@ pm connectors inspect source-freshsales --json
 
 ## References
 
-- [Freshsales documentation](https://docs.airbyte.com/integrations/sources/freshsales)
+- [Freshsales API reference](https://developers.freshworks.com/crm/api/)
+- [Freshsales authentication](https://developers.freshworks.com/crm/api/#authentication)
+- [Freshworks Status](https://status.freshworks.com/)

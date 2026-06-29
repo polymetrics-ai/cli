@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-freshcaller [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Freshcaller catalog connector for https://docs.airbyte.com/integrations/sources/freshcaller. Native implementation status: planned_native_port.
+  Freshcaller catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/freshcaller.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.freshcaller.com/api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-freshcaller:0.5.4 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Freshcaller API reference: https://developers.freshcaller.com/api/
   Freshcaller authentication: https://developers.freshcaller.com/api/#authentication
   Freshworks Status: https://status.freshworks.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/freshcaller
 
 CONFIGURATION
   api_key (string) required secret: Freshcaller API Key. See the docs for more information on how to obtain this key.
@@ -62,11 +66,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/freshcaller
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +82,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Freshcaller documentation: https://docs.airbyte.com/integrations/sources/freshcaller
+  Freshcaller API reference: https://developers.freshcaller.com/api/
+  Freshcaller authentication: https://developers.freshcaller.com/api/#authentication
+  Freshworks Status: https://status.freshworks.com/
 
 EXIT STATUS
   0 success

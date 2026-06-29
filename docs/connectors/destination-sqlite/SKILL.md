@@ -7,7 +7,13 @@ description: Local SQLite connector knowledge and safe action guide.
 
 ## Purpose
 
-Local SQLite catalog connector for https://docs.airbyte.com/integrations/destinations/sqlite. Native implementation status: planned_native_port.
+Local SQLite catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/sqlite.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Local SQLite catalog connector for https://docs.airbyte.com/integrations/destina
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-sqlite:0.2.9 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,12 +50,11 @@ Local SQLite catalog connector for https://docs.airbyte.com/integrations/destina
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/sqlite
+- manual intervention needed
 
 ## Configuration
 
-- destination_path (string) required: Path to the sqlite.db file. The file will be placed inside that local mount. For more information check out our <a href="https://docs.airbyte.com/integrations/destinations/sqlit...
+- destination_path (string) required: manual intervention needed
 
 ## Sync Modes
 
@@ -60,12 +64,8 @@ Local SQLite catalog connector for https://docs.airbyte.com/integrations/destina
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/sqlite
 
 ## Commands
 
@@ -86,7 +86,3 @@ pm connectors inspect destination-sqlite --json
 - Read implementation_status before planning ETL or reverse ETL.
 - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
 - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-## References
-
-- [Local SQLite documentation](https://docs.airbyte.com/integrations/destinations/sqlite)

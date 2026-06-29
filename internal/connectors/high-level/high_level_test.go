@@ -28,7 +28,7 @@ func TestReadPaginatesAndAuthenticates(t *testing.T) {
 		if loc := r.URL.Query().Get("locationId"); loc != "" {
 			sawLocation = loc
 		}
-		if r.URL.Path != "/airbyte/contacts" {
+		if r.URL.Path != "/upstream/contacts" {
 			http.NotFound(w, r)
 			return
 		}
@@ -36,7 +36,7 @@ func TestReadPaginatesAndAuthenticates(t *testing.T) {
 		switch r.URL.Query().Get("startAfterId") {
 		case "":
 			pages++
-			next := srvURL + "/airbyte/contacts?locationId=loc_123&startAfterId=ct_2"
+			next := srvURL + "/upstream/contacts?locationId=loc_123&startAfterId=ct_2"
 			_, _ = w.Write([]byte(`{"contacts":[{"id":"ct_1","dateUpdated":"2026-01-01T00:00:00Z"},{"id":"ct_2","dateUpdated":"2026-01-02T00:00:00Z"}],"meta":{"nextPageUrl":"` + next + `","startAfterId":"ct_2"}}`))
 		case "ct_2":
 			pages++
@@ -91,7 +91,7 @@ func TestReadSingleRequestStream(t *testing.T) {
 	requests := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		requests++
-		if r.URL.Path != "/airbyte/pipelines" {
+		if r.URL.Path != "/upstream/pipelines" {
 			http.NotFound(w, r)
 			return
 		}

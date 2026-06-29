@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-pipedrive [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Pipedrive catalog connector for https://docs.airbyte.com/integrations/sources/pipedrive. Native implementation status: planned_native_port.
+  Pipedrive catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pipedrive.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.pipedrive.com/docs/api/v1
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-pipedrive:2.4.0 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Pipedrive authentication: https://pipedrive.readme.io/docs/core-api-concepts-authentication
   Changelog: https://developers.pipedrive.com/changelog
   Pipedrive rate limits: https://pipedrive.readme.io/docs/core-api-concepts-rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pipedrive
 
 CONFIGURATION
   api_token (string) required secret: The Pipedrive API Token.
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/pipedrive
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Pipedrive documentation: https://docs.airbyte.com/integrations/sources/pipedrive
+  Pipedrive API reference: https://developers.pipedrive.com/docs/api/v1
+  Pipedrive authentication: https://pipedrive.readme.io/docs/core-api-concepts-authentication
+  Changelog: https://developers.pipedrive.com/changelog
+  Pipedrive rate limits: https://pipedrive.readme.io/docs/core-api-concepts-rate-limiting
 
 EXIT STATUS
   0 success

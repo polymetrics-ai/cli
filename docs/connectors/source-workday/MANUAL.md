@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-workday [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Workday catalog connector for https://docs.airbyte.com/integrations/enterprise-connectors/source-workday. Native implementation status: planned_native_port.
+  Workday catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/workday.svg
+  source: official
+  review_status: official_verified
+  review_url: https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-workday:1.0.0 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +48,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/enterprise-connectors/source-workday
+  Workday documentation: https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html
 
 CONFIGURATION
   credentials (object) required: Credentials for connecting to the Workday (RAAS) API.
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/enterprise-connectors/source-workday
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Workday documentation: https://docs.airbyte.com/integrations/enterprise-connectors/source-workday
+  Workday documentation: https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html
 
 EXIT STATUS
   0 success

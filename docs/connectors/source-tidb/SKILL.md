@@ -7,7 +7,14 @@ description: TiDB connector knowledge and safe action guide.
 
 ## Purpose
 
-TiDB catalog connector for https://docs.airbyte.com/integrations/sources/tidb. Native implementation status: planned_native_port.
+TiDB catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/tidb.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.pingcap.com/tidb/stable
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ TiDB catalog connector for https://docs.airbyte.com/integrations/sources/tidb. N
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-tidb:0.3.5 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ TiDB catalog connector for https://docs.airbyte.com/integrations/sources/tidb. N
 ## Official Application Documentation
 
 - TiDB documentation: https://docs.pingcap.com/tidb/stable
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tidb
 
 ## Configuration
 
@@ -70,12 +75,8 @@ TiDB catalog connector for https://docs.airbyte.com/integrations/sources/tidb. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/tidb
 
 ## Commands
 
@@ -99,4 +100,4 @@ pm connectors inspect source-tidb --json
 
 ## References
 
-- [TiDB documentation](https://docs.airbyte.com/integrations/sources/tidb)
+- [TiDB documentation](https://docs.pingcap.com/tidb/stable)

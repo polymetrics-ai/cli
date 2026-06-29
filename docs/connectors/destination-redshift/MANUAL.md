@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-redshift [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Redshift catalog connector for https://docs.airbyte.com/integrations/destinations/redshift. Native implementation status: planned_native_port.
+  Redshift catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/redshift.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.aws.amazon.com/redshift/latest/mgmt/cluster-versions.html
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-redshift:4.0.2 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -50,7 +55,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Release notes: https://docs.aws.amazon.com/redshift/latest/mgmt/release-notes.html
   Quotas and limits: https://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html
   AWS Service Health Dashboard: https://health.aws.amazon.com/health/status
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/redshift
 
 CONFIGURATION
   database (string) required: Enter the name of the <a href="https://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_DATABASE.html">database</a> you want to sync data into
@@ -71,11 +75,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/redshift
 
 EXAMPLES
   # Inspect catalog entry
@@ -90,7 +91,13 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Redshift documentation: https://docs.airbyte.com/integrations/destinations/redshift
+  SQL reference: https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_reference.html
+  Database authentication: https://docs.aws.amazon.com/redshift/latest/mgmt/generating-user-credentials.html
+  Access control: https://docs.aws.amazon.com/redshift/latest/dg/r_GRANT.html
+  Cluster versions: https://docs.aws.amazon.com/redshift/latest/mgmt/cluster-versions.html
+  Release notes: https://docs.aws.amazon.com/redshift/latest/mgmt/release-notes.html
+  Quotas and limits: https://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html
+  AWS Service Health Dashboard: https://health.aws.amazon.com/health/status
 
 EXIT STATUS
   0 success

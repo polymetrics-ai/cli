@@ -7,7 +7,14 @@ description: Intercom connector knowledge and safe action guide.
 
 ## Purpose
 
-Intercom catalog connector for https://docs.airbyte.com/integrations/sources/intercom. Native implementation status: planned_native_port.
+Intercom catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/intercom.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Intercom catalog connector for https://docs.airbyte.com/integrations/sources/int
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-intercom:0.13.24 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Intercom catalog connector for https://docs.airbyte.com/integrations/sources/int
 - API Changelog: https://developers.intercom.com/docs/references/changelog
 - Changelog: https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/api-changelog
 - Intercom API OpenAPI specification: https://developers.intercom.com/docs/references/rest-api/api.intercom.io/openapi.json
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/intercom
 
 ## Configuration
 
@@ -71,12 +76,8 @@ Intercom catalog connector for https://docs.airbyte.com/integrations/sources/int
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/intercom
 
 ## Commands
 
@@ -100,4 +101,7 @@ pm connectors inspect source-intercom --json
 
 ## References
 
-- [Intercom documentation](https://docs.airbyte.com/integrations/sources/intercom)
+- [Unversioned Changes](https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes)
+- [API Changelog](https://developers.intercom.com/docs/references/changelog)
+- [Changelog](https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/api-changelog)
+- [Intercom API OpenAPI specification](https://developers.intercom.com/docs/references/rest-api/api.intercom.io/openapi.json)

@@ -7,7 +7,13 @@ description: Incident.io connector knowledge and safe action guide.
 
 ## Purpose
 
-Incident.io catalog connector for https://docs.airbyte.com/integrations/sources/incident-io. Native implementation status: planned_native_port.
+Incident.io catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Incident.io catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-incident-io:0.1.30 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Incident.io catalog connector for https://docs.airbyte.com/integrations/sources/
 - incident.io API reference: https://api-docs.incident.io/
 - incident.io authentication: https://api-docs.incident.io/#section/Authentication
 - incident.io Status: https://status.incident.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/incident-io
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Incident.io catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/incident-io
 
 ## Commands
 
@@ -92,4 +92,6 @@ pm connectors inspect source-incident-io --json
 
 ## References
 
-- [Incident.io documentation](https://docs.airbyte.com/integrations/sources/incident-io)
+- [incident.io API reference](https://api-docs.incident.io/)
+- [incident.io authentication](https://api-docs.incident.io/#section/Authentication)
+- [incident.io Status](https://status.incident.io/)

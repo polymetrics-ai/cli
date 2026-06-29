@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-zendesk-talk [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Zendesk Talk catalog connector for https://docs.airbyte.com/integrations/sources/zendesk-talk. Native implementation status: planned_native_port.
+  Zendesk Talk catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/zendesk-talk.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://support.zendesk.com/hc/en-us/sections/4405298889242-Developer-updates
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-zendesk-talk:2.0.15 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,10 +50,9 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Changelog: https://developer.zendesk.com/api-reference/changelog/changelog/
   Developer Updates: https://support.zendesk.com/hc/en-us/sections/4405298889242-Developer-updates
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zendesk-talk
 
 CONFIGURATION
-  credentials (object): Zendesk allows three authentication methods. We recommend using `OAuth2.0` for Airbyte Cloud users and `API token` for Airbyte Open Source users.
+  credentials (object): manual intervention needed
   start_date (string) required: The date from which you'd like to replicate data for Zendesk Talk API, in the format YYYY-MM-DDT00:00:00Z. All data generated after this date will be replicated.
   subdomain (string) required: This is your Zendesk subdomain that can be found in your account URL. For example, in https://{MY_SUBDOMAIN}.zendesk.com/, where MY_SUBDOMAIN is the value of your subdomain.
   subscription_tier (string): Your Zendesk subscription plan tier. This controls API rate limiting behavior — higher tiers have higher rate limits. If unsure, leave as the default (Team) for the most conse...
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/zendesk-talk
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Zendesk Talk documentation: https://docs.airbyte.com/integrations/sources/zendesk-talk
+  Changelog: https://developer.zendesk.com/api-reference/changelog/changelog/
+  Developer Updates: https://support.zendesk.com/hc/en-us/sections/4405298889242-Developer-updates
 
 EXIT STATUS
   0 success

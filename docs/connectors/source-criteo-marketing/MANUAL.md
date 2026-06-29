@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-criteo-marketing [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Criteo Marketing catalog connector for https://docs.airbyte.com/integrations/sources/criteo-marketing. Native implementation status: planned_native_port.
+  Criteo Marketing catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/criteo.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developers.criteo.com/marketing-solutions/reference/getting-started
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-criteo-marketing:0.0.8 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +48,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/criteo-marketing
+  Criteo Marketing documentation: https://developers.criteo.com/marketing-solutions/reference/getting-started
 
 CONFIGURATION
   client_id (string) required secret
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/criteo-marketing
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Criteo Marketing documentation: https://docs.airbyte.com/integrations/sources/criteo-marketing
+  Criteo Marketing documentation: https://developers.criteo.com/marketing-solutions/reference/getting-started
 
 EXIT STATUS
   0 success

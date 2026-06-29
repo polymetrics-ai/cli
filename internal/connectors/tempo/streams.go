@@ -14,7 +14,7 @@ type streamEndpoint struct {
 // tempoStreamEndpoints is the per-stream routing table. Adding a stream means
 // adding one entry here plus a Stream definition in tempoStreams; the read path
 // is fully data-driven from this table. The core set mirrors the upstream
-// Airbyte source-tempo streams.
+// upstream source-tempo streams.
 var tempoStreamEndpoints = map[string]streamEndpoint{
 	"accounts":         {resource: "accounts", mapRecord: tempoAccountRecord},
 	"customers":        {resource: "customers", mapRecord: tempoCustomerRecord},

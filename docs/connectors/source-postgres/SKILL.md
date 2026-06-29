@@ -7,7 +7,14 @@ description: Postgres connector knowledge and safe action guide.
 
 ## Purpose
 
-Postgres catalog connector for https://docs.airbyte.com/integrations/sources/postgres. Native implementation status: planned_native_port.
+Postgres catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/postgresql.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.postgresql.org/docs/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Postgres catalog connector for https://docs.airbyte.com/integrations/sources/pos
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-postgres:3.8.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ Postgres catalog connector for https://docs.airbyte.com/integrations/sources/pos
 - PostgreSQL documentation: https://www.postgresql.org/docs/
 - PostgreSQL authentication: https://www.postgresql.org/docs/current/auth-methods.html
 - Release Notes: https://www.postgresql.org/docs/release/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/postgres
 
 ## Configuration
 
@@ -62,7 +67,7 @@ Postgres catalog connector for https://docs.airbyte.com/integrations/sources/pos
 - entra_tenant_id (string): If using Entra service principal, the ID of the tenant
 - host (string) required: Hostname of the database.
 - jdbc_url_params (string): Additional properties to pass to the JDBC URL string when connecting to the database formatted as 'key=value' pairs separated by the symbol '&'. (example: key1=value1&key2=value...
-- max_db_connections (integer): Maximum number of concurrent queries to the database. Leave empty to let Airbyte optimize performance.
+- max_db_connections (integer): manual intervention needed
 - password (string) secret: The password associated with the username.
 - port (integer) required: Port of the database. Defaults to 5432.
 - replication_method (object) required: Configures how data is extracted from the database.
@@ -80,12 +85,8 @@ Postgres catalog connector for https://docs.airbyte.com/integrations/sources/pos
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/postgres
 
 ## Commands
 
@@ -109,4 +110,6 @@ pm connectors inspect source-postgres --json
 
 ## References
 
-- [Postgres documentation](https://docs.airbyte.com/integrations/sources/postgres)
+- [PostgreSQL documentation](https://www.postgresql.org/docs/)
+- [PostgreSQL authentication](https://www.postgresql.org/docs/current/auth-methods.html)
+- [Release Notes](https://www.postgresql.org/docs/release/)

@@ -12,6 +12,12 @@ SYNOPSIS
 DESCRIPTION
   Reads web and Reddit search results from a SearXNG metasearch instance's JSON API (format=json). Read-only. Requires base_url; no credentials by default.
 
+ICON
+  asset: icons/searxng.svg
+  source: official_site
+  review_status: manual_override
+  review_url: https://docs.searxng.org/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api

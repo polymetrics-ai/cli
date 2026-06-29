@@ -7,7 +7,14 @@ description: Primetric connector knowledge and safe action guide.
 
 ## Purpose
 
-Primetric catalog connector for https://docs.airbyte.com/integrations/sources/primetric. Native implementation status: planned_native_port.
+Primetric catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/primetric.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.primetric.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Primetric catalog connector for https://docs.airbyte.com/integrations/sources/pr
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-primetric:1.1.39 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Primetric catalog connector for https://docs.airbyte.com/integrations/sources/pr
 ## Official Application Documentation
 
 - Primetric API documentation: https://developer.primetric.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/primetric
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Primetric catalog connector for https://docs.airbyte.com/integrations/sources/pr
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/primetric
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-primetric --json
 
 ## References
 
-- [Primetric documentation](https://docs.airbyte.com/integrations/sources/primetric)
+- [Primetric API documentation](https://developer.primetric.com/)

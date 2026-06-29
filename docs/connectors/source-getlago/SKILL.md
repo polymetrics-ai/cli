@@ -7,7 +7,14 @@ description: Lago connector knowledge and safe action guide.
 
 ## Purpose
 
-Lago catalog connector for https://docs.airbyte.com/integrations/sources/getlago. Native implementation status: planned_native_port.
+Lago catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/getlago.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://doc.getlago.com/api-reference/intro
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Lago catalog connector for https://docs.airbyte.com/integrations/sources/getlago
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-getlago:0.7.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Lago catalog connector for https://docs.airbyte.com/integrations/sources/getlago
 
 - Lago API documentation: https://doc.getlago.com/api-reference/intro
 - Lago authentication: https://doc.getlago.com/api-reference/intro#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/getlago
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Lago catalog connector for https://docs.airbyte.com/integrations/sources/getlago
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/getlago
 
 ## Commands
 
@@ -92,4 +93,5 @@ pm connectors inspect source-getlago --json
 
 ## References
 
-- [Lago documentation](https://docs.airbyte.com/integrations/sources/getlago)
+- [Lago API documentation](https://doc.getlago.com/api-reference/intro)
+- [Lago authentication](https://doc.getlago.com/api-reference/intro#authentication)

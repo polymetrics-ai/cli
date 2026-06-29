@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-toggl [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Toggl catalog connector for https://docs.airbyte.com/integrations/sources/toggl. Native implementation status: planned_native_port.
+  Toggl catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/toggl.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.track.toggl.com/docs/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-toggl:0.2.23 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Toggl Track API: https://developers.track.toggl.com/docs/
   Toggl authentication: https://developers.track.toggl.com/docs/authentication
   Toggl rate limits: https://developers.track.toggl.com/docs/rate_limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/toggl
 
 CONFIGURATION
   api_token (string) required secret: Your API Token. See <a href="https://developers.track.toggl.com/docs/authentication">here</a>. The token is case sensitive.
@@ -62,11 +66,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/toggl
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +82,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Toggl documentation: https://docs.airbyte.com/integrations/sources/toggl
+  Toggl Track API: https://developers.track.toggl.com/docs/
+  Toggl authentication: https://developers.track.toggl.com/docs/authentication
+  Toggl rate limits: https://developers.track.toggl.com/docs/rate_limiting
 
 EXIT STATUS
   0 success

@@ -9,6 +9,13 @@ description: GitHub connector knowledge and safe action guide.
 
 Reads GitHub repository, issue, pull request, code, release, collaboration, and Actions data, and writes approved reverse ETL actions through the GitHub REST API.
 
+## Icon
+
+- asset: icons/github.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.github.com/en/rest/about-the-rest-api/breaking-changes
+
 ## Capabilities
 
 - check=true catalog=true read=true write=true query=false

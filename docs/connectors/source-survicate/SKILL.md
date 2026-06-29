@@ -7,7 +7,14 @@ description: Survicate connector knowledge and safe action guide.
 
 ## Purpose
 
-Survicate catalog connector for https://docs.airbyte.com/integrations/sources/survicate. Native implementation status: planned_native_port.
+Survicate catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/survicate.svg
+- source: official
+- review_status: official_verified
+- review_url: https://developers.survicate.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Survicate catalog connector for https://docs.airbyte.com/integrations/sources/su
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-survicate:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Survicate catalog connector for https://docs.airbyte.com/integrations/sources/su
 
 ## Official Application Documentation
 
-- Survicate API documentation: https://developers.survicate.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/survicate
+- Survicate documentation: https://developers.survicate.com/
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Survicate catalog connector for https://docs.airbyte.com/integrations/sources/su
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/survicate
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-survicate --json
 
 ## References
 
-- [Survicate documentation](https://docs.airbyte.com/integrations/sources/survicate)
+- [Survicate documentation](https://developers.survicate.com/)

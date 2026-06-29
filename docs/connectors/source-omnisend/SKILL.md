@@ -7,7 +7,13 @@ description: Omnisend connector knowledge and safe action guide.
 
 ## Purpose
 
-Omnisend catalog connector for https://docs.airbyte.com/integrations/sources/omnisend. Native implementation status: planned_native_port.
+Omnisend catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Omnisend catalog connector for https://docs.airbyte.com/integrations/sources/omn
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-omnisend:0.3.11 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Omnisend catalog connector for https://docs.airbyte.com/integrations/sources/omn
 
 - Omnisend API documentation: https://api-docs.omnisend.com/
 - Omnisend authentication: https://api-docs.omnisend.com/reference/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/omnisend
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Omnisend catalog connector for https://docs.airbyte.com/integrations/sources/omn
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/omnisend
 
 ## Commands
 
@@ -91,4 +91,5 @@ pm connectors inspect source-omnisend --json
 
 ## References
 
-- [Omnisend documentation](https://docs.airbyte.com/integrations/sources/omnisend)
+- [Omnisend API documentation](https://api-docs.omnisend.com/)
+- [Omnisend authentication](https://api-docs.omnisend.com/reference/authentication)

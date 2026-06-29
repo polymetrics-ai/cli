@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-rki-covid [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  RKI Covid catalog connector for https://docs.airbyte.com/integrations/sources/rki-covid. Native implementation status: planned_native_port.
+  RKI Covid catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/rki.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-rki-covid:0.1.41 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: catalog, check, docs_skill, read_fixture, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/rki-covid
+  manual intervention needed
 
 CONFIGURATION
   start_date (string) required: UTC date in the format 2017-01-25. Any data before this date will not be replicated.
@@ -55,11 +58,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/rki-covid
 
 EXAMPLES
   # Inspect catalog entry
@@ -72,9 +72,6 @@ AGENT WORKFLOW
   - Read implementation_status before planning ETL or reverse ETL.
   - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-SEE ALSO
-  RKI Covid documentation: https://docs.airbyte.com/integrations/sources/rki-covid
 
 EXIT STATUS
   0 success

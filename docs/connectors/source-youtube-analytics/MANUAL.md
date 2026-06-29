@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-youtube-analytics [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  YouTube Analytics catalog connector for https://docs.airbyte.com/integrations/sources/youtube-analytics. Native implementation status: planned_native_port.
+  YouTube Analytics catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/youtube-analytics.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.google.com/youtube/analytics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-youtube-analytics:1.2.9 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Google OAuth 2.0: https://developers.google.com/identity/protocols/oauth2
   YouTube API changelog: https://developers.google.com/youtube/v3/revision_history
   YouTube API quotas: https://developers.google.com/youtube/v3/getting-started#quota
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/youtube-analytics
 
 CONFIGURATION
   content_owner_id (string): The ID of the content owner for whom the API request is being made. This is useful if you manage multiple YouTube channels and need to specify which content owner's data to retr...
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/youtube-analytics
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  YouTube Analytics documentation: https://docs.airbyte.com/integrations/sources/youtube-analytics
+  YouTube Analytics API: https://developers.google.com/youtube/analytics
+  Google OAuth 2.0: https://developers.google.com/identity/protocols/oauth2
+  YouTube API changelog: https://developers.google.com/youtube/v3/revision_history
+  YouTube API quotas: https://developers.google.com/youtube/v3/getting-started#quota
 
 EXIT STATUS
   0 success

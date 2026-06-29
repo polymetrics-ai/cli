@@ -7,7 +7,13 @@ description: RentCast connector knowledge and safe action guide.
 
 ## Purpose
 
-RentCast catalog connector for https://docs.airbyte.com/integrations/sources/rentcast. Native implementation status: planned_native_port.
+RentCast catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ RentCast catalog connector for https://docs.airbyte.com/integrations/sources/ren
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-rentcast:0.0.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ RentCast catalog connector for https://docs.airbyte.com/integrations/sources/ren
 ## Official Application Documentation
 
 - RentCast API documentation: https://developers.rentcast.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/rentcast
 
 ## Configuration
 
@@ -75,12 +79,8 @@ RentCast catalog connector for https://docs.airbyte.com/integrations/sources/ren
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/rentcast
 
 ## Commands
 
@@ -104,4 +104,4 @@ pm connectors inspect source-rentcast --json
 
 ## References
 
-- [RentCast documentation](https://docs.airbyte.com/integrations/sources/rentcast)
+- [RentCast API documentation](https://developers.rentcast.io/)

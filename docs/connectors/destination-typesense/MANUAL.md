@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-typesense [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Typesense catalog connector for https://docs.airbyte.com/integrations/destinations/typesense. Native implementation status: planned_native_port.
+  Typesense catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/typesense.svg
+  source: official
+  review_status: official_verified
+  review_url: https://typesense.org/docs/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-typesense:0.1.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +48,7 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/typesense
+  Typesense documentation: https://typesense.org/docs/
 
 CONFIGURATION
   api_key (string) required: Typesense API Key
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/typesense
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Typesense documentation: https://docs.airbyte.com/integrations/destinations/typesense
+  Typesense documentation: https://typesense.org/docs/
 
 EXIT STATUS
   0 success

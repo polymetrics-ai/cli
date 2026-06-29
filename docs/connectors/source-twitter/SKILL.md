@@ -7,7 +7,14 @@ description: Twitter connector knowledge and safe action guide.
 
 ## Purpose
 
-Twitter catalog connector for https://docs.airbyte.com/integrations/sources/twitter. Native implementation status: planned_native_port.
+Twitter catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/twitter.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.twitter.com/en/docs/twitter-api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Twitter catalog connector for https://docs.airbyte.com/integrations/sources/twit
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-twitter:0.3.11 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Twitter catalog connector for https://docs.airbyte.com/integrations/sources/twit
 - Twitter authentication: https://developer.twitter.com/en/docs/authentication/overview
 - Twitter rate limits: https://developer.twitter.com/en/docs/twitter-api/rate-limits
 - Twitter API Status: https://api.twitterstat.us/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/twitter
 
 ## Configuration
 
@@ -67,12 +72,8 @@ Twitter catalog connector for https://docs.airbyte.com/integrations/sources/twit
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/twitter
 
 ## Commands
 
@@ -96,4 +97,7 @@ pm connectors inspect source-twitter --json
 
 ## References
 
-- [Twitter documentation](https://docs.airbyte.com/integrations/sources/twitter)
+- [Twitter API v2](https://developer.twitter.com/en/docs/twitter-api)
+- [Twitter authentication](https://developer.twitter.com/en/docs/authentication/overview)
+- [Twitter rate limits](https://developer.twitter.com/en/docs/twitter-api/rate-limits)
+- [Twitter API Status](https://api.twitterstat.us/)

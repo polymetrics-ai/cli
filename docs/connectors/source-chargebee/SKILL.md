@@ -7,7 +7,14 @@ description: Chargebee connector knowledge and safe action guide.
 
 ## Purpose
 
-Chargebee catalog connector for https://docs.airbyte.com/integrations/sources/chargebee. Native implementation status: planned_native_port.
+Chargebee catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/chargebee.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://apidocs.chargebee.com/docs/api/versioning
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Chargebee catalog connector for https://docs.airbyte.com/integrations/sources/ch
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-chargebee:0.10.38 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,14 +53,13 @@ Chargebee catalog connector for https://docs.airbyte.com/integrations/sources/ch
 
 - Versioning Docs: https://apidocs.chargebee.com/docs/api/versioning
 - Changelog: https://www.chargebee.com/help/api-updates/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/chargebee
 
 ## Configuration
 
 - num_workers (integer): The number of worker threads to use for the sync. The performance upper boundary is based on the limit of your Chargebee plan. More info about the rate limit plan tiers can be f...
 - product_catalog (string): Product Catalog version of your Chargebee site. Instructions on how to find your version you may find <a href="https://apidocs.chargebee.com/docs/api?prod_cat_ver=2">here</a> un...
 - site (string) required: The site prefix for your Chargebee instance.
-- site_api_key (string) required secret: Chargebee API Key. See the <a href="https://docs.airbyte.com/integrations/sources/chargebee">docs</a> for more information on how to obtain this key.
+- site_api_key (string) required secret: manual intervention needed
 - start_date (string) required: UTC date and time in the format 2017-01-25T00:00:00.000Z. Any data before this date will not be replicated.
 - secret fields: site_api_key
 
@@ -66,12 +71,8 @@ Chargebee catalog connector for https://docs.airbyte.com/integrations/sources/ch
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/chargebee
 
 ## Commands
 
@@ -95,4 +96,5 @@ pm connectors inspect source-chargebee --json
 
 ## References
 
-- [Chargebee documentation](https://docs.airbyte.com/integrations/sources/chargebee)
+- [Versioning Docs](https://apidocs.chargebee.com/docs/api/versioning)
+- [Changelog](https://www.chargebee.com/help/api-updates/)

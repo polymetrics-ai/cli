@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-clarif-ai [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Clarif-ai catalog connector for https://docs.airbyte.com/integrations/sources/clarif-ai. Native implementation status: planned_native_port.
+  Clarif-ai catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-clarif-ai:0.0.59 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Clarifai API reference: https://docs.clarifai.com/api-guide/api-overview
   Clarifai authentication: https://docs.clarifai.com/api-guide/api-overview/api-clients
   Clarifai Status: https://status.clarifai.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/clarif-ai
 
 CONFIGURATION
   api_key (string) required secret
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/clarif-ai
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Clarif-ai documentation: https://docs.airbyte.com/integrations/sources/clarif-ai
+  Clarifai API reference: https://docs.clarifai.com/api-guide/api-overview
+  Clarifai authentication: https://docs.clarifai.com/api-guide/api-overview/api-clients
+  Clarifai Status: https://status.clarifai.com/
 
 EXIT STATUS
   0 success

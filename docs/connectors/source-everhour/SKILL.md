@@ -7,7 +7,14 @@ description: Everhour connector knowledge and safe action guide.
 
 ## Purpose
 
-Everhour catalog connector for https://docs.airbyte.com/integrations/sources/everhour. Native implementation status: planned_native_port.
+Everhour catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/everhour.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://everhour.docs.apiary.io/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Everhour catalog connector for https://docs.airbyte.com/integrations/sources/eve
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-everhour:0.2.20 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Everhour catalog connector for https://docs.airbyte.com/integrations/sources/eve
 - Everhour API reference: https://everhour.docs.apiary.io/
 - Everhour authentication: https://everhour.docs.apiary.io/#introduction/authentication
 - Everhour rate limits: https://everhour.docs.apiary.io/#introduction/rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/everhour
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Everhour catalog connector for https://docs.airbyte.com/integrations/sources/eve
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/everhour
 
 ## Commands
 
@@ -92,4 +93,6 @@ pm connectors inspect source-everhour --json
 
 ## References
 
-- [Everhour documentation](https://docs.airbyte.com/integrations/sources/everhour)
+- [Everhour API reference](https://everhour.docs.apiary.io/)
+- [Everhour authentication](https://everhour.docs.apiary.io/#introduction/authentication)
+- [Everhour rate limits](https://everhour.docs.apiary.io/#introduction/rate-limiting)

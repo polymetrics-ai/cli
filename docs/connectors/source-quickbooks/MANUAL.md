@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-quickbooks [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  QuickBooks catalog connector for https://docs.airbyte.com/integrations/sources/quickbooks. Native implementation status: planned_native_port.
+  QuickBooks catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/quickbooks.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-quickbooks:4.0.4 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   QuickBooks authentication: https://developer.intuit.com/app/developer/qbo/docs/develop/authentication-and-authorization
   QuickBooks Online API Changelog: https://developer.intuit.com/app/developer/qbo/docs/changelog
   QuickBooks rate limits: https://developer.intuit.com/app/developer/qbo/docs/develop/troubleshooting/error-codes#rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/quickbooks
 
 CONFIGURATION
   access_token (string) required secret: Access token for making authenticated requests.
@@ -67,11 +71,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/quickbooks
 
 EXAMPLES
   # Inspect catalog entry
@@ -86,7 +87,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  QuickBooks documentation: https://docs.airbyte.com/integrations/sources/quickbooks
+  QuickBooks Online API: https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account
+  QuickBooks authentication: https://developer.intuit.com/app/developer/qbo/docs/develop/authentication-and-authorization
+  QuickBooks Online API Changelog: https://developer.intuit.com/app/developer/qbo/docs/changelog
+  QuickBooks rate limits: https://developer.intuit.com/app/developer/qbo/docs/develop/troubleshooting/error-codes#rate-limits
 
 EXIT STATUS
   0 success

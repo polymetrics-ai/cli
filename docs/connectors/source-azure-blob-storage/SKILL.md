@@ -7,7 +7,14 @@ description: Azure Blob Storage connector knowledge and safe action guide.
 
 ## Purpose
 
-Azure Blob Storage catalog connector for https://docs.airbyte.com/integrations/sources/azure-blob-storage. Native implementation status: planned_native_port.
+Azure Blob Storage catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/azureblobstorage.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://learn.microsoft.com/en-us/rest/api/storageservices/previous-azure-storage-service-versions
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Azure Blob Storage catalog connector for https://docs.airbyte.com/integrations/s
 - implementation_status: planned_native_port
 - runtime_kind: file_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-azure-blob-storage:0.8.21 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Azure Blob Storage catalog connector for https://docs.airbyte.com/integrations/s
 ## Official Application Documentation
 
 - API versions: https://learn.microsoft.com/en-us/rest/api/storageservices/previous-azure-storage-service-versions
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/azure-blob-storage
 
 ## Configuration
 
@@ -56,7 +61,7 @@ Azure Blob Storage catalog connector for https://docs.airbyte.com/integrations/s
 - credentials (object) required: Credentials for connecting to the Azure Blob Storage
 - delivery_method (object)
 - start_date (string): UTC date and time in the format 2017-01-25T00:00:00.000000Z. Any file modified before this date will not be replicated.
-- streams (array) required: Each instance of this configuration defines a <a href="https://docs.airbyte.com/cloud/core-concepts#stream">stream</a>. Use this to define which files belong in the stream, thei...
+- streams (array) required: manual intervention needed
 - secret fields: credentials.app_client_id, credentials.app_client_secret, credentials.app_tenant_id, credentials.azure_blob_storage_account_key, credentials.client_id, credentials.client_secret, credentials.refresh_token, credentials.tenant_id
 
 ## Sync Modes
@@ -67,12 +72,8 @@ Azure Blob Storage catalog connector for https://docs.airbyte.com/integrations/s
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/azure-blob-storage
 
 ## Commands
 
@@ -96,4 +97,4 @@ pm connectors inspect source-azure-blob-storage --json
 
 ## References
 
-- [Azure Blob Storage documentation](https://docs.airbyte.com/integrations/sources/azure-blob-storage)
+- [API versions](https://learn.microsoft.com/en-us/rest/api/storageservices/previous-azure-storage-service-versions)

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-chartmogul [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Chartmogul catalog connector for https://docs.airbyte.com/integrations/sources/chartmogul. Native implementation status: planned_native_port.
+  Chartmogul catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/chartmogul.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://dev.chartmogul.com/reference
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-chartmogul:1.1.49 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   ChartMogul authentication: https://dev.chartmogul.com/docs/authentication
   ChartMogul rate limits: https://dev.chartmogul.com/docs/rate-limits
   ChartMogul Status: https://status.chartmogul.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/chartmogul
 
 CONFIGURATION
   api_key (string) required secret: Your Chartmogul API key. See <a href="https://help.chartmogul.com/hc/en-us/articles/4407796325906-Creating-and-Managing-API-keys#creating-an-api-key"> the docs </a> for info on ...
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/chartmogul
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Chartmogul documentation: https://docs.airbyte.com/integrations/sources/chartmogul
+  ChartMogul API reference: https://dev.chartmogul.com/reference
+  ChartMogul authentication: https://dev.chartmogul.com/docs/authentication
+  ChartMogul rate limits: https://dev.chartmogul.com/docs/rate-limits
+  ChartMogul Status: https://status.chartmogul.com/
 
 EXIT STATUS
   0 success

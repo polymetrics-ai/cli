@@ -7,7 +7,13 @@ description: NoCRM connector knowledge and safe action guide.
 
 ## Purpose
 
-NoCRM catalog connector for https://docs.airbyte.com/integrations/sources/nocrm. Native implementation status: planned_native_port.
+NoCRM catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ NoCRM catalog connector for https://docs.airbyte.com/integrations/sources/nocrm.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-nocrm:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ NoCRM catalog connector for https://docs.airbyte.com/integrations/sources/nocrm.
 ## Official Application Documentation
 
 - noCRM API documentation: https://www.nocrm.io/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/nocrm
 
 ## Configuration
 
@@ -62,12 +66,8 @@ NoCRM catalog connector for https://docs.airbyte.com/integrations/sources/nocrm.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/nocrm
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-nocrm --json
 
 ## References
 
-- [NoCRM documentation](https://docs.airbyte.com/integrations/sources/nocrm)
+- [noCRM API documentation](https://www.nocrm.io/api)

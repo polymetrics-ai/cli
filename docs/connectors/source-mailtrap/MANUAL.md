@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-mailtrap [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Mailtrap catalog connector for https://docs.airbyte.com/integrations/sources/mailtrap. Native implementation status: planned_native_port.
+  Mailtrap catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-mailtrap:0.0.55 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Mailtrap API documentation: https://api-docs.mailtrap.io/
   Mailtrap authentication: https://api-docs.mailtrap.io/docs/mailtrap-api-docs/ZG9jOjI2MjA1MzI2-authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mailtrap
 
 CONFIGURATION
   api_token (string) required secret: API token to use. Find it at https://mailtrap.io/account
@@ -57,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/mailtrap
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +76,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Mailtrap documentation: https://docs.airbyte.com/integrations/sources/mailtrap
+  Mailtrap API documentation: https://api-docs.mailtrap.io/
+  Mailtrap authentication: https://api-docs.mailtrap.io/docs/mailtrap-api-docs/ZG9jOjI2MjA1MzI2-authentication
 
 EXIT STATUS
   0 success

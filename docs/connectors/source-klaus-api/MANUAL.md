@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-klaus-api [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Klaus Api catalog connector for https://docs.airbyte.com/integrations/sources/klaus-api. Native implementation status: planned_native_port.
+  Klaus Api catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/klaus-api.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://help.klausapp.com/en/articles/2911907-klaus-api
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-klaus-api:0.2.13 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Klaus API documentation: https://help.klausapp.com/en/articles/2911907-klaus-api
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/klaus-api
 
 CONFIGURATION
   account (integer) required: getting data by account
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/klaus-api
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Klaus Api documentation: https://docs.airbyte.com/integrations/sources/klaus-api
+  Klaus API documentation: https://help.klausapp.com/en/articles/2911907-klaus-api
 
 EXIT STATUS
   0 success

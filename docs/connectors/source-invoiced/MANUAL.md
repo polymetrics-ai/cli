@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-invoiced [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Invoiced catalog connector for https://docs.airbyte.com/integrations/sources/invoiced. Native implementation status: planned_native_port.
+  Invoiced catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-invoiced:0.0.58 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Invoiced API reference: https://www.invoiced.com/docs/api/
   Invoiced authentication: https://www.invoiced.com/docs/api/#authentication
   Invoiced rate limits: https://www.invoiced.com/docs/api/#rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/invoiced
 
 CONFIGURATION
   api_key (string) required secret: API key to use. Find it at https://invoiced.com/account
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/invoiced
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Invoiced documentation: https://docs.airbyte.com/integrations/sources/invoiced
+  Invoiced API reference: https://www.invoiced.com/docs/api/
+  Invoiced authentication: https://www.invoiced.com/docs/api/#authentication
+  Invoiced rate limits: https://www.invoiced.com/docs/api/#rate-limiting
 
 EXIT STATUS
   0 success

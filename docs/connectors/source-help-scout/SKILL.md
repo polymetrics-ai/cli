@@ -7,7 +7,13 @@ description: Help Scout connector knowledge and safe action guide.
 
 ## Purpose
 
-Help Scout catalog connector for https://docs.airbyte.com/integrations/sources/help-scout. Native implementation status: planned_native_port.
+Help Scout catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Help Scout catalog connector for https://docs.airbyte.com/integrations/sources/h
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-help-scout:0.0.45 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Help Scout catalog connector for https://docs.airbyte.com/integrations/sources/h
 - Help Scout authentication: https://developer.helpscout.com/mailbox-api/overview/authentication/
 - Help Scout rate limits: https://developer.helpscout.com/mailbox-api/overview/rate-limiting/
 - Help Scout Status: https://status.helpscout.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/help-scout
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Help Scout catalog connector for https://docs.airbyte.com/integrations/sources/h
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/help-scout
 
 ## Commands
 
@@ -95,4 +95,7 @@ pm connectors inspect source-help-scout --json
 
 ## References
 
-- [Help Scout documentation](https://docs.airbyte.com/integrations/sources/help-scout)
+- [Help Scout API reference](https://developer.helpscout.com/)
+- [Help Scout authentication](https://developer.helpscout.com/mailbox-api/overview/authentication/)
+- [Help Scout rate limits](https://developer.helpscout.com/mailbox-api/overview/rate-limiting/)
+- [Help Scout Status](https://status.helpscout.com/)

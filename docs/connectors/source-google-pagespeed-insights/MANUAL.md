@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-google-pagespeed-insights [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Google PageSpeed Insights catalog connector for https://docs.airbyte.com/integrations/sources/google-pagespeed-insights. Native implementation status: planned_native_port.
+  Google PageSpeed Insights catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/google-pagespeed-insights.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.google.com/speed/docs/insights/v5/get-started
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-google-pagespeed-insights:0.2.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   PageSpeed Insights API: https://developers.google.com/speed/docs/insights/v5/get-started
   PageSpeed Insights quotas: https://developers.google.com/speed/docs/insights/v5/get-started#quota
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-pagespeed-insights
 
 CONFIGURATION
   api_key (string) secret: Google PageSpeed API Key. See <a href="https://developers.google.com/speed/docs/insights/v5/get-started#APIKey">here</a>. The key is optional - however the API is heavily rate l...
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/google-pagespeed-insights
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Google PageSpeed Insights documentation: https://docs.airbyte.com/integrations/sources/google-pagespeed-insights
+  PageSpeed Insights API: https://developers.google.com/speed/docs/insights/v5/get-started
+  PageSpeed Insights quotas: https://developers.google.com/speed/docs/insights/v5/get-started#quota
 
 EXIT STATUS
   0 success

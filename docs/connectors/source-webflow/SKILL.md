@@ -7,7 +7,14 @@ description: Webflow connector knowledge and safe action guide.
 
 ## Purpose
 
-Webflow catalog connector for https://docs.airbyte.com/integrations/sources/webflow. Native implementation status: planned_native_port.
+Webflow catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/webflow.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.webflow.com/data/reference
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Webflow catalog connector for https://docs.airbyte.com/integrations/sources/webf
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-webflow:0.1.46 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ Webflow catalog connector for https://docs.airbyte.com/integrations/sources/webf
 - Webflow API Changelog: https://developers.webflow.com/data/changelog
 - Webflow v1 API Deprecation Notice: https://developers.webflow.com/data/docs/webflow-v1-api-deprecation-notice
 - Webflow rate limits: https://developers.webflow.com/data/docs/rate-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/webflow
 
 ## Configuration
 
@@ -67,12 +72,8 @@ Webflow catalog connector for https://docs.airbyte.com/integrations/sources/webf
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/webflow
 
 ## Commands
 
@@ -96,4 +97,8 @@ pm connectors inspect source-webflow --json
 
 ## References
 
-- [Webflow documentation](https://docs.airbyte.com/integrations/sources/webflow)
+- [Webflow Data API](https://developers.webflow.com/data/reference)
+- [Webflow authentication](https://developers.webflow.com/data/docs/getting-started)
+- [Webflow API Changelog](https://developers.webflow.com/data/changelog)
+- [Webflow v1 API Deprecation Notice](https://developers.webflow.com/data/docs/webflow-v1-api-deprecation-notice)
+- [Webflow rate limits](https://developers.webflow.com/data/docs/rate-limits)

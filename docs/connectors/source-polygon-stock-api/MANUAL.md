@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-polygon-stock-api [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Polygon Stock API catalog connector for https://docs.airbyte.com/integrations/sources/polygon-stock-api. Native implementation status: planned_native_port.
+  Polygon Stock API catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/polygon.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://polygon.io/docs/stocks/getting-started
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-polygon-stock-api:0.2.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Polygon.io API reference: https://polygon.io/docs/stocks/getting-started
   Polygon.io rate limits: https://polygon.io/pricing
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/polygon-stock-api
 
 CONFIGURATION
   adjusted (string): Determines whether or not the results are adjusted for splits. By default, results are adjusted and set to true. Set this to false to get results that are NOT adjusted for splits.
@@ -65,11 +69,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/polygon-stock-api
 
 EXAMPLES
   # Inspect catalog entry
@@ -84,7 +85,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Polygon Stock API documentation: https://docs.airbyte.com/integrations/sources/polygon-stock-api
+  Polygon.io API reference: https://polygon.io/docs/stocks/getting-started
+  Polygon.io rate limits: https://polygon.io/pricing
 
 EXIT STATUS
   0 success

@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector destination-local-json [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Local JSON catalog connector for https://docs.airbyte.com/integrations/destinations/local-json. Native implementation status: planned_native_port.
+  Local JSON catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/file-json.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-local-json:0.2.13 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,11 +47,10 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/local-json
+  manual intervention needed
 
 CONFIGURATION
-  destination_path (string) required: Path to the directory where json files will be written. The files will be placed inside that local mount. For more information check out our <a href="https://docs.airbyte.com/in...
+  destination_path (string) required: manual intervention needed
 
 SYNC MODES
   supported sync modes: append, overwrite
@@ -55,11 +58,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/local-json
 
 EXAMPLES
   # Inspect catalog entry
@@ -72,9 +72,6 @@ AGENT WORKFLOW
   - Read implementation_status before planning ETL or reverse ETL.
   - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-SEE ALSO
-  Local JSON documentation: https://docs.airbyte.com/integrations/destinations/local-json
 
 EXIT STATUS
   0 success

@@ -7,7 +7,13 @@ description: Canny connector knowledge and safe action guide.
 
 ## Purpose
 
-Canny catalog connector for https://docs.airbyte.com/integrations/sources/canny. Native implementation status: planned_native_port.
+Canny catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Canny catalog connector for https://docs.airbyte.com/integrations/sources/canny.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-canny:0.0.49 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Canny catalog connector for https://docs.airbyte.com/integrations/sources/canny.
 - Canny API reference: https://developers.canny.io/api-reference
 - Canny authentication: https://developers.canny.io/api-reference#authentication
 - Canny API rate limits: https://developers.canny.io/api-reference#rate-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/canny
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Canny catalog connector for https://docs.airbyte.com/integrations/sources/canny.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/canny
 
 ## Commands
 
@@ -92,4 +92,6 @@ pm connectors inspect source-canny --json
 
 ## References
 
-- [Canny documentation](https://docs.airbyte.com/integrations/sources/canny)
+- [Canny API reference](https://developers.canny.io/api-reference)
+- [Canny authentication](https://developers.canny.io/api-reference#authentication)
+- [Canny API rate limits](https://developers.canny.io/api-reference#rate-limits)

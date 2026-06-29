@@ -7,7 +7,14 @@ description: Productive connector knowledge and safe action guide.
 
 ## Purpose
 
-Productive catalog connector for https://docs.airbyte.com/integrations/sources/productive. Native implementation status: planned_native_port.
+Productive catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/productive.svg
+- source: official
+- review_status: official_verified
+- review_url: https://developer.productive.io/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Productive catalog connector for https://docs.airbyte.com/integrations/sources/p
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-productive:0.0.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Productive catalog connector for https://docs.airbyte.com/integrations/sources/p
 
 ## Official Application Documentation
 
-- Productive API documentation: https://developer.productive.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/productive
+- Productive documentation: https://developer.productive.io/
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Productive catalog connector for https://docs.airbyte.com/integrations/sources/p
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/productive
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-productive --json
 
 ## References
 
-- [Productive documentation](https://docs.airbyte.com/integrations/sources/productive)
+- [Productive documentation](https://developer.productive.io/)

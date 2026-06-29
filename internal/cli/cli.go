@@ -205,7 +205,7 @@ func runConnectors(args []string, stdout io.Writer, jsonOut bool) error {
 		// definition for connectors that are not yet natively ported.
 		if c, ok := registry.Get(args[1]); ok {
 			if jsonOut {
-				return writeJSON(stdout, envelope{"kind": "Connector", "connector": c.Metadata(), "manifest": connectors.ManifestOf(c)})
+				return writeJSON(stdout, envelope{"kind": "Connector", "connector": connectors.MetadataWithIcon(c.Metadata()), "manifest": connectors.ManifestOf(c)})
 			}
 			fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
 			return nil

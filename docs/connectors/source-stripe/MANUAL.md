@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-stripe [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Stripe native Go source connector. Runtime family: declarative_http_go. Documentation: https://docs.airbyte.com/integrations/sources/stripe.
+  Stripe native Go source connector. Runtime family: declarative_http_go.
+
+ICON
+  asset: icons/stripe.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://stripe.com/docs/api
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -21,7 +27,6 @@ IMPLEMENTATION STATUS
   runtime_kind: declarative_http_go
   pm connector: stripe
   notes: Implemented as the built-in Stripe connector on the connsdk declarative-HTTP template.
-  upstream image reference: airbyte/source-stripe:6.0.7 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -49,7 +54,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Stripe rate limits: https://stripe.com/docs/rate-limits
   Stripe API OpenAPI specification: https://github.com/stripe/openapi
   Stripe Status: https://status.stripe.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/stripe
 
 AUTHENTICATION
   fixture: Fixture-backed conformance mode; no credentials required.
@@ -133,7 +137,6 @@ AGENT WORKFLOW
   - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 SEE ALSO
-  Stripe connector documentation: https://docs.airbyte.com/integrations/sources/stripe
   Stripe API reference: https://stripe.com/docs/api
   Stripe authentication: https://stripe.com/docs/api/authentication
   API changelog: https://docs.stripe.com/changelog

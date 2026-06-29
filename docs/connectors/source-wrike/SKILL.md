@@ -7,7 +7,14 @@ description: Wrike connector knowledge and safe action guide.
 
 ## Purpose
 
-Wrike catalog connector for https://docs.airbyte.com/integrations/sources/wrike. Native implementation status: planned_native_port.
+Wrike catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/wrike.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.wrike.com/api/v4/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Wrike catalog connector for https://docs.airbyte.com/integrations/sources/wrike.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-wrike:0.3.58 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Wrike catalog connector for https://docs.airbyte.com/integrations/sources/wrike.
 
 - Wrike API reference: https://developers.wrike.com/api/v4/
 - Wrike authentication: https://developers.wrike.com/api/v4/oauth-20-authorization/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/wrike
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Wrike catalog connector for https://docs.airbyte.com/integrations/sources/wrike.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/wrike
 
 ## Commands
 
@@ -93,4 +94,5 @@ pm connectors inspect source-wrike --json
 
 ## References
 
-- [Wrike documentation](https://docs.airbyte.com/integrations/sources/wrike)
+- [Wrike API reference](https://developers.wrike.com/api/v4/)
+- [Wrike authentication](https://developers.wrike.com/api/v4/oauth-20-authorization/)

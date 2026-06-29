@@ -7,7 +7,14 @@ description: Kissmetrics connector knowledge and safe action guide.
 
 ## Purpose
 
-Kissmetrics catalog connector for https://docs.airbyte.com/integrations/sources/kissmetrics. Native implementation status: planned_native_port.
+Kissmetrics catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/kissmetrics.svg
+- source: official
+- review_status: official_verified
+- review_url: https://support.kissmetrics.io/reference
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Kissmetrics catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-kissmetrics:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Kissmetrics catalog connector for https://docs.airbyte.com/integrations/sources/
 
 ## Official Application Documentation
 
-- Kissmetrics API documentation: https://support.kissmetrics.io/reference/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/kissmetrics
+- Kissmetrics documentation: https://support.kissmetrics.io/reference
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Kissmetrics catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/kissmetrics
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-kissmetrics --json
 
 ## References
 
-- [Kissmetrics documentation](https://docs.airbyte.com/integrations/sources/kissmetrics)
+- [Kissmetrics documentation](https://support.kissmetrics.io/reference)

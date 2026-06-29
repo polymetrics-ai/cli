@@ -7,7 +7,13 @@ description: Devin AI connector knowledge and safe action guide.
 
 ## Purpose
 
-Devin AI catalog connector for https://docs.airbyte.com/integrations/sources/devin-ai. Native implementation status: planned_native_port.
+Devin AI catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/devin-ai.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Devin AI catalog connector for https://docs.airbyte.com/integrations/sources/dev
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-devin-ai:0.2.5 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Devin AI catalog connector for https://docs.airbyte.com/integrations/sources/dev
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/devin-ai
+- Devin AI documentation: https://docs.devin.ai/api-reference/overview
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Devin AI catalog connector for https://docs.airbyte.com/integrations/sources/dev
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/devin-ai
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-devin-ai --json
 
 ## References
 
-- [Devin AI documentation](https://docs.airbyte.com/integrations/sources/devin-ai)
+- [Devin AI documentation](https://docs.devin.ai/api-reference/overview)

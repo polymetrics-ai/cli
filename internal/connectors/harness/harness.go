@@ -278,7 +278,7 @@ func harnessAccountID(cfg connectors.RuntimeConfig) (string, error) {
 // harnessBaseURL resolves and validates the base URL. The default is
 // app.harness.io; any override must be an absolute https (or http for local
 // test servers) URL with a host to bound SSRF risk. The `api_url` config key is
-// accepted as an alias matching the Airbyte spec.
+// accepted as an alias matching the upstream spec.
 func harnessBaseURL(cfg connectors.RuntimeConfig) (string, error) {
 	base := strings.TrimSpace(cfg.Config["base_url"])
 	if base == "" {

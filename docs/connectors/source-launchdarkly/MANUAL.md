@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-launchdarkly [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  LaunchDarkly catalog connector for https://docs.airbyte.com/integrations/sources/launchdarkly. Native implementation status: planned_native_port.
+  LaunchDarkly catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/launchdarkly.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://apidocs.launchdarkly.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-launchdarkly:0.2.55 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   LaunchDarkly authentication: https://docs.launchdarkly.com/home/account-security/api-access-tokens
   LaunchDarkly rate limits: https://apidocs.launchdarkly.com/#section/Overview/Rate-limiting
   LaunchDarkly Status: https://status.launchdarkly.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/launchdarkly
 
 CONFIGURATION
   access_token (string) required secret: Your Access token. See <a href="https://apidocs.launchdarkly.com/#section/Overview/Authentication">here</a>.
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/launchdarkly
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  LaunchDarkly documentation: https://docs.airbyte.com/integrations/sources/launchdarkly
+  LaunchDarkly API reference: https://apidocs.launchdarkly.com/
+  LaunchDarkly authentication: https://docs.launchdarkly.com/home/account-security/api-access-tokens
+  LaunchDarkly rate limits: https://apidocs.launchdarkly.com/#section/Overview/Rate-limiting
+  LaunchDarkly Status: https://status.launchdarkly.com/
 
 EXIT STATUS
   0 success

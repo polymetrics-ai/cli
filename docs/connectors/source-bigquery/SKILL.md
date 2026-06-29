@@ -7,7 +7,14 @@ description: BigQuery connector knowledge and safe action guide.
 
 ## Purpose
 
-BigQuery catalog connector for https://docs.airbyte.com/integrations/sources/bigquery. Native implementation status: planned_native_port.
+BigQuery catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/bigquery.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://cloud.google.com/bigquery/docs/reference/rest
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ BigQuery catalog connector for https://docs.airbyte.com/integrations/sources/big
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-bigquery:0.4.5 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,11 +55,10 @@ BigQuery catalog connector for https://docs.airbyte.com/integrations/sources/big
 - Authentication: https://cloud.google.com/bigquery/docs/authentication
 - Release notes: https://cloud.google.com/bigquery/docs/release-notes
 - Quotas and limits: https://cloud.google.com/bigquery/quotas
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/bigquery
 
 ## Configuration
 
-- credentials_json (string) required secret: The contents of your Service Account Key JSON file. See the <a href="https://docs.airbyte.com/integrations/sources/bigquery#setup-the-bigquery-source-in-airbyte">docs</a> for mo...
+- credentials_json (string) required secret: manual intervention needed
 - dataset_id (string): The dataset ID to search for tables and views. If you are only loading data from one dataset, setting this option could result in much faster schema discovery.
 - project_id (string) required: The GCP project ID for the project containing the target BigQuery dataset.
 - secret fields: credentials_json
@@ -66,12 +71,8 @@ BigQuery catalog connector for https://docs.airbyte.com/integrations/sources/big
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/bigquery
 
 ## Commands
 
@@ -95,4 +96,7 @@ pm connectors inspect source-bigquery --json
 
 ## References
 
-- [BigQuery documentation](https://docs.airbyte.com/integrations/sources/bigquery)
+- [BigQuery REST API](https://cloud.google.com/bigquery/docs/reference/rest)
+- [Authentication](https://cloud.google.com/bigquery/docs/authentication)
+- [Release notes](https://cloud.google.com/bigquery/docs/release-notes)
+- [Quotas and limits](https://cloud.google.com/bigquery/quotas)

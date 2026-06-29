@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-braintree [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Braintree catalog connector for https://docs.airbyte.com/integrations/sources/braintree. Native implementation status: planned_native_port.
+  Braintree catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/braintree.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.paypal.com/braintree/docs/reference/general/server-sdk-deprecation-policy
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-braintree:0.3.33 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,13 +53,12 @@ OFFICIAL APPLICATION DOCUMENTATION
   Server SDK Deprecation Policy: https://developer.paypal.com/braintree/docs/reference/general/server-sdk-deprecation-policy
   Braintree API rate limits: https://developer.paypal.com/braintree/docs/reference/general/rate-limiting
   Braintree Status: https://status.braintreepayments.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/braintree
 
 CONFIGURATION
   environment (string) required: Environment specifies where the data will come from.
-  merchant_id (string) required: The unique identifier for your entire gateway account. See the <a href="https://docs.airbyte.com/integrations/sources/braintree">docs</a> for more information on how to obtain t...
-  private_key (string) required secret: Braintree Private Key. See the <a href="https://docs.airbyte.com/integrations/sources/braintree">docs</a> for more information on how to obtain this key.
-  public_key (string) required: Braintree Public Key. See the <a href="https://docs.airbyte.com/integrations/sources/braintree">docs</a> for more information on how to obtain this key.
+  merchant_id (string) required: manual intervention needed
+  private_key (string) required secret: manual intervention needed
+  public_key (string) required: manual intervention needed
   start_date (string): UTC date and time in the format 2017-01-25T00:00:00Z. Any data before this date will not be replicated.
   secret fields: private_key
 
@@ -64,11 +68,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/braintree
 
 EXAMPLES
   # Inspect catalog entry
@@ -83,7 +84,11 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Braintree documentation: https://docs.airbyte.com/integrations/sources/braintree
+  Braintree API reference: https://developer.paypal.com/braintree/docs/reference/overview
+  Braintree authentication: https://developer.paypal.com/braintree/docs/start/authentication
+  Server SDK Deprecation Policy: https://developer.paypal.com/braintree/docs/reference/general/server-sdk-deprecation-policy
+  Braintree API rate limits: https://developer.paypal.com/braintree/docs/reference/general/rate-limiting
+  Braintree Status: https://status.braintreepayments.com/
 
 EXIT STATUS
   0 success

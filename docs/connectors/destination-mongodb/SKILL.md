@@ -7,7 +7,14 @@ description: MongoDB connector knowledge and safe action guide.
 
 ## Purpose
 
-MongoDB catalog connector for https://docs.airbyte.com/integrations/destinations/mongodb. Native implementation status: planned_native_port.
+MongoDB catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/mongodb.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.mongodb.com/docs/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ MongoDB catalog connector for https://docs.airbyte.com/integrations/destinations
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-mongodb:0.2.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ MongoDB catalog connector for https://docs.airbyte.com/integrations/destinations
 - Role-based access control: https://www.mongodb.com/docs/manual/core/authorization/
 - Release Notes: https://www.mongodb.com/docs/manual/release-notes/
 - MongoDB Status: https://status.mongodb.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/mongodb
 
 ## Configuration
 
@@ -68,12 +73,8 @@ MongoDB catalog connector for https://docs.airbyte.com/integrations/destinations
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/mongodb
 
 ## Commands
 
@@ -97,4 +98,8 @@ pm connectors inspect destination-mongodb --json
 
 ## References
 
-- [MongoDB documentation](https://docs.airbyte.com/integrations/destinations/mongodb)
+- [MongoDB documentation](https://www.mongodb.com/docs/)
+- [Authentication](https://www.mongodb.com/docs/manual/core/authentication/)
+- [Role-based access control](https://www.mongodb.com/docs/manual/core/authorization/)
+- [Release Notes](https://www.mongodb.com/docs/manual/release-notes/)
+- [MongoDB Status](https://status.mongodb.com/)

@@ -1,5 +1,5 @@
 // Package oveit implements a conservative read-only connector for documented
-// Oveit API resources. The public Airbyte spec exposes email/password auth; this
+// Oveit API resources. The public upstream spec exposes email/password auth; this
 // native port sends those credentials as HTTP Basic auth and limits itself to
 // read-only collection endpoints.
 package oveit

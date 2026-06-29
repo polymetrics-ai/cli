@@ -7,7 +7,13 @@ description: SignNow connector knowledge and safe action guide.
 
 ## Purpose
 
-SignNow catalog connector for https://docs.airbyte.com/integrations/sources/signnow. Native implementation status: planned_native_port.
+SignNow catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ SignNow catalog connector for https://docs.airbyte.com/integrations/sources/sign
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-signnow:0.0.41 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ SignNow catalog connector for https://docs.airbyte.com/integrations/sources/sign
 ## Official Application Documentation
 
 - SignNow API documentation: https://docs.signnow.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/signnow
 
 ## Configuration
 
@@ -64,12 +68,8 @@ SignNow catalog connector for https://docs.airbyte.com/integrations/sources/sign
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/signnow
 
 ## Commands
 
@@ -93,4 +93,4 @@ pm connectors inspect source-signnow --json
 
 ## References
 
-- [SignNow documentation](https://docs.airbyte.com/integrations/sources/signnow)
+- [SignNow API documentation](https://docs.signnow.com/)

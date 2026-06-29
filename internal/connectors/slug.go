@@ -14,7 +14,7 @@ const (
 )
 
 // BareName returns the canonical per-system name for a connector slug by
-// stripping the legacy Airbyte-style "source-"/"destination-" prefix. This is the
+// stripping the legacy upstream-style "source-"/"destination-" prefix. This is the
 // name used for per-system package folders and the unified connector identity:
 //
 //	BareName("source-github")      == "github"

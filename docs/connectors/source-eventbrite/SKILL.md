@@ -7,7 +7,13 @@ description: Eventbrite connector knowledge and safe action guide.
 
 ## Purpose
 
-Eventbrite catalog connector for https://docs.airbyte.com/integrations/sources/eventbrite. Native implementation status: planned_native_port.
+Eventbrite catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Eventbrite catalog connector for https://docs.airbyte.com/integrations/sources/e
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-eventbrite:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Eventbrite catalog connector for https://docs.airbyte.com/integrations/sources/e
 - Eventbrite authentication: https://www.eventbrite.com/platform/api#/introduction/authentication
 - Eventbrite rate limits: https://www.eventbrite.com/platform/api#/introduction/rate-limits
 - Eventbrite Status: https://status.eventbrite.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/eventbrite
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Eventbrite catalog connector for https://docs.airbyte.com/integrations/sources/e
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/eventbrite
 
 ## Commands
 
@@ -94,4 +94,7 @@ pm connectors inspect source-eventbrite --json
 
 ## References
 
-- [Eventbrite documentation](https://docs.airbyte.com/integrations/sources/eventbrite)
+- [Eventbrite API reference](https://www.eventbrite.com/platform/api)
+- [Eventbrite authentication](https://www.eventbrite.com/platform/api#/introduction/authentication)
+- [Eventbrite rate limits](https://www.eventbrite.com/platform/api#/introduction/rate-limits)
+- [Eventbrite Status](https://status.eventbrite.com/)

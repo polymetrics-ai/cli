@@ -7,7 +7,14 @@ description: Couchbase connector knowledge and safe action guide.
 
 ## Purpose
 
-Couchbase catalog connector for https://docs.airbyte.com/integrations/sources/couchbase. Native implementation status: planned_native_port.
+Couchbase catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/couchbase.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/index.html
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Couchbase catalog connector for https://docs.airbyte.com/integrations/sources/co
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-couchbase:0.1.8 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Couchbase catalog connector for https://docs.airbyte.com/integrations/sources/co
 
 - Couchbase SQL++ reference: https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/index.html
 - Couchbase authentication: https://docs.couchbase.com/server/current/learn/security/authentication.html
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/couchbase
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Couchbase catalog connector for https://docs.airbyte.com/integrations/sources/co
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/couchbase
 
 ## Commands
 
@@ -95,4 +96,5 @@ pm connectors inspect source-couchbase --json
 
 ## References
 
-- [Couchbase documentation](https://docs.airbyte.com/integrations/sources/couchbase)
+- [Couchbase SQL++ reference](https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/index.html)
+- [Couchbase authentication](https://docs.couchbase.com/server/current/learn/security/authentication.html)

@@ -7,7 +7,13 @@ description: GitBook connector knowledge and safe action guide.
 
 ## Purpose
 
-GitBook catalog connector for https://docs.airbyte.com/integrations/sources/gitbook. Native implementation status: planned_native_port.
+GitBook catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ GitBook catalog connector for https://docs.airbyte.com/integrations/sources/gitb
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-gitbook:0.0.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ GitBook catalog connector for https://docs.airbyte.com/integrations/sources/gitb
 
 - GitBook API documentation: https://developer.gitbook.com/
 - GitBook authentication: https://developer.gitbook.com/gitbook-api/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/gitbook
 
 ## Configuration
 
@@ -63,12 +67,8 @@ GitBook catalog connector for https://docs.airbyte.com/integrations/sources/gitb
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/gitbook
 
 ## Commands
 
@@ -92,4 +92,5 @@ pm connectors inspect source-gitbook --json
 
 ## References
 
-- [GitBook documentation](https://docs.airbyte.com/integrations/sources/gitbook)
+- [GitBook API documentation](https://developer.gitbook.com/)
+- [GitBook authentication](https://developer.gitbook.com/gitbook-api/authentication)

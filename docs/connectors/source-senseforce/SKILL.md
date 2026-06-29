@@ -7,7 +7,13 @@ description: Senseforce connector knowledge and safe action guide.
 
 ## Purpose
 
-Senseforce catalog connector for https://docs.airbyte.com/integrations/sources/senseforce. Native implementation status: planned_native_port.
+Senseforce catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/senseforce.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Senseforce catalog connector for https://docs.airbyte.com/integrations/sources/s
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-senseforce:0.2.27 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,14 +50,13 @@ Senseforce catalog connector for https://docs.airbyte.com/integrations/sources/s
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/senseforce
+- Senseforce documentation: https://manual.senseforce.io/manual/sf-platform/public-api/endpoints
 
 ## Configuration
 
 - access_token (string) required secret: Your API access token. See <a href="https://manual.senseforce.io/manual/sf-platform/public-api/get-your-access-token/">here</a>. The toke is case sensitive.
 - backend_url (string) required: Your Senseforce API backend URL. This is the URL shown during the Login screen. See <a href="https://manual.senseforce.io/manual/sf-platform/public-api/get-your-access-token/">h...
-- dataset_id (string) required: The ID of the dataset you want to synchronize. The ID can be found in the URL when opening the dataset. See <a href="https://manual.senseforce.io/manual/sf-platform/public-api/g...
+- dataset_id (string) required: manual intervention needed
 - slice_range (integer): The time increment used by the connector when requesting data from the Senseforce API. The bigger the value is, the less requests will be made and faster the sync will be. On th...
 - start_date (string) required: UTC date and time in the format 2017-01-25. Only data with "Timestamp" after this date will be replicated. Important note: This start date must be set to the first day of where ...
 - secret fields: access_token
@@ -65,12 +69,8 @@ Senseforce catalog connector for https://docs.airbyte.com/integrations/sources/s
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/senseforce
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-senseforce --json
 
 ## References
 
-- [Senseforce documentation](https://docs.airbyte.com/integrations/sources/senseforce)
+- [Senseforce documentation](https://manual.senseforce.io/manual/sf-platform/public-api/endpoints)

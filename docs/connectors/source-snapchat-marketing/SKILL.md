@@ -7,7 +7,14 @@ description: Snapchat Marketing connector knowledge and safe action guide.
 
 ## Purpose
 
-Snapchat Marketing catalog connector for https://docs.airbyte.com/integrations/sources/snapchat-marketing. Native implementation status: planned_native_port.
+Snapchat Marketing catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/snapchat.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.snap.com/api/marketing-api/Ads-API/announcements
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Snapchat Marketing catalog connector for https://docs.airbyte.com/integrations/s
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-snapchat-marketing:1.5.40 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Snapchat Marketing catalog connector for https://docs.airbyte.com/integrations/s
 ## Official Application Documentation
 
 - Ads API announcements: https://developers.snap.com/api/marketing-api/Ads-API/announcements
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/snapchat-marketing
 
 ## Configuration
 
@@ -70,12 +75,8 @@ Snapchat Marketing catalog connector for https://docs.airbyte.com/integrations/s
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/snapchat-marketing
 
 ## Commands
 
@@ -99,4 +100,4 @@ pm connectors inspect source-snapchat-marketing --json
 
 ## References
 
-- [Snapchat Marketing documentation](https://docs.airbyte.com/integrations/sources/snapchat-marketing)
+- [Ads API announcements](https://developers.snap.com/api/marketing-api/Ads-API/announcements)

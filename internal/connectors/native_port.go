@@ -225,10 +225,6 @@ func RenderNativePortPlanManual(plan NativePortPlan) string {
 	b.WriteString("  Do not request or print secret values while porting connectors.\n")
 	b.WriteString("  Do not enable read or write runtime capabilities until conformance tests pass.\n")
 	b.WriteString("  Reverse ETL writes must remain plan, preview, approve, then execute.\n\n")
-	if plan.DocumentationURL != "" {
-		b.WriteString("SEE ALSO\n")
-		b.WriteString("  " + plan.DocumentationURL + "\n\n")
-	}
 	b.WriteString("EXIT STATUS\n")
 	b.WriteString("  0 success\n")
 	b.WriteString("  1 runtime error\n")

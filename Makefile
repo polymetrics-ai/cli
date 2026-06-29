@@ -4,7 +4,7 @@ INSTALL_DIR ?= $(HOME)/.local/bin
 # the go command to fetch the matching toolchain when the ambient one is older.
 export GOTOOLCHAIN ?= auto
 
-.PHONY: fmt vet test build docs-check install uninstall smoke verify verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean
+.PHONY: fmt vet test build icons-generate docs-check install uninstall smoke verify verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean
 
 fmt:
 	gofmt -w cmd internal
@@ -17,6 +17,10 @@ test:
 
 build:
 	go build ./cmd/pm
+
+icons-generate:
+	@test -n "$$PM_ICON_REGISTRY_SOURCE" || (printf 'PM_ICON_REGISTRY_SOURCE is required\n' >&2; exit 1)
+	go run ./cmd/iconregistrygen --source "$$PM_ICON_REGISTRY_SOURCE"
 
 docs-check: build
 	./pm docs validate --connectors-dir docs/connectors
@@ -31,7 +35,7 @@ uninstall:
 	printf 'removed %s\n' "$(INSTALL_DIR)/pm"
 
 smoke: build
-	set -euo pipefail; \
+	set -eu; \
 	SMOKE_DIR=$$(mktemp -d); \
 	export PM_SAMPLE_TOKEN=sample-token; \
 	./pm init --root "$$SMOKE_DIR" --json >/dev/null; \

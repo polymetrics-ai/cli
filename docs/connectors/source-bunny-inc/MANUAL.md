@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-bunny-inc [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Bunny, Inc. catalog connector for https://docs.airbyte.com/integrations/sources/bunny-inc. Native implementation status: planned_native_port.
+  Bunny, Inc. catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-bunny-inc:0.0.45 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Bunny.net API documentation: https://docs.bunny.net/reference/bunnynet-api-overview
   Bunny.net authentication: https://docs.bunny.net/reference/authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/bunny-inc
 
 CONFIGURATION
   apikey (string) required secret
@@ -59,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/bunny-inc
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +78,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Bunny, Inc. documentation: https://docs.airbyte.com/integrations/sources/bunny-inc
+  Bunny.net API documentation: https://docs.bunny.net/reference/bunnynet-api-overview
+  Bunny.net authentication: https://docs.bunny.net/reference/authentication
 
 EXIT STATUS
   0 success

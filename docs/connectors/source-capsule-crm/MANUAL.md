@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-capsule-crm [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Capsule CRM catalog connector for https://docs.airbyte.com/integrations/sources/capsule-crm. Native implementation status: planned_native_port.
+  Capsule CRM catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-capsule-crm:0.0.46 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Capsule CRM API reference: https://developer.capsulecrm.com/
   Capsule CRM authentication: https://developer.capsulecrm.com/v2/overview/authentication
   Capsule CRM rate limits: https://developer.capsulecrm.com/v2/overview/rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/capsule-crm
 
 CONFIGURATION
   bearer_token (string) required secret: Bearer token to authenticate API requests. Generate it from the 'My Preferences' > 'API Authentication Tokens' page in your Capsule account.
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/capsule-crm
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Capsule CRM documentation: https://docs.airbyte.com/integrations/sources/capsule-crm
+  Capsule CRM API reference: https://developer.capsulecrm.com/
+  Capsule CRM authentication: https://developer.capsulecrm.com/v2/overview/authentication
+  Capsule CRM rate limits: https://developer.capsulecrm.com/v2/overview/rate-limiting
 
 EXIT STATUS
   0 success

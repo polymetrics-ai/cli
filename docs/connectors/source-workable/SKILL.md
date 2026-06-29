@@ -7,7 +7,14 @@ description: Workable connector knowledge and safe action guide.
 
 ## Purpose
 
-Workable catalog connector for https://docs.airbyte.com/integrations/sources/workable. Native implementation status: planned_native_port.
+Workable catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/workable.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://workable.readme.io/reference
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Workable catalog connector for https://docs.airbyte.com/integrations/sources/wor
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-workable:0.2.17 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Workable catalog connector for https://docs.airbyte.com/integrations/sources/wor
 
 - Workable API reference: https://workable.readme.io/reference
 - Workable authentication: https://workable.readme.io/reference/generate-an-access-token
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/workable
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Workable catalog connector for https://docs.airbyte.com/integrations/sources/wor
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/workable
 
 ## Commands
 
@@ -93,4 +94,5 @@ pm connectors inspect source-workable --json
 
 ## References
 
-- [Workable documentation](https://docs.airbyte.com/integrations/sources/workable)
+- [Workable API reference](https://workable.readme.io/reference)
+- [Workable authentication](https://workable.readme.io/reference/generate-an-access-token)

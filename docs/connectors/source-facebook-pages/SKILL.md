@@ -7,7 +7,14 @@ description: Facebook Pages connector knowledge and safe action guide.
 
 ## Purpose
 
-Facebook Pages catalog connector for https://docs.airbyte.com/integrations/sources/facebook-pages. Native implementation status: planned_native_port.
+Facebook Pages catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/facebook.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.facebook.com/docs/pages/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Facebook Pages catalog connector for https://docs.airbyte.com/integrations/sourc
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-facebook-pages:2.1.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Facebook Pages catalog connector for https://docs.airbyte.com/integrations/sourc
 - Facebook authentication guide: https://developers.facebook.com/docs/facebook-login/guides/access-tokens/
 - Facebook Graph API changelog: https://developers.facebook.com/docs/graph-api/changelog/
 - Facebook Platform Status: https://developers.facebook.com/status/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/facebook-pages
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Facebook Pages catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/facebook-pages
 
 ## Commands
 
@@ -95,4 +96,7 @@ pm connectors inspect source-facebook-pages --json
 
 ## References
 
-- [Facebook Pages documentation](https://docs.airbyte.com/integrations/sources/facebook-pages)
+- [Facebook Pages API reference](https://developers.facebook.com/docs/pages/)
+- [Facebook authentication guide](https://developers.facebook.com/docs/facebook-login/guides/access-tokens/)
+- [Facebook Graph API changelog](https://developers.facebook.com/docs/graph-api/changelog/)
+- [Facebook Platform Status](https://developers.facebook.com/status/)

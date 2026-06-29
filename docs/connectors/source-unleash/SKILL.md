@@ -7,7 +7,14 @@ description: Unleash connector knowledge and safe action guide.
 
 ## Purpose
 
-Unleash catalog connector for https://docs.airbyte.com/integrations/sources/unleash. Native implementation status: planned_native_port.
+Unleash catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/unleash.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.getunleash.io/reference/api/unleash
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Unleash catalog connector for https://docs.airbyte.com/integrations/sources/unle
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-unleash:0.2.23 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Unleash catalog connector for https://docs.airbyte.com/integrations/sources/unle
 ## Official Application Documentation
 
 - Unleash API documentation: https://docs.getunleash.io/reference/api/unleash
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/unleash
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Unleash catalog connector for https://docs.airbyte.com/integrations/sources/unle
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/unleash
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect source-unleash --json
 
 ## References
 
-- [Unleash documentation](https://docs.airbyte.com/integrations/sources/unleash)
+- [Unleash API documentation](https://docs.getunleash.io/reference/api/unleash)

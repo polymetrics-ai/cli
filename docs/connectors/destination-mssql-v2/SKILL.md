@@ -7,7 +7,13 @@ description: MS SQL Server V2 connector knowledge and safe action guide.
 
 ## Purpose
 
-MS SQL Server V2 catalog connector for https://docs.airbyte.com/integrations/destinations/mssql-v2. Native implementation status: planned_native_port.
+MS SQL Server V2 catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-warehouse.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ MS SQL Server V2 catalog connector for https://docs.airbyte.com/integrations/des
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-mssql-v2:0.1.15 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ MS SQL Server V2 catalog connector for https://docs.airbyte.com/integrations/des
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/mssql-v2
+- MS SQL Server V2 documentation: https://learn.microsoft.com/en-us/sql/sql-server/
 
 ## Configuration
 
@@ -69,12 +73,8 @@ MS SQL Server V2 catalog connector for https://docs.airbyte.com/integrations/des
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/mssql-v2
 
 ## Commands
 
@@ -98,4 +98,4 @@ pm connectors inspect destination-mssql-v2 --json
 
 ## References
 
-- [MS SQL Server V2 documentation](https://docs.airbyte.com/integrations/destinations/mssql-v2)
+- [MS SQL Server V2 documentation](https://learn.microsoft.com/en-us/sql/sql-server/)

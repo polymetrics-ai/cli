@@ -28,7 +28,7 @@ const (
 	ezoMaxPageSize     = 100
 	ezoUserAgent       = "polymetrics-go-cli"
 	// ezoAuthHeader is the header EZOfficeInventory expects the API access token
-	// in (per the upstream Airbyte manifest's ApiKeyAuthenticator).
+	// in (per the upstream upstream manifest's ApiKeyAuthenticator).
 	ezoAuthHeader = "token"
 )
 

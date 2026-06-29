@@ -7,7 +7,14 @@ description: Sendinblue connector knowledge and safe action guide.
 
 ## Purpose
 
-Sendinblue catalog connector for https://docs.airbyte.com/integrations/sources/sendinblue. Native implementation status: planned_native_port.
+Sendinblue catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/sendinblue.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.brevo.com/reference
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Sendinblue catalog connector for https://docs.airbyte.com/integrations/sources/s
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sendinblue:0.2.28 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Sendinblue catalog connector for https://docs.airbyte.com/integrations/sources/s
 - Brevo (Sendinblue) API: https://developers.brevo.com/reference
 - Brevo authentication: https://developers.brevo.com/docs/getting-started
 - Brevo rate limits: https://developers.brevo.com/docs/api-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sendinblue
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Sendinblue catalog connector for https://docs.airbyte.com/integrations/sources/s
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/sendinblue
 
 ## Commands
 
@@ -92,4 +93,6 @@ pm connectors inspect source-sendinblue --json
 
 ## References
 
-- [Sendinblue documentation](https://docs.airbyte.com/integrations/sources/sendinblue)
+- [Brevo (Sendinblue) API](https://developers.brevo.com/reference)
+- [Brevo authentication](https://developers.brevo.com/docs/getting-started)
+- [Brevo rate limits](https://developers.brevo.com/docs/api-limits)

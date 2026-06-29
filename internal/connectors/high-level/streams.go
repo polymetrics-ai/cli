@@ -29,8 +29,8 @@ type streamEndpoint struct {
 
 // streamEndpoints is the per-stream routing table. Adding a stream means adding
 // one entry here plus a Stream definition in highLevelStreams; the read path is
-// fully data-driven from this table. Paths mirror the Airbyte source-high-level
-// proxy connector (/airbyte/<resource>).
+// fully data-driven from this table. Paths mirror the upstream source-high-level
+// proxy connector (/upstream/<resource>).
 var streamEndpoints = map[string]streamEndpoint{
 	"contacts":         {resource: "contacts", recordsPath: "contacts", style: styleCursor, mapRecord: contactRecord},
 	"opportunities":    {resource: "opportunities", recordsPath: "opportunities", style: styleCursor, mapRecord: opportunityRecord},

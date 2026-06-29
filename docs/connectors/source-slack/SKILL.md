@@ -7,7 +7,14 @@ description: Slack connector knowledge and safe action guide.
 
 ## Purpose
 
-Slack catalog connector for https://docs.airbyte.com/integrations/sources/slack. Native implementation status: planned_native_port.
+Slack catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/slack.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://api.slack.com/changelog
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Slack catalog connector for https://docs.airbyte.com/integrations/sources/slack.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-slack:3.2.11 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Slack catalog connector for https://docs.airbyte.com/integrations/sources/slack.
 - Changelog: https://api.slack.com/changelog
 - Slack developer changelog: https://docs.slack.dev/changelog/
 - Slack Web API OpenAPI specification: https://api.slack.com/specs/openapi/v2/slack_web.json
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/slack
 
 ## Configuration
 
@@ -72,12 +77,8 @@ Slack catalog connector for https://docs.airbyte.com/integrations/sources/slack.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/slack
 
 ## Commands
 
@@ -101,4 +102,6 @@ pm connectors inspect source-slack --json
 
 ## References
 
-- [Slack documentation](https://docs.airbyte.com/integrations/sources/slack)
+- [Changelog](https://api.slack.com/changelog)
+- [Slack developer changelog](https://docs.slack.dev/changelog/)
+- [Slack Web API OpenAPI specification](https://api.slack.com/specs/openapi/v2/slack_web.json)

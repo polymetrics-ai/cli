@@ -7,7 +7,13 @@ description: Teamwork connector knowledge and safe action guide.
 
 ## Purpose
 
-Teamwork catalog connector for https://docs.airbyte.com/integrations/sources/teamwork. Native implementation status: planned_native_port.
+Teamwork catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Teamwork catalog connector for https://docs.airbyte.com/integrations/sources/tea
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-teamwork:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Teamwork catalog connector for https://docs.airbyte.com/integrations/sources/tea
 
 - Teamwork API reference: https://apidocs.teamwork.com/
 - Teamwork authentication: https://apidocs.teamwork.com/guides/teamwork/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/teamwork
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Teamwork catalog connector for https://docs.airbyte.com/integrations/sources/tea
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/teamwork
 
 ## Commands
 
@@ -94,4 +94,5 @@ pm connectors inspect source-teamwork --json
 
 ## References
 
-- [Teamwork documentation](https://docs.airbyte.com/integrations/sources/teamwork)
+- [Teamwork API reference](https://apidocs.teamwork.com/)
+- [Teamwork authentication](https://apidocs.teamwork.com/guides/teamwork/authentication)

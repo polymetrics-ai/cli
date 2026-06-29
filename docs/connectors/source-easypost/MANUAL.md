@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-easypost [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Easypost catalog connector for https://docs.airbyte.com/integrations/sources/easypost. Native implementation status: planned_native_port.
+  Easypost catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-easypost:0.0.51 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   EasyPost authentication: https://www.easypost.com/docs/api#authentication
   EasyPost rate limits: https://www.easypost.com/docs/api#rate-limiting
   EasyPost Status: https://status.easypost.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/easypost
 
 CONFIGURATION
   start_date (string) required
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/easypost
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Easypost documentation: https://docs.airbyte.com/integrations/sources/easypost
+  EasyPost API reference: https://www.easypost.com/docs/api
+  EasyPost authentication: https://www.easypost.com/docs/api#authentication
+  EasyPost rate limits: https://www.easypost.com/docs/api#rate-limiting
+  EasyPost Status: https://status.easypost.com/
 
 EXIT STATUS
   0 success

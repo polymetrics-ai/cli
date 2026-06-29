@@ -29,7 +29,7 @@ var boxStreamEndpoints = map[string]streamEndpoint{
 
 // boxStreams returns the connector's published stream catalog. Box objects expose
 // a string id, so the primary key is ["id"] across the board. Box's manifest-only
-// Airbyte source supports full_refresh only; the modified_at/created_at fields are
+// upstream source supports full_refresh only; the modified_at/created_at fields are
 // still surfaced as cursor candidates for incremental users of this connector.
 func boxStreams() []connectors.Stream {
 	return []connectors.Stream{

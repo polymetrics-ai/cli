@@ -7,7 +7,14 @@ description: Oracle connector knowledge and safe action guide.
 
 ## Purpose
 
-Oracle catalog connector for https://docs.airbyte.com/integrations/destinations/oracle. Native implementation status: planned_native_port.
+Oracle catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/oracle.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.oracle.com/en/database/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Oracle catalog connector for https://docs.airbyte.com/integrations/destinations/
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-oracle:1.0.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ Oracle catalog connector for https://docs.airbyte.com/integrations/destinations/
 - Database authentication: https://docs.oracle.com/en/database/oracle/oracle-database/19/dbseg/configuring-authentication.html
 - Managing security: https://docs.oracle.com/en/database/oracle/oracle-database/19/dbseg/
 - Oracle Database Release Notes: https://docs.oracle.com/en/database/oracle/oracle-database/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/oracle
 
 ## Configuration
 
@@ -59,8 +64,8 @@ Oracle catalog connector for https://docs.airbyte.com/integrations/destinations/
 - jdbc_url_params (string): Additional properties to pass to the JDBC URL string when connecting to the database formatted as 'key=value' pairs separated by the symbol '&'. (example: key1=value1&key2=value...
 - password (string) secret: The password associated with the username.
 - port (integer) required: The port of the database.
-- raw_data_schema (string): The schema to write raw tables into (default: airbyte_internal)
-- schema (string): The default schema is used as the target schema for all statements issued from the connection that do not explicitly specify a schema name. The usual value for this field is "ai...
+- raw_data_schema (string): manual intervention needed
+- schema (string): manual intervention needed
 - sid (string) required: The System Identifier uniquely distinguishes the instance from any other instance on the same computer.
 - tunnel_method (object): Whether to initiate an SSH tunnel before connecting to the database, and if so, which kind of authentication to use.
 - username (string) required: The username to access the database. This user must have CREATE USER privileges in the database.
@@ -74,12 +79,8 @@ Oracle catalog connector for https://docs.airbyte.com/integrations/destinations/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/oracle
 
 ## Commands
 
@@ -103,4 +104,8 @@ pm connectors inspect destination-oracle --json
 
 ## References
 
-- [Oracle documentation](https://docs.airbyte.com/integrations/destinations/oracle)
+- [Oracle Database documentation](https://docs.oracle.com/en/database/)
+- [SQL language reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/)
+- [Database authentication](https://docs.oracle.com/en/database/oracle/oracle-database/19/dbseg/configuring-authentication.html)
+- [Managing security](https://docs.oracle.com/en/database/oracle/oracle-database/19/dbseg/)
+- [Oracle Database Release Notes](https://docs.oracle.com/en/database/oracle/oracle-database/)

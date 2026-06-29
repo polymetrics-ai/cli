@@ -7,7 +7,13 @@ description: FreshBooks connector knowledge and safe action guide.
 
 ## Purpose
 
-FreshBooks catalog connector for https://docs.airbyte.com/integrations/sources/freshbooks. Native implementation status: planned_native_port.
+FreshBooks catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ FreshBooks catalog connector for https://docs.airbyte.com/integrations/sources/f
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-freshbooks:0.0.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ FreshBooks catalog connector for https://docs.airbyte.com/integrations/sources/f
 - FreshBooks API reference: https://www.freshbooks.com/api/start
 - FreshBooks authentication: https://www.freshbooks.com/api/authentication
 - FreshBooks rate limits: https://www.freshbooks.com/api/rate_limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/freshbooks
 
 ## Configuration
 
@@ -70,12 +74,8 @@ FreshBooks catalog connector for https://docs.airbyte.com/integrations/sources/f
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/freshbooks
 
 ## Commands
 
@@ -99,4 +99,6 @@ pm connectors inspect source-freshbooks --json
 
 ## References
 
-- [FreshBooks documentation](https://docs.airbyte.com/integrations/sources/freshbooks)
+- [FreshBooks API reference](https://www.freshbooks.com/api/start)
+- [FreshBooks authentication](https://www.freshbooks.com/api/authentication)
+- [FreshBooks rate limits](https://www.freshbooks.com/api/rate_limiting)

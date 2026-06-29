@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-duckdb [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  DuckDB catalog connector for https://docs.airbyte.com/integrations/destinations/duckdb. Native implementation status: planned_native_port.
+  DuckDB catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/duckdb.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://duckdb.org/docs/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-duckdb:0.6.0 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,10 +51,9 @@ OFFICIAL APPLICATION DOCUMENTATION
   DuckDB documentation: https://duckdb.org/docs/
   SQL reference: https://duckdb.org/docs/sql/introduction
   MotherDuck Version Lifecycle Schedules: https://motherduck.com/docs/troubleshooting/version-lifecycle-schedules/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/duckdb
 
 CONFIGURATION
-  destination_path (string) required: Path to the .duckdb file, or the text 'md:' to connect to MotherDuck. The file will be placed inside that local mount. For more information check out our <a href="https://docs.a...
+  destination_path (string) required: manual intervention needed
   motherduck_api_key (string) secret: API key to use for authentication to a MotherDuck database.
   schema (string): Database schema name, default for duckdb is 'main'.
   secret fields: motherduck_api_key
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/duckdb
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  DuckDB documentation: https://docs.airbyte.com/integrations/destinations/duckdb
+  DuckDB documentation: https://duckdb.org/docs/
+  SQL reference: https://duckdb.org/docs/sql/introduction
+  MotherDuck Version Lifecycle Schedules: https://motherduck.com/docs/troubleshooting/version-lifecycle-schedules/
 
 EXIT STATUS
   0 success

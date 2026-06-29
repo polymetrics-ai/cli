@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-azure-blob-storage [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Azure Blob Storage catalog connector for https://docs.airbyte.com/integrations/destinations/azure-blob-storage. Native implementation status: planned_native_port.
+  Azure Blob Storage catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/azureblobstorage.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://learn.microsoft.com/en-us/azure/storage/blobs/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-azure-blob-storage:1.1.7 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,7 +53,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Access control: https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-access-control
   Scalability and performance: https://learn.microsoft.com/en-us/azure/storage/blobs/scalability-targets
   Azure Status: https://status.azure.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/azure-blob-storage
 
 CONFIGURATION
   azure_blob_storage_account_key (string) secret: The Azure Blob Storage account key. If you set this value, you must not set the "Shared Access Signature", "Azure Tenant ID", "Azure Client ID", or "Azure Client Secret" fields.
@@ -69,11 +73,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/azure-blob-storage
 
 EXAMPLES
   # Inspect catalog entry
@@ -88,7 +89,11 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Azure Blob Storage documentation: https://docs.airbyte.com/integrations/destinations/azure-blob-storage
+  Azure Blob Storage documentation: https://learn.microsoft.com/en-us/azure/storage/blobs/
+  Authorize access: https://learn.microsoft.com/en-us/azure/storage/common/authorize-data-access
+  Access control: https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-access-control
+  Scalability and performance: https://learn.microsoft.com/en-us/azure/storage/blobs/scalability-targets
+  Azure Status: https://status.azure.com/
 
 EXIT STATUS
   0 success

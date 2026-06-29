@@ -19,7 +19,7 @@
 
 ---
 
-Moving data today means renting a cloud pipeline (Fivetran's surprise MAR bills), babysitting a Docker/Kubernetes deployment (Airbyte's 8 GB of services), or wiring together a graveyard of half-maintained Singer taps. And once the data lands, you still need a *second* tool to push results back into the apps your team actually uses.
+Moving data today means renting a cloud pipeline (Fivetran's surprise MAR bills), babysitting a Docker/Kubernetes deployment (connector registry's 8 GB of services), or wiring together a graveyard of half-maintained Singer taps. And once the data lands, you still need a *second* tool to push results back into the apps your team actually uses.
 
 **Polymetrics is one binary that does the whole loop — extract, query, and act — locally.**
 
@@ -110,7 +110,7 @@ Secrets are never printed or logged — only secret *field names* surface in doc
 
 ## 📊 How it compares
 
-| | **Polymetrics** | Airbyte | Fivetran | dlt | Hightouch / Census |
+| | **Polymetrics** | connector registry | Fivetran | dlt | Hightouch / Census |
 |---|:---:|:---:|:---:|:---:|:---:|
 | **Deploy** | Single local binary | Docker/K8s (8 GB+) or Cloud | Cloud SaaS | Python library | Cloud SaaS |
 | **Direction** | ✅ ETL **+** reverse-ETL | ETL only | ETL only | ETL only | ⚠️ reverse-ETL only |
@@ -127,7 +127,7 @@ Secrets are never printed or logged — only secret *field names* surface in doc
 
 ## 🔌 Connectors
 
-**118 native Go connectors** are implemented today, with a **647-connector catalog** as the roadmap.
+**118 native Go connectors** are implemented today, with a **646-connector catalog** as the roadmap.
 
 ```bash
 pm connectors list              # connectors available in your binary

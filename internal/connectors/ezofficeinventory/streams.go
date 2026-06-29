@@ -19,7 +19,7 @@ type streamEndpoint struct {
 }
 
 // detailParams enriches asset-like responses with image/document/custom-field
-// data, mirroring the upstream Airbyte manifest's request_parameters.
+// data, mirroring the upstream upstream manifest's request_parameters.
 var detailParams = map[string]string{
 	"show_image_urls":       "true",
 	"show_document_urls":    "true",

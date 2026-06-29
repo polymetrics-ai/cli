@@ -7,7 +7,14 @@ description: Google Directory connector knowledge and safe action guide.
 
 ## Purpose
 
-Google Directory catalog connector for https://docs.airbyte.com/integrations/sources/google-directory. Native implementation status: planned_native_port.
+Google Directory catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/googledirectory.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.google.com/admin-sdk/directory/reference/rest
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Google Directory catalog connector for https://docs.airbyte.com/integrations/sou
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-google-directory:0.2.45 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Google Directory catalog connector for https://docs.airbyte.com/integrations/sou
 - Google Directory API reference: https://developers.google.com/admin-sdk/directory/reference/rest
 - Google Directory authentication: https://developers.google.com/admin-sdk/directory/v1/guides/authorizing
 - Google Workspace Status: https://www.google.com/appsstatus/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-directory
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Google Directory catalog connector for https://docs.airbyte.com/integrations/sou
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/google-directory
 
 ## Commands
 
@@ -92,4 +93,6 @@ pm connectors inspect source-google-directory --json
 
 ## References
 
-- [Google Directory documentation](https://docs.airbyte.com/integrations/sources/google-directory)
+- [Google Directory API reference](https://developers.google.com/admin-sdk/directory/reference/rest)
+- [Google Directory authentication](https://developers.google.com/admin-sdk/directory/v1/guides/authorizing)
+- [Google Workspace Status](https://www.google.com/appsstatus/)

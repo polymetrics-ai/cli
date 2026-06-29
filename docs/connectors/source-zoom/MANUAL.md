@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-zoom [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Zoom catalog connector for https://docs.airbyte.com/integrations/sources/zoom. Native implementation status: planned_native_port.
+  Zoom catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/zoom.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.zoom.us/docs/api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-zoom:1.2.53 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,7 +53,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Zoom API changelog: https://developers.zoom.us/changelog/
   Zoom rate limits: https://developers.zoom.us/docs/api/rest/rate-limits/
   Zoom Status: https://status.zoom.us/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zoom
 
 CONFIGURATION
   account_id (string) required: The account ID for your Zoom account. You can find this in the Zoom Marketplace under the "Manage" tab for your app.
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/zoom
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,11 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Zoom documentation: https://docs.airbyte.com/integrations/sources/zoom
+  Zoom API reference: https://developers.zoom.us/docs/api/
+  Zoom authentication: https://developers.zoom.us/docs/integrations/oauth/
+  Zoom API changelog: https://developers.zoom.us/changelog/
+  Zoom rate limits: https://developers.zoom.us/docs/api/rest/rate-limits/
+  Zoom Status: https://status.zoom.us/
 
 EXIT STATUS
   0 success

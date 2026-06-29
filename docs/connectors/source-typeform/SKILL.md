@@ -7,7 +7,14 @@ description: Typeform connector knowledge and safe action guide.
 
 ## Purpose
 
-Typeform catalog connector for https://docs.airbyte.com/integrations/sources/typeform. Native implementation status: planned_native_port.
+Typeform catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/typeform.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.typeform.com/developers/changelog/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Typeform catalog connector for https://docs.airbyte.com/integrations/sources/typ
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-typeform:1.4.8 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Typeform catalog connector for https://docs.airbyte.com/integrations/sources/typ
 ## Official Application Documentation
 
 - Changelog: https://www.typeform.com/developers/changelog/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/typeform
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Typeform catalog connector for https://docs.airbyte.com/integrations/sources/typ
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/typeform
 
 ## Commands
 
@@ -92,4 +93,4 @@ pm connectors inspect source-typeform --json
 
 ## References
 
-- [Typeform documentation](https://docs.airbyte.com/integrations/sources/typeform)
+- [Changelog](https://www.typeform.com/developers/changelog/)

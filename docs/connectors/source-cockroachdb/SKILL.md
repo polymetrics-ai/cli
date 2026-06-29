@@ -7,7 +7,14 @@ description: Cockroachdb connector knowledge and safe action guide.
 
 ## Purpose
 
-Cockroachdb catalog connector for https://docs.airbyte.com/integrations/sources/cockroachdb. Native implementation status: planned_native_port.
+Cockroachdb catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/cockroachdb.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.cockroachlabs.com/docs/stable/sql-statements
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Cockroachdb catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-cockroachdb:0.2.5 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Cockroachdb catalog connector for https://docs.airbyte.com/integrations/sources/
 - CockroachDB authentication: https://www.cockroachlabs.com/docs/stable/authentication
 - CockroachDB Releases: https://www.cockroachlabs.com/docs/releases/
 - CockroachDB Status: https://status.cockroachlabs.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/cockroachdb
 
 ## Configuration
 
@@ -70,12 +75,8 @@ Cockroachdb catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/cockroachdb
 
 ## Commands
 
@@ -99,4 +100,7 @@ pm connectors inspect source-cockroachdb --json
 
 ## References
 
-- [Cockroachdb documentation](https://docs.airbyte.com/integrations/sources/cockroachdb)
+- [CockroachDB SQL reference](https://www.cockroachlabs.com/docs/stable/sql-statements)
+- [CockroachDB authentication](https://www.cockroachlabs.com/docs/stable/authentication)
+- [CockroachDB Releases](https://www.cockroachlabs.com/docs/releases/)
+- [CockroachDB Status](https://status.cockroachlabs.com/)

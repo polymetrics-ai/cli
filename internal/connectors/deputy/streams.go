@@ -18,7 +18,7 @@ type streamEndpoint struct {
 // Stream definition in deputyStreams.
 //
 // Paths and primary keys mirror the official Deputy API and the upstream
-// airbyte/source-deputy manifest.
+// upstream/source-deputy manifest.
 var deputyStreamEndpoints = map[string]streamEndpoint{
 	"locations":   {path: "api/v1/resource/Company", paginated: true, mapRecord: deputyLocationRecord},
 	"employees":   {path: "api/v1/supervise/employee", paginated: false, mapRecord: deputyEmployeeRecord},

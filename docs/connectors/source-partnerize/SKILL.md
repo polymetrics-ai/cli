@@ -7,7 +7,13 @@ description: Partnerize connector knowledge and safe action guide.
 
 ## Purpose
 
-Partnerize catalog connector for https://docs.airbyte.com/integrations/sources/partnerize. Native implementation status: planned_native_port.
+Partnerize catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Partnerize catalog connector for https://docs.airbyte.com/integrations/sources/p
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-partnerize:0.0.39 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Partnerize catalog connector for https://docs.airbyte.com/integrations/sources/p
 ## Official Application Documentation
 
 - Partnerize API documentation: https://api-documentation.partnerize.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/partnerize
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Partnerize catalog connector for https://docs.airbyte.com/integrations/sources/p
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/partnerize
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-partnerize --json
 
 ## References
 
-- [Partnerize documentation](https://docs.airbyte.com/integrations/sources/partnerize)
+- [Partnerize API documentation](https://api-documentation.partnerize.com/)

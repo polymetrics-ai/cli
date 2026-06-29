@@ -7,7 +7,14 @@ description: Gainsight Px connector knowledge and safe action guide.
 
 ## Purpose
 
-Gainsight Px catalog connector for https://docs.airbyte.com/integrations/sources/gainsight-px. Native implementation status: planned_native_port.
+Gainsight Px catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/gainsight-px.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://support.gainsight.com/PX/API_for_Developers/02Usage_of_Different_APIs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Gainsight Px catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-gainsight-px:0.2.34 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Gainsight Px catalog connector for https://docs.airbyte.com/integrations/sources
 ## Official Application Documentation
 
 - Gainsight PX API documentation: https://support.gainsight.com/PX/API_for_Developers/02Usage_of_Different_APIs
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/gainsight-px
 
 ## Configuration
 
@@ -61,12 +66,8 @@ Gainsight Px catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/gainsight-px
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-gainsight-px --json
 
 ## References
 
-- [Gainsight Px documentation](https://docs.airbyte.com/integrations/sources/gainsight-px)
+- [Gainsight PX API documentation](https://support.gainsight.com/PX/API_for_Developers/02Usage_of_Different_APIs)

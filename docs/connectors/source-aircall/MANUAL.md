@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-aircall [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Aircall catalog connector for https://docs.airbyte.com/integrations/sources/aircall. Native implementation status: planned_native_port.
+  Aircall catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/aircall.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.aircall.io/api-references/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-aircall:0.4.13 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   API documentation: https://developer.aircall.io/api-references/
   Authentication: https://developer.aircall.io/api-references/#authentication
   Rate limits: https://developer.aircall.io/api-references/#rate-limit
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/aircall
 
 CONFIGURATION
   api_id (string) required secret: App ID found at settings https://dashboard.aircall.io/integrations/api-keys
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/aircall
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Aircall documentation: https://docs.airbyte.com/integrations/sources/aircall
+  API documentation: https://developer.aircall.io/api-references/
+  Authentication: https://developer.aircall.io/api-references/#authentication
+  Rate limits: https://developer.aircall.io/api-references/#rate-limit
 
 EXIT STATUS
   0 success

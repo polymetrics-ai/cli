@@ -3,12 +3,12 @@
 // composes the connsdk toolkit (Requester + cursor pagination + RecordsAt
 // extraction) with Gmail-API-specific stream definitions and endpoints.
 //
-// The Airbyte source-gmail connector reads the Gmail REST API
+// The upstream source-gmail connector reads the Gmail REST API
 // (https://gmail.googleapis.com/gmail/v1), authenticated with a Google OAuth 2.0
 // refresh-token grant. This connector exposes the four core list resources of
 // that API as streams — messages, threads, drafts, and labels — which are the
 // id-bearing surfaces the upstream source enumerates. It is read-only: the
-// Airbyte source supports only full_refresh and Gmail has no safe reverse-ETL
+// upstream source supports only full_refresh and Gmail has no safe reverse-ETL
 // write surface here.
 //
 // Auth: client_id, client_secret, and client_refresh_token secrets are exchanged

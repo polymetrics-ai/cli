@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-jotform [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Jotform catalog connector for https://docs.airbyte.com/integrations/sources/jotform. Native implementation status: planned_native_port.
+  Jotform catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-jotform:0.0.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Jotform API documentation: https://api.jotform.com/docs/
   Jotform authentication: https://api.jotform.com/docs/#authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/jotform
 
 CONFIGURATION
   api_endpoint (object) required
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/jotform
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Jotform documentation: https://docs.airbyte.com/integrations/sources/jotform
+  Jotform API documentation: https://api.jotform.com/docs/
+  Jotform authentication: https://api.jotform.com/docs/#authentication
 
 EXIT STATUS
   0 success

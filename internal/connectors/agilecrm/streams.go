@@ -19,7 +19,7 @@ type streamEndpoint struct {
 // path is fully data-driven from this table.
 //
 // Paths and pagination semantics come from the official REST API docs
-// (github.com/agilecrm/rest-api) and the Airbyte source manifest: contacts and
+// (github.com/agilecrm/rest-api) and the upstream source manifest: contacts and
 // deals (opportunity) paginate via a cursor read off the last array element;
 // tasks and milestone pipelines return a bounded top-level array with no paging.
 var agilecrmStreamEndpoints = map[string]streamEndpoint{

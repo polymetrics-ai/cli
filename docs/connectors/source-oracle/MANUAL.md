@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-oracle [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Oracle DB catalog connector for https://docs.airbyte.com/integrations/sources/oracle. Native implementation status: planned_native_port.
+  Oracle DB catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/oracle.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.oracle.com/en/database/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: database_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-oracle:0.5.8 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,7 +53,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Oracle Database documentation: https://docs.oracle.com/en/database/
   Oracle authentication: https://docs.oracle.com/en/database/oracle/oracle-database/19/dbseg/introduction-to-oracle-database-security.html
   Oracle Database Release Notes: https://docs.oracle.com/en/database/oracle/oracle-database/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/oracle
 
 CONFIGURATION
   connection_data (object): Connect data that will be used for DB connection
@@ -68,11 +72,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/oracle
 
 EXAMPLES
   # Inspect catalog entry
@@ -87,7 +88,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Oracle DB documentation: https://docs.airbyte.com/integrations/sources/oracle
+  Oracle Database documentation: https://docs.oracle.com/en/database/
+  Oracle authentication: https://docs.oracle.com/en/database/oracle/oracle-database/19/dbseg/introduction-to-oracle-database-security.html
+  Oracle Database Release Notes: https://docs.oracle.com/en/database/oracle/oracle-database/
 
 EXIT STATUS
   0 success

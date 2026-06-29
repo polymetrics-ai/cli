@@ -7,7 +7,14 @@ description: SAP HANA connector knowledge and safe action guide.
 
 ## Purpose
 
-SAP HANA catalog connector for https://docs.airbyte.com/integrations/enterprise-connectors/source-sap-hana. Native implementation status: planned_native_port.
+SAP HANA catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/sap.svg
+- source: official
+- review_status: official_verified
+- review_url: https://help.sap.com/docs/SAP_HANA_PLATFORM
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ SAP HANA catalog connector for https://docs.airbyte.com/integrations/enterprise-
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sap-hana-enterprise:0.0.18 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ SAP HANA catalog connector for https://docs.airbyte.com/integrations/enterprise-
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/enterprise-connectors/source-sap-hana
+- SAP HANA documentation: https://help.sap.com/docs/SAP_HANA_PLATFORM
 
 ## Configuration
 
@@ -74,12 +79,8 @@ SAP HANA catalog connector for https://docs.airbyte.com/integrations/enterprise-
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/enterprise-connectors/source-sap-hana
 
 ## Commands
 
@@ -103,4 +104,4 @@ pm connectors inspect source-sap-hana-enterprise --json
 
 ## References
 
-- [SAP HANA documentation](https://docs.airbyte.com/integrations/enterprise-connectors/source-sap-hana)
+- [SAP HANA documentation](https://help.sap.com/docs/SAP_HANA_PLATFORM)

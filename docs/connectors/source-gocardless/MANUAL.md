@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-gocardless [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  GoCardless catalog connector for https://docs.airbyte.com/integrations/sources/gocardless. Native implementation status: planned_native_port.
+  GoCardless catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/gocardless.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.gocardless.com/api-reference/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-gocardless:0.2.25 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   GoCardless authentication: https://developer.gocardless.com/getting-started/api/making-your-first-api-request/
   GoCardless rate limits: https://developer.gocardless.com/api-reference/#making-requests-rate-limiting
   GoCardless Status: https://status.gocardless.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/gocardless
 
 CONFIGURATION
   access_token (string) required secret: Gocardless API TOKEN
@@ -62,11 +66,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/gocardless
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +82,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  GoCardless documentation: https://docs.airbyte.com/integrations/sources/gocardless
+  GoCardless API reference: https://developer.gocardless.com/api-reference/
+  GoCardless authentication: https://developer.gocardless.com/getting-started/api/making-your-first-api-request/
+  GoCardless rate limits: https://developer.gocardless.com/api-reference/#making-requests-rate-limiting
+  GoCardless Status: https://status.gocardless.com/
 
 EXIT STATUS
   0 success

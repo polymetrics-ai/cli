@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-paypal-transaction [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Paypal Transaction catalog connector for https://docs.airbyte.com/integrations/sources/paypal-transaction. Native implementation status: planned_native_port.
+  Paypal Transaction catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/paypal.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.paypal.com/api/rest/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-paypal-transaction:2.6.37 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   PayPal authentication: https://developer.paypal.com/api/rest/authentication/
   PayPal rate limits: https://developer.paypal.com/api/rest/rate-limiting/
   PayPal Status: https://www.paypal-status.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/paypal-transaction
 
 CONFIGURATION
   client_id (string) required secret: The Client ID of your Paypal developer application.
@@ -66,11 +70,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/paypal-transaction
 
 EXAMPLES
   # Inspect catalog entry
@@ -85,7 +86,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Paypal Transaction documentation: https://docs.airbyte.com/integrations/sources/paypal-transaction
+  PayPal API reference: https://developer.paypal.com/api/rest/
+  PayPal authentication: https://developer.paypal.com/api/rest/authentication/
+  PayPal rate limits: https://developer.paypal.com/api/rest/rate-limiting/
+  PayPal Status: https://www.paypal-status.com/
 
 EXIT STATUS
   0 success

@@ -7,7 +7,14 @@ description: MySQL connector knowledge and safe action guide.
 
 ## Purpose
 
-MySQL catalog connector for https://docs.airbyte.com/integrations/destinations/mysql. Native implementation status: planned_native_port.
+MySQL catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/mysql.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://dev.mysql.com/doc/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ MySQL catalog connector for https://docs.airbyte.com/integrations/destinations/m
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-mysql:1.1.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,12 +56,11 @@ MySQL catalog connector for https://docs.airbyte.com/integrations/destinations/m
 - Access control and account management: https://dev.mysql.com/doc/refman/8.0/en/access-control.html
 - GRANT statement: https://dev.mysql.com/doc/refman/8.0/en/grant.html
 - MySQL Release Notes: https://dev.mysql.com/doc/relnotes/mysql/en/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/mysql
 
 ## Configuration
 
 - database (string) required: Name of the database.
-- disable_type_dedupe (boolean): Disable Writing Final Tables. WARNING! The data format in _airbyte_data is likely stable but there are no guarantees that other metadata columns will remain the same in future v...
+- disable_type_dedupe (boolean): manual intervention needed
 - host (string) required: Hostname of the database.
 - jdbc_url_params (string): Additional properties to pass to the JDBC URL string when connecting to the database formatted as 'key=value' pairs separated by the symbol '&'. (example: key1=value1&key2=value...
 - password (string) secret: Password associated with the username.
@@ -74,12 +79,8 @@ MySQL catalog connector for https://docs.airbyte.com/integrations/destinations/m
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/mysql
 
 ## Commands
 
@@ -103,4 +104,8 @@ pm connectors inspect destination-mysql --json
 
 ## References
 
-- [MySQL documentation](https://docs.airbyte.com/integrations/destinations/mysql)
+- [MySQL documentation](https://dev.mysql.com/doc/)
+- [SQL statement syntax](https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html)
+- [Access control and account management](https://dev.mysql.com/doc/refman/8.0/en/access-control.html)
+- [GRANT statement](https://dev.mysql.com/doc/refman/8.0/en/grant.html)
+- [MySQL Release Notes](https://dev.mysql.com/doc/relnotes/mysql/en/)

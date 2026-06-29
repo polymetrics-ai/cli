@@ -7,7 +7,13 @@ description: Dwolla connector knowledge and safe action guide.
 
 ## Purpose
 
-Dwolla catalog connector for https://docs.airbyte.com/integrations/sources/dwolla. Native implementation status: planned_native_port.
+Dwolla catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Dwolla catalog connector for https://docs.airbyte.com/integrations/sources/dwoll
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-dwolla:0.0.38 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Dwolla catalog connector for https://docs.airbyte.com/integrations/sources/dwoll
 - Dwolla authentication: https://developers.dwolla.com/guides/auth
 - Dwolla rate limits: https://developers.dwolla.com/api-reference#rate-limits
 - Dwolla Status: https://status.dwolla.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/dwolla
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Dwolla catalog connector for https://docs.airbyte.com/integrations/sources/dwoll
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/dwolla
 
 ## Commands
 
@@ -96,4 +96,7 @@ pm connectors inspect source-dwolla --json
 
 ## References
 
-- [Dwolla documentation](https://docs.airbyte.com/integrations/sources/dwolla)
+- [Dwolla API reference](https://developers.dwolla.com/api-reference)
+- [Dwolla authentication](https://developers.dwolla.com/guides/auth)
+- [Dwolla rate limits](https://developers.dwolla.com/api-reference#rate-limits)
+- [Dwolla Status](https://status.dwolla.com/)

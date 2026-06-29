@@ -7,7 +7,13 @@ description: Google Tasks connector knowledge and safe action guide.
 
 ## Purpose
 
-Google Tasks catalog connector for https://docs.airbyte.com/integrations/sources/google-tasks. Native implementation status: planned_native_port.
+Google Tasks catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Google Tasks catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-google-tasks:0.0.58 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Google Tasks catalog connector for https://docs.airbyte.com/integrations/sources
 - Google Tasks API reference: https://developers.google.com/tasks/reference/rest
 - Google Tasks authentication: https://developers.google.com/tasks/quickstart/overview
 - Google Workspace Status: https://www.google.com/appsstatus/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-tasks
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Google Tasks catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/google-tasks
 
 ## Commands
 
@@ -94,4 +94,6 @@ pm connectors inspect source-google-tasks --json
 
 ## References
 
-- [Google Tasks documentation](https://docs.airbyte.com/integrations/sources/google-tasks)
+- [Google Tasks API reference](https://developers.google.com/tasks/reference/rest)
+- [Google Tasks authentication](https://developers.google.com/tasks/quickstart/overview)
+- [Google Workspace Status](https://www.google.com/appsstatus/)

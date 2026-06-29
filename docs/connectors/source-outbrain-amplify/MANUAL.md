@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-outbrain-amplify [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Outbrain Amplify catalog connector for https://docs.airbyte.com/integrations/sources/outbrain-amplify. Native implementation status: planned_native_port.
+  Outbrain Amplify catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-outbrain-amplify:0.2.21 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: catalog, check, docs_skill, read_fixture, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/outbrain-amplify
+  Outbrain Amplify documentation: https://developer.outbrain.com/home-page/amplify-api/documentation/
 
 CONFIGURATION
   conversion_count (string): The definition of conversion count in reports. See <a href="https://amplifyv01.docs.apiary.io/#reference/performance-reporting/periodic/retrieve-performance-statistics-for-all-m...
@@ -61,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/outbrain-amplify
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +80,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Outbrain Amplify documentation: https://docs.airbyte.com/integrations/sources/outbrain-amplify
+  Outbrain Amplify documentation: https://developer.outbrain.com/home-page/amplify-api/documentation/
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-revolut-merchant [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Revolut Merchant catalog connector for https://docs.airbyte.com/integrations/sources/revolut-merchant. Native implementation status: planned_native_port.
+  Revolut Merchant catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/revolut.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developer.revolut.com/docs/guides/merchant/reference/api
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-revolut-merchant:0.0.53 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,9 +48,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  Revolut Merchant API: https://developer.revolut.com/docs/merchant-api/
-  Revolut authentication: https://developer.revolut.com/docs/merchant-api/#merchant-api-authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/revolut-merchant
+  Revolut Merchant documentation: https://developer.revolut.com/docs/guides/merchant/reference/api
 
 CONFIGURATION
   api_version (string) required: Specify the API version to use. This is required for certain API calls. Example: '2024-09-01'.
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/revolut-merchant
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Revolut Merchant documentation: https://docs.airbyte.com/integrations/sources/revolut-merchant
+  Revolut Merchant documentation: https://developer.revolut.com/docs/guides/merchant/reference/api
 
 EXIT STATUS
   0 success

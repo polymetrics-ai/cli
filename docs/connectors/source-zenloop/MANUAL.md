@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-zenloop [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Zenloop catalog connector for https://docs.airbyte.com/integrations/sources/zenloop. Native implementation status: planned_native_port.
+  Zenloop catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/zenloop.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.zenloop.com/reference
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-zenloop:0.1.43 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Zenloop API documentation: https://docs.zenloop.com/reference
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zenloop
 
 CONFIGURATION
   api_token (string) required secret: Zenloop API Token. You can get the API token in settings page <a href="https://app.zenloop.com/settings/api">here</a>
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/zenloop
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Zenloop documentation: https://docs.airbyte.com/integrations/sources/zenloop
+  Zenloop API documentation: https://docs.zenloop.com/reference
 
 EXIT STATUS
   0 success

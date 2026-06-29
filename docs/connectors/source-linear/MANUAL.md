@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-linear [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Linear catalog connector for https://docs.airbyte.com/integrations/sources/linear. Native implementation status: planned_native_port.
+  Linear catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-linear:0.2.7 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Linear authentication: https://developers.linear.app/docs/oauth/authentication
   Linear rate limits: https://developers.linear.app/docs/graphql/working-with-the-graphql-api#rate-limiting
   Linear Status: https://status.linear.app/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/linear
 
 CONFIGURATION
   credentials (object) required: Choose how to authenticate to Linear.
@@ -61,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/linear
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +80,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Linear documentation: https://docs.airbyte.com/integrations/sources/linear
+  Linear API reference: https://developers.linear.app/docs/graphql/working-with-the-graphql-api
+  Linear authentication: https://developers.linear.app/docs/oauth/authentication
+  Linear rate limits: https://developers.linear.app/docs/graphql/working-with-the-graphql-api#rate-limiting
+  Linear Status: https://status.linear.app/
 
 EXIT STATUS
   0 success

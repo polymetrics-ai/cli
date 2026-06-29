@@ -7,7 +7,13 @@ description: Drip connector knowledge and safe action guide.
 
 ## Purpose
 
-Drip catalog connector for https://docs.airbyte.com/integrations/sources/drip. Native implementation status: planned_native_port.
+Drip catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Drip catalog connector for https://docs.airbyte.com/integrations/sources/drip. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-drip:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Drip catalog connector for https://docs.airbyte.com/integrations/sources/drip. N
 - Drip REST API: https://developer.drip.com/
 - Drip authentication: https://developer.drip.com/#authentication
 - Drip rate limits: https://developer.drip.com/#rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/drip
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Drip catalog connector for https://docs.airbyte.com/integrations/sources/drip. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/drip
 
 ## Commands
 
@@ -92,4 +92,6 @@ pm connectors inspect source-drip --json
 
 ## References
 
-- [Drip documentation](https://docs.airbyte.com/integrations/sources/drip)
+- [Drip REST API](https://developer.drip.com/)
+- [Drip authentication](https://developer.drip.com/#authentication)
+- [Drip rate limits](https://developer.drip.com/#rate-limiting)

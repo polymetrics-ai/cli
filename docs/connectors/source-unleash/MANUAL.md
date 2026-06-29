@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-unleash [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Unleash catalog connector for https://docs.airbyte.com/integrations/sources/unleash. Native implementation status: planned_native_port.
+  Unleash catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/unleash.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.getunleash.io/reference/api/unleash
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-unleash:0.2.23 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Unleash API documentation: https://docs.getunleash.io/reference/api/unleash
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/unleash
 
 CONFIGURATION
   api_token (string) required secret: Your API Token (Server-Side SDK [Client]). See <a href="https://docs.getunleash.io/how-to/how-to-create-api-tokens/">here</a>. The token is case sensitive.
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/unleash
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Unleash documentation: https://docs.airbyte.com/integrations/sources/unleash
+  Unleash API documentation: https://docs.getunleash.io/reference/api/unleash
 
 EXIT STATUS
   0 success

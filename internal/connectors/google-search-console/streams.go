@@ -87,7 +87,7 @@ var gscStreamDefs = map[string]streamDef{
 }
 
 // gscStreams returns the published catalog. Search-analytics streams are keyed by
-// site_url, search_type, date plus their non-date dimensions (mirroring Airbyte's
+// site_url, search_type, date plus their non-date dimensions (mirroring upstream's
 // composite key); sites/sitemaps key by their natural identifier.
 func gscStreams() []connectors.Stream {
 	return []connectors.Stream{

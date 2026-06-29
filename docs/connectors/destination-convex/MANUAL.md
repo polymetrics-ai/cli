@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-convex [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Convex catalog connector for https://docs.airbyte.com/integrations/destinations/convex. Native implementation status: planned_native_port.
+  Convex catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/convex.svg
+  source: official
+  review_status: official_verified
+  review_url: https://docs.convex.dev/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-convex:0.2.18 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +48,7 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/convex
+  Convex documentation: https://docs.convex.dev/
 
 CONFIGURATION
   access_key (string) required: API access key used to send data to a Convex deployment.
@@ -56,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/convex
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Convex documentation: https://docs.airbyte.com/integrations/destinations/convex
+  Convex documentation: https://docs.convex.dev/
 
 EXIT STATUS
   0 success

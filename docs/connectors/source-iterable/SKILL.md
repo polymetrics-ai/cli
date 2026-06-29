@@ -7,7 +7,14 @@ description: Iterable connector knowledge and safe action guide.
 
 ## Purpose
 
-Iterable catalog connector for https://docs.airbyte.com/integrations/sources/iterable. Native implementation status: planned_native_port.
+Iterable catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/iterable.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://api.iterable.com/api/docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Iterable catalog connector for https://docs.airbyte.com/integrations/sources/ite
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-iterable:0.7.2 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,11 +55,10 @@ Iterable catalog connector for https://docs.airbyte.com/integrations/sources/ite
 - Iterable authentication: https://support.iterable.com/hc/en-us/articles/360043464871-API-Keys-
 - Iterable rate limits: https://support.iterable.com/hc/en-us/articles/360045714132-API-Rate-Limits
 - Iterable Status: https://status.iterable.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/iterable
 
 ## Configuration
 
-- api_key (string) required secret: Iterable API Key. See the <a href=\"https://docs.airbyte.com/integrations/sources/iterable\">docs</a> for more information on how to obtain this key.
+- api_key (string) required secret: manual intervention needed
 - lookback_window (integer): Number of minutes to re-read from the current time when determining the end of each sync window for export-based streams. This accounts for eventual consistency delays in Iterab...
 - region (string): The region where your Iterable account is hosted. Select 'EU' if your account is on the European data center.
 - start_date (string) required: The date from which you'd like to replicate data for Iterable, in the format YYYY-MM-DDT00:00:00Z. All data generated after this date will be replicated.
@@ -67,12 +72,8 @@ Iterable catalog connector for https://docs.airbyte.com/integrations/sources/ite
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/iterable
 
 ## Commands
 
@@ -96,4 +97,7 @@ pm connectors inspect source-iterable --json
 
 ## References
 
-- [Iterable documentation](https://docs.airbyte.com/integrations/sources/iterable)
+- [Iterable API reference](https://api.iterable.com/api/docs)
+- [Iterable authentication](https://support.iterable.com/hc/en-us/articles/360043464871-API-Keys-)
+- [Iterable rate limits](https://support.iterable.com/hc/en-us/articles/360045714132-API-Rate-Limits)
+- [Iterable Status](https://status.iterable.com/)

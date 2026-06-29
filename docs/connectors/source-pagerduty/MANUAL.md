@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-pagerduty [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Pagerduty catalog connector for https://docs.airbyte.com/integrations/sources/pagerduty. Native implementation status: planned_native_port.
+  Pagerduty catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pagerduty.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.pagerduty.com/api-reference/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-pagerduty:0.3.41 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   PagerDuty authentication: https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTUw-authentication
   PagerDuty rate limits: https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTUx-rate-limiting
   PagerDuty Status: https://status.pagerduty.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pagerduty
 
 CONFIGURATION
   cutoff_days (integer): Fetch pipelines updated in the last number of days
@@ -66,11 +70,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/pagerduty
 
 EXAMPLES
   # Inspect catalog entry
@@ -85,7 +86,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Pagerduty documentation: https://docs.airbyte.com/integrations/sources/pagerduty
+  PagerDuty API reference: https://developer.pagerduty.com/api-reference/
+  PagerDuty authentication: https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTUw-authentication
+  PagerDuty rate limits: https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTUx-rate-limiting
+  PagerDuty Status: https://status.pagerduty.com/
 
 EXIT STATUS
   0 success

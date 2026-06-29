@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-sftp-bulk [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  SFTP Bulk catalog connector for https://docs.airbyte.com/integrations/sources/sftp-bulk. Native implementation status: planned_native_port.
+  SFTP Bulk catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/sftp.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://datatracker.ietf.org/doc/html/draft-ietf-secsh-filexfer-02
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: file_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-sftp-bulk:1.9.2 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   SFTP protocol documentation: https://datatracker.ietf.org/doc/html/draft-ietf-secsh-filexfer-02
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sftp-bulk
 
 CONFIGURATION
   credentials (object) required: Credentials for connecting to the SFTP Server
@@ -53,7 +57,7 @@ CONFIGURATION
   host (string) required: The server host address
   port (integer): The server port
   start_date (string): UTC date and time in the format 2017-01-25T00:00:00.000000Z. Any file modified before this date will not be replicated.
-  streams (array) required: Each instance of this configuration defines a <a href="https://docs.airbyte.com/cloud/core-concepts#stream">stream</a>. Use this to define which files belong in the stream, thei...
+  streams (array) required: manual intervention needed
   username (string) required: The server user
   secret fields: credentials.password, credentials.private_key, streams[].format.processing.api_key
 
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/sftp-bulk
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  SFTP Bulk documentation: https://docs.airbyte.com/integrations/sources/sftp-bulk
+  SFTP protocol documentation: https://datatracker.ietf.org/doc/html/draft-ietf-secsh-filexfer-02
 
 EXIT STATUS
   0 success

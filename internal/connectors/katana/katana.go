@@ -8,7 +8,7 @@
 // in init(); the registryset package blank-imports this package in the production
 // binary to run that side effect.
 //
-// Katana is a read-only source (the Airbyte source supports full_refresh only),
+// Katana is a read-only source (the upstream source supports full_refresh only),
 // so Capabilities.Write is false and there is no write.go.
 package katana
 
@@ -153,7 +153,7 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 }
 
 // Write satisfies the connectors.Connector interface. Katana is a read-only
-// source (the upstream Airbyte source supports full_refresh only), so writes are
+// source (the upstream upstream source supports full_refresh only), so writes are
 // unsupported.
 func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation

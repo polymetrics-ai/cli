@@ -7,7 +7,14 @@ description: Appfollow connector knowledge and safe action guide.
 
 ## Purpose
 
-Appfollow catalog connector for https://docs.airbyte.com/integrations/sources/appfollow. Native implementation status: planned_native_port.
+Appfollow catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/appfollow.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://appfollow.docs.apiary.io/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Appfollow catalog connector for https://docs.airbyte.com/integrations/sources/ap
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-appfollow:1.1.49 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Appfollow catalog connector for https://docs.airbyte.com/integrations/sources/ap
 ## Official Application Documentation
 
 - API documentation: https://appfollow.docs.apiary.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/appfollow
 
 ## Configuration
 
@@ -61,12 +66,8 @@ Appfollow catalog connector for https://docs.airbyte.com/integrations/sources/ap
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/appfollow
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-appfollow --json
 
 ## References
 
-- [Appfollow documentation](https://docs.airbyte.com/integrations/sources/appfollow)
+- [API documentation](https://appfollow.docs.apiary.io/)

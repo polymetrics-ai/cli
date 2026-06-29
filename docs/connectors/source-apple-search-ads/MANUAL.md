@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-apple-search-ads [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Apple Ads catalog connector for https://docs.airbyte.com/integrations/sources/apple-search-ads. Native implementation status: planned_native_port.
+  Apple Ads catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-apple-search-ads:1.1.8 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   API reference: https://developer.apple.com/documentation/apple_search_ads
   Authentication: https://developer.apple.com/documentation/apple_search_ads/implementing_oauth_for_the_apple_search_ads_api
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/apple-search-ads
 
 CONFIGURATION
   backoff_factor (integer): This factor factor determines the delay increase factor between retryable failures. Valid values are integers between 1 and 20.
@@ -66,11 +69,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/apple-search-ads
 
 EXAMPLES
   # Inspect catalog entry
@@ -85,7 +85,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Apple Ads documentation: https://docs.airbyte.com/integrations/sources/apple-search-ads
+  API reference: https://developer.apple.com/documentation/apple_search_ads
+  Authentication: https://developer.apple.com/documentation/apple_search_ads/implementing_oauth_for_the_apple_search_ads_api
 
 EXIT STATUS
   0 success

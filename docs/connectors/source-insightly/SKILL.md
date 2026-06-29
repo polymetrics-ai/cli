@@ -7,7 +7,13 @@ description: Insightly connector knowledge and safe action guide.
 
 ## Purpose
 
-Insightly catalog connector for https://docs.airbyte.com/integrations/sources/insightly. Native implementation status: planned_native_port.
+Insightly catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/insightly.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Insightly catalog connector for https://docs.airbyte.com/integrations/sources/in
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-insightly:0.3.26 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Insightly catalog connector for https://docs.airbyte.com/integrations/sources/in
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/insightly
+- Insightly documentation: https://api.na1.insightly.com/v3.1/
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Insightly catalog connector for https://docs.airbyte.com/integrations/sources/in
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/insightly
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-insightly --json
 
 ## References
 
-- [Insightly documentation](https://docs.airbyte.com/integrations/sources/insightly)
+- [Insightly documentation](https://api.na1.insightly.com/v3.1/)

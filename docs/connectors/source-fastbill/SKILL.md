@@ -7,7 +7,14 @@ description: Fastbill connector knowledge and safe action guide.
 
 ## Purpose
 
-Fastbill catalog connector for https://docs.airbyte.com/integrations/sources/fastbill. Native implementation status: planned_native_port.
+Fastbill catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/fastbill.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://apidocs.fastbill.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Fastbill catalog connector for https://docs.airbyte.com/integrations/sources/fas
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-fastbill:0.3.20 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Fastbill catalog connector for https://docs.airbyte.com/integrations/sources/fas
 
 - FastBill API documentation: https://apidocs.fastbill.com/
 - FastBill authentication: https://apidocs.fastbill.com/fastbill/en/fundamentals.html#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/fastbill
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Fastbill catalog connector for https://docs.airbyte.com/integrations/sources/fas
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/fastbill
 
 ## Commands
 
@@ -92,4 +93,5 @@ pm connectors inspect source-fastbill --json
 
 ## References
 
-- [Fastbill documentation](https://docs.airbyte.com/integrations/sources/fastbill)
+- [FastBill API documentation](https://apidocs.fastbill.com/)
+- [FastBill authentication](https://apidocs.fastbill.com/fastbill/en/fundamentals.html#authentication)

@@ -7,7 +7,13 @@ description: Tremendous connector knowledge and safe action guide.
 
 ## Purpose
 
-Tremendous catalog connector for https://docs.airbyte.com/integrations/sources/tremendous. Native implementation status: planned_native_port.
+Tremendous catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Tremendous catalog connector for https://docs.airbyte.com/integrations/sources/t
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-tremendous:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Tremendous catalog connector for https://docs.airbyte.com/integrations/sources/t
 ## Official Application Documentation
 
 - Tremendous API reference: https://developers.tremendous.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tremendous
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Tremendous catalog connector for https://docs.airbyte.com/integrations/sources/t
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/tremendous
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-tremendous --json
 
 ## References
 
-- [Tremendous documentation](https://docs.airbyte.com/integrations/sources/tremendous)
+- [Tremendous API reference](https://developers.tremendous.com/)

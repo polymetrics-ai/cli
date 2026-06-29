@@ -4,7 +4,7 @@
 // a small in-package cursor loop for Twitter v2's meta.next_token pagination.
 //
 // It reads the Twitter API v2 recent-search endpoint, exposing the Tweets and
-// Authors streams that mirror the upstream Airbyte source-twitter connector.
+// Authors streams that mirror the upstream upstream source-twitter connector.
 //
 // Like stripe, it self-registers with the connectors registry via RegisterFactory
 // in init(); the registryset package blank-imports this package in the production

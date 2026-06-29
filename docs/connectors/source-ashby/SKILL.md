@@ -7,7 +7,14 @@ description: Ashby connector knowledge and safe action guide.
 
 ## Purpose
 
-Ashby catalog connector for https://docs.airbyte.com/integrations/sources/ashby. Native implementation status: planned_native_port.
+Ashby catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/ashby.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.ashbyhq.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Ashby catalog connector for https://docs.airbyte.com/integrations/sources/ashby.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-ashby:0.3.7 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Ashby catalog connector for https://docs.airbyte.com/integrations/sources/ashby.
 
 - API documentation: https://developers.ashbyhq.com/
 - Authentication: https://developers.ashbyhq.com/#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/ashby
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Ashby catalog connector for https://docs.airbyte.com/integrations/sources/ashby.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/ashby
 
 ## Commands
 
@@ -92,4 +93,5 @@ pm connectors inspect source-ashby --json
 
 ## References
 
-- [Ashby documentation](https://docs.airbyte.com/integrations/sources/ashby)
+- [API documentation](https://developers.ashbyhq.com/)
+- [Authentication](https://developers.ashbyhq.com/#authentication)

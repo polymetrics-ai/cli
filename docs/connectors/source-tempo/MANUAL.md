@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-tempo [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Tempo catalog connector for https://docs.airbyte.com/integrations/sources/tempo. Native implementation status: planned_native_port.
+  Tempo catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/tempo.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://apidocs.tempo.io/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-tempo:0.4.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Tempo Timesheets API: https://apidocs.tempo.io/
   Tempo authentication: https://apidocs.tempo.io/#section/Authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tempo
 
 CONFIGURATION
   api_token (string) required secret: Tempo API Token. Go to Tempo>Settings, scroll down to Data Access and select API integration.
@@ -57,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/tempo
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +77,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Tempo documentation: https://docs.airbyte.com/integrations/sources/tempo
+  Tempo Timesheets API: https://apidocs.tempo.io/
+  Tempo authentication: https://apidocs.tempo.io/#section/Authentication
 
 EXIT STATUS
   0 success

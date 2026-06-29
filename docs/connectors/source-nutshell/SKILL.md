@@ -7,7 +7,13 @@ description: Nutshell connector knowledge and safe action guide.
 
 ## Purpose
 
-Nutshell catalog connector for https://docs.airbyte.com/integrations/sources/nutshell. Native implementation status: planned_native_port.
+Nutshell catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Nutshell catalog connector for https://docs.airbyte.com/integrations/sources/nut
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-nutshell:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Nutshell catalog connector for https://docs.airbyte.com/integrations/sources/nut
 
 - Nutshell API documentation: https://developers.nutshell.com/
 - Nutshell authentication: https://developers.nutshell.com/#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/nutshell
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Nutshell catalog connector for https://docs.airbyte.com/integrations/sources/nut
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/nutshell
 
 ## Commands
 
@@ -92,4 +92,5 @@ pm connectors inspect source-nutshell --json
 
 ## References
 
-- [Nutshell documentation](https://docs.airbyte.com/integrations/sources/nutshell)
+- [Nutshell API documentation](https://developers.nutshell.com/)
+- [Nutshell authentication](https://developers.nutshell.com/#authentication)

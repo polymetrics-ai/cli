@@ -7,7 +7,14 @@ description: Public Apis connector knowledge and safe action guide.
 
 ## Purpose
 
-Public Apis catalog connector for https://docs.airbyte.com/integrations/sources/public-apis. Native implementation status: planned_native_port.
+Public Apis catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/public-apis.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://github.com/public-apis/public-apis
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Public Apis catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-public-apis:0.2.35 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Public Apis catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Official Application Documentation
 
 - Public APIs directory: https://github.com/public-apis/public-apis
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/public-apis
 
 ## Configuration
 
@@ -60,12 +65,8 @@ Public Apis catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/public-apis
 
 ## Commands
 
@@ -89,4 +90,4 @@ pm connectors inspect source-public-apis --json
 
 ## References
 
-- [Public Apis documentation](https://docs.airbyte.com/integrations/sources/public-apis)
+- [Public APIs directory](https://github.com/public-apis/public-apis)

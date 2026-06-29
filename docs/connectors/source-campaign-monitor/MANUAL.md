@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-campaign-monitor [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Campaign Monitor catalog connector for https://docs.airbyte.com/integrations/sources/campaign-monitor. Native implementation status: planned_native_port.
+  Campaign Monitor catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-campaign-monitor:0.0.48 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Campaign Monitor API reference: https://www.campaignmonitor.com/api/
   Campaign Monitor authentication: https://www.campaignmonitor.com/api/getting-started/#authenticating
   Campaign Monitor rate limits: https://www.campaignmonitor.com/api/getting-started/#rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/campaign-monitor
 
 CONFIGURATION
   password (string) secret
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/campaign-monitor
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Campaign Monitor documentation: https://docs.airbyte.com/integrations/sources/campaign-monitor
+  Campaign Monitor API reference: https://www.campaignmonitor.com/api/
+  Campaign Monitor authentication: https://www.campaignmonitor.com/api/getting-started/#authenticating
+  Campaign Monitor rate limits: https://www.campaignmonitor.com/api/getting-started/#rate-limiting
 
 EXIT STATUS
   0 success

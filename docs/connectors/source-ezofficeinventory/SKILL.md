@@ -7,7 +7,13 @@ description: EZOfficeInventory connector knowledge and safe action guide.
 
 ## Purpose
 
-EZOfficeInventory catalog connector for https://docs.airbyte.com/integrations/sources/ezofficeinventory. Native implementation status: planned_native_port.
+EZOfficeInventory catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ EZOfficeInventory catalog connector for https://docs.airbyte.com/integrations/so
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-ezofficeinventory:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ EZOfficeInventory catalog connector for https://docs.airbyte.com/integrations/so
 - EZOfficeInventory API reference: https://ezofficeinventory.com/developers
 - EZOfficeInventory authentication: https://ezofficeinventory.com/developers/docs/authentication
 - EZOfficeInventory rate limits: https://ezofficeinventory.com/developers/docs/rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/ezofficeinventory
 
 ## Configuration
 
@@ -65,12 +69,8 @@ EZOfficeInventory catalog connector for https://docs.airbyte.com/integrations/so
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/ezofficeinventory
 
 ## Commands
 
@@ -94,4 +94,6 @@ pm connectors inspect source-ezofficeinventory --json
 
 ## References
 
-- [EZOfficeInventory documentation](https://docs.airbyte.com/integrations/sources/ezofficeinventory)
+- [EZOfficeInventory API reference](https://ezofficeinventory.com/developers)
+- [EZOfficeInventory authentication](https://ezofficeinventory.com/developers/docs/authentication)
+- [EZOfficeInventory rate limits](https://ezofficeinventory.com/developers/docs/rate-limiting)

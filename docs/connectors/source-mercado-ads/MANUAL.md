@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-mercado-ads [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Mercado Ads catalog connector for https://docs.airbyte.com/integrations/sources/mercado-ads. Native implementation status: planned_native_port.
+  Mercado Ads catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-mercado-ads:0.0.33 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Mercado Libre Ads API: https://developers.mercadolibre.com.ar/en_us/advertising
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mercado-ads
 
 CONFIGURATION
   client_id (string) required secret
@@ -61,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/mercado-ads
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +80,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Mercado Ads documentation: https://docs.airbyte.com/integrations/sources/mercado-ads
+  Mercado Libre Ads API: https://developers.mercadolibre.com.ar/en_us/advertising
 
 EXIT STATUS
   0 success

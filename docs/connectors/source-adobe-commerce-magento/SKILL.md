@@ -7,7 +7,13 @@ description: Adobe Commerce (Magento) connector knowledge and safe action guide.
 
 ## Purpose
 
-Adobe Commerce (Magento) catalog connector for https://docs.airbyte.com/integrations/sources/adobe-commerce-magento. Native implementation status: planned_native_port.
+Adobe Commerce (Magento) catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Adobe Commerce (Magento) catalog connector for https://docs.airbyte.com/integrat
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-adobe-commerce-magento:0.0.17 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Adobe Commerce (Magento) catalog connector for https://docs.airbyte.com/integrat
 - REST API reference: https://developer.adobe.com/commerce/webapi/rest/
 - Authentication: https://developer.adobe.com/commerce/webapi/get-started/authentication/
 - Release notes: https://experienceleague.adobe.com/docs/commerce-operations/release/notes/overview.html
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/adobe-commerce-magento
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Adobe Commerce (Magento) catalog connector for https://docs.airbyte.com/integrat
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/adobe-commerce-magento
 
 ## Commands
 
@@ -95,4 +95,6 @@ pm connectors inspect source-adobe-commerce-magento --json
 
 ## References
 
-- [Adobe Commerce (Magento) documentation](https://docs.airbyte.com/integrations/sources/adobe-commerce-magento)
+- [REST API reference](https://developer.adobe.com/commerce/webapi/rest/)
+- [Authentication](https://developer.adobe.com/commerce/webapi/get-started/authentication/)
+- [Release notes](https://experienceleague.adobe.com/docs/commerce-operations/release/notes/overview.html)

@@ -7,7 +7,14 @@ description: Shortio connector knowledge and safe action guide.
 
 ## Purpose
 
-Shortio catalog connector for https://docs.airbyte.com/integrations/sources/shortio. Native implementation status: planned_native_port.
+Shortio catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/shortio.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.short.io/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Shortio catalog connector for https://docs.airbyte.com/integrations/sources/shor
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-shortio:0.3.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Shortio catalog connector for https://docs.airbyte.com/integrations/sources/shor
 ## Official Application Documentation
 
 - Short.io API documentation: https://developers.short.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/shortio
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Shortio catalog connector for https://docs.airbyte.com/integrations/sources/shor
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/shortio
 
 ## Commands
 
@@ -92,4 +93,4 @@ pm connectors inspect source-shortio --json
 
 ## References
 
-- [Shortio documentation](https://docs.airbyte.com/integrations/sources/shortio)
+- [Short.io API documentation](https://developers.short.io/)

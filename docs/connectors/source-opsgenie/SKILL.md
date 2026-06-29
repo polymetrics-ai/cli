@@ -7,7 +7,14 @@ description: Opsgenie connector knowledge and safe action guide.
 
 ## Purpose
 
-Opsgenie catalog connector for https://docs.airbyte.com/integrations/sources/opsgenie. Native implementation status: planned_native_port.
+Opsgenie catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/source-opsgenie.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.opsgenie.com/docs/api-overview
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Opsgenie catalog connector for https://docs.airbyte.com/integrations/sources/ops
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-opsgenie:0.5.12 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Opsgenie catalog connector for https://docs.airbyte.com/integrations/sources/ops
 - Opsgenie authentication: https://docs.opsgenie.com/docs/api-authentication
 - Opsgenie rate limits: https://docs.opsgenie.com/docs/api-rate-limiting
 - Opsgenie Status: https://status.opsgenie.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/opsgenie
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Opsgenie catalog connector for https://docs.airbyte.com/integrations/sources/ops
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/opsgenie
 
 ## Commands
 
@@ -95,4 +96,7 @@ pm connectors inspect source-opsgenie --json
 
 ## References
 
-- [Opsgenie documentation](https://docs.airbyte.com/integrations/sources/opsgenie)
+- [Opsgenie API reference](https://docs.opsgenie.com/docs/api-overview)
+- [Opsgenie authentication](https://docs.opsgenie.com/docs/api-authentication)
+- [Opsgenie rate limits](https://docs.opsgenie.com/docs/api-rate-limiting)
+- [Opsgenie Status](https://status.opsgenie.com/)

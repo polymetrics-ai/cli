@@ -7,7 +7,14 @@ description: Tyntec SMS connector knowledge and safe action guide.
 
 ## Purpose
 
-Tyntec SMS catalog connector for https://docs.airbyte.com/integrations/sources/tyntec-sms. Native implementation status: planned_native_port.
+Tyntec SMS catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/tyntec.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://api.tyntec.com/reference/messaging
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Tyntec SMS catalog connector for https://docs.airbyte.com/integrations/sources/t
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-tyntec-sms:0.2.25 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Tyntec SMS catalog connector for https://docs.airbyte.com/integrations/sources/t
 ## Official Application Documentation
 
 - tyntec SMS API: https://api.tyntec.com/reference/messaging
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tyntec-sms
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Tyntec SMS catalog connector for https://docs.airbyte.com/integrations/sources/t
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/tyntec-sms
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect source-tyntec-sms --json
 
 ## References
 
-- [Tyntec SMS documentation](https://docs.airbyte.com/integrations/sources/tyntec-sms)
+- [tyntec SMS API](https://api.tyntec.com/reference/messaging)

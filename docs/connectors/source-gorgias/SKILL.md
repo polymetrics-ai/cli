@@ -7,7 +7,13 @@ description: Gorgias connector knowledge and safe action guide.
 
 ## Purpose
 
-Gorgias catalog connector for https://docs.airbyte.com/integrations/sources/gorgias. Native implementation status: planned_native_port.
+Gorgias catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Gorgias catalog connector for https://docs.airbyte.com/integrations/sources/gorg
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-gorgias:0.1.43 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Gorgias catalog connector for https://docs.airbyte.com/integrations/sources/gorg
 - Gorgias API documentation: https://developers.gorgias.com/reference
 - Gorgias authentication: https://developers.gorgias.com/reference/authentication
 - Gorgias rate limits: https://developers.gorgias.com/reference/rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/gorgias
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Gorgias catalog connector for https://docs.airbyte.com/integrations/sources/gorg
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/gorgias
 
 ## Commands
 
@@ -95,4 +95,6 @@ pm connectors inspect source-gorgias --json
 
 ## References
 
-- [Gorgias documentation](https://docs.airbyte.com/integrations/sources/gorgias)
+- [Gorgias API documentation](https://developers.gorgias.com/reference)
+- [Gorgias authentication](https://developers.gorgias.com/reference/authentication)
+- [Gorgias rate limits](https://developers.gorgias.com/reference/rate-limiting)

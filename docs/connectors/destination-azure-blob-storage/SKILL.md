@@ -7,7 +7,14 @@ description: Azure Blob Storage connector knowledge and safe action guide.
 
 ## Purpose
 
-Azure Blob Storage catalog connector for https://docs.airbyte.com/integrations/destinations/azure-blob-storage. Native implementation status: planned_native_port.
+Azure Blob Storage catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/azureblobstorage.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://learn.microsoft.com/en-us/azure/storage/blobs/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Azure Blob Storage catalog connector for https://docs.airbyte.com/integrations/d
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-azure-blob-storage:1.1.7 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ Azure Blob Storage catalog connector for https://docs.airbyte.com/integrations/d
 - Access control: https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-access-control
 - Scalability and performance: https://learn.microsoft.com/en-us/azure/storage/blobs/scalability-targets
 - Azure Status: https://status.azure.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/azure-blob-storage
 
 ## Configuration
 
@@ -74,12 +79,8 @@ Azure Blob Storage catalog connector for https://docs.airbyte.com/integrations/d
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/azure-blob-storage
 
 ## Commands
 
@@ -103,4 +104,8 @@ pm connectors inspect destination-azure-blob-storage --json
 
 ## References
 
-- [Azure Blob Storage documentation](https://docs.airbyte.com/integrations/destinations/azure-blob-storage)
+- [Azure Blob Storage documentation](https://learn.microsoft.com/en-us/azure/storage/blobs/)
+- [Authorize access](https://learn.microsoft.com/en-us/azure/storage/common/authorize-data-access)
+- [Access control](https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-access-control)
+- [Scalability and performance](https://learn.microsoft.com/en-us/azure/storage/blobs/scalability-targets)
+- [Azure Status](https://status.azure.com/)

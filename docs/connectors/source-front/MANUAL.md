@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-front [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Front catalog connector for https://docs.airbyte.com/integrations/sources/front. Native implementation status: planned_native_port.
+  Front catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-front:0.0.47 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Front authentication: https://dev.frontapp.com/docs/authentication
   Front rate limits: https://dev.frontapp.com/docs/rate-limiting
   Front Status: https://status.front.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/front
 
 CONFIGURATION
   api_key (string) required secret
@@ -61,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/front
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +80,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Front documentation: https://docs.airbyte.com/integrations/sources/front
+  Front API reference: https://dev.frontapp.com/reference/introduction
+  Front authentication: https://dev.frontapp.com/docs/authentication
+  Front rate limits: https://dev.frontapp.com/docs/rate-limiting
+  Front Status: https://status.front.com/
 
 EXIT STATUS
   0 success

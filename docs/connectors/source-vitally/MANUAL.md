@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-vitally [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Vitally catalog connector for https://docs.airbyte.com/integrations/sources/vitally. Native implementation status: planned_native_port.
+  Vitally catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-vitally:0.4.3 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Vitally API documentation: https://docs.vitally.io/pushing-data-to-vitally/rest-api
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/vitally
 
 CONFIGURATION
   basic_auth_header (string) secret: Basic Auth Header
@@ -59,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/vitally
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +78,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Vitally documentation: https://docs.airbyte.com/integrations/sources/vitally
+  Vitally API documentation: https://docs.vitally.io/pushing-data-to-vitally/rest-api
 
 EXIT STATUS
   0 success

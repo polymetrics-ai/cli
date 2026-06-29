@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-clickup-api [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  ClickUp catalog connector for https://docs.airbyte.com/integrations/sources/clickup-api. Native implementation status: planned_native_port.
+  ClickUp catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/clickup.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://clickup.com/api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-clickup-api:0.3.51 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   ClickUp authentication: https://clickup.com/api/developer-portal/authentication/
   ClickUp rate limits: https://clickup.com/api/developer-portal/rate-limits/
   ClickUp Status: https://status.clickup.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/clickup-api
 
 CONFIGURATION
   api_token (string) required secret: Every ClickUp API call required authentication. This field is your personal API token. See <a href="https://clickup.com/api/developer-portal/authentication/#personal-token">here...
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/clickup-api
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  ClickUp documentation: https://docs.airbyte.com/integrations/sources/clickup-api
+  ClickUp API reference: https://clickup.com/api/
+  ClickUp authentication: https://clickup.com/api/developer-portal/authentication/
+  ClickUp rate limits: https://clickup.com/api/developer-portal/rate-limits/
+  ClickUp Status: https://status.clickup.com/
 
 EXIT STATUS
   0 success

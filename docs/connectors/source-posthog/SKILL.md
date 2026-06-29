@@ -7,7 +7,14 @@ description: PostHog connector knowledge and safe action guide.
 
 ## Purpose
 
-PostHog catalog connector for https://docs.airbyte.com/integrations/sources/posthog. Native implementation status: planned_native_port.
+PostHog catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/posthog.svg
+- source: official
+- review_status: official_verified
+- review_url: https://posthog.com/docs/api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ PostHog catalog connector for https://docs.airbyte.com/integrations/sources/post
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-posthog:1.1.25 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,12 +51,11 @@ PostHog catalog connector for https://docs.airbyte.com/integrations/sources/post
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/posthog
+- PostHog documentation: https://posthog.com/docs/api
 
 ## Configuration
 
-- api_key (string) required secret: API Key. See the <a href="https://docs.airbyte.com/integrations/sources/posthog">docs</a> for information on how to generate this key.
+- api_key (string) required secret: manual intervention needed
 - base_url (string): Base PostHog url. Defaults to PostHog Cloud (https://app.posthog.com).
 - events_time_step (integer): Set lower value in case of failing long running sync of events stream.
 - start_date (string) required: The date from which you'd like to replicate the data. Any data before this date will not be replicated.
@@ -64,12 +69,8 @@ PostHog catalog connector for https://docs.airbyte.com/integrations/sources/post
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/posthog
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect source-posthog --json
 
 ## References
 
-- [PostHog documentation](https://docs.airbyte.com/integrations/sources/posthog)
+- [PostHog documentation](https://posthog.com/docs/api)

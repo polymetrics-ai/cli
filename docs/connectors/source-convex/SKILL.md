@@ -7,7 +7,14 @@ description: Convex connector knowledge and safe action guide.
 
 ## Purpose
 
-Convex catalog connector for https://docs.airbyte.com/integrations/sources/convex. Native implementation status: planned_native_port.
+Convex catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/convex.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.convex.dev/http-api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Convex catalog connector for https://docs.airbyte.com/integrations/sources/conve
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-convex:0.4.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Convex catalog connector for https://docs.airbyte.com/integrations/sources/conve
 - Convex HTTP API: https://docs.convex.dev/http-api/
 - Convex authentication: https://docs.convex.dev/auth
 - Convex Status: https://status.convex.dev/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/convex
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Convex catalog connector for https://docs.airbyte.com/integrations/sources/conve
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/convex
 
 ## Commands
 
@@ -93,4 +94,6 @@ pm connectors inspect source-convex --json
 
 ## References
 
-- [Convex documentation](https://docs.airbyte.com/integrations/sources/convex)
+- [Convex HTTP API](https://docs.convex.dev/http-api/)
+- [Convex authentication](https://docs.convex.dev/auth)
+- [Convex Status](https://status.convex.dev/)

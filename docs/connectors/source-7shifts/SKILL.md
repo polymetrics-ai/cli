@@ -7,7 +7,13 @@ description: 7shifts connector knowledge and safe action guide.
 
 ## Purpose
 
-7shifts catalog connector for https://docs.airbyte.com/integrations/sources/7shifts. Native implementation status: planned_native_port.
+7shifts catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ description: 7shifts connector knowledge and safe action guide.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-7shifts:0.0.43 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ description: 7shifts connector knowledge and safe action guide.
 - API documentation: https://developers.7shifts.com/reference/introduction
 - Authentication: https://developers.7shifts.com/docs/authentication
 - Rate limits: https://developers.7shifts.com/docs/rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/7shifts
 
 ## Configuration
 
@@ -64,12 +68,8 @@ description: 7shifts connector knowledge and safe action guide.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/7shifts
 
 ## Commands
 
@@ -93,4 +93,6 @@ pm connectors inspect source-7shifts --json
 
 ## References
 
-- [7shifts documentation](https://docs.airbyte.com/integrations/sources/7shifts)
+- [API documentation](https://developers.7shifts.com/reference/introduction)
+- [Authentication](https://developers.7shifts.com/docs/authentication)
+- [Rate limits](https://developers.7shifts.com/docs/rate-limiting)

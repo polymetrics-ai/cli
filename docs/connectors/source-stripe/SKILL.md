@@ -7,7 +7,14 @@ description: Stripe connector knowledge and safe action guide.
 
 ## Purpose
 
-Stripe native Go source connector. Runtime family: declarative_http_go. Documentation: https://docs.airbyte.com/integrations/sources/stripe.
+Stripe native Go source connector. Runtime family: declarative_http_go.
+
+## Icon
+
+- asset: icons/stripe.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://stripe.com/docs/api
 
 ## Capabilities
 
@@ -20,7 +27,6 @@ Stripe native Go source connector. Runtime family: declarative_http_go. Document
 - runtime_kind: declarative_http_go
 - pm connector: stripe
 - notes: Implemented as the built-in Stripe connector on the connsdk declarative-HTTP template.
-- upstream image reference: airbyte/source-stripe:6.0.7 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -51,7 +57,6 @@ Stripe native Go source connector. Runtime family: declarative_http_go. Document
 - Stripe rate limits: https://stripe.com/docs/rate-limits
 - Stripe API OpenAPI specification: https://github.com/stripe/openapi
 - Stripe Status: https://status.stripe.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/stripe
 
 ## Authentication
 
@@ -151,7 +156,6 @@ pm connectors inspect source-stripe --json
 
 ## References
 
-- [Stripe connector documentation](https://docs.airbyte.com/integrations/sources/stripe)
 - [Stripe API reference](https://stripe.com/docs/api)
 - [Stripe authentication](https://stripe.com/docs/api/authentication)
 - [API changelog](https://docs.stripe.com/changelog)

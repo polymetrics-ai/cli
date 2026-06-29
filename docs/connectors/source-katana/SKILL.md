@@ -7,7 +7,13 @@ description: Katana connector knowledge and safe action guide.
 
 ## Purpose
 
-Katana catalog connector for https://docs.airbyte.com/integrations/sources/katana. Native implementation status: planned_native_port.
+Katana catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Katana catalog connector for https://docs.airbyte.com/integrations/sources/katan
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-katana:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Katana catalog connector for https://docs.airbyte.com/integrations/sources/katan
 ## Official Application Documentation
 
 - Katana API documentation: https://docs.katanamrp.com/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/katana
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Katana catalog connector for https://docs.airbyte.com/integrations/sources/katan
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/katana
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-katana --json
 
 ## References
 
-- [Katana documentation](https://docs.airbyte.com/integrations/sources/katana)
+- [Katana API documentation](https://docs.katanamrp.com/api/)

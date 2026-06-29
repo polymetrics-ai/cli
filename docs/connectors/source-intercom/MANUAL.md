@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-intercom [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Intercom catalog connector for https://docs.airbyte.com/integrations/sources/intercom. Native implementation status: planned_native_port.
+  Intercom catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/intercom.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-intercom:0.13.24 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   API Changelog: https://developers.intercom.com/docs/references/changelog
   Changelog: https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/api-changelog
   Intercom API OpenAPI specification: https://developers.intercom.com/docs/references/rest-api/api.intercom.io/openapi.json
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/intercom
 
 CONFIGURATION
   access_token (string) required secret: Access token for making authenticated requests. See the <a href="https://developers.intercom.com/building-apps/docs/authentication-types#how-to-get-your-access-token">Intercom d...
@@ -66,11 +70,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/intercom
 
 EXAMPLES
   # Inspect catalog entry
@@ -85,7 +86,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Intercom documentation: https://docs.airbyte.com/integrations/sources/intercom
+  Unversioned Changes: https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes
+  API Changelog: https://developers.intercom.com/docs/references/changelog
+  Changelog: https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/api-changelog
+  Intercom API OpenAPI specification: https://developers.intercom.com/docs/references/rest-api/api.intercom.io/openapi.json
 
 EXIT STATUS
   0 success

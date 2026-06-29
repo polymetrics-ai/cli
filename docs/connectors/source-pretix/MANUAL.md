@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-pretix [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Pretix catalog connector for https://docs.airbyte.com/integrations/sources/pretix. Native implementation status: planned_native_port.
+  Pretix catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-pretix:0.0.58 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   pretix API documentation: https://docs.pretix.eu/en/latest/api/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pretix
 
 CONFIGURATION
   api_token (string) required secret: API token to use. Obtain it from the pretix web interface by creating a new token under your team settings.
@@ -56,11 +59,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/pretix
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +75,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Pretix documentation: https://docs.airbyte.com/integrations/sources/pretix
+  pretix API documentation: https://docs.pretix.eu/en/latest/api/
 
 EXIT STATUS
   0 success

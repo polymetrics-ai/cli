@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-harvest [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Harvest catalog connector for https://docs.airbyte.com/integrations/sources/harvest. Native implementation status: planned_native_port.
+  Harvest catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/harvest.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.harveststatus.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-harvest:1.2.42 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Systems status: https://www.harveststatus.com/
   overview: https://help.getharvest.com/api-v2/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/harvest
 
 CONFIGURATION
   account_id (string) required secret: Harvest account ID. Required for all Harvest requests in pair with Personal Access Token
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/harvest
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Harvest documentation: https://docs.airbyte.com/integrations/sources/harvest
+  Systems status: https://www.harveststatus.com/
+  overview: https://help.getharvest.com/api-v2/
 
 EXIT STATUS
   0 success

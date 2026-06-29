@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-high-level [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  High Level catalog connector for https://docs.airbyte.com/integrations/sources/high-level. Native implementation status: planned_native_port.
+  High Level catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-high-level:0.0.54 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   HighLevel API documentation: https://highlevel.stoplight.io/
   HighLevel authentication: https://highlevel.stoplight.io/docs/integrations/0443d7d1a4bd0-overview
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/high-level
 
 CONFIGURATION
   api_key (string) required secret
@@ -59,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/high-level
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +78,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  High Level documentation: https://docs.airbyte.com/integrations/sources/high-level
+  HighLevel API documentation: https://highlevel.stoplight.io/
+  HighLevel authentication: https://highlevel.stoplight.io/docs/integrations/0443d7d1a4bd0-overview
 
 EXIT STATUS
   0 success

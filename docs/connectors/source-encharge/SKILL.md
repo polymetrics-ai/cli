@@ -7,7 +7,13 @@ description: Encharge connector knowledge and safe action guide.
 
 ## Purpose
 
-Encharge catalog connector for https://docs.airbyte.com/integrations/sources/encharge. Native implementation status: planned_native_port.
+Encharge catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Encharge catalog connector for https://docs.airbyte.com/integrations/sources/enc
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-encharge:0.0.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Encharge catalog connector for https://docs.airbyte.com/integrations/sources/enc
 
 - Encharge API reference: https://developers.encharge.io/
 - Encharge authentication: https://developers.encharge.io/#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/encharge
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Encharge catalog connector for https://docs.airbyte.com/integrations/sources/enc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/encharge
 
 ## Commands
 
@@ -91,4 +91,5 @@ pm connectors inspect source-encharge --json
 
 ## References
 
-- [Encharge documentation](https://docs.airbyte.com/integrations/sources/encharge)
+- [Encharge API reference](https://developers.encharge.io/)
+- [Encharge authentication](https://developers.encharge.io/#authentication)

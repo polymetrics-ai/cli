@@ -7,7 +7,14 @@ description: SmartEngage connector knowledge and safe action guide.
 
 ## Purpose
 
-SmartEngage catalog connector for https://docs.airbyte.com/integrations/sources/smartengage. Native implementation status: planned_native_port.
+SmartEngage catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/smartengage.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://smartengage.com/docs/api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ SmartEngage catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-smartengage:0.2.41 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ SmartEngage catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Official Application Documentation
 
 - SmartEngage API documentation: https://smartengage.com/docs/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/smartengage
 
 ## Configuration
 
@@ -61,12 +66,8 @@ SmartEngage catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/smartengage
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-smartengage --json
 
 ## References
 
-- [SmartEngage documentation](https://docs.airbyte.com/integrations/sources/smartengage)
+- [SmartEngage API documentation](https://smartengage.com/docs/api/)

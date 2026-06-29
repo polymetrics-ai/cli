@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-qualaroo [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Qualaroo catalog connector for https://docs.airbyte.com/integrations/sources/qualaroo. Native implementation status: planned_native_port.
+  Qualaroo catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/qualaroo.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-qualaroo:0.4.49 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Qualaroo API documentation: https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/qualaroo
 
 CONFIGURATION
   key (string) required secret: A Qualaroo token. See the <a href="https://help.qualaroo.com/hc/en-us/articles/201969438-The-REST-Reporting-API">docs</a> for instructions on how to generate it.
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/qualaroo
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Qualaroo documentation: https://docs.airbyte.com/integrations/sources/qualaroo
+  Qualaroo API documentation: https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API
 
 EXIT STATUS
   0 success

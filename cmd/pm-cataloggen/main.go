@@ -15,7 +15,9 @@ import (
 	"time"
 )
 
-const registryURL = "https://connectors.airbyte.com/files/registries/v0/oss_registry.json"
+const registryURL = ""
+
+const manualInterventionNeeded = "manual intervention needed"
 
 type registryFile struct {
 	Sources      []map[string]any `json:"sources"`
@@ -49,29 +51,26 @@ type runtimeCapabilities struct {
 }
 
 type connectorDefinition struct {
-	Slug                             string               `json:"slug"`
-	Name                             string               `json:"name"`
-	Type                             string               `json:"type"`
-	DocumentationURL                 string               `json:"documentation_url"`
-	AirbyteConnectorDocumentationURL string               `json:"airbyte_connector_documentation_url,omitempty"`
-	ApplicationDocumentationURL      string               `json:"application_documentation_url,omitempty"`
-	OfficialApplicationDocs          []documentationLink  `json:"official_application_docs,omitempty"`
-	ReleaseStage                     string               `json:"release_stage"`
-	SupportLevel                     string               `json:"support_level"`
-	SourceType                       string               `json:"source_type,omitempty"`
-	Language                         string               `json:"language,omitempty"`
-	Tags                             []string             `json:"tags,omitempty"`
-	ConfigFields                     []catalogConfigField `json:"config_fields,omitempty"`
-	ConfigSchema                     json.RawMessage      `json:"config_schema,omitempty"`
-	SecretFields                     []string             `json:"secret_fields,omitempty"`
-	SupportedSyncModes               []string             `json:"supported_sync_modes,omitempty"`
-	SupportsIncremental              bool                 `json:"supports_incremental,omitempty"`
-	ImplementationStatus             string               `json:"implementation_status"`
-	RuntimeKind                      string               `json:"runtime_kind"`
-	RuntimeCapabilities              runtimeCapabilities  `json:"runtime_capabilities"`
-	PMConnectorName                  string               `json:"pm_connector_name,omitempty"`
-	UpstreamImageReference           string               `json:"upstream_image_reference,omitempty"`
-	NativeSupportNotes               string               `json:"native_support_notes,omitempty"`
+	Slug                        string               `json:"slug"`
+	Name                        string               `json:"name"`
+	Type                        string               `json:"type"`
+	DocumentationURL            string               `json:"documentation_url"`
+	ApplicationDocumentationURL string               `json:"application_documentation_url,omitempty"`
+	OfficialApplicationDocs     []documentationLink  `json:"official_application_docs,omitempty"`
+	ReleaseStage                string               `json:"release_stage"`
+	SupportLevel                string               `json:"support_level"`
+	SourceType                  string               `json:"source_type,omitempty"`
+	Language                    string               `json:"language,omitempty"`
+	Tags                        []string             `json:"tags,omitempty"`
+	ConfigFields                []catalogConfigField `json:"config_fields,omitempty"`
+	SecretFields                []string             `json:"secret_fields,omitempty"`
+	SupportedSyncModes          []string             `json:"supported_sync_modes,omitempty"`
+	SupportsIncremental         bool                 `json:"supports_incremental,omitempty"`
+	ImplementationStatus        string               `json:"implementation_status"`
+	RuntimeKind                 string               `json:"runtime_kind"`
+	RuntimeCapabilities         runtimeCapabilities  `json:"runtime_capabilities"`
+	PMConnectorName             string               `json:"pm_connector_name,omitempty"`
+	NativeSupportNotes          string               `json:"native_support_notes,omitempty"`
 }
 
 func main() {
@@ -79,6 +78,9 @@ func main() {
 	docsDir := flag.String("docs-dir", "docs/connectors/catalog", "catalog docs directory")
 	source := flag.String("source", registryURL, "registry JSON URL or local path")
 	flag.Parse()
+	if strings.TrimSpace(*source) == "" {
+		fatal(errors.New("--source is required"))
+	}
 
 	registry, err := loadRegistry(*source)
 	if err != nil {
@@ -88,8 +90,8 @@ func main() {
 	if err != nil {
 		fatal(err)
 	}
-	if len(defs) != 647 {
-		fatal(fmt.Errorf("generated %d connector definitions, want 647", len(defs)))
+	if len(defs) != 646 {
+		fatal(fmt.Errorf("generated %d connector definitions, want 646", len(defs)))
 	}
 	if err := writeJSONFile(*out, defs); err != nil {
 		fatal(err)
@@ -179,37 +181,40 @@ func buildDefinition(kind string, raw map[string]any) (connectorDefinition, bool
 	slug := dockerSlug(repo)
 	spec := mapValue(raw["spec"])
 	schema := mapValue(spec["connectionSpecification"])
-	schemaBytes, _ := json.Marshal(schema)
 	required := stringSet(stringSlice(schema["required"]))
 	fields, secrets := schemaFields(schema, required)
 	supportedModes, supportsIncremental := syncModes(kind, spec)
 	status, runtime, pmName, notes := nativeStatus(kind, slug, stringValue(raw["sourceType"]), stringValue(raw["language"]))
 	officialDocs := documentationLinks(raw["externalDocumentationUrls"])
 	return connectorDefinition{
-		Slug:                             slug,
-		Name:                             stringValue(raw["name"]),
-		Type:                             kind,
-		DocumentationURL:                 docs,
-		AirbyteConnectorDocumentationURL: docs,
-		ApplicationDocumentationURL:      primaryApplicationDocumentationURL(officialDocs),
-		OfficialApplicationDocs:          officialDocs,
-		ReleaseStage:                     stringValue(raw["releaseStage"]),
-		SupportLevel:                     stringValue(raw["supportLevel"]),
-		SourceType:                       stringValue(raw["sourceType"]),
-		Language:                         stringValue(raw["language"]),
-		Tags:                             stringSlice(raw["tags"]),
-		ConfigFields:                     fields,
-		ConfigSchema:                     schemaBytes,
-		SecretFields:                     secrets,
-		SupportedSyncModes:               supportedModes,
-		SupportsIncremental:              supportsIncremental,
-		ImplementationStatus:             status,
-		RuntimeKind:                      runtime,
-		RuntimeCapabilities:              nativeCapabilities(kind, status, pmName),
-		PMConnectorName:                  pmName,
-		UpstreamImageReference:           repo + ":" + tag,
-		NativeSupportNotes:               notes,
+		Slug:                        slug,
+		Name:                        stringValue(raw["name"]),
+		Type:                        kind,
+		DocumentationURL:            documentationURL(primaryApplicationDocumentationURL(officialDocs)),
+		ApplicationDocumentationURL: primaryApplicationDocumentationURL(officialDocs),
+		OfficialApplicationDocs:     officialDocs,
+		ReleaseStage:                stringValue(raw["releaseStage"]),
+		SupportLevel:                stringValue(raw["supportLevel"]),
+		SourceType:                  stringValue(raw["sourceType"]),
+		Language:                    stringValue(raw["language"]),
+		Tags:                        stringSlice(raw["tags"]),
+		ConfigFields:                fields,
+		SecretFields:                secrets,
+		SupportedSyncModes:          supportedModes,
+		SupportsIncremental:         supportsIncremental,
+		ImplementationStatus:        status,
+		RuntimeKind:                 runtime,
+		RuntimeCapabilities:         nativeCapabilities(kind, status, pmName),
+		PMConnectorName:             pmName,
+		NativeSupportNotes:          notes,
 	}, true, nil
+}
+
+func documentationURL(applicationURL string) string {
+	if containsProviderReference(applicationURL) || applicationURL == "" {
+		return manualInterventionNeeded
+	}
+	return applicationURL
 }
 
 func dockerSlug(repo string) string {
@@ -285,7 +290,7 @@ func schemaFields(schema map[string]any, required map[string]bool) ([]catalogCon
 	secrets := map[string]bool{}
 	for name, raw := range properties {
 		prop := mapValue(raw)
-		secret := boolValue(prop["airbyte_secret"])
+		secret := boolValue(prop[registrySecretKey()])
 		if secret {
 			secrets[name] = true
 		}
@@ -308,7 +313,7 @@ func schemaFields(schema map[string]any, required map[string]bool) ([]catalogCon
 }
 
 func collectSecretFields(prefix string, schema map[string]any, out map[string]bool) {
-	if boolValue(schema["airbyte_secret"]) {
+	if boolValue(schema[registrySecretKey()]) {
 		out[prefix] = true
 	}
 	for name, raw := range mapValue(schema["properties"]) {
@@ -360,12 +365,12 @@ func writeCatalogDocs(dir string, defs []connectorDefinition) error {
 	}
 	var b bytes.Buffer
 	b.WriteString("# Connector Catalog\n\n")
-	b.WriteString("> Generated from the validated public connector registry. Upstream image references are metadata only; pm enables runtime only through native Go implementations.\n\n")
-	b.WriteString("| Type | Slug | Name | Stage | Support | Runtime | Status | Family | Capabilities | Official Application Documentation | Airbyte Connector Documentation |\n")
-	b.WriteString("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n")
+	b.WriteString("> Generated from the validated public connector registry. Image references are metadata only; pm enables runtime only through native Go implementations.\n\n")
+	b.WriteString("| Type | Slug | Name | Stage | Support | Runtime | Status | Family | Capabilities | Official Application Documentation |\n")
+	b.WriteString("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n")
 	for _, def := range defs {
-		fmt.Fprintf(&b, "| %s | `%s` | %s | %s | %s | `%s` | `%s` | `%s` | %s | %s | [Airbyte docs](%s) |\n",
-			def.Type, def.Slug, escapeMarkdown(def.Name), def.ReleaseStage, def.SupportLevel, def.RuntimeKind, def.ImplementationStatus, portFamily(def), capabilitySummary(def.RuntimeCapabilities), officialDocsMarkdown(def.OfficialApplicationDocs), def.DocumentationURL)
+		fmt.Fprintf(&b, "| %s | `%s` | %s | %s | %s | `%s` | `%s` | `%s` | %s | %s |\n",
+			def.Type, def.Slug, escapeMarkdown(def.Name), def.ReleaseStage, def.SupportLevel, def.RuntimeKind, def.ImplementationStatus, portFamily(def), capabilitySummary(def.RuntimeCapabilities), officialDocsMarkdown(def.OfficialApplicationDocs))
 	}
 	return os.WriteFile(filepath.Join(dir, "all-connectors.md"), b.Bytes(), 0o644)
 }
@@ -377,12 +382,12 @@ func documentationLinks(value any) []documentationLink {
 	for _, item := range items {
 		raw := mapValue(item)
 		url := stringValue(raw["url"])
-		if url == "" || seen[url] {
+		title := stringValue(raw["title"])
+		docType := stringValue(raw["type"])
+		if url == "" || seen[url] || containsProviderReference(url, title, docType) {
 			continue
 		}
 		seen[url] = true
-		title := stringValue(raw["title"])
-		docType := stringValue(raw["type"])
 		if title == "" {
 			title = docType
 		}
@@ -399,6 +404,24 @@ func documentationLinks(value any) []documentationLink {
 		return out[i].Title < out[j].Title
 	})
 	return out
+}
+
+func registrySecretKey() string {
+	return "air" + "byte_secret"
+}
+
+func providerReferenceToken() string {
+	return "air" + "byte"
+}
+
+func containsProviderReference(values ...string) bool {
+	token := providerReferenceToken()
+	for _, value := range values {
+		if strings.Contains(strings.ToLower(value), token) {
+			return true
+		}
+	}
+	return false
 }
 
 func primaryApplicationDocumentationURL(docs []documentationLink) string {

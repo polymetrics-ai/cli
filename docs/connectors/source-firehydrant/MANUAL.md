@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-firehydrant [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  FireHydrant catalog connector for https://docs.airbyte.com/integrations/sources/firehydrant. Native implementation status: planned_native_port.
+  FireHydrant catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-firehydrant:1.0.9 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   FireHydrant API documentation: https://firehydrant.com/docs/api/
   FireHydrant authentication: https://firehydrant.com/docs/api/#authentication
   FireHydrant Status: https://status.firehydrant.io/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/firehydrant
 
 CONFIGURATION
   api_token (string) required secret: Bot token to use for authenticating with the FireHydrant API. You can find or create a bot token by logging into your organization and visiting the Bot users page at https://app...
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/firehydrant
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  FireHydrant documentation: https://docs.airbyte.com/integrations/sources/firehydrant
+  FireHydrant API documentation: https://firehydrant.com/docs/api/
+  FireHydrant authentication: https://firehydrant.com/docs/api/#authentication
+  FireHydrant Status: https://status.firehydrant.io/
 
 EXIT STATUS
   0 success

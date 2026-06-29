@@ -7,7 +7,13 @@ description: RKI Covid connector knowledge and safe action guide.
 
 ## Purpose
 
-RKI Covid catalog connector for https://docs.airbyte.com/integrations/sources/rki-covid. Native implementation status: planned_native_port.
+RKI Covid catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/rki.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ RKI Covid catalog connector for https://docs.airbyte.com/integrations/sources/rk
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-rki-covid:0.1.41 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ RKI Covid catalog connector for https://docs.airbyte.com/integrations/sources/rk
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/rki-covid
+- manual intervention needed
 
 ## Configuration
 
@@ -60,12 +64,8 @@ RKI Covid catalog connector for https://docs.airbyte.com/integrations/sources/rk
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/rki-covid
 
 ## Commands
 
@@ -86,7 +86,3 @@ pm connectors inspect source-rki-covid --json
 - Read implementation_status before planning ETL or reverse ETL.
 - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
 - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-## References
-
-- [RKI Covid documentation](https://docs.airbyte.com/integrations/sources/rki-covid)

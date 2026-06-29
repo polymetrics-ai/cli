@@ -7,7 +7,14 @@ description: Veeqo connector knowledge and safe action guide.
 
 ## Purpose
 
-Veeqo catalog connector for https://docs.airbyte.com/integrations/sources/veeqo. Native implementation status: planned_native_port.
+Veeqo catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/veeqo.svg
+- source: official
+- review_status: official_verified
+- review_url: https://developers.veeqo.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Veeqo catalog connector for https://docs.airbyte.com/integrations/sources/veeqo.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-veeqo:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Veeqo catalog connector for https://docs.airbyte.com/integrations/sources/veeqo.
 
 ## Official Application Documentation
 
-- Veeqo API documentation: https://developer.veeqo.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/veeqo
+- Veeqo documentation: https://developers.veeqo.com/
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Veeqo catalog connector for https://docs.airbyte.com/integrations/sources/veeqo.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/veeqo
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-veeqo --json
 
 ## References
 
-- [Veeqo documentation](https://docs.airbyte.com/integrations/sources/veeqo)
+- [Veeqo documentation](https://developers.veeqo.com/)

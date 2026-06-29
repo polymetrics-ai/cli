@@ -7,7 +7,13 @@ description: GreytHr connector knowledge and safe action guide.
 
 ## Purpose
 
-GreytHr catalog connector for https://docs.airbyte.com/integrations/sources/greythr. Native implementation status: planned_native_port.
+GreytHr catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ GreytHr catalog connector for https://docs.airbyte.com/integrations/sources/grey
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-greythr:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ GreytHr catalog connector for https://docs.airbyte.com/integrations/sources/grey
 ## Official Application Documentation
 
 - greytHR API documentation: https://help.greythr.com/api/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/greythr
 
 ## Configuration
 
@@ -64,12 +68,8 @@ GreytHr catalog connector for https://docs.airbyte.com/integrations/sources/grey
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/greythr
 
 ## Commands
 
@@ -93,4 +93,4 @@ pm connectors inspect source-greythr --json
 
 ## References
 
-- [GreytHr documentation](https://docs.airbyte.com/integrations/sources/greythr)
+- [greytHR API documentation](https://help.greythr.com/api/)

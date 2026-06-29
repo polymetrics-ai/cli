@@ -7,7 +7,13 @@ description: Capsule CRM connector knowledge and safe action guide.
 
 ## Purpose
 
-Capsule CRM catalog connector for https://docs.airbyte.com/integrations/sources/capsule-crm. Native implementation status: planned_native_port.
+Capsule CRM catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Capsule CRM catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-capsule-crm:0.0.46 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Capsule CRM catalog connector for https://docs.airbyte.com/integrations/sources/
 - Capsule CRM API reference: https://developer.capsulecrm.com/
 - Capsule CRM authentication: https://developer.capsulecrm.com/v2/overview/authentication
 - Capsule CRM rate limits: https://developer.capsulecrm.com/v2/overview/rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/capsule-crm
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Capsule CRM catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/capsule-crm
 
 ## Commands
 
@@ -94,4 +94,6 @@ pm connectors inspect source-capsule-crm --json
 
 ## References
 
-- [Capsule CRM documentation](https://docs.airbyte.com/integrations/sources/capsule-crm)
+- [Capsule CRM API reference](https://developer.capsulecrm.com/)
+- [Capsule CRM authentication](https://developer.capsulecrm.com/v2/overview/authentication)
+- [Capsule CRM rate limits](https://developer.capsulecrm.com/v2/overview/rate-limiting)

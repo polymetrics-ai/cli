@@ -7,7 +7,14 @@ description: Fullstory connector knowledge and safe action guide.
 
 ## Purpose
 
-Fullstory catalog connector for https://docs.airbyte.com/integrations/sources/fullstory. Native implementation status: planned_native_port.
+Fullstory catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/fullstory.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.fullstory.com/reference
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Fullstory catalog connector for https://docs.airbyte.com/integrations/sources/fu
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-fullstory:0.2.23 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Fullstory catalog connector for https://docs.airbyte.com/integrations/sources/fu
 - FullStory API reference: https://developer.fullstory.com/reference
 - FullStory authentication: https://developer.fullstory.com/introduction
 - FullStory Status: https://status.fullstory.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/fullstory
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Fullstory catalog connector for https://docs.airbyte.com/integrations/sources/fu
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/fullstory
 
 ## Commands
 
@@ -93,4 +94,6 @@ pm connectors inspect source-fullstory --json
 
 ## References
 
-- [Fullstory documentation](https://docs.airbyte.com/integrations/sources/fullstory)
+- [FullStory API reference](https://developer.fullstory.com/reference)
+- [FullStory authentication](https://developer.fullstory.com/introduction)
+- [FullStory Status](https://status.fullstory.com/)

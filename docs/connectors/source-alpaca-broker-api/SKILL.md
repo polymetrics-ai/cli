@@ -7,7 +7,13 @@ description: Alpaca Broker API connector knowledge and safe action guide.
 
 ## Purpose
 
-Alpaca Broker API catalog connector for https://docs.airbyte.com/integrations/sources/alpaca-broker-api. Native implementation status: planned_native_port.
+Alpaca Broker API catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Alpaca Broker API catalog connector for https://docs.airbyte.com/integrations/so
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-alpaca-broker-api:0.0.28 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Alpaca Broker API catalog connector for https://docs.airbyte.com/integrations/so
 - Broker API documentation: https://docs.alpaca.markets/docs/broker-api
 - Authentication: https://docs.alpaca.markets/docs/broker-api-keys
 - Rate limits: https://docs.alpaca.markets/docs/rate-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/alpaca-broker-api
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Alpaca Broker API catalog connector for https://docs.airbyte.com/integrations/so
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/alpaca-broker-api
 
 ## Commands
 
@@ -96,4 +96,6 @@ pm connectors inspect source-alpaca-broker-api --json
 
 ## References
 
-- [Alpaca Broker API documentation](https://docs.airbyte.com/integrations/sources/alpaca-broker-api)
+- [Broker API documentation](https://docs.alpaca.markets/docs/broker-api)
+- [Authentication](https://docs.alpaca.markets/docs/broker-api-keys)
+- [Rate limits](https://docs.alpaca.markets/docs/rate-limits)

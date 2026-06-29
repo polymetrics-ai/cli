@@ -7,7 +7,14 @@ description: ZohoCRM connector knowledge and safe action guide.
 
 ## Purpose
 
-ZohoCRM catalog connector for https://docs.airbyte.com/integrations/sources/zoho-crm. Native implementation status: planned_native_port.
+ZohoCRM catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/zohocrm.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.zoho.com/crm/developer/docs/api/v6/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ ZohoCRM catalog connector for https://docs.airbyte.com/integrations/sources/zoho
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-zoho-crm:0.1.3 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ ZohoCRM catalog connector for https://docs.airbyte.com/integrations/sources/zoho
 - Zoho OAuth 2.0: https://www.zoho.com/crm/developer/docs/api/v6/oauth-overview.html
 - Zoho CRM API changelog: https://www.zoho.com/crm/developer/docs/api/v6/whats-new.html
 - Zoho API limits: https://www.zoho.com/crm/developer/docs/api/v6/api-limits.html
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zoho-crm
 
 ## Configuration
 
@@ -70,12 +75,8 @@ ZohoCRM catalog connector for https://docs.airbyte.com/integrations/sources/zoho
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/zoho-crm
 
 ## Commands
 
@@ -99,4 +100,7 @@ pm connectors inspect source-zoho-crm --json
 
 ## References
 
-- [ZohoCRM documentation](https://docs.airbyte.com/integrations/sources/zoho-crm)
+- [Zoho CRM API](https://www.zoho.com/crm/developer/docs/api/v6/)
+- [Zoho OAuth 2.0](https://www.zoho.com/crm/developer/docs/api/v6/oauth-overview.html)
+- [Zoho CRM API changelog](https://www.zoho.com/crm/developer/docs/api/v6/whats-new.html)
+- [Zoho API limits](https://www.zoho.com/crm/developer/docs/api/v6/api-limits.html)

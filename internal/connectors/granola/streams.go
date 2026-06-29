@@ -6,7 +6,7 @@ import "polymetrics.ai/internal/connectors"
 // note exposes a string id and an RFC3339 created_at timestamp, so the primary
 // key is ["id"] and the incremental cursor field is ["created_at"].
 //
-// The two core streams mirror the upstream Airbyte connector:
+// The two core streams mirror the upstream upstream connector:
 //   - notes: lightweight list metadata from GET /notes.
 //   - detailed_notes: the full note (summary, owner, attendees, calendar event)
 //     from GET /notes/{id}, fanned out from the notes list.

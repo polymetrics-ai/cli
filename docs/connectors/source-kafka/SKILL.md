@@ -7,7 +7,14 @@ description: Kafka connector knowledge and safe action guide.
 
 ## Purpose
 
-Kafka catalog connector for https://docs.airbyte.com/integrations/sources/kafka. Native implementation status: planned_native_port.
+Kafka catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/kafka.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://kafka.apache.org/documentation/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Kafka catalog connector for https://docs.airbyte.com/integrations/sources/kafka.
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-kafka:0.4.2 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Kafka catalog connector for https://docs.airbyte.com/integrations/sources/kafka.
 ## Official Application Documentation
 
 - Apache Kafka documentation: https://kafka.apache.org/documentation/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/kafka
 
 ## Configuration
 
@@ -67,7 +72,7 @@ Kafka catalog connector for https://docs.airbyte.com/integrations/sources/kafka.
 - request_timeout_ms (integer): The configuration controls the maximum amount of time the client will wait for the response of a request. If the response is not received before the timeout elapses the client w...
 - retry_backoff_ms (integer): The amount of time to wait before attempting to retry a failed request to a given topic partition. This avoids repeatedly sending requests in a tight loop under some failure sce...
 - subscription (object) required: You can choose to manually assign a list of partitions, or subscribe to all topics matching specified pattern to get dynamically assigned partitions.
-- test_topic (string): The Topic to test in case the Airbyte can consume messages.
+- test_topic (string): manual intervention needed
 - secret fields: MessageFormat.schema_registry_password, protocol.sasl_jaas_config
 
 ## Sync Modes
@@ -78,12 +83,8 @@ Kafka catalog connector for https://docs.airbyte.com/integrations/sources/kafka.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/kafka
 
 ## Commands
 
@@ -107,4 +108,4 @@ pm connectors inspect source-kafka --json
 
 ## References
 
-- [Kafka documentation](https://docs.airbyte.com/integrations/sources/kafka)
+- [Apache Kafka documentation](https://kafka.apache.org/documentation/)

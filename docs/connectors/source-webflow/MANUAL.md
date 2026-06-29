@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-webflow [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Webflow catalog connector for https://docs.airbyte.com/integrations/sources/webflow. Native implementation status: planned_native_port.
+  Webflow catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/webflow.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.webflow.com/data/reference
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-webflow:0.1.46 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,7 +53,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Webflow API Changelog: https://developers.webflow.com/data/changelog
   Webflow v1 API Deprecation Notice: https://developers.webflow.com/data/docs/webflow-v1-api-deprecation-notice
   Webflow rate limits: https://developers.webflow.com/data/docs/rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/webflow
 
 CONFIGURATION
   accept_version (string): The version of the Webflow API to use. See https://developers.webflow.com/#versioning
@@ -62,11 +66,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/webflow
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +82,11 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Webflow documentation: https://docs.airbyte.com/integrations/sources/webflow
+  Webflow Data API: https://developers.webflow.com/data/reference
+  Webflow authentication: https://developers.webflow.com/data/docs/getting-started
+  Webflow API Changelog: https://developers.webflow.com/data/changelog
+  Webflow v1 API Deprecation Notice: https://developers.webflow.com/data/docs/webflow-v1-api-deprecation-notice
+  Webflow rate limits: https://developers.webflow.com/data/docs/rate-limits
 
 EXIT STATUS
   0 success

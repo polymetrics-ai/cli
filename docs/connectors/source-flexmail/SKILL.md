@@ -7,7 +7,13 @@ description: Flexmail connector knowledge and safe action guide.
 
 ## Purpose
 
-Flexmail catalog connector for https://docs.airbyte.com/integrations/sources/flexmail. Native implementation status: planned_native_port.
+Flexmail catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Flexmail catalog connector for https://docs.airbyte.com/integrations/sources/fle
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-flexmail:0.0.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Flexmail catalog connector for https://docs.airbyte.com/integrations/sources/fle
 ## Official Application Documentation
 
 - Flexmail API documentation: https://api.flexmail.eu/documentation/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/flexmail
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Flexmail catalog connector for https://docs.airbyte.com/integrations/sources/fle
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/flexmail
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-flexmail --json
 
 ## References
 
-- [Flexmail documentation](https://docs.airbyte.com/integrations/sources/flexmail)
+- [Flexmail API documentation](https://api.flexmail.eu/documentation/)

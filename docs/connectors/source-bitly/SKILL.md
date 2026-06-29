@@ -7,7 +7,13 @@ description: Bitly connector knowledge and safe action guide.
 
 ## Purpose
 
-Bitly catalog connector for https://docs.airbyte.com/integrations/sources/bitly. Native implementation status: planned_native_port.
+Bitly catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Bitly catalog connector for https://docs.airbyte.com/integrations/sources/bitly.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-bitly:0.0.46 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Bitly catalog connector for https://docs.airbyte.com/integrations/sources/bitly.
 - API reference: https://dev.bitly.com/api-reference/
 - Authentication: https://dev.bitly.com/docs/getting-started/authentication/
 - Rate limits: https://dev.bitly.com/docs/getting-started/rate-limits/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/bitly
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Bitly catalog connector for https://docs.airbyte.com/integrations/sources/bitly.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/bitly
 
 ## Commands
 
@@ -94,4 +94,6 @@ pm connectors inspect source-bitly --json
 
 ## References
 
-- [Bitly documentation](https://docs.airbyte.com/integrations/sources/bitly)
+- [API reference](https://dev.bitly.com/api-reference/)
+- [Authentication](https://dev.bitly.com/docs/getting-started/authentication/)
+- [Rate limits](https://dev.bitly.com/docs/getting-started/rate-limits/)

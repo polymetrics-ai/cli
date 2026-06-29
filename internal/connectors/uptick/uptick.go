@@ -9,7 +9,7 @@
 // in init(); the registryset package blank-imports this package in the production
 // binary to run that side effect.
 //
-// The connector is read-only: the Uptick Airbyte source supports only
+// The connector is read-only: the Uptick upstream source supports only
 // full_refresh / incremental reads, so Capabilities.Write is false.
 package uptick
 
@@ -31,7 +31,7 @@ import (
 
 const (
 	// uptickAPIVersion is the Uptick REST API version segment used by the
-	// upstream Airbyte manifest.
+	// upstream upstream manifest.
 	uptickAPIVersion = "v2.14"
 	// uptickTokenPath is the OAuth2 password-grant token endpoint, relative to
 	// base_url.

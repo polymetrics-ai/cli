@@ -7,7 +7,13 @@ description: Microsoft Entra Id connector knowledge and safe action guide.
 
 ## Purpose
 
-Microsoft Entra Id catalog connector for https://docs.airbyte.com/integrations/sources/microsoft-entra-id. Native implementation status: planned_native_port.
+Microsoft Entra Id catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Microsoft Entra Id catalog connector for https://docs.airbyte.com/integrations/s
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-microsoft-entra-id:0.0.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Microsoft Entra Id catalog connector for https://docs.airbyte.com/integrations/s
 - Microsoft Graph authentication: https://learn.microsoft.com/en-us/graph/auth/
 - Microsoft Graph throttling: https://learn.microsoft.com/en-us/graph/throttling
 - Microsoft 365 Status: https://status.office365.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/microsoft-entra-id
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Microsoft Entra Id catalog connector for https://docs.airbyte.com/integrations/s
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/microsoft-entra-id
 
 ## Commands
 
@@ -96,4 +96,7 @@ pm connectors inspect source-microsoft-entra-id --json
 
 ## References
 
-- [Microsoft Entra Id documentation](https://docs.airbyte.com/integrations/sources/microsoft-entra-id)
+- [Microsoft Entra ID API](https://learn.microsoft.com/en-us/graph/api/resources/azure-ad-overview)
+- [Microsoft Graph authentication](https://learn.microsoft.com/en-us/graph/auth/)
+- [Microsoft Graph throttling](https://learn.microsoft.com/en-us/graph/throttling)
+- [Microsoft 365 Status](https://status.office365.com/)

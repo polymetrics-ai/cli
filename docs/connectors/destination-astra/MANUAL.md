@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector destination-astra [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Astra DB catalog connector for https://docs.airbyte.com/integrations/destinations/astra. Native implementation status: planned_native_port.
+  Astra DB catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/astra.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-astra:0.1.44 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/astra
+  Astra DB documentation: https://docs.datastax.com/en/astra-db-serverless/index.html
 
 CONFIGURATION
   embedding (object) required: Embedding configuration
@@ -59,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/astra
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +78,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Astra DB documentation: https://docs.airbyte.com/integrations/destinations/astra
+  Astra DB documentation: https://docs.datastax.com/en/astra-db-serverless/index.html
 
 EXIT STATUS
   0 success

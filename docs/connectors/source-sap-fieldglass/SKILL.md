@@ -7,7 +7,14 @@ description: SAP Fieldglass connector knowledge and safe action guide.
 
 ## Purpose
 
-SAP Fieldglass catalog connector for https://docs.airbyte.com/integrations/sources/sap-fieldglass. Native implementation status: planned_native_port.
+SAP Fieldglass catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/sapfieldglass.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://api.sap.com/package/SAPFieldglass/rest
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ SAP Fieldglass catalog connector for https://docs.airbyte.com/integrations/sourc
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sap-fieldglass:0.2.39 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ SAP Fieldglass catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Official Application Documentation
 
 - SAP Fieldglass API: https://api.sap.com/package/SAPFieldglass/rest
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sap-fieldglass
 
 ## Configuration
 
@@ -61,12 +66,8 @@ SAP Fieldglass catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/sap-fieldglass
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-sap-fieldglass --json
 
 ## References
 
-- [SAP Fieldglass documentation](https://docs.airbyte.com/integrations/sources/sap-fieldglass)
+- [SAP Fieldglass API](https://api.sap.com/package/SAPFieldglass/rest)

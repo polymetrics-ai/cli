@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-formbricks [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Formbricks catalog connector for https://docs.airbyte.com/integrations/sources/formbricks. Native implementation status: planned_native_port.
+  Formbricks catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-formbricks:0.0.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Formbricks API documentation: https://formbricks.com/docs/api/overview
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/formbricks
 
 CONFIGURATION
   api_key (string) required secret: API key to use. You can generate and find it in your Postman account settings.
@@ -56,11 +59,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/formbricks
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +75,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Formbricks documentation: https://docs.airbyte.com/integrations/sources/formbricks
+  Formbricks API documentation: https://formbricks.com/docs/api/overview
 
 EXIT STATUS
   0 success

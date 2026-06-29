@@ -7,7 +7,13 @@ description: Papersign connector knowledge and safe action guide.
 
 ## Purpose
 
-Papersign catalog connector for https://docs.airbyte.com/integrations/sources/papersign. Native implementation status: planned_native_port.
+Papersign catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Papersign catalog connector for https://docs.airbyte.com/integrations/sources/pa
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-papersign:0.0.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Papersign catalog connector for https://docs.airbyte.com/integrations/sources/pa
 ## Official Application Documentation
 
 - PaperSign API documentation: https://papersign.com/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/papersign
 
 ## Configuration
 
@@ -61,12 +65,8 @@ Papersign catalog connector for https://docs.airbyte.com/integrations/sources/pa
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/papersign
 
 ## Commands
 
@@ -90,4 +90,4 @@ pm connectors inspect source-papersign --json
 
 ## References
 
-- [Papersign documentation](https://docs.airbyte.com/integrations/sources/papersign)
+- [PaperSign API documentation](https://papersign.com/api)

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-hibob [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Hibob catalog connector for https://docs.airbyte.com/integrations/sources/hibob. Native implementation status: planned_native_port.
+  Hibob catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/hibob.svg
+  source: official
+  review_status: official_verified
+  review_url: https://apidocs.hibob.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-hibob:0.2.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,9 +48,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  HiBob API documentation: https://apidocs.hibob.com/
-  HiBob authentication: https://apidocs.hibob.com/docs/authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/hibob
+  Hibob documentation: https://apidocs.hibob.com/
 
 CONFIGURATION
   is_sandbox (boolean) required: Toggle true if this instance is a HiBob sandbox
@@ -59,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/hibob
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +78,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Hibob documentation: https://docs.airbyte.com/integrations/sources/hibob
+  Hibob documentation: https://apidocs.hibob.com/
 
 EXIT STATUS
   0 success

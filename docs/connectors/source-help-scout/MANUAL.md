@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-help-scout [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Help Scout catalog connector for https://docs.airbyte.com/integrations/sources/help-scout. Native implementation status: planned_native_port.
+  Help Scout catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-help-scout:0.0.45 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Help Scout authentication: https://developer.helpscout.com/mailbox-api/overview/authentication/
   Help Scout rate limits: https://developer.helpscout.com/mailbox-api/overview/rate-limiting/
   Help Scout Status: https://status.helpscout.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/help-scout
 
 CONFIGURATION
   client_id (string) required secret
@@ -61,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/help-scout
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +80,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Help Scout documentation: https://docs.airbyte.com/integrations/sources/help-scout
+  Help Scout API reference: https://developer.helpscout.com/
+  Help Scout authentication: https://developer.helpscout.com/mailbox-api/overview/authentication/
+  Help Scout rate limits: https://developer.helpscout.com/mailbox-api/overview/rate-limiting/
+  Help Scout Status: https://status.helpscout.com/
 
 EXIT STATUS
   0 success

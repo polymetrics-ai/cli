@@ -7,7 +7,14 @@ description: Netsuite connector knowledge and safe action guide.
 
 ## Purpose
 
-Netsuite catalog connector for https://docs.airbyte.com/integrations/sources/netsuite. Native implementation status: planned_native_port.
+Netsuite catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/netsuite.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1540391670.html
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Netsuite catalog connector for https://docs.airbyte.com/integrations/sources/net
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-netsuite:0.1.27 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Netsuite catalog connector for https://docs.airbyte.com/integrations/sources/net
 
 - NetSuite REST API: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1540391670.html
 - NetSuite authentication: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4389727047.html
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/netsuite
 
 ## Configuration
 
@@ -69,12 +74,8 @@ Netsuite catalog connector for https://docs.airbyte.com/integrations/sources/net
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/netsuite
 
 ## Commands
 
@@ -98,4 +99,5 @@ pm connectors inspect source-netsuite --json
 
 ## References
 
-- [Netsuite documentation](https://docs.airbyte.com/integrations/sources/netsuite)
+- [NetSuite REST API](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1540391670.html)
+- [NetSuite authentication](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4389727047.html)

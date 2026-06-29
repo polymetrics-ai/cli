@@ -7,7 +7,14 @@ description: GNews connector knowledge and safe action guide.
 
 ## Purpose
 
-GNews catalog connector for https://docs.airbyte.com/integrations/sources/gnews. Native implementation status: planned_native_port.
+GNews catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/gnews.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://gnews.io/docs/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ GNews catalog connector for https://docs.airbyte.com/integrations/sources/gnews.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-gnews:0.2.23 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ GNews catalog connector for https://docs.airbyte.com/integrations/sources/gnews.
 ## Official Application Documentation
 
 - GNews API documentation: https://gnews.io/docs/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/gnews
 
 ## Configuration
 
@@ -71,12 +76,8 @@ GNews catalog connector for https://docs.airbyte.com/integrations/sources/gnews.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/gnews
 
 ## Commands
 
@@ -100,4 +101,4 @@ pm connectors inspect source-gnews --json
 
 ## References
 
-- [GNews documentation](https://docs.airbyte.com/integrations/sources/gnews)
+- [GNews API documentation](https://gnews.io/docs/)

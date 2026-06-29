@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-dixa [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Dixa catalog connector for https://docs.airbyte.com/integrations/sources/dixa. Native implementation status: planned_native_port.
+  Dixa catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/dixa.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.dixa.io/openapi/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-dixa:0.4.21 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Dixa API reference: https://docs.dixa.io/openapi/
   Dixa authentication: https://docs.dixa.io/openapi/dixa-api/#section/Authentication
   Dixa rate limits: https://docs.dixa.io/openapi/dixa-api/#section/Rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/dixa
 
 CONFIGURATION
   api_token (string) required secret: Dixa API token
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/dixa
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Dixa documentation: https://docs.airbyte.com/integrations/sources/dixa
+  Dixa API reference: https://docs.dixa.io/openapi/
+  Dixa authentication: https://docs.dixa.io/openapi/dixa-api/#section/Authentication
+  Dixa rate limits: https://docs.dixa.io/openapi/dixa-api/#section/Rate-limiting
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-microsoft-onedrive [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Microsoft OneDrive catalog connector for https://docs.airbyte.com/integrations/sources/microsoft-onedrive. Native implementation status: planned_native_port.
+  Microsoft OneDrive catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/microsoft-onedrive.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://learn.microsoft.com/en-us/onedrive/developer/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: file_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-microsoft-onedrive:0.2.44 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   OneDrive authentication: https://learn.microsoft.com/en-us/onedrive/developer/rest-api/getting-started/authentication
   Microsoft Graph throttling: https://learn.microsoft.com/en-us/graph/throttling
   Microsoft 365 Status: https://status.office365.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/microsoft-onedrive
 
 CONFIGURATION
   credentials (object) required: Credentials for connecting to the One Drive API
@@ -55,7 +59,7 @@ CONFIGURATION
   folder_path (string): Path to a specific folder within the drives to search for files. Leave empty to search all folders of the drives. This does not apply to shared items.
   search_scope (string): Specifies the location(s) to search for files. Valid options are 'ACCESSIBLE_DRIVES' to search in the selected OneDrive drive, 'SHARED_ITEMS' for shared items the user has acces...
   start_date (string): UTC date and time in the format 2017-01-25T00:00:00.000000Z. Any file modified before this date will not be replicated.
-  streams (array) required: Each instance of this configuration defines a <a href="https://docs.airbyte.com/cloud/core-concepts#stream">stream</a>. Use this to define which files belong in the stream, thei...
+  streams (array) required: manual intervention needed
   secret fields: credentials.client_id, credentials.client_secret, credentials.refresh_token, credentials.tenant_id, credentials.user_principal_name
 
 SYNC MODES
@@ -64,11 +68,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/microsoft-onedrive
 
 EXAMPLES
   # Inspect catalog entry
@@ -83,7 +84,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Microsoft OneDrive documentation: https://docs.airbyte.com/integrations/sources/microsoft-onedrive
+  OneDrive API reference: https://learn.microsoft.com/en-us/onedrive/developer/
+  OneDrive authentication: https://learn.microsoft.com/en-us/onedrive/developer/rest-api/getting-started/authentication
+  Microsoft Graph throttling: https://learn.microsoft.com/en-us/graph/throttling
+  Microsoft 365 Status: https://status.office365.com/
 
 EXIT STATUS
   0 success

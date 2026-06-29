@@ -218,7 +218,7 @@ pm connectors inspect stripe  # auth modes, streams, sync modes, write actions
 pm connectors inspect stripe --json
 ```
 
-**118 native connectors** are implemented today (a `647`-connector catalog is the
+**118 native connectors** are implemented today (a `646`-connector catalog is the
 roadmap). A few notes:
 
 - **GitHub** (`github`) — public reads need no token; private/higher-rate-limit reads
@@ -325,12 +325,27 @@ Adding a connector is the highest-leverage contribution. The pattern:
 3. **Implement `Check`, `Catalog`, `Read`** (and `Write` + `WriteValidator` if the API has
    safe mutations). Add a `mode=fixture` path so it conforms without live credentials.
 4. **Test first** — write an `httptest`-backed `_test.go`, confirm it fails, then implement.
-5. **Wire it in** — `go run ./cmd/registrygen` regenerates the registry from the connector
+5. **Add the icon release artifact** — connector icons are registry-backed and validated.
+   Run `PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate` to seed icons from an upstream registry. If the seeded icon is stale,
+   compare it against the vendor website or official documentation, replace the SVG under
+   `docs/connectors/icons/`, and update the icon entry in `internal/connectors/icon_data.json`
+   with `review_status` set to `official_verified` or `manual_override`.
+6. **Wire it in** — `go run ./cmd/registrygen` regenerates the registry from the connector
    directories (no shared file to hand-edit), then `make verify`.
 
 ```bash
+PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate
 go run ./cmd/registrygen   # derive the registry from internal/connectors/*/
 make verify                # must stay green
 ```
+
+Optional local hook setup:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+The hook and CI both route through the same docs/icon validation path, so a connector cannot
+ship without icon metadata, a local SVG asset, generated docs, and safe SVG content.
 
 Open a PR — and thank you. 🙌

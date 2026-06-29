@@ -14,7 +14,7 @@ type streamEndpoint struct {
 // mailjetStreamEndpoints is the per-stream routing table. Adding a stream means
 // adding one entry here plus a Stream definition in mailjetStreams; the read
 // path is fully data-driven from this table. The published stream names mirror
-// the Airbyte source-mailjet-mail streams (pluralized) while the resource is the
+// the upstream source-mailjet-mail streams (pluralized) while the resource is the
 // underlying Mailjet v3 REST resource.
 var mailjetStreamEndpoints = map[string]streamEndpoint{
 	"contacts":      {resource: "contact", mapRecord: mailjetContactRecord},

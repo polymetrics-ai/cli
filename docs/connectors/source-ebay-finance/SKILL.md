@@ -7,7 +7,13 @@ description: Ebay Finance connector knowledge and safe action guide.
 
 ## Purpose
 
-Ebay Finance catalog connector for https://docs.airbyte.com/integrations/sources/ebay-finance. Native implementation status: planned_native_port.
+Ebay Finance catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Ebay Finance catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-ebay-finance:0.0.39 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Ebay Finance catalog connector for https://docs.airbyte.com/integrations/sources
 - eBay authentication: https://developer.ebay.com/api-docs/static/oauth-tokens.html
 - eBay rate limits: https://developer.ebay.com/support/app-check
 - eBay Developer Status: https://developer.ebay.com/support/api-status
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/ebay-finance
 
 ## Configuration
 
@@ -71,12 +75,8 @@ Ebay Finance catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/ebay-finance
 
 ## Commands
 
@@ -100,4 +100,7 @@ pm connectors inspect source-ebay-finance --json
 
 ## References
 
-- [Ebay Finance documentation](https://docs.airbyte.com/integrations/sources/ebay-finance)
+- [eBay Finances API](https://developer.ebay.com/api-docs/sell/finances/overview.html)
+- [eBay authentication](https://developer.ebay.com/api-docs/static/oauth-tokens.html)
+- [eBay rate limits](https://developer.ebay.com/support/app-check)
+- [eBay Developer Status](https://developer.ebay.com/support/api-status)

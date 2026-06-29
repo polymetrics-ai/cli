@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-mailchimp [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Mailchimp catalog connector for https://docs.airbyte.com/integrations/sources/mailchimp. Native implementation status: planned_native_port.
+  Mailchimp catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/mailchimp.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://mailchimp.com/developer/release-notes/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-mailchimp:2.1.29 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Mailchimp Marketing API Release Notes: https://mailchimp.com/developer/release-notes/
   Release Notes: https://mailchimp.com/developer/release-notes/?filter=marketing
   Mailchimp Marketing API OpenAPI specification: https://api.mailchimp.com/schema/3.0/Swagger.json
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mailchimp
 
 CONFIGURATION
   credentials (object)
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/mailchimp
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Mailchimp documentation: https://docs.airbyte.com/integrations/sources/mailchimp
+  Mailchimp Marketing API Release Notes: https://mailchimp.com/developer/release-notes/
+  Release Notes: https://mailchimp.com/developer/release-notes/?filter=marketing
+  Mailchimp Marketing API OpenAPI specification: https://api.mailchimp.com/schema/3.0/Swagger.json
 
 EXIT STATUS
   0 success

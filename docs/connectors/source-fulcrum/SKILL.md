@@ -7,7 +7,13 @@ description: Fulcrum connector knowledge and safe action guide.
 
 ## Purpose
 
-Fulcrum catalog connector for https://docs.airbyte.com/integrations/sources/fulcrum. Native implementation status: planned_native_port.
+Fulcrum catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Fulcrum catalog connector for https://docs.airbyte.com/integrations/sources/fulc
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-fulcrum:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Fulcrum catalog connector for https://docs.airbyte.com/integrations/sources/fulc
 
 - Fulcrum API documentation: https://developer.fulcrumapp.com/
 - Fulcrum authentication: https://developer.fulcrumapp.com/general/authentication/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/fulcrum
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Fulcrum catalog connector for https://docs.airbyte.com/integrations/sources/fulc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/fulcrum
 
 ## Commands
 
@@ -91,4 +91,5 @@ pm connectors inspect source-fulcrum --json
 
 ## References
 
-- [Fulcrum documentation](https://docs.airbyte.com/integrations/sources/fulcrum)
+- [Fulcrum API documentation](https://developer.fulcrumapp.com/)
+- [Fulcrum authentication](https://developer.fulcrumapp.com/general/authentication/)

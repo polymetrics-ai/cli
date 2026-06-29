@@ -7,7 +7,14 @@ description: Starburst Galaxy connector knowledge and safe action guide.
 
 ## Purpose
 
-Starburst Galaxy catalog connector for https://docs.airbyte.com/integrations/destinations/starburst-galaxy. Native implementation status: planned_native_port.
+Starburst Galaxy catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/starburst-galaxy.svg
+- source: official
+- review_status: official_verified
+- review_url: https://docs.starburst.io/starburst-galaxy/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Starburst Galaxy catalog connector for https://docs.airbyte.com/integrations/des
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-starburst-galaxy:0.0.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Starburst Galaxy catalog connector for https://docs.airbyte.com/integrations/des
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/starburst-galaxy
+- Starburst Galaxy documentation: https://docs.starburst.io/starburst-galaxy/
 
 ## Configuration
 
@@ -69,12 +74,8 @@ Starburst Galaxy catalog connector for https://docs.airbyte.com/integrations/des
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/starburst-galaxy
 
 ## Commands
 
@@ -98,4 +99,4 @@ pm connectors inspect destination-starburst-galaxy --json
 
 ## References
 
-- [Starburst Galaxy documentation](https://docs.airbyte.com/integrations/destinations/starburst-galaxy)
+- [Starburst Galaxy documentation](https://docs.starburst.io/starburst-galaxy/)

@@ -7,7 +7,14 @@ description: LinkedIn Ads connector knowledge and safe action guide.
 
 ## Purpose
 
-LinkedIn Ads catalog connector for https://docs.airbyte.com/integrations/sources/linkedin-ads. Native implementation status: planned_native_port.
+LinkedIn Ads catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/linkedin.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ LinkedIn Ads catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-linkedin-ads:5.6.9 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ LinkedIn Ads catalog connector for https://docs.airbyte.com/integrations/sources
 ## Official Application Documentation
 
 - Changelog: https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/linkedin-ads
 
 ## Configuration
 
@@ -66,12 +71,8 @@ LinkedIn Ads catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/linkedin-ads
 
 ## Commands
 
@@ -95,4 +96,4 @@ pm connectors inspect source-linkedin-ads --json
 
 ## References
 
-- [LinkedIn Ads documentation](https://docs.airbyte.com/integrations/sources/linkedin-ads)
+- [Changelog](https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10)

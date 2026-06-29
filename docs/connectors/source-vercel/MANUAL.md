@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-vercel [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Vercel catalog connector for https://docs.airbyte.com/integrations/sources/vercel. Native implementation status: planned_native_port.
+  Vercel catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-vercel:0.0.56 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Vercel authentication: https://vercel.com/docs/rest-api#authentication
   Vercel rate limits: https://vercel.com/docs/rest-api#rate-limiting
   Vercel Status: https://www.vercel-status.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/vercel
 
 CONFIGURATION
   access_token (string) required secret: Access token to authenticate with the Vercel API. Create and manage tokens in your Vercel account settings.
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/vercel
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Vercel documentation: https://docs.airbyte.com/integrations/sources/vercel
+  Vercel API reference: https://vercel.com/docs/rest-api
+  Vercel authentication: https://vercel.com/docs/rest-api#authentication
+  Vercel rate limits: https://vercel.com/docs/rest-api#rate-limiting
+  Vercel Status: https://www.vercel-status.com/
 
 EXIT STATUS
   0 success

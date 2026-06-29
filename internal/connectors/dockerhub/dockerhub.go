@@ -243,7 +243,7 @@ func (c Connector) readFixture(ctx context.Context, stream string, def streamDef
 		}
 		item := map[string]any{
 			"name":                  fmt.Sprintf("%s-fixture-%d", stream, i),
-			"namespace":             "airbyte",
+			"namespace":             "upstream",
 			"repository_type":       "image",
 			"status":                int64(1),
 			"status_description":    "active",
@@ -257,9 +257,9 @@ func (c Connector) readFixture(ctx context.Context, stream string, def streamDef
 			"date_registered":       "2026-01-01T00:00:00Z",
 			"id":                    fmt.Sprintf("id_fixture_%d", i),
 			"uuid":                  fmt.Sprintf("uuid-fixture-%d", i),
-			"orgname":               "airbyte",
-			"full_name":             "Airbyte",
-			"company":               "Airbyte",
+			"orgname":               "upstream",
+			"full_name":             "upstream",
+			"company":               "upstream",
 			"location":              "",
 			"type":                  "Organization",
 			"badge":                 "verified_publisher",
@@ -272,7 +272,7 @@ func (c Connector) readFixture(ctx context.Context, stream string, def streamDef
 			"content_type":          "image",
 			"tag_status":            "active",
 			"last_pushed":           fmt.Sprintf("2026-01-0%dT00:00:00Z", i),
-			"last_updater_username": "airbyte",
+			"last_updater_username": "upstream",
 		}
 		if err := emit(def.mapRecord(item)); err != nil {
 			return err

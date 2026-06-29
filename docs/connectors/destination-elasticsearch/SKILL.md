@@ -7,7 +7,14 @@ description: ElasticSearch connector knowledge and safe action guide.
 
 ## Purpose
 
-ElasticSearch catalog connector for https://docs.airbyte.com/integrations/destinations/elasticsearch. Native implementation status: planned_native_port.
+ElasticSearch catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/elasticsearch.svg
+- source: official
+- review_status: official_verified
+- review_url: https://www.elastic.co/docs/reference/elasticsearch
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ ElasticSearch catalog connector for https://docs.airbyte.com/integrations/destin
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-elasticsearch:0.2.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ ElasticSearch catalog connector for https://docs.airbyte.com/integrations/destin
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/elasticsearch
+- ElasticSearch documentation: https://www.elastic.co/docs/reference/elasticsearch
 
 ## Configuration
 
@@ -66,12 +71,8 @@ ElasticSearch catalog connector for https://docs.airbyte.com/integrations/destin
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/elasticsearch
 
 ## Commands
 
@@ -95,4 +96,4 @@ pm connectors inspect destination-elasticsearch --json
 
 ## References
 
-- [ElasticSearch documentation](https://docs.airbyte.com/integrations/destinations/elasticsearch)
+- [ElasticSearch documentation](https://www.elastic.co/docs/reference/elasticsearch)

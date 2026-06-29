@@ -7,7 +7,14 @@ description: SurrealDB connector knowledge and safe action guide.
 
 ## Purpose
 
-SurrealDB catalog connector for https://docs.airbyte.com/integrations/destinations/surrealdb. Native implementation status: planned_native_port.
+SurrealDB catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/surrealdb.svg
+- source: official
+- review_status: official_verified
+- review_url: https://surrealdb.com/docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ SurrealDB catalog connector for https://docs.airbyte.com/integrations/destinatio
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-surrealdb:0.1.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ SurrealDB catalog connector for https://docs.airbyte.com/integrations/destinatio
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/surrealdb
+- SurrealDB documentation: https://surrealdb.com/docs
 
 ## Configuration
 
@@ -64,12 +69,8 @@ SurrealDB catalog connector for https://docs.airbyte.com/integrations/destinatio
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/surrealdb
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect destination-surrealdb --json
 
 ## References
 
-- [SurrealDB documentation](https://docs.airbyte.com/integrations/destinations/surrealdb)
+- [SurrealDB documentation](https://surrealdb.com/docs)

@@ -7,7 +7,7 @@ import (
 
 func TestNativePortPlansCoverCatalog(t *testing.T) {
 	plans := NativePortPlans(ConnectorCatalog())
-	if got, want := len(plans), 647; got != want {
+	if got, want := len(plans), 646; got != want {
 		t.Fatalf("NativePortPlans len = %d, want %d", got, want)
 	}
 	for _, plan := range plans {

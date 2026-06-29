@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-trello [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Trello catalog connector for https://docs.airbyte.com/integrations/sources/trello. Native implementation status: planned_native_port.
+  Trello catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/trello.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.atlassian.com/cloud/trello/rest/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-trello:1.3.10 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Trello REST API: https://developer.atlassian.com/cloud/trello/rest/
   Trello authentication: https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/
   Trello rate limits: https://developer.atlassian.com/cloud/trello/guides/rest-api/rate-limits/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/trello
 
 CONFIGURATION
   board_ids (array): IDs of the boards to replicate data from. If left empty, data from all boards to which you have access will be replicated. Please note that this is not the 8-character ID in the...
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/trello
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Trello documentation: https://docs.airbyte.com/integrations/sources/trello
+  Trello REST API: https://developer.atlassian.com/cloud/trello/rest/
+  Trello authentication: https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/
+  Trello rate limits: https://developer.atlassian.com/cloud/trello/guides/rest-api/rate-limits/
 
 EXIT STATUS
   0 success

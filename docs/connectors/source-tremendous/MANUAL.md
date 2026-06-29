@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-tremendous [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Tremendous catalog connector for https://docs.airbyte.com/integrations/sources/tremendous. Native implementation status: planned_native_port.
+  Tremendous catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-tremendous:0.0.56 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Tremendous API reference: https://developers.tremendous.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tremendous
 
 CONFIGURATION
   api_key (string) required secret: API key to use. You can generate an API key through the Tremendous dashboard under Team Settings > Developers. Save the key once you’ve generated it.
@@ -57,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/tremendous
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Tremendous documentation: https://docs.airbyte.com/integrations/sources/tremendous
+  Tremendous API reference: https://developers.tremendous.com/
 
 EXIT STATUS
   0 success

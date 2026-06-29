@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-zendesk-sunshine [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Zendesk Sunshine catalog connector for https://docs.airbyte.com/integrations/sources/zendesk-sunshine. Native implementation status: planned_native_port.
+  Zendesk Sunshine catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/zendesk-sunshine.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-zendesk-sunshine:0.4.11 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,10 +51,9 @@ OFFICIAL APPLICATION DOCUMENTATION
   Zendesk Sunshine API: https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/
   Zendesk authentication: https://developer.zendesk.com/api-reference/ticketing/introduction/#security-and-authentication
   Zendesk Status: https://status.zendesk.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zendesk-sunshine
 
 CONFIGURATION
-  credentials (object): Zendesk allows three authentication methods. We recommend using `OAuth2.0` for Airbyte Cloud users and `API token` for Airbyte Open Source users.
+  credentials (object): manual intervention needed
   start_date (string) required: The date from which you'd like to replicate data for Zendesk Sunshine API, in the format YYYY-MM-DDT00:00:00Z.
   subdomain (string) required: The subdomain for your Zendesk Account.
   secret fields: credentials.access_token, credentials.api_token, credentials.client_id, credentials.client_secret, credentials.refresh_token
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/zendesk-sunshine
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Zendesk Sunshine documentation: https://docs.airbyte.com/integrations/sources/zendesk-sunshine
+  Zendesk Sunshine API: https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/
+  Zendesk authentication: https://developer.zendesk.com/api-reference/ticketing/introduction/#security-and-authentication
+  Zendesk Status: https://status.zendesk.com/
 
 EXIT STATUS
   0 success

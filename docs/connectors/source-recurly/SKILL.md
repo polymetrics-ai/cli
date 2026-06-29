@@ -7,7 +7,14 @@ description: Recurly connector knowledge and safe action guide.
 
 ## Purpose
 
-Recurly catalog connector for https://docs.airbyte.com/integrations/sources/recurly. Native implementation status: planned_native_port.
+Recurly catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/recurly.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.recurly.com/api/v2021-02-25/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Recurly catalog connector for https://docs.airbyte.com/integrations/sources/recu
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-recurly:1.3.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,12 +54,11 @@ Recurly catalog connector for https://docs.airbyte.com/integrations/sources/recu
 - Recurly API reference: https://developers.recurly.com/api/v2021-02-25/
 - Recurly authentication: https://developers.recurly.com/api/v2021-02-25/#section/Authentication
 - Recurly rate limits: https://developers.recurly.com/api/v2021-02-25/#section/Rate-Limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/recurly
 
 ## Configuration
 
 - accounts_step_days (integer): Days in length for each API call to get data from the accounts stream. Smaller values will result in more API calls but better concurrency.
-- api_key (string) required secret: Recurly API Key. See the <a href="https://docs.airbyte.com/integrations/sources/recurly">docs</a> for more information on how to generate this key.
+- api_key (string) required secret: manual intervention needed
 - begin_time (string): ISO8601 timestamp from which the replication from Recurly API will start from.
 - end_time (string): ISO8601 timestamp to which the replication from Recurly API will stop. Records after that date won't be imported.
 - is_sandbox (boolean): Set to true for sandbox accounts (400 requests/min, all types). Defaults to false for production accounts (1,000 GET requests/min).
@@ -68,12 +73,8 @@ Recurly catalog connector for https://docs.airbyte.com/integrations/sources/recu
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/recurly
 
 ## Commands
 
@@ -97,4 +98,6 @@ pm connectors inspect source-recurly --json
 
 ## References
 
-- [Recurly documentation](https://docs.airbyte.com/integrations/sources/recurly)
+- [Recurly API reference](https://developers.recurly.com/api/v2021-02-25/)
+- [Recurly authentication](https://developers.recurly.com/api/v2021-02-25/#section/Authentication)
+- [Recurly rate limits](https://developers.recurly.com/api/v2021-02-25/#section/Rate-Limits)

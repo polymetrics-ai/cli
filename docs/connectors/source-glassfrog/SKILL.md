@@ -7,7 +7,14 @@ description: Glassfrog connector knowledge and safe action guide.
 
 ## Purpose
 
-Glassfrog catalog connector for https://docs.airbyte.com/integrations/sources/glassfrog. Native implementation status: planned_native_port.
+Glassfrog catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/glassfrog.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Glassfrog catalog connector for https://docs.airbyte.com/integrations/sources/gl
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-glassfrog:0.3.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Glassfrog catalog connector for https://docs.airbyte.com/integrations/sources/gl
 ## Official Application Documentation
 
 - GlassFrog API documentation: https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/glassfrog
 
 ## Configuration
 
@@ -61,12 +66,8 @@ Glassfrog catalog connector for https://docs.airbyte.com/integrations/sources/gl
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/glassfrog
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-glassfrog --json
 
 ## References
 
-- [Glassfrog documentation](https://docs.airbyte.com/integrations/sources/glassfrog)
+- [GlassFrog API documentation](https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY)

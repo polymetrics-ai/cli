@@ -7,7 +7,13 @@ description: Reddit connector knowledge and safe action guide.
 
 ## Purpose
 
-Reddit catalog connector for https://docs.airbyte.com/integrations/sources/reddit. Native implementation status: planned_native_port.
+Reddit catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Reddit catalog connector for https://docs.airbyte.com/integrations/sources/reddi
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-reddit:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Reddit catalog connector for https://docs.airbyte.com/integrations/sources/reddi
 - Reddit API documentation: https://www.reddit.com/dev/api/
 - Reddit OAuth guide: https://github.com/reddit-archive/reddit/wiki/OAuth2
 - Reddit rate limits: https://github.com/reddit-archive/reddit/wiki/API#rules
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/reddit
 
 ## Configuration
 
@@ -69,12 +73,8 @@ Reddit catalog connector for https://docs.airbyte.com/integrations/sources/reddi
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/reddit
 
 ## Commands
 
@@ -98,4 +98,6 @@ pm connectors inspect source-reddit --json
 
 ## References
 
-- [Reddit documentation](https://docs.airbyte.com/integrations/sources/reddit)
+- [Reddit API documentation](https://www.reddit.com/dev/api/)
+- [Reddit OAuth guide](https://github.com/reddit-archive/reddit/wiki/OAuth2)
+- [Reddit rate limits](https://github.com/reddit-archive/reddit/wiki/API#rules)

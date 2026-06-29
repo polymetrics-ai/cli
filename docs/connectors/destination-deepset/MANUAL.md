@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector destination-deepset [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Deepset catalog connector for https://docs.airbyte.com/integrations/destinations/deepset. Native implementation status: planned_native_port.
+  Deepset catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/deepset.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-deepset:0.1.8 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: approval_policy, batch_write, catalog, check, dedup_write, docs_skill, idempotency, overwrite_write, secret_redaction, spec, write_fixture
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/deepset
+  Deepset documentation: https://docs.cloud.deepset.ai/docs/getting-started
 
 CONFIGURATION
   api_key (string) required secret: Your deepset cloud API key
@@ -59,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/deepset
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +78,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Deepset documentation: https://docs.airbyte.com/integrations/destinations/deepset
+  Deepset documentation: https://docs.cloud.deepset.ai/docs/getting-started
 
 EXIT STATUS
   0 success

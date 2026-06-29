@@ -7,7 +7,14 @@ description: Paypal Transaction connector knowledge and safe action guide.
 
 ## Purpose
 
-Paypal Transaction catalog connector for https://docs.airbyte.com/integrations/sources/paypal-transaction. Native implementation status: planned_native_port.
+Paypal Transaction catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/paypal.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.paypal.com/api/rest/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Paypal Transaction catalog connector for https://docs.airbyte.com/integrations/s
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-paypal-transaction:2.6.37 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Paypal Transaction catalog connector for https://docs.airbyte.com/integrations/s
 - PayPal authentication: https://developer.paypal.com/api/rest/authentication/
 - PayPal rate limits: https://developer.paypal.com/api/rest/rate-limiting/
 - PayPal Status: https://www.paypal-status.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/paypal-transaction
 
 ## Configuration
 
@@ -71,12 +76,8 @@ Paypal Transaction catalog connector for https://docs.airbyte.com/integrations/s
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/paypal-transaction
 
 ## Commands
 
@@ -100,4 +101,7 @@ pm connectors inspect source-paypal-transaction --json
 
 ## References
 
-- [Paypal Transaction documentation](https://docs.airbyte.com/integrations/sources/paypal-transaction)
+- [PayPal API reference](https://developer.paypal.com/api/rest/)
+- [PayPal authentication](https://developer.paypal.com/api/rest/authentication/)
+- [PayPal rate limits](https://developer.paypal.com/api/rest/rate-limiting/)
+- [PayPal Status](https://www.paypal-status.com/)

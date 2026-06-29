@@ -7,7 +7,14 @@ description: SurveyMonkey connector knowledge and safe action guide.
 
 ## Purpose
 
-SurveyMonkey catalog connector for https://docs.airbyte.com/integrations/sources/surveymonkey. Native implementation status: planned_native_port.
+SurveyMonkey catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/surveymonkey.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.surveymonkey.com/api/v3/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ SurveyMonkey catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-surveymonkey:0.3.48 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ SurveyMonkey catalog connector for https://docs.airbyte.com/integrations/sources
 - SurveyMonkey authentication: https://developer.surveymonkey.com/api/v3/#authentication
 - SurveyMonkey API Changelog: https://developer.surveymonkey.com/api/v3/#changelog
 - SurveyMonkey rate limits: https://developer.surveymonkey.com/api/v3/#rate-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/surveymonkey
 
 ## Configuration
 
@@ -67,12 +72,8 @@ SurveyMonkey catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/surveymonkey
 
 ## Commands
 
@@ -96,4 +97,7 @@ pm connectors inspect source-surveymonkey --json
 
 ## References
 
-- [SurveyMonkey documentation](https://docs.airbyte.com/integrations/sources/surveymonkey)
+- [SurveyMonkey API reference](https://developer.surveymonkey.com/api/v3/)
+- [SurveyMonkey authentication](https://developer.surveymonkey.com/api/v3/#authentication)
+- [SurveyMonkey API Changelog](https://developer.surveymonkey.com/api/v3/#changelog)
+- [SurveyMonkey rate limits](https://developer.surveymonkey.com/api/v3/#rate-limits)

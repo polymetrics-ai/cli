@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-rss [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Rss catalog connector for https://docs.airbyte.com/integrations/sources/rss. Native implementation status: planned_native_port.
+  Rss catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/rss.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-rss:1.0.31 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,8 +47,7 @@ NATIVE PORT PLAN
   conformance: catalog, check, docs_skill, read_fixture, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/rss
+  manual intervention needed
 
 CONFIGURATION
   url (string) required: RSS Feed URL
@@ -55,11 +58,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/rss
 
 EXAMPLES
   # Inspect catalog entry
@@ -72,9 +72,6 @@ AGENT WORKFLOW
   - Read implementation_status before planning ETL or reverse ETL.
   - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-SEE ALSO
-  Rss documentation: https://docs.airbyte.com/integrations/sources/rss
 
 EXIT STATUS
   0 success

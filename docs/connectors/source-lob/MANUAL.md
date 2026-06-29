@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-lob [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Lob catalog connector for https://docs.airbyte.com/integrations/sources/lob. Native implementation status: planned_native_port.
+  Lob catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-lob:0.0.57 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Lob authentication: https://docs.lob.com/#authentication
   Lob rate limits: https://docs.lob.com/#rate-limiting
   Lob Status: https://status.lob.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/lob
 
 CONFIGURATION
   api_key (string) required secret: API key to use for authentication. You can find your account's API keys in your Dashboard Settings at https://dashboard.lob.com/settings/api-keys.
@@ -61,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/lob
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +80,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Lob documentation: https://docs.airbyte.com/integrations/sources/lob
+  Lob API reference: https://docs.lob.com/
+  Lob authentication: https://docs.lob.com/#authentication
+  Lob rate limits: https://docs.lob.com/#rate-limiting
+  Lob Status: https://status.lob.com/
 
 EXIT STATUS
   0 success

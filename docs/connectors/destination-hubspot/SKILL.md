@@ -7,7 +7,14 @@ description: HubSpot connector knowledge and safe action guide.
 
 ## Purpose
 
-HubSpot catalog connector for https://docs.airbyte.com/integrations/destinations/hubspot. Native implementation status: planned_native_port.
+HubSpot catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/hubspot.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.hubspot.com/docs/api/overview
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ HubSpot catalog connector for https://docs.airbyte.com/integrations/destinations
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-hubspot:0.0.12 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,7 +56,6 @@ HubSpot catalog connector for https://docs.airbyte.com/integrations/destinations
 - HubSpot Developer Changelog: https://developers.hubspot.com/changelog
 - Rate limits: https://developers.hubspot.com/docs/api/usage-details
 - HubSpot Status: https://status.hubspot.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/hubspot
 
 ## Configuration
 
@@ -66,12 +71,8 @@ HubSpot catalog connector for https://docs.airbyte.com/integrations/destinations
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/hubspot
 
 ## Commands
 
@@ -95,4 +96,8 @@ pm connectors inspect destination-hubspot --json
 
 ## References
 
-- [HubSpot documentation](https://docs.airbyte.com/integrations/destinations/hubspot)
+- [HubSpot API documentation](https://developers.hubspot.com/docs/api/overview)
+- [OAuth](https://developers.hubspot.com/docs/api/oauth-quickstart-guide)
+- [HubSpot Developer Changelog](https://developers.hubspot.com/changelog)
+- [Rate limits](https://developers.hubspot.com/docs/api/usage-details)
+- [HubSpot Status](https://status.hubspot.com/)

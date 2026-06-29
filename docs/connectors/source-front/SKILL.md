@@ -7,7 +7,13 @@ description: Front connector knowledge and safe action guide.
 
 ## Purpose
 
-Front catalog connector for https://docs.airbyte.com/integrations/sources/front. Native implementation status: planned_native_port.
+Front catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Front catalog connector for https://docs.airbyte.com/integrations/sources/front.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-front:0.0.47 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Front catalog connector for https://docs.airbyte.com/integrations/sources/front.
 - Front authentication: https://dev.frontapp.com/docs/authentication
 - Front rate limits: https://dev.frontapp.com/docs/rate-limiting
 - Front Status: https://status.front.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/front
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Front catalog connector for https://docs.airbyte.com/integrations/sources/front.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/front
 
 ## Commands
 
@@ -95,4 +95,7 @@ pm connectors inspect source-front --json
 
 ## References
 
-- [Front documentation](https://docs.airbyte.com/integrations/sources/front)
+- [Front API reference](https://dev.frontapp.com/reference/introduction)
+- [Front authentication](https://dev.frontapp.com/docs/authentication)
+- [Front rate limits](https://dev.frontapp.com/docs/rate-limiting)
+- [Front Status](https://status.front.com/)

@@ -7,7 +7,13 @@ description: Mode connector knowledge and safe action guide.
 
 ## Purpose
 
-Mode catalog connector for https://docs.airbyte.com/integrations/sources/mode. Native implementation status: planned_native_port.
+Mode catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Mode catalog connector for https://docs.airbyte.com/integrations/sources/mode. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mode:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Mode catalog connector for https://docs.airbyte.com/integrations/sources/mode. N
 
 - Mode API documentation: https://mode.com/developer/api-reference/
 - Mode authentication: https://mode.com/developer/api-reference/authentication/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mode
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Mode catalog connector for https://docs.airbyte.com/integrations/sources/mode. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mode
 
 ## Commands
 
@@ -93,4 +93,5 @@ pm connectors inspect source-mode --json
 
 ## References
 
-- [Mode documentation](https://docs.airbyte.com/integrations/sources/mode)
+- [Mode API documentation](https://mode.com/developer/api-reference/)
+- [Mode authentication](https://mode.com/developer/api-reference/authentication/)

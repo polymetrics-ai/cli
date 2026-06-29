@@ -7,7 +7,13 @@ description: TicketTailor connector knowledge and safe action guide.
 
 ## Purpose
 
-TicketTailor catalog connector for https://docs.airbyte.com/integrations/sources/tickettailor. Native implementation status: planned_native_port.
+TicketTailor catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ TicketTailor catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-tickettailor:0.0.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ TicketTailor catalog connector for https://docs.airbyte.com/integrations/sources
 ## Official Application Documentation
 
 - Ticket Tailor API: https://developers.tickettailor.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tickettailor
 
 ## Configuration
 
@@ -61,12 +65,8 @@ TicketTailor catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/tickettailor
 
 ## Commands
 
@@ -90,4 +90,4 @@ pm connectors inspect source-tickettailor --json
 
 ## References
 
-- [TicketTailor documentation](https://docs.airbyte.com/integrations/sources/tickettailor)
+- [Ticket Tailor API](https://developers.tickettailor.com/)

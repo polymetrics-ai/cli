@@ -7,7 +7,13 @@ description: Piwik connector knowledge and safe action guide.
 
 ## Purpose
 
-Piwik catalog connector for https://docs.airbyte.com/integrations/sources/piwik. Native implementation status: planned_native_port.
+Piwik catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Piwik catalog connector for https://docs.airbyte.com/integrations/sources/piwik.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-piwik:0.0.60 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Piwik catalog connector for https://docs.airbyte.com/integrations/sources/piwik.
 
 - Matomo (Piwik) API reference: https://developer.matomo.org/api-reference/reporting-api
 - Matomo authentication: https://matomo.org/faq/general/faq_114/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/piwik
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Piwik catalog connector for https://docs.airbyte.com/integrations/sources/piwik.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/piwik
 
 ## Commands
 
@@ -93,4 +93,5 @@ pm connectors inspect source-piwik --json
 
 ## References
 
-- [Piwik documentation](https://docs.airbyte.com/integrations/sources/piwik)
+- [Matomo (Piwik) API reference](https://developer.matomo.org/api-reference/reporting-api)
+- [Matomo authentication](https://matomo.org/faq/general/faq_114/)

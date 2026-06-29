@@ -7,7 +7,14 @@ description: SendPulse connector knowledge and safe action guide.
 
 ## Purpose
 
-SendPulse catalog connector for https://docs.airbyte.com/integrations/sources/sendpulse. Native implementation status: planned_native_port.
+SendPulse catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/sendpulse.svg
+- source: official
+- review_status: official_verified
+- review_url: https://sendpulse.com/integrations/api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ SendPulse catalog connector for https://docs.airbyte.com/integrations/sources/se
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sendpulse:0.0.49 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ SendPulse catalog connector for https://docs.airbyte.com/integrations/sources/se
 
 ## Official Application Documentation
 
-- SendPulse API documentation: https://sendpulse.com/integrations/api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sendpulse
+- SendPulse documentation: https://sendpulse.com/integrations/api
 
 ## Configuration
 
@@ -62,12 +67,8 @@ SendPulse catalog connector for https://docs.airbyte.com/integrations/sources/se
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/sendpulse
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-sendpulse --json
 
 ## References
 
-- [SendPulse documentation](https://docs.airbyte.com/integrations/sources/sendpulse)
+- [SendPulse documentation](https://sendpulse.com/integrations/api)

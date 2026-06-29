@@ -7,7 +7,14 @@ description: Square connector knowledge and safe action guide.
 
 ## Purpose
 
-Square catalog connector for https://docs.airbyte.com/integrations/sources/square. Native implementation status: planned_native_port.
+Square catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/square.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.squareup.com/reference/square
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Square catalog connector for https://docs.airbyte.com/integrations/sources/squar
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-square:1.7.20 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -51,7 +57,6 @@ Square catalog connector for https://docs.airbyte.com/integrations/sources/squar
 - Square API changelog: https://developer.squareup.com/docs/changelog
 - Square rate limits: https://developer.squareup.com/docs/build-basics/api-rate-limits
 - Square Status: https://www.issquareup.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/square
 
 ## Configuration
 
@@ -69,12 +74,8 @@ Square catalog connector for https://docs.airbyte.com/integrations/sources/squar
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/square
 
 ## Commands
 
@@ -98,4 +99,9 @@ pm connectors inspect source-square --json
 
 ## References
 
-- [Square documentation](https://docs.airbyte.com/integrations/sources/square)
+- [Square API reference](https://developer.squareup.com/reference/square)
+- [Square authentication](https://developer.squareup.com/docs/build-basics/access-tokens)
+- [Square API Release Notes](https://developer.squareup.com/docs/release-notes)
+- [Square API changelog](https://developer.squareup.com/docs/changelog)
+- [Square rate limits](https://developer.squareup.com/docs/build-basics/api-rate-limits)
+- [Square Status](https://www.issquareup.com/)

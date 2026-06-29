@@ -7,7 +7,14 @@ description: Intruder connector knowledge and safe action guide.
 
 ## Purpose
 
-Intruder catalog connector for https://docs.airbyte.com/integrations/sources/intruder. Native implementation status: planned_native_port.
+Intruder catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/intruder.svg
+- source: official
+- review_status: official_verified
+- review_url: https://developers.intruder.io/docs/welcome
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Intruder catalog connector for https://docs.airbyte.com/integrations/sources/int
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-intruder:0.2.23 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Intruder catalog connector for https://docs.airbyte.com/integrations/sources/int
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/intruder
+- Intruder documentation: https://developers.intruder.io/docs/welcome
 
 ## Configuration
 
@@ -61,12 +66,8 @@ Intruder catalog connector for https://docs.airbyte.com/integrations/sources/int
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/intruder
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-intruder --json
 
 ## References
 
-- [Intruder documentation](https://docs.airbyte.com/integrations/sources/intruder)
+- [Intruder documentation](https://developers.intruder.io/docs/welcome)

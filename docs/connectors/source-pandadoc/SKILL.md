@@ -7,7 +7,13 @@ description: PandaDoc connector knowledge and safe action guide.
 
 ## Purpose
 
-PandaDoc catalog connector for https://docs.airbyte.com/integrations/sources/pandadoc. Native implementation status: planned_native_port.
+PandaDoc catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ PandaDoc catalog connector for https://docs.airbyte.com/integrations/sources/pan
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-pandadoc:0.0.56 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ PandaDoc catalog connector for https://docs.airbyte.com/integrations/sources/pan
 - PandaDoc API reference: https://developers.pandadoc.com/reference/about
 - PandaDoc authentication: https://developers.pandadoc.com/reference/authentication
 - PandaDoc rate limits: https://developers.pandadoc.com/reference/rate-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pandadoc
 
 ## Configuration
 
@@ -64,12 +68,8 @@ PandaDoc catalog connector for https://docs.airbyte.com/integrations/sources/pan
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/pandadoc
 
 ## Commands
 
@@ -93,4 +93,6 @@ pm connectors inspect source-pandadoc --json
 
 ## References
 
-- [PandaDoc documentation](https://docs.airbyte.com/integrations/sources/pandadoc)
+- [PandaDoc API reference](https://developers.pandadoc.com/reference/about)
+- [PandaDoc authentication](https://developers.pandadoc.com/reference/authentication)
+- [PandaDoc rate limits](https://developers.pandadoc.com/reference/rate-limits)

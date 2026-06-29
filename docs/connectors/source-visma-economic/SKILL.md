@@ -7,7 +7,14 @@ description: Visma Economic connector knowledge and safe action guide.
 
 ## Purpose
 
-Visma Economic catalog connector for https://docs.airbyte.com/integrations/sources/visma-economic. Native implementation status: planned_native_port.
+Visma Economic catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/visma-economic.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://restdocs.e-conomic.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Visma Economic catalog connector for https://docs.airbyte.com/integrations/sourc
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-visma-economic:0.3.60 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Visma Economic catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Official Application Documentation
 
 - Visma e-conomic API: https://restdocs.e-conomic.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/visma-economic
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Visma Economic catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/visma-economic
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-visma-economic --json
 
 ## References
 
-- [Visma Economic documentation](https://docs.airbyte.com/integrations/sources/visma-economic)
+- [Visma e-conomic API](https://restdocs.e-conomic.com/)

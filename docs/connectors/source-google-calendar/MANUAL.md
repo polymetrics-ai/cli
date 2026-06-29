@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-google-calendar [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Google Calendar catalog connector for https://docs.airbyte.com/integrations/sources/google-calendar. Native implementation status: planned_native_port.
+  Google Calendar catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-google-calendar:0.0.43 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Google Calendar authentication: https://developers.google.com/calendar/api/guides/auth
   Google Calendar quotas: https://developers.google.com/calendar/api/guides/quota
   Google Workspace Status: https://www.google.com/appsstatus/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-calendar
 
 CONFIGURATION
   calendarid (string) required
@@ -62,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/google-calendar
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +81,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Google Calendar documentation: https://docs.airbyte.com/integrations/sources/google-calendar
+  Google Calendar API reference: https://developers.google.com/calendar/api/v3/reference
+  Google Calendar authentication: https://developers.google.com/calendar/api/guides/auth
+  Google Calendar quotas: https://developers.google.com/calendar/api/guides/quota
+  Google Workspace Status: https://www.google.com/appsstatus/
 
 EXIT STATUS
   0 success

@@ -7,7 +7,13 @@ description: Serpstat connector knowledge and safe action guide.
 
 ## Purpose
 
-Serpstat catalog connector for https://docs.airbyte.com/integrations/sources/serpstat. Native implementation status: planned_native_port.
+Serpstat catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/serpstat.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Serpstat catalog connector for https://docs.airbyte.com/integrations/sources/ser
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-serpstat:0.2.24 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Serpstat catalog connector for https://docs.airbyte.com/integrations/sources/ser
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/serpstat
+- Serpstat documentation: https://api-docs.serpstat.com/
 
 ## Configuration
 
@@ -70,12 +74,8 @@ Serpstat catalog connector for https://docs.airbyte.com/integrations/sources/ser
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/serpstat
 
 ## Commands
 
@@ -99,4 +99,4 @@ pm connectors inspect source-serpstat --json
 
 ## References
 
-- [Serpstat documentation](https://docs.airbyte.com/integrations/sources/serpstat)
+- [Serpstat documentation](https://api-docs.serpstat.com/)

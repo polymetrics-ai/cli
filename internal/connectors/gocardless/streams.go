@@ -16,7 +16,7 @@ type streamEndpoint struct {
 // gocardlessStreamEndpoints is the per-stream routing table. Adding a stream
 // means adding one entry here plus a Stream definition in gocardlessStreams; the
 // read path is fully data-driven from this table. The core set mirrors the
-// upstream Airbyte source: payments, mandates, payouts, refunds.
+// upstream upstream source: payments, mandates, payouts, refunds.
 var gocardlessStreamEndpoints = map[string]streamEndpoint{
 	"payments": {resource: "payments", mapRecord: gocardlessPaymentRecord},
 	"mandates": {resource: "mandates", mapRecord: gocardlessMandateRecord},

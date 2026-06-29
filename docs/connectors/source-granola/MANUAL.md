@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-granola [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Granola catalog connector for https://docs.airbyte.com/integrations/sources/granola. Native implementation status: planned_native_port.
+  Granola catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/source-granola.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.granola.ai/introduction
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-granola:0.2.5 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Granola Enterprise API documentation: https://docs.granola.ai/introduction
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/granola
 
 CONFIGURATION
   api_key (string) required secret: Your Granola API key. For a personal key, open the Granola desktop app and go to Settings > Connectors > API keys > Create new key. For an Enterprise API key, go to Settings > A...
@@ -57,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/granola
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +77,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Granola documentation: https://docs.airbyte.com/integrations/sources/granola
+  Granola Enterprise API documentation: https://docs.granola.ai/introduction
 
 EXIT STATUS
   0 success

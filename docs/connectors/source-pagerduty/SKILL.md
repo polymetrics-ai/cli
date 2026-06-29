@@ -7,7 +7,14 @@ description: Pagerduty connector knowledge and safe action guide.
 
 ## Purpose
 
-Pagerduty catalog connector for https://docs.airbyte.com/integrations/sources/pagerduty. Native implementation status: planned_native_port.
+Pagerduty catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pagerduty.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.pagerduty.com/api-reference/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Pagerduty catalog connector for https://docs.airbyte.com/integrations/sources/pa
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-pagerduty:0.3.41 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Pagerduty catalog connector for https://docs.airbyte.com/integrations/sources/pa
 - PagerDuty authentication: https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTUw-authentication
 - PagerDuty rate limits: https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTUx-rate-limiting
 - PagerDuty Status: https://status.pagerduty.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pagerduty
 
 ## Configuration
 
@@ -71,12 +76,8 @@ Pagerduty catalog connector for https://docs.airbyte.com/integrations/sources/pa
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/pagerduty
 
 ## Commands
 
@@ -100,4 +101,7 @@ pm connectors inspect source-pagerduty --json
 
 ## References
 
-- [Pagerduty documentation](https://docs.airbyte.com/integrations/sources/pagerduty)
+- [PagerDuty API reference](https://developer.pagerduty.com/api-reference/)
+- [PagerDuty authentication](https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTUw-authentication)
+- [PagerDuty rate limits](https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTUx-rate-limiting)
+- [PagerDuty Status](https://status.pagerduty.com/)

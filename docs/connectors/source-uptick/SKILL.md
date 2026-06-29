@@ -7,7 +7,13 @@ description: Uptick connector knowledge and safe action guide.
 
 ## Purpose
 
-Uptick catalog connector for https://docs.airbyte.com/integrations/sources/uptick. Native implementation status: planned_native_port.
+Uptick catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Uptick catalog connector for https://docs.airbyte.com/integrations/sources/uptic
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-uptick:0.5.13 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Uptick catalog connector for https://docs.airbyte.com/integrations/sources/uptic
 ## Official Application Documentation
 
 - Uptick API documentation: https://developer.uptick.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/uptick
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Uptick catalog connector for https://docs.airbyte.com/integrations/sources/uptic
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/uptick
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-uptick --json
 
 ## References
 
-- [Uptick documentation](https://docs.airbyte.com/integrations/sources/uptick)
+- [Uptick API documentation](https://developer.uptick.com/)

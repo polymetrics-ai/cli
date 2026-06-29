@@ -7,7 +7,14 @@ description: Chartmogul connector knowledge and safe action guide.
 
 ## Purpose
 
-Chartmogul catalog connector for https://docs.airbyte.com/integrations/sources/chartmogul. Native implementation status: planned_native_port.
+Chartmogul catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/chartmogul.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://dev.chartmogul.com/reference
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Chartmogul catalog connector for https://docs.airbyte.com/integrations/sources/c
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-chartmogul:1.1.49 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +55,6 @@ Chartmogul catalog connector for https://docs.airbyte.com/integrations/sources/c
 - ChartMogul authentication: https://dev.chartmogul.com/docs/authentication
 - ChartMogul rate limits: https://dev.chartmogul.com/docs/rate-limits
 - ChartMogul Status: https://status.chartmogul.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/chartmogul
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Chartmogul catalog connector for https://docs.airbyte.com/integrations/sources/c
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/chartmogul
 
 ## Commands
 
@@ -94,4 +95,7 @@ pm connectors inspect source-chartmogul --json
 
 ## References
 
-- [Chartmogul documentation](https://docs.airbyte.com/integrations/sources/chartmogul)
+- [ChartMogul API reference](https://dev.chartmogul.com/reference)
+- [ChartMogul authentication](https://dev.chartmogul.com/docs/authentication)
+- [ChartMogul rate limits](https://dev.chartmogul.com/docs/rate-limits)
+- [ChartMogul Status](https://status.chartmogul.com/)

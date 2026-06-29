@@ -7,7 +7,14 @@ description: PrestaShop connector knowledge and safe action guide.
 
 ## Purpose
 
-PrestaShop catalog connector for https://docs.airbyte.com/integrations/sources/prestashop. Native implementation status: planned_native_port.
+PrestaShop catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/prestashop.svg
+- source: official
+- review_status: official_verified
+- review_url: https://devdocs.prestashop-project.org/9/webservice/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ PrestaShop catalog connector for https://docs.airbyte.com/integrations/sources/p
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-prestashop:1.2.7 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ PrestaShop catalog connector for https://docs.airbyte.com/integrations/sources/p
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/prestashop
+- PrestaShop documentation: https://devdocs.prestashop-project.org/9/webservice/
 
 ## Configuration
 
@@ -63,12 +68,8 @@ PrestaShop catalog connector for https://docs.airbyte.com/integrations/sources/p
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/prestashop
 
 ## Commands
 
@@ -92,4 +93,4 @@ pm connectors inspect source-prestashop --json
 
 ## References
 
-- [PrestaShop documentation](https://docs.airbyte.com/integrations/sources/prestashop)
+- [PrestaShop documentation](https://devdocs.prestashop-project.org/9/webservice/)

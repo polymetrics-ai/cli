@@ -7,7 +7,14 @@ description: Cart.com connector knowledge and safe action guide.
 
 ## Purpose
 
-Cart.com catalog connector for https://docs.airbyte.com/integrations/sources/cart. Native implementation status: planned_native_port.
+Cart.com catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/cart.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.cart.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Cart.com catalog connector for https://docs.airbyte.com/integrations/sources/car
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-cart:0.3.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Cart.com catalog connector for https://docs.airbyte.com/integrations/sources/car
 
 - Cart.com API documentation: https://developers.cart.com/
 - Cart.com authentication: https://developers.cart.com/docs/rest-api/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/cart
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Cart.com catalog connector for https://docs.airbyte.com/integrations/sources/car
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/cart
 
 ## Commands
 
@@ -92,4 +93,5 @@ pm connectors inspect source-cart --json
 
 ## References
 
-- [Cart.com documentation](https://docs.airbyte.com/integrations/sources/cart)
+- [Cart.com API documentation](https://developers.cart.com/)
+- [Cart.com authentication](https://developers.cart.com/docs/rest-api/authentication)

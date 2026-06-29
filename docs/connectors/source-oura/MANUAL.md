@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-oura [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Oura catalog connector for https://docs.airbyte.com/integrations/sources/oura. Native implementation status: planned_native_port.
+  Oura catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/oura.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://cloud.ouraring.com/docs/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-oura:0.2.26 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Oura API documentation: https://cloud.ouraring.com/docs/
   Oura authentication: https://cloud.ouraring.com/docs/authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/oura
 
 CONFIGURATION
   api_key (string) required secret: API Key
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/oura
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Oura documentation: https://docs.airbyte.com/integrations/sources/oura
+  Oura API documentation: https://cloud.ouraring.com/docs/
+  Oura authentication: https://cloud.ouraring.com/docs/authentication
 
 EXIT STATUS
   0 success

@@ -7,7 +7,13 @@ description: MixMax connector knowledge and safe action guide.
 
 ## Purpose
 
-MixMax catalog connector for https://docs.airbyte.com/integrations/sources/mixmax. Native implementation status: planned_native_port.
+MixMax catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ MixMax catalog connector for https://docs.airbyte.com/integrations/sources/mixma
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mixmax:0.1.34 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ MixMax catalog connector for https://docs.airbyte.com/integrations/sources/mixma
 ## Official Application Documentation
 
 - Mixmax API documentation: https://developer.mixmax.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mixmax
 
 ## Configuration
 
@@ -62,12 +66,8 @@ MixMax catalog connector for https://docs.airbyte.com/integrations/sources/mixma
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mixmax
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-mixmax --json
 
 ## References
 
-- [MixMax documentation](https://docs.airbyte.com/integrations/sources/mixmax)
+- [Mixmax API documentation](https://developer.mixmax.com/)

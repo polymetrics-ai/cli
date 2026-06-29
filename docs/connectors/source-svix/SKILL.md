@@ -7,7 +7,13 @@ description: Svix connector knowledge and safe action guide.
 
 ## Purpose
 
-Svix catalog connector for https://docs.airbyte.com/integrations/sources/svix. Native implementation status: planned_native_port.
+Svix catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Svix catalog connector for https://docs.airbyte.com/integrations/sources/svix. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-svix:0.0.34 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Svix catalog connector for https://docs.airbyte.com/integrations/sources/svix. N
 
 - Svix API reference: https://docs.svix.com/api-reference
 - Svix authentication: https://docs.svix.com/api-reference#section/Authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/svix
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Svix catalog connector for https://docs.airbyte.com/integrations/sources/svix. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/svix
 
 ## Commands
 
@@ -92,4 +92,5 @@ pm connectors inspect source-svix --json
 
 ## References
 
-- [Svix documentation](https://docs.airbyte.com/integrations/sources/svix)
+- [Svix API reference](https://docs.svix.com/api-reference)
+- [Svix authentication](https://docs.svix.com/api-reference#section/Authentication)

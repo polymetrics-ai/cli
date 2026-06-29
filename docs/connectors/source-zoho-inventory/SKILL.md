@@ -7,7 +7,13 @@ description: Zoho Inventory connector knowledge and safe action guide.
 
 ## Purpose
 
-Zoho Inventory catalog connector for https://docs.airbyte.com/integrations/sources/zoho-inventory. Native implementation status: planned_native_port.
+Zoho Inventory catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Zoho Inventory catalog connector for https://docs.airbyte.com/integrations/sourc
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-zoho-inventory:0.0.57 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Zoho Inventory catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Official Application Documentation
 
 - Zoho Inventory API: https://www.zoho.com/inventory/api/v1/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zoho-inventory
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Zoho Inventory catalog connector for https://docs.airbyte.com/integrations/sourc
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/zoho-inventory
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-zoho-inventory --json
 
 ## References
 
-- [Zoho Inventory documentation](https://docs.airbyte.com/integrations/sources/zoho-inventory)
+- [Zoho Inventory API](https://www.zoho.com/inventory/api/v1/)

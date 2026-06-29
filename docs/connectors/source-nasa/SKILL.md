@@ -7,7 +7,14 @@ description: Nasa connector knowledge and safe action guide.
 
 ## Purpose
 
-Nasa catalog connector for https://docs.airbyte.com/integrations/sources/nasa. Native implementation status: planned_native_port.
+Nasa catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/nasa.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://api.nasa.gov/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Nasa catalog connector for https://docs.airbyte.com/integrations/sources/nasa. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-nasa:0.3.32 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Nasa catalog connector for https://docs.airbyte.com/integrations/sources/nasa. N
 ## Official Application Documentation
 
 - NASA APIs: https://api.nasa.gov/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/nasa
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Nasa catalog connector for https://docs.airbyte.com/integrations/sources/nasa. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/nasa
 
 ## Commands
 
@@ -95,4 +96,4 @@ pm connectors inspect source-nasa --json
 
 ## References
 
-- [Nasa documentation](https://docs.airbyte.com/integrations/sources/nasa)
+- [NASA APIs](https://api.nasa.gov/)

@@ -7,7 +7,14 @@ description: Younium connector knowledge and safe action guide.
 
 ## Purpose
 
-Younium catalog connector for https://docs.airbyte.com/integrations/sources/younium. Native implementation status: planned_native_port.
+Younium catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/younium.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.younium.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Younium catalog connector for https://docs.airbyte.com/integrations/sources/youn
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-younium:0.4.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Younium catalog connector for https://docs.airbyte.com/integrations/sources/youn
 ## Official Application Documentation
 
 - Younium API documentation: https://developer.younium.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/younium
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Younium catalog connector for https://docs.airbyte.com/integrations/sources/youn
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/younium
 
 ## Commands
 
@@ -93,4 +94,4 @@ pm connectors inspect source-younium --json
 
 ## References
 
-- [Younium documentation](https://docs.airbyte.com/integrations/sources/younium)
+- [Younium API documentation](https://developer.younium.com/)

@@ -9,7 +9,7 @@
 // the registryset package blank-imports this package in the production binary to
 // run that side effect.
 //
-// API shape (from the Airbyte source-clazar manifest + Clazar developer docs):
+// API shape (from the upstream source-clazar manifest + Clazar developer docs):
 //   - base URL https://api.clazar.io
 //   - OAuth2 client_credentials, token endpoint https://api.clazar.io/authenticate/
 //   - list endpoints return {"results":[...], "next":..., "count":...}

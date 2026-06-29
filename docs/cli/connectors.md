@@ -23,8 +23,8 @@ DESCRIPTION
   behavior is documented in each connector manual when available.
 
 CATALOG
-  The generated native-Go-only catalog contains 647 validated connectors:
-  591 sources and 56 destinations. Use --all or the catalog subcommand when an
+  The generated native-Go-only catalog contains 646 validated connectors:
+  590 sources and 56 destinations. Use --all or the catalog subcommand when an
   agent needs to discover the complete connector universe.
 
 GITHUB AUTHENTICATION

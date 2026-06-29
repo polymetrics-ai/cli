@@ -7,7 +7,13 @@ description: Google Sheets connector knowledge and safe action guide.
 
 ## Purpose
 
-Google Sheets catalog connector for https://docs.airbyte.com/integrations/destinations/google-sheets. Native implementation status: planned_native_port.
+Google Sheets catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/google-sheets.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Google Sheets catalog connector for https://docs.airbyte.com/integrations/destin
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-google-sheets:0.3.5 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,13 +50,12 @@ Google Sheets catalog connector for https://docs.airbyte.com/integrations/destin
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/google-sheets
+- Google Sheets documentation: https://developers.google.com/workspace/sheets/api/guides/concepts
 
 ## Configuration
 
 - credentials (object) required: Authentication method to access Google Sheets
-- spreadsheet_id (string) required: The link to your spreadsheet. See <a href='https://docs.airbyte.com/integrations/destinations/google-sheets#sheetlink'>this guide</a> for more details.
+- spreadsheet_id (string) required: manual intervention needed
 - secret fields: credentials.client_id, credentials.client_secret, credentials.refresh_token, credentials.service_account_info
 
 ## Sync Modes
@@ -62,12 +66,8 @@ Google Sheets catalog connector for https://docs.airbyte.com/integrations/destin
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/google-sheets
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect destination-google-sheets --json
 
 ## References
 
-- [Google Sheets documentation](https://docs.airbyte.com/integrations/destinations/google-sheets)
+- [Google Sheets documentation](https://developers.google.com/workspace/sheets/api/guides/concepts)

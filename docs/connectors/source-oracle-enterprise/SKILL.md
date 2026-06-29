@@ -7,7 +7,14 @@ description: Oracle connector knowledge and safe action guide.
 
 ## Purpose
 
-Oracle catalog connector for https://docs.airbyte.com/integrations/enterprise-connectors/source-oracle-enterprise. Native implementation status: planned_native_port.
+Oracle catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/oracle.svg
+- source: official
+- review_status: official_verified
+- review_url: https://docs.oracle.com/en/database/oracle/oracle-database/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Oracle catalog connector for https://docs.airbyte.com/integrations/enterprise-co
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-oracle-enterprise:0.1.4 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,8 +53,7 @@ Oracle catalog connector for https://docs.airbyte.com/integrations/enterprise-co
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/enterprise-connectors/source-oracle-enterprise
+- Oracle documentation: https://docs.oracle.com/en/database/oracle/oracle-database/
 
 ## Configuration
 
@@ -61,7 +66,7 @@ Oracle catalog connector for https://docs.airbyte.com/integrations/enterprise-co
 - encryption (object) required: The encryption method with is used when communicating with the database.
 - host (string) required: Hostname of the database.
 - jdbc_url_params (string): Additional properties to pass to the JDBC URL string when connecting to the database formatted as 'key=value' pairs separated by the symbol '&'. (example: key1=value1&key2=value...
-- max_db_connections (integer): Maximum number of concurrent queries to the database. Leave empty to let Airbyte optimize performance.
+- max_db_connections (integer): manual intervention needed
 - password (string) secret: The password associated with the username.
 - port (integer) required: Port of the database. Oracle Corporations recommends the following port numbers: 1521 - Default listening port for client connections to the listener. 2484 - Recommended and off...
 - schemas (array): The list of schemas to sync from. Defaults to user. Case sensitive.
@@ -78,12 +83,8 @@ Oracle catalog connector for https://docs.airbyte.com/integrations/enterprise-co
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/enterprise-connectors/source-oracle-enterprise
 
 ## Commands
 
@@ -107,4 +108,4 @@ pm connectors inspect source-oracle-enterprise --json
 
 ## References
 
-- [Oracle documentation](https://docs.airbyte.com/integrations/enterprise-connectors/source-oracle-enterprise)
+- [Oracle documentation](https://docs.oracle.com/en/database/oracle/oracle-database/)

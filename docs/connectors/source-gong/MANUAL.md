@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-gong [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Gong catalog connector for https://docs.airbyte.com/integrations/sources/gong. Native implementation status: planned_native_port.
+  Gong catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/gong.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://us-66463.app.gong.io/settings/api/documentation
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-gong:1.2.7 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Gong API reference: https://us-66463.app.gong.io/settings/api/documentation
   Gong authentication: https://us-66463.app.gong.io/settings/api/documentation#overview
   Gong rate limits: https://us-66463.app.gong.io/settings/api/documentation#rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/gong
 
 CONFIGURATION
   credentials (object) required: Choose how to authenticate to Gong.
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/gong
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Gong documentation: https://docs.airbyte.com/integrations/sources/gong
+  Gong API reference: https://us-66463.app.gong.io/settings/api/documentation
+  Gong authentication: https://us-66463.app.gong.io/settings/api/documentation#overview
+  Gong rate limits: https://us-66463.app.gong.io/settings/api/documentation#rate-limits
 
 EXIT STATUS
   0 success

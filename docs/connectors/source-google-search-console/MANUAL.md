@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-google-search-console [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Google Search Console catalog connector for https://docs.airbyte.com/integrations/sources/google-search-console. Native implementation status: planned_native_port.
+  Google Search Console catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/googlesearchconsole.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.google.com/search/news
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-google-search-console:2.1.2 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,14 +50,13 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Reference: https://developers.google.com/webmaster-tools/v1/api_reference_index
   Google Search Central Blog: https://developers.google.com/search/news
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-search-console
 
 CONFIGURATION
   always_use_aggregation_type_auto (boolean): Some search analytics streams fail with a 400 error if the specified `aggregationType` is not supported. This is customer implementation dependent and if this error is encounter...
   authorization (object) required
-  custom_reports (string): (DEPRCATED) A JSON array describing the custom reports you want to sync from Google Search Console. See our <a href='https://docs.airbyte.com/integrations/sources/google-search-...
+  custom_reports (string): manual intervention needed
   custom_reports_array (array): You can add your Custom Analytics report by creating one.
-  data_state (string): If set to 'final', the returned data will include only finalized, stable data. If set to 'all', fresh data will be included. When using Incremental sync mode, we do not recommen...
+  data_state (string): manual intervention needed
   end_date (string): UTC date in the format YYYY-MM-DD. Any data created after this date will not be replicated. Must be greater or equal to the start date field. Leaving this field blank will repli...
   num_workers (integer): The number of worker threads to use for the sync. For more details on Google Search Console rate limits, refer to the <a href="https://developers.google.com/webmaster-tools/limi...
   requests_per_minute (integer): The maximum number of requests per minute for Search Analytics API calls. The default (1200) matches Google's documented maximum quota. If you are experiencing rate limit errors...
@@ -66,11 +70,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/google-search-console
 
 EXAMPLES
   # Inspect catalog entry
@@ -85,7 +86,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Google Search Console documentation: https://docs.airbyte.com/integrations/sources/google-search-console
+  Reference: https://developers.google.com/webmaster-tools/v1/api_reference_index
+  Google Search Central Blog: https://developers.google.com/search/news
 
 EXIT STATUS
   0 success

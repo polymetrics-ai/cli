@@ -7,7 +7,14 @@ description: Adjust connector knowledge and safe action guide.
 
 ## Purpose
 
-Adjust catalog connector for https://docs.airbyte.com/integrations/sources/adjust. Native implementation status: planned_native_port.
+Adjust catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/adjust.svg
+- source: official
+- review_status: official_verified
+- review_url: https://dev.adjust.com/en/api/rs-api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Adjust catalog connector for https://docs.airbyte.com/integrations/sources/adjus
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-adjust:0.1.33 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Adjust catalog connector for https://docs.airbyte.com/integrations/sources/adjus
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/adjust
+- Adjust documentation: https://dev.adjust.com/en/api/rs-api/
 
 ## Configuration
 
@@ -66,12 +71,8 @@ Adjust catalog connector for https://docs.airbyte.com/integrations/sources/adjus
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/adjust
 
 ## Commands
 
@@ -95,4 +96,4 @@ pm connectors inspect source-adjust --json
 
 ## References
 
-- [Adjust documentation](https://docs.airbyte.com/integrations/sources/adjust)
+- [Adjust documentation](https://dev.adjust.com/en/api/rs-api/)

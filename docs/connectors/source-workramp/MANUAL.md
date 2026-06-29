@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-workramp [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Workramp catalog connector for https://docs.airbyte.com/integrations/sources/workramp. Native implementation status: planned_native_port.
+  Workramp catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/workramp.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.workramp.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-workramp:0.2.24 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   WorkRamp API documentation: https://developers.workramp.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/workramp
 
 CONFIGURATION
   academy_id (string) required: The id of the Academy
@@ -57,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/workramp
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +77,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Workramp documentation: https://docs.airbyte.com/integrations/sources/workramp
+  WorkRamp API documentation: https://developers.workramp.com/
 
 EXIT STATUS
   0 success

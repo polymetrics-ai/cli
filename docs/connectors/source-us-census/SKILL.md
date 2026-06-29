@@ -7,7 +7,14 @@ description: US Census connector knowledge and safe action guide.
 
 ## Purpose
 
-US Census catalog connector for https://docs.airbyte.com/integrations/sources/us-census. Native implementation status: planned_native_port.
+US Census catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/uscensus.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.census.gov/data/developers/data-sets.html
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ US Census catalog connector for https://docs.airbyte.com/integrations/sources/us
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-us-census:0.4.24 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ US Census catalog connector for https://docs.airbyte.com/integrations/sources/us
 ## Official Application Documentation
 
 - US Census Bureau API: https://www.census.gov/data/developers/data-sets.html
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/us-census
 
 ## Configuration
 
@@ -63,12 +68,8 @@ US Census catalog connector for https://docs.airbyte.com/integrations/sources/us
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/us-census
 
 ## Commands
 
@@ -92,4 +93,4 @@ pm connectors inspect source-us-census --json
 
 ## References
 
-- [US Census documentation](https://docs.airbyte.com/integrations/sources/us-census)
+- [US Census Bureau API](https://www.census.gov/data/developers/data-sets.html)

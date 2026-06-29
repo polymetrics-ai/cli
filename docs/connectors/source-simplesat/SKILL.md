@@ -7,7 +7,13 @@ description: Simplesat connector knowledge and safe action guide.
 
 ## Purpose
 
-Simplesat catalog connector for https://docs.airbyte.com/integrations/sources/simplesat. Native implementation status: planned_native_port.
+Simplesat catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Simplesat catalog connector for https://docs.airbyte.com/integrations/sources/si
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-simplesat:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Simplesat catalog connector for https://docs.airbyte.com/integrations/sources/si
 ## Official Application Documentation
 
 - Simplesat API documentation: https://docs.simplesat.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/simplesat
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Simplesat catalog connector for https://docs.airbyte.com/integrations/sources/si
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/simplesat
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-simplesat --json
 
 ## References
 
-- [Simplesat documentation](https://docs.airbyte.com/integrations/sources/simplesat)
+- [Simplesat API documentation](https://docs.simplesat.io/)

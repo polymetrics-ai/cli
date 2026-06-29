@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-google-classroom [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Google Classroom catalog connector for https://docs.airbyte.com/integrations/sources/google-classroom. Native implementation status: planned_native_port.
+  Google Classroom catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-google-classroom:0.0.52 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Google Classroom API reference: https://developers.google.com/classroom/reference/rest
   Google Classroom authentication: https://developers.google.com/classroom/guides/auth
   Google Workspace Status: https://www.google.com/appsstatus/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-classroom
 
 CONFIGURATION
   client_id (string) required secret
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/google-classroom
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Google Classroom documentation: https://docs.airbyte.com/integrations/sources/google-classroom
+  Google Classroom API reference: https://developers.google.com/classroom/reference/rest
+  Google Classroom authentication: https://developers.google.com/classroom/guides/auth
+  Google Workspace Status: https://www.google.com/appsstatus/
 
 EXIT STATUS
   0 success

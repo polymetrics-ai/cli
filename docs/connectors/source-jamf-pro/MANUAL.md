@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-jamf-pro [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Jamf Pro catalog connector for https://docs.airbyte.com/integrations/sources/jamf-pro. Native implementation status: planned_native_port.
+  Jamf Pro catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-jamf-pro:0.0.38 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +49,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Jamf Pro API reference: https://developer.jamf.com/jamf-pro/reference/classic-api
   Jamf Pro authentication: https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-overview
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/jamf-pro
 
 CONFIGURATION
   password (string) secret
@@ -59,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/jamf-pro
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +78,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Jamf Pro documentation: https://docs.airbyte.com/integrations/sources/jamf-pro
+  Jamf Pro API reference: https://developer.jamf.com/jamf-pro/reference/classic-api
+  Jamf Pro authentication: https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-overview
 
 EXIT STATUS
   0 success

@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-rentcast [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  RentCast catalog connector for https://docs.airbyte.com/integrations/sources/rentcast. Native implementation status: planned_native_port.
+  RentCast catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-rentcast:0.0.53 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   RentCast API documentation: https://developers.rentcast.io/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/rentcast
 
 CONFIGURATION
   address (string): The full address of the property, in the format of Street, City, State, Zip. Used to retrieve data for a specific property, or together with the radius parameter to search for l...
@@ -70,11 +73,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/rentcast
 
 EXAMPLES
   # Inspect catalog entry
@@ -89,7 +89,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  RentCast documentation: https://docs.airbyte.com/integrations/sources/rentcast
+  RentCast API documentation: https://developers.rentcast.io/
 
 EXIT STATUS
   0 success

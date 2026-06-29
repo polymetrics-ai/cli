@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-zapsign [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  ZapSign catalog connector for https://docs.airbyte.com/integrations/sources/zapsign. Native implementation status: planned_native_port.
+  ZapSign catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-zapsign:0.0.40 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   ZapSign API documentation: https://docs.zapsign.com.br/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zapsign
 
 CONFIGURATION
   api_token (string) required secret: Your static API token for authentication. You can find it in your ZapSign account under the 'Settings' or 'API' section. For more details, refer to the [Getting Started](https:/...
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/zapsign
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  ZapSign documentation: https://docs.airbyte.com/integrations/sources/zapsign
+  ZapSign API documentation: https://docs.zapsign.com.br/
 
 EXIT STATUS
   0 success

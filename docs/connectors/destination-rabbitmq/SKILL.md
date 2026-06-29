@@ -7,7 +7,14 @@ description: RabbitMQ connector knowledge and safe action guide.
 
 ## Purpose
 
-RabbitMQ catalog connector for https://docs.airbyte.com/integrations/destinations/rabbitmq. Native implementation status: planned_native_port.
+RabbitMQ catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/rabbitmq.svg
+- source: official
+- review_status: official_verified
+- review_url: https://www.rabbitmq.com/docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ RabbitMQ catalog connector for https://docs.airbyte.com/integrations/destination
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-rabbitmq:0.1.43 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ RabbitMQ catalog connector for https://docs.airbyte.com/integrations/destination
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/rabbitmq
+- RabbitMQ documentation: https://www.rabbitmq.com/docs
 
 ## Configuration
 
@@ -68,12 +73,8 @@ RabbitMQ catalog connector for https://docs.airbyte.com/integrations/destination
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/rabbitmq
 
 ## Commands
 
@@ -97,4 +98,4 @@ pm connectors inspect destination-rabbitmq --json
 
 ## References
 
-- [RabbitMQ documentation](https://docs.airbyte.com/integrations/destinations/rabbitmq)
+- [RabbitMQ documentation](https://www.rabbitmq.com/docs)

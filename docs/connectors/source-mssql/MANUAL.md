@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-mssql [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Microsoft SQL Server (MSSQL) catalog connector for https://docs.airbyte.com/integrations/sources/mssql. Native implementation status: planned_native_port.
+  Microsoft SQL Server (MSSQL) catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: database_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-mssql:5.0.0 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   SQL Server documentation: https://learn.microsoft.com/en-us/sql/sql-server/
   SQL Server authentication: https://learn.microsoft.com/en-us/sql/relational-databases/security/choose-an-authentication-mode
   SQL Server 2022 release notes: https://learn.microsoft.com/en-us/sql/sql-server/sql-server-2022-release-notes
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mssql
 
 CONFIGURATION
   additionalProperties (object)
@@ -76,11 +79,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/mssql
 
 EXAMPLES
   # Inspect catalog entry
@@ -95,7 +95,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Microsoft SQL Server (MSSQL) documentation: https://docs.airbyte.com/integrations/sources/mssql
+  SQL Server documentation: https://learn.microsoft.com/en-us/sql/sql-server/
+  SQL Server authentication: https://learn.microsoft.com/en-us/sql/relational-databases/security/choose-an-authentication-mode
+  SQL Server 2022 release notes: https://learn.microsoft.com/en-us/sql/sql-server/sql-server-2022-release-notes
 
 EXIT STATUS
   0 success

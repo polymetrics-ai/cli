@@ -7,7 +7,14 @@ description: Google Ads connector knowledge and safe action guide.
 
 ## Purpose
 
-Google Ads catalog connector for https://docs.airbyte.com/integrations/sources/google-ads. Native implementation status: planned_native_port.
+Google Ads catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/google-adwords.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.google.com/google-ads/api/docs/release-notes
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Google Ads catalog connector for https://docs.airbyte.com/integrations/sources/g
 - implementation_status: planned_native_port
 - runtime_kind: native_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-google-ads:6.0.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,14 +53,13 @@ Google Ads catalog connector for https://docs.airbyte.com/integrations/sources/g
 
 - Release notes: https://developers.google.com/google-ads/api/docs/release-notes
 - Developer blog: https://ads-developers.googleblog.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-ads
 
 ## Configuration
 
 - conversion_window_days (integer): A conversion window is the number of days after an ad interaction (such as an ad click or video view) during which a conversion, such as a purchase, is recorded in Google Ads. F...
 - credentials (object) required
 - custom_queries_array (array)
-- customer_id (string): Comma-separated list of (client) customer IDs. Each customer ID must be specified as a 10-digit number without dashes. For detailed instructions on finding this value, refer to ...
+- customer_id (string): manual intervention needed
 - customer_status_filter (array): A list of customer statuses to filter on. For detailed info about what each status mean refer to Google Ads <a href="https://developers.google.com/google-ads/api/reference/rpc/v...
 - end_date (string): UTC date in the format YYYY-MM-DD. Any data after this date will not be replicated. (Default value of today is used if not set)
 - num_workers (integer): The number of concurrent threads to use for syncing. Increasing this value may speed up syncs for accounts with many customers or streams. Adjust based on your API usage and rat...
@@ -69,12 +74,8 @@ Google Ads catalog connector for https://docs.airbyte.com/integrations/sources/g
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/google-ads
 
 ## Commands
 
@@ -98,4 +99,5 @@ pm connectors inspect source-google-ads --json
 
 ## References
 
-- [Google Ads documentation](https://docs.airbyte.com/integrations/sources/google-ads)
+- [Release notes](https://developers.google.com/google-ads/api/docs/release-notes)
+- [Developer blog](https://ads-developers.googleblog.com/)

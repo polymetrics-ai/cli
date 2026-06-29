@@ -7,7 +7,14 @@ description: PGVector connector knowledge and safe action guide.
 
 ## Purpose
 
-PGVector catalog connector for https://docs.airbyte.com/integrations/destinations/pgvector. Native implementation status: planned_native_port.
+PGVector catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pgvector.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.postgresql.org/docs/current/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ PGVector catalog connector for https://docs.airbyte.com/integrations/destination
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-pgvector:0.1.9 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ PGVector catalog connector for https://docs.airbyte.com/integrations/destination
 
 - PostgreSQL documentation: https://www.postgresql.org/docs/current/
 - pgvector documentation: https://github.com/pgvector/pgvector
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/pgvector
 
 ## Configuration
 
@@ -65,12 +70,8 @@ PGVector catalog connector for https://docs.airbyte.com/integrations/destination
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/pgvector
 
 ## Commands
 
@@ -94,4 +95,5 @@ pm connectors inspect destination-pgvector --json
 
 ## References
 
-- [PGVector documentation](https://docs.airbyte.com/integrations/destinations/pgvector)
+- [PostgreSQL documentation](https://www.postgresql.org/docs/current/)
+- [pgvector documentation](https://github.com/pgvector/pgvector)

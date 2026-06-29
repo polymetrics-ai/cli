@@ -7,7 +7,13 @@ description: Box connector knowledge and safe action guide.
 
 ## Purpose
 
-Box catalog connector for https://docs.airbyte.com/integrations/sources/box. Native implementation status: planned_native_port.
+Box catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Box catalog connector for https://docs.airbyte.com/integrations/sources/box. Nat
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-box:0.0.21 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Box catalog connector for https://docs.airbyte.com/integrations/sources/box. Nat
 - Authentication: https://developer.box.com/guides/authentication/
 - Rate limits: https://developer.box.com/guides/api-calls/permissions-and-errors/rate-limits/
 - Box Status: https://status.box.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/box
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Box catalog connector for https://docs.airbyte.com/integrations/sources/box. Nat
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/box
 
 ## Commands
 
@@ -95,4 +95,7 @@ pm connectors inspect source-box --json
 
 ## References
 
-- [Box documentation](https://docs.airbyte.com/integrations/sources/box)
+- [Box API reference](https://developer.box.com/reference/)
+- [Authentication](https://developer.box.com/guides/authentication/)
+- [Rate limits](https://developer.box.com/guides/api-calls/permissions-and-errors/rate-limits/)
+- [Box Status](https://status.box.com/)

@@ -7,7 +7,14 @@ description: Flexport connector knowledge and safe action guide.
 
 ## Purpose
 
-Flexport catalog connector for https://docs.airbyte.com/integrations/sources/flexport. Native implementation status: planned_native_port.
+Flexport catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/flexport.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.flexport.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Flexport catalog connector for https://docs.airbyte.com/integrations/sources/fle
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-flexport:0.3.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Flexport catalog connector for https://docs.airbyte.com/integrations/sources/fle
 
 - Flexport API documentation: https://developers.flexport.com/
 - Flexport authentication: https://developers.flexport.com/s/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/flexport
 
 ## Configuration
 
@@ -63,12 +68,8 @@ Flexport catalog connector for https://docs.airbyte.com/integrations/sources/fle
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/flexport
 
 ## Commands
 
@@ -92,4 +93,5 @@ pm connectors inspect source-flexport --json
 
 ## References
 
-- [Flexport documentation](https://docs.airbyte.com/integrations/sources/flexport)
+- [Flexport API documentation](https://developers.flexport.com/)
+- [Flexport authentication](https://developers.flexport.com/s/authentication)

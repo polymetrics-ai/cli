@@ -1,0 +1,4884 @@
+[
+  {
+    "connector": "destination-astra",
+    "id": "astra",
+    "path": "icons/astra.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-aws-datalake",
+    "id": "awsdatalake",
+    "path": "icons/awsdatalake.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-azure-blob-storage",
+    "id": "azureblobstorage",
+    "path": "icons/azureblobstorage.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://learn.microsoft.com/en-us/azure/storage/blobs/"
+  },
+  {
+    "connector": "destination-bigquery",
+    "id": "bigquery",
+    "path": "icons/bigquery.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://cloud.google.com/bigquery/docs/release-notes"
+  },
+  {
+    "connector": "destination-chroma",
+    "id": "chroma",
+    "path": "icons/chroma.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.trychroma.com/docs/overview/getting-started"
+  },
+  {
+    "connector": "destination-clickhouse",
+    "id": "clickhouse",
+    "path": "icons/clickhouse.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://clickhouse.com/docs"
+  },
+  {
+    "connector": "destination-convex",
+    "id": "convex",
+    "path": "icons/convex.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.convex.dev/"
+  },
+  {
+    "connector": "destination-csv",
+    "id": "file-csv",
+    "path": "icons/file-csv.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-customer-io",
+    "id": "customer-io",
+    "path": "icons/customer-io.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://customer.io/docs/api/"
+  },
+  {
+    "connector": "destination-databricks",
+    "id": "databricks",
+    "path": "icons/databricks.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.databricks.com/release-notes/index.html"
+  },
+  {
+    "connector": "destination-deepset",
+    "id": "deepset",
+    "path": "icons/deepset.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-dev-null",
+    "id": "pm-outbox",
+    "path": "icons/pm-outbox.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "destination-duckdb",
+    "id": "duckdb",
+    "path": "icons/duckdb.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://duckdb.org/docs/"
+  },
+  {
+    "connector": "destination-dynamodb",
+    "id": "dynamodb",
+    "path": "icons/dynamodb.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-elasticsearch",
+    "id": "elasticsearch",
+    "path": "icons/elasticsearch.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://www.elastic.co/docs/reference/elasticsearch"
+  },
+  {
+    "connector": "destination-firebolt",
+    "id": "firebolt",
+    "path": "icons/firebolt.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.firebolt.io/overview"
+  },
+  {
+    "connector": "destination-firestore",
+    "id": "firestore",
+    "path": "icons/firestore.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-gcs",
+    "id": "googlecloudstorage",
+    "path": "icons/googlecloudstorage.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://cloud.google.com/storage/docs"
+  },
+  {
+    "connector": "destination-gcs-data-lake",
+    "id": "googlecloudstorage",
+    "path": "icons/googlecloudstorage.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://cloud.google.com/storage/docs"
+  },
+  {
+    "connector": "destination-glassflow",
+    "id": "glassflow",
+    "path": "icons/glassflow.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.glassflow.dev/"
+  },
+  {
+    "connector": "destination-google-sheets",
+    "id": "google-sheets",
+    "path": "icons/google-sheets.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-hubspot",
+    "id": "hubspot",
+    "path": "icons/hubspot.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.hubspot.com/docs/api/overview"
+  },
+  {
+    "connector": "destination-kafka",
+    "id": "kafka",
+    "path": "icons/kafka.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-local-json",
+    "id": "file-json",
+    "path": "icons/file-json.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-milvus",
+    "id": "milvus",
+    "path": "icons/milvus.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://milvus.io/docs"
+  },
+  {
+    "connector": "destination-mongodb",
+    "id": "mongodb",
+    "path": "icons/mongodb.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.mongodb.com/docs/"
+  },
+  {
+    "connector": "destination-motherduck",
+    "id": "duckdb",
+    "path": "icons/duckdb.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://motherduck.com/docs"
+  },
+  {
+    "connector": "destination-mssql",
+    "id": "pm-warehouse",
+    "path": "icons/pm-warehouse.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "destination-mssql-v2",
+    "id": "pm-warehouse",
+    "path": "icons/pm-warehouse.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "destination-mysql",
+    "id": "mysql",
+    "path": "icons/mysql.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://dev.mysql.com/doc/"
+  },
+  {
+    "connector": "destination-oracle",
+    "id": "oracle",
+    "path": "icons/oracle.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.oracle.com/en/database/"
+  },
+  {
+    "connector": "destination-pgvector",
+    "id": "pgvector",
+    "path": "icons/pgvector.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.postgresql.org/docs/current/"
+  },
+  {
+    "connector": "destination-pinecone",
+    "id": "pinecone",
+    "path": "icons/pinecone.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.pinecone.io/"
+  },
+  {
+    "connector": "destination-postgres",
+    "id": "postgresql",
+    "path": "icons/postgresql.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.postgresql.org/docs/current/"
+  },
+  {
+    "connector": "destination-pubsub",
+    "id": "googlepubsub",
+    "path": "icons/googlepubsub.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-qdrant",
+    "id": "qdrant",
+    "path": "icons/qdrant.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://qdrant.tech/documentation/"
+  },
+  {
+    "connector": "destination-rabbitmq",
+    "id": "rabbitmq",
+    "path": "icons/rabbitmq.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://www.rabbitmq.com/docs"
+  },
+  {
+    "connector": "destination-ragie",
+    "id": "pm-warehouse",
+    "path": "icons/pm-warehouse.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "destination-redis",
+    "id": "redis",
+    "path": "icons/redis.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://redis.io/docs/latest/"
+  },
+  {
+    "connector": "destination-redshift",
+    "id": "redshift",
+    "path": "icons/redshift.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.aws.amazon.com/redshift/latest/mgmt/cluster-versions.html"
+  },
+  {
+    "connector": "destination-s3",
+    "id": "s3",
+    "path": "icons/s3.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.aws.amazon.com/s3/"
+  },
+  {
+    "connector": "destination-s3-data-lake",
+    "id": "s3",
+    "path": "icons/s3.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.aws.amazon.com/s3/"
+  },
+  {
+    "connector": "destination-s3-glue",
+    "id": "s3-glue",
+    "path": "icons/s3-glue.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-salesforce",
+    "id": "salesforce",
+    "path": "icons/salesforce.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm"
+  },
+  {
+    "connector": "destination-sftp-json",
+    "id": "pm-warehouse",
+    "path": "icons/pm-warehouse.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "destination-snowflake",
+    "id": "snowflake",
+    "path": "icons/snowflake.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.snowflake.com/en/release-notes"
+  },
+  {
+    "connector": "destination-snowflake-cortex",
+    "id": "snowflake-cortex",
+    "path": "icons/snowflake-cortex.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.snowflake.com/en/user-guide/snowflake-cortex"
+  },
+  {
+    "connector": "destination-sqlite",
+    "id": "sqlite",
+    "path": "icons/sqlite.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-starburst-galaxy",
+    "id": "starburst-galaxy",
+    "path": "icons/starburst-galaxy.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.starburst.io/starburst-galaxy/"
+  },
+  {
+    "connector": "destination-surrealdb",
+    "id": "surrealdb",
+    "path": "icons/surrealdb.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://surrealdb.com/docs"
+  },
+  {
+    "connector": "destination-teradata",
+    "id": "teradata",
+    "path": "icons/teradata.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-timeplus",
+    "id": "timeplus",
+    "path": "icons/timeplus.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "destination-typesense",
+    "id": "typesense",
+    "path": "icons/typesense.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://typesense.org/docs/"
+  },
+  {
+    "connector": "destination-vectara",
+    "id": "vectara",
+    "path": "icons/vectara.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.vectara.com/docs/"
+  },
+  {
+    "connector": "destination-weaviate",
+    "id": "weaviate",
+    "path": "icons/weaviate.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://weaviate.io/developers/weaviate"
+  },
+  {
+    "connector": "destination-yellowbrick",
+    "id": "yellowbrick",
+    "path": "icons/yellowbrick.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.yellowbrick.com/"
+  },
+  {
+    "connector": "file",
+    "id": "pm-file",
+    "path": "icons/pm-file.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics",
+    "review_url": "https://github.com/karthik-sivadas/polymetrics-cli"
+  },
+  {
+    "connector": "outbox",
+    "id": "pm-outbox",
+    "path": "icons/pm-outbox.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics",
+    "review_url": "https://github.com/karthik-sivadas/polymetrics-cli"
+  },
+  {
+    "connector": "sample",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics",
+    "review_url": "https://github.com/karthik-sivadas/polymetrics-cli"
+  },
+  {
+    "connector": "searxng",
+    "id": "searxng",
+    "path": "icons/searxng.svg",
+    "source": "official_site",
+    "review_status": "manual_override",
+    "review_url": "https://docs.searxng.org/"
+  },
+  {
+    "connector": "source-100ms",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-7shifts",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-activecampaign",
+    "id": "activecampaign",
+    "path": "icons/activecampaign.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developers.activecampaign.com/reference/overview"
+  },
+  {
+    "connector": "source-acuity-scheduling",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-adjust",
+    "id": "adjust",
+    "path": "icons/adjust.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://dev.adjust.com/en/api/rs-api/"
+  },
+  {
+    "connector": "source-adobe-commerce-magento",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-agilecrm",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-aha",
+    "id": "aha",
+    "path": "icons/aha.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://www.aha.io/api"
+  },
+  {
+    "connector": "source-aircall",
+    "id": "aircall",
+    "path": "icons/aircall.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.aircall.io/api-references/"
+  },
+  {
+    "connector": "source-airtable",
+    "id": "airtable",
+    "path": "icons/airtable.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://airtable.com/developers/web/api/changelog"
+  },
+  {
+    "connector": "source-akeneo",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-algolia",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-alpaca-broker-api",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-alpha-vantage",
+    "id": "alpha-vantage",
+    "path": "icons/alpha-vantage.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-amazon-ads",
+    "id": "amazonads",
+    "path": "icons/amazonads.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://advertising.amazon.com/API/docs/en-us/release-notes/deprecations"
+  },
+  {
+    "connector": "source-amazon-seller-partner",
+    "id": "amazonsellerpartner",
+    "path": "icons/amazonsellerpartner.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations"
+  },
+  {
+    "connector": "source-amazon-sqs",
+    "id": "amazon-sqs",
+    "path": "icons/amazon-sqs.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-amplitude",
+    "id": "amplitude",
+    "path": "icons/amplitude.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/"
+  },
+  {
+    "connector": "source-apify-dataset",
+    "id": "apify",
+    "path": "icons/apify.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.apify.com/api/v2"
+  },
+  {
+    "connector": "source-appcues",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-appfigures",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-appfollow",
+    "id": "appfollow",
+    "path": "icons/appfollow.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://appfollow.docs.apiary.io/"
+  },
+  {
+    "connector": "source-apple-search-ads",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-appsflyer",
+    "id": "appsflyer",
+    "path": "icons/appsflyer.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://dev.appsflyer.com/hc/reference"
+  },
+  {
+    "connector": "source-apptivo",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-asana",
+    "id": "asana",
+    "path": "icons/asana.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.asana.com/reference/rest-api-reference"
+  },
+  {
+    "connector": "source-ashby",
+    "id": "ashby",
+    "path": "icons/ashby.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.ashbyhq.com/"
+  },
+  {
+    "connector": "source-assemblyai",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-auth0",
+    "id": "auth0",
+    "path": "icons/auth0.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://auth0.com/docs/api/management/v2"
+  },
+  {
+    "connector": "source-aviationstack",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-avni",
+    "id": "avni",
+    "path": "icons/avni.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-awin-advertiser",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-aws-cloudtrail",
+    "id": "aws-cloudtrail",
+    "path": "icons/aws-cloudtrail.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-azure-blob-storage",
+    "id": "azureblobstorage",
+    "path": "icons/azureblobstorage.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://learn.microsoft.com/en-us/rest/api/storageservices/previous-azure-storage-service-versions"
+  },
+  {
+    "connector": "source-azure-table",
+    "id": "azureblobstorage",
+    "path": "icons/azureblobstorage.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-babelforce",
+    "id": "babelforce",
+    "path": "icons/babelforce.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api.babelforce.com/"
+  },
+  {
+    "connector": "source-bamboo-hr",
+    "id": "bamboohr",
+    "path": "icons/bamboohr.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-basecamp",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-beamer",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-bigmailer",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-bigquery",
+    "id": "bigquery",
+    "path": "icons/bigquery.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://cloud.google.com/bigquery/docs/reference/rest"
+  },
+  {
+    "connector": "source-bing-ads",
+    "id": "bingads",
+    "path": "icons/bingads.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://learn.microsoft.com/en-us/advertising/guides/release-notes"
+  },
+  {
+    "connector": "source-bitly",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-blogger",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-bluetally",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-boldsign",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-box",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-box-data-extract",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-braintree",
+    "id": "braintree",
+    "path": "icons/braintree.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.paypal.com/braintree/docs/reference/general/server-sdk-deprecation-policy"
+  },
+  {
+    "connector": "source-braze",
+    "id": "braze",
+    "path": "icons/braze.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.braze.com/docs/api/home"
+  },
+  {
+    "connector": "source-breezometer",
+    "id": "breezometer",
+    "path": "icons/breezometer.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.breezometer.com/api-documentation/"
+  },
+  {
+    "connector": "source-breezy-hr",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-brevo",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-brex",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-bugsnag",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-buildkite",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-bunny-inc",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-buzzsprout",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-cal-com",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-calendly",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-callrail",
+    "id": "callrail",
+    "path": "icons/callrail.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://apidocs.callrail.com/"
+  },
+  {
+    "connector": "source-campaign-monitor",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-campayn",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-canny",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-capsule-crm",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-captain-data",
+    "id": "captain-data",
+    "path": "icons/captain-data.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.captaindata.co/api-documentation"
+  },
+  {
+    "connector": "source-care-quality-commission",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-cart",
+    "id": "cart",
+    "path": "icons/cart.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.cart.com/"
+  },
+  {
+    "connector": "source-castor-edc",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-chameleon",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-chargebee",
+    "id": "chargebee",
+    "path": "icons/chargebee.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://apidocs.chargebee.com/docs/api/versioning"
+  },
+  {
+    "connector": "source-chargedesk",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-chargify",
+    "id": "chargify",
+    "path": "icons/chargify.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api"
+  },
+  {
+    "connector": "source-chartmogul",
+    "id": "chartmogul",
+    "path": "icons/chartmogul.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://dev.chartmogul.com/reference"
+  },
+  {
+    "connector": "source-chift",
+    "id": "chift",
+    "path": "icons/chift.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.chift.eu/docs/introduction/welcome"
+  },
+  {
+    "connector": "source-churnkey",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-cimis",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-cin7",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-circa",
+    "id": "circa",
+    "path": "icons/circa.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.circa.co/"
+  },
+  {
+    "connector": "source-circleci",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-cisco-meraki",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-clarif-ai",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-clazar",
+    "id": "clazar",
+    "path": "icons/clazar.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://clazar.io/api-docs"
+  },
+  {
+    "connector": "source-clickhouse",
+    "id": "clickhouse",
+    "path": "icons/clickhouse.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://clickhouse.com/docs/en/interfaces/http"
+  },
+  {
+    "connector": "source-clickup-api",
+    "id": "clickup",
+    "path": "icons/clickup.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://clickup.com/api/"
+  },
+  {
+    "connector": "source-clockify",
+    "id": "clockify",
+    "path": "icons/clockify.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.clockify.me/"
+  },
+  {
+    "connector": "source-clockodo",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-close-com",
+    "id": "close",
+    "path": "icons/close.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.close.com/"
+  },
+  {
+    "connector": "source-cloudbeds",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-coassemble",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-cockroachdb",
+    "id": "cockroachdb",
+    "path": "icons/cockroachdb.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.cockroachlabs.com/docs/stable/sql-statements"
+  },
+  {
+    "connector": "source-coda",
+    "id": "coda",
+    "path": "icons/coda.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://coda.io/developers/apis/v1"
+  },
+  {
+    "connector": "source-codefresh",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-coin-api",
+    "id": "coinapi",
+    "path": "icons/coinapi.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.coinapi.io/"
+  },
+  {
+    "connector": "source-coingecko-coins",
+    "id": "coingeckocoins",
+    "path": "icons/coingeckocoins.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.coingecko.com/en/api/documentation"
+  },
+  {
+    "connector": "source-coinmarketcap",
+    "id": "coinmarketcap",
+    "path": "icons/coinmarketcap.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://coinmarketcap.com/api/documentation/v1/"
+  },
+  {
+    "connector": "source-commcare",
+    "id": "commcare",
+    "path": "icons/commcare.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://confluence.dimagi.com/display/commcarepublic/CommCare+HQ+APIs"
+  },
+  {
+    "connector": "source-commercetools",
+    "id": "commercetools",
+    "path": "icons/commercetools.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.commercetools.com/api/"
+  },
+  {
+    "connector": "source-concord",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-configcat",
+    "id": "configcat",
+    "path": "icons/configcat.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api.configcat.com/docs/"
+  },
+  {
+    "connector": "source-confluence",
+    "id": "confluence",
+    "path": "icons/confluence.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.atlassian.com/cloud/confluence/rest/v2/intro/"
+  },
+  {
+    "connector": "source-convertkit",
+    "id": "convertkit",
+    "path": "icons/convertkit.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.convertkit.com/"
+  },
+  {
+    "connector": "source-convex",
+    "id": "convex",
+    "path": "icons/convex.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.convex.dev/http-api/"
+  },
+  {
+    "connector": "source-copper",
+    "id": "copper",
+    "path": "icons/copper.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.copper.com/"
+  },
+  {
+    "connector": "source-couchbase",
+    "id": "couchbase",
+    "path": "icons/couchbase.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/index.html"
+  },
+  {
+    "connector": "source-countercyclical",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-criteo-marketing",
+    "id": "criteo",
+    "path": "icons/criteo.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developers.criteo.com/marketing-solutions/reference/getting-started"
+  },
+  {
+    "connector": "source-customer-io",
+    "id": "customer-io",
+    "path": "icons/customer-io.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://customer.io/docs/api/"
+  },
+  {
+    "connector": "source-customerly",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-datadog",
+    "id": "datadog",
+    "path": "icons/datadog.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.datadoghq.com/api/latest/"
+  },
+  {
+    "connector": "source-datagen",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-datascope",
+    "id": "datascope",
+    "path": "icons/datascope.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://app.mydatascope.com/api/external/docs/"
+  },
+  {
+    "connector": "source-db2",
+    "id": "db2",
+    "path": "icons/db2.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.ibm.com/docs/en/db2/11.5?topic=reference-sql"
+  },
+  {
+    "connector": "source-db2-enterprise",
+    "id": "db2",
+    "path": "icons/db2.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-dbt",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-defillama",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-delighted",
+    "id": "delighted",
+    "path": "icons/delighted.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://delighted.com/docs/api"
+  },
+  {
+    "connector": "source-deputy",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-devin-ai",
+    "id": "devin-ai",
+    "path": "icons/devin-ai.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-ding-connect",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-discord",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-dixa",
+    "id": "dixa",
+    "path": "icons/dixa.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.dixa.io/openapi/"
+  },
+  {
+    "connector": "source-dockerhub",
+    "id": "dockerhub",
+    "path": "icons/dockerhub.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.docker.com/docker-hub/api/latest/"
+  },
+  {
+    "connector": "source-docuseal",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-dolibarr",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-dremio",
+    "id": "dremio",
+    "path": "icons/dremio.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.dremio.com/software/rest-api/"
+  },
+  {
+    "connector": "source-drift",
+    "id": "drift",
+    "path": "icons/drift.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://devdocs.drift.com/"
+  },
+  {
+    "connector": "source-drip",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-dropbox-sign",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-dwolla",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-dynamodb",
+    "id": "dynamodb",
+    "path": "icons/dynamodb.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/"
+  },
+  {
+    "connector": "source-e-conomic",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-e2e-test",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-easypost",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-easypromos",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-ebay-finance",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-ebay-fulfillment",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-elasticemail",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-elasticsearch",
+    "id": "elasticsearch",
+    "path": "icons/elasticsearch.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html"
+  },
+  {
+    "connector": "source-emailoctopus",
+    "id": "emailoctopus",
+    "path": "icons/emailoctopus.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://emailoctopus.com/api-documentation"
+  },
+  {
+    "connector": "source-employment-hero",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-encharge",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-eventbrite",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-eventee",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-eventzilla",
+    "id": "eventzilla",
+    "path": "icons/eventzilla.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://www.eventzilla.net/api/"
+  },
+  {
+    "connector": "source-everhour",
+    "id": "everhour",
+    "path": "icons/everhour.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://everhour.docs.apiary.io/"
+  },
+  {
+    "connector": "source-exchange-rates",
+    "id": "exchangeratesapi",
+    "path": "icons/exchangeratesapi.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://exchangeratesapi.io/documentation/"
+  },
+  {
+    "connector": "source-ezofficeinventory",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-facebook-marketing",
+    "id": "facebook",
+    "path": "icons/facebook.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.facebook.com/docs/marketing-api/marketing-api-changelog"
+  },
+  {
+    "connector": "source-facebook-pages",
+    "id": "facebook",
+    "path": "icons/facebook.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.facebook.com/docs/pages/"
+  },
+  {
+    "connector": "source-factorial",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-faker",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-fastbill",
+    "id": "fastbill",
+    "path": "icons/fastbill.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://apidocs.fastbill.com/"
+  },
+  {
+    "connector": "source-fastly",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-fauna",
+    "id": "fauna",
+    "path": "icons/fauna.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.fauna.com/fauna/current/api/"
+  },
+  {
+    "connector": "source-feishu",
+    "id": "feishu",
+    "path": "icons/feishu.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-overview"
+  },
+  {
+    "connector": "source-file",
+    "id": "file",
+    "path": "icons/file.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-fillout",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-finage",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-financial-modelling",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-finnhub",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-finnworlds",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-firebase-realtime-database",
+    "id": "source-firebase-realtime-database",
+    "path": "icons/source-firebase-realtime-database.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://firebase.google.com/docs/reference/rest/database"
+  },
+  {
+    "connector": "source-firebolt",
+    "id": "firebolt",
+    "path": "icons/firebolt.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.firebolt.io/godocs/Overview/api-reference.html"
+  },
+  {
+    "connector": "source-firehydrant",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-fleetio",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-flexmail",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-flexport",
+    "id": "flexport",
+    "path": "icons/flexport.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.flexport.com/"
+  },
+  {
+    "connector": "source-float",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-flowlu",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-formbricks",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-free-agent-connector",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-freightview",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-freshbooks",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-freshcaller",
+    "id": "freshcaller",
+    "path": "icons/freshcaller.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.freshcaller.com/api/"
+  },
+  {
+    "connector": "source-freshchat",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-freshdesk",
+    "id": "freshdesk",
+    "path": "icons/freshdesk.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.freshdesk.com/api/#change_log"
+  },
+  {
+    "connector": "source-freshsales",
+    "id": "freshsales",
+    "path": "icons/freshsales.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.freshworks.com/crm/api/"
+  },
+  {
+    "connector": "source-freshservice",
+    "id": "freshservice",
+    "path": "icons/freshservice.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api.freshservice.com/"
+  },
+  {
+    "connector": "source-front",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-fulcrum",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-fullstory",
+    "id": "fullstory",
+    "path": "icons/fullstory.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.fullstory.com/reference"
+  },
+  {
+    "connector": "source-gainsight-px",
+    "id": "gainsight-px",
+    "path": "icons/gainsight-px.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://support.gainsight.com/PX/API_for_Developers/02Usage_of_Different_APIs"
+  },
+  {
+    "connector": "source-gcs",
+    "id": "gcs",
+    "path": "icons/gcs.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://cloud.google.com/storage/docs"
+  },
+  {
+    "connector": "source-genesys",
+    "id": "genesys",
+    "path": "icons/genesys.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.genesys.cloud/api/"
+  },
+  {
+    "connector": "source-getgist",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-getlago",
+    "id": "getlago",
+    "path": "icons/getlago.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://doc.getlago.com/api-reference/intro"
+  },
+  {
+    "connector": "source-giphy",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-gitbook",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-github",
+    "id": "github",
+    "path": "icons/github.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.github.com/en/rest/about-the-rest-api/breaking-changes"
+  },
+  {
+    "connector": "source-gitlab",
+    "id": "gitlab",
+    "path": "icons/gitlab.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.gitlab.com/ee/api/rest/deprecations.html"
+  },
+  {
+    "connector": "source-glassfrog",
+    "id": "glassfrog",
+    "path": "icons/glassfrog.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY"
+  },
+  {
+    "connector": "source-gmail",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-gnews",
+    "id": "gnews",
+    "path": "icons/gnews.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://gnews.io/docs/"
+  },
+  {
+    "connector": "source-gocardless",
+    "id": "gocardless",
+    "path": "icons/gocardless.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.gocardless.com/api-reference/"
+  },
+  {
+    "connector": "source-goldcast",
+    "id": "goldcast",
+    "path": "icons/goldcast.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.goldcast.io/api-docs"
+  },
+  {
+    "connector": "source-gologin",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-gong",
+    "id": "gong",
+    "path": "icons/gong.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://us-66463.app.gong.io/settings/api/documentation"
+  },
+  {
+    "connector": "source-google-ads",
+    "id": "google-adwords",
+    "path": "icons/google-adwords.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.google.com/google-ads/api/docs/release-notes"
+  },
+  {
+    "connector": "source-google-analytics-data-api",
+    "id": "google-analytics",
+    "path": "icons/google-analytics.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog"
+  },
+  {
+    "connector": "source-google-calendar",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-google-classroom",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-google-directory",
+    "id": "googledirectory",
+    "path": "icons/googledirectory.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.google.com/admin-sdk/directory/reference/rest"
+  },
+  {
+    "connector": "source-google-drive",
+    "id": "google-drive",
+    "path": "icons/google-drive.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.google.com/drive/api/reference/rest/v3"
+  },
+  {
+    "connector": "source-google-forms",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-google-pagespeed-insights",
+    "id": "google-pagespeed-insights",
+    "path": "icons/google-pagespeed-insights.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.google.com/speed/docs/insights/v5/get-started"
+  },
+  {
+    "connector": "source-google-search-console",
+    "id": "googlesearchconsole",
+    "path": "icons/googlesearchconsole.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.google.com/search/news"
+  },
+  {
+    "connector": "source-google-sheets",
+    "id": "google-sheets",
+    "path": "icons/google-sheets.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.google.com/workspace/release-notes"
+  },
+  {
+    "connector": "source-google-tasks",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-google-webfonts",
+    "id": "googleworkpace",
+    "path": "icons/googleworkpace.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-gorgias",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-grafana",
+    "id": "grafana",
+    "path": "icons/grafana.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/"
+  },
+  {
+    "connector": "source-granola",
+    "id": "source-granola",
+    "path": "icons/source-granola.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.granola.ai/introduction"
+  },
+  {
+    "connector": "source-greenhouse",
+    "id": "greenhouse",
+    "path": "icons/greenhouse.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.greenhouse.io/harvest.html"
+  },
+  {
+    "connector": "source-greythr",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-gridly",
+    "id": "gridly",
+    "path": "icons/gridly.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://www.gridly.com/docs/api/"
+  },
+  {
+    "connector": "source-guru",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-gutendex",
+    "id": "source-gutendex",
+    "path": "icons/source-gutendex.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-hardcoded-records",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-harness",
+    "id": "harness",
+    "path": "icons/harness.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-harvest",
+    "id": "harvest",
+    "path": "icons/harvest.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.harveststatus.com/"
+  },
+  {
+    "connector": "source-height",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-hellobaton",
+    "id": "hellobaton",
+    "path": "icons/hellobaton.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-help-scout",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-hibob",
+    "id": "hibob",
+    "path": "icons/hibob.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://apidocs.hibob.com/"
+  },
+  {
+    "connector": "source-high-level",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-hoorayhr",
+    "id": "hoorayhr",
+    "path": "icons/hoorayhr.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://api.hoorayhr.io/swagger.json"
+  },
+  {
+    "connector": "source-hubplanner",
+    "id": "hubplanner",
+    "path": "icons/hubplanner.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-hubspot",
+    "id": "hubspot",
+    "path": "icons/hubspot.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.hubspot.com/docs/api/overview"
+  },
+  {
+    "connector": "source-hugging-face-datasets",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-humanitix",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-huntr",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-illumina-basespace",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-imagga",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-incident-io",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-inflowinventory",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-insightful",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-insightly",
+    "id": "insightly",
+    "path": "icons/insightly.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-instagram",
+    "id": "instagram",
+    "path": "icons/instagram.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.facebook.com/docs/instagram-platform/changelog"
+  },
+  {
+    "connector": "source-instatus",
+    "id": "instatus",
+    "path": "icons/instatus.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://instatus.com/help/api"
+  },
+  {
+    "connector": "source-intercom",
+    "id": "intercom",
+    "path": "icons/intercom.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes"
+  },
+  {
+    "connector": "source-interzoid",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-intruder",
+    "id": "intruder",
+    "path": "icons/intruder.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developers.intruder.io/docs/welcome"
+  },
+  {
+    "connector": "source-invoiced",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-invoiceninja",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-ip2whois",
+    "id": "ip2whois",
+    "path": "icons/ip2whois.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.ip2whois.com/developers-api"
+  },
+  {
+    "connector": "source-iterable",
+    "id": "iterable",
+    "path": "icons/iterable.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api.iterable.com/api/docs"
+  },
+  {
+    "connector": "source-jamf-pro",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-jina-ai-reader",
+    "id": "jina-ai-reader",
+    "path": "icons/jina-ai-reader.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://r.jina.ai/docs"
+  },
+  {
+    "connector": "source-jira",
+    "id": "jira",
+    "path": "icons/jira.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.atlassian.com/changelog/#"
+  },
+  {
+    "connector": "source-jobnimbus",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-jotform",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-judge-me-reviews",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-just-sift",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-justcall",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-k6-cloud",
+    "id": "k6cloud",
+    "path": "icons/k6cloud.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://k6.io/docs/cloud/cloud-reference/cloud-rest-api/"
+  },
+  {
+    "connector": "source-kafka",
+    "id": "kafka",
+    "path": "icons/kafka.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://kafka.apache.org/documentation/"
+  },
+  {
+    "connector": "source-katana",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-keka",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-kisi",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-kissmetrics",
+    "id": "kissmetrics",
+    "path": "icons/kissmetrics.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://support.kissmetrics.io/reference"
+  },
+  {
+    "connector": "source-klarna",
+    "id": "klarna",
+    "path": "icons/klarna.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.klarna.com/api/"
+  },
+  {
+    "connector": "source-klaus-api",
+    "id": "klaus-api",
+    "path": "icons/klaus-api.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://help.klausapp.com/en/articles/2911907-klaus-api"
+  },
+  {
+    "connector": "source-klaviyo",
+    "id": "klaviyo",
+    "path": "icons/klaviyo.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+  },
+  {
+    "connector": "source-kyriba",
+    "id": "kyriba",
+    "path": "icons/kyriba.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.kyriba.com/"
+  },
+  {
+    "connector": "source-kyve",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-launchdarkly",
+    "id": "launchdarkly",
+    "path": "icons/launchdarkly.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://apidocs.launchdarkly.com/"
+  },
+  {
+    "connector": "source-leadfeeder",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-lemlist",
+    "id": "lemlist",
+    "path": "icons/lemlist.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.lemlist.com/"
+  },
+  {
+    "connector": "source-less-annoying-crm",
+    "id": "less-annoying-crm",
+    "path": "icons/less-annoying-crm.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://www.lessannoyingcrm.com/help/topic/API"
+  },
+  {
+    "connector": "source-lever-hiring",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-lightspeed-retail",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-linear",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-linkedin-ads",
+    "id": "linkedin",
+    "path": "icons/linkedin.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10"
+  },
+  {
+    "connector": "source-linkedin-pages",
+    "id": "linkedin",
+    "path": "icons/linkedin.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/community-management/organizations"
+  },
+  {
+    "connector": "source-linkrunner",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-linnworks",
+    "id": "linnworks",
+    "path": "icons/linnworks.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://apps.linnworks.net/Api"
+  },
+  {
+    "connector": "source-lob",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-lokalise",
+    "id": "lokalise",
+    "path": "icons/lokalise.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.lokalise.com/reference/api-introduction"
+  },
+  {
+    "connector": "source-looker",
+    "id": "looker",
+    "path": "icons/looker.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://cloud.google.com/looker/docs/reference/looker-api/latest"
+  },
+  {
+    "connector": "source-luma",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-mailchimp",
+    "id": "mailchimp",
+    "path": "icons/mailchimp.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://mailchimp.com/developer/release-notes/"
+  },
+  {
+    "connector": "source-mailerlite",
+    "id": "mailerlite",
+    "path": "icons/mailerlite.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.mailerlite.com/"
+  },
+  {
+    "connector": "source-mailersend",
+    "id": "mailersend",
+    "path": "icons/mailersend.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.mailersend.com/"
+  },
+  {
+    "connector": "source-mailgun",
+    "id": "mailgun",
+    "path": "icons/mailgun.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://documentation.mailgun.com/en/latest/api_reference.html"
+  },
+  {
+    "connector": "source-mailjet-mail",
+    "id": "mailjetmail",
+    "path": "icons/mailjetmail.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://dev.mailjet.com/email/reference/"
+  },
+  {
+    "connector": "source-mailjet-sms",
+    "id": "mailjetsms",
+    "path": "icons/mailjetsms.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://dev.mailjet.com/sms/reference/"
+  },
+  {
+    "connector": "source-mailosaur",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-mailtrap",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-mantle",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-marketo",
+    "id": "marketo",
+    "path": "icons/marketo.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.marketo.com/rest-api/"
+  },
+  {
+    "connector": "source-marketstack",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-mendeley",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-mention",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-mercado-ads",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-merge",
+    "id": "merge",
+    "path": "icons/merge.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.merge.dev/api-reference/"
+  },
+  {
+    "connector": "source-metabase",
+    "id": "metabase",
+    "path": "icons/metabase.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.metabase.com/docs/latest/api-documentation"
+  },
+  {
+    "connector": "source-metricool",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-microsoft-dataverse",
+    "id": "microsoftdataverse",
+    "path": "icons/microsoftdataverse.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview"
+  },
+  {
+    "connector": "source-microsoft-entra-id",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-microsoft-lists",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-microsoft-onedrive",
+    "id": "microsoft-onedrive",
+    "path": "icons/microsoft-onedrive.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://learn.microsoft.com/en-us/onedrive/developer/"
+  },
+  {
+    "connector": "source-microsoft-sharepoint",
+    "id": "microsoft-sharepoint",
+    "path": "icons/microsoft-sharepoint.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/get-to-know-the-sharepoint-rest-service"
+  },
+  {
+    "connector": "source-microsoft-teams",
+    "id": "microsoft-teams",
+    "path": "icons/microsoft-teams.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview"
+  },
+  {
+    "connector": "source-miro",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-missive",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-mixmax",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-mixpanel",
+    "id": "mixpanel",
+    "path": "icons/mixpanel.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.mixpanel.com/reference/overview"
+  },
+  {
+    "connector": "source-mode",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-monday",
+    "id": "monday",
+    "path": "icons/monday.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.monday.com/api-reference/docs"
+  },
+  {
+    "connector": "source-mongodb-v2",
+    "id": "mongodb",
+    "path": "icons/mongodb.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.mongodb.com/docs/"
+  },
+  {
+    "connector": "source-mssql",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-mux",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-my-hours",
+    "id": "my-hours",
+    "path": "icons/my-hours.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://myhours.com/api"
+  },
+  {
+    "connector": "source-mysql",
+    "id": "mysql",
+    "path": "icons/mysql.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://dev.mysql.com/doc/"
+  },
+  {
+    "connector": "source-n8n",
+    "id": "n8n",
+    "path": "icons/n8n.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.n8n.io/api/"
+  },
+  {
+    "connector": "source-nasa",
+    "id": "nasa",
+    "path": "icons/nasa.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api.nasa.gov/"
+  },
+  {
+    "connector": "source-navan",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-nebius-ai",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-netsuite",
+    "id": "netsuite",
+    "path": "icons/netsuite.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1540391670.html"
+  },
+  {
+    "connector": "source-netsuite-enterprise",
+    "id": "netsuite",
+    "path": "icons/netsuite.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N3865324.html"
+  },
+  {
+    "connector": "source-news-api",
+    "id": "newsapi",
+    "path": "icons/newsapi.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://newsapi.org/docs"
+  },
+  {
+    "connector": "source-newsdata",
+    "id": "source-newsdata",
+    "path": "icons/source-newsdata.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://newsdata.io/documentation"
+  },
+  {
+    "connector": "source-newsdata-io",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-nexiopay",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-nexus-datasets",
+    "id": "nexus-datasets",
+    "path": "icons/nexus-datasets.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-ninjaone-rmm",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-nocrm",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-northpass-lms",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-notion",
+    "id": "notion",
+    "path": "icons/notion.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.notion.com/reference/changes-by-version"
+  },
+  {
+    "connector": "source-nutshell",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-nylas",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-nytimes",
+    "id": "nytimes",
+    "path": "icons/nytimes.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.nytimes.com/apis"
+  },
+  {
+    "connector": "source-okta",
+    "id": "okta",
+    "path": "icons/okta.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developer.okta.com/docs/reference/"
+  },
+  {
+    "connector": "source-omnisend",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-oncehub",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-onepagecrm",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-onesignal",
+    "id": "onesignal",
+    "path": "icons/onesignal.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://documentation.onesignal.com/reference"
+  },
+  {
+    "connector": "source-onfleet",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-open-data-dc",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-open-exchange-rates",
+    "id": "open-exchange-rates",
+    "path": "icons/open-exchange-rates.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.openexchangerates.org/"
+  },
+  {
+    "connector": "source-openaq",
+    "id": "openaq",
+    "path": "icons/openaq.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.openaq.org/"
+  },
+  {
+    "connector": "source-openfda",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-openweather",
+    "id": "openweather",
+    "path": "icons/openweather.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://openweathermap.org/api"
+  },
+  {
+    "connector": "source-opinion-stage",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-opsgenie",
+    "id": "source-opsgenie",
+    "path": "icons/source-opsgenie.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.opsgenie.com/docs/api-overview"
+  },
+  {
+    "connector": "source-opuswatch",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-oracle",
+    "id": "oracle",
+    "path": "icons/oracle.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.oracle.com/en/database/"
+  },
+  {
+    "connector": "source-oracle-enterprise",
+    "id": "oracle",
+    "path": "icons/oracle.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.oracle.com/en/database/oracle/oracle-database/"
+  },
+  {
+    "connector": "source-orb",
+    "id": "orb",
+    "path": "icons/orb.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.withorb.com/reference/api-reference"
+  },
+  {
+    "connector": "source-oura",
+    "id": "oura",
+    "path": "icons/oura.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://cloud.ouraring.com/docs/"
+  },
+  {
+    "connector": "source-outbrain-amplify",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-outlook",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-outreach",
+    "id": "outreach",
+    "path": "icons/outreach.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api.outreach.io/api/v2/docs"
+  },
+  {
+    "connector": "source-oveit",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-pabbly-subscriptions-billing",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-paddle",
+    "id": "paddle",
+    "path": "icons/paddle.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developer.paddle.com/api-reference/"
+  },
+  {
+    "connector": "source-pagerduty",
+    "id": "pagerduty",
+    "path": "icons/pagerduty.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.pagerduty.com/api-reference/"
+  },
+  {
+    "connector": "source-pandadoc",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-paperform",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-papersign",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-pardot",
+    "id": "salesforcepardot",
+    "path": "icons/salesforcepardot.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.salesforce.com/docs/marketing/pardot/overview"
+  },
+  {
+    "connector": "source-partnerize",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-partnerstack",
+    "id": "partnerstack",
+    "path": "icons/partnerstack.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.partnerstack.com/docs/api-overview"
+  },
+  {
+    "connector": "source-payfit",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-paypal-transaction",
+    "id": "paypal",
+    "path": "icons/paypal.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.paypal.com/api/rest/"
+  },
+  {
+    "connector": "source-paystack",
+    "id": "paystack",
+    "path": "icons/paystack.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://paystack.com/docs/api/"
+  },
+  {
+    "connector": "source-pendo",
+    "id": "pendo",
+    "path": "icons/pendo.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://engageapi.pendo.io/"
+  },
+  {
+    "connector": "source-pennylane",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-perigon",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-perk",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-persistiq",
+    "id": "persistiq",
+    "path": "icons/persistiq.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://persistiq.com/api-docs/index.html"
+  },
+  {
+    "connector": "source-persona",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-pexels-api",
+    "id": "pexels",
+    "path": "icons/pexels.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.pexels.com/api/documentation/"
+  },
+  {
+    "connector": "source-phyllo",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-picqer",
+    "id": "picqer",
+    "path": "icons/picqer.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://picqer.com/en/api"
+  },
+  {
+    "connector": "source-pingdom",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-pinterest",
+    "id": "pinterest",
+    "path": "icons/pinterest.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.pinterest.com/docs/changelog/changelog/"
+  },
+  {
+    "connector": "source-pipedrive",
+    "id": "pipedrive",
+    "path": "icons/pipedrive.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.pipedrive.com/docs/api/v1"
+  },
+  {
+    "connector": "source-pipeliner",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-pivotal-tracker",
+    "id": "pivotal-tracker",
+    "path": "icons/pivotal-tracker.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-piwik",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-plaid",
+    "id": "plaid",
+    "path": "icons/plaid.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://plaid.com/docs/"
+  },
+  {
+    "connector": "source-planhat",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-plausible",
+    "id": "plausible",
+    "path": "icons/plausible.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://plausible.io/docs/stats-api"
+  },
+  {
+    "connector": "source-pocket",
+    "id": "pocket",
+    "path": "icons/pocket.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-pokeapi",
+    "id": "pokeapi",
+    "path": "icons/pokeapi.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://pokeapi.co/docs/v2"
+  },
+  {
+    "connector": "source-polygon-stock-api",
+    "id": "polygon",
+    "path": "icons/polygon.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://polygon.io/docs/stocks/getting-started"
+  },
+  {
+    "connector": "source-poplar",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-postgres",
+    "id": "postgresql",
+    "path": "icons/postgresql.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.postgresql.org/docs/"
+  },
+  {
+    "connector": "source-posthog",
+    "id": "posthog",
+    "path": "icons/posthog.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://posthog.com/docs/api"
+  },
+  {
+    "connector": "source-postmarkapp",
+    "id": "postmark",
+    "path": "icons/postmark.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://postmarkapp.com/developer"
+  },
+  {
+    "connector": "source-prestashop",
+    "id": "prestashop",
+    "path": "icons/prestashop.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://devdocs.prestashop-project.org/9/webservice/"
+  },
+  {
+    "connector": "source-pretix",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-primetric",
+    "id": "primetric",
+    "path": "icons/primetric.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.primetric.com/"
+  },
+  {
+    "connector": "source-printify",
+    "id": "printify",
+    "path": "icons/printify.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developers.printify.com/"
+  },
+  {
+    "connector": "source-productboard",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-productive",
+    "id": "productive",
+    "path": "icons/productive.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developer.productive.io/"
+  },
+  {
+    "connector": "source-public-apis",
+    "id": "public-apis",
+    "path": "icons/public-apis.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://github.com/public-apis/public-apis"
+  },
+  {
+    "connector": "source-pylon",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-pypi",
+    "id": "pypi",
+    "path": "icons/pypi.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://warehouse.pypa.io/api-reference/"
+  },
+  {
+    "connector": "source-qonto",
+    "id": "qonto",
+    "path": "icons/qonto.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api-doc.qonto.com/"
+  },
+  {
+    "connector": "source-qualaroo",
+    "id": "qualaroo",
+    "path": "icons/qualaroo.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API"
+  },
+  {
+    "connector": "source-quickbooks",
+    "id": "quickbooks",
+    "path": "icons/quickbooks.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account"
+  },
+  {
+    "connector": "source-railz",
+    "id": "railz",
+    "path": "icons/railz.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-rd-station-marketing",
+    "id": "rdstation",
+    "path": "icons/rdstation.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developers.rdstation.com/"
+  },
+  {
+    "connector": "source-recharge",
+    "id": "recharge",
+    "path": "icons/recharge.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.getrecharge.com/"
+  },
+  {
+    "connector": "source-recreation",
+    "id": "recreation",
+    "path": "icons/recreation.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-recruitee",
+    "id": "recruitee",
+    "path": "icons/recruitee.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-recurly",
+    "id": "recurly",
+    "path": "icons/recurly.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.recurly.com/api/v2021-02-25/"
+  },
+  {
+    "connector": "source-reddit",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-redshift",
+    "id": "redshift",
+    "path": "icons/redshift.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.aws.amazon.com/redshift/"
+  },
+  {
+    "connector": "source-referralhero",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-rentcast",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-repairshopr",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-reply-io",
+    "id": "reply-io",
+    "path": "icons/reply-io.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-retailexpress-by-maropost",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-retently",
+    "id": "retently",
+    "path": "icons/retently.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.retently.com/api/"
+  },
+  {
+    "connector": "source-revenuecat",
+    "id": "revenuecat",
+    "path": "icons/revenuecat.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://www.revenuecat.com/docs/api-v1"
+  },
+  {
+    "connector": "source-revolut-merchant",
+    "id": "revolut",
+    "path": "icons/revolut.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developer.revolut.com/docs/guides/merchant/reference/api"
+  },
+  {
+    "connector": "source-ringcentral",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-rki-covid",
+    "id": "rki",
+    "path": "icons/rki.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-rocket-chat",
+    "id": "rocket-chat",
+    "path": "icons/rocket-chat.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developer.rocket.chat/apidocs"
+  },
+  {
+    "connector": "source-rocketlane",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-rollbar",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-rootly",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-rss",
+    "id": "rss",
+    "path": "icons/rss.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-ruddr",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-s3",
+    "id": "s3",
+    "path": "icons/s3.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/WhatsNew.html"
+  },
+  {
+    "connector": "source-safetyculture",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-sage-hr",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-salesflare",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-salesforce",
+    "id": "salesforce",
+    "path": "icons/salesforce.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/rest_rns.htm"
+  },
+  {
+    "connector": "source-salesloft",
+    "id": "salesloft",
+    "path": "icons/salesloft.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developers.salesloft.com/docs/api/"
+  },
+  {
+    "connector": "source-sap-fieldglass",
+    "id": "sapfieldglass",
+    "path": "icons/sapfieldglass.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api.sap.com/package/SAPFieldglass/rest"
+  },
+  {
+    "connector": "source-sap-hana-enterprise",
+    "id": "sap",
+    "path": "icons/sap.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://help.sap.com/docs/SAP_HANA_PLATFORM"
+  },
+  {
+    "connector": "source-savvycal",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-scryfall",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-secoda",
+    "id": "secoda",
+    "path": "icons/secoda.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://docs.secoda.co/api.md"
+  },
+  {
+    "connector": "source-segment",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-sendgrid",
+    "id": "sendgrid",
+    "path": "icons/sendgrid.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.sendgrid.com/api-reference/how-to-use-the-sendgrid-v3-api/authentication"
+  },
+  {
+    "connector": "source-sendinblue",
+    "id": "sendinblue",
+    "path": "icons/sendinblue.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.brevo.com/reference"
+  },
+  {
+    "connector": "source-sendowl",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-sendpulse",
+    "id": "sendpulse",
+    "path": "icons/sendpulse.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://sendpulse.com/integrations/api"
+  },
+  {
+    "connector": "source-senseforce",
+    "id": "senseforce",
+    "path": "icons/senseforce.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-sentry",
+    "id": "sentry",
+    "path": "icons/sentry.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.sentry.io/api/"
+  },
+  {
+    "connector": "source-serpstat",
+    "id": "serpstat",
+    "path": "icons/serpstat.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-service-now",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-sftp",
+    "id": "sftp",
+    "path": "icons/sftp.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-sftp-bulk",
+    "id": "sftp",
+    "path": "icons/sftp.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://datatracker.ietf.org/doc/html/draft-ietf-secsh-filexfer-02"
+  },
+  {
+    "connector": "source-sharepoint-enterprise",
+    "id": "microsoft-sharepoint",
+    "path": "icons/microsoft-sharepoint.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-sharepoint-lists-enterprise",
+    "id": "microsoft-sharepoint",
+    "path": "icons/microsoft-sharepoint.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded"
+  },
+  {
+    "connector": "source-sharetribe",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-shippo",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-shipstation",
+    "id": "shipstation",
+    "path": "icons/shipstation.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://www.shipstation.com/docs/api/"
+  },
+  {
+    "connector": "source-shopify",
+    "id": "shopify",
+    "path": "icons/shopify.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://shopify.dev/docs/api/admin-rest"
+  },
+  {
+    "connector": "source-shopwired",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-shortcut",
+    "id": "shortcut",
+    "path": "icons/shortcut.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developer.shortcut.com/api/rest/v3"
+  },
+  {
+    "connector": "source-shortio",
+    "id": "shortio",
+    "path": "icons/shortio.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.short.io/"
+  },
+  {
+    "connector": "source-shutterstock",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-sigma-computing",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-signnow",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-simfin",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-simplecast",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-simplesat",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-singlestore",
+    "id": "singlestore",
+    "path": "icons/singlestore.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.singlestore.com/"
+  },
+  {
+    "connector": "source-slack",
+    "id": "slack",
+    "path": "icons/slack.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api.slack.com/changelog"
+  },
+  {
+    "connector": "source-smaily",
+    "id": "smaily",
+    "path": "icons/smaily.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://smaily.com/help/api/"
+  },
+  {
+    "connector": "source-smartengage",
+    "id": "smartengage",
+    "path": "icons/smartengage.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://smartengage.com/docs/api/"
+  },
+  {
+    "connector": "source-smartreach",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-smartsheets",
+    "id": "smartsheet",
+    "path": "icons/smartsheet.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://smartsheet.redoc.ly/"
+  },
+  {
+    "connector": "source-smartwaiver",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-smoke-test",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-snapchat-marketing",
+    "id": "snapchat",
+    "path": "icons/snapchat.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.snap.com/api/marketing-api/Ads-API/announcements"
+  },
+  {
+    "connector": "source-snowflake",
+    "id": "snowflake",
+    "path": "icons/snowflake.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.snowflake.com/"
+  },
+  {
+    "connector": "source-solarwinds-service-desk",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-sonar-cloud",
+    "id": "sonarcloud",
+    "path": "icons/sonarcloud.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://sonarcloud.io/web_api"
+  },
+  {
+    "connector": "source-spacex-api",
+    "id": "spacex",
+    "path": "icons/spacex.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://github.com/r-spacex/SpaceX-API/tree/master/docs"
+  },
+  {
+    "connector": "source-sparkpost",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-split-io",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-spotify-ads",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-spotlercrm",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-square",
+    "id": "square",
+    "path": "icons/square.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.squareup.com/reference/square"
+  },
+  {
+    "connector": "source-squarespace",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-statsig",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-statuspage",
+    "id": "statuspage",
+    "path": "icons/statuspage.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.statuspage.io/"
+  },
+  {
+    "connector": "source-stigg",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-stockdata",
+    "id": "stockdata",
+    "path": "icons/stockdata.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://www.stockdata.org/documentation"
+  },
+  {
+    "connector": "source-strava",
+    "id": "strava",
+    "path": "icons/strava.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.strava.com/docs/reference/"
+  },
+  {
+    "connector": "source-stripe",
+    "id": "stripe",
+    "path": "icons/stripe.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://stripe.com/docs/api"
+  },
+  {
+    "connector": "source-survey-sparrow",
+    "id": "surveysparrow",
+    "path": "icons/surveysparrow.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.surveysparrow.com/"
+  },
+  {
+    "connector": "source-surveycto",
+    "id": "surveycto",
+    "path": "icons/surveycto.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.surveycto.com/05-exporting-and-publishing-data/02-api-access/01.api-access.html"
+  },
+  {
+    "connector": "source-surveymonkey",
+    "id": "surveymonkey",
+    "path": "icons/surveymonkey.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.surveymonkey.com/api/v3/"
+  },
+  {
+    "connector": "source-survicate",
+    "id": "survicate",
+    "path": "icons/survicate.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developers.survicate.com/"
+  },
+  {
+    "connector": "source-svix",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-systeme",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-taboola",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-tavus",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-teamtailor",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-teamwork",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-tempo",
+    "id": "tempo",
+    "path": "icons/tempo.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://apidocs.tempo.io/"
+  },
+  {
+    "connector": "source-teradata",
+    "id": "teradata",
+    "path": "icons/teradata.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.teradata.com/"
+  },
+  {
+    "connector": "source-testrail",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-the-guardian-api",
+    "id": "theguardian",
+    "path": "icons/theguardian.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://open-platform.theguardian.com/documentation/"
+  },
+  {
+    "connector": "source-thinkific",
+    "id": "thinkific",
+    "path": "icons/thinkific.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developers.thinkific.com/"
+  },
+  {
+    "connector": "source-thinkific-courses",
+    "id": "thinkific",
+    "path": "icons/thinkific.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developers.thinkific.com/"
+  },
+  {
+    "connector": "source-thrive-learning",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-ticketmaster",
+    "id": "ticketmaster",
+    "path": "icons/ticketmaster.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/"
+  },
+  {
+    "connector": "source-tickettailor",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-ticktick",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-tidb",
+    "id": "tidb",
+    "path": "icons/tidb.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.pingcap.com/tidb/stable"
+  },
+  {
+    "connector": "source-tiktok-marketing",
+    "id": "tiktok",
+    "path": "icons/tiktok.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169"
+  },
+  {
+    "connector": "source-timely",
+    "id": "timely",
+    "path": "icons/timely.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://dev.timelyapp.com/"
+  },
+  {
+    "connector": "source-tinyemail",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-tmdb",
+    "id": "tmdb",
+    "path": "icons/tmdb.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.themoviedb.org/reference/intro/getting-started"
+  },
+  {
+    "connector": "source-todoist",
+    "id": "todoist",
+    "path": "icons/todoist.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.todoist.com/rest/v2/"
+  },
+  {
+    "connector": "source-toggl",
+    "id": "toggl",
+    "path": "icons/toggl.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.track.toggl.com/docs/"
+  },
+  {
+    "connector": "source-tplcentral",
+    "id": "tplcentral",
+    "path": "icons/tplcentral.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api.3plcentral.com/"
+  },
+  {
+    "connector": "source-track-pms",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-trello",
+    "id": "trello",
+    "path": "icons/trello.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.atlassian.com/cloud/trello/rest/"
+  },
+  {
+    "connector": "source-tremendous",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-trustpilot",
+    "id": "trustpilot",
+    "path": "icons/trustpilot.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.trustpilot.com/"
+  },
+  {
+    "connector": "source-tvmaze-schedule",
+    "id": "tvmazeschedule",
+    "path": "icons/tvmazeschedule.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.tvmaze.com/api"
+  },
+  {
+    "connector": "source-twelve-data",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-twilio",
+    "id": "twilio",
+    "path": "icons/twilio.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.twilio.com/docs/usage/api"
+  },
+  {
+    "connector": "source-twilio-taskrouter",
+    "id": "twilio",
+    "path": "icons/twilio.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.twilio.com/docs/taskrouter/api"
+  },
+  {
+    "connector": "source-twitter",
+    "id": "twitter",
+    "path": "icons/twitter.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.twitter.com/en/docs/twitter-api"
+  },
+  {
+    "connector": "source-tyntec-sms",
+    "id": "tyntec",
+    "path": "icons/tyntec.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://api.tyntec.com/reference/messaging"
+  },
+  {
+    "connector": "source-typeform",
+    "id": "typeform",
+    "path": "icons/typeform.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.typeform.com/developers/changelog/"
+  },
+  {
+    "connector": "source-ubidots",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-unleash",
+    "id": "unleash",
+    "path": "icons/unleash.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.getunleash.io/reference/api/unleash"
+  },
+  {
+    "connector": "source-uppromote",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-uptick",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-us-census",
+    "id": "uscensus",
+    "path": "icons/uscensus.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.census.gov/data/developers/data-sets.html"
+  },
+  {
+    "connector": "source-uservoice",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-vantage",
+    "id": "vantage",
+    "path": "icons/vantage.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.vantage.sh/"
+  },
+  {
+    "connector": "source-veeqo",
+    "id": "veeqo",
+    "path": "icons/veeqo.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://developers.veeqo.com/"
+  },
+  {
+    "connector": "source-vercel",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-visma-economic",
+    "id": "visma-economic",
+    "path": "icons/visma-economic.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://restdocs.e-conomic.com/"
+  },
+  {
+    "connector": "source-vitally",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-vwo",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-waiteraid",
+    "id": "waiteraid",
+    "path": "icons/waiteraid.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://waiteraid.com/api"
+  },
+  {
+    "connector": "source-wasabi-stats-api",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-watchmode",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-weatherstack",
+    "id": "weatherstack",
+    "path": "icons/weatherstack.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://weatherstack.com/documentation"
+  },
+  {
+    "connector": "source-web-scrapper",
+    "id": "web-scraper",
+    "path": "icons/web-scraper.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://webscraper.io/documentation/api"
+  },
+  {
+    "connector": "source-webflow",
+    "id": "webflow",
+    "path": "icons/webflow.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.webflow.com/data/reference"
+  },
+  {
+    "connector": "source-when-i-work",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-whisky-hunter",
+    "id": "whiskyhunter",
+    "path": "icons/whiskyhunter.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://whiskyhunter.net/api/"
+  },
+  {
+    "connector": "source-wikipedia-pageviews",
+    "id": "wikipedia-pageviews",
+    "path": "icons/wikipedia-pageviews.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews"
+  },
+  {
+    "connector": "source-woocommerce",
+    "id": "woocommerce",
+    "path": "icons/woocommerce.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+  },
+  {
+    "connector": "source-wordpress",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-workable",
+    "id": "workable",
+    "path": "icons/workable.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://workable.readme.io/reference"
+  },
+  {
+    "connector": "source-workday",
+    "id": "workday",
+    "path": "icons/workday.svg",
+    "source": "official",
+    "review_status": "official_verified",
+    "review_url": "https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html"
+  },
+  {
+    "connector": "source-workday-rest",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-workflowmax",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-workramp",
+    "id": "workramp",
+    "path": "icons/workramp.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.workramp.com/"
+  },
+  {
+    "connector": "source-wrike",
+    "id": "wrike",
+    "path": "icons/wrike.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.wrike.com/api/v4/"
+  },
+  {
+    "connector": "source-wufoo",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-xero",
+    "id": "xero",
+    "path": "icons/xero.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.xero.com/documentation/"
+  },
+  {
+    "connector": "source-xkcd",
+    "id": "xkcd",
+    "path": "icons/xkcd.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://xkcd.com/json.html"
+  },
+  {
+    "connector": "source-xsolla",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-yahoo-finance-price",
+    "id": "yahoo-finance-price",
+    "path": "icons/yahoo-finance-price.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.yahoofinanceapi.com/"
+  },
+  {
+    "connector": "source-yandex-metrica",
+    "id": "yandexmetrica",
+    "path": "icons/yandexmetrica.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://yandex.com/dev/metrica/"
+  },
+  {
+    "connector": "source-yotpo",
+    "id": "yotpo",
+    "path": "icons/yotpo.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://apidocs.yotpo.com/reference"
+  },
+  {
+    "connector": "source-you-need-a-budget-ynab",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-younium",
+    "id": "younium",
+    "path": "icons/younium.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.younium.com/"
+  },
+  {
+    "connector": "source-yousign",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-youtube-analytics",
+    "id": "youtube-analytics",
+    "path": "icons/youtube-analytics.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.google.com/youtube/analytics"
+  },
+  {
+    "connector": "source-youtube-data",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zapier-supported-storage",
+    "id": "zapiersupportedstorage",
+    "path": "icons/zapiersupportedstorage.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://help.zapier.com/hc/en-us/articles/8496293271053-Save-and-retrieve-data-from-Zaps"
+  },
+  {
+    "connector": "source-zapsign",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zendesk-chat",
+    "id": "zendesk-chat",
+    "path": "icons/zendesk-chat.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://support.zendesk.com/hc/en-us/sections/4405298889242-Developer-updates"
+  },
+  {
+    "connector": "source-zendesk-sunshine",
+    "id": "zendesk-sunshine",
+    "path": "icons/zendesk-sunshine.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/"
+  },
+  {
+    "connector": "source-zendesk-support",
+    "id": "zendesk-support",
+    "path": "icons/zendesk-support.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developer.zendesk.com/api-reference/ticketing/introduction/"
+  },
+  {
+    "connector": "source-zendesk-talk",
+    "id": "zendesk-talk",
+    "path": "icons/zendesk-talk.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://support.zendesk.com/hc/en-us/sections/4405298889242-Developer-updates"
+  },
+  {
+    "connector": "source-zenefits",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zenloop",
+    "id": "zenloop",
+    "path": "icons/zenloop.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://docs.zenloop.com/reference"
+  },
+  {
+    "connector": "source-zoho-analytics-metadata-api",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zoho-bigin",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zoho-billing",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zoho-books",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zoho-campaign",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zoho-crm",
+    "id": "zohocrm",
+    "path": "icons/zohocrm.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://www.zoho.com/crm/developer/docs/api/v6/"
+  },
+  {
+    "connector": "source-zoho-desk",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zoho-expense",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zoho-inventory",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zoho-invoice",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zonka-feedback",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics"
+  },
+  {
+    "connector": "source-zoom",
+    "id": "zoom",
+    "path": "icons/zoom.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://developers.zoom.us/docs/api/"
+  },
+  {
+    "connector": "warehouse",
+    "id": "pm-warehouse",
+    "path": "icons/pm-warehouse.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics",
+    "review_url": "https://github.com/karthik-sivadas/polymetrics-cli"
+  }
+]

@@ -7,7 +7,13 @@ description: Elasticemail connector knowledge and safe action guide.
 
 ## Purpose
 
-Elasticemail catalog connector for https://docs.airbyte.com/integrations/sources/elasticemail. Native implementation status: planned_native_port.
+Elasticemail catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Elasticemail catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-elasticemail:0.0.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Elasticemail catalog connector for https://docs.airbyte.com/integrations/sources
 - Elastic Email API reference: https://elasticemail.com/developers/api-documentation/
 - Elastic Email authentication: https://elasticemail.com/developers/api-documentation/authentication
 - Elastic Email rate limits: https://elasticemail.com/developers/api-documentation/rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/elasticemail
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Elasticemail catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/elasticemail
 
 ## Commands
 
@@ -95,4 +95,6 @@ pm connectors inspect source-elasticemail --json
 
 ## References
 
-- [Elasticemail documentation](https://docs.airbyte.com/integrations/sources/elasticemail)
+- [Elastic Email API reference](https://elasticemail.com/developers/api-documentation/)
+- [Elastic Email authentication](https://elasticemail.com/developers/api-documentation/authentication)
+- [Elastic Email rate limits](https://elasticemail.com/developers/api-documentation/rate-limiting)

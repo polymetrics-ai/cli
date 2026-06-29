@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-genesys [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Genesys catalog connector for https://docs.airbyte.com/integrations/sources/genesys. Native implementation status: planned_native_port.
+  Genesys catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/genesys.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.genesys.cloud/api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-genesys:0.1.41 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Genesys authentication: https://developer.genesys.cloud/authorization/
   Genesys rate limits: https://developer.genesys.cloud/api/rest/rate_limits
   Genesys Cloud Status: https://status.mypurecloud.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/genesys
 
 CONFIGURATION
   client_id (string) required secret: Your OAuth user Client ID
@@ -62,11 +66,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/genesys
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +82,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Genesys documentation: https://docs.airbyte.com/integrations/sources/genesys
+  Genesys Cloud API reference: https://developer.genesys.cloud/api/
+  Genesys authentication: https://developer.genesys.cloud/authorization/
+  Genesys rate limits: https://developer.genesys.cloud/api/rest/rate_limits
+  Genesys Cloud Status: https://status.mypurecloud.com/
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-microsoft-sharepoint [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Microsoft SharePoint catalog connector for https://docs.airbyte.com/integrations/sources/microsoft-sharepoint. Native implementation status: planned_native_port.
+  Microsoft SharePoint catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/microsoft-sharepoint.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/get-to-know-the-sharepoint-rest-service
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: file_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-microsoft-sharepoint:0.10.4 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   SharePoint REST API: https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/get-to-know-the-sharepoint-rest-service
   SharePoint authentication: https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/authorization-and-authentication-of-sharepoint-add-ins
   Microsoft 365 Status: https://status.office365.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/microsoft-sharepoint
 
 CONFIGURATION
   credentials (object) required: Credentials for connecting to the One Drive API
@@ -55,7 +59,7 @@ CONFIGURATION
   search_scope (string): Specifies the location(s) to search for files. Valid options are 'ACCESSIBLE_DRIVES' for all SharePoint drives the user can access, 'SHARED_ITEMS' for shared items the user has ...
   site_url (string): Url of SharePoint site to search for files. Leave empty to search in the main site. Use 'https://<tenant_name>.sharepoint.com/sites/' to iterate over all sites.
   start_date (string): UTC date and time in the format 2017-01-25T00:00:00.000000Z. Any file modified before this date will not be replicated.
-  streams (array) required: Each instance of this configuration defines a <a href="https://docs.airbyte.com/cloud/core-concepts#stream">stream</a>. Use this to define which files belong in the stream, thei...
+  streams (array) required: manual intervention needed
   secret fields: credentials.client_id, credentials.client_secret, credentials.refresh_token, credentials.tenant_id, credentials.user_principal_name
 
 SYNC MODES
@@ -64,11 +68,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/microsoft-sharepoint
 
 EXAMPLES
   # Inspect catalog entry
@@ -83,7 +84,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Microsoft SharePoint documentation: https://docs.airbyte.com/integrations/sources/microsoft-sharepoint
+  SharePoint REST API: https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/get-to-know-the-sharepoint-rest-service
+  SharePoint authentication: https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/authorization-and-authentication-of-sharepoint-add-ins
+  Microsoft 365 Status: https://status.office365.com/
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-sap-fieldglass [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  SAP Fieldglass catalog connector for https://docs.airbyte.com/integrations/sources/sap-fieldglass. Native implementation status: planned_native_port.
+  SAP Fieldglass catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/sapfieldglass.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://api.sap.com/package/SAPFieldglass/rest
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-sap-fieldglass:0.2.39 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   SAP Fieldglass API: https://api.sap.com/package/SAPFieldglass/rest
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sap-fieldglass
 
 CONFIGURATION
   api_key (string) required secret: API Key
@@ -56,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/sap-fieldglass
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  SAP Fieldglass documentation: https://docs.airbyte.com/integrations/sources/sap-fieldglass
+  SAP Fieldglass API: https://api.sap.com/package/SAPFieldglass/rest
 
 EXIT STATUS
   0 success

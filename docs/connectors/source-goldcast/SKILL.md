@@ -7,7 +7,14 @@ description: Goldcast connector knowledge and safe action guide.
 
 ## Purpose
 
-Goldcast catalog connector for https://docs.airbyte.com/integrations/sources/goldcast. Native implementation status: planned_native_port.
+Goldcast catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/goldcast.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.goldcast.io/api-docs
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Goldcast catalog connector for https://docs.airbyte.com/integrations/sources/gol
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-goldcast:0.2.25 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +52,6 @@ Goldcast catalog connector for https://docs.airbyte.com/integrations/sources/gol
 ## Official Application Documentation
 
 - Goldcast API documentation: https://www.goldcast.io/api-docs
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/goldcast
 
 ## Configuration
 
@@ -61,12 +66,8 @@ Goldcast catalog connector for https://docs.airbyte.com/integrations/sources/gol
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/goldcast
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-goldcast --json
 
 ## References
 
-- [Goldcast documentation](https://docs.airbyte.com/integrations/sources/goldcast)
+- [Goldcast API documentation](https://www.goldcast.io/api-docs)

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-eventzilla [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Eventzilla catalog connector for https://docs.airbyte.com/integrations/sources/eventzilla. Native implementation status: planned_native_port.
+  Eventzilla catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/eventzilla.svg
+  source: official
+  review_status: official_verified
+  review_url: https://www.eventzilla.net/api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-eventzilla:0.0.51 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,9 +48,7 @@ NATIVE PORT PLAN
   conformance: authenticator, catalog, check, docs_skill, pagination, rate_limit_retry, read_fixture, schema_mapping, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  Eventzilla API documentation: https://www.eventzilla.net/api/
-  Eventzilla authentication: https://www.eventzilla.net/api/#authentication
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/eventzilla
+  Eventzilla documentation: https://www.eventzilla.net/api/
 
 CONFIGURATION
   x-api-key (string) required secret: API key to use. Generate it by creating a new application within your Eventzilla account settings under Settings > App Management.
@@ -57,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/eventzilla
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Eventzilla documentation: https://docs.airbyte.com/integrations/sources/eventzilla
+  Eventzilla documentation: https://www.eventzilla.net/api/
 
 EXIT STATUS
   0 success

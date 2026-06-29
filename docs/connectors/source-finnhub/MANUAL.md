@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-finnhub [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Finnhub catalog connector for https://docs.airbyte.com/integrations/sources/finnhub. Native implementation status: planned_native_port.
+  Finnhub catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-finnhub:0.0.51 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Finnhub API documentation: https://finnhub.io/docs/api
   Finnhub authentication: https://finnhub.io/docs/api/authentication
   Finnhub rate limits: https://finnhub.io/pricing
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/finnhub
 
 CONFIGURATION
   api_key (string) required secret: The API key to use for authentication
@@ -62,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/finnhub
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +81,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Finnhub documentation: https://docs.airbyte.com/integrations/sources/finnhub
+  Finnhub API documentation: https://finnhub.io/docs/api
+  Finnhub authentication: https://finnhub.io/docs/api/authentication
+  Finnhub rate limits: https://finnhub.io/pricing
 
 EXIT STATUS
   0 success

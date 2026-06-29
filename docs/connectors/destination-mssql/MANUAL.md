@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector destination-mssql [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  MS SQL Server catalog connector for https://docs.airbyte.com/integrations/destinations/mssql. Native implementation status: planned_native_port.
+  MS SQL Server catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-warehouse.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-mssql:2.2.17 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Authentication and authorization: https://learn.microsoft.com/en-us/sql/relational-databases/security/authentication-access/getting-started-with-database-engine-permissions
   Permissions: https://learn.microsoft.com/en-us/sql/relational-databases/security/permissions-database-engine
   SQL Server 2022 release notes: https://learn.microsoft.com/en-us/sql/sql-server/sql-server-2022-release-notes
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/mssql
 
 CONFIGURATION
   database (string) required: The name of the MSSQL database.
@@ -69,11 +72,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/mssql
 
 EXAMPLES
   # Inspect catalog entry
@@ -88,7 +88,11 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  MS SQL Server documentation: https://docs.airbyte.com/integrations/destinations/mssql
+  SQL Server documentation: https://learn.microsoft.com/en-us/sql/sql-server/
+  Transact-SQL reference: https://learn.microsoft.com/en-us/sql/t-sql/language-reference
+  Authentication and authorization: https://learn.microsoft.com/en-us/sql/relational-databases/security/authentication-access/getting-started-with-database-engine-permissions
+  Permissions: https://learn.microsoft.com/en-us/sql/relational-databases/security/permissions-database-engine
+  SQL Server 2022 release notes: https://learn.microsoft.com/en-us/sql/sql-server/sql-server-2022-release-notes
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-pokeapi [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  PokeAPI catalog connector for https://docs.airbyte.com/integrations/sources/pokeapi. Native implementation status: planned_native_port.
+  PokeAPI catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pokeapi.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://pokeapi.co/docs/v2
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-pokeapi:0.3.58 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   PokéAPI documentation: https://pokeapi.co/docs/v2
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pokeapi
 
 CONFIGURATION
   pokemon_name (string) required: Pokemon requested from the API.
@@ -55,11 +59,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/pokeapi
 
 EXAMPLES
   # Inspect catalog entry
@@ -74,7 +75,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  PokeAPI documentation: https://docs.airbyte.com/integrations/sources/pokeapi
+  PokéAPI documentation: https://pokeapi.co/docs/v2
 
 EXIT STATUS
   0 success

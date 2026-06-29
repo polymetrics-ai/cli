@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-amplitude [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Amplitude catalog connector for https://docs.airbyte.com/integrations/sources/amplitude. Native implementation status: planned_native_port.
+  Amplitude catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/amplitude.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-amplitude:0.7.32 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,14 +51,13 @@ OFFICIAL APPLICATION DOCUMENTATION
   Analytics API: https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/
   Authentication: https://www.docs.developers.amplitude.com/analytics/apis/authentication/
   Rate limits: https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/#rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/amplitude
 
 CONFIGURATION
   active_users_group_by_country (boolean): According to <a href="https://amplitude.com/docs/apis/analytics/dashboard-rest#query-parameters">Amplitude documentation</a>, grouping by `Country` is optional. If you face issu...
-  api_key (string) required secret: Amplitude API Key. See the <a href="https://docs.airbyte.com/integrations/sources/amplitude#setup-guide">setup guide</a> for more information on how to obtain this key.
+  api_key (string) required secret: manual intervention needed
   data_region (string): Amplitude data region server
   request_time_range (integer): According to <a href="https://www.docs.developers.amplitude.com/analytics/apis/export-api/#considerations">Considerations</a> too large of a time range in te request can cause a...
-  secret_key (string) required secret: Amplitude Secret Key. See the <a href="https://docs.airbyte.com/integrations/sources/amplitude#setup-guide">setup guide</a> for more information on how to obtain this key.
+  secret_key (string) required secret: manual intervention needed
   start_date (string) required: UTC date and time in the format 2021-01-25T00:00:00Z. Any data before this date will not be replicated.
   secret fields: api_key, secret_key
 
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/amplitude
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Amplitude documentation: https://docs.airbyte.com/integrations/sources/amplitude
+  Analytics API: https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/
+  Authentication: https://www.docs.developers.amplitude.com/analytics/apis/authentication/
+  Rate limits: https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/#rate-limits
 
 EXIT STATUS
   0 success

@@ -12,6 +12,12 @@ SYNOPSIS
 DESCRIPTION
   Built-in deterministic source connector for local development and tests.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+  review_url: https://github.com/karthik-sivadas/polymetrics-cli
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api

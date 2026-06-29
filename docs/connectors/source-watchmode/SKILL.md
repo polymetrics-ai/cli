@@ -7,7 +7,13 @@ description: Watchmode connector knowledge and safe action guide.
 
 ## Purpose
 
-Watchmode catalog connector for https://docs.airbyte.com/integrations/sources/watchmode. Native implementation status: planned_native_port.
+Watchmode catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Watchmode catalog connector for https://docs.airbyte.com/integrations/sources/wa
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-watchmode:0.0.39 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Watchmode catalog connector for https://docs.airbyte.com/integrations/sources/wa
 ## Official Application Documentation
 
 - Watchmode API documentation: https://api.watchmode.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/watchmode
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Watchmode catalog connector for https://docs.airbyte.com/integrations/sources/wa
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/watchmode
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-watchmode --json
 
 ## References
 
-- [Watchmode documentation](https://docs.airbyte.com/integrations/sources/watchmode)
+- [Watchmode API documentation](https://api.watchmode.com/)

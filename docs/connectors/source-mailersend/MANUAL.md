@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-mailersend [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  MailerSend catalog connector for https://docs.airbyte.com/integrations/sources/mailersend. Native implementation status: planned_native_port.
+  MailerSend catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/mailersend.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.mailersend.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-mailersend:0.2.25 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   MailerSend API reference: https://developers.mailersend.com/
   MailerSend authentication: https://developers.mailersend.com/#authentication
   MailerSend rate limits: https://developers.mailersend.com/#rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mailersend
 
 CONFIGURATION
   api_token (string) required secret: Your API Token. See <a href="https://www.mailersend.com/help/managing-api-tokens">here</a>.
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/mailersend
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  MailerSend documentation: https://docs.airbyte.com/integrations/sources/mailersend
+  MailerSend API reference: https://developers.mailersend.com/
+  MailerSend authentication: https://developers.mailersend.com/#authentication
+  MailerSend rate limits: https://developers.mailersend.com/#rate-limits
 
 EXIT STATUS
   0 success

@@ -7,7 +7,13 @@ description: Pocket connector knowledge and safe action guide.
 
 ## Purpose
 
-Pocket catalog connector for https://docs.airbyte.com/integrations/sources/pocket. Native implementation status: planned_native_port.
+Pocket catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pocket.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Pocket catalog connector for https://docs.airbyte.com/integrations/sources/pocke
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-pocket:0.2.37 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Pocket catalog connector for https://docs.airbyte.com/integrations/sources/pocke
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pocket
+- manual intervention needed
 
 ## Configuration
 
@@ -71,12 +75,8 @@ Pocket catalog connector for https://docs.airbyte.com/integrations/sources/pocke
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/pocket
 
 ## Commands
 
@@ -97,7 +97,3 @@ pm connectors inspect source-pocket --json
 - Read implementation_status before planning ETL or reverse ETL.
 - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
 - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-## References
-
-- [Pocket documentation](https://docs.airbyte.com/integrations/sources/pocket)

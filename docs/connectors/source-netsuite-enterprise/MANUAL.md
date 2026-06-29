@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-netsuite-enterprise [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Netsuite Enterprise Source catalog connector for https://docs.airbyte.com/integrations/enterprise-connectors/source-netsuite-enterprise. Native implementation status: planned_native_port.
+  Netsuite Enterprise Source catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/netsuite.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N3865324.html
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: database_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-netsuite-enterprise:0.2.7 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Connect schema: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158695828012.html
   Query Language Compliance - SQL Compliance: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3903316302.html#subsect_163595195498
   NetSuite Release Notes: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N3865324.html
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/enterprise-connectors/source-netsuite-enterprise
 
 CONFIGURATION
   account_id (string) required: The username which is used to access the database.
@@ -70,11 +74,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/enterprise-connectors/source-netsuite-enterprise
 
 EXAMPLES
   # Inspect catalog entry
@@ -89,7 +90,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Netsuite Enterprise Source documentation: https://docs.airbyte.com/integrations/enterprise-connectors/source-netsuite-enterprise
+  Accessing the Connect Service Using a JDBC Driver: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3994742720.html
+  Connect schema: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158695828012.html
+  Query Language Compliance - SQL Compliance: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3903316302.html#subsect_163595195498
+  NetSuite Release Notes: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N3865324.html
 
 EXIT STATUS
   0 success

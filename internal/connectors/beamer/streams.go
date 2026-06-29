@@ -7,7 +7,7 @@ import "polymetrics.ai/internal/connectors"
 // request-parameter name (Beamer filters incremental streams by dateFrom), and
 // the record mapper that flattens its objects.
 //
-// Beamer list endpoints return a bare JSON array of objects (the Airbyte
+// Beamer list endpoints return a bare JSON array of objects (the upstream
 // manifest's record selector is the root: field_path: []), so recordsKey is ""
 // for the root path across the board.
 type streamEndpoint struct {
@@ -27,7 +27,7 @@ type streamEndpoint struct {
 // adding one entry here plus a Stream definition in beamerStreams; the read path
 // is fully data-driven from this table.
 //
-// The nps stream is the one verified by the upstream Airbyte source-beamer
+// The nps stream is the one verified by the upstream upstream source-beamer
 // manifest (cursor field "date", filtered via dateFrom/dateTo). posts,
 // feature-requests, and comments are the other core Beamer REST resources, all
 // served as root arrays under the same /v0 base with the same page/maxResults
@@ -73,7 +73,7 @@ func beamerStreams() []connectors.Stream {
 	}
 }
 
-// beamerNPSFields mirrors the schema published by the upstream Airbyte
+// beamerNPSFields mirrors the schema published by the upstream upstream
 // source-beamer manifest.
 func beamerNPSFields() []connectors.Field {
 	return []connectors.Field{

@@ -7,7 +7,13 @@ description: Fastly connector knowledge and safe action guide.
 
 ## Purpose
 
-Fastly catalog connector for https://docs.airbyte.com/integrations/sources/fastly. Native implementation status: planned_native_port.
+Fastly catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Fastly catalog connector for https://docs.airbyte.com/integrations/sources/fastl
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-fastly:0.0.37 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Fastly catalog connector for https://docs.airbyte.com/integrations/sources/fastl
 - Fastly API authentication: https://developer.fastly.com/reference/api/#authentication
 - Fastly API rate limits: https://developer.fastly.com/reference/api/#rate-limiting
 - Fastly Status: https://status.fastly.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/fastly
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Fastly catalog connector for https://docs.airbyte.com/integrations/sources/fastl
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/fastly
 
 ## Commands
 
@@ -94,4 +94,7 @@ pm connectors inspect source-fastly --json
 
 ## References
 
-- [Fastly documentation](https://docs.airbyte.com/integrations/sources/fastly)
+- [Fastly API reference](https://developer.fastly.com/reference/api/)
+- [Fastly API authentication](https://developer.fastly.com/reference/api/#authentication)
+- [Fastly API rate limits](https://developer.fastly.com/reference/api/#rate-limiting)
+- [Fastly Status](https://status.fastly.com/)

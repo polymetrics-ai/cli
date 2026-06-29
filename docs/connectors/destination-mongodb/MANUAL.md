@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector destination-mongodb [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  MongoDB catalog connector for https://docs.airbyte.com/integrations/destinations/mongodb. Native implementation status: planned_native_port.
+  MongoDB catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/mongodb.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.mongodb.com/docs/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: destination_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/destination-mongodb:0.2.0 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -48,7 +53,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Role-based access control: https://www.mongodb.com/docs/manual/core/authorization/
   Release Notes: https://www.mongodb.com/docs/manual/release-notes/
   MongoDB Status: https://status.mongodb.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/mongodb
 
 CONFIGURATION
   auth_type (object) required: Authorization type.
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/destinations/mongodb
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,11 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  MongoDB documentation: https://docs.airbyte.com/integrations/destinations/mongodb
+  MongoDB documentation: https://www.mongodb.com/docs/
+  Authentication: https://www.mongodb.com/docs/manual/core/authentication/
+  Role-based access control: https://www.mongodb.com/docs/manual/core/authorization/
+  Release Notes: https://www.mongodb.com/docs/manual/release-notes/
+  MongoDB Status: https://status.mongodb.com/
 
 EXIT STATUS
   0 success

@@ -37,10 +37,21 @@ type GuideProvider interface {
 }
 
 func GuideOf(c Connector) ConnectorGuide {
+	manifest := ManifestOf(c)
 	if provider, ok := c.(GuideProvider); ok {
-		return provider.Guide()
+		return guideWithIcon(provider.Guide(), manifest)
 	}
-	return guideFromManifest(ManifestOf(c))
+	return guideWithIcon(guideFromManifest(manifest), manifest)
+}
+
+func guideWithIcon(guide ConnectorGuide, manifest Manifest) ConnectorGuide {
+	for _, section := range guide.Sections {
+		if strings.EqualFold(section.Title, "icon") {
+			return guide
+		}
+	}
+	guide.Sections = append([]GuideSection{iconSection(manifest)}, guide.Sections...)
+	return guide
 }
 
 func RenderConnectorManual(c Connector) string {
@@ -60,8 +71,11 @@ func ValidateConnectorGuide(c Connector) error {
 	if strings.TrimSpace(guide.Summary) == "" {
 		return fmt.Errorf("connector %q guide missing summary", c.Name())
 	}
+	if manifest.Metadata.Icon == nil {
+		return fmt.Errorf("connector %q guide missing icon metadata", c.Name())
+	}
 	manual := RenderGuideManual(guide)
-	for _, required := range []string{"NAME", "SYNOPSIS", "DESCRIPTION", "CAPABILITIES", "CONFIGURATION", "SECURITY", "AGENT WORKFLOW"} {
+	for _, required := range []string{"NAME", "SYNOPSIS", "DESCRIPTION", "ICON", "CAPABILITIES", "CONFIGURATION", "SECURITY", "AGENT WORKFLOW"} {
 		if !strings.Contains(manual, required) {
 			return fmt.Errorf("connector %q guide missing section %s", c.Name(), required)
 		}
@@ -198,11 +212,12 @@ func RenderGuideSkill(guide ConnectorGuide) string {
 			b.WriteString("- [" + link.Label + "](" + link.URL + ")\n")
 		}
 	}
-	return b.String()
+	return strings.TrimRight(b.String(), "\n") + "\n"
 }
 
 func guideFromManifest(manifest Manifest) ConnectorGuide {
 	sections := []GuideSection{
+		iconSection(manifest),
 		capabilitySection(manifest),
 		authSection(manifest),
 		configSection(manifest),
@@ -229,6 +244,22 @@ func capabilitySection(manifest Manifest) GuideSection {
 		"Integration type: " + manifest.Metadata.IntegrationType,
 	}
 	return GuideSection{Title: "Capabilities", Lines: lines}
+}
+
+func iconSection(manifest Manifest) GuideSection {
+	icon := manifest.Metadata.Icon
+	if icon == nil {
+		return GuideSection{Title: "Icon", Lines: []string{"No icon metadata is registered for this connector."}}
+	}
+	lines := []string{
+		"asset: " + icon.Path,
+		"source: " + icon.Source,
+		"review_status: " + icon.ReviewStatus,
+	}
+	if icon.ReviewURL != "" {
+		lines = append(lines, "review_url: "+icon.ReviewURL)
+	}
+	return GuideSection{Title: "Icon", Lines: lines}
 }
 
 func authSection(manifest Manifest) GuideSection {

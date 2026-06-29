@@ -7,7 +7,14 @@ description: Grafana connector knowledge and safe action guide.
 
 ## Purpose
 
-Grafana catalog connector for https://docs.airbyte.com/integrations/sources/grafana. Native implementation status: planned_native_port.
+Grafana catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/grafana.svg
+- source: official
+- review_status: official_verified
+- review_url: https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Grafana catalog connector for https://docs.airbyte.com/integrations/sources/graf
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-grafana:0.0.12 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Grafana catalog connector for https://docs.airbyte.com/integrations/sources/graf
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/grafana
+- Grafana documentation: https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Grafana catalog connector for https://docs.airbyte.com/integrations/sources/graf
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/grafana
 
 ## Commands
 
@@ -91,4 +92,4 @@ pm connectors inspect source-grafana --json
 
 ## References
 
-- [Grafana documentation](https://docs.airbyte.com/integrations/sources/grafana)
+- [Grafana documentation](https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/)

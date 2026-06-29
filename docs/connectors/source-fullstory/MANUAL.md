@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-fullstory [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Fullstory catalog connector for https://docs.airbyte.com/integrations/sources/fullstory. Native implementation status: planned_native_port.
+  Fullstory catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/fullstory.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.fullstory.com/reference
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-fullstory:0.2.23 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   FullStory API reference: https://developer.fullstory.com/reference
   FullStory authentication: https://developer.fullstory.com/introduction
   FullStory Status: https://status.fullstory.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/fullstory
 
 CONFIGURATION
   api_key (string) required secret: API Key for the fullstory.com API.
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/fullstory
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Fullstory documentation: https://docs.airbyte.com/integrations/sources/fullstory
+  FullStory API reference: https://developer.fullstory.com/reference
+  FullStory authentication: https://developer.fullstory.com/introduction
+  FullStory Status: https://status.fullstory.com/
 
 EXIT STATUS
   0 success

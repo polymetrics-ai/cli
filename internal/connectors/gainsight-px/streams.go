@@ -20,7 +20,7 @@ type streamEndpoint struct {
 // adding one entry here plus a Stream definition in gainsightStreams; the read
 // path is fully data-driven from this table.
 //
-// Endpoints, record keys, and primary keys come from the Airbyte
+// Endpoints, record keys, and primary keys come from the upstream
 // source-gainsight-px declarative manifest (api.aptrinsic.com/v1).
 var gainsightStreamEndpoints = map[string]streamEndpoint{
 	"accounts": {resource: "accounts", recordsKey: "accounts", mapRecord: gainsightAccountRecord},

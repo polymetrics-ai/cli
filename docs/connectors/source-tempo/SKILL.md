@@ -7,7 +7,14 @@ description: Tempo connector knowledge and safe action guide.
 
 ## Purpose
 
-Tempo catalog connector for https://docs.airbyte.com/integrations/sources/tempo. Native implementation status: planned_native_port.
+Tempo catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/tempo.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://apidocs.tempo.io/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Tempo catalog connector for https://docs.airbyte.com/integrations/sources/tempo.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-tempo:0.4.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Tempo catalog connector for https://docs.airbyte.com/integrations/sources/tempo.
 
 - Tempo Timesheets API: https://apidocs.tempo.io/
 - Tempo authentication: https://apidocs.tempo.io/#section/Authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/tempo
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Tempo catalog connector for https://docs.airbyte.com/integrations/sources/tempo.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/tempo
 
 ## Commands
 
@@ -91,4 +92,5 @@ pm connectors inspect source-tempo --json
 
 ## References
 
-- [Tempo documentation](https://docs.airbyte.com/integrations/sources/tempo)
+- [Tempo Timesheets API](https://apidocs.tempo.io/)
+- [Tempo authentication](https://apidocs.tempo.io/#section/Authentication)

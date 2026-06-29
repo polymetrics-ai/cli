@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-primetric [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Primetric catalog connector for https://docs.airbyte.com/integrations/sources/primetric. Native implementation status: planned_native_port.
+  Primetric catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/primetric.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.primetric.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-primetric:1.1.39 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Primetric API documentation: https://developer.primetric.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/primetric
 
 CONFIGURATION
   client_id (string) required secret: The Client ID of your Primetric developer application. The Client ID is visible <a href=\"https://app.primetric.com/administrator/integrations">here</a>.
@@ -57,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/primetric
 
 EXAMPLES
   # Inspect catalog entry
@@ -76,7 +77,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Primetric documentation: https://docs.airbyte.com/integrations/sources/primetric
+  Primetric API documentation: https://developer.primetric.com/
 
 EXIT STATUS
   0 success

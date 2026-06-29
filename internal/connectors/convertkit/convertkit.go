@@ -8,7 +8,7 @@
 // each resource under a JSON key named after the resource (subscribers[],
 // forms[], ...), and paginates the large collections (subscribers, broadcasts)
 // with a "page" query param plus a "total_pages" field in the response body. The
-// connector is read-only: the upstream Airbyte source supports full-refresh only
+// connector is read-only: the upstream upstream source supports full-refresh only
 // and there are no safe reverse-ETL writes to expose.
 //
 // Like stripe, it self-registers with the connectors registry via RegisterFactory

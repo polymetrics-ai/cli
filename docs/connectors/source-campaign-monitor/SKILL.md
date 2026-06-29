@@ -7,7 +7,13 @@ description: Campaign Monitor connector knowledge and safe action guide.
 
 ## Purpose
 
-Campaign Monitor catalog connector for https://docs.airbyte.com/integrations/sources/campaign-monitor. Native implementation status: planned_native_port.
+Campaign Monitor catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Campaign Monitor catalog connector for https://docs.airbyte.com/integrations/sou
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-campaign-monitor:0.0.48 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Campaign Monitor catalog connector for https://docs.airbyte.com/integrations/sou
 - Campaign Monitor API reference: https://www.campaignmonitor.com/api/
 - Campaign Monitor authentication: https://www.campaignmonitor.com/api/getting-started/#authenticating
 - Campaign Monitor rate limits: https://www.campaignmonitor.com/api/getting-started/#rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/campaign-monitor
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Campaign Monitor catalog connector for https://docs.airbyte.com/integrations/sou
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/campaign-monitor
 
 ## Commands
 
@@ -94,4 +94,6 @@ pm connectors inspect source-campaign-monitor --json
 
 ## References
 
-- [Campaign Monitor documentation](https://docs.airbyte.com/integrations/sources/campaign-monitor)
+- [Campaign Monitor API reference](https://www.campaignmonitor.com/api/)
+- [Campaign Monitor authentication](https://www.campaignmonitor.com/api/getting-started/#authenticating)
+- [Campaign Monitor rate limits](https://www.campaignmonitor.com/api/getting-started/#rate-limiting)

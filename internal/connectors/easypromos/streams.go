@@ -20,7 +20,7 @@ type streamEndpoint struct {
 //
 // promotions and organizing_brands are account-level lists. The remaining streams
 // are scoped to a single promotion: their path embeds the promotion_id (taken
-// from config), mirroring the upstream Airbyte connector's SubstreamPartitionRouter.
+// from config), mirroring the upstream upstream connector's SubstreamPartitionRouter.
 var easypromosStreamEndpoints = map[string]streamEndpoint{
 	"promotions":        {resource: "promotions", mapRecord: easypromosPromotionRecord},
 	"organizing_brands": {resource: "organizing_brands", mapRecord: easypromosOrganizingBrandRecord},

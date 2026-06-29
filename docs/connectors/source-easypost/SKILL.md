@@ -7,7 +7,13 @@ description: Easypost connector knowledge and safe action guide.
 
 ## Purpose
 
-Easypost catalog connector for https://docs.airbyte.com/integrations/sources/easypost. Native implementation status: planned_native_port.
+Easypost catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Easypost catalog connector for https://docs.airbyte.com/integrations/sources/eas
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-easypost:0.0.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Easypost catalog connector for https://docs.airbyte.com/integrations/sources/eas
 - EasyPost authentication: https://www.easypost.com/docs/api#authentication
 - EasyPost rate limits: https://www.easypost.com/docs/api#rate-limiting
 - EasyPost Status: https://status.easypost.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/easypost
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Easypost catalog connector for https://docs.airbyte.com/integrations/sources/eas
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/easypost
 
 ## Commands
 
@@ -94,4 +94,7 @@ pm connectors inspect source-easypost --json
 
 ## References
 
-- [Easypost documentation](https://docs.airbyte.com/integrations/sources/easypost)
+- [EasyPost API reference](https://www.easypost.com/docs/api)
+- [EasyPost authentication](https://www.easypost.com/docs/api#authentication)
+- [EasyPost rate limits](https://www.easypost.com/docs/api#rate-limiting)
+- [EasyPost Status](https://status.easypost.com/)

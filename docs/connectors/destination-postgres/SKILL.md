@@ -7,7 +7,14 @@ description: Postgres connector knowledge and safe action guide.
 
 ## Purpose
 
-Postgres catalog connector for https://docs.airbyte.com/integrations/destinations/postgres. Native implementation status: planned_native_port.
+Postgres catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/postgresql.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.postgresql.org/docs/current/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Postgres catalog connector for https://docs.airbyte.com/integrations/destination
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-postgres:3.0.13 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -50,22 +56,21 @@ Postgres catalog connector for https://docs.airbyte.com/integrations/destination
 - Client authentication: https://www.postgresql.org/docs/current/client-authentication.html
 - Database roles and privileges: https://www.postgresql.org/docs/current/user-manag.html
 - Release Notes: https://www.postgresql.org/docs/release/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/postgres
 
 ## Configuration
 
 - cdc_deletion_mode (string): Whether to execute CDC deletions as hard deletes (i.e. propagate source deletions to the destination), or soft deletes (i.e. leave a tombstone record in the destination). Defaul...
 - database (string) required: Name of the database.
-- disable_type_dedupe (boolean): Disable Writing Final Tables. WARNING! The data format in _airbyte_data is likely stable but there are no guarantees that other metadata columns will remain the same in future v...
+- disable_type_dedupe (boolean): manual intervention needed
 - drop_cascade (boolean): Drop tables with CASCADE. WARNING! This will delete all data in all dependent objects (views, etc.). Use with caution. This option is intended for usecases which can easily rebu...
 - host (string) required: Hostname of the database.
 - jdbc_url_params (string): Additional properties to pass to the JDBC URL string when connecting to the database formatted as 'key=value' pairs separated by the symbol '&'. (example: key1=value1&key2=value...
 - password (string) secret: Password associated with the username.
 - port (integer) required: Port of the database.
-- raw_data_schema (string): Airbyte will use this schema for various internal tables. In legacy raw tables mode, the raw tables will be stored in this schema. Defaults to "airbyte_internal".
+- raw_data_schema (string): manual intervention needed
 - schema (string) required: The default schema tables are written. If not specified otherwise, the "public" schema will be used.
 - ssl (boolean): Encrypt data using SSL. When activating SSL, please select one of the connection modes.
-- ssl_mode (object): SSL connection modes. <b>disable</b> - Disables encryption of communication between Airbyte and destination database. <b>allow</b> - Enables encryption only when required by the...
+- ssl_mode (object): manual intervention needed
 - tunnel_method (object): Whether to initiate an SSH tunnel before connecting to the database, and if so, which kind of authentication to use.
 - unconstrained_number (boolean): Create numeric columns as unconstrained DECIMAL instead of NUMBER(38, 9). This will allow increased precision in numeric values. (this is disabled by default for backwards compa...
 - username (string) required: Username to access the database.
@@ -79,12 +84,8 @@ Postgres catalog connector for https://docs.airbyte.com/integrations/destination
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/postgres
 
 ## Commands
 
@@ -108,4 +109,8 @@ pm connectors inspect destination-postgres --json
 
 ## References
 
-- [Postgres documentation](https://docs.airbyte.com/integrations/destinations/postgres)
+- [PostgreSQL documentation](https://www.postgresql.org/docs/current/)
+- [SQL commands](https://www.postgresql.org/docs/current/sql-commands.html)
+- [Client authentication](https://www.postgresql.org/docs/current/client-authentication.html)
+- [Database roles and privileges](https://www.postgresql.org/docs/current/user-manag.html)
+- [Release Notes](https://www.postgresql.org/docs/release/)

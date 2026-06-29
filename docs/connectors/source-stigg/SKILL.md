@@ -7,7 +7,13 @@ description: Stigg connector knowledge and safe action guide.
 
 ## Purpose
 
-Stigg catalog connector for https://docs.airbyte.com/integrations/sources/stigg. Native implementation status: planned_native_port.
+Stigg catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Stigg catalog connector for https://docs.airbyte.com/integrations/sources/stigg.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-stigg:0.0.13 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Stigg catalog connector for https://docs.airbyte.com/integrations/sources/stigg.
 ## Official Application Documentation
 
 - Stigg API documentation: https://api-docs.stigg.io/how-to-use-stigg-api
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/stigg
 
 ## Configuration
 
@@ -61,12 +65,8 @@ Stigg catalog connector for https://docs.airbyte.com/integrations/sources/stigg.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/stigg
 
 ## Commands
 
@@ -90,4 +90,4 @@ pm connectors inspect source-stigg --json
 
 ## References
 
-- [Stigg documentation](https://docs.airbyte.com/integrations/sources/stigg)
+- [Stigg API documentation](https://api-docs.stigg.io/how-to-use-stigg-api)

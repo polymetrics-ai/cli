@@ -7,7 +7,14 @@ description: Firebolt connector knowledge and safe action guide.
 
 ## Purpose
 
-Firebolt catalog connector for https://docs.airbyte.com/integrations/sources/firebolt. Native implementation status: planned_native_port.
+Firebolt catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/firebolt.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.firebolt.io/godocs/Overview/api-reference.html
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Firebolt catalog connector for https://docs.airbyte.com/integrations/sources/fir
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-firebolt:2.0.39 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Firebolt catalog connector for https://docs.airbyte.com/integrations/sources/fir
 - Firebolt API reference: https://docs.firebolt.io/godocs/Overview/api-reference.html
 - Firebolt authentication: https://docs.firebolt.io/godocs/Guides/managing-your-organization/service-accounts.html
 - Firebolt Status: https://status.firebolt.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/firebolt
 
 ## Configuration
 
@@ -68,12 +73,8 @@ Firebolt catalog connector for https://docs.airbyte.com/integrations/sources/fir
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/firebolt
 
 ## Commands
 
@@ -97,4 +98,6 @@ pm connectors inspect source-firebolt --json
 
 ## References
 
-- [Firebolt documentation](https://docs.airbyte.com/integrations/sources/firebolt)
+- [Firebolt API reference](https://docs.firebolt.io/godocs/Overview/api-reference.html)
+- [Firebolt authentication](https://docs.firebolt.io/godocs/Guides/managing-your-organization/service-accounts.html)
+- [Firebolt Status](https://status.firebolt.io/)

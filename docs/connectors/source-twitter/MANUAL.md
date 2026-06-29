@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-twitter [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Twitter catalog connector for https://docs.airbyte.com/integrations/sources/twitter. Native implementation status: planned_native_port.
+  Twitter catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/twitter.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.twitter.com/en/docs/twitter-api
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-twitter:0.3.11 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Twitter authentication: https://developer.twitter.com/en/docs/authentication/overview
   Twitter rate limits: https://developer.twitter.com/en/docs/twitter-api/rate-limits
   Twitter API Status: https://api.twitterstat.us/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/twitter
 
 CONFIGURATION
   api_key (string) required secret: App only Bearer Token. See the <a href="https://developer.twitter.com/en/docs/authentication/oauth-2-0/bearer-tokens">docs</a> for more information on how to obtain this token.
@@ -62,11 +66,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/twitter
 
 EXAMPLES
   # Inspect catalog entry
@@ -81,7 +82,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Twitter documentation: https://docs.airbyte.com/integrations/sources/twitter
+  Twitter API v2: https://developer.twitter.com/en/docs/twitter-api
+  Twitter authentication: https://developer.twitter.com/en/docs/authentication/overview
+  Twitter rate limits: https://developer.twitter.com/en/docs/twitter-api/rate-limits
+  Twitter API Status: https://api.twitterstat.us/
 
 EXIT STATUS
   0 success

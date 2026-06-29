@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-firebolt [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Firebolt catalog connector for https://docs.airbyte.com/integrations/sources/firebolt. Native implementation status: planned_native_port.
+  Firebolt catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/firebolt.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.firebolt.io/godocs/Overview/api-reference.html
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: database_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-firebolt:2.0.39 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Firebolt API reference: https://docs.firebolt.io/godocs/Overview/api-reference.html
   Firebolt authentication: https://docs.firebolt.io/godocs/Guides/managing-your-organization/service-accounts.html
   Firebolt Status: https://status.firebolt.io/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/firebolt
 
 CONFIGURATION
   account (string) required: Firebolt account to login.
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/firebolt
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Firebolt documentation: https://docs.airbyte.com/integrations/sources/firebolt
+  Firebolt API reference: https://docs.firebolt.io/godocs/Overview/api-reference.html
+  Firebolt authentication: https://docs.firebolt.io/godocs/Guides/managing-your-organization/service-accounts.html
+  Firebolt Status: https://status.firebolt.io/
 
 EXIT STATUS
   0 success

@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-mixpanel [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Mixpanel catalog connector for https://docs.airbyte.com/integrations/sources/mixpanel. Native implementation status: planned_native_port.
+  Mixpanel catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/mixpanel.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.mixpanel.com/reference/overview
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-mixpanel:4.0.0 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Mixpanel authentication: https://developer.mixpanel.com/reference/authentication
   Mixpanel rate limits: https://developer.mixpanel.com/reference/rate-limits
   Mixpanel Status: https://status.mixpanel.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mixpanel
 
 CONFIGURATION
   attribution_window (integer): A period of time for attributing results to ads and the lookback period after those actions occur during which ad results are counted. Default attribution window is 5 days. (Thi...
@@ -69,11 +73,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/mixpanel
 
 EXAMPLES
   # Inspect catalog entry
@@ -88,7 +89,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Mixpanel documentation: https://docs.airbyte.com/integrations/sources/mixpanel
+  Mixpanel API reference: https://developer.mixpanel.com/reference/overview
+  Mixpanel authentication: https://developer.mixpanel.com/reference/authentication
+  Mixpanel rate limits: https://developer.mixpanel.com/reference/rate-limits
+  Mixpanel Status: https://status.mixpanel.com/
 
 EXIT STATUS
   0 success

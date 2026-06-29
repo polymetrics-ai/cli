@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-gitlab [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Gitlab catalog connector for https://docs.airbyte.com/integrations/sources/gitlab. Native implementation status: planned_native_port.
+  Gitlab catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/gitlab.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.gitlab.com/ee/api/rest/deprecations.html
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-gitlab:4.4.31 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,16 +51,15 @@ OFFICIAL APPLICATION DOCUMENTATION
   API reference: https://docs.gitlab.com/ee/api/rest/
   Future REST API deprecations and removals: https://docs.gitlab.com/ee/api/rest/deprecations.html
   GitLab API OpenAPI specification: https://docs.gitlab.com/ee/api/openapi/openapi.yaml
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/gitlab
 
 CONFIGURATION
   api_url (string): Please enter your basic URL from GitLab instance.
   credentials (object) required
-  groups (string): [DEPRECATED] Space-delimited list of groups. e.g. airbyte.io.
-  groups_list (array): List of groups. e.g. airbyte.io.
+  groups (string): manual intervention needed
+  groups_list (array): manual intervention needed
   num_workers (integer): Number of concurrent threads for syncing. Higher values can speed up syncs but may hit rate limits. Adjust based on your GitLab instance rate limits.
-  projects (string): [DEPRECATED] Space-delimited list of projects. e.g. airbyte.io/documentation meltano/tap-gitlab.
-  projects_list (array): Space-delimited list of projects. e.g. airbyte.io/documentation meltano/tap-gitlab.
+  projects (string): manual intervention needed
+  projects_list (array): manual intervention needed
   start_date (string): The date from which you'd like to replicate data for GitLab API, in the format YYYY-MM-DDT00:00:00Z. Optional. If not set, all data will be replicated. All data generated after ...
   secret fields: credentials.access_token, credentials.client_id, credentials.client_secret, credentials.refresh_token
 
@@ -65,11 +69,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/gitlab
 
 EXAMPLES
   # Inspect catalog entry
@@ -84,7 +85,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Gitlab documentation: https://docs.airbyte.com/integrations/sources/gitlab
+  API reference: https://docs.gitlab.com/ee/api/rest/
+  Future REST API deprecations and removals: https://docs.gitlab.com/ee/api/rest/deprecations.html
+  GitLab API OpenAPI specification: https://docs.gitlab.com/ee/api/openapi/openapi.yaml
 
 EXIT STATUS
   0 success

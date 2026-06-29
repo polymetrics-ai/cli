@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-zapier-supported-storage [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Zapier Supported Storage catalog connector for https://docs.airbyte.com/integrations/sources/zapier-supported-storage. Native implementation status: planned_native_port.
+  Zapier Supported Storage catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/zapiersupportedstorage.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://help.zapier.com/hc/en-us/articles/8496293271053-Save-and-retrieve-data-from-Zaps
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-zapier-supported-storage:0.2.24 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Zapier Storage documentation: https://help.zapier.com/hc/en-us/articles/8496293271053-Save-and-retrieve-data-from-Zaps
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/zapier-supported-storage
 
 CONFIGURATION
   secret (string) required secret: Secret key supplied by zapier
@@ -56,11 +60,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/zapier-supported-storage
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +76,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Zapier Supported Storage documentation: https://docs.airbyte.com/integrations/sources/zapier-supported-storage
+  Zapier Storage documentation: https://help.zapier.com/hc/en-us/articles/8496293271053-Save-and-retrieve-data-from-Zaps
 
 EXIT STATUS
   0 success

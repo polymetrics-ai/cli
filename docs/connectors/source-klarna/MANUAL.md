@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-klarna [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Klarna catalog connector for https://docs.airbyte.com/integrations/sources/klarna. Native implementation status: planned_native_port.
+  Klarna catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/klarna.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.klarna.com/api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-klarna:0.3.23 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,7 +50,6 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Klarna API reference: https://docs.klarna.com/api/
   Klarna authentication: https://docs.klarna.com/api/authentication/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/klarna
 
 CONFIGURATION
   password (string) required secret: A string which is associated with your Merchant ID and is used to authorize use of Klarna's APIs (https://developers.klarna.com/api/#authentication)
@@ -60,11 +64,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/klarna
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +80,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Klarna documentation: https://docs.airbyte.com/integrations/sources/klarna
+  Klarna API reference: https://docs.klarna.com/api/
+  Klarna authentication: https://docs.klarna.com/api/authentication/
 
 EXIT STATUS
   0 success

@@ -7,7 +7,13 @@ description: Fleetio connector knowledge and safe action guide.
 
 ## Purpose
 
-Fleetio catalog connector for https://docs.airbyte.com/integrations/sources/fleetio. Native implementation status: planned_native_port.
+Fleetio catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Fleetio catalog connector for https://docs.airbyte.com/integrations/sources/flee
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-fleetio:0.2.54 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Fleetio catalog connector for https://docs.airbyte.com/integrations/sources/flee
 
 - Fleetio API documentation: https://developer.fleetio.com/
 - Fleetio authentication: https://developer.fleetio.com/#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/fleetio
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Fleetio catalog connector for https://docs.airbyte.com/integrations/sources/flee
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/fleetio
 
 ## Commands
 
@@ -92,4 +92,5 @@ pm connectors inspect source-fleetio --json
 
 ## References
 
-- [Fleetio documentation](https://docs.airbyte.com/integrations/sources/fleetio)
+- [Fleetio API documentation](https://developer.fleetio.com/)
+- [Fleetio authentication](https://developer.fleetio.com/#authentication)

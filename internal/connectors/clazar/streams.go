@@ -13,7 +13,7 @@ type streamEndpoint struct {
 
 // clazarStreamEndpoints is the per-stream routing table. Adding a stream means
 // adding one entry here plus a Stream definition in clazarStreams; the read path
-// is fully data-driven from this table. Mirrors the Airbyte source-clazar
+// is fully data-driven from this table. Mirrors the upstream source-clazar
 // manifest core streams (buyers, listings, contracts, opportunities,
 // private_offers), all of which share the page-increment paginator, the
 // `results` record selector, the `id` primary key, and the `last_modified_at`

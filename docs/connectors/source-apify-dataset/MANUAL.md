@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-apify-dataset [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Apify Dataset catalog connector for https://docs.airbyte.com/integrations/sources/apify-dataset. Native implementation status: planned_native_port.
+  Apify Dataset catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/apify.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.apify.com/api/v2
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-apify-dataset:2.2.49 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,10 +51,9 @@ OFFICIAL APPLICATION DOCUMENTATION
   API reference: https://docs.apify.com/api/v2
   Authentication: https://docs.apify.com/api/v2#/introduction/authentication
   Rate limiting: https://docs.apify.com/api/v2#/introduction/rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/apify-dataset
 
 CONFIGURATION
-  dataset_id (string) required: ID of the dataset you would like to load to Airbyte. In Apify Console, you can view your datasets in the <a href="https://console.apify.com/storage/datasets">Storage section und...
+  dataset_id (string) required: manual intervention needed
   token (string) required secret: Personal API token of your Apify account. In Apify Console, you can find your API token in the <a href="https://console.apify.com/account/integrations">Settings section under th...
   secret fields: token
 
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/apify-dataset
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Apify Dataset documentation: https://docs.airbyte.com/integrations/sources/apify-dataset
+  API reference: https://docs.apify.com/api/v2
+  Authentication: https://docs.apify.com/api/v2#/introduction/authentication
+  Rate limiting: https://docs.apify.com/api/v2#/introduction/rate-limiting
 
 EXIT STATUS
   0 success

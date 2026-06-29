@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-recharge [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Recharge catalog connector for https://docs.airbyte.com/integrations/sources/recharge. Native implementation status: planned_native_port.
+  Recharge catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/recharge.svg
+  source: official
+  review_status: official_verified
+  review_url: https://docs.getrecharge.com/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: native_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-recharge:3.0.11 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -43,11 +48,10 @@ NATIVE PORT PLAN
   conformance: catalog, check, docs_skill, read_fixture, secret_redaction, spec, state_checkpoint
 
 OFFICIAL APPLICATION DOCUMENTATION
-  No upstream application documentation URL was listed in the imported connector registry.
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/recharge
+  Recharge documentation: https://docs.getrecharge.com/
 
 CONFIGURATION
-  access_token (string) required secret: The value of the Access Token generated. See the <a href="https://docs.airbyte.com/integrations/sources/recharge">docs</a> for more information.
+  access_token (string) required secret: manual intervention needed
   lookback_window_days (integer): Specifies how many days of historical data should be reloaded each time the recharge connector runs.
   start_date (string) required: The date from which you'd like to replicate data for Recharge API, in the format YYYY-MM-DDT00:00:00Z. Any data before this date will not be replicated.
   use_orders_deprecated_api (boolean): Define whether or not the `Orders` stream should use the deprecated `2021-01` API version, or use `2021-11`, otherwise.
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/recharge
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Recharge documentation: https://docs.airbyte.com/integrations/sources/recharge
+  Recharge documentation: https://docs.getrecharge.com/
 
 EXIT STATUS
   0 success

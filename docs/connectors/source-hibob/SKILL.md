@@ -7,7 +7,14 @@ description: Hibob connector knowledge and safe action guide.
 
 ## Purpose
 
-Hibob catalog connector for https://docs.airbyte.com/integrations/sources/hibob. Native implementation status: planned_native_port.
+Hibob catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/hibob.svg
+- source: official
+- review_status: official_verified
+- review_url: https://apidocs.hibob.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Hibob catalog connector for https://docs.airbyte.com/integrations/sources/hibob.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-hibob:0.2.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,9 +51,7 @@ Hibob catalog connector for https://docs.airbyte.com/integrations/sources/hibob.
 
 ## Official Application Documentation
 
-- HiBob API documentation: https://apidocs.hibob.com/
-- HiBob authentication: https://apidocs.hibob.com/docs/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/hibob
+- Hibob documentation: https://apidocs.hibob.com/
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Hibob catalog connector for https://docs.airbyte.com/integrations/sources/hibob.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/hibob
 
 ## Commands
 
@@ -93,4 +93,4 @@ pm connectors inspect source-hibob --json
 
 ## References
 
-- [Hibob documentation](https://docs.airbyte.com/integrations/sources/hibob)
+- [Hibob documentation](https://apidocs.hibob.com/)

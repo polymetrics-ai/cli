@@ -13,7 +13,7 @@ type streamEndpoint struct {
 
 // huntrStreamEndpoints is the per-stream routing table. Adding a stream means
 // adding one entry here plus a Stream definition in huntrStreams; the read path
-// is fully data-driven from this table. Paths mirror the upstream Airbyte
+// is fully data-driven from this table. Paths mirror the upstream upstream
 // manifest (e.g. notes lives at /notes/members).
 var huntrStreamEndpoints = map[string]streamEndpoint{
 	"members":    {resource: "members", mapRecord: huntrMemberRecord},

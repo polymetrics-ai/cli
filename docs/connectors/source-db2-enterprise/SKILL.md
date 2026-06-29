@@ -7,7 +7,13 @@ description: Db2 connector knowledge and safe action guide.
 
 ## Purpose
 
-Db2 catalog connector for https://docs.airbyte.com/integrations/enterprise-connectors/source-db2-enterprise. Native implementation status: planned_native_port.
+Db2 catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/db2.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Db2 catalog connector for https://docs.airbyte.com/integrations/enterprise-conne
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-db2-enterprise:0.0.7 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Db2 catalog connector for https://docs.airbyte.com/integrations/enterprise-conne
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/enterprise-connectors/source-db2-enterprise
+- Db2 documentation: https://www.ibm.com/docs/en/db2
 
 ## Configuration
 
@@ -73,12 +77,8 @@ Db2 catalog connector for https://docs.airbyte.com/integrations/enterprise-conne
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/enterprise-connectors/source-db2-enterprise
 
 ## Commands
 
@@ -102,4 +102,4 @@ pm connectors inspect source-db2-enterprise --json
 
 ## References
 
-- [Db2 documentation](https://docs.airbyte.com/integrations/enterprise-connectors/source-db2-enterprise)
+- [Db2 documentation](https://www.ibm.com/docs/en/db2)

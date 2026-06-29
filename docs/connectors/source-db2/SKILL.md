@@ -7,7 +7,14 @@ description: IBM Db2 connector knowledge and safe action guide.
 
 ## Purpose
 
-IBM Db2 catalog connector for https://docs.airbyte.com/integrations/sources/db2. Native implementation status: planned_native_port.
+IBM Db2 catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/db2.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.ibm.com/docs/en/db2/11.5?topic=reference-sql
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ IBM Db2 catalog connector for https://docs.airbyte.com/integrations/sources/db2.
 - implementation_status: planned_native_port
 - runtime_kind: database_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-db2:0.3.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ IBM Db2 catalog connector for https://docs.airbyte.com/integrations/sources/db2.
 
 - IBM Db2 SQL reference: https://www.ibm.com/docs/en/db2/11.5?topic=reference-sql
 - IBM Db2 authentication: https://www.ibm.com/docs/en/db2/11.5?topic=security-authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/db2
 
 ## Configuration
 
@@ -68,12 +73,8 @@ IBM Db2 catalog connector for https://docs.airbyte.com/integrations/sources/db2.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/db2
 
 ## Commands
 
@@ -97,4 +98,5 @@ pm connectors inspect source-db2 --json
 
 ## References
 
-- [IBM Db2 documentation](https://docs.airbyte.com/integrations/sources/db2)
+- [IBM Db2 SQL reference](https://www.ibm.com/docs/en/db2/11.5?topic=reference-sql)
+- [IBM Db2 authentication](https://www.ibm.com/docs/en/db2/11.5?topic=security-authentication)

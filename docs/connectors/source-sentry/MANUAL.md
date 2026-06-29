@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-sentry [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Sentry catalog connector for https://docs.airbyte.com/integrations/sources/sentry. Native implementation status: planned_native_port.
+  Sentry catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/sentry.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.sentry.io/api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-sentry:0.9.26 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   API Reference: https://docs.sentry.io/api/
   Changelog: https://sentry.io/changelog/
   Sentry API OpenAPI specification: https://github.com/getsentry/sentry-api-schema
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sentry
 
 CONFIGURATION
   auth_token (string) required secret: Log into Sentry and then <a href="https://sentry.io/settings/account/api/auth-tokens/">create authentication tokens</a>.For self-hosted, you can find or create authentication to...
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/sentry
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Sentry documentation: https://docs.airbyte.com/integrations/sources/sentry
+  API Reference: https://docs.sentry.io/api/
+  Changelog: https://sentry.io/changelog/
+  Sentry API OpenAPI specification: https://github.com/getsentry/sentry-api-schema
 
 EXIT STATUS
   0 success

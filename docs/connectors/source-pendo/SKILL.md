@@ -7,7 +7,14 @@ description: Pendo connector knowledge and safe action guide.
 
 ## Purpose
 
-Pendo catalog connector for https://docs.airbyte.com/integrations/sources/pendo. Native implementation status: planned_native_port.
+Pendo catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pendo.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://engageapi.pendo.io/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Pendo catalog connector for https://docs.airbyte.com/integrations/sources/pendo.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-pendo:0.2.53 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Pendo catalog connector for https://docs.airbyte.com/integrations/sources/pendo.
 
 - Pendo API reference: https://engageapi.pendo.io/
 - Pendo authentication: https://support.pendo.io/hc/en-us/articles/360031862272-Integration-Keys
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pendo
 
 ## Configuration
 
@@ -62,12 +67,8 @@ Pendo catalog connector for https://docs.airbyte.com/integrations/sources/pendo.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/pendo
 
 ## Commands
 
@@ -91,4 +92,5 @@ pm connectors inspect source-pendo --json
 
 ## References
 
-- [Pendo documentation](https://docs.airbyte.com/integrations/sources/pendo)
+- [Pendo API reference](https://engageapi.pendo.io/)
+- [Pendo authentication](https://support.pendo.io/hc/en-us/articles/360031862272-Integration-Keys)

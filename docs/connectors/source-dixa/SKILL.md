@@ -7,7 +7,14 @@ description: Dixa connector knowledge and safe action guide.
 
 ## Purpose
 
-Dixa catalog connector for https://docs.airbyte.com/integrations/sources/dixa. Native implementation status: planned_native_port.
+Dixa catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/dixa.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.dixa.io/openapi/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Dixa catalog connector for https://docs.airbyte.com/integrations/sources/dixa. N
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-dixa:0.4.21 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Dixa catalog connector for https://docs.airbyte.com/integrations/sources/dixa. N
 - Dixa API reference: https://docs.dixa.io/openapi/
 - Dixa authentication: https://docs.dixa.io/openapi/dixa-api/#section/Authentication
 - Dixa rate limits: https://docs.dixa.io/openapi/dixa-api/#section/Rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/dixa
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Dixa catalog connector for https://docs.airbyte.com/integrations/sources/dixa. N
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/dixa
 
 ## Commands
 
@@ -94,4 +95,6 @@ pm connectors inspect source-dixa --json
 
 ## References
 
-- [Dixa documentation](https://docs.airbyte.com/integrations/sources/dixa)
+- [Dixa API reference](https://docs.dixa.io/openapi/)
+- [Dixa authentication](https://docs.dixa.io/openapi/dixa-api/#section/Authentication)
+- [Dixa rate limits](https://docs.dixa.io/openapi/dixa-api/#section/Rate-limiting)

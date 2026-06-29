@@ -7,7 +7,13 @@ description: Finnhub connector knowledge and safe action guide.
 
 ## Purpose
 
-Finnhub catalog connector for https://docs.airbyte.com/integrations/sources/finnhub. Native implementation status: planned_native_port.
+Finnhub catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Finnhub catalog connector for https://docs.airbyte.com/integrations/sources/finn
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-finnhub:0.0.51 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Finnhub catalog connector for https://docs.airbyte.com/integrations/sources/finn
 - Finnhub API documentation: https://finnhub.io/docs/api
 - Finnhub authentication: https://finnhub.io/docs/api/authentication
 - Finnhub rate limits: https://finnhub.io/pricing
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/finnhub
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Finnhub catalog connector for https://docs.airbyte.com/integrations/sources/finn
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/finnhub
 
 ## Commands
 
@@ -96,4 +96,6 @@ pm connectors inspect source-finnhub --json
 
 ## References
 
-- [Finnhub documentation](https://docs.airbyte.com/integrations/sources/finnhub)
+- [Finnhub API documentation](https://finnhub.io/docs/api)
+- [Finnhub authentication](https://finnhub.io/docs/api/authentication)
+- [Finnhub rate limits](https://finnhub.io/pricing)

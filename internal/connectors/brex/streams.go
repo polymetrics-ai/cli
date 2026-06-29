@@ -14,7 +14,7 @@ type streamEndpoint struct {
 // brexStreamEndpoints is the per-stream routing table. Adding a stream means
 // adding one entry here plus a Stream definition in brexStreams; the read path
 // is fully data-driven from this table. Paths mirror the Brex platform API
-// (https://platform.brexapis.com) as exposed by the Airbyte source-brex
+// (https://platform.brexapis.com) as exposed by the upstream source-brex
 // manifest.
 var brexStreamEndpoints = map[string]streamEndpoint{
 	"transactions": {path: "/v2/transactions/card/primary", mapRecord: brexTransactionRecord},

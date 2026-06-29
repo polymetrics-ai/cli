@@ -7,7 +7,14 @@ description: MailerLite connector knowledge and safe action guide.
 
 ## Purpose
 
-MailerLite catalog connector for https://docs.airbyte.com/integrations/sources/mailerlite. Native implementation status: planned_native_port.
+MailerLite catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/mailerlite.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.mailerlite.com/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ MailerLite catalog connector for https://docs.airbyte.com/integrations/sources/m
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mailerlite:1.1.31 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ MailerLite catalog connector for https://docs.airbyte.com/integrations/sources/m
 - MailerLite API reference: https://developers.mailerlite.com/
 - MailerLite authentication: https://developers.mailerlite.com/docs/authentication
 - MailerLite rate limits: https://developers.mailerlite.com/docs/rate-limits
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mailerlite
 
 ## Configuration
 
@@ -63,12 +68,8 @@ MailerLite catalog connector for https://docs.airbyte.com/integrations/sources/m
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mailerlite
 
 ## Commands
 
@@ -92,4 +93,6 @@ pm connectors inspect source-mailerlite --json
 
 ## References
 
-- [MailerLite documentation](https://docs.airbyte.com/integrations/sources/mailerlite)
+- [MailerLite API reference](https://developers.mailerlite.com/)
+- [MailerLite authentication](https://developers.mailerlite.com/docs/authentication)
+- [MailerLite rate limits](https://developers.mailerlite.com/docs/rate-limits)

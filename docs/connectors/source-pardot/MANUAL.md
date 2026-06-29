@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-pardot [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Pardot catalog connector for https://docs.airbyte.com/integrations/sources/pardot. Native implementation status: planned_native_port.
+  Pardot catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/salesforcepardot.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.salesforce.com/docs/marketing/pardot/overview
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-pardot:1.0.46 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -45,14 +50,13 @@ NATIVE PORT PLAN
 OFFICIAL APPLICATION DOCUMENTATION
   Pardot API reference: https://developer.salesforce.com/docs/marketing/pardot/overview
   Pardot authentication: https://developer.salesforce.com/docs/marketing/pardot/guide/authentication.html
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pardot
 
 CONFIGURATION
   client_id (string) required secret: The Consumer Key that can be found when viewing your app in Salesforce
   client_secret (string) required secret: The Consumer Secret that can be found when viewing your app in Salesforce
   is_sandbox (boolean): Whether or not the the app is in a Salesforce sandbox. If you do not know what this, assume it is false.
   pardot_business_unit_id (string) required: Pardot Business ID, can be found at Setup > Pardot > Pardot Account Setup
-  refresh_token (string) required secret: Salesforce Refresh Token used for Airbyte to access your Salesforce account. If you don't know what this is, follow this <a href="https://medium.com/@bpmmendis94/obtain-access-r...
+  refresh_token (string) required secret: manual intervention needed
   start_date (string): UTC date and time in the format 2000-01-01T00:00:00Z. Any data before this date will not be replicated. Defaults to the year Pardot was released.
   v5_page_size (integer): The maximum number of records to return per request
   secret fields: client_id, client_secret, refresh_token
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/pardot
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,8 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Pardot documentation: https://docs.airbyte.com/integrations/sources/pardot
+  Pardot API reference: https://developer.salesforce.com/docs/marketing/pardot/overview
+  Pardot authentication: https://developer.salesforce.com/docs/marketing/pardot/guide/authentication.html
 
 EXIT STATUS
   0 success

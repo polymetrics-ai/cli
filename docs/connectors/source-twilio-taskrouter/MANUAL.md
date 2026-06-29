@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-twilio-taskrouter [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Twilio Taskrouter catalog connector for https://docs.airbyte.com/integrations/sources/twilio-taskrouter. Native implementation status: planned_native_port.
+  Twilio Taskrouter catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/twilio.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.twilio.com/docs/taskrouter/api
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-twilio-taskrouter:0.2.21 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Twilio TaskRouter API: https://www.twilio.com/docs/taskrouter/api
   Twilio authentication: https://www.twilio.com/docs/iam/credentials/api-credentials
   Twilio Status: https://status.twilio.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/twilio-taskrouter
 
 CONFIGURATION
   account_sid (string) required secret: Twilio Account ID
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/twilio-taskrouter
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Twilio Taskrouter documentation: https://docs.airbyte.com/integrations/sources/twilio-taskrouter
+  Twilio TaskRouter API: https://www.twilio.com/docs/taskrouter/api
+  Twilio authentication: https://www.twilio.com/docs/iam/credentials/api-credentials
+  Twilio Status: https://status.twilio.com/
 
 EXIT STATUS
   0 success

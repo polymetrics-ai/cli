@@ -7,7 +7,13 @@ description: Kafka connector knowledge and safe action guide.
 
 ## Purpose
 
-Kafka catalog connector for https://docs.airbyte.com/integrations/destinations/kafka. Native implementation status: planned_native_port.
+Kafka catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/kafka.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Kafka catalog connector for https://docs.airbyte.com/integrations/destinations/k
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-kafka:0.1.11 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Kafka catalog connector for https://docs.airbyte.com/integrations/destinations/k
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/kafka
+- Kafka documentation: https://kafka.apache.org/documentation/
 
 ## Configuration
 
@@ -71,7 +75,7 @@ Kafka catalog connector for https://docs.airbyte.com/integrations/destinations/k
 - socket_connection_setup_timeout_max_ms (string) required: The maximum amount of time the client will wait for the socket connection to be established. The connection setup timeout will increase exponentially for each consecutive connec...
 - socket_connection_setup_timeout_ms (string) required: The amount of time the client will wait for the socket connection to be established.
 - sync_producer (boolean): Wait synchronously until the record has been sent to Kafka.
-- test_topic (string): Topic to test if Airbyte can produce messages.
+- test_topic (string): manual intervention needed
 - topic_pattern (string) required: Topic pattern in which the records will be sent. You can use patterns like '{namespace}' and/or '{stream}' to send the message to a specific topic based on these values. Notice ...
 - secret fields: protocol.sasl_jaas_config
 
@@ -83,12 +87,8 @@ Kafka catalog connector for https://docs.airbyte.com/integrations/destinations/k
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/kafka
 
 ## Commands
 
@@ -112,4 +112,4 @@ pm connectors inspect destination-kafka --json
 
 ## References
 
-- [Kafka documentation](https://docs.airbyte.com/integrations/destinations/kafka)
+- [Kafka documentation](https://kafka.apache.org/documentation/)

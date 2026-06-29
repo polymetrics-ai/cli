@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-configcat [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  ConfigCat catalog connector for https://docs.airbyte.com/integrations/sources/configcat. Native implementation status: planned_native_port.
+  ConfigCat catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/configcat.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://api.configcat.com/docs/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-configcat:0.2.24 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   ConfigCat Public Management API: https://api.configcat.com/docs/
   ConfigCat authentication: https://configcat.com/docs/advanced/public-api/
   ConfigCat Status: https://status.configcat.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/configcat
 
 CONFIGURATION
   password (string) required secret: Basic auth password. See <a href="https://api.configcat.com/docs/#section/Authentication">here</a>.
@@ -59,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/configcat
 
 EXAMPLES
   # Inspect catalog entry
@@ -78,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  ConfigCat documentation: https://docs.airbyte.com/integrations/sources/configcat
+  ConfigCat Public Management API: https://api.configcat.com/docs/
+  ConfigCat authentication: https://configcat.com/docs/advanced/public-api/
+  ConfigCat Status: https://status.configcat.com/
 
 EXIT STATUS
   0 success

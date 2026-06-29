@@ -7,7 +7,14 @@ description: Web Scrapper connector knowledge and safe action guide.
 
 ## Purpose
 
-Web Scrapper catalog connector for https://docs.airbyte.com/integrations/sources/web-scrapper. Native implementation status: planned_native_port.
+Web Scrapper catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/web-scraper.svg
+- source: official
+- review_status: official_verified
+- review_url: https://webscraper.io/documentation/api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Web Scrapper catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-web-scrapper:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +51,7 @@ Web Scrapper catalog connector for https://docs.airbyte.com/integrations/sources
 
 ## Official Application Documentation
 
-- Web scraper documentation: https://docs.airbyte.com/integrations/sources/web-scrapper
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/web-scrapper
+- Web Scrapper documentation: https://webscraper.io/documentation/api
 
 ## Configuration
 
@@ -61,12 +66,8 @@ Web Scrapper catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/web-scrapper
 
 ## Commands
 
@@ -90,4 +91,4 @@ pm connectors inspect source-web-scrapper --json
 
 ## References
 
-- [Web Scrapper documentation](https://docs.airbyte.com/integrations/sources/web-scrapper)
+- [Web Scrapper documentation](https://webscraper.io/documentation/api)

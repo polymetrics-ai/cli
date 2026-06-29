@@ -7,7 +7,14 @@ description: K6 Cloud connector knowledge and safe action guide.
 
 ## Purpose
 
-K6 Cloud catalog connector for https://docs.airbyte.com/integrations/sources/k6-cloud. Native implementation status: planned_native_port.
+K6 Cloud catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/k6cloud.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://k6.io/docs/cloud/cloud-reference/cloud-rest-api/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ K6 Cloud catalog connector for https://docs.airbyte.com/integrations/sources/k6-
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-k6-cloud:0.2.26 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ K6 Cloud catalog connector for https://docs.airbyte.com/integrations/sources/k6-
 
 - k6 Cloud API documentation: https://k6.io/docs/cloud/cloud-reference/cloud-rest-api/
 - k6 Cloud Status: https://status.k6.io/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/k6-cloud
 
 ## Configuration
 
@@ -62,12 +67,8 @@ K6 Cloud catalog connector for https://docs.airbyte.com/integrations/sources/k6-
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/k6-cloud
 
 ## Commands
 
@@ -91,4 +92,5 @@ pm connectors inspect source-k6-cloud --json
 
 ## References
 
-- [K6 Cloud documentation](https://docs.airbyte.com/integrations/sources/k6-cloud)
+- [k6 Cloud API documentation](https://k6.io/docs/cloud/cloud-reference/cloud-rest-api/)
+- [k6 Cloud Status](https://status.k6.io/)

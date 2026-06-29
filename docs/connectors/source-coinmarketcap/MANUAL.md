@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-coinmarketcap [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  CoinMarketCap catalog connector for https://docs.airbyte.com/integrations/sources/coinmarketcap. Native implementation status: planned_native_port.
+  CoinMarketCap catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/coinmarketcap.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://coinmarketcap.com/api/documentation/v1/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-coinmarketcap:0.2.38 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -47,7 +52,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   CoinMarketCap authentication: https://coinmarketcap.com/api/documentation/v1/#section/Authentication
   CoinMarketCap rate limits: https://coinmarketcap.com/api/documentation/v1/#section/Standards-and-Conventions
   CoinMarketCap Status: https://status.coinmarketcap.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/coinmarketcap
 
 CONFIGURATION
   api_key (string) required secret: Your API Key. See <a href="https://coinmarketcap.com/api/documentation/v1/#section/Authentication">here</a>. The token is case sensitive.
@@ -61,11 +65,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/coinmarketcap
 
 EXAMPLES
   # Inspect catalog entry
@@ -80,7 +81,10 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  CoinMarketCap documentation: https://docs.airbyte.com/integrations/sources/coinmarketcap
+  CoinMarketCap API reference: https://coinmarketcap.com/api/documentation/v1/
+  CoinMarketCap authentication: https://coinmarketcap.com/api/documentation/v1/#section/Authentication
+  CoinMarketCap rate limits: https://coinmarketcap.com/api/documentation/v1/#section/Standards-and-Conventions
+  CoinMarketCap Status: https://status.coinmarketcap.com/
 
 EXIT STATUS
   0 success

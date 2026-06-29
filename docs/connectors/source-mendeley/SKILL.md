@@ -7,7 +7,13 @@ description: Mendeley connector knowledge and safe action guide.
 
 ## Purpose
 
-Mendeley catalog connector for https://docs.airbyte.com/integrations/sources/mendeley. Native implementation status: planned_native_port.
+Mendeley catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Mendeley catalog connector for https://docs.airbyte.com/integrations/sources/men
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mendeley:0.0.39 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Mendeley catalog connector for https://docs.airbyte.com/integrations/sources/men
 ## Official Application Documentation
 
 - Mendeley API documentation: https://dev.mendeley.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mendeley
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Mendeley catalog connector for https://docs.airbyte.com/integrations/sources/men
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mendeley
 
 ## Commands
 
@@ -95,4 +95,4 @@ pm connectors inspect source-mendeley --json
 
 ## References
 
-- [Mendeley documentation](https://docs.airbyte.com/integrations/sources/mendeley)
+- [Mendeley API documentation](https://dev.mendeley.com/)

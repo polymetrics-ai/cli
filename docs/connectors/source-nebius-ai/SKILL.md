@@ -7,7 +7,13 @@ description: Nebius AI connector knowledge and safe action guide.
 
 ## Purpose
 
-Nebius AI catalog connector for https://docs.airbyte.com/integrations/sources/nebius-ai. Native implementation status: planned_native_port.
+Nebius AI catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Nebius AI catalog connector for https://docs.airbyte.com/integrations/sources/ne
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-nebius-ai:0.0.39 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Nebius AI catalog connector for https://docs.airbyte.com/integrations/sources/ne
 ## Official Application Documentation
 
 - Nebius AI documentation: https://nebius.ai/docs/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/nebius-ai
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Nebius AI catalog connector for https://docs.airbyte.com/integrations/sources/ne
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/nebius-ai
 
 ## Commands
 
@@ -92,4 +92,4 @@ pm connectors inspect source-nebius-ai --json
 
 ## References
 
-- [Nebius AI documentation](https://docs.airbyte.com/integrations/sources/nebius-ai)
+- [Nebius AI documentation](https://nebius.ai/docs/)

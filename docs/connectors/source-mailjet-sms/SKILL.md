@@ -7,7 +7,14 @@ description: Mailjet SMS connector knowledge and safe action guide.
 
 ## Purpose
 
-Mailjet SMS catalog connector for https://docs.airbyte.com/integrations/sources/mailjet-sms. Native implementation status: planned_native_port.
+Mailjet SMS catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/mailjetsms.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://dev.mailjet.com/sms/reference/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Mailjet SMS catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-mailjet-sms:0.2.24 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +53,6 @@ Mailjet SMS catalog connector for https://docs.airbyte.com/integrations/sources/
 
 - Mailjet SMS API: https://dev.mailjet.com/sms/reference/
 - Mailjet authentication: https://dev.mailjet.com/sms/guides/#authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/mailjet-sms
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Mailjet SMS catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/mailjet-sms
 
 ## Commands
 
@@ -93,4 +94,5 @@ pm connectors inspect source-mailjet-sms --json
 
 ## References
 
-- [Mailjet SMS documentation](https://docs.airbyte.com/integrations/sources/mailjet-sms)
+- [Mailjet SMS API](https://dev.mailjet.com/sms/reference/)
+- [Mailjet authentication](https://dev.mailjet.com/sms/guides/#authentication)

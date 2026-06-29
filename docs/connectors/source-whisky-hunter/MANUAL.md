@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-whisky-hunter [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Whisky Hunter catalog connector for https://docs.airbyte.com/integrations/sources/whisky-hunter. Native implementation status: planned_native_port.
+  Whisky Hunter catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/whiskyhunter.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://whiskyhunter.net/api/
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-whisky-hunter:0.2.27 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +49,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   Whisky Hunter API: https://whiskyhunter.net/api/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/whisky-hunter
 
 CONFIGURATION
   No config schema fields were advertised in the catalog.
@@ -55,11 +59,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/whisky-hunter
 
 EXAMPLES
   # Inspect catalog entry
@@ -74,7 +75,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Whisky Hunter documentation: https://docs.airbyte.com/integrations/sources/whisky-hunter
+  Whisky Hunter API: https://whiskyhunter.net/api/
 
 EXIT STATUS
   0 success

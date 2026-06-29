@@ -23,7 +23,7 @@ var twitterStreamEndpoints = map[string]streamEndpoint{
 }
 
 // twitterStreams returns the connector's published stream catalog. It mirrors the
-// upstream Airbyte source-twitter connector, which exposes Tweets and Authors,
+// upstream upstream source-twitter connector, which exposes Tweets and Authors,
 // both derived from the recent-search endpoint. Twitter v2 supports only
 // full_refresh for recent search, but every tweet carries created_at, which we
 // surface as a cursor field for downstream incremental dedup.

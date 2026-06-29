@@ -7,7 +7,13 @@ description: Pingdom connector knowledge and safe action guide.
 
 ## Purpose
 
-Pingdom catalog connector for https://docs.airbyte.com/integrations/sources/pingdom. Native implementation status: planned_native_port.
+Pingdom catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Pingdom catalog connector for https://docs.airbyte.com/integrations/sources/ping
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-pingdom:0.0.1 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ Pingdom catalog connector for https://docs.airbyte.com/integrations/sources/ping
 
 ## Official Application Documentation
 
-- No upstream application documentation URL was listed in the imported connector registry.
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pingdom
+- Pingdom documentation: https://docs.pingdom.com/api/
 
 ## Configuration
 
@@ -64,12 +68,8 @@ Pingdom catalog connector for https://docs.airbyte.com/integrations/sources/ping
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/pingdom
 
 ## Commands
 
@@ -93,4 +93,4 @@ pm connectors inspect source-pingdom --json
 
 ## References
 
-- [Pingdom documentation](https://docs.airbyte.com/integrations/sources/pingdom)
+- [Pingdom documentation](https://docs.pingdom.com/api/)

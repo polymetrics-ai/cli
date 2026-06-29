@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-jobnimbus [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  JobNimbus catalog connector for https://docs.airbyte.com/integrations/sources/jobnimbus. Native implementation status: planned_native_port.
+  JobNimbus catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-jobnimbus:0.0.54 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -44,7 +48,6 @@ NATIVE PORT PLAN
 
 OFFICIAL APPLICATION DOCUMENTATION
   JobNimbus API documentation: https://documenter.getpostman.com/view/3919598/S11PpG4x
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/jobnimbus
 
 CONFIGURATION
   api_key (string) required secret: API key to use. Find it by logging into your JobNimbus account, navigating to settings, and creating a new API key under the API section.
@@ -56,11 +59,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/jobnimbus
 
 EXAMPLES
   # Inspect catalog entry
@@ -75,7 +75,7 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  JobNimbus documentation: https://docs.airbyte.com/integrations/sources/jobnimbus
+  JobNimbus API documentation: https://documenter.getpostman.com/view/3919598/S11PpG4x
 
 EXIT STATUS
   0 success

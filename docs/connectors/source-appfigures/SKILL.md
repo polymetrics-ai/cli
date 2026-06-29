@@ -7,7 +7,13 @@ description: Appfigures connector knowledge and safe action guide.
 
 ## Purpose
 
-Appfigures catalog connector for https://docs.airbyte.com/integrations/sources/appfigures. Native implementation status: planned_native_port.
+Appfigures catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Appfigures catalog connector for https://docs.airbyte.com/integrations/sources/a
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-appfigures:0.0.47 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Appfigures catalog connector for https://docs.airbyte.com/integrations/sources/a
 
 - API documentation: https://docs.appfigures.com/
 - Authentication: https://docs.appfigures.com/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/appfigures
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Appfigures catalog connector for https://docs.airbyte.com/integrations/sources/a
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/appfigures
 
 ## Commands
 
@@ -94,4 +94,5 @@ pm connectors inspect source-appfigures --json
 
 ## References
 
-- [Appfigures documentation](https://docs.airbyte.com/integrations/sources/appfigures)
+- [API documentation](https://docs.appfigures.com/)
+- [Authentication](https://docs.appfigures.com/authentication)

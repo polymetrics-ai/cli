@@ -7,7 +7,13 @@ description: Twelve Data connector knowledge and safe action guide.
 
 ## Purpose
 
-Twelve Data catalog connector for https://docs.airbyte.com/integrations/sources/twelve-data. Native implementation status: planned_native_port.
+Twelve Data catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Twelve Data catalog connector for https://docs.airbyte.com/integrations/sources/
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-twelve-data:0.0.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Twelve Data catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Official Application Documentation
 
 - Twelve Data API: https://twelvedata.com/docs
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/twelve-data
 
 ## Configuration
 
@@ -65,12 +69,8 @@ Twelve Data catalog connector for https://docs.airbyte.com/integrations/sources/
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/twelve-data
 
 ## Commands
 
@@ -94,4 +94,4 @@ pm connectors inspect source-twelve-data --json
 
 ## References
 
-- [Twelve Data documentation](https://docs.airbyte.com/integrations/sources/twelve-data)
+- [Twelve Data API](https://twelvedata.com/docs)

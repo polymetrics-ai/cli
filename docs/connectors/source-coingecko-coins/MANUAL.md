@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-coingecko-coins [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  CoinGecko Coins catalog connector for https://docs.airbyte.com/integrations/sources/coingecko-coins. Native implementation status: planned_native_port.
+  CoinGecko Coins catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/coingeckocoins.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.coingecko.com/en/api/documentation
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-coingecko-coins:0.2.26 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   CoinGecko API documentation: https://www.coingecko.com/en/api/documentation
   CoinGecko rate limits: https://www.coingecko.com/en/api/pricing
   CoinGecko Status: https://status.coingecko.com/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/coingecko-coins
 
 CONFIGURATION
   api_key (string) secret: API Key (for pro users)
@@ -63,11 +67,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/coingecko-coins
 
 EXAMPLES
   # Inspect catalog entry
@@ -82,7 +83,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  CoinGecko Coins documentation: https://docs.airbyte.com/integrations/sources/coingecko-coins
+  CoinGecko API documentation: https://www.coingecko.com/en/api/documentation
+  CoinGecko rate limits: https://www.coingecko.com/en/api/pricing
+  CoinGecko Status: https://status.coingecko.com/
 
 EXIT STATUS
   0 success

@@ -4,7 +4,7 @@
 // RecordsAt extraction) with YouTube-Reporting-API-specific stream definitions
 // and endpoints.
 //
-// The Airbyte source-youtube-analytics connector is built on YouTube's bulk
+// The upstream source-youtube-analytics connector is built on YouTube's bulk
 // Reporting API (https://youtubereporting.googleapis.com/v1), authenticated with
 // a Google OAuth 2.0 refresh-token grant. This connector exposes the three core
 // control-plane resources of that API as streams — reporting jobs, report types,

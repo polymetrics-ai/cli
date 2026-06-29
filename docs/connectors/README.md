@@ -5,7 +5,6 @@
 ## Native Implementation Program
 
 - [Real Native Implementation Plan](REAL_NATIVE_IMPLEMENTATION_PLAN.md): architecture, runtime families, migration phases, and acceptance gates for real native connector ports.
-- [Airbyte To pm Native Porting Guide](AIRBYTE_TO_PM_PORTING_GUIDE.md): field-by-field translation guide for auth, streams, state, destinations, and conformance.
 - [Native Implementation Status Policy](NATIVE_IMPLEMENTATION_STATUS_POLICY.md): rules for when a connector can be called fixture-backed, live-ported, or enabled.
 
 ## Enabled Runtime Connectors
@@ -15,8 +14,8 @@
 - [outbox](outbox/MANUAL.md): Local JSONL destination that records reverse ETL writes and receipts.
 - [sample](sample/MANUAL.md): Built-in deterministic source connector for local development and tests.
 - [searxng](searxng/MANUAL.md): Reads web and Reddit search results from a SearXNG metasearch instance's JSON API (format=json). Read-only. Requires base_url; no credentials by default.
-- [source-github](source-github/MANUAL.md): GitHub native Go source connector. Runtime family: native_go. Documentation: https://docs.airbyte.com/integrations/sources/github.
-- [source-stripe](source-stripe/MANUAL.md): Stripe native Go source connector. Runtime family: declarative_http_go. Documentation: https://docs.airbyte.com/integrations/sources/stripe.
+- [source-github](source-github/MANUAL.md): GitHub native Go source connector. Runtime family: native_go.
+- [source-stripe](source-stripe/MANUAL.md): Stripe native Go source connector. Runtime family: declarative_http_go.
 - [stripe](stripe/MANUAL.md): Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse ETL customer actions through the Stripe REST API.
 - [warehouse](warehouse/MANUAL.md): Local JSONL warehouse destination used by the dependency-free MVP.
 
@@ -87,7 +86,6 @@
 - [source-adobe-commerce-magento](source-adobe-commerce-magento/MANUAL.md): Adobe Commerce (Magento) (planned_native_port)
 - [source-agilecrm](source-agilecrm/MANUAL.md): AgileCRM (planned_native_port)
 - [source-aha](source-aha/MANUAL.md): Aha (planned_native_port)
-- [source-airbyte](source-airbyte/MANUAL.md): Airbyte (planned_native_port)
 - [source-aircall](source-aircall/MANUAL.md): Aircall (planned_native_port)
 - [source-airtable](source-airtable/MANUAL.md): Airtable (planned_native_port)
 - [source-akeneo](source-akeneo/MANUAL.md): Akeneo (planned_native_port)

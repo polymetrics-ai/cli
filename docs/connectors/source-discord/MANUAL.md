@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-discord [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Discord catalog connector for https://docs.airbyte.com/integrations/sources/discord. Native implementation status: planned_native_port.
+  Discord catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-discord:0.1.3 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   Discord API Reference: https://discord.com/developers/docs/reference
   Discord Developer Portal: https://discord.com/developers/applications
   Discord Rate Limits: https://discord.com/developers/docs/topics/rate-limits
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/discord
 
 CONFIGURATION
   bot_token (string) required secret: Discord Bot Token used for authentication. Create a bot at https://discord.com/developers/applications, then copy the token from the Bot section. The bot must be invited to targ...
@@ -58,11 +61,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/discord
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +77,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Discord documentation: https://docs.airbyte.com/integrations/sources/discord
+  Discord API Reference: https://discord.com/developers/docs/reference
+  Discord Developer Portal: https://discord.com/developers/applications
+  Discord Rate Limits: https://discord.com/developers/docs/topics/rate-limits
 
 EXIT STATUS
   0 success

@@ -16,7 +16,7 @@
 // RegisterFactory in init(); the registryset package blank-imports this package
 // in the production binary to run that side effect.
 //
-// This connector is read-only: the upstream Airbyte source supports only
+// This connector is read-only: the upstream upstream source supports only
 // full_refresh syncs and no reverse ETL, so Capabilities.Write is false and
 // there is no write.go.
 package pinterest

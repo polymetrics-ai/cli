@@ -7,7 +7,13 @@ description: Microsoft Lists connector knowledge and safe action guide.
 
 ## Purpose
 
-Microsoft Lists catalog connector for https://docs.airbyte.com/integrations/sources/microsoft-lists. Native implementation status: planned_native_port.
+Microsoft Lists catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Microsoft Lists catalog connector for https://docs.airbyte.com/integrations/sour
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-microsoft-lists:0.0.59 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Microsoft Lists catalog connector for https://docs.airbyte.com/integrations/sour
 - Microsoft Lists API: https://learn.microsoft.com/en-us/graph/api/resources/list
 - Microsoft Graph authentication: https://learn.microsoft.com/en-us/graph/auth/
 - Microsoft 365 Status: https://status.office365.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/microsoft-lists
 
 ## Configuration
 
@@ -68,12 +72,8 @@ Microsoft Lists catalog connector for https://docs.airbyte.com/integrations/sour
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/microsoft-lists
 
 ## Commands
 
@@ -97,4 +97,6 @@ pm connectors inspect source-microsoft-lists --json
 
 ## References
 
-- [Microsoft Lists documentation](https://docs.airbyte.com/integrations/sources/microsoft-lists)
+- [Microsoft Lists API](https://learn.microsoft.com/en-us/graph/api/resources/list)
+- [Microsoft Graph authentication](https://learn.microsoft.com/en-us/graph/auth/)
+- [Microsoft 365 Status](https://status.office365.com/)

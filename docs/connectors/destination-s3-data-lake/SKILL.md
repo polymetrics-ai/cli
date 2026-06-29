@@ -7,7 +7,14 @@ description: S3 Data Lake connector knowledge and safe action guide.
 
 ## Purpose
 
-S3 Data Lake catalog connector for https://docs.airbyte.com/integrations/destinations/s3-data-lake. Native implementation status: planned_native_port.
+S3 Data Lake catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/s3.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.aws.amazon.com/s3/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ S3 Data Lake catalog connector for https://docs.airbyte.com/integrations/destina
 - implementation_status: planned_native_port
 - runtime_kind: destination_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/destination-s3-data-lake:0.3.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ S3 Data Lake catalog connector for https://docs.airbyte.com/integrations/destina
 - AWS S3 documentation: https://docs.aws.amazon.com/s3/
 - IAM authentication: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html
 - Bucket policies and permissions: https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-policy-language-overview.html
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/destinations/s3-data-lake
 
 ## Configuration
 
@@ -71,12 +76,8 @@ S3 Data Lake catalog connector for https://docs.airbyte.com/integrations/destina
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/destinations/s3-data-lake
 
 ## Commands
 
@@ -100,4 +101,6 @@ pm connectors inspect destination-s3-data-lake --json
 
 ## References
 
-- [S3 Data Lake documentation](https://docs.airbyte.com/integrations/destinations/s3-data-lake)
+- [AWS S3 documentation](https://docs.aws.amazon.com/s3/)
+- [IAM authentication](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
+- [Bucket policies and permissions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-policy-language-overview.html)

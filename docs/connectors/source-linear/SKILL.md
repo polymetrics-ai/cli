@@ -7,7 +7,13 @@ description: Linear connector knowledge and safe action guide.
 
 ## Purpose
 
-Linear catalog connector for https://docs.airbyte.com/integrations/sources/linear. Native implementation status: planned_native_port.
+Linear catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Linear catalog connector for https://docs.airbyte.com/integrations/sources/linea
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-linear:0.2.7 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Linear catalog connector for https://docs.airbyte.com/integrations/sources/linea
 - Linear authentication: https://developers.linear.app/docs/oauth/authentication
 - Linear rate limits: https://developers.linear.app/docs/graphql/working-with-the-graphql-api#rate-limiting
 - Linear Status: https://status.linear.app/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/linear
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Linear catalog connector for https://docs.airbyte.com/integrations/sources/linea
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/linear
 
 ## Commands
 
@@ -95,4 +95,7 @@ pm connectors inspect source-linear --json
 
 ## References
 
-- [Linear documentation](https://docs.airbyte.com/integrations/sources/linear)
+- [Linear API reference](https://developers.linear.app/docs/graphql/working-with-the-graphql-api)
+- [Linear authentication](https://developers.linear.app/docs/oauth/authentication)
+- [Linear rate limits](https://developers.linear.app/docs/graphql/working-with-the-graphql-api#rate-limiting)
+- [Linear Status](https://status.linear.app/)

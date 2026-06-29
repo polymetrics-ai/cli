@@ -7,7 +7,13 @@ description: Pylon connector knowledge and safe action guide.
 
 ## Purpose
 
-Pylon catalog connector for https://docs.airbyte.com/integrations/sources/pylon. Native implementation status: planned_native_port.
+Pylon catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Pylon catalog connector for https://docs.airbyte.com/integrations/sources/pylon.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-pylon:0.0.12 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Pylon catalog connector for https://docs.airbyte.com/integrations/sources/pylon.
 
 - Pylon API reference: https://docs.usepylon.com/pylon-docs/developer/api/api-reference
 - Pylon authentication: https://docs.usepylon.com/pylon-docs/developer/api/authentication
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/pylon
 
 ## Configuration
 
@@ -63,12 +67,8 @@ Pylon catalog connector for https://docs.airbyte.com/integrations/sources/pylon.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/pylon
 
 ## Commands
 
@@ -92,4 +92,5 @@ pm connectors inspect source-pylon --json
 
 ## References
 
-- [Pylon documentation](https://docs.airbyte.com/integrations/sources/pylon)
+- [Pylon API reference](https://docs.usepylon.com/pylon-docs/developer/api/api-reference)
+- [Pylon authentication](https://docs.usepylon.com/pylon-docs/developer/api/authentication)

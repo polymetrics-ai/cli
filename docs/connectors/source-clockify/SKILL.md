@@ -7,7 +7,14 @@ description: Clockify connector knowledge and safe action guide.
 
 ## Purpose
 
-Clockify catalog connector for https://docs.airbyte.com/integrations/sources/clockify. Native implementation status: planned_native_port.
+Clockify catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/clockify.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.clockify.me/
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Clockify catalog connector for https://docs.airbyte.com/integrations/sources/clo
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-clockify:0.4.55 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Clockify catalog connector for https://docs.airbyte.com/integrations/sources/clo
 - Clockify API reference: https://docs.clockify.me/
 - Clockify authentication: https://docs.clockify.me/#section/Introduction/Authentication
 - Clockify rate limits: https://docs.clockify.me/#section/Introduction/Rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/clockify
 
 ## Configuration
 
@@ -65,12 +70,8 @@ Clockify catalog connector for https://docs.airbyte.com/integrations/sources/clo
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/clockify
 
 ## Commands
 
@@ -94,4 +95,6 @@ pm connectors inspect source-clockify --json
 
 ## References
 
-- [Clockify documentation](https://docs.airbyte.com/integrations/sources/clockify)
+- [Clockify API reference](https://docs.clockify.me/)
+- [Clockify authentication](https://docs.clockify.me/#section/Introduction/Authentication)
+- [Clockify rate limits](https://docs.clockify.me/#section/Introduction/Rate-limiting)

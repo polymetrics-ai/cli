@@ -7,7 +7,13 @@ description: Google Forms connector knowledge and safe action guide.
 
 ## Purpose
 
-Google Forms catalog connector for https://docs.airbyte.com/integrations/sources/google-forms. Native implementation status: planned_native_port.
+Google Forms catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Google Forms catalog connector for https://docs.airbyte.com/integrations/sources
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-google-forms:0.0.52 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +53,6 @@ Google Forms catalog connector for https://docs.airbyte.com/integrations/sources
 - Google Forms API reference: https://developers.google.com/forms/api/reference/rest
 - Google Forms authentication: https://developers.google.com/forms/api/guides/auth
 - Google Workspace Status: https://www.google.com/appsstatus/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/google-forms
 
 ## Configuration
 
@@ -66,12 +70,8 @@ Google Forms catalog connector for https://docs.airbyte.com/integrations/sources
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/google-forms
 
 ## Commands
 
@@ -95,4 +95,6 @@ pm connectors inspect source-google-forms --json
 
 ## References
 
-- [Google Forms documentation](https://docs.airbyte.com/integrations/sources/google-forms)
+- [Google Forms API reference](https://developers.google.com/forms/api/reference/rest)
+- [Google Forms authentication](https://developers.google.com/forms/api/guides/auth)
+- [Google Workspace Status](https://www.google.com/appsstatus/)

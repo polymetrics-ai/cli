@@ -78,7 +78,7 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 		return err
 	}
 	// Listing the team members confirms auth and connectivity without mutating
-	// anything (mirrors the Airbyte check stream).
+	// anything (mirrors the upstream check stream).
 	if err := r.DoJSON(ctx, http.MethodGet, "team/users", nil, nil, nil); err != nil {
 		return fmt.Errorf("check everhour: %w", err)
 	}

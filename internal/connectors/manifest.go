@@ -69,16 +69,16 @@ type ManifestProvider interface {
 
 func ManifestOf(c Connector) Manifest {
 	if provider, ok := c.(ManifestProvider); ok {
-		return provider.Manifest()
+		return manifestWithIcon(provider.Manifest())
 	}
-	return Manifest{
+	return manifestWithIcon(Manifest{
 		Metadata: c.Metadata(),
 		Risk: RiskSpec{
 			Read:     "connector-specific",
 			Write:    "connector-specific",
 			Approval: "external mutations require preview and approval",
 		},
-	}
+	})
 }
 
 func (r *Registry) Manifest(name string) (Manifest, bool) {

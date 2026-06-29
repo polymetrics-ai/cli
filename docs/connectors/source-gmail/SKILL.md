@@ -7,7 +7,13 @@ description: Gmail connector knowledge and safe action guide.
 
 ## Purpose
 
-Gmail catalog connector for https://docs.airbyte.com/integrations/sources/gmail. Native implementation status: planned_native_port.
+Gmail catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Gmail catalog connector for https://docs.airbyte.com/integrations/sources/gmail.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-gmail:0.1.5 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -49,7 +54,6 @@ Gmail catalog connector for https://docs.airbyte.com/integrations/sources/gmail.
 - Gmail authentication: https://developers.google.com/gmail/api/auth/about-auth
 - Gmail API quotas: https://developers.google.com/gmail/api/reference/quota
 - Google Workspace Status: https://www.google.com/appsstatus/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/gmail
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Gmail catalog connector for https://docs.airbyte.com/integrations/sources/gmail.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/gmail
 
 ## Commands
 
@@ -96,4 +96,7 @@ pm connectors inspect source-gmail --json
 
 ## References
 
-- [Gmail documentation](https://docs.airbyte.com/integrations/sources/gmail)
+- [Gmail API reference](https://developers.google.com/gmail/api/reference/rest)
+- [Gmail authentication](https://developers.google.com/gmail/api/auth/about-auth)
+- [Gmail API quotas](https://developers.google.com/gmail/api/reference/quota)
+- [Google Workspace Status](https://www.google.com/appsstatus/)

@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector source-bitly [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Bitly catalog connector for https://docs.airbyte.com/integrations/sources/bitly. Native implementation status: planned_native_port.
+  Bitly catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +27,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-bitly:0.0.46 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +50,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   API reference: https://dev.bitly.com/api-reference/
   Authentication: https://dev.bitly.com/docs/getting-started/authentication/
   Rate limits: https://dev.bitly.com/docs/getting-started/rate-limits/
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/bitly
 
 CONFIGURATION
   api_key (string) required secret
@@ -60,11 +63,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/bitly
 
 EXAMPLES
   # Inspect catalog entry
@@ -79,7 +79,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  Bitly documentation: https://docs.airbyte.com/integrations/sources/bitly
+  API reference: https://dev.bitly.com/api-reference/
+  Authentication: https://dev.bitly.com/docs/getting-started/authentication/
+  Rate limits: https://dev.bitly.com/docs/getting-started/rate-limits/
 
 EXIT STATUS
   0 success

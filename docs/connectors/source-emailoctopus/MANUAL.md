@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector source-emailoctopus [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  EmailOctopus catalog connector for https://docs.airbyte.com/integrations/sources/emailoctopus. Native implementation status: planned_native_port.
+  EmailOctopus catalog connector. Native implementation status: planned_native_port.
+
+ICON
+  asset: icons/emailoctopus.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://emailoctopus.com/api-documentation
 
 CAPABILITIES
   catalog_metadata=true
@@ -22,7 +28,6 @@ IMPLEMENTATION STATUS
   implementation_status: planned_native_port
   runtime_kind: declarative_http_go
   notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-  upstream image reference: airbyte/source-emailoctopus:0.2.54 (metadata only; not executed)
 
 RUNTIME CAPABILITIES
   metadata=true
@@ -46,7 +51,6 @@ OFFICIAL APPLICATION DOCUMENTATION
   EmailOctopus API documentation: https://emailoctopus.com/api-documentation
   EmailOctopus authentication: https://emailoctopus.com/api-documentation#authentication
   EmailOctopus rate limits: https://emailoctopus.com/api-documentation#rate-limiting
-  Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/emailoctopus
 
 CONFIGURATION
   api_key (string) required secret: EmailOctopus API Key. See the <a href="https://help.emailoctopus.com/article/165-how-to-create-and-delete-api-keys">docs</a> for information on how to generate this key.
@@ -58,11 +62,8 @@ SYNC MODES
 
 SECURITY
   Secret values are never rendered; only secret field names are shown.
-  Upstream image references are metadata only and are not executed by pm.
+  Image references are metadata only and are not executed by pm.
   Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-DOCUMENTATION
-  https://docs.airbyte.com/integrations/sources/emailoctopus
 
 EXAMPLES
   # Inspect catalog entry
@@ -77,7 +78,9 @@ AGENT WORKFLOW
   - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
 
 SEE ALSO
-  EmailOctopus documentation: https://docs.airbyte.com/integrations/sources/emailoctopus
+  EmailOctopus API documentation: https://emailoctopus.com/api-documentation
+  EmailOctopus authentication: https://emailoctopus.com/api-documentation#authentication
+  EmailOctopus rate limits: https://emailoctopus.com/api-documentation#rate-limiting
 
 EXIT STATUS
   0 success

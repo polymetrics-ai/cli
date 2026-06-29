@@ -7,7 +7,14 @@ description: Twilio Taskrouter connector knowledge and safe action guide.
 
 ## Purpose
 
-Twilio Taskrouter catalog connector for https://docs.airbyte.com/integrations/sources/twilio-taskrouter. Native implementation status: planned_native_port.
+Twilio Taskrouter catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/twilio.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.twilio.com/docs/taskrouter/api
 
 ## Capabilities
 
@@ -21,7 +28,6 @@ Twilio Taskrouter catalog connector for https://docs.airbyte.com/integrations/so
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-twilio-taskrouter:0.2.21 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -48,7 +54,6 @@ Twilio Taskrouter catalog connector for https://docs.airbyte.com/integrations/so
 - Twilio TaskRouter API: https://www.twilio.com/docs/taskrouter/api
 - Twilio authentication: https://www.twilio.com/docs/iam/credentials/api-credentials
 - Twilio Status: https://status.twilio.com/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/twilio-taskrouter
 
 ## Configuration
 
@@ -64,12 +69,8 @@ Twilio Taskrouter catalog connector for https://docs.airbyte.com/integrations/so
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/twilio-taskrouter
 
 ## Commands
 
@@ -93,4 +94,6 @@ pm connectors inspect source-twilio-taskrouter --json
 
 ## References
 
-- [Twilio Taskrouter documentation](https://docs.airbyte.com/integrations/sources/twilio-taskrouter)
+- [Twilio TaskRouter API](https://www.twilio.com/docs/taskrouter/api)
+- [Twilio authentication](https://www.twilio.com/docs/iam/credentials/api-credentials)
+- [Twilio Status](https://status.twilio.com/)

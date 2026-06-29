@@ -7,7 +7,13 @@ description: Sage HR connector knowledge and safe action guide.
 
 ## Purpose
 
-Sage HR catalog connector for https://docs.airbyte.com/integrations/sources/sage-hr. Native implementation status: planned_native_port.
+Sage HR catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Sage HR catalog connector for https://docs.airbyte.com/integrations/sources/sage
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-sage-hr:0.0.58 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ Sage HR catalog connector for https://docs.airbyte.com/integrations/sources/sage
 ## Official Application Documentation
 
 - Sage HR API documentation: https://developers.sage.hr/
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/sage-hr
 
 ## Configuration
 
@@ -62,12 +66,8 @@ Sage HR catalog connector for https://docs.airbyte.com/integrations/sources/sage
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/sage-hr
 
 ## Commands
 
@@ -91,4 +91,4 @@ pm connectors inspect source-sage-hr --json
 
 ## References
 
-- [Sage HR documentation](https://docs.airbyte.com/integrations/sources/sage-hr)
+- [Sage HR API documentation](https://developers.sage.hr/)

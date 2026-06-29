@@ -7,7 +7,13 @@ description: lu.ma connector knowledge and safe action guide.
 
 ## Purpose
 
-lu.ma catalog connector for https://docs.airbyte.com/integrations/sources/luma. Native implementation status: planned_native_port.
+lu.ma catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ lu.ma catalog connector for https://docs.airbyte.com/integrations/sources/luma. 
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-luma:0.0.61 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -46,7 +51,6 @@ lu.ma catalog connector for https://docs.airbyte.com/integrations/sources/luma. 
 ## Official Application Documentation
 
 - Luma API documentation: https://docs.lu.ma/reference/getting-started
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/luma
 
 ## Configuration
 
@@ -61,12 +65,8 @@ lu.ma catalog connector for https://docs.airbyte.com/integrations/sources/luma. 
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/luma
 
 ## Commands
 
@@ -90,4 +90,4 @@ pm connectors inspect source-luma --json
 
 ## References
 
-- [lu.ma documentation](https://docs.airbyte.com/integrations/sources/luma)
+- [Luma API documentation](https://docs.lu.ma/reference/getting-started)

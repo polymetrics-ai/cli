@@ -7,7 +7,13 @@ description: File (CSV, JSON, Excel, Feather, Parquet) connector knowledge and s
 
 ## Purpose
 
-File (CSV, JSON, Excel, Feather, Parquet) catalog connector for https://docs.airbyte.com/integrations/sources/file. Native implementation status: planned_native_port.
+File (CSV, JSON, Excel, Feather, Parquet) catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/file.svg
+- source: upstream_registry
+- review_status: upstream_seeded
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ File (CSV, JSON, Excel, Feather, Parquet) catalog connector for https://docs.air
 - implementation_status: planned_native_port
 - runtime_kind: file_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-file:0.6.0 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -45,8 +50,7 @@ File (CSV, JSON, Excel, Feather, Parquet) catalog connector for https://docs.air
 
 ## Official Application Documentation
 
-- File source documentation: https://docs.airbyte.com/integrations/sources/file
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/file
+- manual intervention needed
 
 ## Configuration
 
@@ -65,12 +69,8 @@ File (CSV, JSON, Excel, Feather, Parquet) catalog connector for https://docs.air
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/file
 
 ## Commands
 
@@ -91,7 +91,3 @@ pm connectors inspect source-file --json
 - Read implementation_status before planning ETL or reverse ETL.
 - If implementation_status is planned_native_port, do not create credentials or runs for this connector yet.
 - Never ask for secret values in chat; use pm credentials with --from-env or --value-stdin after native support is enabled.
-
-## References
-
-- [File (CSV, JSON, Excel, Feather, Parquet) documentation](https://docs.airbyte.com/integrations/sources/file)

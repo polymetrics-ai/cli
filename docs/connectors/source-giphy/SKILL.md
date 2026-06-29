@@ -7,7 +7,13 @@ description: Giphy connector knowledge and safe action guide.
 
 ## Purpose
 
-Giphy catalog connector for https://docs.airbyte.com/integrations/sources/giphy. Native implementation status: planned_native_port.
+Giphy catalog connector. Native implementation status: planned_native_port.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -21,7 +27,6 @@ Giphy catalog connector for https://docs.airbyte.com/integrations/sources/giphy.
 - implementation_status: planned_native_port
 - runtime_kind: declarative_http_go
 - notes: Catalog metadata is available; ETL is disabled until a native Go port passes conformance tests.
-- upstream image reference: airbyte/source-giphy:0.0.37 (metadata only; not executed)
 
 ## Runtime Capabilities
 
@@ -47,7 +52,6 @@ Giphy catalog connector for https://docs.airbyte.com/integrations/sources/giphy.
 
 - GIPHY API documentation: https://developers.giphy.com/docs/api/
 - GIPHY rate limits: https://developers.giphy.com/docs/api/#rate-limiting
-- Airbyte connector documentation: https://docs.airbyte.com/integrations/sources/giphy
 
 ## Configuration
 
@@ -67,12 +71,8 @@ Giphy catalog connector for https://docs.airbyte.com/integrations/sources/giphy.
 ## Security
 
 - Secret values are never rendered; only secret field names are shown.
-- Upstream image references are metadata only and are not executed by pm.
+- Image references are metadata only and are not executed by pm.
 - Catalog-only connectors cannot run ETL until a native Go implementation is enabled.
-
-## Documentation
-
-- https://docs.airbyte.com/integrations/sources/giphy
 
 ## Commands
 
@@ -96,4 +96,5 @@ pm connectors inspect source-giphy --json
 
 ## References
 
-- [Giphy documentation](https://docs.airbyte.com/integrations/sources/giphy)
+- [GIPHY API documentation](https://developers.giphy.com/docs/api/)
+- [GIPHY rate limits](https://developers.giphy.com/docs/api/#rate-limiting)
