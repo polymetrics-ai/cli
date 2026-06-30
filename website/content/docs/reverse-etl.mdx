@@ -1,0 +1,136 @@
+---
+title: Reverse ETL
+description: Write data back to any destination using the plan-preview-approve-run gate that keeps humans and agents in control.
+---
+
+Reverse ETL in pm follows a strict four-step gate: **plan, preview, approve, run**. No records are written to a destination until an approval token is explicitly presented at run time. This design makes reverse-ETL safe to delegate to an AI agent without the risk of silent mutations.
+
+## The four-step gate
+
+```bash
+pm reverse plan <name> [flags]             # generate a plan and approval token
+pm reverse preview <plan-id> [--json]      # inspect exactly what will change
+pm reverse run <plan-id> --approve <token> [--json]   # execute
+```
+
+<Callout type="warn">
+  The command group is `pm reverse`, not `pm reverse-etl`. There is no `pm reverse-etl` command.
+</Callout>
+
+## Step-by-step walkthrough
+
+### 1. Create a plan
+
+```bash
+pm reverse plan sync \
+  --source-table open_issues \
+  --destination github:my-github \
+  --action create_issue \
+  --map title:title \
+  --map body:body \
+  --json
+```
+
+The `plan` subcommand reads from the named source table, maps columns to destination fields, and returns a plan ID and an approval token.
+
+JSON output:
+
+```json
+{
+  "api_version": "polymetrics.ai/v1",
+  "kind": "ReversePlan",
+  "plan": {
+    "id": "plan_abc123",
+    "name": "sync",
+    "status": "pending",
+    "record_count": 5,
+    "expires_at": "2026-01-15T11:00:00Z"
+  },
+  "approval_required": true
+}
+```
+
+<Callout type="info">
+  The approval token is printed in plain-text mode but is **omitted from the JSON output** for security. Retrieve it from the plain-text run or your vault. Tokens are time-bounded and single-use.
+</Callout>
+
+### 2. Preview the plan
+
+```bash
+pm reverse preview plan_abc123 --json
+```
+
+The preview returns the full plan record including all staged actions. Review it before approving.
+
+```json
+{
+  "kind": "ReversePlanPreview",
+  "plan": {
+    "id": "plan_abc123",
+    "status": "pending",
+    "record_count": 5,
+    "actions": [
+      { "action": "create_issue", "title": "Fix login bug", "body": "Steps to reproduce..." }
+    ]
+  }
+}
+```
+
+### 3. Execute with an approval token
+
+```bash
+pm reverse run plan_abc123 --approve tk_xyz789 --json
+```
+
+JSON output:
+
+```json
+{
+  "api_version": "polymetrics.ai/v1",
+  "kind": "ReverseRun",
+  "run": {
+    "id": "run_def456",
+    "status": "completed",
+    "plan_id": "plan_abc123",
+    "records_succeeded": 5,
+    "records_failed": 0
+  }
+}
+```
+
+## Listing plans and runs
+
+```bash
+pm reverse list --json
+```
+
+Returns all plans and their associated runs.
+
+## Security model
+
+| Guarantee | Detail |
+|---|---|
+| **Approval tokens are time-bounded** | A token expires after a configurable window. Expired tokens are rejected. |
+| **Tokens are single-use** | Replaying a token returns exit code `7` (policy / approval needed). |
+| **Secrets are never printed** | Only secret field names appear in plan manifests; values are never exposed. |
+| **Agents get a diff first** | An agent can run `plan` and `preview` autonomously; it must present an approval token for `run`. |
+
+This design lets you delegate reverse-ETL to an AI agent with confidence: the agent proposes changes, a human (or an explicitly trusted policy) issues the token, and only then does data move.
+
+## Exit codes
+
+| Code | Meaning | Recommended action |
+|---:|---|---|
+| `0` | Success | Continue. |
+| `4` | Auth error | Surface to a human to update credentials. |
+| `7` | Approval required | Obtain an approval token from the plan step, then retry. |
+| `1` | Internal error | File a bug report. |
+
+## Where to go next
+
+<Cards>
+  <Card title="ETL" href="/docs/etl" description="Extract source data before writing it back." />
+  <Card title="Query" href="/docs/query" description="Shape data with SQL before passing it to pm reverse plan." />
+  <Card title="Agent guide" href="/docs/agent-guide" description="Orchestrate the full loop from an AI agent, including approval gates." />
+  <Card title="Connector catalog" href="/docs/connectors" description="Browse destination connectors available for reverse-ETL." />
+</Cards>

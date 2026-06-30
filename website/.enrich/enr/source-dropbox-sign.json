@@ -1,0 +1,37 @@
+{
+  "prerequisites": [
+    "A Dropbox Sign account (sign in at sign.dropbox.com). Dropbox Sign was formerly known as HelloSign.",
+    "An API key generated from your Dropbox Sign account API settings.",
+    "A start_date value (the connector replicates data created on or after this date)."
+  ],
+  "authMethods": [
+    {
+      "name": "API key (HTTP Basic Auth)",
+      "summary": "Authenticate with the api_key secret field. The Dropbox Sign API uses HTTP Basic Authentication where the API key is passed as the username and the password is left blank. Generate or reveal the key on the Dropbox Sign API settings page and paste it into the connector's api_key field."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Get your Dropbox Sign API key",
+      "body": "Log in to sign.dropbox.com, then open the API settings page at https://app.hellosign.com/home/myAccount#api. Click Reveal Key to show an existing key, or Create Key if you have not generated one yet. Copy the key."
+    },
+    {
+      "title": "Provide the API key",
+      "body": "Paste the copied key into the connector's required api_key field. This key is used as the Basic Auth username (with a blank password) on every Dropbox Sign API request."
+    },
+    {
+      "title": "Set the start date",
+      "body": "Set the required start_date field. The connector replicates records created on or after this date."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Authentication | Dropbox Sign Developer Documentation",
+      "url": "https://developers.hellosign.com/api/api-reference-authentication"
+    },
+    {
+      "title": "How to find your Dropbox Sign API key (Dropbox Help)",
+      "url": "https://help.dropbox.com/integrations/api-account-api-key-dropbox-sign"
+    }
+  ]
+}

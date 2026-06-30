@@ -1,0 +1,37 @@
+{
+  "prerequisites": [
+    "A SimFin account. Register and sign in at app.simfin.com; a free tier is available with limited data access, and paid subscriptions unlock extended historical data.",
+    "A confirmed account email. SimFin rejects API requests until the email address used at registration has been verified.",
+    "A SimFin API key generated from your account, used to populate the connector's required api_key field."
+  ],
+  "authMethods": [
+    {
+      "name": "API key",
+      "summary": "SimFin's v3 API authenticates with a per-account API key. The connector sends it in the Authorization HTTP header on each request to the SimFin backend (https://backend.simfin.com/api/v3/). Requests without a valid key return HTTP 401 'Full authentication is required to access this resource', and an unrecognized key returns 'Invalid API Key', which also reminds you to confirm your registration email. This maps to the connector's single required secret field, api_key."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Create and confirm a SimFin account",
+      "body": "Go to app.simfin.com and register (the free subscription is sufficient to obtain a key). Confirm the verification email SimFin sends, because the API rejects keys whose registration email has not been confirmed."
+    },
+    {
+      "title": "Obtain your SimFin API key",
+      "body": "Sign in at app.simfin.com and locate the API key issued for your account. Each SimFin account has its own key, which authorizes access to the data your subscription tier permits."
+    },
+    {
+      "title": "Configure the connector",
+      "body": "Set the required api_key field to your SimFin API key. The connector authenticates by sending this key in the Authorization header to the SimFin v3 API (https://backend.simfin.com/api/v3/)."
+    }
+  ],
+  "sources": [
+    {
+      "title": "SimFin Fundamental Data Download (API access, account, free tier)",
+      "url": "https://www.simfin.com/en/fundamental-data-download/"
+    },
+    {
+      "title": "SimFin account login / registration (app.simfin.com)",
+      "url": "https://app.simfin.com/login?subscription=free"
+    }
+  ]
+}

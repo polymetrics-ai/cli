@@ -1,0 +1,33 @@
+{
+  "prerequisites": [
+    "An incident.io account with access to the dashboard.",
+    "Permission to create API keys under Settings in the incident.io dashboard.",
+    "An API key generated with the permissions required for the data you intend to read."
+  ],
+  "authMethods": [
+    {
+      "name": "API key (Bearer token)",
+      "summary": "Authenticate with a single API key. incident.io uses Bearer token authentication: the key is sent in the Authorization header as 'Authorization: Bearer <YOUR_API_KEY>'. Provide this value in the connector's api_key field."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Generate an API key in incident.io",
+      "body": "Log in to your incident.io dashboard and go to Settings then API keys. Create a new key and choose the actions it can take so it has the permissions appropriate to what you want to access. The token is shown only once, so copy and store it securely immediately."
+    },
+    {
+      "title": "Provide the API key to the connector",
+      "body": "Paste the generated API key into the connector's required api_key field. The connector sends this value as a Bearer token in the Authorization header against the incident.io API at https://api.incident.io/."
+    }
+  ],
+  "sources": [
+    {
+      "title": "incident.io API reference - Introduction (authentication, base URL, generating keys)",
+      "url": "https://docs.incident.io/api-reference/introduction"
+    },
+    {
+      "title": "Creating your first incident using the API (Settings then API keys)",
+      "url": "https://docs.incident.io/integrations/api-create-incident"
+    }
+  ]
+}

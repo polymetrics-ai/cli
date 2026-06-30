@@ -1,0 +1,121 @@
+---
+title: Query
+description: Run table scans or read-only SQL over local warehouse data using pm query run.
+---
+
+After an extraction lands data in the local warehouse, `pm query run` lets you inspect it without leaving the local workspace. The default binary uses a pure-Go JSONL query engine for table reads and conservative SELECT parsing. Building with `-tags duckdb` unlocks the DuckDB-backed engine for richer analytical SQL.
+
+## Basic usage
+
+```bash
+pm query run --table <table> [--limit <n>] [--json]
+pm query run --sql "<SQL statement>" [--limit <n>] [--json]
+```
+
+`--table` is shorthand for `SELECT * FROM <table> LIMIT <n>`. Use `--sql` for any other query.
+
+## Flag reference
+
+| Flag | Description |
+|---|---|
+| `--table` | Table name to query. Returns all columns up to `--limit` rows. |
+| `--sql` | Raw SQL statement. Takes precedence over `--table` when both are provided. |
+| `--limit` | Maximum rows to return. Default is 100. |
+| `--json` | Emit structured JSON to stdout. |
+
+<Callout type="info">
+  The flag for the SQL string is `--sql`, not `--query`. There is no `--format` flag.
+</Callout>
+
+## Examples
+
+### Inspect a table
+
+```bash
+pm query run --table customers --limit 5 --json
+```
+
+### Aggregate by column
+
+```bash
+pm query run \
+  --sql "SELECT state, COUNT(*) AS n FROM issues GROUP BY state ORDER BY n DESC" \
+  --json
+```
+
+### Join two extracted tables
+
+```bash
+pm query run \
+  --sql "SELECT c.name, COUNT(o.id) AS orders
+         FROM customers c
+         JOIN orders o ON c.id = o.customer_id
+         GROUP BY c.name
+         ORDER BY orders DESC" \
+  --json
+```
+
+<Callout type="warn">
+  Joins require the DuckDB build (`CGO_ENABLED=1 go build -tags duckdb ./cmd/pm`). The default CGO-free build is intentionally conservative.
+</Callout>
+
+### Filter and sort
+
+```bash
+pm query run \
+  --sql "SELECT id, title, created_at FROM issues WHERE state = 'open' ORDER BY created_at DESC LIMIT 20" \
+  --json
+```
+
+## JSON output envelope
+
+```json
+{
+  "kind": "QueryResult",
+  "count": 2,
+  "rows": [
+    { "state": "open",   "n": 98 },
+    { "state": "closed", "n": 44 }
+  ]
+}
+```
+
+The envelope always contains:
+- `kind`: always `"QueryResult"`
+- `count`: number of rows returned
+- `rows`: array of row objects, keys are column names
+
+## Engine modes
+
+| Build | Query behavior |
+|---|---|
+| Default | Local JSONL table reads and conservative SELECT parsing. |
+| `-tags duckdb` | DuckDB-backed read-only SQL over local warehouse files. |
+
+Both modes keep query execution local. Output can contain data rows, so agents should use explicit `--limit` values.
+
+## Workflow: extract then query
+
+A typical agent or script workflow:
+
+```bash
+# 1. Extract
+pm etl run --connection my-stripe --stream charges --json
+
+# 2. Aggregate
+pm query run \
+  --sql "SELECT DATE_TRUNC('month', created_at) AS month, SUM(amount) AS revenue
+         FROM charges
+         GROUP BY month
+         ORDER BY month DESC" \
+  --json
+```
+
+## Where to go next
+
+<Cards>
+  <Card title="ETL" href="/docs/etl" description="Extract data from any connector before querying it." />
+  <Card title="Reverse ETL" href="/docs/reverse-etl" description="Write query results back to a destination system." />
+  <Card title="Agent guide" href="/docs/agent-guide" description="Automate the extract-query loop from an AI agent." />
+  <Card title="Connector catalog" href="/docs/connectors" description="Browse all available source connectors." />
+</Cards>

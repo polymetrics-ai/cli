@@ -1,0 +1,182 @@
+name: Website CI/CD
+
+on:
+  pull_request:
+    paths:
+      - "website/**"
+      - ".github/workflows/website.yml"
+      - ".gitlab-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "website/**"
+      - ".github/workflows/website.yml"
+      - ".gitlab-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+  PNPM_VERSION: "11.7.0"
+  REGISTRY: ghcr.io
+
+jobs:
+  checks:
+    name: Website checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+
+    steps:
+      - name: Configure git defaults
+        working-directory: .
+        run: git config --global init.defaultBranch main
+
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: website/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --reporter=silent
+
+      - name: Verify generated website data
+        run: |
+          pnpm run gen:website-data
+          changed="$(git status --short -- \
+            lib/connectors.catalog.generated.ts \
+            lib/connectors.generated.ts \
+            lib/connectors.enrichment.generated.ts \
+            lib/docs.generated.ts \
+            public/connectors/icons)"
+          if [ -n "$changed" ]; then
+            printf '%s\n' "$changed"
+            exit 1
+          fi
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Unit tests
+        run: pnpm run test:unit
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: pnpm run test:e2e
+
+      - name: Build
+        run: pnpm run build
+
+  image:
+    name: Website image
+    runs-on: ubuntu-latest
+    needs: checks
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.image.outputs.image }}
+
+    steps:
+      - name: Configure git defaults
+        run: git config --global init.defaultBranch main
+
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set image tags
+        id: image
+        run: |
+          repo="${GITHUB_REPOSITORY,,}"
+          image="${REGISTRY}/${repo}/website:${GITHUB_SHA}"
+          {
+            echo "image=${image}"
+            echo "tags<<EOF"
+            echo "${image}"
+            if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
+              echo "${REGISTRY}/${repo}/website:main"
+            fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GitHub Container Registry
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: printf '%s' "$GITHUB_TOKEN" | docker login "$REGISTRY" --username "${{ github.actor }}" --password-stdin
+
+      - name: Build website image
+        env:
+          DOCKER_BUILDKIT: "1"
+          PUSH_IMAGE: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+          TAGS: ${{ steps.image.outputs.tags }}
+        run: |
+          tags=()
+          while IFS= read -r tag; do
+            if [ -n "$tag" ]; then
+              tags+=("-t" "$tag")
+            fi
+          done <<< "$TAGS"
+
+          docker build -f website/Dockerfile "${tags[@]}" website
+
+          if [ "$PUSH_IMAGE" = "true" ]; then
+            while IFS= read -r tag; do
+              if [ -n "$tag" ]; then
+                docker push "$tag"
+              fi
+            done <<< "$TAGS"
+          fi
+
+  deploy:
+    name: Website deploy
+    runs-on: [self-hosted, linux, tailscale, polymetrics-website]
+    needs: image
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    environment: website-production
+    concurrency: website-production
+
+    steps:
+      - name: Configure git defaults
+        run: git config --global init.defaultBranch main
+
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Configure kubeconfig from secret
+        env:
+          WEBSITE_KUBECONFIG_B64: ${{ secrets.WEBSITE_KUBECONFIG_B64 }}
+        run: |
+          if [ -n "${WEBSITE_KUBECONFIG_B64:-}" ]; then
+            mkdir -p "$HOME/.kube"
+            printf '%s' "$WEBSITE_KUBECONFIG_B64" | base64 -d > "$HOME/.kube/config"
+            chmod 600 "$HOME/.kube/config"
+          fi
+
+      - name: Deploy website
+        env:
+          WEBSITE_IMAGE: ${{ needs.image.outputs.image }}
+          WEBSITE_KUBE_CONTEXT: ${{ vars.WEBSITE_KUBE_CONTEXT }}
+          WEBSITE_NAMESPACE: ${{ vars.WEBSITE_NAMESPACE }}
+          WEBSITE_DEPLOYMENT: ${{ vars.WEBSITE_DEPLOYMENT }}
+          WEBSITE_CONTAINER: ${{ vars.WEBSITE_CONTAINER }}
+          WEBSITE_IMAGE_PULL_SECRET: ${{ vars.WEBSITE_IMAGE_PULL_SECRET }}
+          WEBSITE_ROLLOUT_TIMEOUT: ${{ vars.WEBSITE_ROLLOUT_TIMEOUT }}
+        run: website/deploy/deploy-image.sh

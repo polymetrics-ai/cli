@@ -1,0 +1,33 @@
+{
+  "prerequisites": [
+    "A Ticket Tailor account with access to your box office settings.",
+    "An API key generated from your box office API settings (manage keys at https://app.tickettailor.com/box-office/api). Keys are prefixed with sk_.",
+    "Network access to the production API base URL https://api.tickettailor.com."
+  ],
+  "authMethods": [
+    {
+      "name": "API key (HTTP Basic Auth)",
+      "summary": "The connector authenticates with the api_key secret field. The Ticket Tailor API uses HTTP Basic Auth: the API key is sent either as a Base64-encoded Authorization header (Authorization: Basic Base64Encode(api_key)) or as the basic auth username with an empty password (a trailing colon, e.g. -u 'sk_...:'). Provide the key in the api_key field and the connector handles the Basic Auth encoding."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Generate an API key",
+      "body": "Sign in to Ticket Tailor and open your box office API settings at https://app.tickettailor.com/box-office/api. Create an API key and copy it. Keys begin with the sk_ prefix. Store the key securely, as it grants access to your box office data."
+    },
+    {
+      "title": "Provide the API key to the connector",
+      "body": "Set the required api_key config field to the key you generated. This is the only field the source-tickettailor connector requires. The connector sends it via HTTP Basic Auth against the production API at https://api.tickettailor.com."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Ticket Tailor API (developer docs, authentication and base URL)",
+      "url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api/"
+    },
+    {
+      "title": "Ticket Tailor API reference (developer portal)",
+      "url": "https://developers.tickettailor.com/"
+    }
+  ]
+}

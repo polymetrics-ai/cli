@@ -1,0 +1,53 @@
+{
+  "prerequisites": [
+    "A Cloudbeds account with API access enabled (property-level users generate a key from the dashboard; technology partners need a Partner Dev Account with API Keys Authentication enabled by Cloudbeds).",
+    "Application credentials created under Account > Apps & Marketplace, with the permission scopes that match the API endpoints you plan to read.",
+    "The generated Cloudbeds API key (api_key), copied at creation time because it cannot be viewed again after the dialog is closed."
+  ],
+  "authMethods": [
+    {
+      "name": "API key (Bearer token)",
+      "summary": "Cloudbeds authenticates with a long-lived API key. Provide it in the connector's api_key field. Cloudbeds keys are prefixed cbat_ and are sent as a bearer token (Authorization: Bearer <api_key>, or via the x-api-key header). A key does not expire as long as it is used at least once every 30 days; regenerating or deleting it invalidates the old key."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Open Apps & Marketplace in Cloudbeds",
+      "body": "Log into your Cloudbeds account and go to Account > Apps & Marketplace from the menu in the upper-right corner."
+    },
+    {
+      "title": "Create new credentials",
+      "body": "Click + New Credentials and provide an application name, select a category, and enter a Redirect URI (for example https://localhost). Check Enable for entire organization if the key should cover multiple properties."
+    },
+    {
+      "title": "Select the required scopes",
+      "body": "After saving, choose the API scopes that align with the API endpoints you plan to read. Scopes are required and must match the endpoints you intend to access. To change scopes later you must delete and recreate the key."
+    },
+    {
+      "title": "Select properties (if applicable)",
+      "body": "If you manage multiple properties, select which ones the credentials apply to."
+    },
+    {
+      "title": "Generate and copy the API key",
+      "body": "Verify the credentials and generate the key. Copy it immediately and store it securely, because the API key cannot be viewed again after the dialog is closed."
+    },
+    {
+      "title": "Configure the connector",
+      "body": "Paste the Cloudbeds API key into the connector's required api_key field. The connector sends it as a bearer token on each request."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Cloudbeds Developers - API reference",
+      "url": "https://developers.cloudbeds.com/reference"
+    },
+    {
+      "title": "Cloudbeds Developers - Quickstart guide: API authentication for property-level users",
+      "url": "https://developers.cloudbeds.com/docs/quickstart-guide-api-authentication-for-property-level-users"
+    },
+    {
+      "title": "Cloudbeds Developers - API Keys authentication guide for technology partners",
+      "url": "https://developers.cloudbeds.com/docs/api-keys-authentication-guide-for-technology-partners"
+    }
+  ]
+}

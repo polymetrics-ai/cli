@@ -1,0 +1,100 @@
+stages:
+  - website-test
+  - website-build
+  - website-deploy
+
+variables:
+  NODE_VERSION: "22"
+  PNPM_VERSION: "11.7.0"
+  WEBSITE_DIR: "website"
+  WEBSITE_IMAGE: "$CI_REGISTRY_IMAGE/website:$CI_COMMIT_SHA"
+  WEBSITE_MAIN_IMAGE: "$CI_REGISTRY_IMAGE/website:main"
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+
+.website_rules:
+  rules: &website_rules
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - website/**/*
+        - .gitlab-ci.yml
+        - .github/workflows/website.yml
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - website/**/*
+        - .gitlab-ci.yml
+        - .github/workflows/website.yml
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
+website:test:
+  stage: website-test
+  image: mcr.microsoft.com/playwright:v1.61.1-noble
+  rules: *website_rules
+  before_script:
+    - npm install --global "pnpm@$PNPM_VERSION"
+  script:
+    - cd "$WEBSITE_DIR"
+    - pnpm install --frozen-lockfile --reporter=silent
+    - pnpm run gen:website-data
+    - |
+      changed="$(git status --short -- \
+        lib/connectors.catalog.generated.ts \
+        lib/connectors.generated.ts \
+        lib/connectors.enrichment.generated.ts \
+        lib/docs.generated.ts \
+        public/connectors/icons)"
+      if [ -n "$changed" ]; then
+        printf '%s\n' "$changed"
+        exit 1
+      fi
+    - pnpm run typecheck
+    - pnpm run test:unit
+    - pnpm run test:e2e
+    - pnpm run build
+
+website:image:
+  stage: website-build
+  image: docker:27
+  services:
+    - name: docker:27-dind
+      alias: docker
+  rules: *website_rules
+  needs:
+    - website:test
+  script:
+    - docker build --pull -f "$WEBSITE_DIR/Dockerfile" -t "$WEBSITE_IMAGE" "$WEBSITE_DIR"
+    - |
+      if [ "${CI_COMMIT_BRANCH:-}" = "main" ]; then
+        printf '%s' "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" --username "$CI_REGISTRY_USER" --password-stdin
+        docker push "$WEBSITE_IMAGE"
+        docker tag "$WEBSITE_IMAGE" "$WEBSITE_MAIN_IMAGE"
+        docker push "$WEBSITE_MAIN_IMAGE"
+      fi
+
+website:deploy:
+  stage: website-deploy
+  image:
+    name: bitnami/kubectl:1.33
+    entrypoint: [""]
+  tags:
+    - tailscale
+    - polymetrics-website
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - website/**/*
+        - .gitlab-ci.yml
+        - .github/workflows/website.yml
+    - if: '$CI_PIPELINE_SOURCE == "web" && $CI_COMMIT_BRANCH == "main"'
+  needs:
+    - website:image
+  environment:
+    name: website-production
+  script:
+    - |
+      if [ -n "${WEBSITE_KUBECONFIG_B64:-}" ]; then
+        mkdir -p "$HOME/.kube"
+        printf '%s' "$WEBSITE_KUBECONFIG_B64" | base64 -d > "$HOME/.kube/config"
+        chmod 600 "$HOME/.kube/config"
+      fi
+    - sh website/deploy/deploy-image.sh "$WEBSITE_IMAGE"

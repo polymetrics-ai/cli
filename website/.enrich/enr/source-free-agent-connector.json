@@ -1,0 +1,45 @@
+{
+  "prerequisites": [
+    "A FreeAgent account with access to the company data you want to sync.",
+    "A registered application in the FreeAgent Developer Dashboard at https://dev.freeagent.com, which provides the OAuth Client ID and Client Secret.",
+    "An OAuth refresh token obtained by completing the authorization code flow against your registered app (used here as client_refresh_token_2)."
+  ],
+  "authMethods": [
+    {
+      "name": "OAuth 2.0 (refresh token)",
+      "summary": "FreeAgent's API uses OAuth 2.0. Register an app at the FreeAgent Developer Dashboard to obtain a Client ID and Client Secret, then complete the authorization code flow to obtain a refresh token. The connector authenticates with client_id, client_secret, and client_refresh_token_2, exchanging the refresh token at the token endpoint (https://api.freeagent.com/v2/token_endpoint) for short-lived bearer access tokens. Access tokens are valid for one hour."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Register an app in the FreeAgent Developer Dashboard",
+      "body": "Sign in at https://dev.freeagent.com and register a new application. After creation, note the OAuth Client ID and Client Secret. When registering, set a redirect URI that you will use during the authorization step."
+    },
+    {
+      "title": "Obtain a refresh token via the OAuth authorization code flow",
+      "body": "Direct a FreeAgent user to the authorization endpoint https://api.freeagent.com/v2/approve_app with response_type=code, your client_id, and your registered redirect_uri to approve the app. Exchange the returned authorization code at the token endpoint https://api.freeagent.com/v2/token_endpoint (grant_type=authorization_code, using HTTP Basic auth with your Client ID and Client Secret) to receive an access_token and refresh_token. The quick start guide (https://dev.freeagent.com/docs/quick_start) walks through doing this with the Google OAuth 2.0 Playground."
+    },
+    {
+      "title": "Provide credentials to the connector",
+      "body": "Enter client_id, client_secret, and client_refresh_token_2 (the OAuth refresh token from the previous step). The connector uses the refresh token to obtain bearer access tokens automatically."
+    },
+    {
+      "title": "Configure optional sync settings",
+      "body": "Optionally set updated_since to limit records to those changed on or after a given date for incremental syncs, and payroll_year to scope payroll data to a specific year. Both fields are optional."
+    }
+  ],
+  "sources": [
+    {
+      "title": "FreeAgent API documentation",
+      "url": "https://dev.freeagent.com/"
+    },
+    {
+      "title": "FreeAgent OAuth 2.0 guide",
+      "url": "https://dev.freeagent.com/docs/oauth"
+    },
+    {
+      "title": "FreeAgent API Quick start",
+      "url": "https://dev.freeagent.com/docs/quick_start"
+    }
+  ]
+}

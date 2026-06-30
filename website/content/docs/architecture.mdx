@@ -1,0 +1,176 @@
+---
+title: Architecture
+description: "How pm is organized internally: local workspace, connector registry, ETL engine, query engine, reverse-ETL gate, flows, schedules, and optional runtime services."
+---
+
+`pm` is a Go-only CLI monolith. The default path runs locally with no daemon: credentials, connector metadata, warehouse files, ETL state, reverse plans, and docs generation all live under the current workspace.
+
+## System shape
+
+```text
+CLI dispatcher
+  -> app workspace
+  -> connector registry
+  -> ETL runner
+  -> local warehouse
+  -> query engine
+  -> reverse-ETL approval gate
+
+Optional runtime path
+  -> runtime doctor
+  -> Dragonfly lease
+  -> PostgreSQL run ledger
+  -> Temporal RLM worker
+```
+
+The dependency-free path is the product default. Runtime-backed services are opt-in for benchmarking, RLM agent mode, and external orchestration experiments.
+
+## Local workspace
+
+```bash
+pm init --root ./demo --json
+```
+
+`pm init` creates `.polymetrics/` under the selected root. The app package opens that workspace for every stateful command and keeps these classes of state local:
+
+| State | Stored under `.polymetrics` | Notes |
+|---|---|---|
+| Credentials | encrypted vault plus state metadata | Secret values are not printed by inspect commands. |
+| Connections | state file | References credentials by name. |
+| Catalogs | state file | Stream names and schemas only. |
+| ETL runs | state file plus warehouse files | Records are written in bounded batches. |
+| Warehouse | JSONL files by default | DuckDB is available through the tagged build. |
+| Reverse plans | state file | Approval tokens are hashed; JSON output redacts them. |
+| Schedules | schedule manifests | Local cron/system scheduler bridge. |
+
+## Connector registry
+
+```bash
+pm connectors list --json
+pm connectors list --all --json
+pm connectors inspect source-github --json
+pm connectors port-plan source-postgres --json
+```
+
+The registry combines built-in runnable connectors with generated catalog metadata. The public catalog has 646 connector pages, but most are catalog-only until their native Go port is enabled. The docs and connector pages deliberately distinguish metadata from runnable ETL.
+
+Connector operations are narrow: check, catalog, read, write, query, ETL, and reverse ETL. Agents get capability metadata and schemas, not generic HTTP, SQL write, or shell execution tools.
+
+## ETL engine
+
+```bash
+pm etl check --connector sample --json
+pm etl catalog --connector sample --json
+pm etl read --connector sample --stream customers --limit 5 --json
+pm etl run --connection sample_to_warehouse --stream customers --batch-size 500 --json
+pm etl status <run-id> --json
+```
+
+Direct `check`, `catalog`, and `read` are useful for connector development and preflight. Configured `run` loads from a connection, adds Polymetrics metadata, and writes to the destination in bounded batches.
+
+Sync modes are configured on `pm connections create`, not on `pm etl run`. Incremental modes require a cursor. Deduped modes require a primary key.
+
+## Query engine
+
+```bash
+pm query run --table customers --limit 10 --json
+pm query run --sql "SELECT * FROM customers LIMIT 10" --json
+```
+
+The default binary uses a pure-Go local JSONL query path. It is intentionally conservative. Build with the DuckDB tag when a workflow needs richer analytical SQL such as joins, window functions, or advanced aggregation.
+
+## Reverse-ETL gate
+
+```bash
+pm reverse plan customers_to_outbox --source-table customers --destination outbox:outbox-local --map id:external_id --json
+pm reverse preview <plan-id> --json
+pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse status <run-id> --json
+```
+
+Reverse ETL is deliberately split across plan, preview, approval, and run. Agents can create and preview plans, but JSON plan output redacts approval tokens. Execution rejects missing, expired, replayed, or mismatched approval tokens.
+
+## Flows
+
+```bash
+pm flow plan --file flow.json --json
+pm flow preview --file flow.json --json
+pm flow run --file flow.json --force --json
+pm flow status nightly_leads --flows-dir .polymetrics/flows --json
+pm flow list --flows-dir .polymetrics/flows --json
+```
+
+Flow manifests describe ordered ETL and query steps. `plan` and `preview` validate the manifest and DAG. `run` executes supported steps through existing app primitives and checkpoints progress.
+
+<Callout type="warn">
+  Flow manifests can be listed as `.yaml`, but the current parser is JSON-backed. Use JSON manifests until YAML parsing is explicitly wired.
+</Callout>
+
+## Natural-language extraction and RLM
+
+```bash
+pm extract --request "show active customers" --sql "SELECT * FROM customers WHERE state = 'active'" --json
+pm extract --request "score customers for churn" --in customers --out churn_scores --json
+pm rlm run --spec churn.json --in customers --out churn_scores --mode deterministic --json
+pm rlm run --spec churn.json --in customers --out churn_scores --mode fixture --json
+pm rlm run --spec churn.json --in customers --out churn_scores --mode model --json
+pm rlm run --spec churn.json --in customers --out churn_scores --mode agent --request "score churn" --json
+```
+
+`pm extract` classifies a natural-language request and routes it to either query execution or RLM analysis. RLM supports deterministic, fixture, model, and agent modes. Agent mode needs the optional Temporal worker and Podman image.
+
+```bash
+pm agent image build --json
+pm agent image pull --json
+pm agent image ensure --json
+pm worker status --json
+pm worker serve --json
+```
+
+The worker serves the typed RLM Temporal workflow. It is not a generic remote command runner.
+
+## Scheduling
+
+```bash
+pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --json
+pm schedule list --json
+pm schedule install nightly --crontab --json
+pm schedule remove nightly --json
+```
+
+Schedules store local cron expressions for named flows. Installation chooses a local scheduler backend; `--crontab` forces the crontab path.
+
+## Runtime checks and benchmarks
+
+```bash
+pm runtime doctor --json
+pm perf compare --iterations 25 --json
+pm perf compare --iterations 25 --runtime --json
+pm perf sync-modes --records 1000 --json
+```
+
+`pm runtime doctor` checks PostgreSQL, DragonflyDB, and Temporal endpoints. `pm perf compare --runtime` uses those services after the local ETL completes. `pm perf sync-modes` benchmarks the supported local sync modes.
+
+## Documentation gate
+
+```bash
+pm docs generate --dir docs/cli --connectors-dir docs/connectors
+pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs
+```
+
+The docs validator is part of `make verify` and the repository pre-commit hook. It checks command manuals, generated CLI markdown, website command coverage, connector manuals, connector skills, icon metadata, and the connector catalog.
+
+Adding a CLI command without adding docs should fail before release:
+
+```bash
+make verify
+```
+
+## Where to go next
+
+<Cards>
+  <Card title="CLI Reference" href="/docs/cli-reference" description="Every command and subcommand in one searchable page." />
+  <Card title="ETL" href="/docs/etl" description="Sync modes, direct connector operations, runtime flag, and JSON output." />
+  <Card title="Reverse ETL" href="/docs/reverse-etl" description="Plan, preview, approval, and execution details." />
+  <Card title="Agent Guide" href="/docs/agent-guide" description="Agent-safe command sequencing and JSON envelopes." />
+</Cards>

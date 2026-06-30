@@ -1,0 +1,166 @@
+---
+title: ETL
+description: Check, catalog, read, and run local connector syncs with bounded batches and explicit sync modes.
+---
+
+The `pm etl` command group has two lanes:
+
+| Lane | Commands | Use |
+|---|---|---|
+| Direct connector operations | `pm etl check`, `pm etl catalog`, `pm etl read` | Preflight and connector development without creating a connection. |
+| Configured syncs | `pm etl run`, `pm etl status` | Production-style extraction from a saved connection into a destination. |
+
+Catalog-only connectors are inspectable through `pm connectors inspect`, but they cannot execute ETL until their native Go runtime is enabled.
+
+## Direct connector operations
+
+```bash
+pm etl check --connector <name> [--config key=value] [--json]
+pm etl catalog --connector <name> [--config key=value] [--json]
+pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
+```
+
+Examples:
+
+```bash
+pm etl check --connector sample --json
+pm etl catalog --connector sample --json
+pm etl read --connector sample --stream customers --limit 5 --json
+```
+
+For a connector that needs configuration:
+
+```bash
+pm etl catalog \
+  --connector github \
+  --config repository=OWNER/REPO \
+  --json
+```
+
+## How connections and sync modes work
+
+A **connection** is the named pairing of a source credential and a destination credential, with one or more configured streams. The sync mode is set at connection-creation time using `--sync-mode` -- it is not a flag on `pm etl run`.
+
+```bash
+pm connections create <name> \
+  --source <credential>:<credential-name> \
+  --destination <credential>:<credential-name> \
+  --stream <stream-name> \
+  --primary-key <field> \
+  --cursor <field> \
+  --sync-mode <mode> \
+  --table <destination-table>
+```
+
+### Sync modes
+
+| Mode | Value | Description |
+|---|---|---|
+| Full refresh overwrite | `full_refresh_overwrite` | Re-extracts all records and replaces the destination table. Default if `--sync-mode` is omitted. |
+| Full refresh append | `full_refresh_append` | Re-extracts all records and appends them to the destination table. |
+| Full refresh overwrite deduped | `full_refresh_overwrite_deduped` | Re-extracts and deduplicates by primary key before writing. |
+| Incremental append | `incremental_append` | Extracts only records newer than the stored cursor value and appends them. |
+| Incremental append deduped | `incremental_append_deduped` | Incremental extraction, deduplicates by primary key before writing. |
+
+## Running an extraction
+
+```bash
+pm etl run --connection <name> --stream <stream> [--batch-size <n>] [--json]
+```
+
+### Flags
+
+| Flag | Required | Description |
+|---|---|---|
+| `--connection` | Yes | Name of the connection to use. |
+| `--stream` | Yes | Stream within that connection to extract. |
+| `--batch-size` | No | Records per write batch. Default is 1000. |
+| `--runtime` | No | After local ETL completes, record the run through optional PostgreSQL, DragonflyDB, and Temporal runtime checks. |
+| `--json` | No | Emit structured JSON to stdout instead of human-readable text. |
+
+### Example
+
+```bash
+pm etl run --connection my-github --stream issues --json
+```
+
+For tighter memory bounds on large streams:
+
+```bash
+pm etl run --connection my-github --stream pull_requests --batch-size 500 --json
+```
+
+For runtime-backed recording:
+
+```bash
+pm runtime doctor --json
+pm etl run --connection my-github --stream issues --runtime --json
+```
+
+### JSON output
+
+```json
+{
+  "api_version": "polymetrics.ai/v1",
+  "kind": "ETLRun",
+  "run": {
+    "status": "completed",
+    "records_read": 142,
+    "records_loaded": 142,
+    "records_failed": 0,
+    "stream": "issues",
+    "connection": "my-github",
+    "started_at": "2026-01-15T10:00:00Z",
+    "completed_at": "2026-01-15T10:00:03Z"
+  },
+  "runtime_recorded": false
+}
+```
+
+## Checking run status
+
+Each successful `pm etl run` produces a run ID. Use it to retrieve status later:
+
+```bash
+pm etl status <run-id>
+```
+
+```bash
+pm etl status <run-id> --json
+```
+
+<Callout type="info">
+  The run ID appears in the JSON `run.id` field and in the plain-text output line. Store it if you need to poll for completion in a script or agent.
+</Callout>
+
+## Inspecting the catalog
+
+Before running an extraction, you can discover the streams a connector exposes:
+
+```bash
+pm catalog refresh --connection <name>   # fetch the latest catalog from the source
+pm catalog show   --connection <name>   # display the cached catalog
+```
+
+## Exit codes
+
+Agents and scripts should branch on exit codes, not parse stderr text.
+
+| Code | Meaning | Recommended action |
+|---:|---|---|
+| `0` | Success | Continue. |
+| `2` | Usage error | Fix the command invocation -- do not retry. |
+| `3` | Validation error | Fix the argument values -- do not retry. |
+| `4` | Auth error | Surface to a human to add or update credentials. |
+| `5` | Connector error | Inspect the error detail; may be retryable. |
+| `6` | Runtime unavailable | Start the required dependency (DuckDB, Postgres, etc.). |
+| `1` | Internal error | File a bug report. |
+
+## Where to go next
+
+<Cards>
+  <Card title="Query" href="/docs/query" description="Run SQL over extracted tables with pm query run." />
+  <Card title="Reverse ETL" href="/docs/reverse-etl" description="Write query results back to any destination." />
+  <Card title="Connector catalog" href="/docs/connectors" description="Browse all available source and destination connectors." />
+  <Card title="Agent guide" href="/docs/agent-guide" description="Automate pm etl run from an AI agent using --json and exit codes." />
+</Cards>

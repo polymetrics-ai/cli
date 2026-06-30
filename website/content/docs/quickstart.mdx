@@ -1,0 +1,195 @@
+---
+title: Quickstart
+description: Run your first extract, query, and reverse-ETL loop using the built-in sample, warehouse, and outbox connectors.
+---
+
+The `sample` connector ships with pm and provides built-in demo data -- no external account required. Follow the steps below to complete the full extract-query-act loop.
+
+<Callout type="info">
+  **Prerequisite:** Go 1.24 or later. Run `go version` to check.
+</Callout>
+
+<Steps>
+
+<Step>
+
+### Install pm
+
+```bash
+go install polymetrics.ai/cmd/pm@latest
+```
+
+The `pm` binary is placed at `$GOPATH/bin/pm`. Confirm it is on your PATH:
+
+```bash
+pm --help
+```
+
+</Step>
+
+<Step>
+
+### Initialize a workspace
+
+```bash
+pm init
+```
+
+This creates a `.polymetrics/` directory in the current folder. All credentials, connections, and extracted data are stored here.
+
+</Step>
+
+<Step>
+
+### Add credentials
+
+```bash
+export PM_SAMPLE_TOKEN=demo
+
+pm credentials add sample \
+  --connector sample \
+  --from-env token=PM_SAMPLE_TOKEN
+
+pm credentials add warehouse \
+  --connector warehouse \
+  --config path=.polymetrics/warehouse
+
+pm credentials add outbox \
+  --connector outbox \
+  --config path=.polymetrics/outbox
+```
+
+The `sample` credential authenticates against the built-in demo connector. The `warehouse` credential points to a local JSONL warehouse directory. The `outbox` credential gives reverse ETL a safe local destination.
+
+</Step>
+
+<Step>
+
+### Create a connection
+
+A connection wires a source credential to a destination credential, names the stream, and sets the sync mode.
+
+```bash
+pm connections create demo \
+  --source sample:sample \
+  --destination warehouse:warehouse \
+  --stream customers \
+  --primary-key id \
+  --cursor updated_at \
+  --sync-mode incremental_append \
+  --table customers
+```
+
+</Step>
+
+<Step>
+
+### Extract data
+
+```bash
+pm etl run --connection demo --stream customers --json
+```
+
+Expected output:
+
+```json
+{
+  "api_version": "polymetrics.ai/v1",
+  "kind": "ETLRun",
+  "run": {
+    "status": "completed",
+    "records_read": 3,
+    "records_loaded": 3,
+    "stream": "customers",
+    "connection": "demo"
+  },
+  "runtime_recorded": false
+}
+```
+
+</Step>
+
+<Step>
+
+### Query extracted data
+
+```bash
+pm query run --table customers --json
+```
+
+Expected output:
+
+```json
+{
+  "kind": "QueryResult",
+  "count": 3,
+  "rows": [
+    { "id": "1", "name": "Acme Corp", "state": "active" },
+    { "id": "2", "name": "Globex", "state": "active" },
+    { "id": "3", "name": "Initech", "state": "churned" }
+  ]
+}
+```
+
+Run ad-hoc SQL against the same table:
+
+```bash
+pm query run \
+  --sql "SELECT state, COUNT(*) AS n FROM customers GROUP BY state ORDER BY n DESC" \
+  --json
+```
+
+</Step>
+
+<Step>
+
+### Plan and run a local reverse-ETL write
+
+Create a plan that maps warehouse columns into a local outbox file:
+
+```bash
+pm reverse plan customers_to_outbox \
+  --source-table customers \
+  --destination outbox:outbox \
+  --map id:external_id \
+  --map name:full_name \
+  --map email:email
+```
+
+Plain-text output includes a plan ID and approval token. Preview the plan before executing:
+
+```bash
+pm reverse preview <plan-id> --json
+```
+
+Run only after you intentionally pass the approval token:
+
+```bash
+pm reverse run <plan-id> --approve <approval-token> --json
+```
+
+The outbox connector writes a JSONL receipt under `.polymetrics/outbox/`.
+
+</Step>
+
+</Steps>
+
+## Explore connectors
+
+Swap `sample` for any connector in your binary:
+
+```bash
+pm connectors list             # list all connectors compiled into this binary
+pm connectors inspect stripe   # auth fields, streams, and sync modes for Stripe
+```
+
+For the full command surface, open [/docs/cli-reference](/docs/cli-reference).
+
+## Where to go next
+
+<Cards>
+  <Card title="ETL" href="/docs/etl" description="Sync modes, flags, JSON output, and exit codes for pm etl run." />
+  <Card title="Query" href="/docs/query" description="DuckDB SQL, flag reference, and joining multiple extracted tables." />
+  <Card title="Reverse ETL" href="/docs/reverse-etl" description="The plan-preview-approve-run write gate." />
+  <Card title="Connector catalog" href="/docs/connectors" description="Browse connector pages, setup notes, auth fields, and machine-readable metadata." />
+</Cards>
