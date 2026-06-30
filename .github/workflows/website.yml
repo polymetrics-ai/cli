@@ -120,7 +120,12 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: printf '%s' "$GITHUB_TOKEN" | docker login "$REGISTRY" --username "${{ github.actor }}" --password-stdin
+        run: |
+          login_log="$(mktemp)"
+          if ! printf '%s' "$GITHUB_TOKEN" | docker login "$REGISTRY" --username "${{ github.actor }}" --password-stdin >"$login_log" 2>&1; then
+            cat "$login_log"
+            exit 1
+          fi
 
       - name: Build website image
         env:
