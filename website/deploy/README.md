@@ -30,6 +30,7 @@ GitLab image builds use Docker-in-Docker. The runner used by `website:image` mus
 Required:
 
 - `GITHUB_TOKEN`: provided by GitHub Actions; used to push to GHCR from `main`.
+- Variable `WEBSITE_DEPLOY_ENABLED`: set to `true` after the Tailscale self-hosted runner is registered. Until then, the deploy job stays skipped instead of queuing forever.
 
 Optional:
 
