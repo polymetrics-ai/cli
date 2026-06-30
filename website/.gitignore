@@ -1,0 +1,28 @@
+# Next.js
+.next/
+out/
+
+# Node
+node_modules/
+.pnpm-store/
+
+# Fumadocs generated
+.source/
+
+# Test artifacts
+test-results/
+playwright-report/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Misc
+.DS_Store
+*.tsbuildinfo
+*.pem
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

@@ -1,0 +1,39 @@
+{
+  "prerequisites": [
+    "A Timely account with a workspace, since every resource belongs to a workspace identified by account_id.",
+    "Your Timely account_id (workspace ID). Retrieve account IDs by calling GET /1.1/accounts after authenticating.",
+    "A bearer token for the API. Tokens are obtained via the OAuth 2.0 flow or from the Timely docs login.",
+    "Admin access to the workspace if you need to create an OAuth application at https://app.timelyapp.com/{account_id}/oauth_applications.",
+    "A start_date to define the point from which the connector begins replicating data."
+  ],
+  "authMethods": [
+    {
+      "name": "Bearer token",
+      "summary": "The Timely API uses HTTP bearer authentication. Provide the token in the connector's bearer_token field; it is sent as the Authorization: Bearer {access_token} header. Tokens are obtained through Timely's OAuth 2.0 flow or from the docs login."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Obtain a bearer token",
+      "body": "Acquire a Timely access token. Timely uses OAuth 2.0 (Authorization Code flow): create an OAuth application at https://app.timelyapp.com/{account_id}/oauth_applications (admin access required), redirect users to /1.1/oauth/authorize with your client_id and redirect_uri, then POST to /1.1/oauth/token with the authorization code to receive an access token. A token can also be obtained from the Timely docs login."
+    },
+    {
+      "title": "Find your account_id",
+      "body": "Every resource in Timely belongs to a workspace identified by account_id, and most endpoints require this ID in the path. After authenticating, call GET /1.1/accounts to list your account IDs and choose the workspace you want to extract from."
+    },
+    {
+      "title": "Configure the connector",
+      "body": "Enter the account_id of the workspace to sync, paste your token into the bearer_token field, and set start_date to the date from which the connector should begin replicating records."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Timely API Reference (Authentication and Core Concepts)",
+      "url": "https://developer.timely.com/"
+    },
+    {
+      "title": "Timely API documentation (dev.timelyapp.com, redirects to developer.timely.com)",
+      "url": "https://dev.timelyapp.com/"
+    }
+  ]
+}

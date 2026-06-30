@@ -1,0 +1,55 @@
+{
+  "prerequisites": [
+    "A Microsoft Entra ID tenant (formerly Azure AD). If you don't have one, you can create a free Azure account that includes a tenant.",
+    "An application registered in the Microsoft Entra admin center (entra.microsoft.com). The registration provides the Directory (tenant) ID and is where you create the client secret used to authenticate.",
+    "A client secret created under the registered application's Certificates & secrets, used for the credentials.client_secret field.",
+    "The Directory (tenant) ID of the Microsoft Entra tenant whose Teams data you want to read, used for the credentials.tenant_id field.",
+    "A value for the required period config field, which scopes the time range of the Teams usage data the connector requests from Microsoft Graph."
+  ],
+  "authMethods": [
+    {
+      "name": "OAuth 2.0 (Microsoft Entra ID / Microsoft Graph)",
+      "summary": "Microsoft Teams data is read through the Microsoft Graph API, which is protected by the Microsoft identity platform (Microsoft Entra ID). The connector authenticates as a registered application using its client secret (credentials.client_secret) and tenant (credentials.tenant_id), and presents a refresh token (credentials.refresh_token) to obtain short-lived access tokens. The access token is then attached as a Bearer token on the Authorization header of each Microsoft Graph request."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Register an application in Microsoft Entra ID",
+      "body": "Sign in to the Microsoft Entra admin center (https://entra.microsoft.com), browse to Identity > Applications > App registrations, and select New registration. Enter a display name and choose the supported account types appropriate for your tenant, then select Register. After registration, the Overview pane shows the Directory (tenant) ID, which corresponds to the credentials.tenant_id field."
+    },
+    {
+      "title": "Configure a redirect URI",
+      "body": "Under the app registration, select Authentication > Add a platform, choose the Web platform, and enter a Redirect URI. This is the location to which the Microsoft identity platform returns the authorization response and security tokens after a user signs in, and it is required to complete the OAuth flow that yields the refresh token."
+    },
+    {
+      "title": "Create a client secret",
+      "body": "Under the app registration, select Certificates & secrets > Client secrets > New client secret. Add a description and set an expiration, then select Add. Record the secret value immediately, because it is not displayed again after you leave the page. Use this value for the credentials.client_secret field."
+    },
+    {
+      "title": "Authorize and obtain a refresh token",
+      "body": "Complete the Microsoft identity platform authorization for the registered application so a user consents to the required Microsoft Graph permissions. Use the resulting refresh token for the credentials.refresh_token field; the connector exchanges it for short-lived access tokens when calling the Microsoft Graph Teams APIs."
+    },
+    {
+      "title": "Provide credentials and set the reporting period in the connector",
+      "body": "Enter the tenant ID, client secret, and refresh token into the credentials group, and set the required period field to the time range you want the connector to pull Teams usage data for from Microsoft Graph."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Microsoft Teams API overview (Microsoft Graph)",
+      "url": "https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview"
+    },
+    {
+      "title": "Authentication and authorization basics - Microsoft Graph",
+      "url": "https://learn.microsoft.com/en-us/graph/auth/auth-concepts"
+    },
+    {
+      "title": "Register an application with the Microsoft identity platform - Microsoft Graph",
+      "url": "https://learn.microsoft.com/en-us/graph/auth-register-app-v2"
+    },
+    {
+      "title": "Microsoft Graph throttling guidance",
+      "url": "https://learn.microsoft.com/en-us/graph/throttling"
+    }
+  ]
+}

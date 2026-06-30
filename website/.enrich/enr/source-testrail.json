@@ -1,0 +1,51 @@
+{
+  "prerequisites": [
+    "A TestRail instance you can reach over HTTPS. Note its base URL (for example https://YOURNAME.testrail.io/) to use as domain_name.",
+    "A TestRail user account with permission to access the projects and data you want to extract. Provide its login as username.",
+    "The TestRail API must be enabled for the instance. On hosted (testrail.io) accounts it is enabled by default; on TestRail Server an administrator enables it under Administration > Site Settings > API.",
+    "A credential for HTTP Basic authentication: either the account password or an API key generated for that account, supplied as password.",
+    "A start_date marking the earliest point from which to sync records."
+  ],
+  "authMethods": [
+    {
+      "name": "HTTP Basic authentication (username + password or API key)",
+      "summary": "TestRail's API v2 authenticates every request with HTTP Basic auth: the connector sends an Authorization header of 'Basic ' + base64(username:password). Set username to your TestRail login and password to either your account password or an API key generated for that account. Requests are made against the {domain_name}index.php?/api/v2/ endpoint."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Confirm the API is enabled",
+      "body": "TestRail exposes its API only when enabled for the instance. Hosted testrail.io accounts have it on by default. For self-hosted TestRail Server, an administrator enables it under Administration > Site Settings > API. Without this, all API requests are rejected."
+    },
+    {
+      "title": "Obtain a credential (password or API key)",
+      "body": "You can authenticate with your account password, but TestRail recommends an API key. Generate one from your TestRail profile under My Settings on the API Keys tab, then copy the generated key. Use this key (or your password) as the password value."
+    },
+    {
+      "title": "Set domain_name",
+      "body": "Enter your TestRail instance base URL as domain_name, for example https://YOURNAME.testrail.io/. The connector appends index.php?/api/v2/ to form the API endpoint, so provide the root URL of the instance, not an API path."
+    },
+    {
+      "title": "Set username and password",
+      "body": "Set username to the email or login of the TestRail account, and password to that account's password or its API key. These two values form the HTTP Basic credential the connector uses for every request."
+    },
+    {
+      "title": "Set start_date",
+      "body": "Provide start_date as the earliest date from which to pull records. The connector uses it as the lower bound for incremental data so older history is skipped."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Introduction to the TestRail API (official)",
+      "url": "https://support.testrail.com/hc/en-us/articles/7077039051284-Introduction-to-the-TestRail-API"
+    },
+    {
+      "title": "Accessing the TestRail API (official authentication guide)",
+      "url": "https://support.testrail.com/hc/en-us/articles/7077196481428-Accessing-the-TestRail-API"
+    },
+    {
+      "title": "gurock/testrail-api official Python binding (HTTP Basic auth + index.php?/api/v2/ endpoint)",
+      "url": "https://github.com/gurock/testrail-api/blob/master/python/3.x/testrail.py"
+    }
+  ]
+}

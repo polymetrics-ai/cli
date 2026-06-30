@@ -1,0 +1,42 @@
+{
+  "prerequisites": [
+    "A Yandex Metrica account with at least one counter (tag) collecting data for the site you want to extract.",
+    "The counter ID (counter_id) of the Metrica counter to read. You can retrieve the list of counters and their IDs by calling the Management API endpoint GET https://api-metrika.yandex.net/management/v1/counters.",
+    "A registered Yandex OAuth application with the metrika:read access permission, used to obtain an authorization token.",
+    "A start date (start_date) marking the earliest date to extract; an optional end date (end_date) bounds the range."
+  ],
+  "authMethods": [
+    {
+      "name": "OAuth token (auth_token)",
+      "summary": "Yandex Metrica authenticates every API request with an OAuth token supplied via the connector's auth_token field. Register a Yandex OAuth application (selecting API access and the metrika:read permission), then obtain a token by following https://oauth.yandex.com/authorize?response_type=token&client_id=<application_id> and copying the token from the resulting page. The token is sent on each request in the HTTP header as 'Authorization: OAuth <token>'. Requests without a valid token return 401 Unauthorized."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Register a Yandex OAuth application",
+      "body": "Go to the Yandex OAuth portal at https://oauth.yandex.com/?dialog=create-client-entry and create an application for API access. Grant it the metrika:read permission so it can retrieve Metrica statistics, then copy the application's ClientID."
+    },
+    {
+      "title": "Obtain an OAuth token",
+      "body": "Build the authorization URL https://oauth.yandex.com/authorize?response_type=token&client_id=<application_id> using your ClientID, open it, and grant access. Copy the token shown on the resulting page. Store it securely and do not share it. This token is the value for the auth_token field."
+    },
+    {
+      "title": "Identify your counter ID",
+      "body": "Find the numeric ID of the Metrica counter you want to read. You can list your counters and their IDs by calling GET https://api-metrika.yandex.net/management/v1/counters with your OAuth token. Use the chosen counter's id value as counter_id."
+    },
+    {
+      "title": "Configure the connector",
+      "body": "Set auth_token to your OAuth token, counter_id to the target counter's numeric ID, and start_date to the earliest date to extract. Optionally set end_date to bound the upper end of the date range; leave it empty to extract through the latest available data."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Quick start | Yandex Metrica API",
+      "url": "https://yandex.com/dev/metrika/en/intro/quick-start"
+    },
+    {
+      "title": "Authorization | Yandex Metrica API",
+      "url": "https://yandex.com/dev/metrika/en/intro/authorization"
+    }
+  ]
+}

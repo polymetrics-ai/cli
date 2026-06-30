@@ -1,0 +1,45 @@
+{
+  "prerequisites": [
+    "A Freshdesk account with an active, verified agent profile.",
+    "Your Freshdesk domain in the format yourcompany.freshdesk.com (the domain config field).",
+    "A Freshdesk API key retrieved from your profile settings (the api_key config field)."
+  ],
+  "authMethods": [
+    {
+      "name": "API Key (HTTP Basic Auth)",
+      "summary": "Freshdesk authenticates with a personal API key sent via HTTP Basic Auth. The api_key is passed as the username with any dummy string (for example, X) as the password; no account password is required. The connector exposes a single secret field, api_key, matching this method."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Find your Freshdesk API key",
+      "body": "Log in to your Freshdesk support portal, click your profile picture in the top right, and select Profile Settings. In the right pane click View API key and complete the captcha verification, then copy the key. The key is only displayed when the agent is verified."
+    },
+    {
+      "title": "Identify your Freshdesk domain",
+      "body": "Set the domain field to your Freshdesk subdomain in the format yourcompany.freshdesk.com. This forms the API base URL (https://yourcompany.freshdesk.com/api/v2/)."
+    },
+    {
+      "title": "Provide credentials in the connector",
+      "body": "Enter the api_key and domain in the connector configuration. These two fields are required."
+    },
+    {
+      "title": "Configure optional sync settings",
+      "body": "Optionally set start_date (YYYY-MM-DDTHH:mm:ssZ) so only data created or updated on or after that date is replicated for incremental streams, and lookback_window_in_days (default 14) to re-read recent data for the Satisfaction Ratings stream. Tune API consumption with requests_per_minute (defaults to your plan limit if empty), rate_limit_plan, subscription_tier, and num_workers as needed."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Freshdesk API Documentation (Authentication)",
+      "url": "https://developers.freshdesk.com/api/"
+    },
+    {
+      "title": "How To Find Your API Key - Freshdesk Support",
+      "url": "https://support.freshdesk.com/support/solutions/articles/215517-how-to-find-your-api-key"
+    },
+    {
+      "title": "Freshdesk Connector - Airbyte Documentation",
+      "url": "https://docs.airbyte.com/integrations/sources/freshdesk"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "prerequisites": [
+    "A PostHog account with access to the project whose data you want to extract.",
+    "A personal API key generated from your PostHog account settings (used for the required api_key field).",
+    "The base URL of your PostHog instance if you are not on US Cloud (sets the optional base_url field): https://us.posthog.com for US Cloud, https://eu.posthog.com for EU Cloud, or your own domain for a self-hosted instance.",
+    "A start_date marking the earliest point from which to begin syncing data."
+  ],
+  "authMethods": [
+    {
+      "name": "Personal API key (Bearer token)",
+      "summary": "PostHog private API endpoints authenticate with a personal API key passed in the HTTP Authorization header as `Authorization: Bearer <key>`. Provide this key in the connector's api_key secret field. Personal API keys carry the prefix phx_."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Create a personal API key in PostHog",
+      "body": "Click your avatar icon in the bottom left corner of your PostHog instance, then click the gear icon to open Account settings. In My settings, open the Personal API Keys tab, click Create personal API key, add a name, and click Create key. The key value is shown only once, so copy and store it immediately; if lost, you must create a new key."
+    },
+    {
+      "title": "Provide the API key",
+      "body": "Paste the personal API key into the required api_key field. The connector sends it as a Bearer token in the Authorization header when calling PostHog private endpoints."
+    },
+    {
+      "title": "Set the base URL for your region or instance",
+      "body": "If you are not on PostHog US Cloud, set the optional base_url field to match your instance: https://us.posthog.com for US Cloud, https://eu.posthog.com for EU Cloud, or your own domain for a self-hosted instance."
+    },
+    {
+      "title": "Set the start date and tuning options",
+      "body": "Set the required start_date to the earliest date from which data should be synced. Optionally adjust events_time_step to control the time-window size used when paginating event data."
+    }
+  ],
+  "sources": [
+    {
+      "title": "PostHog API overview (authentication and base URLs by region)",
+      "url": "https://posthog.com/docs/api"
+    },
+    {
+      "title": "How to use the PostHog API to get insights and persons (Bearer header and creating a personal API key)",
+      "url": "https://posthog.com/tutorials/api-get-insights-persons"
+    }
+  ]
+}

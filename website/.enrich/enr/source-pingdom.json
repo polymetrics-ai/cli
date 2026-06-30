@@ -1,0 +1,46 @@
+{
+  "prerequisites": [
+    "A Pingdom account (SolarWinds Pingdom) with access to create API tokens.",
+    "A Pingdom API token, used as the api_key. Generate it in My Pingdom under Integrations > The Pingdom API (https://my.pingdom.com/app/api-tokens).",
+    "A start_date value (the earliest date from which to begin syncing performance and check data).",
+    "Optional: the probes you want to filter results to, and a resolution (the time granularity for performance summaries)."
+  ],
+  "authMethods": [
+    {
+      "name": "API token (Bearer)",
+      "summary": "Authenticate with a single Pingdom API token supplied as the api_key secret field. The Pingdom Public API (3.1) accepts the token as a Bearer token in the HTTP Authorization header (Authorization: Bearer <token>) against the base URL https://api.pingdom.com. Generate the token inside My Pingdom under Integrations > The Pingdom API at https://my.pingdom.com/app/api-tokens."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Generate a Pingdom API token",
+      "body": "Sign in to your Pingdom account at my.pingdom.com. Navigate to Integrations > The Pingdom API (or go directly to https://my.pingdom.com/app/api-tokens) and generate an API token. Copy the token value immediately, as it is shown only once."
+    },
+    {
+      "title": "Provide the token as api_key",
+      "body": "Set the connector's api_key field to the Pingdom API token you generated. pm sends it as a Bearer token in the Authorization header when calling the Pingdom Public API at https://api.pingdom.com."
+    },
+    {
+      "title": "Set the sync start date",
+      "body": "Set the required start_date field to the earliest date from which the connector should pull data. Records before this date are not synced."
+    },
+    {
+      "title": "Configure optional filters",
+      "body": "Optionally set probes to restrict results to specific Pingdom probe servers, and set resolution to control the time granularity of performance summary data. Leave these unset to use the API defaults."
+    }
+  ],
+  "sources": [
+    {
+      "title": "The Pingdom API - SolarWinds Documentation",
+      "url": "https://documentation.solarwinds.com/en/success_center/pingdom/content/topics/the-pingdom-api.htm"
+    },
+    {
+      "title": "Pingdom Transaction Recorder (creating a Pingdom API access token) - SolarWinds Documentation",
+      "url": "https://documentation.solarwinds.com/en/success_center/pingdom/content/topics/transaction-recorder.htm"
+    },
+    {
+      "title": "Pingdom Public API (3.1)",
+      "url": "https://docs.pingdom.com/api/"
+    }
+  ]
+}

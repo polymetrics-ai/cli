@@ -1,0 +1,49 @@
+{
+  "prerequisites": [
+    "A JustCall account on the Team plan or above, since API access is available starting from the JustCall Team plan (contact help@justcall.io for lower tiers).",
+    "JustCall API credentials (API Key and API Secret) generated from the JustCall dashboard.",
+    "A start date (the earliest date from which to replicate data), supplied to the required start_date config field."
+  ],
+  "authMethods": [
+    {
+      "name": "API Key and Secret (HTTP Basic auth)",
+      "summary": "JustCall authenticates each request with an API Key and API Secret pair, passed in the Authorization header as HTTP Basic auth (Basic base64(api_key:api_secret)). The connector collects this credential in its required, secret api_key_2 field. Generate the API Key and Secret from the JustCall dashboard under your profile icon > APIs and Webhooks (https://app.justcall.io/app/developersApiCredentials)."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Confirm API access on your plan",
+      "body": "Sign in to JustCall and confirm your account is on the Team plan or higher, as API access starts at the Team plan. If you are on a lower tier, contact help@justcall.io to enable access."
+    },
+    {
+      "title": "Generate your API Key and Secret",
+      "body": "In the JustCall dashboard, click your profile icon and select APIs and Webhooks (or go to https://app.justcall.io/app/developersApiCredentials). Use the copy button beside the API Key and Secret fields to copy your credentials."
+    },
+    {
+      "title": "Provide the credentials to the connector",
+      "body": "Enter your JustCall credentials in the required, secret api_key_2 field. JustCall sends them as HTTP Basic auth in the Authorization header (Basic base64(api_key:api_secret))."
+    },
+    {
+      "title": "Set the replication start date",
+      "body": "Provide the required start_date field with the earliest date from which the connector should begin replicating JustCall data."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Authentication - JustCall API Reference",
+      "url": "https://developer.justcall.io/reference/authentication"
+    },
+    {
+      "title": "Accessing JustCall AI data using APIs - JustCall Help Center",
+      "url": "https://help.justcall.io/en/articles/8820238-accessing-justcall-ai-data-using-apis"
+    },
+    {
+      "title": "Connecting JustCall to Zapier with API credentials - Zapier Community",
+      "url": "https://community.zapier.com/troubleshooting-99/connecting-justcall-to-zapier-with-api-credentials-52570"
+    },
+    {
+      "title": "JustCall User Management API Guide - Stitchflow",
+      "url": "https://www.stitchflow.com/user-management/justcall/api"
+    }
+  ]
+}

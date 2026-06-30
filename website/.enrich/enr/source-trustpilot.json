@@ -1,0 +1,42 @@
+{
+  "prerequisites": [
+    "A Trustpilot Business account with access to the Trustpilot for Business / developer portal.",
+    "A registered application on the Trustpilot developer portal, which provides the API Key (Client ID) and Client Secret.",
+    "The business unit ID(s) for the Trustpilot business profile(s) you want to extract reviews from (the `business_units` config field).",
+    "A `start_date` marking the earliest date from which to sync data."
+  ],
+  "authMethods": [
+    {
+      "name": "OAuth 2.0 (access token + refresh token)",
+      "summary": "Trustpilot private APIs require OAuth 2.0. After registering an application you receive an API Key (Client ID) and Client Secret; you exchange these for an access token (valid for 100 hours) and a refresh token (valid for 30 days). The connector stores all four values in its `credentials` field: client_id, client_secret, access_token, and refresh_token. Access tokens are sent as `Authorization: Bearer <token>`, and the refresh token is used to obtain new access tokens when they expire."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Register a Trustpilot application",
+      "body": "Sign in to the Trustpilot for Business / developer portal and register an application. Trustpilot issues an API Key, which serves as your Client ID, along with a Client Secret. Record both values; the Client Secret is typically shown only at creation time."
+    },
+    {
+      "title": "Obtain access and refresh tokens",
+      "body": "Using your Client ID and Client Secret, complete an OAuth 2.0 grant flow to obtain an access token and a refresh token. The access token is valid for 100 hours and the refresh token for 30 days. When the access token expires, request a new one by POSTing the refresh token to https://api.trustpilot.com/v1/oauth/oauth-business-users-for-applications/refresh."
+    },
+    {
+      "title": "Identify your business unit IDs",
+      "body": "Determine the business unit ID for each Trustpilot business profile you want to pull reviews from, and provide these in the connector's `business_units` field."
+    },
+    {
+      "title": "Configure the connector",
+      "body": "Enter the `credentials` (client_id, client_secret, access_token, refresh_token), the `business_units` list, and a `start_date` for the earliest data to sync. The connector authenticates with the access token as a Bearer token and refreshes it using the refresh token when it expires."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Trustpilot API documentation",
+      "url": "https://developers.trustpilot.com/"
+    },
+    {
+      "title": "Trustpilot Authentication overview",
+      "url": "https://developers.trustpilot.com/authentication"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "prerequisites": [
+    "An active ReferralHero account.",
+    "An API token, which you can find in the ReferralHero dashboard under Account > API.",
+    "At least one ReferralHero campaign whose data you want to extract."
+  ],
+  "authMethods": [
+    {
+      "name": "API token",
+      "summary": "Authenticate with a ReferralHero API token, supplied through the connector's required api_key field. ReferralHero accepts the token in an Authorization header using the Bearer scheme (Authorization: Bearer YOUR_API_TOKEN), or alternatively in an X-API-Key header if the client cannot send the Authorization header. Keep the token secret, since it grants access to your ReferralHero account."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Locate your API token",
+      "body": "Sign in to ReferralHero and open the dashboard. Navigate to Account > API to find your API token. This token is used to authenticate all REST API requests against your account."
+    },
+    {
+      "title": "Configure the connector",
+      "body": "Set the required api_key field to your ReferralHero API token. This is the single secret the connector needs; it is sent as Authorization: Bearer YOUR_API_TOKEN (or X-API-Key) on each request."
+    },
+    {
+      "title": "Identify your campaign",
+      "body": "ReferralHero data is scoped per campaign. Each campaign has a 12-character UUID that begins with 'M', found in the dashboard under Campaign > Installation > Instructions. Note the campaign(s) you want to sync so the correct data is extracted."
+    }
+  ],
+  "sources": [
+    {
+      "title": "REST API - ReferralHero",
+      "url": "https://support.referralhero.com/integrate/rest-api"
+    },
+    {
+      "title": "Endpoints Reference - ReferralHero",
+      "url": "https://support.referralhero.com/integrate/rest-api/endpoints-reference"
+    }
+  ]
+}

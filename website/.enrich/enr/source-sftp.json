@@ -1,0 +1,47 @@
+{
+  "prerequisites": [
+    "A running SFTP (SSH File Transfer Protocol) server you can reach over the network.",
+    "The server hostname or IP address (host) and the listening port (port, conventionally 22 for SSH/SFTP).",
+    "A valid login account (user) on the SFTP server with read access to the files you want to sync.",
+    "One credential for that account: either the account password, or an SSH private key whose matching public key is registered in the account's authorized_keys on the server.",
+    "Network reachability from where pm runs to the server's SFTP port (firewall/security-group access)."
+  ],
+  "authMethods": [
+    {
+      "name": "Password authentication",
+      "summary": "Authenticate with the SFTP account's username and password. Provide the username in the `user` field and the password in the `credentials.auth_user_password` secret. This is the standard password-based SSH login supported by the SFTP client."
+    },
+    {
+      "name": "SSH key (public-key) authentication",
+      "summary": "Authenticate with an SSH key pair instead of a password. Provide the private key in the `credentials.auth_ssh_key` secret; its corresponding public key must already be present in the server account's authorized_keys file. SFTP uses SSH's public-key authentication for this method."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Confirm the SFTP server endpoint",
+      "body": "Obtain the server's hostname or IP address and the SFTP listening port from the system administrator. SFTP runs over SSH, so the port is conventionally 22 unless the server was configured otherwise. Enter these as the required `host` and `port` config fields."
+    },
+    {
+      "title": "Identify the login account",
+      "body": "Use an existing SFTP account that has read access to the target files, and enter its username in the required `user` field. Avoid using a privileged account; a least-privilege account scoped to the directories you need to read is sufficient."
+    },
+    {
+      "title": "Choose and supply a credential",
+      "body": "Pick one authentication method for the account. For password auth, put the account password in `credentials.auth_user_password`. For SSH key auth, put the account's private key in `credentials.auth_ssh_key` and make sure its public key is listed in the server's authorized_keys for that user. Provide only the credential that matches the method the server accepts."
+    },
+    {
+      "title": "Scope the files to read (optional)",
+      "body": "Narrow what gets ingested using the optional config fields: set `folder_path` to the remote directory to read from, `file_pattern` to a name/glob filter, and `file_types` to restrict by file format. Leave them unset to use the connector defaults."
+    }
+  ],
+  "sources": [
+    {
+      "title": "OpenSSH sftp(1) manual page (sftp client, SSH public-key authentication)",
+      "url": "https://man.openbsd.org/sftp"
+    },
+    {
+      "title": "OpenSSH: Manual Pages (password and public-key authentication mechanisms)",
+      "url": "https://www.openssh.org/manual.html"
+    }
+  ]
+}

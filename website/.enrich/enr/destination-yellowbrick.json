@@ -1,0 +1,55 @@
+{
+  "prerequisites": [
+    "A running Yellowbrick instance (version 7 or greater) reachable from Airbyte. Airbyte Cloud requires SSL or TLS encryption when connecting.",
+    "A Yellowbrick database to load data into. Create one with UTF-8 encoding, for example: CREATE DATABASE airbyte_test ENCODING=UTF8;",
+    "A Yellowbrick user configured to enable the JSON type and functions, with permission to create a database. Verify JSON support with SHOW enable_full_json;",
+    "The connection coordinates: host, port (defaults to 5432), database name, target schema, and a username/password for the Yellowbrick user.",
+    "Network access from Airbyte to the Yellowbrick host. The host address is available from Yellowbrick Manager."
+  ],
+  "authMethods": [
+    {
+      "name": "Username and password",
+      "summary": "Authenticate with a Yellowbrick database user via the username and password fields. The password is stored as a secret. This is the standard authentication for the connection."
+    },
+    {
+      "name": "SSL / TLS encryption (ssl_mode)",
+      "summary": "Set ssl and ssl_mode to control connection encryption. Modes range from disable, allow, prefer, and require to verify-ca and verify-full. The verification modes accept secret certificate material via ssl_mode.ca_certificate, ssl_mode.client_certificate, ssl_mode.client_key, and ssl_mode.client_key_password. Airbyte Cloud only supports connecting with SSL or TLS encryption."
+    },
+    {
+      "name": "SSH tunnel (tunnel_method)",
+      "summary": "Optionally reach Yellowbrick through an SSH bastion. Choose No Tunnel, SSH Key Authentication (provide the private key via tunnel_method.ssh_key), or Password Authentication (provide tunnel_method.tunnel_user_password). Both tunnel secrets are stored securely."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Prepare the Yellowbrick database and user",
+      "body": "Create the destination database with UTF-8 encoding (for example CREATE DATABASE airbyte_test ENCODING=UTF8;) and ensure the Yellowbrick user has JSON type/functions enabled and permission to create a database. Confirm JSON support with SHOW enable_full_json;."
+    },
+    {
+      "title": "Enter connection details",
+      "body": "Provide the required fields: host (your Yellowbrick instance address from Yellowbrick Manager), port (default 5432), database, schema (the default schema, or several comma-separated schemas, set in the search path), and username."
+    },
+    {
+      "title": "Provide credentials",
+      "body": "Enter the password for the Yellowbrick user. Optionally set jdbc_url_params for advanced JDBC connection options such as connectTimeout (defaults to 60 seconds)."
+    },
+    {
+      "title": "Configure encryption",
+      "body": "Enable ssl and select an ssl_mode. For verify-ca or verify-full, supply ssl_mode.ca_certificate and, where mutual TLS is used, ssl_mode.client_certificate, ssl_mode.client_key, and ssl_mode.client_key_password. SSL or TLS is required on Airbyte Cloud."
+    },
+    {
+      "title": "Optionally configure an SSH tunnel",
+      "body": "If Yellowbrick is not directly reachable, set tunnel_method to SSH Key Authentication (provide tunnel_method.ssh_key) or Password Authentication (provide tunnel_method.tunnel_user_password). Otherwise leave it as No Tunnel."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Yellowbrick Destination Connector | Airbyte Documentation",
+      "url": "https://docs.airbyte.com/integrations/destinations/yellowbrick"
+    },
+    {
+      "title": "Connect Airbyte | Yellowbrick Data Product Documentation",
+      "url": "https://docs.yellowbrick.com/7.3.2/tutorial/connecting_with_airbyte.html"
+    }
+  ]
+}

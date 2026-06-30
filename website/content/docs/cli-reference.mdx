@@ -1,0 +1,208 @@
+---
+title: CLI Reference
+description: Complete command surface for the pm binary, including docs coverage, safety boundaries, and JSON envelopes.
+---
+
+This page is the public website contract for the `pm` CLI. When a command is added to the Go dispatcher, `pm docs validate` requires the command to appear here, in the embedded manual, and in `docs/cli`.
+
+## Global contract
+
+| Surface | Contract |
+|---|---|
+| `pm --help` | Prints the root manual. |
+| `pm help <topic>` | Prints the embedded manual for a command group. |
+| `pm <command> --help` | Prints that command group's embedded manual. |
+| `--json` | Emits a structured envelope for commands that support machine output. |
+| `--root <path>` | Selects the project root containing `.polymetrics`. |
+
+<Callout type="info">
+  `--json` is the agent path for operational commands. A few developer-facing commands, such as `pm help`, are intentionally plain text because they return human manuals.
+</Callout>
+
+## Command map
+
+| Command | Subcommands | Primary docs |
+|---|---|---|
+| `pm init` | workspace creation | [/docs/quickstart](/docs/quickstart) |
+| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help` | [/docs/connectors](/docs/connectors) |
+| `pm credentials` | `pm credentials add`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
+| `pm connections` | `pm connections create`, `pm connections list` | this page |
+| `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
+| `pm etl` | `pm etl check`, `pm etl catalog`, `pm etl read`, `pm etl run`, `pm etl status` | [/docs/etl](/docs/etl) |
+| `pm query` | `pm query run` | [/docs/query](/docs/query) |
+| `pm reverse` | `pm reverse list`, `pm reverse plan`, `pm reverse preview`, `pm reverse run`, `pm reverse status` | [/docs/reverse-etl](/docs/reverse-etl) |
+| `pm agent` | `pm agent plan`, `pm agent image build`, `pm agent image pull`, `pm agent image ensure` | [/docs/agent-guide](/docs/agent-guide) |
+| `pm runtime` | `pm runtime doctor` | [/docs/architecture](/docs/architecture) |
+| `pm flow` | `pm flow plan`, `pm flow preview`, `pm flow run`, `pm flow status`, `pm flow list` | [/docs/architecture](/docs/architecture) |
+| `pm extract` | request routing | [/docs/agent-guide](/docs/agent-guide) |
+| `pm perf` | `pm perf compare`, `pm perf sync-modes` | this page |
+| `pm docs` | `pm docs generate`, `pm docs validate` | this page |
+| `pm skills` | `pm skills generate` | [/docs/agent-guide](/docs/agent-guide) |
+| `pm rlm` | `pm rlm run` | [/docs/architecture](/docs/architecture) |
+| `pm schedule` | `pm schedule create`, `pm schedule list`, `pm schedule install`, `pm schedule remove` | [/docs/architecture](/docs/architecture) |
+| `pm worker` | `pm worker serve`, `pm worker status` | [/docs/architecture](/docs/architecture) |
+
+## Workspace commands
+
+### `pm init`
+
+```bash
+pm init --root ./demo --json
+```
+
+Creates `.polymetrics/` under the selected root. The workspace stores state, encrypted credential references, local warehouse files, outbox files, catalogs, runs, reverse plans, flow checkpoints, and schedules.
+
+### `pm credentials`
+
+```bash
+pm credentials add github-local \
+  --connector github \
+  --config repository=OWNER/REPO \
+  --from-env token=GITHUB_TOKEN \
+  --json
+
+pm credentials list --json
+pm credentials inspect github-local --json
+pm credentials test github-local --json
+pm credentials remove github-local
+```
+
+Secrets must come from environment variables or stdin. Do not pass raw token values in chat, shell history, or docs.
+
+### `pm connections`
+
+```bash
+pm connections create github_to_warehouse \
+  --source github:github-local \
+  --destination warehouse:warehouse-local \
+  --stream pull_requests \
+  --primary-key node_id \
+  --cursor updated_at \
+  --sync-mode incremental_append_deduped \
+  --table github_pull_requests \
+  --json
+
+pm connections list --json
+```
+
+Connections bind a source credential, destination credential, stream, table, sync mode, cursor, and primary key.
+
+### `pm catalog`
+
+```bash
+pm catalog refresh --connection github_to_warehouse --json
+pm catalog show --connection github_to_warehouse --json
+```
+
+Catalog commands discover and cache stream metadata. Catalog output includes schemas and stream names, never decrypted secret values.
+
+## Connector discovery
+
+```bash
+pm connectors list --json
+pm connectors list --all --json
+pm connectors catalog --type source --json
+pm connectors catalog --stage generally_available --json
+pm connectors port-plan --all --json
+pm connectors port-plan source-postgres --json
+pm connectors inspect source-100ms --json
+pm connectors help source-100ms
+```
+
+`pm connectors list` shows runnable built-in connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated 646-connector catalog, including catalog-only connectors that are inspectable but not executable until a native Go port is enabled.
+
+## Extract, query, and write
+
+```bash
+pm etl check --connector github --config repository=OWNER/REPO --json
+pm etl catalog --connector github --config repository=OWNER/REPO --json
+pm etl read --connector github --stream issues --limit 10 --config repository=OWNER/REPO --json
+pm etl run --connection github_to_warehouse --stream pull_requests --batch-size 500 --json
+pm etl status <run-id> --json
+```
+
+Use direct `check`, `catalog`, and `read` while developing a connector or testing credentials. Use `pm etl run` for configured syncs.
+
+```bash
+pm query run --table github_pull_requests --limit 20 --json
+pm query run --sql "SELECT * FROM github_pull_requests LIMIT 20" --json
+```
+
+The default build uses the local JSONL query engine. Build with the DuckDB tag when you need richer SQL support.
+
+```bash
+pm reverse list --json
+pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-local --action create_pull_request --map title:title --map head:head --map base:base --json
+pm reverse preview <plan-id> --json
+pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse status <run-id> --json
+```
+
+Reverse ETL is always plan, preview, approval, run. JSON plan output redacts the approval token.
+
+## Agent and automation commands
+
+```bash
+pm agent plan --request "sync sample customers" --json
+pm extract --request "show active customers" --sql "SELECT * FROM customers LIMIT 20" --json
+pm skills generate --dir docs/skills --json
+```
+
+`pm agent plan` returns typed command suggestions. `pm extract` classifies natural-language requests and routes simple requests to query or RLM analysis. `pm skills generate` writes agent skill files from the command and connector metadata.
+
+```bash
+pm agent image build --json
+pm agent image pull --json
+pm agent image ensure --json
+pm rlm run --spec spec.json --in customers --out scored_customers --mode deterministic --json
+pm worker status --json
+pm worker serve --json
+```
+
+RLM agent mode is optional and runtime-backed. It uses Temporal plus a Podman-managed agent image; it is not part of the dependency-free quickstart.
+
+```bash
+pm flow plan --file flow.json --json
+pm flow preview --file flow.json --json
+pm flow run --file flow.json --force --json
+pm flow status nightly_leads --flows-dir .polymetrics/flows --json
+pm flow list --flows-dir .polymetrics/flows --json
+
+pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --json
+pm schedule list --json
+pm schedule install nightly --crontab --json
+pm schedule remove nightly --json
+```
+
+Flows compose ETL and query steps. Schedules install named flows into the local scheduler backend.
+
+## Operational commands
+
+```bash
+pm runtime doctor --json
+pm perf compare --iterations 25 --json
+pm perf compare --iterations 25 --runtime --json
+pm perf sync-modes --records 1000 --json
+```
+
+Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The dependency-free path is the default.
+
+```bash
+pm docs generate --dir docs/cli --connectors-dir docs/connectors
+pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs
+```
+
+`pm docs validate` is a release gate. It fails when a public command or subcommand is missing from embedded help, checked-in CLI markdown, website MDX, or connector docs.
+
+## Exit codes
+
+| Code | Category | Use |
+|---:|---|---|
+| `0` | success | Continue. |
+| `2` | usage | Fix command shape. |
+| `3` | validation | Fix argument values. |
+| `4` | auth | Add or rotate credentials. |
+| `5` | connector | Inspect connector-specific failure. |
+| `6` | runtime | Start required runtime service. |
+| `7` | policy | Obtain approval or satisfy policy. |
+| `1` | internal | Treat as a bug. |

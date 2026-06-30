@@ -1,0 +1,19 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "quickstart",
+    "installation",
+    "---",
+    "Core Concepts",
+    "[Connectors](/docs/connectors)",
+    "etl",
+    "query",
+    "reverse-etl",
+    "cli-reference",
+    "architecture",
+    "---",
+    "Guides",
+    "agent-guide"
+  ]
+}

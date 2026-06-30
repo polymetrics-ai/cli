@@ -1,0 +1,59 @@
+---
+title: Introduction
+description: pm is a local-first, single-binary data engine for ETL, SQL analytics, and reverse-ETL -- built for humans and AI agents alike.
+---
+
+`pm` is a single Go binary that extracts data from connector-backed sources, lands it in an embedded DuckDB warehouse, lets you query it with real SQL, and writes results back to destinations -- all without a vendor cloud, Docker, or Kubernetes.
+
+## The extract-query-act loop
+
+<ExtractQueryActDiagram />
+
+Every step is accessible to a human operator and to an AI agent using identical commands.
+
+## Key properties
+
+| Property | What it means |
+|---|---|
+| **Local-first** | Credentials live in an encrypted local vault. Nothing reaches a vendor cloud unless you write it there. |
+| **Agent-native** | Every command emits structured JSON via `--json`. Exit codes are stable and branchable. Writes require explicit approval. |
+| **One binary** | `go install polymetrics.ai/cmd/pm@latest` and you're done. No daemon, no registry, no SaaS. |
+| **Bidirectional** | ETL and reverse-ETL in a single tool, same credential store. |
+
+## Top-level commands
+
+```bash
+pm init            # Initialize a local workspace
+pm connectors      # Browse, inspect, and port-plan connectors
+pm credentials     # Manage the encrypted credential vault
+pm connections     # Create and list source-to-destination connections
+pm catalog         # Refresh or show a connection's stream catalog
+pm etl             # Run extractions and check status
+pm query           # Run SQL over extracted data
+pm reverse         # Plan, preview, and execute reverse-ETL writes
+pm agent           # Generate agent plans
+pm runtime         # Check runtime health (pm runtime doctor)
+pm flow            # Orchestrate multi-step flows
+pm extract         # Low-level extract command
+pm perf            # Benchmarking utilities
+pm docs            # Generate or validate connector docs
+pm skills          # Generate connector-specific agent skills
+pm rlm             # Run the RLM extractor agent
+pm schedule        # Manage scheduled workflows
+pm worker          # Run the Temporal worker
+```
+
+<Callout type="info">
+  There is no `pm run` top-level command. Use `pm etl run` to trigger an extraction.
+</Callout>
+
+## Where to go next
+
+<Cards>
+  <Card title="Quickstart (60s)" href="/docs/quickstart" description="Install pm and run your first extract, query, and reverse-ETL in under a minute." />
+  <Card title="Installation" href="/docs/installation" description="go install, build from source, and prerequisite details." />
+  <Card title="Connector catalog" href="/docs/connectors" description="Browse sources, destinations, setup notes, auth fields, and machine-readable connector metadata." />
+  <Card title="CLI reference" href="/docs/cli-reference" description="Every command and subcommand in one searchable page." />
+  <Card title="Architecture" href="/docs/architecture" description="Workspace state, runtime path, flows, schedules, and RLM." />
+  <Card title="Agent guide" href="/docs/agent-guide" description="JSON contract, exit codes, and approval gates for driving pm from an AI agent." />
+</Cards>

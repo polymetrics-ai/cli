@@ -1,0 +1,47 @@
+{
+  "prerequisites": [
+    "An active ShipStation account with access to Settings > API (https://ss.shipstation.com/#/settings/api), where the API Key and API Secret are generated.",
+    "Your ShipStation API Key, which the connector uses as the username configuration field.",
+    "Your ShipStation API Secret, which the connector uses as the password (secret) configuration field.",
+    "A start_date value marking the earliest point from which to sync records.",
+    "Awareness of ShipStation API V1's rate limit of 40 requests per minute per API Key and Secret pair."
+  ],
+  "authMethods": [
+    {
+      "name": "HTTP Basic authentication (API Key and API Secret)",
+      "summary": "ShipStation API V1 uses HTTP Basic authentication. Provide your ShipStation API Key in the username field and your API Secret in the password field (the connector's secret). The connector combines them and sends them Base64-encoded in the Authorization header. Generate both values under Settings > API in the ShipStation web app."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Generate your ShipStation API credentials",
+      "body": "Sign in to ShipStation and open Settings > API at https://ss.shipstation.com/#/settings/api. Locate (or generate) your API Key and API Secret. These two values are your Basic Auth credentials for the ShipStation API V1."
+    },
+    {
+      "title": "Configure the connector credentials",
+      "body": "Enter your API Key into the username configuration field and your API Secret into the password field (marked secret). The connector authenticates to the ShipStation API using HTTP Basic authentication built from these two values."
+    },
+    {
+      "title": "Set the sync start date",
+      "body": "Set the required start_date field to the earliest date from which the connector should pull data. Records before this date are not retrieved on the initial sync."
+    },
+    {
+      "title": "Verify the connection",
+      "body": "Run the connector. It authenticates against the ShipStation API and begins extracting data. Note that ShipStation enforces a rate limit of 40 requests per minute per API Key and Secret pair and returns HTTP 429 when exceeded."
+    }
+  ],
+  "sources": [
+    {
+      "title": "ShipStation API reference",
+      "url": "https://www.shipstation.com/docs/api/"
+    },
+    {
+      "title": "ShipStation API authentication and requirements",
+      "url": "https://www.shipstation.com/docs/api/requirements/"
+    },
+    {
+      "title": "ShipStation API rate limits",
+      "url": "https://www.shipstation.com/docs/api/requirements/#rate-limits"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "prerequisites": [
+    "A Humanitix account with access to the Console (https://console.humanitix.com).",
+    "Permission to view the Advanced account settings, where the Public API key is generated and managed.",
+    "A generated Public API key, copied for use in the api_key field. Generating a new key invalidates any existing one."
+  ],
+  "authMethods": [
+    {
+      "name": "API key (x-api-key header)",
+      "summary": "The connector authenticates with a single Humanitix Public API key supplied in the required api_key field. Humanitix expects this key in an x-api-key request header on every call to the API (base URL https://api.humanitix.com/v1). The key grants access to account data, so keep it secret."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Generate your Humanitix Public API key",
+      "body": "Sign in to the Humanitix Console at https://console.humanitix.com. From the top menu, go to Account > Advanced > Public API key (direct link: https://console.humanitix.com/console/account/advanced/api-key). Generate the key and copy it. Note that generating a new key breaks any previously issued key."
+    },
+    {
+      "title": "Provide the API key to the connector",
+      "body": "Enter the copied key into the connector's required api_key field. This value is sent as the x-api-key header on every request, which is how Humanitix authenticates the connection. There are no other configuration fields to set."
+    },
+    {
+      "title": "Verify the connection",
+      "body": "Save the configuration and run a connection check. The connector calls the Humanitix Public API (https://api.humanitix.com/v1) using the x-api-key header; a successful response confirms the key is valid. Note that Humanitix enforces a rate limit of 200 requests per minute."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Public API documentation - Humanitix Help Centre",
+      "url": "https://help.humanitix.com/en/articles/8888275-public-api-documentation"
+    },
+    {
+      "title": "Humanitix Public API - Stoplight (API reference)",
+      "url": "https://humanitix.stoplight.io/docs/humanitix-public-api/e508a657c1467-humanitix-public-api"
+    },
+    {
+      "title": "Humanitix Python API Docs - dltHub (base URL and x-api-key header)",
+      "url": "https://dlthub.com/context/source/humanitix"
+    }
+  ]
+}

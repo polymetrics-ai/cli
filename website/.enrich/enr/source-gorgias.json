@@ -1,0 +1,51 @@
+{
+  "prerequisites": [
+    "A Gorgias account with access to the helpdesk Settings (Account > REST API section).",
+    "Your Gorgias domain (the subdomain in https://{domain}.gorgias.com), used for the domain_name config field.",
+    "The email address of the agent whose access is used, supplied as the username config field.",
+    "A Gorgias REST API key, generated under Settings > Account > REST API, supplied as the password secret field.",
+    "A start_date to define the earliest point from which records are synced."
+  ],
+  "authMethods": [
+    {
+      "name": "HTTP Basic Authentication (email + API key)",
+      "summary": "Gorgias authenticates REST API requests with HTTP Basic Authentication. The username is your Gorgias account/agent email address and the password is your Gorgias API key. This maps to the connector's username config field and the password secret field. Requests are sent to https://{domain_name}.gorgias.com/api/."
+    }
+  ],
+  "setupSteps": [
+    {
+      "title": "Locate your Gorgias domain",
+      "body": "Your Gorgias instance is reachable at https://{domain}.gorgias.com. Take the subdomain from that URL (for example, dgtest from https://dgtest.gorgias.com) and use it as the domain_name field."
+    },
+    {
+      "title": "Open the REST API credentials page",
+      "body": "In your Gorgias helpdesk, click the Settings icon, go to Account, then select REST API. The API Access and Credentials section lists the base API URL, your email, and the API key."
+    },
+    {
+      "title": "Generate or copy your API key",
+      "body": "Under API Access and Credentials, if no key exists the Password field shows a Create API Key button; click it to generate one immediately. Copy the API key. Note that resetting a key invalidates the previous one and breaks integrations using it."
+    },
+    {
+      "title": "Provide credentials to the connector",
+      "body": "Enter the subdomain as domain_name, your agent email as username, and the API key as the password secret field. Set start_date to the earliest date from which Gorgias records should be synced."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Gorgias API authentication",
+      "url": "https://developers.gorgias.com/reference/authentication"
+    },
+    {
+      "title": "Access your Gorgias REST API credentials",
+      "url": "https://docs.gorgias.com/en-US/rest-api-208286"
+    },
+    {
+      "title": "Gorgias API documentation",
+      "url": "https://developers.gorgias.com/reference"
+    },
+    {
+      "title": "Gorgias API Credentials - DigitalGenius",
+      "url": "https://docs.digitalgenius.com/docs/gorgias-get-credentials"
+    }
+  ]
+}

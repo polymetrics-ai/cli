@@ -1,0 +1,223 @@
+---
+title: Agent Guide
+description: Everything an AI agent needs to drive pm safely -- JSON contract, exit codes, approval gates, and connector discovery.
+---
+
+`pm` is designed so an LLM agent can run the full extract-query-act pipeline without a human in the hot path for read operations, while still requiring explicit approval before any destination is mutated.
+
+## The agent contract
+
+Every operational `pm` command follows three guarantees agents can depend on:
+
+| Guarantee | How to use it |
+|---|---|
+| **Structured output for operations** | Add `--json` to command groups that produce machine output. Parse `kind` to dispatch. |
+| **Stable exit codes** | Branch on the exit code -- never parse stderr text. |
+| **Approval-gated writes** | `pm reverse run` requires `--approve <token>`. The agent cannot bypass this gate. |
+
+## Read-only commands (agent-autonomous)
+
+An agent may run these without any human checkpoint:
+
+```bash
+pm connectors list --json
+pm connectors inspect github --json
+pm connections list --json
+pm catalog show --connection my-github --json
+pm etl check --connector github --config repository=OWNER/REPO --json
+pm etl catalog --connector github --config repository=OWNER/REPO --json
+pm etl read --connector github --stream issues --limit 10 --config repository=OWNER/REPO --json
+pm etl run --connection my-github --stream issues --json
+pm etl status <run-id> --json
+pm query run --table issues --json
+pm query run --sql "SELECT state, COUNT(*) AS n FROM issues GROUP BY state" --json
+pm runtime doctor --json
+pm worker status --json
+```
+
+## Approval-gated write commands
+
+The agent may run `plan` and `preview` autonomously. Only `run` requires a token:
+
+```bash
+# Agent runs plan and preview autonomously:
+pm reverse plan sync \
+  --source-table issues \
+  --destination github:my-github \
+  --action create_issue \
+  --map title:title \
+  --map body:body \
+  --json
+
+pm reverse preview plan_abc123 --json
+
+# Agent must obtain an approval token before this step:
+pm reverse run plan_abc123 --approve <token> --json
+```
+
+<Callout type="warn">
+  Exit code `7` means approval is required. The agent should surface the plan preview to a human (or a trusted policy), collect a token, and retry. It should not loop indefinitely without an external input.
+</Callout>
+
+## Exit code reference
+
+| Code | Category | Agent action |
+|---:|---|---|
+| `0` | Success | Continue to the next step. |
+| `2` | Usage error | Fix the command invocation -- do not retry. |
+| `3` | Validation error | Fix the argument values -- do not retry. |
+| `4` | Auth error | Surface to a human to add or rotate credentials. |
+| `5` | Connector error | Inspect the error detail field; may be retryable with backoff. |
+| `6` | Runtime unavailable | Surface: the required runtime dependency is not reachable. |
+| `7` | Approval required | Obtain an approval token from `pm reverse plan`, then retry. |
+| `1` | Internal error | Report as a bug. |
+
+## JSON output envelopes
+
+Every `--json` response follows the same envelope shape:
+
+```json
+{
+  "api_version": "polymetrics.ai/v1",
+  "kind": "<TypeName>",
+  ...type-specific fields...
+}
+```
+
+Common `kind` values:
+
+| kind | Produced by |
+|---|---|
+| `ConnectorList` | `pm connectors list --json` |
+| `Connector` | `pm connectors inspect <slug> --json` |
+| `ConnectionList` | `pm connections list --json` |
+| `ETLRun` | `pm etl run --json`, `pm etl status --json` |
+| `QueryResult` | `pm query run --json` |
+| `ReversePlan` | `pm reverse plan --json` |
+| `ReversePlanPreview` | `pm reverse preview --json` |
+| `ReverseRun` | `pm reverse run --json` |
+| `CommandManual` | any `pm <cmd> --help --json` |
+
+## Connector discovery
+
+The connector catalog is machine-readable. An agent can enumerate available connectors and their authentication requirements:
+
+```bash
+# List natively compiled connectors
+pm connectors list --json
+
+# Get auth fields, streams, and sync modes for a specific connector
+pm connectors inspect stripe --json
+
+# Browse the full catalog, including planned native ports
+pm connectors list --all --json
+```
+
+For human-readable connector pages with per-connector guides, visit [/docs/connectors](/docs/connectors). Each page in the connector catalog documents the exact `--from-env` fields and available streams for that connector.
+
+## Generating connector skills
+
+pm can generate connector-specific skill files for Claude Code and other agent runtimes:
+
+```bash
+pm skills generate --dir docs/skills --json
+```
+
+This produces MDX skill files your agent can load as context, scoped to individual connector workflows.
+
+## Natural-language routing
+
+`pm extract` is the narrow natural-language entry point. It classifies a request and routes either to a simple query or to RLM analysis.
+
+```bash
+pm extract --request "show active customers" \
+  --sql "SELECT * FROM customers WHERE state = 'active' LIMIT 20" \
+  --json
+
+pm extract --request "score churn risk" \
+  --in customers \
+  --out churn_scores \
+  --json
+```
+
+RLM agent mode is optional and runtime-backed:
+
+```bash
+pm agent image ensure --json
+pm rlm run --spec churn.json --in customers --out churn_scores --mode agent --json
+pm worker status --json
+```
+
+## Recommended agent loop
+
+A well-behaved agent driving pm should follow this pattern:
+
+<Steps>
+
+<Step>
+
+### Discover
+
+```bash
+pm connectors inspect <slug> --json   # confirm auth fields
+pm connections list --json            # check existing connections
+```
+
+</Step>
+
+<Step>
+
+### Extract
+
+```bash
+pm etl run --connection <name> --stream <stream> --json
+# branch on exit code; on 0, parse run.records_loaded
+```
+
+</Step>
+
+<Step>
+
+### Analyze
+
+```bash
+pm query run --sql "<your SQL>" --json
+# parse QueryResult.rows
+```
+
+</Step>
+
+<Step>
+
+### Plan a write (if needed)
+
+```bash
+pm reverse plan <name> --source-table <t> --destination <c>:<cred> --action <a> --map <col>:<field> --json
+pm reverse preview <plan-id> --json
+# surface the preview to a human or trusted policy for approval
+```
+
+</Step>
+
+<Step>
+
+### Execute with approval
+
+```bash
+pm reverse run <plan-id> --approve <token> --json
+# branch on exit code; on 7, re-request an approval token
+```
+
+</Step>
+
+</Steps>
+
+## Where to go next
+
+<Cards>
+  <Card title="ETL" href="/docs/etl" description="Full flag reference and sync modes for pm etl run." />
+  <Card title="Query" href="/docs/query" description="SQL examples and JSON output for pm query run." />
+  <Card title="Reverse ETL" href="/docs/reverse-etl" description="The full plan-preview-approve-run security model." />
+  <Card title="Connector catalog" href="/docs/connectors" description="Connector pages with per-connector setup, auth fields, and machine-readable metadata." />
+</Cards>
+Manual surfaces such as `pm help <topic>` are intentionally human-readable. Use `pm <command> --help --json` when an agent needs the embedded manual envelope.

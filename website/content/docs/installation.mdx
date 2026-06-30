@@ -1,0 +1,80 @@
+---
+title: Installation
+description: Install pm via go install when the module path is available, or build the single Go binary from source.
+---
+
+`pm` ships as a single Go binary with no runtime dependencies in its default build. Pick the installation method that suits your environment.
+
+<Callout type="info">
+  **Prerequisites:** Go 1.24 or later is the only hard requirement for the default CGO-free build. Run `go version` to verify. For the DuckDB-enabled build you additionally need a C toolchain (gcc or clang).
+</Callout>
+
+## Installation methods
+
+<Tabs items={["go install", "Build from source"]}>
+
+<Tab value="go install">
+
+Use this path when your environment can resolve the `polymetrics.ai` module path.
+
+```bash
+go install polymetrics.ai/cmd/pm@latest
+```
+
+The binary is placed at `$GOPATH/bin/pm`. Make sure `$GOPATH/bin` (or `$(go env GOPATH)/bin`) is on your `$PATH`.
+
+To pin a specific version replace `latest` with a version tag, for example `v0.9.0`.
+
+</Tab>
+
+<Tab value="Build from source">
+
+Clone the repository and build locally:
+
+```bash
+git clone https://github.com/karthik-sivadas/polymetrics-cli
+cd polymetrics-cli
+make build        # produces ./pm  (CGO-free, default)
+make install      # copies ./pm to $GOPATH/bin
+```
+
+### DuckDB-enabled build
+
+The default build uses a pure-Go JSONL warehouse. To unlock the full DuckDB SQL engine -- joins, window functions, aggregations -- build with CGO enabled:
+
+```bash
+CGO_ENABLED=1 go build -tags duckdb ./cmd/pm
+```
+
+<Callout type="warn">
+  The DuckDB build requires CGO. Cross-compiling to a different OS or architecture also requires a matching C cross-toolchain. The default CGO-free build is recommended unless you specifically need analytical SQL.
+</Callout>
+
+</Tab>
+
+</Tabs>
+
+## Prebuilt binaries and Homebrew
+
+Prebuilt release binaries and a Homebrew tap are on the roadmap. For now, use `go install` or build from source.
+
+## Verify your installation
+
+```bash
+pm --help
+```
+
+```bash
+pm connectors list | head -10
+```
+
+If you see a list of connector names, pm is installed and ready.
+
+## Where to go next
+
+<Cards>
+  <Card title="Quickstart" href="/docs/quickstart" description="Run your first extraction and query in under a minute." />
+  <Card title="Connector catalog" href="/docs/connectors" description="Browse connector pages, setup notes, and auth fields." />
+  <Card title="ETL" href="/docs/etl" description="Understand sync modes, connections, and pm etl run." />
+  <Card title="Agent guide" href="/docs/agent-guide" description="Drive pm from an AI agent using the JSON contract." />
+</Cards>
