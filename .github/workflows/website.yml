@@ -149,7 +149,7 @@ jobs:
     name: Website deploy
     runs-on: [self-hosted, linux, tailscale, polymetrics-website]
     needs: image
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.WEBSITE_DEPLOY_ENABLED == 'true'
     environment: website-production
     concurrency: website-production
 
