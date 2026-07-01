@@ -21,6 +21,31 @@ test.describe('docs UI smoke', () => {
     await expect(page.getByText('pm etl run --connection demo --stream customers --json')).toBeVisible();
   });
 
+  test('renders the desktop on-page TOC and follows heading anchors', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/docs/quickstart');
+
+    const toc = page.getByRole('navigation', { name: 'On this page' });
+    await expect(toc).toBeVisible();
+
+    await expect(toc.getByRole('link', { name: 'Install pm' })).toHaveAttribute(
+      'aria-current',
+      'location',
+    );
+
+    await toc.getByRole('link', { name: 'Extract data' }).click();
+    await expect(page).toHaveURL(/\/docs\/quickstart#extract-data$/);
+    await expect(toc.getByRole('link', { name: 'Extract data' })).toHaveAttribute(
+      'aria-current',
+      'location',
+    );
+
+    await page.goto('/docs/connectors/source-100ms');
+    const connectorToc = page.getByRole('navigation', { name: 'On this page' });
+    await expect(connectorToc).toBeVisible();
+    await expect(connectorToc.getByRole('link', { name: 'Configuration' })).toBeVisible();
+  });
+
   test('renders connector catalog, connector detail, and generated data.json', async ({ page }) => {
     await page.goto('/docs/connectors');
 
