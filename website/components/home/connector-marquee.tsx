@@ -104,7 +104,7 @@ export function ConnectorMarquee({ compact = false }: { compact?: boolean }) {
         {CONNECTOR_CATALOG_COUNT} catalog connectors share a Go HTTP &amp; database toolkit.
         Missing one?{' '}
         <a
-          href="https://github.com/karthik-sivadas/polymetrics-cli/issues"
+          href="https://github.com/polymetrics-ai/cli/issues"
           target="_blank"
           rel="noreferrer"
           className="text-text-secondary underline hover:text-text-primary transition-colors"

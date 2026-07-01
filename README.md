@@ -7,11 +7,11 @@
 **`pm` is a local-first, single-binary data engine.** Extract from **118+ native connectors**, query the data with an **embedded DuckDB** SQL engine, and **write it back** to your tools — all from one Go binary that **AI agents can drive safely**. No SaaS. No Docker. Your data never leaves your machine.
 
 [![Website](https://img.shields.io/badge/polymetrics.ai-6f42c1?logo=icloud&logoColor=white)](https://polymetrics.ai)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Go Report Card](https://goreportcard.com/badge/github.com/karthik-sivadas/polymetrics-cli)](https://goreportcard.com/report/github.com/karthik-sivadas/polymetrics-cli)
+[![License: Elastic 2.0](https://img.shields.io/badge/License-Elastic--2.0-blue.svg)](LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/polymetrics-ai/cli)](https://goreportcard.com/report/github.com/polymetrics-ai/cli)
 ![Go](https://img.shields.io/badge/Go-1.24+-00ADD8?logo=go&logoColor=white)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#-contributing)
-[![GitHub stars](https://img.shields.io/github/stars/karthik-sivadas/polymetrics-cli?style=social)](https://github.com/karthik-sivadas/polymetrics-cli/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/polymetrics-ai/cli?style=social)](https://github.com/polymetrics-ai/cli/stargazers)
 
 [Website](https://polymetrics.ai) · [Quickstart](#-quickstart-60-seconds) · [Why](#-why-polymetrics) · [Agent-native](#-agent-native) · [Compare](#-how-it-compares) · [Docs](docs/GUIDE.md) · [Roadmap](#-roadmap)
 
@@ -41,7 +41,7 @@ Moving data today means renting a cloud pipeline (Fivetran's surprise MAR bills)
 go install polymetrics.ai/cmd/pm@latest      # installs the `pm` binary onto your PATH
 ```
 
-<sub>Or build from source — <code>git clone https://github.com/karthik-sivadas/polymetrics-cli && cd polymetrics-cli && make build</code> (produces <code>./pm</code>; <code>make build</code> auto-fetches the Go 1.24 toolchain).</sub>
+<sub>Or build from source — <code>git clone https://github.com/polymetrics-ai/cli && cd cli && make build</code> (produces <code>./pm</code>; <code>make build</code> auto-fetches the Go 1.24 toolchain).</sub>
 
 **Run** a full extract → land → query loop with zero external services:
 
@@ -180,16 +180,18 @@ make verify          # gofmt + vet + go test ./... + build + smoke
 make verify-duckdb   # the DuckDB (CGO) build lane
 ```
 
-Look for [`good first issue`](https://github.com/karthik-sivadas/polymetrics-cli/labels/good%20first%20issue) to get started.
+Look for [`good first issue`](https://github.com/polymetrics-ai/cli/labels/good%20first%20issue) to get started.
 
 ## ⭐ Star us
 
 If a single local binary that extracts, analyzes, and writes back your data — and that your AI agent can drive — sounds useful, **star the repo** to follow along as we march toward 600+ connectors.
 
-<a href="https://star-history.com/#karthik-sivadas/polymetrics-cli&Date">
-  <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=karthik-sivadas/polymetrics-cli&type=Date" width="600">
+<a href="https://star-history.com/#polymetrics-ai/cli&Date">
+  <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=polymetrics-ai/cli&type=Date" width="600">
 </a>
 
 ## 📄 License
 
-[MIT](LICENSE) © 2026 Karthik Sivadas
+[Elastic License 2.0](LICENSE) © 2026 Polymetrics AI
+
+Polymetrics CLI is public source and free to use under Elastic License 2.0. The license does not permit offering the software to third parties as a hosted or managed service where users access a substantial set of its functionality. For commercial licensing beyond those terms, contact Polymetrics AI.

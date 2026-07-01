@@ -14,7 +14,7 @@ Local JSONL warehouse destination used by the dependency-free MVP.
 - asset: icons/pm-warehouse.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/karthik-sivadas/polymetrics-cli
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

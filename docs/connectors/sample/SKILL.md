@@ -14,7 +14,7 @@ Built-in deterministic source connector for local development and tests.
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/karthik-sivadas/polymetrics-cli
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
