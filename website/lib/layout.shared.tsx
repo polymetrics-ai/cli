@@ -16,5 +16,5 @@ export const baseOptions: BaseLayoutProps = {
       active: 'nested-url',
     },
   ],
-  githubUrl: 'https://github.com/karthik-sivadas/polymetrics-cli',
+  githubUrl: 'https://github.com/polymetrics-ai/cli',
 };

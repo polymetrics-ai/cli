@@ -16,7 +16,7 @@ ICON
   asset: icons/pm-file.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/karthik-sivadas/polymetrics-cli
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

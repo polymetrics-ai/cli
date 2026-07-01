@@ -375,7 +375,7 @@ export function OnPageTocAside({ items, className }: OnPageTocAsideProps) {
 
         <SidebarFooter className="site-toc-footer">
           <a
-            href="https://github.com/karthik-sivadas/polymetrics-cli/discussions"
+            href="https://github.com/polymetrics-ai/cli/discussions"
             target="_blank"
             rel="noreferrer"
             className="site-toc-footer-link site-toc-footer-link-block"
@@ -389,7 +389,7 @@ export function OnPageTocAside({ items, className }: OnPageTocAsideProps) {
             </span>
           </a>
           <a
-            href="https://github.com/karthik-sivadas/polymetrics-cli"
+            href="https://github.com/polymetrics-ai/cli"
             target="_blank"
             rel="noreferrer"
             className="site-toc-footer-link flex items-center gap-2"

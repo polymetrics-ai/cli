@@ -279,7 +279,7 @@ function MobileMenu({ open, onOpenChange }: { open: boolean; onOpenChange: (open
           <SheetClose asChild>
             <Link href="/changelog" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Changelog</Link>
           </SheetClose>
-          <a href="https://github.com/karthik-sivadas/polymetrics-cli" target="_blank" rel="noreferrer" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">GitHub</a>
+          <a href="https://github.com/polymetrics-ai/cli" target="_blank" rel="noreferrer" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">GitHub</a>
         </div>
         <div className="mt-4 flex flex-col gap-2">
           <SheetClose asChild>
@@ -337,7 +337,7 @@ export function SiteNavbar() {
               <ProductDropdown />
               <NavLink href="/docs">Docs</NavLink>
               <NavLink href="/changelog">Changelog</NavLink>
-              <NavLink href="https://github.com/karthik-sivadas/polymetrics-cli" external>GitHub</NavLink>
+              <NavLink href="https://github.com/polymetrics-ai/cli" external>GitHub</NavLink>
             </div>
             <div className="navbar-desktop-search min-w-0 justify-self-end">
               <DocsSearch variant="navbar" />
@@ -357,7 +357,7 @@ export function SiteNavbar() {
               <NavBtn href="/docs" variant="primary" kbdKey="L">
                 Get Started
               </NavBtn>
-              <NavBtn href="https://github.com/karthik-sivadas/polymetrics-cli" variant="secondary" kbdKey="G" external>
+              <NavBtn href="https://github.com/polymetrics-ai/cli" variant="secondary" kbdKey="G" external>
                 Get Demo
               </NavBtn>
             </div>

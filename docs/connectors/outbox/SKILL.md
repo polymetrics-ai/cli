@@ -14,7 +14,7 @@ Local JSONL destination that records reverse ETL writes and receipts.
 - asset: icons/pm-outbox.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/karthik-sivadas/polymetrics-cli
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

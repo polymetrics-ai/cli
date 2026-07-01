@@ -176,7 +176,7 @@ export default function HomePage() {
                 Get started <ArrowRight size={14} />
               </Link>
               <a
-                href="https://github.com/karthik-sivadas/polymetrics-cli"
+                href="https://github.com/polymetrics-ai/cli"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-sm border border-line-structure bg-surface-bg px-5 py-2.5 text-[14px] font-medium text-text-secondary transition-colors hover:bg-surface-1"
@@ -254,8 +254,8 @@ export default function HomePage() {
           </div>
         </HomeSection>
 
-        {/* ── Open source & local-first ──────────────────────────────── */}
-        <HomeSection id="open-source" pattern="p025" className="pt-[120px]">
+        {/* ── Public source & local-first ────────────────────────────── */}
+        <HomeSection id="public-source" pattern="p025" className="pt-[120px]">
           <CornerBox withStripes className="px-8 py-10 md:py-14 relative overflow-hidden">
             {/* Accent glow in top-right corner */}
             <span
@@ -273,7 +273,7 @@ export default function HomePage() {
                   <TextHighlight>No vendor lock-in.</TextHighlight>
                 </Heading>
                 <Text className="text-left">
-                  pm is MIT-licensed, written in pure Go, and trivially cross-compiled. No CGO, no Docker, no 8 GB of services. Install with a single{' '}
+                  pm is public source under Elastic License 2.0, written in pure Go, and trivially cross-compiled. No CGO, no Docker, no 8 GB of services. Install with a single{' '}
                   <code className="font-mono text-[13px] bg-surface-2 rounded px-1">go install</code>{' '}
                   and run anywhere.
                 </Text>
@@ -335,7 +335,7 @@ export default function HomePage() {
                 Read the docs <ArrowRight size={14} />
               </Link>
               <a
-                href="https://github.com/karthik-sivadas/polymetrics-cli"
+                href="https://github.com/polymetrics-ai/cli"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-sm border border-line-structure bg-surface-bg px-5 py-2.5 text-[14px] font-medium text-text-secondary transition-colors hover:bg-surface-1"

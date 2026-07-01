@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { CornerBox } from '@/components/ui/corner-box';
 
-const REPO = 'https://github.com/karthik-sivadas/polymetrics-cli';
+const REPO = 'https://github.com/polymetrics-ai/cli';
 
 /* ── Link columns ─────────────────────────────────────────────────────── */
 type Col = { title: string; links: [label: string, href: string][] };
@@ -40,8 +40,8 @@ const COLUMNS: Col[] = [
   {
     title: 'Community',
     links: [
-      ['Open Source', REPO],
-      ['MIT License', `${REPO}/blob/main/LICENSE`],
+      ['Public Source', REPO],
+      ['Elastic License 2.0', `${REPO}/blob/main/LICENSE`],
       ['Star on GitHub', REPO],
       ['Report a bug', `${REPO}/issues/new`],
     ],
@@ -137,7 +137,7 @@ export function SiteFooter() {
 
         {/* Legal links */}
         <div className="flex flex-wrap items-center gap-5 border-t border-line-structure px-6 py-4 text-[12px]">
-          <FooterLink label="MIT License" href={`${REPO}/blob/main/LICENSE`} />
+          <FooterLink label="Elastic License 2.0" href={`${REPO}/blob/main/LICENSE`} />
           <FooterLink label="Privacy" href="#" />
           <FooterLink label="Security" href={`${REPO}/security`} />
         </div>
@@ -145,7 +145,7 @@ export function SiteFooter() {
         {/* Copyright + trademark footnote */}
         <div className="flex flex-col gap-3 border-t border-line-structure px-6 py-4">
           <div className="flex flex-wrap items-center justify-between gap-2 text-[12px] text-text-tertiary">
-            <span>© 2026 Polymetrics, independent open-source project.</span>
+            <span>© 2026 Polymetrics AI, public source project.</span>
             <span className="flex items-center gap-2">
               <span className="flex items-center justify-center h-[18px] min-w-[18px] px-1 bg-emerald-800 select-none">
                 <span className="font-mono font-bold text-[10px] leading-none text-white tracking-tight">PM</span>

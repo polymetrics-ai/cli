@@ -37,8 +37,8 @@ build from source below.
 ### Build from source
 
 ```bash
-git clone https://github.com/karthik-sivadas/polymetrics-cli
-cd polymetrics-cli
+git clone https://github.com/polymetrics-ai/cli
+cd cli
 make build          # produces ./pm  (pure-Go, CGO-free)
 ```
 

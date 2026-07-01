@@ -31,7 +31,7 @@ const stats = [
   {
     label: 'GitHub Stars',
     value: 'Star us',
-    href: 'https://github.com/karthik-sivadas/polymetrics-cli',
+    href: 'https://github.com/polymetrics-ai/cli',
     tooltip: 'Leave a Star',
     icon: Star,
   },
@@ -44,9 +44,9 @@ const stats = [
   },
   {
     label: 'License',
-    value: 'MIT',
-    href: 'https://github.com/karthik-sivadas/polymetrics-cli/blob/main/LICENSE',
-    tooltip: 'MIT license',
+    value: 'Elastic-2.0',
+    href: 'https://github.com/polymetrics-ai/cli/blob/main/LICENSE',
+    tooltip: 'Elastic License 2.0',
     icon: Scale,
   },
   {
@@ -121,7 +121,7 @@ export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: 
             <SidebarGroupHeader>
               <SidebarGroupLabel>What&rsquo;s new</SidebarGroupLabel>
               <a
-                href="https://github.com/karthik-sivadas/polymetrics-cli/releases"
+                href="https://github.com/polymetrics-ai/cli/releases"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-text-tertiary transition-colors hover:text-text-secondary"
@@ -152,7 +152,7 @@ export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: 
 
         <SidebarFooter>
           <a
-            href="https://github.com/karthik-sivadas/polymetrics-cli"
+            href="https://github.com/polymetrics-ai/cli"
             target="_blank"
             rel="noreferrer"
             className="link-box group relative grid min-w-0 grid-cols-[2rem_minmax(0,1fr)] items-center gap-2 px-4 py-3 text-[12px] text-text-tertiary transition-colors hover:bg-surface-bg hover:text-text-secondary"
@@ -167,7 +167,7 @@ export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: 
               </span>
               <span className="mt-0.5 flex min-w-0 items-center gap-1.5 font-mono text-[10px] text-text-disabled">
                 <Github className="h-3 w-3 shrink-0" aria-hidden="true" />
-                <span className="min-w-0 truncate">karthik-sivadas/polymetrics-cli</span>
+                <span className="min-w-0 truncate">polymetrics-ai/cli</span>
               </span>
             </span>
           </a>

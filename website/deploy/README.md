@@ -69,6 +69,6 @@ For GHCR pulls, the deploy job logs Podman into `ghcr.io` using the job-scoped `
 Use the same script from the origin VPS as `deploy`:
 
 ```bash
-WEBSITE_IMAGE="ghcr.io/karthik-sivadas/polymetrics-cli/website:<sha>" \
+WEBSITE_IMAGE="ghcr.io/polymetrics-ai/cli/website:<sha>" \
   website/deploy/deploy-podman-quadlet.sh
 ```

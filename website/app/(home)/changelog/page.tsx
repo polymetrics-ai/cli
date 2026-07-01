@@ -64,7 +64,7 @@ export default function ChangelogPage() {
             Release notes for the local-first extract, query, and reverse-ETL workflow.
           </p>
           <a
-            href="https://github.com/karthik-sivadas/polymetrics-cli/releases"
+            href="https://github.com/polymetrics-ai/cli/releases"
             target="_blank"
             rel="noreferrer"
             className="inline-flex w-fit items-center gap-2 border border-line-structure bg-surface-1 px-3 py-2 font-square text-[12px] font-semibold text-text-secondary transition-colors hover:border-line-cta hover:text-text-primary"
