@@ -83,6 +83,8 @@ func Run(args []string, stdout, stderr io.Writer) int {
 		err = runDocs(rest, stdout)
 	case "skills":
 		err = runSkills(rest, stdout, jsonOut)
+	case "version":
+		err = runVersion(rest, stdout, jsonOut)
 	case "rlm":
 		err = runRLM(ctx, root, rest, stdout, jsonOut)
 	case "schedule":
@@ -131,7 +133,7 @@ func runHelp(args []string, stdout io.Writer) error {
 }
 
 func isManualCommand(cmd string) bool {
-	if cmd == "init" || cmd == "help" || cmd == "man" {
+	if cmd == "init" || cmd == "help" || cmd == "man" || cmd == "version" {
 		return false
 	}
 	_, ok := docs[cmd]

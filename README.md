@@ -35,9 +35,17 @@ Moving data today means renting a cloud pipeline (Fivetran's surprise MAR bills)
 
 ## ⚡ Quickstart (60 seconds)
 
-**Install** (Go 1.25.11+):
+**Install** from a release binary, or with Go 1.25.11+:
 
 ```bash
+# Release binary
+os="$(go env GOOS)"
+arch="$(go env GOARCH)"
+gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*"
+case "$os" in windows) unzip "pm_"*_"${os}"_"${arch}".zip ;; *) tar -xzf "pm_"*_"${os}"_"${arch}".tar.gz ;; esac
+./pm version
+
+# Or install with Go
 go install polymetrics.ai/cmd/pm@latest      # installs the `pm` binary onto your PATH
 ```
 
@@ -167,7 +175,8 @@ Full details, build options, sync modes, and per-connector usage are in the **[S
 - [x] ETL + approval-gated reverse-ETL + sync modes
 - [ ] Remaining catalog → **600+ connectors**
 - [ ] Logical-replication CDC (Postgres/MySQL/Mongo/SQL Server/Oracle)
-- [ ] Prebuilt release binaries + Homebrew tap
+- [x] Prebuilt release binaries
+- [ ] Homebrew tap
 - [ ] Bundled MCP server (same `plan → approve → execute` gate)
 - [ ] Scheduling & incremental orchestration
 
@@ -179,6 +188,10 @@ Contributions are very welcome — **adding a connector is the best first PR.** 
 make verify          # gofmt + vet + go test ./... + build + smoke
 make verify-duckdb   # the DuckDB (CGO) build lane
 ```
+
+Use Conventional Commits for PR titles and squash commits. Connector updates use
+`fix(<connector>): ...` for patch releases; new connectors use
+`feat(connector): add <name>` for minor releases.
 
 Look for [`good first issue`](https://github.com/polymetrics-ai/cli/labels/good%20first%20issue) to get started.
 

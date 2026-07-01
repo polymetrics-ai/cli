@@ -434,7 +434,7 @@
     "path": "icons/pm-file.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "review_url": "https://github.com/karthik-sivadas/polymetrics-cli"
+    "review_url": "https://github.com/polymetrics-ai/cli"
   },
   {
     "connector": "outbox",
@@ -442,7 +442,7 @@
     "path": "icons/pm-outbox.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "review_url": "https://github.com/karthik-sivadas/polymetrics-cli"
+    "review_url": "https://github.com/polymetrics-ai/cli"
   },
   {
     "connector": "sample",
@@ -450,7 +450,7 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "review_url": "https://github.com/karthik-sivadas/polymetrics-cli"
+    "review_url": "https://github.com/polymetrics-ai/cli"
   },
   {
     "connector": "searxng",
@@ -4879,6 +4879,6 @@
     "path": "icons/pm-warehouse.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "review_url": "https://github.com/karthik-sivadas/polymetrics-cli"
+    "review_url": "https://github.com/polymetrics-ai/cli"
   }
 ]

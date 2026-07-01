@@ -1,6 +1,6 @@
 ---
 title: Installation
-description: Install pm via go install when the module path is available, or build the single Go binary from source.
+description: Install pm from a release binary, via go install, or by building the single Go binary from source.
 ---
 
 `pm` ships as a single Go binary with no runtime dependencies in its default build. Pick the installation method that suits your environment.
@@ -11,7 +11,23 @@ description: Install pm via go install when the module path is available, or bui
 
 ## Installation methods
 
-<Tabs items={["go install", "Build from source"]}>
+<Tabs items={["Release binary", "go install", "Build from source"]}>
+
+<Tab value="Release binary">
+
+Release assets are published from [`polymetrics-ai/cli`](https://github.com/polymetrics-ai/cli/releases) for Linux, macOS, and Windows on amd64 and arm64.
+
+```bash
+os="$(go env GOOS)"
+arch="$(go env GOARCH)"
+gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*"
+case "$os" in windows) unzip "pm_"*_"${os}"_"${arch}".zip ;; *) tar -xzf "pm_"*_"${os}"_"${arch}".tar.gz ;; esac
+./pm version
+```
+
+Each release includes `checksums.txt` for artifact verification.
+
+</Tab>
 
 <Tab value="go install">
 
@@ -54,9 +70,9 @@ CGO_ENABLED=1 go build -tags duckdb ./cmd/pm
 
 </Tabs>
 
-## Prebuilt binaries and Homebrew
+## Release cadence
 
-Prebuilt release binaries and a Homebrew tap are on the roadmap. For now, use `go install` or build from source.
+Release PRs are generated from Conventional Commits after changes land on `main`. A connector update such as `fix(github): repair pagination` produces a patch release. A new connector such as `feat(connector): add linear` produces a minor release. Breaking changes use `!` or a `BREAKING CHANGE:` footer for a major release.
 
 ## Verify your installation
 

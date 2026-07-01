@@ -34,6 +34,21 @@ The module path is `polymetrics.ai`; the binary is always named `pm` (it builds 
 `cmd/pm`). This resolves once `polymetrics.ai` serves its Go module meta tag — until then,
 build from source below.
 
+### Install a release binary
+
+Release assets are published from `polymetrics-ai/cli` for Linux, macOS, and
+Windows on amd64 and arm64.
+
+```bash
+os="$(go env GOOS)"
+arch="$(go env GOARCH)"
+gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*"
+case "$os" in windows) unzip "pm_"*_"${os}"_"${arch}".zip ;; *) tar -xzf "pm_"*_"${os}"_"${arch}".tar.gz ;; esac
+./pm version
+```
+
+Each release also publishes `checksums.txt` for artifact verification.
+
 ### Build from source
 
 ```bash
