@@ -21,7 +21,7 @@ extract → query → write-back workflows. For the elevator pitch see the
 
 ## Install & build
 
-**Prerequisites:** Go **1.24+**. (The `Makefile` sets `GOTOOLCHAIN=auto`, so `make`
+**Prerequisites:** Go **1.25.11+**. (The `Makefile` sets `GOTOOLCHAIN=auto`, so `make`
 targets auto-fetch the right toolchain even on an older local Go.)
 
 ### Install with `go install`
@@ -297,8 +297,8 @@ Details: [docs/runtime/SETUP.md](runtime/SETUP.md).
 
 ## Troubleshooting
 
-- **`go.mod requires go >= 1.24` / toolchain errors** — use `make` targets (they set
-  `GOTOOLCHAIN=auto`), or run `GOTOOLCHAIN=auto go build ./cmd/pm`, or install Go 1.24+.
+- **`go.mod requires go >= 1.25` / toolchain errors** — use `make` targets (they set
+  `GOTOOLCHAIN=auto`), or run `GOTOOLCHAIN=auto go build ./cmd/pm`, or install Go 1.25.11+.
 - **DuckDB build fails to link** — the `-tags duckdb` build needs CGO and a C compiler
   (`CGO_ENABLED=1`). The default build needs neither; use it if you don't need analytical SQL.
 - **An HTTP connector only returns one page** — connectors default to one page for safe
