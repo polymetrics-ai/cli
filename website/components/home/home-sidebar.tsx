@@ -3,7 +3,7 @@ import {
   Database,
   ExternalLink,
   FileJson,
-  Github,
+  GitBranch as Github,
   HardDrive,
   Lock,
   Scale,

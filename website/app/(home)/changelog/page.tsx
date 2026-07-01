@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Cable, Database, FileJson, Github, Lock } from 'lucide-react';
+import { Cable, Database, FileJson, GitBranch as Github, Lock } from 'lucide-react';
 import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.generated';
 
 export const metadata: Metadata = {
