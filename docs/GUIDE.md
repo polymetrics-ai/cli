@@ -21,8 +21,8 @@ extract → query → write-back workflows. For the elevator pitch see the
 
 ## Install & build
 
-**Prerequisites:** Go **1.25.11+**. (The `Makefile` sets `GOTOOLCHAIN=auto`, so `make`
-targets auto-fetch the right toolchain even on an older local Go.)
+**Build prerequisites:** Go **1.25.11+**. (The `Makefile` sets `GOTOOLCHAIN=auto`,
+so `make` targets auto-fetch the right toolchain even on an older local Go.)
 
 ### Install with `go install`
 
@@ -33,6 +33,55 @@ go install polymetrics.ai/cmd/pm@latest      # installs the `pm` binary into $(g
 The module path is `polymetrics.ai`; the binary is always named `pm` (it builds from
 `cmd/pm`). This resolves once `polymetrics.ai` serves its Go module meta tag — until then,
 build from source below.
+
+### Install a release binary
+
+Release assets are published from `polymetrics-ai/cli` for Linux, macOS, and
+Windows on amd64 and arm64.
+
+This path requires the GitHub CLI (`gh`) and standard archive tools (`tar` on
+macOS/Linux, `unzip` for Windows archives), but does not require Go.
+
+```bash
+os_name="$(uname -s)"
+arch_name="$(uname -m)"
+
+case "$os_name" in
+  Darwin) os=darwin ;;
+  Linux) os=linux ;;
+  MINGW*|MSYS*|CYGWIN*) os=windows ;;
+  *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
+esac
+
+case "$arch_name" in
+  x86_64|amd64) arch=amd64 ;;
+  arm64|aarch64) arch=arm64 ;;
+  *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
+esac
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "$tmpdir"' EXIT
+gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*" --dir "$tmpdir"
+
+case "$os" in
+  windows)
+    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
+    binary_name=pm.exe
+    ;;
+  *)
+    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
+    binary_name=pm
+    ;;
+esac
+
+install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
+mkdir -p "$install_dir"
+cp "$tmpdir/$binary_name" "$install_dir/$binary_name"
+chmod +x "$install_dir/$binary_name" 2>/dev/null || true
+"$install_dir/$binary_name" version
+```
+
+Each release also publishes `checksums.txt` for artifact verification.
 
 ### Build from source
 

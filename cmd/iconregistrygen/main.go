@@ -301,11 +301,11 @@ func downloadIconAsset(client http.Client, iconsDir string, asset iconAsset) err
 
 func localIconEntries() []iconEntry {
 	return []iconEntry{
-		localIconEntry("file", "pm-file", connectors.IconSourcePolymetrics, connectors.IconReviewPolymetrics, "https://github.com/karthik-sivadas/polymetrics-cli"),
-		localIconEntry("outbox", "pm-outbox", connectors.IconSourcePolymetrics, connectors.IconReviewPolymetrics, "https://github.com/karthik-sivadas/polymetrics-cli"),
-		localIconEntry("sample", "pm-sample", connectors.IconSourcePolymetrics, connectors.IconReviewPolymetrics, "https://github.com/karthik-sivadas/polymetrics-cli"),
+		localIconEntry("file", "pm-file", connectors.IconSourcePolymetrics, connectors.IconReviewPolymetrics, "https://github.com/polymetrics-ai/cli"),
+		localIconEntry("outbox", "pm-outbox", connectors.IconSourcePolymetrics, connectors.IconReviewPolymetrics, "https://github.com/polymetrics-ai/cli"),
+		localIconEntry("sample", "pm-sample", connectors.IconSourcePolymetrics, connectors.IconReviewPolymetrics, "https://github.com/polymetrics-ai/cli"),
 		localIconEntry("searxng", "searxng", "official_site", connectors.IconReviewManualOverride, "https://docs.searxng.org/"),
-		localIconEntry("warehouse", "pm-warehouse", connectors.IconSourcePolymetrics, connectors.IconReviewPolymetrics, "https://github.com/karthik-sivadas/polymetrics-cli"),
+		localIconEntry("warehouse", "pm-warehouse", connectors.IconSourcePolymetrics, connectors.IconReviewPolymetrics, "https://github.com/polymetrics-ai/cli"),
 	}
 }
 

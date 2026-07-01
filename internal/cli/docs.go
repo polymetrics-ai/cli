@@ -30,6 +30,7 @@ COMMANDS
   perf              compare dependency-free and runtime-backed performance
   docs              generate markdown command docs
   skills            generate agent SKILL.md files
+  version           print build version metadata
   help, man         show detailed documentation
 
 HUMAN QUICK START
@@ -73,7 +74,26 @@ var docs = map[string]string{
 	"perf":        perfHelp,
 	"docs":        docsHelp,
 	"skills":      skillsHelp,
+	"version":     versionHelp,
 }
+
+const versionHelp = `NAME
+  pm version - print build version metadata
+
+SYNOPSIS
+  pm version [--json]
+
+DESCRIPTION
+  Prints the release version, git commit, and build date embedded into release
+  binaries. Development builds print dev, none, and unknown unless overridden
+  with Go linker flags.
+
+OPTIONS
+  --json    render machine-readable JSON
+
+EXIT STATUS
+  0 success
+`
 
 const credentialsHelp = `NAME
   pm credentials - manage encrypted connector credentials
