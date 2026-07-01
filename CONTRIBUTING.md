@@ -6,7 +6,7 @@ Thanks for helping improve Polymetrics CLI. The fastest useful contribution is a
 
 Prerequisites:
 
-- Go 1.24 or newer
+- Go 1.25.11 or newer
 - Node.js 22 and pnpm 11 for the website
 - A POSIX shell for the smoke test
 
