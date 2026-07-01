@@ -1,7 +1,7 @@
 INSTALL_DIR ?= $(HOME)/.local/bin
 
-# go.mod requires go >= 1.24 (pulled in by the duckdb-tagged dependency). Allow
-# the go command to fetch the matching toolchain when the ambient one is older.
+# go.mod requires Go 1.25 and pins a patched toolchain. Allow the go command to
+# fetch the matching toolchain when the ambient one is older.
 export GOTOOLCHAIN ?= auto
 
 .PHONY: fmt vet test build icons-generate docs-check install uninstall smoke verify verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean
