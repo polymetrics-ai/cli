@@ -1,14 +1,6 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('docs UI smoke', () => {
-  test('renders the homepage terminal without breaking the app shell', async ({ page }) => {
-    await page.goto('/');
-
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Extract');
-    await expect(page.getByText('pm · quickstart')).toBeVisible();
-    await expect(page.getByText('pm etl run --connection my-github')).toBeVisible();
-  });
-
   test('renders an MDX docs page with docs actions', async ({ page }) => {
     await page.goto('/docs/quickstart');
 
@@ -27,6 +19,7 @@ test.describe('docs UI smoke', () => {
 
     const toc = page.getByRole('navigation', { name: 'On this page' });
     await expect(toc).toBeVisible();
+    await expect(page.locator('[data-site-toc]')).toHaveCount(1);
 
     await expect(toc.getByRole('link', { name: 'Install pm' })).toHaveAttribute(
       'aria-current',
@@ -43,7 +36,56 @@ test.describe('docs UI smoke', () => {
     await page.goto('/docs/connectors/source-100ms');
     const connectorToc = page.getByRole('navigation', { name: 'On this page' });
     await expect(connectorToc).toBeVisible();
+    await expect(page.locator('[data-site-toc]')).toHaveCount(1);
     await expect(connectorToc.getByRole('link', { name: 'Configuration' })).toBeVisible();
+  });
+
+  test('uses one shared right TOC on the homepage and stays light only', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.addInitScript(() => {
+      localStorage.setItem('theme', 'dark');
+      document.documentElement.classList.add('dark');
+    });
+    await page.goto('/');
+
+    const toc = page.getByRole('navigation', { name: 'On this page' });
+    await expect(toc).toBeVisible();
+    await expect(page.locator('[data-site-toc]')).toHaveCount(1);
+    await expect(toc.getByRole('link', { name: 'Overview' })).toHaveAttribute(
+      'aria-current',
+      'location',
+    );
+
+    await toc.getByRole('link', { name: 'The loop' }).click();
+    await expect(page).toHaveURL(/\/#loop$/);
+    await expect(toc.getByRole('link', { name: 'The loop' })).toHaveAttribute(
+      'aria-current',
+      'location',
+    );
+
+    await expect(page.locator('.site-toc-svg')).toBeVisible();
+    await expect(page.locator('.site-toc-path-active')).toHaveCount(1);
+    await expect(page.locator('.site-toc-path-active')).toHaveAttribute('d', /M /);
+    await expect(page.locator('.site-toc-node rect')).toBeVisible();
+    const tocBox = await page.locator('[data-site-toc]').boundingBox();
+    expect(Math.round(tocBox?.width ?? 0)).toBe(256);
+    const bodyBackground = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    const colorScheme = await page.evaluate(
+      () => getComputedStyle(document.documentElement).colorScheme,
+    );
+    expect(bodyBackground).not.toBe('rgb(18, 18, 18)');
+    expect(colorScheme).toContain('light');
+  });
+
+  test('opens the changelog route from the main navigation', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    await page.locator('header').getByRole('link', { name: 'Changelog' }).click();
+    await expect(page).toHaveURL(/\/changelog$/);
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Changes that ship the loop.' }),
+    ).toBeVisible();
   });
 
   test('renders connector catalog, connector detail, and generated data.json', async ({ page }) => {

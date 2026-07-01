@@ -1,21 +1,23 @@
 # Website Deployment
 
-The website pipelines build and test the Next.js app on pull requests and pushes that touch `website/`. Deployment is limited to `main` and runs on self-hosted infrastructure that can reach the Kubernetes API over Tailscale.
+The website pipelines build and test the Next.js app on pull requests and pushes that touch `website/`. Production deployment is limited to `main` and runs on the Polymetrics origin VPS through a Tailscale-connected self-hosted GitHub runner.
 
 ## Flow
 
 - GitHub Actions runs `gen:website-data`, generated-file drift checks, `typecheck`, `build`, and a Docker image build. Pushes to `main` publish `ghcr.io/<owner>/<repo>/website:<sha>` and `:main`.
 - GitLab CI runs the same website checks, builds the Docker image, and pushes `$CI_REGISTRY_IMAGE/website:<sha>` plus `:main` only on `main`.
-- Deployment runs `website/deploy/deploy-image.sh`, applies the namespace/deployment/service manifests, sets the CI-built image, changes `imagePullPolicy` to `IfNotPresent`, optionally sets an image pull secret name, and waits for rollout.
+- Deployment runs `website/deploy/deploy-podman-quadlet.sh` on the origin runner. The script pulls the CI-built GHCR tag, resolves it to an immutable digest, updates the rootless Quadlet `Image=...@sha256:...`, restarts `cli-polymetrics.service`, checks loopback health, and verifies the public Cloudflare Tunnel URL.
+- `website/deploy/deploy-image.sh` and the Kubernetes manifests are retained for future Kubernetes environments, but they are not the active Polymetrics origin path.
 
 ## Runner Assumptions
 
 GitHub deploy runner:
 
 - Labels: `self-hosted`, `linux`, `tailscale`, `polymetrics-website`.
-- Joined to the tailnet and able to reach the target Kubernetes API.
-- Has `kubectl` installed.
-- Has a working kubeconfig already on disk, or receives one through `WEBSITE_KUBECONFIG_B64`.
+- Runs on the origin VPS as the `deploy` user.
+- Joined to the tailnet.
+- Has rootless Podman, `curl`, and user systemd available.
+- Has linger enabled for `deploy` so `systemctl --user` can restart the Quadlet from CI.
 
 GitLab deploy runner:
 
@@ -30,16 +32,13 @@ GitLab image builds use Docker-in-Docker. The runner used by `website:image` mus
 Required:
 
 - `GITHUB_TOKEN`: provided by GitHub Actions; used to push to GHCR from `main`.
-- Variable `WEBSITE_DEPLOY_ENABLED`: set to `true` after the Tailscale self-hosted runner is registered. Until then, the deploy job stays skipped instead of queuing forever.
 
 Optional:
 
-- Secret `WEBSITE_KUBECONFIG_B64`: base64-encoded kubeconfig, only needed when the deploy runner does not already have kubeconfig.
-- Variable `WEBSITE_KUBE_CONTEXT`: kube context to select before deployment.
-- Variable `WEBSITE_NAMESPACE`: defaults to `polymetrics-website`; keep it aligned with the namespace in these manifests.
-- Variable `WEBSITE_DEPLOYMENT`: defaults to `polymetrics-website`.
-- Variable `WEBSITE_CONTAINER`: defaults to `website`.
-- Variable `WEBSITE_IMAGE_PULL_SECRET`: Kubernetes secret name to attach to the deployment for private registry pulls.
+- Variable `WEBSITE_SERVICE`: defaults to `cli-polymetrics`.
+- Variable `WEBSITE_QUADLET`: defaults to `/home/deploy/.config/containers/systemd/cli-polymetrics.container`.
+- Variable `WEBSITE_HEALTH_URL`: defaults to `http://127.0.0.1:18081/`.
+- Variable `WEBSITE_PUBLIC_URL`: defaults to `https://cli.polymetrics.ai/`. Set to an empty value to skip the public URL check.
 - Variable `WEBSITE_ROLLOUT_TIMEOUT`: defaults to `120s`.
 
 ## GitLab Variables
@@ -63,22 +62,13 @@ Optional project or environment variables:
 
 ## Private Registry Pulls
 
-For private GHCR or GitLab registry images, create a Kubernetes image pull secret out of band and set `WEBSITE_IMAGE_PULL_SECRET` to that secret name. Keep tokens in environment variables or secret stores.
-
-Example shape:
-
-```bash
-kubectl -n polymetrics-website create secret docker-registry website-registry \
-  --docker-server="$REGISTRY_HOST" \
-  --docker-username="$REGISTRY_USERNAME" \
-  --docker-password="$REGISTRY_TOKEN"
-```
+For GHCR pulls, the deploy job logs Podman into `ghcr.io` using the job-scoped `GITHUB_TOKEN` with `packages: read`. No long-lived registry password is stored on the VPS.
 
 ## Manual Deploy
 
-Use the same script from a Tailscale-connected machine with `kubectl` configured:
+Use the same script from the origin VPS as `deploy`:
 
 ```bash
-WEBSITE_IMAGE="$REGISTRY_HOST/$REGISTRY_PATH/website:$IMAGE_TAG" \
-  website/deploy/deploy-image.sh
+WEBSITE_IMAGE="ghcr.io/karthik-sivadas/polymetrics-cli/website:<sha>" \
+  website/deploy/deploy-podman-quadlet.sh
 ```
