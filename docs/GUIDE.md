@@ -40,11 +40,27 @@ Release assets are published from `polymetrics-ai/cli` for Linux, macOS, and
 Windows on amd64 and arm64.
 
 ```bash
-os="$(go env GOOS)"
-arch="$(go env GOARCH)"
+os_name="$(uname -s)"
+arch_name="$(uname -m)"
+
+case "$os_name" in
+  Darwin) os=darwin ;;
+  Linux) os=linux ;;
+  MINGW*|MSYS*|CYGWIN*) os=windows ;;
+  *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
+esac
+
+case "$arch_name" in
+  x86_64|amd64) arch=amd64 ;;
+  arm64|aarch64) arch=arm64 ;;
+  *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
+esac
+
 gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*"
 case "$os" in windows) unzip "pm_"*_"${os}"_"${arch}".zip ;; *) tar -xzf "pm_"*_"${os}"_"${arch}".tar.gz ;; esac
-./pm version
+binary=./pm
+if [ "$os" = windows ]; then binary=./pm.exe; fi
+"$binary" version
 ```
 
 Each release also publishes `checksums.txt` for artifact verification.
