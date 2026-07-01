@@ -11,4 +11,5 @@ deploy/compose/.env
 
 *.tmp
 *.log
-
+__pycache__/
+*.py[cod]

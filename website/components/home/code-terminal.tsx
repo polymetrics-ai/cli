@@ -215,7 +215,7 @@ function tokenizeSql(raw: string): ReactNode {
 }
 
 /* ── QUICKSTART content ────────────────────────────────────────────────── */
-const QUICKSTART = `# Install (Go 1.24+)
+const QUICKSTART = `# Install (Go 1.25.11+)
 go install polymetrics.ai/cmd/pm@latest
 
 pm init
