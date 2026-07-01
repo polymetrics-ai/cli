@@ -9,7 +9,7 @@
 [![Website](https://img.shields.io/badge/polymetrics.ai-6f42c1?logo=icloud&logoColor=white)](https://polymetrics.ai)
 [![License: Elastic 2.0](https://img.shields.io/badge/License-Elastic--2.0-blue.svg)](LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/polymetrics-ai/cli)](https://goreportcard.com/report/github.com/polymetrics-ai/cli)
-![Go](https://img.shields.io/badge/Go-1.24+-00ADD8?logo=go&logoColor=white)
+![Go](https://img.shields.io/badge/Go-1.25.11+-00ADD8?logo=go&logoColor=white)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#-contributing)
 [![GitHub stars](https://img.shields.io/github/stars/polymetrics-ai/cli?style=social)](https://github.com/polymetrics-ai/cli/stargazers)
 
@@ -35,13 +35,13 @@ Moving data today means renting a cloud pipeline (Fivetran's surprise MAR bills)
 
 ## ⚡ Quickstart (60 seconds)
 
-**Install** (Go 1.24+):
+**Install** (Go 1.25.11+):
 
 ```bash
 go install polymetrics.ai/cmd/pm@latest      # installs the `pm` binary onto your PATH
 ```
 
-<sub>Or build from source — <code>git clone https://github.com/polymetrics-ai/cli && cd cli && make build</code> (produces <code>./pm</code>; <code>make build</code> auto-fetches the Go 1.24 toolchain).</sub>
+<sub>Or build from source — <code>git clone https://github.com/polymetrics-ai/cli && cd cli && make build</code> (produces <code>./pm</code>; <code>make build</code> auto-fetches the Go 1.25.11 toolchain).</sub>
 
 **Run** a full extract → land → query loop with zero external services:
 
