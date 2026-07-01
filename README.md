@@ -35,7 +35,11 @@ Moving data today means renting a cloud pipeline (Fivetran's surprise MAR bills)
 
 ## ⚡ Quickstart (60 seconds)
 
-**Install** from a release binary, or with Go 1.25.11+:
+**Install** from a release binary, or with Go 1.25.11+.
+
+Release binary install requires the GitHub CLI (`gh`) and standard archive
+tools (`tar` on macOS/Linux, `unzip` for Windows archives), but does not require
+Go:
 
 ```bash
 # Release binary

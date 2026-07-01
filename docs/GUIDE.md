@@ -21,8 +21,8 @@ extract → query → write-back workflows. For the elevator pitch see the
 
 ## Install & build
 
-**Prerequisites:** Go **1.25.11+**. (The `Makefile` sets `GOTOOLCHAIN=auto`, so `make`
-targets auto-fetch the right toolchain even on an older local Go.)
+**Build prerequisites:** Go **1.25.11+**. (The `Makefile` sets `GOTOOLCHAIN=auto`,
+so `make` targets auto-fetch the right toolchain even on an older local Go.)
 
 ### Install with `go install`
 
@@ -38,6 +38,9 @@ build from source below.
 
 Release assets are published from `polymetrics-ai/cli` for Linux, macOS, and
 Windows on amd64 and arm64.
+
+This path requires the GitHub CLI (`gh`) and standard archive tools (`tar` on
+macOS/Linux, `unzip` for Windows archives), but does not require Go.
 
 ```bash
 os_name="$(uname -s)"

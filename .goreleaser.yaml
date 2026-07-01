@@ -2,6 +2,10 @@ version: 2
 
 project_name: pm
 
+release:
+  mode: keep-existing
+  replace_existing_artifacts: true
+
 builds:
   - id: pm
     main: ./cmd/pm
