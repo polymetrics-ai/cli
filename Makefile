@@ -4,13 +4,17 @@ INSTALL_DIR ?= $(HOME)/.local/bin
 # fetch the matching toolchain when the ambient one is older.
 export GOTOOLCHAIN ?= auto
 
-.PHONY: fmt vet test build icons-generate docs-check install uninstall smoke verify verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean
+.PHONY: fmt vet tidy-check test build icons-generate docs-check install uninstall smoke verify verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean
 
 fmt:
 	gofmt -w cmd internal
 
 vet:
 	go vet ./...
+
+tidy-check:
+	go mod tidy
+	git diff --exit-code -- go.mod go.sum
 
 test:
 	go test ./...
@@ -53,7 +57,7 @@ smoke: build
 	test -s "$$SMOKE_DIR/.polymetrics/outbox/customers_to_outbox.jsonl"; \
 	printf 'smoke ok: %s\n' "$$SMOKE_DIR"
 
-verify: fmt vet test build docs-check smoke
+verify: fmt tidy-check vet test build docs-check smoke
 
 verify-duckdb:
 	CGO_ENABLED=1 go build -tags duckdb ./cmd/pm

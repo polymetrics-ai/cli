@@ -56,11 +56,26 @@ case "$arch_name" in
   *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
 esac
 
-gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*"
-case "$os" in windows) unzip "pm_"*_"${os}"_"${arch}".zip ;; *) tar -xzf "pm_"*_"${os}"_"${arch}".tar.gz ;; esac
-binary=./pm
-if [ "$os" = windows ]; then binary=./pm.exe; fi
-"$binary" version
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "$tmpdir"' EXIT
+gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*" --dir "$tmpdir"
+
+case "$os" in
+  windows)
+    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
+    binary_name=pm.exe
+    ;;
+  *)
+    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
+    binary_name=pm
+    ;;
+esac
+
+install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
+mkdir -p "$install_dir"
+cp "$tmpdir/$binary_name" "$install_dir/$binary_name"
+chmod +x "$install_dir/$binary_name" 2>/dev/null || true
+"$install_dir/$binary_name" version
 ```
 
 Each release also publishes `checksums.txt` for artifact verification.

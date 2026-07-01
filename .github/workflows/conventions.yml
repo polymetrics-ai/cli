@@ -48,9 +48,15 @@ jobs:
     steps:
       - name: Validate PR title
         env:
+          HEAD_REF: ${{ github.head_ref }}
           PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_ACTOR: ${{ github.event.pull_request.user.login }}
         run: |
           set -euo pipefail
+
+          if [[ "$HEAD_REF" == dependabot/* || "$PR_ACTOR" == "dependabot[bot]" ]]; then
+            exit 0
+          fi
 
           pattern='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9][a-z0-9._-]*\))?!?: .+'
           if [[ ! "$PR_TITLE" =~ $pattern ]]; then
