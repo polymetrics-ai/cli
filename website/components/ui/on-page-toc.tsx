@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties, MouseEvent } from 'react';
-import { Cable, Github, MessageSquare } from 'lucide-react';
+import { Cable, GitBranch as Github, MessageSquare } from 'lucide-react';
 import {
   Sidebar,
   SidebarAccent,

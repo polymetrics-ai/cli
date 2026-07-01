@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import {
-  ArrowRight, Github, Download, Database, ArrowLeftRight,
+  ArrowRight, GitBranch as Github, Download, Database, ArrowLeftRight,
   Plug, Bot, Lock, RefreshCw,
 } from 'lucide-react';
 import { useState, useCallback, type MouseEvent } from 'react';
