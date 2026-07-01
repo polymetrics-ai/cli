@@ -1,18 +1,16 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
 import { usePathname } from 'next/navigation';
-import { Github, MessageSquare, Navigation } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { AnchorProvider, TOCItem, useActiveAnchor } from 'fumadocs-core/toc';
+import type { TOCItemType } from 'fumadocs-core/toc';
+import { Github, Menu, MessageSquare } from 'lucide-react';
 import {
   Sidebar,
   SidebarAccent,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupHeader,
-  SidebarGroupLabel,
   SidebarInner,
 } from '@/components/ui/sidebar';
 
@@ -22,140 +20,199 @@ interface TocHeading {
   level: 2 | 3;
 }
 
+function readHeadings(): TocHeading[] {
+  const article =
+    document.querySelector('#nd-docs-layout article') ??
+    document.querySelector('#nd-docs-layout main') ??
+    document.querySelector('#nd-docs-layout');
+
+  if (!article) return [];
+
+  return Array.from(article.querySelectorAll<HTMLHeadingElement>('h2[id], h3[id]'))
+    .map((el) => ({
+      id: el.id,
+      text: el.textContent?.trim() ?? '',
+      level: el.tagName === 'H2' ? (2 as const) : (3 as const),
+    }))
+    .filter((heading) => heading.id && heading.text);
+}
+
+function sameHeadings(a: TocHeading[], b: TocHeading[]) {
+  return (
+    a.length === b.length &&
+    a.every((heading, index) => {
+      const next = b[index];
+      return (
+        next &&
+        heading.id === next.id &&
+        heading.text === next.text &&
+        heading.level === next.level
+      );
+    })
+  );
+}
+
 function useDOMHeadings(): TocHeading[] {
   const pathname = usePathname();
   const [headings, setHeadings] = useState<TocHeading[]>([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const article =
-        document.querySelector('#nd-docs-layout article') ??
-        document.querySelector('#nd-docs-layout main') ??
-        document.querySelector('#nd-docs-layout');
+    let frame = 0;
 
-      if (!article) return;
+    const update = () => {
+      frame = 0;
+      const next = readHeadings();
+      setHeadings((current) => (sameHeadings(current, next) ? current : next));
+    };
 
-      const els = Array.from(
-        article.querySelectorAll<HTMLHeadingElement>('h2[id], h3[id]'),
-      );
+    const schedule = () => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
 
-      setHeadings(
-        els.map((el) => ({
-          id: el.id,
-          text: el.textContent ?? '',
-          level: el.tagName === 'H2' ? 2 : 3,
-        })),
-      );
-    }, 80);
+    const timer = window.setTimeout(schedule, 80);
+    const root = document.querySelector('#nd-docs-layout') ?? document.body;
+    const observer = new MutationObserver(schedule);
+    observer.observe(root, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
 
-    return () => clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      if (frame) cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
   }, [pathname]);
 
   return headings;
 }
 
-export function DocsTocAside() {
-  const pathname = usePathname();
-  const headings = useDOMHeadings();
-  const [active, setActive] = useState<string>('');
+function DocsTocList({ headings }: { headings: TocHeading[] }) {
+  const observedActive = useActiveAnchor();
+  const [manualActive, setManualActive] = useState('');
+  const active = manualActive || observedActive || headings[0]?.id || '';
   const listRef = useRef<HTMLDivElement>(null);
   const [indicator, setIndicator] = useState<{ top: number; height: number } | null>(null);
 
   useEffect(() => {
-    if (headings.length === 0) return;
-    setActive(headings[0].id);
-
-    const els = headings
-      .map(({ id }) => document.getElementById(id))
-      .filter(Boolean) as HTMLElement[];
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id);
-            break;
-          }
-        }
-      },
-      { rootMargin: '-20% 0px -70% 0px', threshold: 0 },
-    );
-
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [headings, pathname]);
+    if (!manualActive) return;
+    const timer = window.setTimeout(() => setManualActive(''), 700);
+    return () => window.clearTimeout(timer);
+  }, [manualActive]);
 
   useEffect(() => {
-    if (!active) return;
-    const el = listRef.current?.querySelector(`[data-id="${active}"]`) as HTMLElement | null;
-    if (el) setIndicator({ top: el.offsetTop, height: el.offsetHeight });
-  }, [active]);
+    if (!active) {
+      setIndicator(null);
+      return;
+    }
+
+    let frame = 0;
+    const update = () => {
+      const el = listRef.current?.querySelector<HTMLElement>(`[data-id="${active}"]`);
+      setIndicator(el ? { top: el.offsetTop, height: el.offsetHeight } : null);
+    };
+
+    frame = requestAnimationFrame(update);
+    window.addEventListener('resize', update);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', update);
+    };
+  }, [active, headings]);
+
+  const handleAnchorClick = useCallback((event: MouseEvent<HTMLAnchorElement>, id: string) => {
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    event.preventDefault();
+    setManualActive(id);
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block: 'start',
+    });
+
+    window.history.pushState(null, '', `${window.location.pathname}${window.location.search}#${id}`);
+  }, []);
 
   return (
-    <Sidebar className="docs-toc-panel">
-      <SidebarInner>
-        <SidebarContent className="space-y-2 pt-3">
-          <SidebarGroup>
-            <SidebarGroupHeader>
-              <SidebarGroupLabel>On this page</SidebarGroupLabel>
-              <span className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-text-disabled">
-                <Navigation className="h-3 w-3" aria-hidden="true" />
-                {headings.length}
-              </span>
-            </SidebarGroupHeader>
-            <SidebarGroupContent>
-              {headings.length > 0 ? (
-                <div className="relative">
-                  <div className="absolute bottom-0 left-0 top-0 w-px bg-line-structure" />
-                  {indicator && (
-                    <div
-                      className="absolute left-0 w-0.5 bg-surface-cta-primary"
-                      style={{
-                        top: indicator.top,
-                        height: indicator.height,
-                        transition:
-                          'top 150ms cubic-bezier(0.23,1,0.32,1), height 150ms cubic-bezier(0.23,1,0.32,1)',
-                      }}
-                    />
-                  )}
+    <div className="docs-toc-list" ref={listRef}>
+      <span className="docs-toc-rail" aria-hidden="true" />
+      {indicator ? (
+        <span
+          className="docs-toc-indicator"
+          aria-hidden="true"
+          style={{
+            height: indicator.height,
+            transform: `translateY(${indicator.top}px)`,
+          }}
+        />
+      ) : null}
 
-                  <div ref={listRef} className="flex flex-col">
-                    {headings.map(({ id, text, level }) => (
-                      <a
-                        key={id}
-                        href={`#${id}`}
-                        data-id={id}
-                        className={cn(
-                          'link-box group relative block border border-transparent py-1.5 text-[13px] leading-snug transition-colors duration-150 hover:border-line-structure hover:bg-surface-bg',
-                          level === 2 ? 'ps-3 pe-2' : 'ps-5 pe-2 text-[12px]',
-                          active === id
-                            ? 'border-line-structure bg-surface-bg text-text-primary'
-                            : 'text-text-tertiary hover:text-text-secondary',
-                        )}
-                      >
-                        <span aria-hidden className="corner-box-hover-child" />
-                        <span className="block truncate">{text}</span>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <p className="text-[12px] leading-relaxed text-text-disabled">
-                  No sections on this page.
-                </p>
-              )}
-            </SidebarGroupContent>
-          </SidebarGroup>
+      {headings.map(({ id, text, level }) => (
+        <TOCItem
+          key={id}
+          href={`#${id}`}
+          data-id={id}
+          data-level={level}
+          data-active={active === id ? 'true' : 'false'}
+          aria-current={active === id ? 'location' : undefined}
+          className="docs-toc-link"
+          onClick={(event) => handleAnchorClick(event, id)}
+        >
+          <span>{text}</span>
+        </TOCItem>
+      ))}
+    </div>
+  );
+}
+
+export function DocsTocAside() {
+  const headings = useDOMHeadings();
+  const toc = useMemo<TOCItemType[]>(
+    () =>
+      headings.map((heading) => ({
+        title: heading.text,
+        url: `#${heading.id}`,
+        depth: heading.level,
+      })),
+    [headings],
+  );
+
+  return (
+    <Sidebar className="docs-toc-panel" data-docs-toc>
+      <SidebarInner className="docs-toc-inner" aria-label="On this page">
+        <SidebarContent className="docs-toc-content">
+          <div className="docs-toc-header">
+            <span className="inline-flex min-w-0 items-center gap-2">
+              <Menu className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              <span>On this page</span>
+            </span>
+            <span className="docs-toc-count" aria-label={`${headings.length} sections`}>
+              {headings.length}
+            </span>
+          </div>
+
+          {headings.length > 0 ? (
+            <AnchorProvider toc={toc} single>
+              <DocsTocList headings={headings} />
+            </AnchorProvider>
+          ) : (
+            <p className="docs-toc-empty">No sections on this page.</p>
+          )}
         </SidebarContent>
 
-        <SidebarFooter>
+        <SidebarFooter className="docs-toc-footer">
           <a
             href="https://github.com/karthik-sivadas/polymetrics-cli/discussions"
             target="_blank"
             rel="noreferrer"
-            className="link-box group relative block border-b border-line-structure px-4 py-3 transition-colors hover:bg-surface-bg"
+            className="docs-toc-footer-link docs-toc-footer-link-block"
           >
-            <span aria-hidden className="corner-box-hover-child" />
             <span className="flex items-center gap-2 text-[12px] font-medium text-text-secondary">
               <MessageSquare className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
               Join the discussion
@@ -168,9 +225,8 @@ export function DocsTocAside() {
             href="https://github.com/karthik-sivadas/polymetrics-cli"
             target="_blank"
             rel="noreferrer"
-            className="link-box group relative flex items-center gap-2 px-4 py-3 text-[12px] text-text-tertiary transition-colors hover:bg-surface-bg hover:text-text-secondary"
+            className="docs-toc-footer-link flex items-center gap-2"
           >
-            <span aria-hidden className="corner-box-hover-child" />
             <Github className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
             <span className="min-w-0 truncate">GitHub repository</span>
           </a>
