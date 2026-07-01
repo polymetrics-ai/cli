@@ -53,10 +53,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${chakraPetch.variable}`}
+      className={`light ${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${chakraPetch.variable}`}
     >
       <body className="font-sans flex min-h-screen flex-col antialiased">
-        <RootProvider search={{ enabled: false }}>
+        <RootProvider search={{ enabled: false }} theme={{ enabled: false }}>
           <TooltipProvider>{children}</TooltipProvider>
         </RootProvider>
       </body>

@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 import { CornerBox } from '@/components/ui/corner-box';
 
 /* ── Design tokens (matching globals.css) ──────────────────────────────── */
@@ -17,12 +17,16 @@ const C = {
 } as const;
 
 /* ── Helpers ───────────────────────────────────────────────────────────── */
-function span(key: string, color: string, text: string, extra?: React.CSSProperties): ReactNode {
+function span(color: string, text: string, extra?: React.CSSProperties): ReactNode {
   return (
-    <span key={key} style={{ color, ...extra }}>
+    <span style={{ color, ...extra }}>
       {text}
     </span>
   );
+}
+
+function keyedNodes(nodes: ReactNode[], prefix: string) {
+  return nodes.map((node, i) => <Fragment key={`${prefix}-${i}`}>{node}</Fragment>);
 }
 
 const FLAGS = [
@@ -72,12 +76,11 @@ function tokenizeLine(line: string, index: number): ReactNode {
   // All other lines: tokenize token-by-token
   const nodes: ReactNode[] = [];
   let remaining = line;
-  const key = () => `${index}-${nodes.length}`;
 
   while (remaining.length > 0) {
     // Trailing backslash continuation
     if (remaining === '\\') {
-      nodes.push(span(key(), C.backslash, '\\'));
+      nodes.push(span(C.backslash, '\\'));
       remaining = '';
       break;
     }
@@ -88,14 +91,14 @@ function tokenizeLine(line: string, index: number): ReactNode {
       .find(x => x.match !== null);
     if (flagMatch) {
       const f = flagMatch.flag;
-      nodes.push(span(key(), C.flag, f));
+      nodes.push(span(C.flag, f));
       remaining = remaining.slice(f.length);
 
       // What follows a flag: optional space + value
       // Value ends at the next space or backslash or end
       const afterFlag = remaining.match(/^( )(.*)/);
       if (afterFlag) {
-        nodes.push(span(key(), C.normal, ' '));
+        nodes.push(span(C.normal, ' '));
         remaining = afterFlag[2];
 
         // If the next thing is another flag, don't consume it as a value
@@ -119,13 +122,13 @@ function tokenizeLine(line: string, index: number): ReactNode {
                 if (closeIdx !== -1) {
                   val = remaining.slice(0, closeIdx + 1);
                   remaining = remaining.slice(closeIdx + 1);
-                  nodes.push(tokenizeSql(val, key()));
+                  nodes.push(tokenizeSql(val));
                   continue;
                 }
               }
             }
 
-            nodes.push(span(key(), C.flagValue, val));
+            nodes.push(span(C.flagValue, val));
             remaining = rest;
           }
         }
@@ -149,12 +152,12 @@ function tokenizeLine(line: string, index: number): ReactNode {
       remaining  = wordMatch[2];
 
       if (word === 'go' || word === 'pm') {
-        nodes.push(span(key(), C.cmdPrimary, word, { fontWeight: 700 }));
+        nodes.push(span(C.cmdPrimary, word, { fontWeight: 700 }));
       } else if (SUBCOMMANDS.includes(word)) {
-        nodes.push(span(key(), C.subcommand, word));
+        nodes.push(span(C.subcommand, word));
       } else {
         // plain argument / positional value
-        nodes.push(span(key(), C.normal, word));
+        nodes.push(span(C.normal, word));
       }
       continue;
     }
@@ -166,21 +169,20 @@ function tokenizeLine(line: string, index: number): ReactNode {
 
   return (
     <span key={index}>
-      {nodes}
+      {keyedNodes(nodes, `line-${index}`)}
       {'\n'}
     </span>
   );
 }
 
 /* Tokenize an SQL string literal (the whole quoted value) */
-function tokenizeSql(raw: string, keyPrefix: string): ReactNode {
+function tokenizeSql(raw: string): ReactNode {
   // raw = "SELECT assignee, COUNT(*) AS open FROM issues WHERE state='open' GROUP BY 1"
   // Opening and closing double-quote belong to the value
   const inner = raw.slice(1, raw.length - 1); // strip surrounding double quotes
 
   const nodes: ReactNode[] = [];
-  const key = () => `${keyPrefix}-${nodes.length}`;
-  nodes.push(span(key(), C.flagValue, '"'));
+  nodes.push(span(C.flagValue, '"'));
 
   // Tokenize inside: find SQL keywords and single-quoted strings
   let s = inner;
@@ -188,7 +190,7 @@ function tokenizeSql(raw: string, keyPrefix: string): ReactNode {
     // SQL keyword match (case-sensitive as per QUICKSTART)
     const kwMatch = SQL_KEYWORDS.find(kw => s.startsWith(kw));
     if (kwMatch) {
-      nodes.push(span(key(), C.sqlKeyword, kwMatch, { fontWeight: 600 }));
+      nodes.push(span(C.sqlKeyword, kwMatch, { fontWeight: 600 }));
       s = s.slice(kwMatch.length);
       continue;
     }
@@ -197,23 +199,19 @@ function tokenizeSql(raw: string, keyPrefix: string): ReactNode {
     if (s.startsWith("'")) {
       const closeIdx = s.indexOf("'", 1);
       if (closeIdx !== -1) {
-        nodes.push(span(key(), C.sqlString, s.slice(0, closeIdx + 1)));
+        nodes.push(span(C.sqlString, s.slice(0, closeIdx + 1)));
         s = s.slice(closeIdx + 1);
         continue;
       }
     }
 
     // Plain char
-    nodes.push(
-      <span key={key()} style={{ color: C.normal }}>
-        {s[0]}
-      </span>,
-    );
+    nodes.push(<span style={{ color: C.normal }}>{s[0]}</span>);
     s = s.slice(1);
   }
 
-  nodes.push(span(key(), C.flagValue, '"'));
-  return <span key={keyPrefix}>{nodes}</span>;
+  nodes.push(span(C.flagValue, '"'));
+  return <>{keyedNodes(nodes, 'sql')}</>;
 }
 
 /* ── QUICKSTART content ────────────────────────────────────────────────── */

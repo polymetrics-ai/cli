@@ -110,14 +110,15 @@ jobs:
             echo "image=${image}"
             echo "tags<<EOF"
             echo "${image}"
-            if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
+            if { [ "${GITHUB_EVENT_NAME}" = "push" ] || [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; } \
+              && [ "${GITHUB_REF_NAME}" = "main" ]; then
               echo "${REGISTRY}/${repo}/website:main"
             fi
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
       - name: Log in to GitHub Container Registry
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        if: github.ref_name == 'main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -130,7 +131,7 @@ jobs:
       - name: Build website image
         env:
           DOCKER_BUILDKIT: "1"
-          PUSH_IMAGE: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+          PUSH_IMAGE: ${{ github.ref_name == 'main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
           TAGS: ${{ steps.image.outputs.tags }}
         run: |
           tags=()
@@ -154,9 +155,12 @@ jobs:
     name: Website deploy
     runs-on: [self-hosted, linux, tailscale, polymetrics-website]
     needs: image
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.WEBSITE_DEPLOY_ENABLED == 'true'
+    if: github.ref_name == 'main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     environment: website-production
     concurrency: website-production
+    permissions:
+      contents: read
+      packages: read
 
     steps:
       - name: Configure git defaults
@@ -165,23 +169,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Configure kubeconfig from secret
-        env:
-          WEBSITE_KUBECONFIG_B64: ${{ secrets.WEBSITE_KUBECONFIG_B64 }}
-        run: |
-          if [ -n "${WEBSITE_KUBECONFIG_B64:-}" ]; then
-            mkdir -p "$HOME/.kube"
-            printf '%s' "$WEBSITE_KUBECONFIG_B64" | base64 -d > "$HOME/.kube/config"
-            chmod 600 "$HOME/.kube/config"
-          fi
-
-      - name: Deploy website
+      - name: Deploy website to origin Quadlet
         env:
           WEBSITE_IMAGE: ${{ needs.image.outputs.image }}
-          WEBSITE_KUBE_CONTEXT: ${{ vars.WEBSITE_KUBE_CONTEXT }}
-          WEBSITE_NAMESPACE: ${{ vars.WEBSITE_NAMESPACE }}
-          WEBSITE_DEPLOYMENT: ${{ vars.WEBSITE_DEPLOYMENT }}
-          WEBSITE_CONTAINER: ${{ vars.WEBSITE_CONTAINER }}
-          WEBSITE_IMAGE_PULL_SECRET: ${{ vars.WEBSITE_IMAGE_PULL_SECRET }}
+          REGISTRY_USERNAME: ${{ github.actor }}
+          REGISTRY_PASSWORD: ${{ github.token }}
+          WEBSITE_SERVICE: ${{ vars.WEBSITE_SERVICE }}
+          WEBSITE_QUADLET: ${{ vars.WEBSITE_QUADLET }}
+          WEBSITE_HEALTH_URL: ${{ vars.WEBSITE_HEALTH_URL }}
+          WEBSITE_PUBLIC_URL: ${{ vars.WEBSITE_PUBLIC_URL }}
           WEBSITE_ROLLOUT_TIMEOUT: ${{ vars.WEBSITE_ROLLOUT_TIMEOUT }}
-        run: website/deploy/deploy-image.sh
+        run: website/deploy/deploy-podman-quadlet.sh
