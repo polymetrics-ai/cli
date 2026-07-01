@@ -6,6 +6,7 @@ import {
   GitBranch as Github,
   HardDrive,
   Lock,
+  PackageCheck,
   Scale,
   Sparkles,
   Star,
@@ -59,10 +60,10 @@ const stats = [
 ];
 
 const changelog = [
+  { version: 'release', label: 'Automated binary releases', icon: PackageCheck },
   { version: 'v0.1.0', label: `${CONNECTOR_CATALOG_COUNT} connector catalog pages`, icon: Cable },
   { version: 'v0.1.0', label: 'Embedded DuckDB SQL engine', icon: Database },
   { version: 'v0.1.0', label: 'Local AES-GCM vault', icon: Lock },
-  { version: 'v0.1.0', label: 'Agent-native JSON output', icon: FileJson },
 ];
 
 export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: string }) {

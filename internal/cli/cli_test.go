@@ -59,6 +59,34 @@ func TestRootHelpJSONIsAgentReadable(t *testing.T) {
 	}
 }
 
+func TestVersionCommandReportsBuildMetadata(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"version"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(version) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"pm dev", "commit: none", "built: unknown"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("version output missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestVersionCommandJSONIsAgentReadable(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"version", "--json"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(version --json) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"kind": "Version"`, `"version": "dev"`, `"commit": "none"`, `"date": "unknown"`} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("version json missing %q:\n%s", want, out)
+		}
+	}
+}
+
 func TestBareCommandShowsManualInsteadOfUsageError(t *testing.T) {
 	tests := []struct {
 		args []string

@@ -1,0 +1,69 @@
+name: Repository Conventions
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  branch-name:
+    name: branch-name
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate branch name
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          case "$HEAD_REF" in
+            dependabot/*|release-please--branches--*)
+              exit 0
+              ;;
+          esac
+
+          pattern='^(feat|fix|docs|chore|ci|test|refactor|perf|build|release|revert|deps)/[a-z0-9][a-z0-9._-]*$'
+          if [[ ! "$HEAD_REF" =~ $pattern ]]; then
+            {
+              echo "Invalid branch name: $HEAD_REF"
+              echo "Use <type>/<description>, for example feat/github-connector or fix/stripe-pagination."
+              echo "Allowed types: feat, fix, docs, chore, ci, test, refactor, perf, build, release, revert, deps."
+            } >&2
+            exit 1
+          fi
+
+  pr-title:
+    name: pr-title
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate PR title
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_ACTOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$HEAD_REF" == dependabot/* || "$PR_ACTOR" == "dependabot[bot]" ]]; then
+            exit 0
+          fi
+
+          pattern='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9][a-z0-9._-]*\))?!?: .+'
+          if [[ ! "$PR_TITLE" =~ $pattern ]]; then
+            {
+              echo "Invalid PR title: $PR_TITLE"
+              echo "Use a Conventional Commit title, for example feat(connector): add linear or fix(github): repair pagination."
+              echo "Use ! before the colon or a BREAKING CHANGE footer for major releases."
+            } >&2
+            exit 1
+          fi

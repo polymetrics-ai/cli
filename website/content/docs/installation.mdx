@@ -1,17 +1,66 @@
 ---
 title: Installation
-description: Install pm via go install when the module path is available, or build the single Go binary from source.
+description: Install pm from a release binary, via go install, or by building the single Go binary from source.
 ---
 
 `pm` ships as a single Go binary with no runtime dependencies in its default build. Pick the installation method that suits your environment.
 
 <Callout type="info">
-  **Prerequisites:** Go 1.25.11 or later is the only hard requirement for the default CGO-free build. Run `go version` to verify. For the DuckDB-enabled build you additionally need a C toolchain (gcc or clang).
+  **Prerequisites:** Release binary install requires the GitHub CLI (`gh`) and standard archive tools (`tar` on macOS/Linux, `unzip` for Windows archives), but does not require Go. `go install` and source builds require Go 1.25.11 or later. For the DuckDB-enabled build you additionally need a C toolchain (gcc or clang).
 </Callout>
 
 ## Installation methods
 
-<Tabs items={["go install", "Build from source"]}>
+<Tabs items={["Release binary", "go install", "Build from source"]}>
+
+<Tab value="Release binary">
+
+Release assets are published from [`polymetrics-ai/cli`](https://github.com/polymetrics-ai/cli/releases) for Linux, macOS, and Windows on amd64 and arm64.
+
+This path requires the GitHub CLI (`gh`) and standard archive tools (`tar` on macOS/Linux, `unzip` for Windows archives), but does not require Go.
+
+```bash
+os_name="$(uname -s)"
+arch_name="$(uname -m)"
+
+case "$os_name" in
+  Darwin) os=darwin ;;
+  Linux) os=linux ;;
+  MINGW*|MSYS*|CYGWIN*) os=windows ;;
+  *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
+esac
+
+case "$arch_name" in
+  x86_64|amd64) arch=amd64 ;;
+  arm64|aarch64) arch=arm64 ;;
+  *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
+esac
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "$tmpdir"' EXIT
+gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*" --dir "$tmpdir"
+
+case "$os" in
+  windows)
+    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
+    binary_name=pm.exe
+    ;;
+  *)
+    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
+    binary_name=pm
+    ;;
+esac
+
+install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
+mkdir -p "$install_dir"
+cp "$tmpdir/$binary_name" "$install_dir/$binary_name"
+chmod +x "$install_dir/$binary_name" 2>/dev/null || true
+"$install_dir/$binary_name" version
+```
+
+Each release includes `checksums.txt` for artifact verification.
+
+</Tab>
 
 <Tab value="go install">
 
@@ -54,9 +103,9 @@ CGO_ENABLED=1 go build -tags duckdb ./cmd/pm
 
 </Tabs>
 
-## Prebuilt binaries and Homebrew
+## Release cadence
 
-Prebuilt release binaries and a Homebrew tap are on the roadmap. For now, use `go install` or build from source.
+Release PRs are generated from Conventional Commits after changes land on `main`. A connector update such as `fix(github): repair pagination` produces a patch release. A new connector such as `feat(connector): add linear` produces a minor release. Breaking changes use `!` or a `BREAKING CHANGE:` footer for a major release.
 
 ## Verify your installation
 

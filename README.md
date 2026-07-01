@@ -35,9 +35,52 @@ Moving data today means renting a cloud pipeline (Fivetran's surprise MAR bills)
 
 ## ⚡ Quickstart (60 seconds)
 
-**Install** (Go 1.25.11+):
+**Install** from a release binary, or with Go 1.25.11+.
+
+Release binary install requires the GitHub CLI (`gh`) and standard archive
+tools (`tar` on macOS/Linux, `unzip` for Windows archives), but does not require
+Go:
 
 ```bash
+# Release binary
+os_name="$(uname -s)"
+arch_name="$(uname -m)"
+
+case "$os_name" in
+  Darwin) os=darwin ;;
+  Linux) os=linux ;;
+  MINGW*|MSYS*|CYGWIN*) os=windows ;;
+  *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
+esac
+
+case "$arch_name" in
+  x86_64|amd64) arch=amd64 ;;
+  arm64|aarch64) arch=arm64 ;;
+  *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
+esac
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "$tmpdir"' EXIT
+gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*" --dir "$tmpdir"
+
+case "$os" in
+  windows)
+    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
+    binary_name=pm.exe
+    ;;
+  *)
+    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
+    binary_name=pm
+    ;;
+esac
+
+install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
+mkdir -p "$install_dir"
+cp "$tmpdir/$binary_name" "$install_dir/$binary_name"
+chmod +x "$install_dir/$binary_name" 2>/dev/null || true
+"$install_dir/$binary_name" version
+
+# Or install with Go
 go install polymetrics.ai/cmd/pm@latest      # installs the `pm` binary onto your PATH
 ```
 
@@ -167,7 +210,8 @@ Full details, build options, sync modes, and per-connector usage are in the **[S
 - [x] ETL + approval-gated reverse-ETL + sync modes
 - [ ] Remaining catalog → **600+ connectors**
 - [ ] Logical-replication CDC (Postgres/MySQL/Mongo/SQL Server/Oracle)
-- [ ] Prebuilt release binaries + Homebrew tap
+- [x] Prebuilt release binaries
+- [ ] Homebrew tap
 - [ ] Bundled MCP server (same `plan → approve → execute` gate)
 - [ ] Scheduling & incremental orchestration
 
@@ -179,6 +223,10 @@ Contributions are very welcome — **adding a connector is the best first PR.** 
 make verify          # gofmt + vet + go test ./... + build + smoke
 make verify-duckdb   # the DuckDB (CGO) build lane
 ```
+
+Use Conventional Commits for PR titles and squash commits. Connector updates use
+`fix(<connector>): ...` for patch releases; new connectors use
+`feat(connector): add <name>` for minor releases.
 
 Look for [`good first issue`](https://github.com/polymetrics-ai/cli/labels/good%20first%20issue) to get started.
 
