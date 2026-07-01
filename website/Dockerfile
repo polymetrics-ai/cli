@@ -1,16 +1,20 @@
 # syntax=docker/dockerfile:1
 
+ARG PNPM_VERSION=11.7.0
+
 # ── deps ──────────────────────────────────────────────────────────────────────
-FROM node:22-alpine AS deps
-RUN corepack enable pnpm
+FROM node:26-alpine AS deps
+ARG PNPM_VERSION
+RUN npm install -g "pnpm@${PNPM_VERSION}"
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --ignore-scripts --reporter=silent
 
 # ── builder ───────────────────────────────────────────────────────────────────
-FROM node:22-alpine AS builder
-RUN corepack enable pnpm
+FROM node:26-alpine AS builder
+ARG PNPM_VERSION
+RUN npm install -g "pnpm@${PNPM_VERSION}"
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -20,7 +24,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm build
 
 # ── runner ────────────────────────────────────────────────────────────────────
-FROM node:22-alpine AS runner
+FROM node:26-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
