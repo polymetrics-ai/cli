@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties, MouseEvent } from 'react';
-import { Cable, GitBranch as Github, MessageSquare } from 'lucide-react';
+import { Cable, Heart, MessageSquare } from 'lucide-react';
 import {
   Sidebar,
   SidebarAccent,
@@ -51,6 +51,12 @@ const TOC_NODE_SIZE = 8;
 const TOC_NODE_HALF = TOC_NODE_SIZE / 2;
 const TOC_NODE_MASK_PADDING = 3;
 const TOC_NODE_MASK_SIZE = TOC_NODE_SIZE + (TOC_NODE_MASK_PADDING * 2);
+
+const CREATOR_LINKS = [
+  { label: 'GitHub', href: 'https://github.com/karthik-sivadas' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/karthiksivadas/' },
+  { label: 'X', href: 'https://x.com/karthik_sivadas' },
+] as const;
 
 function findListItem(list: HTMLDivElement | null, id: string) {
   if (!list) return null;
@@ -388,15 +394,25 @@ export function OnPageTocAside({ items, className }: OnPageTocAsideProps) {
               Questions, ideas, and feedback.
             </span>
           </a>
-          <a
-            href="https://github.com/polymetrics-ai/cli"
-            target="_blank"
-            rel="noreferrer"
-            className="site-toc-footer-link flex items-center gap-2"
-          >
-            <Github className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-            <span className="min-w-0 truncate">GitHub repository</span>
-          </a>
+          <div className="site-toc-footer-link site-toc-footer-link-block">
+            <span className="flex items-center gap-2 text-[12px] font-medium text-text-secondary">
+              <Heart className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
+              Created with love by Karthik
+            </span>
+            <span className="mt-2 flex flex-wrap items-center gap-2 text-[11px] font-medium">
+              {CREATOR_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-text-tertiary underline-offset-4 transition-colors hover:text-text-primary hover:underline"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </span>
+          </div>
           <SidebarAccent />
         </SidebarFooter>
       </SidebarInner>
