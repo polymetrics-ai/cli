@@ -100,6 +100,7 @@ func runScheduleInstall(ctx context.Context, root string, args []string, stdout 
 		}
 		return err
 	}
+	m.Root = root
 
 	pmBin, _ := os.Executable()
 	backend := schedule.SelectBackend(ctx, forceCrontab, nil)

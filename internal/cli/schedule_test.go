@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"encoding/json"
+	"os"
 	"strings"
 	"testing"
 )
@@ -80,6 +81,15 @@ func TestScheduleCLI_Install_Crontab(t *testing.T) {
 	_, stderr, code := scheduleRun(t, root, "schedule", "install", "nightly-leads", "--crontab")
 	if code != 0 {
 		t.Fatalf("install: exit %d, stderr=%q", code, stderr)
+	}
+
+	data, err := os.ReadFile(tmpCrontab)
+	if err != nil {
+		t.Fatalf("read redirected crontab: %v", err)
+	}
+	line := string(data)
+	if !strings.Contains(line, "--root "+root+" flow run likely-customers --json") {
+		t.Fatalf("installed crontab line must include --root and named flow, got %q", line)
 	}
 }
 
