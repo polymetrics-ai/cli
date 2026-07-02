@@ -515,7 +515,7 @@ func TestReadRateLimitSleeperInvokedNMinus1Times(t *testing.T) {
 		page++
 		switch {
 		case page < 3:
-			_, _ = w.Write([]byte(fmt.Sprintf(`{"data":[{"id":"%d","name":"a","updated_at":"2026-01-01T00:00:00Z"}], "has_more": true}`, page)))
+			_, _ = fmt.Fprintf(w, `{"data":[{"id":"%d","name":"a","updated_at":"2026-01-01T00:00:00Z"}], "has_more": true}`, page)
 		default:
 			_, _ = w.Write([]byte(`{"data":[], "has_more": false}`))
 		}
@@ -848,7 +848,7 @@ func TestReadNextURLPaginationSetsBaseHostFromRequester(t *testing.T) {
 		page++
 		switch page {
 		case 1:
-			_, _ = w.Write([]byte(fmt.Sprintf(`{"data":[{"id":"1","name":"a","updated_at":"2026-01-01T00:00:00Z"}],"meta":{"next_page_link":%q}}`, srv.URL+"/widgets?page=2")))
+			_, _ = fmt.Fprintf(w, `{"data":[{"id":"1","name":"a","updated_at":"2026-01-01T00:00:00Z"}],"meta":{"next_page_link":%q}}`, srv.URL+"/widgets?page=2")
 		default:
 			_, _ = w.Write([]byte(`{"data":[{"id":"2","name":"b","updated_at":"2026-01-01T00:00:00Z"}],"meta":{"next_page_link":""}}`))
 		}

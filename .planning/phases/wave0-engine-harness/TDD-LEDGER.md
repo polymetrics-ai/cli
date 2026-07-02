@@ -17,6 +17,11 @@ this index tracks status. Coordinator merges after each dispatch wave.
 | T/B-07 hook interfaces + registry | red-confirmed → green | traces/waveB-ledger.md §T-07 | 9 |
 | T/B-05 auth selection | red-confirmed → green | traces/waveB-ledger.md §T-05 | 17 |
 | T/B-06 paginators (6 types + SSRF guard) | red-confirmed → green | traces/waveB-ledger.md §T-06 | 21 |
+| T/B-11 connectorgen validate\|gen\|new | red-confirmed → green | traces/waveC-b11-ledger.md §T-11 | 23 |
+| T/B-08 read path | red-confirmed → green | traces/waveC-ledger.md §T-08 | 28 |
+| T/B-09 write path | red-confirmed → green | traces/waveC-ledger.md §T-09 | 17 |
+| T/B-10 connector assembly + Definition | red-confirmed → green | traces/waveD-b10-ledger.md §T-10 | pass |
+| T/B-18 .golangci.yml + Makefile gates | red-artifact → green | traces/waveD-b18-ledger.md | make lint 0 issues |
 
 Wave A gate (coordinator, 2026-07-02): `go build ./...` ok · engine+certify tests ok · gofmt clean ·
 path guard clean (no tracked-file modifications outside plan). Noted deviations (agent-documented):

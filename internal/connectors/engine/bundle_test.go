@@ -292,10 +292,10 @@ func TestBundleLoadAllEmptyTreeIsFine(t *testing.T) {
 	}
 }
 
-// TestBundleLoadAllDefsFSEmpty exercises the real embedded defs.FS
-// go:embed all:* scaffold end-to-end: wave0 ships zero bundles (goldens land
-// in Wave F), so this must succeed with a zero-length result rather than
-// erroring on the stray embedded defs.go file.
+// TestBundleLoadAllDefsFSEmpty exercises the real embedded defs.FS scaffold
+// (the `all:*` embed directive in defs.go) end-to-end: wave0 ships zero
+// bundles (goldens land in Wave F), so this must succeed with a zero-length
+// result rather than erroring on the stray embedded defs.go file.
 func TestBundleLoadAllDefsFSEmpty(t *testing.T) {
 	bundles, err := LoadAll(defs.FS)
 	if err != nil {
