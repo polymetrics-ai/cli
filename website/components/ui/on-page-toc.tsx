@@ -53,9 +53,21 @@ const TOC_NODE_MASK_PADDING = 3;
 const TOC_NODE_MASK_SIZE = TOC_NODE_SIZE + (TOC_NODE_MASK_PADDING * 2);
 
 const CREATOR_LINKS = [
-  { label: 'GitHub', href: 'https://github.com/karthik-sivadas' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/karthiksivadas/' },
-  { label: 'X', href: 'https://x.com/karthik_sivadas' },
+  {
+    label: 'GitHub',
+    href: 'https://github.com/karthik-sivadas',
+    iconSrc: '/connectors/icons/github.svg',
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/karthiksivadas/',
+    iconSrc: '/connectors/icons/linkedin.svg',
+  },
+  {
+    label: 'X',
+    href: 'https://x.com/karthik_sivadas',
+    iconSrc: '/social/x.svg',
+  },
 ] as const;
 
 function findListItem(list: HTMLDivElement | null, id: string) {
@@ -399,16 +411,23 @@ export function OnPageTocAside({ items, className }: OnPageTocAsideProps) {
               <Heart className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
               Created with love by Karthik
             </span>
-            <span className="mt-2 flex flex-wrap items-center gap-2 text-[11px] font-medium">
+            <span className="site-toc-social-links" aria-label="Karthik social profiles">
               {CREATOR_LINKS.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-text-tertiary underline-offset-4 transition-colors hover:text-text-primary hover:underline"
+                  className="site-toc-social-link"
                 >
-                  {link.label}
+                  <img
+                    src={link.iconSrc}
+                    alt=""
+                    width={14}
+                    height={14}
+                    className="site-toc-social-icon"
+                  />
+                  <span>{link.label}</span>
                 </a>
               ))}
             </span>
