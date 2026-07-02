@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Sentry Connection Specification",
   "type": "object",
-  "required": ["auth_token"],
+  "required": ["auth_token", "base_url"],
   "properties": {
     "auth_token": {
       "type": "string",
@@ -12,12 +12,7 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "Sentry API base URL override for tests or self-hosted instances. Defaults to https://<hostname>."
-    },
-    "hostname": {
-      "type": "string",
-      "default": "sentry.io",
-      "description": "Sentry hostname used to build the base URL when base_url is not set."
+      "description": "Sentry API base URL, e.g. https://sentry.io or https://<self-hosted-host>. Required: legacy derives this from a hostname config value (default sentry.io), but that cross-key derivation has no engine mechanism today (see docs.md Known limits), so this bundle requires the fully-formed URL instead."
     },
     "organization": {
       "type": "string",

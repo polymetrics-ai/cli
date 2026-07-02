@@ -10,9 +10,9 @@
     "type": { "type": ["string", "null"] },
     "message_list_visibility": { "type": ["string", "null"] },
     "label_list_visibility": { "type": ["string", "null"] },
-    "messages_total": { "type": ["string", "null"], "description": "Gmail's real wire type is a JSON integer; this bundle's computed_fields camelCase-to-snake_case rename (engine.Interpolate) always stringifies, see docs.md Known limits." },
-    "messages_unread": { "type": ["string", "null"], "description": "Same computed_fields stringification as messages_total; see docs.md Known limits." },
-    "threads_total": { "type": ["string", "null"], "description": "Same computed_fields stringification as messages_total; see docs.md Known limits." },
-    "threads_unread": { "type": ["string", "null"], "description": "Same computed_fields stringification as messages_total; see docs.md Known limits." }
+    "messages_total": { "type": ["integer", "null"], "description": "Gmail's real wire type is a JSON integer. Sourced via a bare computed_fields camelCase-to-snake_case rename (\"{{ record.messagesTotal }}\"), which now preserves the native JSON type (gap-loop cycle-1 typed computed_fields extraction) rather than stringifying it; see docs.md Known limits." },
+    "messages_unread": { "type": ["integer", "null"], "description": "Same as messages_total; see docs.md Known limits." },
+    "threads_total": { "type": ["integer", "null"], "description": "Same as messages_total; see docs.md Known limits." },
+    "threads_unread": { "type": ["integer", "null"], "description": "Same as messages_total; see docs.md Known limits." }
   }
 }

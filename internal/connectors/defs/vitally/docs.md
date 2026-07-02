@@ -45,6 +45,15 @@ bundle ships no `writes.json`.
 
 ## Known limits
 
+- **`Check` now dials the network; legacy's `Check` never did.** Legacy `Check` (`vitally.go:33-47`)
+  validates config/secret presence offline only — it never issues an HTTP request. This bundle's
+  `base.check` (`streams.json`) issues a real `GET /resources/accounts`, matching the wave's
+  general "fail loud, not fail silent" preference for `Check` (a bad credential or unreachable host
+  is now caught at `Check` time instead of surfacing on the first `Read`). This is a deliberate,
+  strictly-improving behavior change with zero record-data impact, but it IS a behavior deviation
+  worth naming explicitly: a `Check` that previously always succeeded offline (given well-formed
+  config/secrets) can now fail on a network outage or an invalid credential that legacy would only
+  have caught on `Read`.
 - **The optional `status` query filter is not modeled.** Legacy accepts an optional `status`
   config value and, only when it is non-empty, appends `?status=<value>` to the accounts request
   (`vitally.go:72-74`) — an absent/empty `status` sends no query param at all. The engine

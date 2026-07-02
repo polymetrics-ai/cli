@@ -10,6 +10,11 @@
     "safe_title": { "type": ["string", "null"] },
     "year": { "type": ["string", "null"] },
     "month": { "type": ["string", "null"] },
-    "day": { "type": ["string", "null"] }
+    "day": { "type": ["string", "null"] },
+    "link": { "type": ["string", "null"], "description": "Raw API field; usually empty string on most comics, occasionally a related URL." },
+    "news": { "type": ["string", "null"], "description": "Raw API field; occasional comic-specific news/announcement text, usually empty string." },
+    "transcript": { "type": ["string", "null"], "description": "Raw API field; plain-text transcript of the comic, empty string when not transcribed." },
+    "alt": { "type": ["string", "null"], "description": "Raw API field; the comic's alt/title-text (hover text)." },
+    "img": { "type": ["string", "null"], "description": "Raw API field; absolute URL of the comic image." }
   }
 }

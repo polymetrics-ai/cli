@@ -11,13 +11,13 @@
     "plan_id": { "type": ["string", "null"] },
     "status": { "type": ["string", "null"] },
     "currency_code": { "type": ["string", "null"] },
-    "plan_quantity": { "type": ["string", "null"], "description": "Integer, stringified by computed_fields (see docs.md Known limits)." },
-    "plan_amount": { "type": ["string", "null"], "description": "Integer, stringified by computed_fields (see docs.md Known limits)." },
-    "current_term_start": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
-    "current_term_end": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
-    "created_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
-    "started_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
-    "updated_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
-    "deleted": { "type": ["string", "null"], "description": "Boolean, stringified by computed_fields (see docs.md Known limits)." }
+    "plan_quantity": { "type": ["integer", "null"] },
+    "plan_amount": { "type": ["integer", "null"] },
+    "current_term_start": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "current_term_end": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "created_at": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "started_at": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "updated_at": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "deleted": { "type": ["boolean", "null"] }
   }
 }

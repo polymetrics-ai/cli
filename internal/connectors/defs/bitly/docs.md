@@ -39,11 +39,19 @@ wire shape always emits a fully-qualified absolute URL (confirmed against legacy
 "/groups/g1/bitlinks?search_after=tok2"`, and legacy's own comment at `bitly.go:180-183`). The
 engine's `next_url` paginator's same-host SSRF guard (THREAT-MODEL §3) passes cleanly since the
 `next` URL Bitly returns is always same-origin as `base_url` in production. `size=50` (bitly's
-own default page size, `bitlyDefaultPageSize`) is sent as a static per-stream query value on the
-FIRST request only — subsequent pages are driven entirely by the absolute `pagination.next` URL
-(which already carries its own `search_after` query), matching legacy's `harvest` loop
-(`bitly.go:143-186`): `query = url.Values{}` is reset once the paginator follows an absolute
-next-page URL.
+own default page size, `bitlyDefaultPageSize`) is declared as a static per-stream `query` value
+(`streams.json`'s `"query": {"size": "50"}`) and is, in fact, **re-sent on every page**: the
+engine's `readDeclarative` merges `stream.Query` into EVERY page request
+(`engine/read.go`'s `mergeQuery(baseQuery, page.Query)`), and `connsdk.Requester.resolveURL`
+re-applies that merged query onto the absolute next-page URL (Del+Add, replacing any same-named
+param already present in the URL) — unlike legacy, which explicitly resets to an empty
+`url.Values{}` once it follows an absolute next-page URL (`bitly.go:180-183`), sending `size` only
+on the first request. This is a **wire-request-shape divergence from legacy**, verified benign in
+DATA terms only because Bitly's own `pagination.next` URL already carries the identical `size=50`
+value the engine re-applies (the replace is idempotent) — so the effective query on every page is
+value-identical to what the next URL already carries, not a behavior change an operator or Bitly's
+API would observe differently. If Bitly's `next` URL ever omitted or diverged from `size`, this
+bundle's request would differ from legacy's; today it does not.
 
 ## Write actions & risks
 

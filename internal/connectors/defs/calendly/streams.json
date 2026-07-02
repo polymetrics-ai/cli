@@ -25,6 +25,9 @@
         "count": "{{ config.page_size }}"
       },
       "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
       "incremental": {
         "cursor_field": "start_time",
         "request_param": "min_start_time",
@@ -40,6 +43,9 @@
         "count": "{{ config.page_size }}"
       },
       "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
       "schema": "schemas/event_types.json"
     },
     {
@@ -51,6 +57,7 @@
       },
       "records": { "path": "collection" },
       "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}",
         "user": "{{ record.user.uri }}",
         "user_name": "{{ record.user.name }}",
         "user_email": "{{ record.user.email }}"
@@ -65,12 +72,19 @@
         "count": "{{ config.page_size }}"
       },
       "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
       "schema": "schemas/groups.json"
     },
     {
       "name": "users",
       "path": "/users/me",
       "records": { "path": "resource", "single_object": true },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "pagination": { "type": "none" },
       "schema": "schemas/users.json"
     }
   ]

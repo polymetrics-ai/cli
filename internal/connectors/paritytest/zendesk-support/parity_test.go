@@ -15,6 +15,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"reflect"
 	"testing"
 
@@ -288,22 +289,71 @@ func recordIDs(t *testing.T, recs []connectors.Record) []any {
 	return out
 }
 
-// --- incremental parity: start_date-raised lower bound ---
+// --- pagination stop-signal parity: has_more:false with a non-null cursor ---
 
-// incrementalCaptureServer answers every request with an empty, terminal
-// tickets page (has_more:false) so the read terminates after exactly one
-// request, and records the updated_at[gte]-shaped query value both
-// connectors send for their respective incremental lower-bound mechanisms.
-// Zendesk's real API has no documented updated_at>= query filter for these
-// collection endpoints (legacy zendesk_support.go implements no
-// request-side incremental filtering at all — InitialState always starts
-// empty and start_date is mentioned only in a doc comment, never wired to a
-// query param); this bundle therefore intentionally does NOT declare an
-// incremental.request_param either, matching legacy's real (lack of)
-// server-side filtering behavior — see the parity-deviation ledger entry in
-// the bundle's docs.md "Known limits". Both sides still MUST accept
-// start_date/persisted-cursor config without erroring (InitialState/State
-// plumbing parity), which is what this test actually asserts.
+// zendeskHasMoreFalseNonNullCursorServer serves /tickets exactly one page
+// that sets meta.has_more:false but STILL populates a non-empty
+// meta.after_cursor — the exact shape Zendesk's own cursor-pagination docs
+// warn callers about ("the cursor properties may be populated even when
+// has_more is false") and the divergent case REVIEW-B.md's zendesk-support
+// finding 2 called out as untested. Legacy's harvest() stops on
+// `hasMore != "true" || nextCursor == ""` (zendesk_support.go:189) — has_more
+// alone is sufficient to stop, regardless of the cursor value — so a
+// correct client must issue exactly ONE request here, never a second page.
+func zendeskHasMoreFalseNonNullCursorServer(t *testing.T) (*httptest.Server, *[]string) {
+	t.Helper()
+	var paths []string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		paths = append(paths, r.URL.Path+"?"+r.URL.RawQuery)
+		writeJSON(w, `{"tickets":[
+			{"id":1,"subject":"a","description":"first","status":"open","priority":"normal","type":"question","requester_id":100,"assignee_id":200,"organization_id":300,"group_id":400,"brand_id":500,"created_at":"2026-01-01T00:00:00Z","updated_at":"2026-01-01T00:00:00Z"}
+		],"meta":{"has_more":false,"after_cursor":"STALE_CURSOR_AFTER_LAST_PAGE"}}`)
+	}))
+	t.Cleanup(srv.Close)
+	return srv, &paths
+}
+
+func TestParityZendesk_HasMoreFalseWithNonNullCursorStopsPagination(t *testing.T) {
+	bundle := loadZendeskBundle(t)
+
+	legacySrv, legacyPaths := zendeskHasMoreFalseNonNullCursorServer(t)
+	legacy := zendesksupport.New()
+	legacyRecs := readAllZendeskRecords(t, legacy, connectors.ReadRequest{Stream: "tickets", Config: zendeskAPITokenConfig(legacySrv.URL, nil)})
+	if len(legacyRecs) != 1 {
+		t.Fatalf("legacy tickets records = %d, want 1 (single page, test fixture bug)", len(legacyRecs))
+	}
+	if len(*legacyPaths) != 1 {
+		t.Fatalf("legacy requested %d pages, want exactly 1 (has_more:false stops regardless of cursor): %v", len(*legacyPaths), *legacyPaths)
+	}
+
+	engSrv, engPaths := zendeskHasMoreFalseNonNullCursorServer(t)
+	eng := engine.New(withZendeskBaseURL(bundle, engSrv.URL), nil)
+	engRecs := readAllZendeskRecords(t, eng, connectors.ReadRequest{Stream: "tickets", Config: zendeskAPITokenConfig(engSrv.URL, nil)})
+	if len(engRecs) != 1 {
+		t.Fatalf("engine tickets records = %d, want 1 (single page)", len(engRecs))
+	}
+	if len(*engPaths) != 1 {
+		t.Fatalf("engine requested %d pages, want exactly 1 (has_more:false via stop_path must stop even though after_cursor is non-null): %v", len(*engPaths), *engPaths)
+	}
+}
+
+// --- incremental parity: legacy sends NO server-side incremental filter ---
+
+// zendeskEmptyTicketsServer (below) answers every request with an empty,
+// terminal tickets page (has_more:false) so the read terminates after
+// exactly one request. Zendesk's real API has no documented updated_at>=
+// query filter for these collection endpoints (legacy zendesk_support.go
+// implements no request-side incremental filtering at all — InitialState
+// always starts empty, and start_date is mentioned only in a doc comment,
+// never wired to a query param); this bundle therefore declares NO
+// `incremental` block at all on any of the 5 streams (streams.json keeps
+// only `x-cursor-field: updated_at` on each schema for manifest-surface
+// parity, the calendly-3-streams pattern — see the parity-deviation ledger
+// entry in the bundle's docs.md "Known limits"). Both sides still MUST
+// accept an app-persisted state cursor without erroring (InitialState/State
+// plumbing parity) even though it is never forwarded on the wire, which is
+// what this test actually asserts. TestParityZendesk_StartDateConfigNever-
+// SendsServerFilter (below) covers the sibling config-only start_date case.
 func TestParityZendesk_IncrementalConfigAcceptedWithoutServerFilter(t *testing.T) {
 	bundle := loadZendeskBundle(t)
 	const appPersistedCursor = "2026-01-02T00:00:00Z" // updated_at is an RFC3339 string cursor field
@@ -337,19 +387,26 @@ func TestParityZendesk_IncrementalConfigAcceptedWithoutServerFilter(t *testing.T
 	}
 }
 
-// TestParityZendesk_StartDateConfigDoesNotError proves the bundle's
-// start_date-raised incremental lower bound (TEST-PLAN.md "start_date-raised"
-// requirement) is wired end-to-end: a config-only start_date (no persisted
-// state cursor yet — the fresh-sync path) resolves through
-// incrementalLowerBoundValue -> formatParam(rfc3339) without error and is
-// forwarded as the declared incremental.request_param.
-func TestParityZendesk_StartDateConfigRaisesLowerBound(t *testing.T) {
+// TestParityZendesk_StartDateConfigNeverSendsServerFilter is the inversion of
+// the former StartDateConfigRaisesLowerBound test (REVIEW-B.md zendesk-support
+// finding 1): legacy's harvest() sends NO server-side incremental filter
+// query parameter under any config — "updated_at[gte]" is not real Zendesk
+// Support collection-endpoint API surface, and declaring
+// incremental.request_param would silently no-op in production while
+// narrowing the emitted record set against fixture/test servers that happen
+// to honor the invented parameter (a schema/API-fidelity blocker). A
+// configured start_date must still be ACCEPTED without error (the
+// InitialState/state-cursor/start_date config-plumbing parity requirement),
+// but it must never be forwarded as any query parameter on the wire — this
+// test asserts the raw request query is untouched by start_date, matching
+// legacy byte-for-byte.
+func TestParityZendesk_StartDateConfigNeverSendsServerFilter(t *testing.T) {
 	bundle := loadZendeskBundle(t)
 	const startDate = "2026-01-01T00:00:00Z"
 
-	var gotParam string
+	var gotQuery url.Values
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		gotParam = r.URL.Query().Get("updated_at[gte]")
+		gotQuery = r.URL.Query()
 		writeJSON(w, `{"tickets":[],"meta":{"has_more":false,"after_cursor":null}}`)
 	}))
 	defer srv.Close()
@@ -362,8 +419,14 @@ func TestParityZendesk_StartDateConfigRaisesLowerBound(t *testing.T) {
 	if err != nil {
 		t.Fatalf("engine Read with start_date config: %v", err)
 	}
-	if gotParam != startDate {
-		t.Fatalf("updated_at[gte] = %q, want %q (start_date forwarded verbatim, rfc3339 param_format)", gotParam, startDate)
+	if got := gotQuery.Get("updated_at[gte]"); got != "" {
+		t.Fatalf("updated_at[gte] = %q, want empty (legacy sends no server-side incremental filter; \"updated_at[gte]\" is not real Zendesk API surface)", got)
+	}
+	for key := range gotQuery {
+		if key == "page[size]" || key == "page[after]" {
+			continue
+		}
+		t.Fatalf("unexpected query param %q=%q sent for start_date config (legacy sends only page[size]/page[after])", key, gotQuery.Get(key))
 	}
 }
 

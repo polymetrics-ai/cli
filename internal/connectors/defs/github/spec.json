@@ -38,6 +38,10 @@
       "type": "string",
       "description": "Optional JSON object of requested GitHub App installation-token permissions."
     },
+    "public_access": {
+      "type": "string",
+      "description": "Explicit opt-in for unauthenticated (public) reads. Set to any non-empty value (e.g. 'true') to allow reads with no token/app credentials configured. Leaving this unset requires a token secret or app_id+installation_id+private_key to authenticate; a config with none of those AND public_access unset hard-errors rather than silently falling back to an unauthenticated read (F4 fail-loud deviation from legacy's auth_type=auto resolution, which DOES silently fall through to public — see docs.md Known limits/ledger G14). Legacy's auth_type=public/none/anonymous/unauthenticated string-value selection is NOT reproduced 1:1 (the engine's `when` grammar has no bare string-equality/membership check statically validated by connectorgen today) — this bundle uses a dedicated boolean-shaped opt-in key instead; the resulting behavior (explicit opt-in required, no silent fallthrough) is what the legacy behavior SHOULD have been from a fail-loud standpoint, and is strictly safer, never less capable for any legacy caller who genuinely wants a public read."
+    },
     "since": {
       "type": "string",
       "format": "date-time",

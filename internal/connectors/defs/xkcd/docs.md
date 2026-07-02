@@ -34,9 +34,21 @@ pagination/incremental logic.
   `internal/connectors/paritytest/xkcd/parity_test.go` asserts zero requests reach the upstream
   server on either connector.
 
-Schema fields (`num`, `title`, `safe_title`, `year`, `month`, `day`) are copied field-for-field from
-legacy's `Catalog()` field list (xkcd.go:55) and its direct pass-through record shape; `num` is the
-primary key on both streams.
+Both streams declare `"projection": "passthrough"` (`engine/read.go`'s `projectRecord`), matching
+legacy's own record shape exactly: legacy's read path is a raw passthrough
+(`json.Unmarshal(resp.Body, &rec); emit(rec)`, xkcd.go:93-97) that emits every field of whatever the
+real XKCD API returns, not a fixed subset. In `"schema"` projection mode (the engine default),
+only schema-declared properties survive a read; an earlier draft of this bundle used that default
+and a 6-field schema copied from legacy's `Catalog()` field list (xkcd.go:55) — Catalog() is a
+capability-discovery listing, NOT legacy's record-shaping function, and does not describe every
+field the live read path actually emits. That drift silently dropped `link`, `news`, `transcript`,
+`alt`, and `img` from every real response (REVIEW-B.md finding 1, BLOCKER). Fixed by switching both
+streams to `passthrough` — the schema's 11 declared `properties` (`num`, `title`, `safe_title`,
+`year`, `month`, `day`, `link`, `news`, `transcript`, `alt`, `img`, matching the real XKCD JSON
+API's documented field list, https://xkcd.com/json.html) now serve purely as a documentation/
+validation surface (`required`, `x-primary-key`, types) — the actual emitted record shape is
+whatever the live API returns, unfiltered, exactly like legacy. `num` is the primary key on both
+streams.
 
 ## Write actions & risks
 
@@ -57,10 +69,11 @@ None. XKCD is a read-only comic-metadata API with no mutation endpoints; `capabi
   silent default — a caller MUST configure `base_url` explicitly for this bundle. Every parity test
   in `internal/connectors/paritytest/xkcd/parity_test.go` supplies `base_url` explicitly on both
   sides, so this does not affect any parity assertion; it is called out here for anyone
-  provisioning a production connection. `spec.json`'s `base_url` still declares
-  `"default": "https://xkcd.com"` as a documentation/CLI-affordance annotation (matching stripe's
-  own `base_url` pattern), even though the engine itself does not consume that annotation at
-  runtime.
+  provisioning a production connection. `spec.json`'s `base_url` property does NOT declare a
+  `"default"` key (no CLI-affordance annotation, unlike stripe's own `base_url` pattern) — its
+  `description` documents the legacy default value in prose only, which is the sole place this
+  default is recorded in this bundle (corrected: a prior revision of this doc claimed `spec.json`
+  declared a `"default"` key here — it never has; REVIEW-B.md finding 2).
 - **Fixture mode is a legacy-only affordance, not part of this bundle.** Legacy's `mode: fixture`
   config value short-circuits all network access and emits a synthetic record carrying `fixture:
   true` and a derived `stream` marker field (xkcd.go:100-106, `readFixture`) — this is a

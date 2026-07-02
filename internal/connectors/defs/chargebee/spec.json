@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Chargebee Connection Specification",
   "type": "object",
-  "required": ["site_api_key"],
+  "required": ["site_api_key", "base_url"],
   "properties": {
     "site_api_key": {
       "type": "string",
@@ -12,11 +12,7 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "Chargebee API base URL override for tests or proxies. When unset, derived from site as https://{site}.chargebee.com/api/v2."
-    },
-    "site": {
-      "type": "string",
-      "description": "Chargebee site name; used to derive the base URL as https://{site}.chargebee.com/api/v2 when base_url is not set."
+      "description": "Chargebee API base URL, e.g. https://{site}.chargebee.com/api/v2. Required: legacy derives this from a site config value, but that cross-key derivation has no engine mechanism today (see docs.md Known limits), so this bundle requires the fully-formed URL instead."
     },
     "start_date": {
       "type": "string",

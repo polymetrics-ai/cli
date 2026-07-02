@@ -10,6 +10,10 @@
     "sha"
   ],
   "properties": {
+    "repository": {
+      "type": "string",
+      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
+    },
     "sha": {
       "type": "string"
     },
@@ -31,10 +35,9 @@
     "author_id": {
       "type": [
         "integer",
-        "null",
-        "string"
+        "null"
       ],
-      "description": "Emitted as a decimal STRING (not a native JSON number) when sourced from a computed_fields nested-path template \u2014 engine/interpolate.go's Interpolate always stringifies its result; see docs.md Known limits."
+      "description": "Legacy emits this via nestedValue (raw JSON number). Sourced here via a bare computed_fields \"{{ record.<path>.id }}\" template, which now preserves the native JSON type (gap-loop cycle-1 typed computed_fields extraction, G0b RESOLVED) rather than stringifying it."
     },
     "committer_login": {
       "type": [
@@ -45,10 +48,9 @@
     "committer_id": {
       "type": [
         "integer",
-        "null",
-        "string"
+        "null"
       ],
-      "description": "Emitted as a decimal STRING (not a native JSON number) when sourced from a computed_fields nested-path template \u2014 engine/interpolate.go's Interpolate always stringifies its result; see docs.md Known limits."
+      "description": "Legacy emits this via nestedValue (raw JSON number). Sourced here via a bare computed_fields \"{{ record.<path>.id }}\" template, which now preserves the native JSON type (gap-loop cycle-1 typed computed_fields extraction, G0b RESOLVED) rather than stringifying it."
     },
     "commit_message": {
       "type": [

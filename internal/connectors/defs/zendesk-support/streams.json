@@ -9,7 +9,8 @@
     "pagination": {
       "type": "cursor",
       "cursor_param": "page[after]",
-      "token_path": "meta.after_cursor"
+      "token_path": "meta.after_cursor",
+      "stop_path": "meta.has_more"
     },
     "check": { "method": "GET", "path": "/api/v2/groups" },
     "error_map": [
@@ -24,12 +25,6 @@
       "path": "/api/v2/tickets",
       "query": { "page[size]": "100" },
       "records": { "path": "tickets" },
-      "incremental": {
-        "cursor_field": "updated_at",
-        "request_param": "updated_at[gte]",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
-      },
       "schema": "schemas/tickets.json"
     },
     {
@@ -37,12 +32,6 @@
       "path": "/api/v2/users",
       "query": { "page[size]": "100" },
       "records": { "path": "users" },
-      "incremental": {
-        "cursor_field": "updated_at",
-        "request_param": "updated_at[gte]",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
-      },
       "schema": "schemas/users.json"
     },
     {
@@ -50,12 +39,6 @@
       "path": "/api/v2/organizations",
       "query": { "page[size]": "100" },
       "records": { "path": "organizations" },
-      "incremental": {
-        "cursor_field": "updated_at",
-        "request_param": "updated_at[gte]",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
-      },
       "schema": "schemas/organizations.json"
     },
     {
@@ -63,12 +46,6 @@
       "path": "/api/v2/groups",
       "query": { "page[size]": "100" },
       "records": { "path": "groups" },
-      "incremental": {
-        "cursor_field": "updated_at",
-        "request_param": "updated_at[gte]",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
-      },
       "schema": "schemas/groups.json"
     },
     {
@@ -76,12 +53,6 @@
       "path": "/api/v2/satisfaction_ratings",
       "query": { "page[size]": "100" },
       "records": { "path": "satisfaction_ratings" },
-      "incremental": {
-        "cursor_field": "updated_at",
-        "request_param": "updated_at[gte]",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
-      },
       "schema": "schemas/satisfaction_ratings.json"
     }
   ]

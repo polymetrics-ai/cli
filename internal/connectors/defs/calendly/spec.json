@@ -29,15 +29,6 @@
       "type": "string",
       "default": "100",
       "description": "Records per page (1-100), sent as the count query param."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
-    },
-    "mode": {
-      "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
     }
   }
 }

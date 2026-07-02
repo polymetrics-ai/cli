@@ -7,9 +7,20 @@
       "X-GitHub-Api-Version": "2026-03-10"
     },
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.token }}", "when": "{{ secrets.token }}" },
-      { "mode": "custom", "hook": "github", "when": "{{ config.app_id }}" },
-      { "mode": "none" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.token }}",
+        "when": "{{ secrets.token }}"
+      },
+      {
+        "mode": "custom",
+        "hook": "github",
+        "when": "{{ config.app_id }}"
+      },
+      {
+        "mode": "none",
+        "when": "{{ config.public_access }}"
+      }
     ],
     "pagination": {
       "type": "page_number",
@@ -18,28 +29,54 @@
       "start_page": 1,
       "page_size": 100
     },
-    "check": { "method": "GET", "path": "/repos/{{ config.owner }}/{{ config.repo }}" },
+    "check": {
+      "method": "GET",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}"
+    },
     "error_map": [
-      { "status": 401, "hint": "github token or app credentials are missing or invalid; re-run pm credentials add github" },
-      { "status": 403, "hint": "github token lacks access for this request, or a secondary rate limit was hit" },
-      { "status": 404, "hint": "repository not found or not visible to the configured credentials" },
-      { "status": 429, "class": "rate_limited", "hint": "github rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "github token or app credentials are missing or invalid; re-run pm credentials add github"
+      },
+      {
+        "status": 403,
+        "hint": "github token lacks access for this request, or a secondary rate limit was hit"
+      },
+      {
+        "status": 404,
+        "hint": "repository not found or not visible to the configured credentials"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "github rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "repository",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}",
-      "records": { "path": ".", "single_object": true },
-            "schema": "schemas/repository.json"
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
+      "schema": "schemas/repository.json"
     },
     {
       "name": "issues",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues",
-      "query": { "state": "all" },
+      "query": {
+        "state": "all"
+      },
       "records": {
         "path": ".",
-        "filter": { "field_absent": "pull_request" }
+        "filter": {
+          "field_absent": "pull_request"
+        }
       },
       "incremental": {
         "cursor_field": "updated_at",
@@ -48,6 +85,7 @@
         "start_config_key": "since"
       },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "user_login": "{{ record.user.login }}",
         "user_id": "{{ record.user.id }}"
       },
@@ -56,12 +94,17 @@
     {
       "name": "pull_requests",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls",
-      "query": { "state": "all" },
-      "records": { "path": "." },
+      "query": {
+        "state": "all"
+      },
+      "records": {
+        "path": "."
+      },
       "incremental": {
         "cursor_field": "updated_at"
       },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "user_login": "{{ record.user.login }}",
         "user_id": "{{ record.user.id }}",
         "base_ref": "{{ record.base.ref }}",
@@ -74,8 +117,11 @@
     {
       "name": "branches",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "commit_sha": "{{ record.commit.sha }}",
         "commit_url": "{{ record.commit.url }}"
       },
@@ -84,8 +130,11 @@
     {
       "name": "commits",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/commits",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "author_login": "{{ record.author.login }}",
         "author_id": "{{ record.author.id }}",
         "committer_login": "{{ record.committer.login }}",
@@ -103,8 +152,11 @@
     {
       "name": "tags",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/tags",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "commit_sha": "{{ record.commit.sha }}",
         "commit_url": "{{ record.commit.url }}"
       },
@@ -113,11 +165,14 @@
     {
       "name": "releases",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "incremental": {
         "cursor_field": "published_at"
       },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "author_login": "{{ record.author.login }}"
       },
       "schema": "schemas/releases.json"
@@ -125,18 +180,28 @@
     {
       "name": "labels",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/labels",
-      "records": { "path": "." },
-            "schema": "schemas/labels.json"
+      "records": {
+        "path": "."
+      },
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
+      "schema": "schemas/labels.json"
     },
     {
       "name": "milestones",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/milestones",
-      "query": { "state": "all" },
-      "records": { "path": "." },
+      "query": {
+        "state": "all"
+      },
+      "records": {
+        "path": "."
+      },
       "incremental": {
         "cursor_field": "updated_at"
       },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "creator_login": "{{ record.creator.login }}"
       },
       "schema": "schemas/milestones.json"
@@ -144,7 +209,9 @@
     {
       "name": "issue_comments",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "incremental": {
         "cursor_field": "updated_at",
         "request_param": "since",
@@ -152,6 +219,7 @@
         "start_config_key": "since"
       },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "user_login": "{{ record.user.login }}",
         "user_id": "{{ record.user.id }}"
       },
@@ -160,7 +228,9 @@
     {
       "name": "pull_request_review_comments",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "incremental": {
         "cursor_field": "updated_at",
         "request_param": "since",
@@ -168,6 +238,7 @@
         "start_config_key": "since"
       },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "user_login": "{{ record.user.login }}"
       },
       "schema": "schemas/pull_request_review_comments.json"
@@ -175,8 +246,11 @@
     {
       "name": "collaborators",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/collaborators",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "relation": "collaborator"
       },
       "schema": "schemas/collaborators.json"
@@ -184,8 +258,11 @@
     {
       "name": "contributors",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/contributors",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "relation": "contributor"
       },
       "schema": "schemas/contributors.json"
@@ -193,8 +270,11 @@
     {
       "name": "stargazers",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/stargazers",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "relation": "stargazer"
       },
       "schema": "schemas/stargazers.json"
@@ -202,8 +282,11 @@
     {
       "name": "subscribers",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/subscribers",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "relation": "subscriber"
       },
       "schema": "schemas/subscribers.json"
@@ -211,20 +294,33 @@
     {
       "name": "workflows",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/workflows",
-      "records": { "path": "workflows" },
-            "schema": "schemas/workflows.json"
+      "records": {
+        "path": "workflows"
+      },
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
+      "schema": "schemas/workflows.json"
     },
     {
       "name": "workflow_runs",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs",
-      "records": { "path": "workflow_runs" },
-            "schema": "schemas/workflow_runs.json"
+      "records": {
+        "path": "workflow_runs"
+      },
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}"
+      },
+      "schema": "schemas/workflow_runs.json"
     },
     {
       "name": "workflow_artifacts",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/artifacts",
-      "records": { "path": "artifacts" },
+      "records": {
+        "path": "artifacts"
+      },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "workflow_run_id": "{{ record.workflow_run.id }}"
       },
       "schema": "schemas/workflow_artifacts.json"
@@ -232,8 +328,11 @@
     {
       "name": "deployments",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/deployments",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
         "creator_login": "{{ record.creator.login }}"
       },
       "schema": "schemas/deployments.json"

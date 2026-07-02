@@ -1,7 +1,5 @@
-// Package github is the Tier-2 escape hatch for the github bundle: a
-// github_app JWT->installation-token AuthHook (ports
-// internal/connectors/github/auth.go) and a WriteHook for compound write
-// actions (ports writePullRequestFollowups/writeReviewers/writeIssueComment).
+// Package github is the Tier-2 escape hatch: a github_app JWT->installation-
+// token AuthHook (ports auth.go) + WriteHook for compound writes/label color.
 package github
 
 import (
@@ -49,8 +47,8 @@ var (
 // Authenticator mints an RS256 JWT (matches legacy's githubAppJWT) and
 // exchanges it for an installation token via POST
 // /app/installations/{id}/access_tokens, returning a Bearer authenticator.
-// ctx is honored (a real network call, never context.Background); uncached,
-// matching legacy's own re-mint-on-every-call behavior.
+// ctx is honored (a real network call); uncached, matching legacy's own
+// re-mint-on-every-call behavior.
 func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, _ engine.AuthSpec) (connsdk.Authenticator, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
@@ -208,14 +206,14 @@ func compactSplit(raw string) []string {
 	return out
 }
 
-// --- WriteHook: compound (multi-request) write actions --------------------
+// --- WriteHook: compound writes + label color-strip normalization --------
 
 var metaFields = []string{"labels", "assignees", "milestone"}
 var reviewerFields = []string{"reviewers", "team_reviewers"}
 var pullCoreFields = []string{"title", "body", "state", "base", "maintainer_can_modify"}
 
-// ExecuteWrite handles the 4 legacy write actions that are genuinely
-// compound; every other action returns handled=false (declarative fallback).
+// ExecuteWrite: 4 compound actions + label color normalization; anything
+// else returns handled=false (declarative fallback).
 func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, error) {
 	switch action.Name {
 	case "close_issue":
@@ -226,9 +224,48 @@ func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec
 		return true, createPullRequest(ctx, rt, rec)
 	case "update_pull_request":
 		return true, updatePullRequest(ctx, rt, rec)
+	case "create_label":
+		return true, createLabel(ctx, rt, rec)
+	case "update_label":
+		return true, updateLabel(ctx, rt, rec)
 	default:
 		return false, nil
 	}
+}
+
+// createLabel/updateLabel reproduce githubCreateLabelPayload/
+// githubUpdateLabelPayload: a leading "#" on color is stripped
+// (github.go:1120,1133; ledger G3 — update_label's fields are all optional).
+func createLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
+	name, color := optionalString(rec, "name"), optionalString(rec, "color")
+	if name == "" || color == "" {
+		return fmt.Errorf("name and color are required")
+	}
+	payload := map[string]any{"name": name, "color": strings.TrimPrefix(color, "#")}
+	if v := optionalString(rec, "description"); v != "" {
+		payload["description"] = v
+	}
+	_, err := rt.Requester.Do(ctx, http.MethodPost, repoPath(rt)+"/labels", nil, payload)
+	return err
+}
+
+func updateLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
+	name := optionalString(rec, "name")
+	if name == "" {
+		return fmt.Errorf("name is required")
+	}
+	payload := map[string]any{}
+	for _, key := range []string{"new_name", "color", "description"} {
+		if v := optionalString(rec, key); v != "" {
+			if key == "color" {
+				v = strings.TrimPrefix(v, "#")
+			}
+			payload[key] = v
+		}
+	}
+	path := fmt.Sprintf("%s/labels/%s", repoPath(rt), url.PathEscape(name))
+	_, err := rt.Requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	return err
 }
 
 func repoPath(rt *engine.Runtime) string {

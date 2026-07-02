@@ -499,23 +499,24 @@ func TestParityChargebee_BundleLoadsAndValidates(t *testing.T) {
 	}
 }
 
-// TestParityChargebee_ComputedFieldsStringifyNumericAndBooleanFields locks in
-// the documented parity deviation (docs/migration/conventions.md §5 chargebee
-// entry): the engine's computed_fields mechanism (the ONLY Tier-1 way to
-// flatten Chargebee's per-item resource envelope, e.g. {"customer": {"id":
-// ...}}) always resolves through engine.Interpolate, which returns a string —
-// so a numeric/boolean raw field (created_at, updated_at, deleted,
-// is_shippable, ...) is emitted as a STRING by the engine bundle, while
-// legacy emits the value decoded straight off the raw JSON envelope via
-// connsdk.RecordsAt (json.Number for a numeric field — connsdk decodes with
-// json.Decoder.UseNumber, see connsdk/extract.go's decodeJSON — and a native
-// Go bool for a JSON boolean, decoding is type-preserving regardless of
-// UseNumber). This never changes any DATA a consumer would read (the string
-// "true"/"1700000000" carries the identical information as json.Number
-// "1700000000" or the bool true), but it IS a real type-shape change, so it
-// is asserted explicitly here (not silently absorbed by a coercing equality
-// helper) and ledgered.
-func TestParityChargebee_ComputedFieldsStringifyNumericAndBooleanFields(t *testing.T) {
+// TestParityChargebee_ComputedFieldsPreserveNativeNumericAndBooleanTypes locks
+// in the RESOLVED state of the formerly-documented parity deviation
+// (docs/migration/conventions.md §5 chargebee entry, gap-loop cycle-1 A1):
+// every one of chargebee's computed_fields templates is a single bare
+// `{{ record.<envelope>.<field> }}` reference with no filter stage, so the
+// engine's typed computed_fields extraction (engine/read.go's
+// bareRecordPathReference + resolveRecordPathValue, gap-loop cycle-1 item 1)
+// now copies the raw typed JSON value straight through instead of routing it
+// through Interpolate's stringify — matching legacy's connsdk.RecordsAt
+// decode (json.Number for a numeric field via json.Decoder.UseNumber, a
+// native Go bool for a JSON boolean) byte-for-byte in TYPE as well as value.
+// This test previously asserted the (now-superseded) stringified deviation;
+// it is kept as a dedicated, named companion assertion per REVIEW-A.md A2
+// rule 4 (a type-shape guarantee deserves a pinned test whether it documents
+// a known deviation or proves one resolved) so no future engine change can
+// silently regress chargebee back to string-typed numeric/boolean fields
+// without a test catching it.
+func TestParityChargebee_ComputedFieldsPreserveNativeNumericAndBooleanTypes(t *testing.T) {
 	bundle := loadChargebeeBundle(t)
 	srv := chargebeeStreamServer(t)
 
@@ -537,13 +538,18 @@ func TestParityChargebee_ComputedFieldsStringifyNumericAndBooleanFields(t *testi
 	if len(engRecs) == 0 {
 		t.Fatal("engine emitted zero customers records")
 	}
-	if _, ok := engRecs[0]["created_at"].(string); !ok {
-		t.Fatalf("engine customers[0].created_at = %#v (%T), want string (computed_fields always stringifies; conventions.md §5 chargebee deviation)", engRecs[0]["created_at"], engRecs[0]["created_at"])
+	n, ok := engRecs[0]["created_at"].(json.Number)
+	if !ok {
+		t.Fatalf("engine customers[0].created_at = %#v (%T), want json.Number (typed computed_fields extraction; conventions.md §5 chargebee entry now RESOLVED)", engRecs[0]["created_at"], engRecs[0]["created_at"])
 	}
-	if s, _ := engRecs[0]["created_at"].(string); s != "1700000000" {
-		t.Fatalf("engine customers[0].created_at = %q, want %q (same DATA, string-shaped)", s, "1700000000")
+	if n.String() != "1700000000" {
+		t.Fatalf("engine customers[0].created_at = %q, want %q (same DATA, now same TYPE as legacy)", n.String(), "1700000000")
 	}
-	if s, _ := engRecs[0]["deleted"].(string); s != "false" {
-		t.Fatalf("engine customers[0].deleted = %q, want %q (same DATA, string-shaped)", s, "false")
+	b, ok := engRecs[0]["deleted"].(bool)
+	if !ok {
+		t.Fatalf("engine customers[0].deleted = %#v (%T), want bool (typed computed_fields extraction)", engRecs[0]["deleted"], engRecs[0]["deleted"])
+	}
+	if b != false {
+		t.Fatalf("engine customers[0].deleted = %v, want false (same DATA, now same TYPE as legacy)", b)
 	}
 }

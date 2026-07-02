@@ -44,9 +44,17 @@ differs from legacy's behavior.
 Pagination is Calendly's absolute-URL `pagination.next_page` cursor (`pagination.type: next_url`,
 `next_url_path: pagination.next_page`) — a `null`/absent `next_page` stops pagination immediately
 (SPEC wave1-pilot §4 N3: calendly returns ABSOLUTE next-page URLs, so the engine's same-host SSRF
-guard never blocks legitimate pagination here; no `allow_cross_host` override is needed).
-`count={{ config.page_size }}` is sent on every organization-scoped list request, matching
-legacy's `calendlyPageSize` default of 100.
+guard never blocks legitimate pagination here; no `allow_cross_host` override is needed). The
+`users` single-object stream (`GET /users/me`) declares an explicit stream-level
+`"pagination": {"type": "none"}` override rather than inheriting the collection streams'
+`next_url` paginator, matching its real (unpaginated, single-object) response shape.
+
+`count={{ config.page_size }}` is sent on every organization-scoped list request. `page_size` is
+NOT required: leaving it unset resolves to spec.json's declared `"default": "100"`, materialized
+into `RuntimeConfig.Config` at runtime by the engine's config-default mechanism
+(`engine/read.go`'s `materializeConfigDefaults`) before query templating runs — matching legacy's
+`calendlyPageSize` default-100 fallback (`calendly.go:363-376`) exactly, for the identical (unset)
+input, without a hard error.
 
 ## Write actions & risks
 
@@ -70,16 +78,14 @@ None — calendly is read-only in both legacy and this bundle (`capabilities.wri
   (invariant) organization URI is supplied. If a future wave needs true auto-discovery (e.g. to
   support switching organizations without a config update), that is a `StreamHook` escalation, not
   an engine dialect change.
-- **The `id` primary-key convenience field is not reproduced (documented parity deviation,
-  conventions.md §5 ledger).** Legacy derives `id` from `uri`'s trailing path segment
-  (`idFromURI`) on every record. The engine dialect's closed filter set (`urlencode`,
-  `unix_seconds`, `base64`, `join:<sep>` — `interpolate.go`) has no "take the last path segment of
-  a URI" transform, so `computed_fields` cannot reproduce this exact derivation without a new
-  engine filter (not requested by SPEC wave1-pilot for this connector). Every schema instead
-  declares `uri` itself — Calendly's own stable, always-present, globally-unique resource
-  identifier, and the exact value `id` is derived FROM — as `x-primary-key`. No other field's
-  value changes for any input legacy itself would accept; `id` is fully recoverable by any
-  consumer as `uri`'s trailing path segment.
+- **The `id` primary-key convenience field IS reproduced** (gap-loop cycle-1 fix, REVIEW-B.md
+  finding 1/adjudication 1 — this item previously documented `id` as a NOT-reproduced deviation;
+  that was superseded by the `last_path_segment` engine filter and is corrected here rather than
+  left stale). Legacy derives `id` from `uri`'s trailing path segment (`idFromURI`) on every
+  record; every stream here does the identical derivation via
+  `"id": "{{ record.uri | last_path_segment }}"` in `computed_fields`, and every schema declares
+  `x-primary-key: ["id"]` — matching legacy's published primary key exactly, byte-for-byte, for
+  every input legacy itself would accept.
 - `event_types`/`organization_memberships`/`groups` publish an `x-cursor-field` (`updated_at`,
   matching legacy's published `CursorFields`) but have NO server-side incremental filtering and
   are NOT `client_filtered` — matching legacy's actual (lack of) filtering behavior for these

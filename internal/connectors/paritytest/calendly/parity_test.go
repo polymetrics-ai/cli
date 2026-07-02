@@ -67,10 +67,17 @@ const testOrgURI = "https://api.calendly.com/organizations/ORG1"
 // calendlyRuntimeConfig builds the shared RuntimeConfig for both connectors:
 // legacy discovers the organization URI itself via /users/me (scopeQuery);
 // the engine bundle is fed the identical value directly via config
-// (organization_uri — the documented parity deviation above). extra carries
-// additional config (start_date, page_size, max_pages).
+// (organization_uri — the documented parity deviation above). page_size is
+// deliberately left UNSET here (gap-loop cycle-1, REVIEW-B.md finding 2): both
+// legacy (calendlyPageSize's default-100 fallback) and the engine bundle
+// (spec.json's page_size "default": "100", materialized into RuntimeConfig at
+// runtime by the C3 engine mechanism, engine/read.go's
+// materializeConfigDefaults) fall back to the identical default of 100 when
+// the caller never supplies page_size — proving the common (unset) case works
+// without a test-only crutch value. extra carries additional config
+// (start_date, an explicit page_size override, etc).
 func calendlyRuntimeConfig(baseURL string, extra map[string]string) connectors.RuntimeConfig {
-	cfg := map[string]string{"base_url": baseURL, "organization_uri": testOrgURI, "page_size": "100"}
+	cfg := map[string]string{"base_url": baseURL, "organization_uri": testOrgURI}
 	for k, v := range extra {
 		cfg[k] = v
 	}
@@ -210,32 +217,6 @@ func writeJSON(w http.ResponseWriter, body string) {
 	_, _ = w.Write([]byte(body))
 }
 
-// stripDerivedID removes the "id" field legacy derives from "uri" via
-// idFromURI (calendly.go's idFromURI/streams.go's calendly*Record mappers).
-// Documented parity deviation (conventions.md §5 ledger, docs.md "Known
-// limits"): the engine dialect's closed filter set (urlencode, unix_seconds,
-// base64, join:<sep> — interpolate.go) has no "take the trailing path
-// segment of a URI" transform, so computed_fields cannot reproduce this
-// single derived convenience field. The bundle instead declares "uri"
-// itself as the schema's x-primary-key (Calendly's own stable, always-
-// present, globally-unique resource identifier — the exact value legacy's
-// id IS derived from) and never emits "id" at all. This never changes any
-// OTHER field's value for any input legacy itself would accept; it only
-// omits one fully-recoverable (id = trailing segment of uri) redundant
-// field. Stripping "id" before comparison here (rather than skipping the
-// assertion) is deliberate: it proves every OTHER field still matches
-// exactly, which a skip would not.
-func stripDerivedID(m map[string]any) map[string]any {
-	out := make(map[string]any, len(m))
-	for k, v := range m {
-		if k == "id" {
-			continue
-		}
-		out[k] = v
-	}
-	return out
-}
-
 func TestParityCalendly_StreamRecords(t *testing.T) {
 	bundle := loadCalendlyBundle(t)
 
@@ -261,10 +242,10 @@ func TestParityCalendly_StreamRecords(t *testing.T) {
 			gotNorm := normalizeRecords(t, engRecs)
 			wantNorm := normalizeRecords(t, legacyRecs)
 			for i := range wantNorm {
-				got := stripDerivedID(gotNorm[i])
-				want := stripDerivedID(wantNorm[i])
+				got := gotNorm[i]
+				want := wantNorm[i]
 				if !reflect.DeepEqual(got, want) {
-					t.Fatalf("stream %q record %d mismatch (id field excluded, see stripDerivedID):\nengine:  %+v\nlegacy:  %+v", stream, i, got, want)
+					t.Fatalf("stream %q record %d mismatch:\nengine:  %+v\nlegacy:  %+v", stream, i, got, want)
 				}
 			}
 		})
@@ -289,10 +270,43 @@ func TestParityCalendly_UsersSingleObject(t *testing.T) {
 		t.Fatalf("engine users records = %d, want 1 (single_object)", len(engRecs))
 	}
 
-	gotNorm := stripDerivedID(normalizeRecords(t, engRecs)[0])
-	wantNorm := stripDerivedID(normalizeRecords(t, legacyRecs)[0])
+	gotNorm := normalizeRecords(t, engRecs)[0]
+	wantNorm := normalizeRecords(t, legacyRecs)[0]
 	if !reflect.DeepEqual(gotNorm, wantNorm) {
-		t.Fatalf("users record mismatch (id field excluded, see stripDerivedID):\nengine:  %+v\nlegacy:  %+v", gotNorm, wantNorm)
+		t.Fatalf("users record mismatch:\nengine:  %+v\nlegacy:  %+v", gotNorm, wantNorm)
+	}
+}
+
+// TestParityCalendly_UsersStreamPaginationExplicitlyNone asserts the "users"
+// single_object stream (gap-loop cycle-1, REVIEW-B.md finding 4) declares an
+// explicit stream-level "pagination": {"type": "none"} override rather than
+// silently inheriting base.pagination's next_url paginator. Before the fix,
+// /users/me had no declared override, so it inherited the next_url paginator
+// applied to every other (collection) stream — harmless today only because
+// /users/me's response has no pagination.next_page envelope to trigger it,
+// but a stream-level declaration WRONG for the stream's real (single-object,
+// unpaginated) shape; a stream-level Pagination entirely replaces base's
+// wholesale (bundle.go's StreamSpec.Pagination doc comment: "overrides
+// base"), so this also protects against any future base.pagination change
+// silently reaching a single_object stream it was never meant to apply to.
+func TestParityCalendly_UsersStreamPaginationExplicitlyNone(t *testing.T) {
+	bundle := loadCalendlyBundle(t)
+
+	var usersStream *engine.StreamSpec
+	for i := range bundle.Streams {
+		if bundle.Streams[i].Name == "users" {
+			usersStream = &bundle.Streams[i]
+			break
+		}
+	}
+	if usersStream == nil {
+		t.Fatal("bundle has no \"users\" stream")
+	}
+	if usersStream.Pagination == nil {
+		t.Fatal("users stream has no stream-level pagination override, want explicit {type: none}")
+	}
+	if usersStream.Pagination.Type != "none" {
+		t.Fatalf("users stream pagination.type = %q, want %q", usersStream.Pagination.Type, "none")
 	}
 }
 
@@ -529,6 +543,94 @@ func TestParityCalendly_MinStartTimeOnlyAppliesToScheduledEvents(t *testing.T) {
 	}
 }
 
+// --- page_size default parity (gap-loop cycle-1, REVIEW-B.md finding 2) ---
+
+// countCaptureServer answers every scheduled_events request with an empty
+// collection (single request, then stop) and records the "count" query
+// value it observed (the wire param page_size templates into).
+func countCaptureServer(t *testing.T) (*httptest.Server, *string) {
+	t.Helper()
+	var got string
+	mux := http.NewServeMux()
+	mux.HandleFunc("/users/me", usersMeHandler())
+	mux.HandleFunc("/scheduled_events", func(w http.ResponseWriter, r *http.Request) {
+		got = r.URL.Query().Get("count")
+		writeJSON(w, `{"collection":[],"pagination":{"count":0,"next_page":null}}`)
+	})
+	srv := httptest.NewServer(mux)
+	t.Cleanup(srv.Close)
+	return srv, &got
+}
+
+// TestParityCalendly_PageSizeDefaultsTo100WhenUnset asserts that leaving
+// page_size UNSET (an input legacy's calendlyPageSize accepts and defaults to
+// 100 for, calendly.go:363-376) no longer hard-errors the engine bundle and
+// sends the identical "count=100" both sides send. Before the gap-loop fix,
+// stream.Query's "count": "{{ config.page_size }}" template had no
+// absent-key tolerance, so an unset page_size hard-errored every
+// organization-scoped read even though page_size was NOT in spec.json's
+// required[] — an undocumented accepted-input regression (REVIEW-B.md
+// finding 2). spec.json's page_size now declares a JSON Schema "default":
+// "100" annotation, materialized into RuntimeConfig.Config for any genuinely
+// absent key by the C3 engine mechanism (engine/read.go's
+// materializeConfigDefaults) before query templating ever runs — the exact
+// mechanism REVIEW-B.md's adjudication 2 and the gap-loop plan's C3 decision
+// specify, restoring legacy's default-100 behavior via a single mechanism
+// rather than a static "100" literal.
+func TestParityCalendly_PageSizeDefaultsTo100WhenUnset(t *testing.T) {
+	bundle := loadCalendlyBundle(t)
+
+	legacySrv, legacyGot := countCaptureServer(t)
+	legacy := calendly.New()
+	_ = readAllRecords(t, legacy, connectors.ReadRequest{
+		Stream: "scheduled_events",
+		Config: calendlyRuntimeConfig(legacySrv.URL, nil), // page_size deliberately unset
+	})
+
+	engSrv, engGot := countCaptureServer(t)
+	eng := engine.New(withCalendlyBaseURL(bundle, engSrv.URL), nil)
+	_ = readAllRecords(t, eng, connectors.ReadRequest{
+		Stream: "scheduled_events",
+		Config: calendlyRuntimeConfig(engSrv.URL, nil), // page_size deliberately unset
+	})
+
+	if *legacyGot != "100" {
+		t.Fatalf("legacy count = %q, want %q (test fixture bug)", *legacyGot, "100")
+	}
+	if *engGot != *legacyGot {
+		t.Fatalf("engine count = %q, want %q (legacy default-100)", *engGot, *legacyGot)
+	}
+}
+
+// TestParityCalendly_PageSizeExplicitOverride asserts an explicitly-configured
+// page_size still overrides the spec.json default on both sides (C3 defaults
+// only fill a genuinely ABSENT key — schema.go's materializeConfigDefaults
+// never overrides a key already present in cfg.Config).
+func TestParityCalendly_PageSizeExplicitOverride(t *testing.T) {
+	bundle := loadCalendlyBundle(t)
+
+	legacySrv, legacyGot := countCaptureServer(t)
+	legacy := calendly.New()
+	_ = readAllRecords(t, legacy, connectors.ReadRequest{
+		Stream: "scheduled_events",
+		Config: calendlyRuntimeConfig(legacySrv.URL, map[string]string{"page_size": "50"}),
+	})
+
+	engSrv, engGot := countCaptureServer(t)
+	eng := engine.New(withCalendlyBaseURL(bundle, engSrv.URL), nil)
+	_ = readAllRecords(t, eng, connectors.ReadRequest{
+		Stream: "scheduled_events",
+		Config: calendlyRuntimeConfig(engSrv.URL, map[string]string{"page_size": "50"}),
+	})
+
+	if *legacyGot != "50" {
+		t.Fatalf("legacy count = %q, want %q (test fixture bug)", *legacyGot, "50")
+	}
+	if *engGot != *legacyGot {
+		t.Fatalf("engine count = %q, want %q (legacy override)", *engGot, *legacyGot)
+	}
+}
+
 // --- auth header parity ---
 
 func TestParityCalendly_BearerAuthHeaderByteIdentical(t *testing.T) {
@@ -598,17 +700,17 @@ func TestParityCalendly_Non2xxErrorPath(t *testing.T) {
 
 // --- manifest-surface parity ---
 
-// TestParityCalendly_ManifestSurface compares stream NAMES and CURSOR FIELDS
-// against legacy's Catalog() (calendly.go:89, backed by calendlyStreams() in
-// streams.go) rather than connectors.ManifestOf: legacy calendly has no
-// dedicated manifest.go (unlike stripe), so ManifestOf(calendly.New()) falls
-// through to the generic zero-Streams path — comparing against that would be
-// vacuous. Catalog() is legacy's real, meaningful published stream surface.
-// Primary keys are deliberately NOT compared: legacy's is a derived "id"
-// (idFromURI(uri)) the engine dialect cannot reproduce (see stripDerivedID's
-// doc comment) — this bundle's schemas declare "uri" itself as
-// x-primary-key instead, a documented, ACCEPTABLE parity deviation, not a
-// defect to assert away.
+// TestParityCalendly_ManifestSurface compares stream NAMES, CURSOR FIELDS, and
+// PRIMARY KEYS against legacy's Catalog() (calendly.go:89, backed by
+// calendlyStreams() in streams.go) rather than connectors.ManifestOf: legacy
+// calendly has no dedicated manifest.go (unlike stripe), so
+// ManifestOf(calendly.New()) falls through to the generic zero-Streams path —
+// comparing against that would be vacuous. Catalog() is legacy's real,
+// meaningful published stream surface. Primary keys ARE compared now
+// (gap-loop cycle-1 REVIEW-B.md finding 1/adjudication 1): legacy's `id`
+// (idFromURI(uri)) is restored via the `last_path_segment` computed_fields
+// filter and `x-primary-key: ["id"]`, so both sides now publish the
+// identical `["id"]` primary key for every stream.
 func TestParityCalendly_ManifestSurface(t *testing.T) {
 	bundle := loadCalendlyBundle(t)
 
@@ -626,9 +728,16 @@ func TestParityCalendly_ManifestSurface(t *testing.T) {
 		t.Fatalf("stream surface (name+cursor fields) = %+v, want %+v (legacy Catalog)", gotStreams, wantStreams)
 	}
 
+	legacyByName := make(map[string][]string, len(legacyCatalog.Streams))
+	for _, s := range legacyCatalog.Streams {
+		legacyByName[s.Name] = s.PrimaryKey
+	}
 	for _, s := range engManifest.Streams {
 		if len(s.PrimaryKey) == 0 {
 			t.Fatalf("engine stream %q missing primary key", s.Name)
+		}
+		if !reflect.DeepEqual(s.PrimaryKey, legacyByName[s.Name]) {
+			t.Fatalf("engine stream %q primary key = %v, want %v (legacy)", s.Name, s.PrimaryKey, legacyByName[s.Name])
 		}
 	}
 }
@@ -670,5 +779,24 @@ func TestParityCalendly_BundleLoadsAndValidates(t *testing.T) {
 	}
 	if bundle.Metadata.Capabilities.Write {
 		t.Fatal("bundle metadata.capabilities.write = true, want false (calendly is read-only)")
+	}
+}
+
+// TestParityCalendly_SpecHasNoDeadConfigKeys guards against the F6 dead-key
+// regression fixed by the gap-loop (REVIEW-B.md finding 3): spec.json
+// previously declared "max_pages" and "mode", neither consumed by any
+// template or engine mechanism ("mode" described a legacy-only fixture
+// affordance the bundle explicitly does not have; "max_pages" implied a wired
+// page cap that did not exist). Both are deleted; this test fails loudly if
+// either dead key (or a new undeclared/unwired one following the same defect
+// class) reappears in spec.json's declared properties.
+func TestParityCalendly_SpecHasNoDeadConfigKeys(t *testing.T) {
+	bundle := loadCalendlyBundle(t)
+
+	wantKeys := []string{"api_key", "base_url", "organization_uri", "page_size", "start_date"}
+	gotKeys := append([]string{}, bundle.Spec.Properties()...)
+	sort.Strings(gotKeys)
+	if !reflect.DeepEqual(gotKeys, wantKeys) {
+		t.Fatalf("spec.json declared properties = %v, want %v (no dead max_pages/mode keys)", gotKeys, wantKeys)
 	}
 }

@@ -10,8 +10,12 @@ migrates); the legacy package stays registered and unchanged until wave6's regis
 Provide a Sentry internal-integration or auth token via the `auth_token` secret; it is used only
 for Bearer auth (`Authorization: Bearer <auth_token>`) and is never logged. `organization` and
 `project` config values scope the `issues`/`events` (org+project) and `releases` (org) streams;
-`hostname` (default `sentry.io`) or an explicit `base_url` override selects the API host, matching
-legacy's `sentryBaseURL` resolution.
+`base_url` (**required** — e.g. `https://sentry.io` or a self-hosted host) selects the API host.
+Legacy instead derives the host from a `hostname` config value (default `sentry.io`,
+`sentryBaseURL`: `"https://" + hostname` when `base_url` is unset); this bundle does not reproduce
+that derivation — see "Known limits" below for why and the config-surface change this implies for
+an operator migrating a legacy-shaped config (a bare `hostname` value must become the fully-formed
+`https://<hostname>` `base_url`).
 
 ## Streams notes
 
@@ -64,6 +68,17 @@ None. Sentry is read-only in legacy (`Write` returns `connectors.ErrUnsupportedO
 - Full Sentry API surface (teams, members, alert rules, dashboards, integrations) is out of scope
   for this pilot; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B
   capability expansion"}` entries. Only the 4 legacy-parity read streams are implemented.
+- **`hostname` config key dropped; `base_url` is now required.** Legacy derives the API host from a
+  `hostname` config value (default `sentry.io`) as `https://<hostname>` when `base_url` is unset
+  (`sentryBaseURL`, `sentry.go:293-308`). The engine's spec-default materialization (gap-loop
+  cycle-1 item 6, C3) only fills in a LITERAL per-key default — it cannot express "derive `base_url`
+  from `hostname`", a cross-key template (`chargebee`'s `site` key hit the identical class; see
+  `docs/migration/conventions.md`'s derived-default guidance). This bundle therefore drops
+  `hostname` entirely and requires `base_url`: an operator migrating a legacy `hostname`-only (or
+  default, unset-hostname) config must now supply the fully-formed `https://sentry.io` (or
+  `https://<hostname>`) URL as `base_url`. This is a documented config-surface narrowing (every
+  legacy-accepted `hostname` value has an operator-reachable `base_url` equivalent; no request/data
+  change once configured), not a data-shape regression.
 - Pagination is a Tier-2 `StreamHook` (`hooks/sentry/hooks.go`), not declarative `link_header` —
   see "Streams notes" above for the full resolution-ladder reasoning (SPEC.md §5.3). Candidate
   future engine feature: a `link_header` pagination "stop attribute" (a configurable Link-header

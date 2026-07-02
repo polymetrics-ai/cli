@@ -250,49 +250,12 @@ func TestParityGmail_StreamRecords(t *testing.T) {
 
 			gotNorm := normalizeGmailRecords(t, engRecs)
 			wantNorm := normalizeGmailRecords(t, legacyRecs)
-			if stream == "labels" {
-				// Documented, ACCEPTABLE-per-precedent deviation (matches
-				// chargebee's identical finding): computed_fields' camelCase
-				// -> snake_case rename (messagesTotal -> messages_total, etc.)
-				// resolves through engine.Interpolate, which always returns a
-				// Go string regardless of the raw JSON value's real type
-				// (engine/interpolate.go's stringify) — so these 4 count
-				// fields compare as their STRING form on both sides rather
-				// than raw type-identical. See docs.md's Known limits and
-				// this connector's ledger entry.
-				for _, m := range []map[string]any{gotNorm[0], wantNorm[0]} {
-					for _, k := range []string{"messages_total", "messages_unread", "threads_total", "threads_unread"} {
-						m[k] = stringifyCountField(m[k])
-					}
-				}
-			}
 			for i := range wantNorm {
 				if !reflect.DeepEqual(gotNorm[i], wantNorm[i]) {
 					t.Fatalf("stream %q record %d mismatch:\nengine:  %+v\nlegacy:  %+v", stream, i, gotNorm[i], wantNorm[i])
 				}
 			}
 		})
-	}
-}
-
-// stringifyCountField renders a label count field (messages_total etc.) to
-// its string form regardless of whether it arrived as a json.Number
-// (legacy) or an already-stringified value (engine computed_fields) — see
-// TestParityGmail_StreamRecords/labels's comment and docs.md Known limits.
-func stringifyCountField(v any) string {
-	switch t := v.(type) {
-	case nil:
-		return ""
-	case string:
-		return t
-	case json.Number:
-		return t.String()
-	default:
-		raw, err := json.Marshal(t)
-		if err != nil {
-			return ""
-		}
-		return string(raw)
 	}
 }
 
@@ -375,35 +338,27 @@ func TestParityGmail_LabelsUnpaginatedSinglePage(t *testing.T) {
 	}
 	gotNorm := normalizeGmailRecords(t, engRecs)
 	wantNorm := normalizeGmailRecords(t, legacyRecs)
-	// See TestParityGmail_StreamRecords/labels: the 4 count fields are a
-	// documented computed_fields stringification deviation, not raw-type
-	// identical.
-	for _, m := range append(gotNorm, wantNorm...) {
-		for _, k := range []string{"messages_total", "messages_unread", "threads_total", "threads_unread"} {
-			m[k] = stringifyCountField(m[k])
-		}
-	}
 	if !reflect.DeepEqual(gotNorm, wantNorm) {
 		t.Fatalf("labels records mismatch:\nengine:  %+v\nlegacy:  %+v", gotNorm, wantNorm)
 	}
 }
 
-// TestParityGmail_ComputedFieldsStringifyLabelCountFields locks in the
-// documented parity deviation (docs.md Known limits; conventions.md §5
-// candidate ledger entry): computed_fields' camelCase->snake_case rename is
-// the ONLY Tier-1 way to project messagesTotal/messagesUnread/
-// threadsTotal/threadsUnread under their schema-declared snake_case names,
-// and engine.Interpolate (which every computed_fields template resolves
-// through) always returns a Go string — so the engine emits these 4 fields
-// as strings, while legacy emits them as connsdk's UseNumber-decoded
-// json.Number (connsdk/extract.go's decodeJSON). This never changes the
-// DATA a consumer would read (the string "10" carries the identical
-// information as json.Number "10"), but it IS a real type-shape change, so
-// it is asserted explicitly here rather than silently absorbed by a
-// coercing equality helper (mirrors
-// paritytest/chargebee's identical TestParityChargebee_
-// ComputedFieldsStringifyNumericAndBooleanFields finding).
-func TestParityGmail_ComputedFieldsStringifyLabelCountFields(t *testing.T) {
+// TestParityGmail_ComputedFieldsPreserveLabelCountFieldsNativeType pins the
+// RESOLVED state (gap-loop cycle-1 engine mini-wave item 1, REVIEW-A.md
+// adjudication A1: typed computed_fields extraction; formerly
+// TestParityGmail_ComputedFieldsStringifyLabelCountFields, which asserted
+// the PRE-increment stringified form). messagesTotal/messagesUnread/
+// threadsTotal/threadsUnread are all sourced via a BARE single
+// "{{ record.messagesTotal }}"-shaped computed_fields template (camelCase
+// rename to the schema's snake_case names, no filter, no surrounding
+// literal text) — the engine now copies the raw JSON value straight
+// through instead of stringifying it via Interpolate, so these 4 fields
+// are native json.Number on the engine side too, matching legacy's own
+// connsdk UseNumber-decoded json.Number exactly (connsdk/extract.go's
+// decodeJSON). RAW type-identical equality, not a coercing/stringifying
+// comparison (mirrors paritytest/chargebee's identical A1 finding, now also
+// RESOLVED there).
+func TestParityGmail_ComputedFieldsPreserveLabelCountFieldsNativeType(t *testing.T) {
 	bundle := loadGmailBundle(t)
 	srv := gmailDataServer(t)
 	tokenSrv, tlsClient, _ := tokenServer(t, "tok_stringify_check")
@@ -422,12 +377,12 @@ func TestParityGmail_ComputedFieldsStringifyLabelCountFields(t *testing.T) {
 	if len(engRecs) == 0 {
 		t.Fatal("engine emitted zero labels records")
 	}
-	got, ok := engRecs[0]["messages_total"].(string)
+	got, ok := engRecs[0]["messages_total"].(json.Number)
 	if !ok {
-		t.Fatalf("engine labels[0].messages_total = %#v (%T), want string (computed_fields always stringifies — engine/interpolate.go's resolveExpr/stringify)", engRecs[0]["messages_total"], engRecs[0]["messages_total"])
+		t.Fatalf("engine labels[0].messages_total = %#v (%T), want json.Number (native type, typed computed_fields extraction)", engRecs[0]["messages_total"], engRecs[0]["messages_total"])
 	}
-	if got != "10" {
-		t.Fatalf("engine labels[0].messages_total = %q, want %q (same numeric VALUE as legacy's json.Number, different Go type)", got, "10")
+	if got.String() != "10" {
+		t.Fatalf("engine labels[0].messages_total = %q, want %q", got.String(), "10")
 	}
 }
 

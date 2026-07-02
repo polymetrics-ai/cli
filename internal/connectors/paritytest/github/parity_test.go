@@ -266,19 +266,6 @@ func TestParityGithub_StreamRecords(t *testing.T) {
 						}
 						t.Fatalf("stream %q record %d missing field %q in engine output (legacy=%v)", stream, i, key, legacyVal)
 					}
-					if isStringifiedNestedID(key) {
-						// Documented deviation: computed_fields' Interpolate
-						// always stringifies its result (engine/interpolate.go),
-						// so a nested-path numeric id (user.id, author.id, ...)
-						// is emitted as a decimal STRING, not a native JSON
-						// number, unlike every other numeric field (which
-						// passes through raw JSON via schema projection and
-						// keeps its real type). Compare string forms only.
-						if fmt.Sprint(engVal) != fmt.Sprint(legacyVal) {
-							t.Fatalf("stream %q record %d field %q mismatch:\nengine:  %+v\nlegacy:  %+v", stream, i, key, engVal, legacyVal)
-						}
-						continue
-					}
 					if !reflect.DeepEqual(engVal, legacyVal) {
 						t.Fatalf("stream %q record %d field %q mismatch:\nengine:  %+v\nlegacy:  %+v", stream, i, key, engVal, legacyVal)
 					}
@@ -288,26 +275,98 @@ func TestParityGithub_StreamRecords(t *testing.T) {
 	}
 }
 
-// isDocumentedDrop names the record fields legacy emits that this bundle's
-// dialect genuinely cannot express (no count/length filter) — see docs.md
-// Known limits. Anything else must match exactly.
-func isDocumentedDrop(field string) bool {
-	switch field {
-	case "labels_count", "assignees_count", "is_pull_request", "assets_count", "repository":
-		return true
-	default:
-		return false
+// TestParityGithub_NestedIDComputedFieldsEmitNativeNumbers pins G0b's
+// RESOLVED state (gap-loop cycle-1 engine mini-wave item 1/REVIEW-A.md
+// adjudication A1: typed computed_fields extraction). user_id/author_id/
+// committer_id/workflow_run_id are all sourced via a BARE single
+// "{{ record.<path> }}" computed_fields template (e.g. "{{ record.user.id
+// }}", no filter, no surrounding literal text), so the engine now copies
+// the raw JSON value straight through instead of stringifying it via
+// Interpolate — these fields must be native json.Number, matching legacy's
+// own raw-JSON-passthrough numeric type exactly (RAW equality, not the
+// string-form-only comparison isStringifiedNestedID used to require before
+// this engine increment landed).
+func TestParityGithub_NestedIDComputedFieldsEmitNativeNumbers(t *testing.T) {
+	bundle := loadGithubBundle(t)
+	srv := githubStreamServer(t)
+
+	eng := newGithubEngineConnector(withGithubBaseURL(bundle, srv.URL))
+	engRecs := readAllGithubRecords(t, eng, connectors.ReadRequest{Stream: "issues", Config: githubRuntimeConfig(srv.URL, nil)})
+	if len(engRecs) == 0 {
+		t.Fatal("engine emitted zero issues records (test fixture bug)")
+	}
+
+	got := normalizeRecord(t, engRecs[0])["user_id"]
+	n, ok := got.(json.Number)
+	if !ok {
+		t.Fatalf("engine issues[0].user_id = %#v (%T), want json.Number (native type, typed computed_fields extraction)", got, got)
+	}
+	if n.String() != "1" {
+		t.Fatalf("engine issues[0].user_id = %q, want %q", n.String(), "1")
 	}
 }
 
-// isStringifiedNestedID names the computed_fields-sourced nested-id fields
-// that the engine emits as decimal STRINGS rather than native JSON numbers
-// (see docs.md Known limits: computed_fields' Interpolate always
-// stringifies). Every other numeric field passes through raw JSON via
-// schema projection and keeps its real type.
-func isStringifiedNestedID(field string) bool {
+// TestParityGithub_RepositoryMarkerFieldRestored pins G0's RESOLVED state
+// (gap-loop cycle-1 engine mini-wave: config.* now resolves inside
+// computed_fields; see docs/migration/conventions.md §3 "config.* in
+// computed_fields"). Legacy stamps req.Config.Config["repository"] (a
+// single "owner/repo" config value) onto EVERY emitted record of EVERY
+// stream; this bundle now reproduces it via a computed_fields
+// "{{ config.owner }}/{{ config.repo }}" template. Asserted directly
+// (not folded into the generic per-field loop in TestParityGithub_
+// StreamRecords, since the string this bundle derives it from --
+// "owner"+"repo" -- differs from legacy's single "repository" config key,
+// even though both resolve to the identical wire value for this fixture).
+func TestParityGithub_RepositoryMarkerFieldRestored(t *testing.T) {
+	bundle := loadGithubBundle(t)
+	streams := []string{"repository", "issues", "pull_requests", "workflows"}
+
+	for _, stream := range streams {
+		stream := stream
+		t.Run(stream, func(t *testing.T) {
+			srv := githubStreamServer(t)
+
+			legacy := githublegacy.New()
+			legacyRecs := readAllGithubRecords(t, legacy, connectors.ReadRequest{Stream: stream, Config: githubRuntimeConfig(srv.URL, nil)})
+
+			eng := newGithubEngineConnector(withGithubBaseURL(bundle, srv.URL))
+			engRecs := readAllGithubRecords(t, eng, connectors.ReadRequest{Stream: stream, Config: githubRuntimeConfig(srv.URL, nil)})
+
+			if len(legacyRecs) == 0 || len(engRecs) == 0 {
+				t.Fatalf("zero records for stream %q (test fixture bug)", stream)
+			}
+
+			wantRepo, ok := legacyRecs[0]["repository"].(string)
+			if !ok || wantRepo == "" {
+				t.Fatalf("legacy stream %q record 0 repository = %#v, want non-empty string (test fixture bug)", stream, legacyRecs[0]["repository"])
+			}
+			if wantRepo != "octocat/hello-world" {
+				t.Fatalf("legacy stream %q record 0 repository = %q, want %q (test fixture bug)", stream, wantRepo, "octocat/hello-world")
+			}
+
+			gotRepo, ok := engRecs[0]["repository"].(string)
+			if !ok {
+				t.Fatalf("engine stream %q record 0 repository = %#v (%T), want string %q", stream, engRecs[0]["repository"], engRecs[0]["repository"], wantRepo)
+			}
+			if gotRepo != wantRepo {
+				t.Fatalf("engine stream %q record 0 repository = %q, want %q (legacy)", stream, gotRepo, wantRepo)
+			}
+		})
+	}
+}
+
+// isDocumentedDrop names the record fields legacy emits that this bundle's
+// dialect genuinely cannot express (no count/length filter) — see docs.md
+// Known limits. Anything else must match exactly. "repository" was
+// previously here (ENGINE_GAP G0: computed_fields could not reference
+// config.*) but the gap-loop cycle-1 engine mini-wave closed G0 (config.*
+// now resolves inside computed_fields, secrets.* stays excluded) — the
+// marker is restored via "{{ config.owner }}/{{ config.repo }}" (see
+// TestParityGithub_RepositoryMarkerFieldRestored) and must no longer be
+// silently stripped from the comparison.
+func isDocumentedDrop(field string) bool {
 	switch field {
-	case "user_id", "author_id", "committer_id", "workflow_run_id":
+	case "labels_count", "assignees_count", "is_pull_request", "assets_count":
 		return true
 	default:
 		return false
@@ -390,6 +449,91 @@ func recordIDs(t *testing.T, recs []connectors.Record) []string {
 	return out
 }
 
+// --- since-param incremental parity (docs.md Known limits / ledger G15) --
+
+// sinceCaptureServer answers the issues stream endpoint, recording the
+// "since" query param value it received (empty string if absent), and
+// returns one fixture issue.
+func sinceCaptureServer(t *testing.T) (*httptest.Server, *string) {
+	t.Helper()
+	var gotSince string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotSince = r.URL.Query().Get("since")
+		writeJSON(w, `[{"id":1,"node_id":"I1","number":101,"state":"open","title":"Fixture","body":"b","html_url":"https://github.com/octocat/hello-world/issues/101","url":"https://api.github.com/repos/octocat/hello-world/issues/101","user":{"login":"octocat","id":1},"author_association":"OWNER","comments":0,"locked":false,"created_at":"2026-01-01T00:00:00Z","updated_at":"2026-01-01T01:00:00Z"}]`)
+	}))
+	t.Cleanup(srv.Close)
+	return srv, &gotSince
+}
+
+// TestParityGithub_SinceConfigOnlyMatchesLegacy asserts the CONFIG path:
+// both connectors forward config.since to the "since" query param
+// identically when no app-persisted state cursor is present — legacy's own
+// (and only) "since" source (github.go Read: config "since" only, never
+// req.State).
+func TestParityGithub_SinceConfigOnlyMatchesLegacy(t *testing.T) {
+	bundle := loadGithubBundle(t)
+	const configSince = "2026-01-01T00:00:00Z"
+
+	legacySrv, legacyGot := sinceCaptureServer(t)
+	legacy := githublegacy.New()
+	_ = readAllGithubRecords(t, legacy, connectors.ReadRequest{
+		Stream: "issues",
+		Config: githubRuntimeConfig(legacySrv.URL, map[string]string{"since": configSince}),
+	})
+	if *legacyGot != configSince {
+		t.Fatalf("legacy since query param = %q, want %q (test fixture bug)", *legacyGot, configSince)
+	}
+
+	engSrv, engGot := sinceCaptureServer(t)
+	eng := newGithubEngineConnector(withGithubBaseURL(bundle, engSrv.URL))
+	_ = readAllGithubRecords(t, eng, connectors.ReadRequest{
+		Stream: "issues",
+		Config: githubRuntimeConfig(engSrv.URL, map[string]string{"since": configSince}),
+	})
+	if *engGot != *legacyGot {
+		t.Fatalf("engine since query param = %q, want %q (legacy, config-only path)", *engGot, *legacyGot)
+	}
+}
+
+// TestParityGithub_SinceStateCursorForwardingIsEngineOnlyBehavior asserts
+// the STATE path: the engine forwards an app-persisted state cursor as
+// "since" (engine/read.go's incrementalLowerBoundValue prefers req.State
+// over start_config_key — engine-wide semantics, matches every other
+// incremental stream in the fleet), while legacy IGNORES req.State entirely
+// (github.go's Read only ever consults req.Config.Config["since"] — greps
+// clean, no req.State reference anywhere in the legacy package). This is a
+// documented, deliberate IMPROVEMENT (a sync with persisted state emits a
+// smaller, correctly-incremental record set on the engine side) — not a
+// parity bug — but docs.md must not claim "matches legacy exactly" for the
+// state path, and this test pins the actual (diverging, by design) behavior
+// so a future change to either side is caught.
+func TestParityGithub_SinceStateCursorForwardingIsEngineOnlyBehavior(t *testing.T) {
+	bundle := loadGithubBundle(t)
+	const stateCursor = "2026-02-02T00:00:00Z"
+
+	legacySrv, legacyGot := sinceCaptureServer(t)
+	legacy := githublegacy.New()
+	_ = readAllGithubRecords(t, legacy, connectors.ReadRequest{
+		Stream: "issues",
+		Config: githubRuntimeConfig(legacySrv.URL, nil), // no config "since" set either
+		State:  map[string]string{"cursor": stateCursor},
+	})
+	if *legacyGot != "" {
+		t.Fatalf("legacy since query param = %q, want empty (legacy never reads req.State — test fixture bug if this fails)", *legacyGot)
+	}
+
+	engSrv, engGot := sinceCaptureServer(t)
+	eng := newGithubEngineConnector(withGithubBaseURL(bundle, engSrv.URL))
+	_ = readAllGithubRecords(t, eng, connectors.ReadRequest{
+		Stream: "issues",
+		Config: githubRuntimeConfig(engSrv.URL, nil),
+		State:  map[string]string{"cursor": stateCursor},
+	})
+	if *engGot != stateCursor {
+		t.Fatalf("engine since query param = %q, want %q (documented engine-only state-cursor-forwarding behavior, see docs.md Known limits)", *engGot, stateCursor)
+	}
+}
+
 // --- AuthHook parity: github_app JWT -> installation-token exchange ------
 
 // TestParityGithub_AuthGithubAppInstallationTokenBearerHeader asserts BOTH
@@ -439,6 +583,80 @@ func TestParityGithub_AuthGithubAppInstallationTokenBearerHeader(t *testing.T) {
 	}
 	if engAuthHeader != legacyAuthHeader {
 		t.Fatalf("engine Authorization = %q, want %q (legacy)", engAuthHeader, legacyAuthHeader)
+	}
+}
+
+// TestParityGithub_AuthNoCredentialsFailsLoudRatherThanSilentlyPublic pins
+// the fixed no-silent-fallthrough behavior (docs.md Known limits / ledger
+// G14): a config with NEITHER a token secret NOR github_app config NOR the
+// explicit public_access opt-in must hard-error, not silently resolve to an
+// unauthenticated read. Legacy's own "auto" resolution (auth.go:73-80) DOES
+// fall through to public in this exact shape (including for a caller who set
+// an alias-shaped secret legacy tolerates — personalAccessToken, etc. — but
+// not "token" itself) — this bundle is a documented, intentional
+// STRICTER-than-legacy deviation (F4: never silently fail open) closing the
+// alias/typo hazard REVIEW-A.md's major flagged. A caller that genuinely
+// wants unauthenticated reads must opt in with public_access (see
+// TestParityGithub_AuthExplicitPublicOptIn); the engine's `when` grammar has
+// no statically-validated string-equality/membership check today (F9,
+// connectorgen validate's ResolveCheck only parses bare namespace.key
+// truthiness), so this bundle cannot reproduce legacy's exact
+// auth_type=public/none/anonymous/unauthenticated string-value selection —
+// see docs.md Known limits for the documented scope narrowing.
+func TestParityGithub_AuthNoCredentialsFailsLoudRatherThanSilentlyPublic(t *testing.T) {
+	bundle := loadGithubBundle(t)
+	srv := githubStreamServer(t)
+
+	noCredsCfg := connectors.RuntimeConfig{
+		Config: map[string]string{
+			"base_url": srv.URL,
+			"owner":    "octocat",
+			"repo":     "hello-world",
+		},
+		// No Secrets at all — not even the alias-shaped ones legacy also
+		// tolerates (personalAccessToken, etc.) — this is a "no credentials
+		// were ever configured" config, the exact shape that must never
+		// silently reach GitHub unauthenticated.
+	}
+
+	eng := newGithubEngineConnector(withGithubBaseURL(bundle, srv.URL))
+	err := eng.Read(context.Background(), connectors.ReadRequest{Stream: "repository", Config: noCredsCfg}, func(connectors.Record) error { return nil })
+	if err == nil {
+		t.Fatal("engine Read with no credentials and no public_access opt-in = nil error, want a hard failure (must not silently fall through to unauthenticated mode:none)")
+	}
+}
+
+// TestParityGithub_AuthExplicitPublicOptIn asserts a caller can still
+// explicitly opt into unauthenticated reads via public_access — the
+// mode:none candidate is gated ({{ config.public_access }} truthiness), not
+// an unconditional catch-all, but remains reachable for the
+// legacy-documented "public" auth mode (auth.go's githubAuthPublic) via this
+// bundle's dedicated opt-in key (see docs.md Known limits: legacy's
+// auth_type=public string-value selection itself is not reproduced 1:1).
+func TestParityGithub_AuthExplicitPublicOptIn(t *testing.T) {
+	bundle := loadGithubBundle(t)
+	srv := githubStreamServer(t)
+
+	publicCfg := connectors.RuntimeConfig{
+		Config: map[string]string{
+			"base_url":      srv.URL,
+			"owner":         "octocat",
+			"repo":          "hello-world",
+			"public_access": "true",
+		},
+	}
+
+	eng := newGithubEngineConnector(withGithubBaseURL(bundle, srv.URL))
+	var recs []connectors.Record
+	err := eng.Read(context.Background(), connectors.ReadRequest{Stream: "repository", Config: publicCfg}, func(r connectors.Record) error {
+		recs = append(recs, r)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("engine Read with explicit public_access opt-in: %v (want success, opt-in unauthenticated read)", err)
+	}
+	if len(recs) == 0 {
+		t.Fatal("engine Read with explicit public_access opt-in emitted zero records (test fixture bug)")
 	}
 }
 
@@ -569,6 +787,81 @@ func TestParityGithub_WriteMergePullRequest(t *testing.T) {
 
 	if legacyReqs[0].Method != http.MethodPut || legacyReqs[0].Path != "/repos/octocat/hello-world/pulls/301/merge" {
 		t.Fatalf("legacy request = %+v (test fixture bug)", legacyReqs[0])
+	}
+	if !reflect.DeepEqual(engReqs[0], legacyReqs[0]) {
+		t.Fatalf("engine request = %+v, want %+v (legacy)", engReqs[0], legacyReqs[0])
+	}
+}
+
+// TestParityGithub_WriteCreateLabelStripsLeadingHashFromColor pins the
+// restored '#'-strip normalization (docs.md Known limits / ledger G16):
+// legacy's githubCreateLabelPayload does
+// strings.TrimPrefix(color, "#") (github.go:1120) before sending, so a
+// caller-supplied "#ff0000" (a value GitHub's own docs/UI commonly show
+// with the leading hash, and legacy explicitly accepts+normalizes) must
+// reach the wire as "ff0000" on BOTH connectors, not the raw "#ff0000"
+// (which GitHub's API 422s on).
+func TestParityGithub_WriteCreateLabelStripsLeadingHashFromColor(t *testing.T) {
+	record := connectors.Record{"name": "bug", "color": "#ff0000"}
+	legacyReqs, engReqs := runWriteParity(t, "create_label", record, `{"id":1,"name":"bug","color":"ff0000"}`)
+
+	if legacyReqs[0].Method != http.MethodPost || legacyReqs[0].Path != "/repos/octocat/hello-world/labels" {
+		t.Fatalf("legacy request = %+v (test fixture bug)", legacyReqs[0])
+	}
+	if got := legacyReqs[0].Body["color"]; got != "ff0000" {
+		t.Fatalf("legacy request body color = %#v, want %q (test fixture bug: legacy's TrimPrefix(color, \"#\"))", got, "ff0000")
+	}
+	if !reflect.DeepEqual(engReqs[0], legacyReqs[0]) {
+		t.Fatalf("engine request = %+v, want %+v (legacy)", engReqs[0], legacyReqs[0])
+	}
+}
+
+// TestParityGithub_WriteCreateLabelColorWithoutHashUnaffected asserts a
+// caller-supplied color with NO leading '#' (GitHub's own wire shape) is
+// unaffected by the strip on both sides — the normalization is a no-op for
+// an already-bare hex string.
+func TestParityGithub_WriteCreateLabelColorWithoutHashUnaffected(t *testing.T) {
+	record := connectors.Record{"name": "bug", "color": "ff0000"}
+	legacyReqs, engReqs := runWriteParity(t, "create_label", record, `{"id":1,"name":"bug","color":"ff0000"}`)
+
+	if got := legacyReqs[0].Body["color"]; got != "ff0000" {
+		t.Fatalf("legacy request body color = %#v, want %q (test fixture bug)", got, "ff0000")
+	}
+	if !reflect.DeepEqual(engReqs[0], legacyReqs[0]) {
+		t.Fatalf("engine request = %+v, want %+v (legacy)", engReqs[0], legacyReqs[0])
+	}
+}
+
+// TestParityGithub_WriteUpdateLabelStripsLeadingHashFromColor is
+// create_label's sibling case for update_label — legacy's
+// githubUpdateLabelPayload does the identical TrimPrefix (github.go:1133),
+// but ONLY when a color field is actually present (update_label's color is
+// optional, "at least one mutable field" shape, ledger G3).
+func TestParityGithub_WriteUpdateLabelStripsLeadingHashFromColor(t *testing.T) {
+	record := connectors.Record{"name": "bug", "color": "#00ff00"}
+	legacyReqs, engReqs := runWriteParity(t, "update_label", record, "")
+
+	if legacyReqs[0].Method != http.MethodPatch || legacyReqs[0].Path != "/repos/octocat/hello-world/labels/bug" {
+		t.Fatalf("legacy request = %+v (test fixture bug)", legacyReqs[0])
+	}
+	if got := legacyReqs[0].Body["color"]; got != "00ff00" {
+		t.Fatalf("legacy request body color = %#v, want %q (test fixture bug: legacy's TrimPrefix(color, \"#\"))", got, "00ff00")
+	}
+	if !reflect.DeepEqual(engReqs[0], legacyReqs[0]) {
+		t.Fatalf("engine request = %+v, want %+v (legacy)", engReqs[0], legacyReqs[0])
+	}
+}
+
+// TestParityGithub_WriteUpdateLabelNoColorFieldOmitsColor asserts
+// update_label's "at least one mutable field" shape: a record with no
+// color field at all must not send a "color" body key on either side (the
+// strip normalization must not invent a color key that was never present).
+func TestParityGithub_WriteUpdateLabelNoColorFieldOmitsColor(t *testing.T) {
+	record := connectors.Record{"name": "bug", "new_name": "bug2"}
+	legacyReqs, engReqs := runWriteParity(t, "update_label", record, "")
+
+	if _, ok := legacyReqs[0].Body["color"]; ok {
+		t.Fatalf("legacy request body = %+v, want no \"color\" key (test fixture bug)", legacyReqs[0].Body)
 	}
 	if !reflect.DeepEqual(engReqs[0], legacyReqs[0]) {
 		t.Fatalf("engine request = %+v, want %+v (legacy)", engReqs[0], legacyReqs[0])

@@ -379,6 +379,98 @@ func TestExecuteWrite_ClosePullRequestWithComment(t *testing.T) {
 	}
 }
 
+func TestExecuteWrite_CreateLabelStripsLeadingHash(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, nil)
+	h := githubhooks.New()
+	cfg := newRuntimeConfig(srv.URL, nil, nil)
+	rt := newTestRuntime(srv.URL, cfg)
+
+	action := engine.WriteAction{Name: "create_label"}
+	rec := connectors.Record{"name": "bug", "color": "#ff0000", "description": "Fixture label"}
+
+	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	if err != nil {
+		t.Fatalf("ExecuteWrite() error = %v", err)
+	}
+	if !handled {
+		t.Fatal("handled = false, want true for create_label")
+	}
+	if len(*reqs) != 1 {
+		t.Fatalf("requests = %d, want 1", len(*reqs))
+	}
+	got := (*reqs)[0]
+	if got.Method != http.MethodPost || got.Path != "/repos/octocat/hello-world/labels" {
+		t.Fatalf("request = %+v, want POST /repos/octocat/hello-world/labels", got)
+	}
+	if got.Body["color"] != "ff0000" {
+		t.Fatalf("body color = %#v, want %q (leading # stripped)", got.Body["color"], "ff0000")
+	}
+	if got.Body["description"] != "Fixture label" {
+		t.Fatalf("body description = %#v, want %q", got.Body["description"], "Fixture label")
+	}
+}
+
+func TestExecuteWrite_CreateLabelMissingColorErrors(t *testing.T) {
+	srv, _ := newWriteCaptureServer(t, nil)
+	h := githubhooks.New()
+	rt := newTestRuntime(srv.URL, newRuntimeConfig(srv.URL, nil, nil))
+
+	action := engine.WriteAction{Name: "create_label"}
+	rec := connectors.Record{"name": "bug"}
+
+	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	if !handled {
+		t.Fatal("handled = false, want true (create_label is always hook-handled)")
+	}
+	if err == nil {
+		t.Fatal("ExecuteWrite() error = nil, want an error for a missing required color field")
+	}
+}
+
+func TestExecuteWrite_UpdateLabelStripsLeadingHashWhenColorPresent(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, nil)
+	h := githubhooks.New()
+	rt := newTestRuntime(srv.URL, newRuntimeConfig(srv.URL, nil, nil))
+
+	action := engine.WriteAction{Name: "update_label"}
+	rec := connectors.Record{"name": "bug", "color": "#00ff00"}
+
+	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	if err != nil {
+		t.Fatalf("ExecuteWrite() error = %v", err)
+	}
+	if !handled {
+		t.Fatal("handled = false, want true for update_label")
+	}
+	got := (*reqs)[0]
+	if got.Method != http.MethodPatch || got.Path != "/repos/octocat/hello-world/labels/bug" {
+		t.Fatalf("request = %+v, want PATCH /repos/octocat/hello-world/labels/bug", got)
+	}
+	if got.Body["color"] != "00ff00" {
+		t.Fatalf("body color = %#v, want %q (leading # stripped)", got.Body["color"], "00ff00")
+	}
+	if _, ok := got.Body["new_name"]; ok {
+		t.Fatalf("body = %+v, want no new_name key (field was absent on record)", got.Body)
+	}
+}
+
+func TestExecuteWrite_UpdateLabelMissingNameErrors(t *testing.T) {
+	srv, _ := newWriteCaptureServer(t, nil)
+	h := githubhooks.New()
+	rt := newTestRuntime(srv.URL, newRuntimeConfig(srv.URL, nil, nil))
+
+	action := engine.WriteAction{Name: "update_label"}
+	rec := connectors.Record{"color": "#00ff00"}
+
+	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	if !handled {
+		t.Fatal("handled = false, want true (update_label is always hook-handled)")
+	}
+	if err == nil {
+		t.Fatal("ExecuteWrite() error = nil, want an error for a missing required name field")
+	}
+}
+
 func TestExecuteWrite_NonCompoundActionFallsBackToDeclarative(t *testing.T) {
 	h := githubhooks.New()
 	rt := &engine.Runtime{}

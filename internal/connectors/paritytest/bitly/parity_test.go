@@ -14,7 +14,9 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"reflect"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -228,8 +230,16 @@ func TestParityBitly_CampaignsStreamRecords(t *testing.T) {
 // bitly_test.go's TestReadBitlinksPaginates fixture) then a short/empty
 // final page. Confirms the engine's next_url paginator follows the absolute
 // URL and terminates (2-page fixture rule, conventions.md §4); also asserts
-// the request-shape (group-scoped path, size query param on page 1 only)
-// matches legacy.
+// the request-shape (group-scoped path on both pages). NOTE: unlike legacy
+// (which resets to an empty url.Values{} once it follows an absolute
+// next-page URL, bitly.go:180-183, so `size` is sent on page 1 only), the
+// engine's declarative query merge re-sends `size=50` on EVERY page,
+// including page 2 (engine/read.go's mergeQuery + connsdk's resolveURL
+// Del+Add re-apply the stream's static query onto the absolute next URL) —
+// this handler does not assert "no size param on page 2" because the engine
+// legitimately sends one there (see docs.md's "Streams notes" and
+// TestParityBitly_BitlinksSizeParamResentOnEveryPage below for the explicit,
+// dedicated assertion of this real divergence).
 func bitlyTwoPageServer(t *testing.T) (*httptest.Server, *[]string) {
 	t.Helper()
 	var paths []string
@@ -249,6 +259,50 @@ func bitlyTwoPageServer(t *testing.T) (*httptest.Server, *[]string) {
 	}))
 	t.Cleanup(srv.Close)
 	return srv, &paths
+}
+
+// TestParityBitly_BitlinksSizeParamResentOnEveryPage locks in the real,
+// documented divergence from legacy (docs.md "Streams notes"): legacy resets
+// its query to an empty url.Values{} once it follows bitlinks' absolute
+// pagination.next URL, so `size=50` is sent on page 1 only (bitly.go:180-183).
+// The engine's declarative next_url paginator re-merges the stream's static
+// `query` onto every page request (engine/read.go's mergeQuery +
+// connsdk.Requester.resolveURL's Del+Add re-apply), so `size=50` IS present
+// on page 2 as well. This is verified benign in DATA terms only because
+// Bitly's own next URL already carries the identical size value the engine
+// re-applies (a no-op replace) — asserted explicitly here so the divergence
+// itself (not just "records still match") is pinned, per
+// docs/migration/conventions.md's stripping/normalization companion-assertion
+// discipline.
+func TestParityBitly_BitlinksSizeParamResentOnEveryPage(t *testing.T) {
+	bundle := loadBitlyBundle(t)
+
+	srv, paths := bitlyTwoPageServer(t)
+	eng := engine.New(withBitlyBaseURL(bundle, srv.URL), nil)
+	recs := readAllBitlyRecords(t, eng, connectors.ReadRequest{
+		Stream: "bitlinks",
+		Config: bitlyRuntimeConfig(srv.URL, "tok_abc", map[string]string{"group_guid": "g1"}),
+	})
+	if len(recs) != 2 {
+		t.Fatalf("records = %d, want 2; paths=%v", len(recs), *paths)
+	}
+	if len(*paths) != 2 {
+		t.Fatalf("requested %d pages, want 2: %v", len(*paths), *paths)
+	}
+	page1, err := url.ParseQuery(strings.SplitN((*paths)[0], "?", 2)[1])
+	if err != nil {
+		t.Fatalf("parse page 1 query: %v", err)
+	}
+	if got := page1.Get("size"); got != "50" {
+		t.Fatalf("page 1 size = %q, want %q", got, "50")
+	}
+	page2, err := url.ParseQuery(strings.SplitN((*paths)[1], "?", 2)[1])
+	if err != nil {
+		t.Fatalf("parse page 2 query: %v", err)
+	}
+	if got := page2.Get("size"); got != "50" {
+		t.Fatalf("page 2 size = %q, want %q (engine re-sends the static query on every page, unlike legacy — see docs.md)", got, "50")
+	}
 }
 
 func TestParityBitly_BitlinksStreamPaginates(t *testing.T) {

@@ -13,10 +13,10 @@
     "company": { "type": ["string", "null"] },
     "phone": { "type": ["string", "null"] },
     "auto_collection": { "type": ["string", "null"] },
-    "net_term_days": { "type": ["string", "null"], "description": "Chargebee's real wire type is a JSON integer; this bundle's computed_fields envelope-unwrap mechanism (engine.Interpolate) always stringifies, see docs.md Known limits." },
+    "net_term_days": { "type": ["integer", "null"] },
     "taxability": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
-    "updated_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
-    "deleted": { "type": ["string", "null"], "description": "Boolean, stringified by computed_fields (see docs.md Known limits)." }
+    "created_at": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "updated_at": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "deleted": { "type": ["boolean", "null"] }
   }
 }

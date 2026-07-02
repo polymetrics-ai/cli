@@ -92,7 +92,23 @@ func normalizeXkcdRecord(t *testing.T, r connectors.Record) map[string]any {
 	return out
 }
 
-const xkcdFixtureBody = `{"num":42,"title":"Geography","safe_title":"Geography","year":"2006","month":"1","day":"1"}`
+// xkcdFixtureBody is the REAL XKCD JSON API response shape (11 fields:
+// month, num, link, year, news, safe_title, transcript, alt, img, title,
+// day — https://xkcd.com/json.html, confirmed by a live sample), not the
+// 6-field subset the bundle's schema previously declared. Legacy's read path
+// is a raw passthrough (`json.Unmarshal(resp.Body, &rec); emit(rec)`,
+// xkcd.go:93-97) — every one of these 11 fields reaches a real caller on
+// every real read. REVIEW-B.md finding 1 (xkcd BLOCKER): a 6-field fixture
+// masks the "schema" projection mode silently dropping link/news/transcript/
+// alt/img, so this fixture (and the two golden fixture files under
+// defs/xkcd/fixtures/streams/**) must carry the full realistic shape for the
+// parity/conformance suites to ever exercise the divergence.
+const xkcdFixtureBody = `{"month":"1","num":42,"link":"","year":"2006","news":"","safe_title":"Geography","transcript":"transcript text","alt":"alt text","img":"https://imgs.xkcd.com/comics/geography.png","title":"Geography","day":"1"}`
+
+// xkcdAllRealFieldNames is the complete real-API field set (order per
+// https://xkcd.com/json.html's own documented field list); used to assert
+// passthrough parity doesn't silently narrow the record.
+var xkcdAllRealFieldNames = []string{"month", "num", "link", "year", "news", "safe_title", "transcript", "alt", "img", "title", "day"}
 
 func xkcdSingleObjectServer(t *testing.T, wantPath string, body string) *httptest.Server {
 	t.Helper()
@@ -151,7 +167,7 @@ func TestParityXkcd_LatestStreamRecord(t *testing.T) {
 func TestParityXkcd_ComicStreamTemplatedPath(t *testing.T) {
 	bundle := loadXkcdBundle(t)
 	const comicNumber = "614"
-	const comicBody = `{"num":614,"title":"Woodpecker","safe_title":"Woodpecker","year":"2009","month":"9","day":"9"}`
+	const comicBody = `{"month":"9","num":614,"link":"","year":"2009","news":"","safe_title":"Woodpecker","transcript":"woodpecker transcript","alt":"woodpecker alt text","img":"https://imgs.xkcd.com/comics/woodpecker.png","title":"Woodpecker","day":"9"}`
 
 	legacySrv := xkcdSingleObjectServer(t, "/"+comicNumber+"/info.0.json", comicBody)
 	legacy := xkcd.New()
@@ -177,6 +193,59 @@ func TestParityXkcd_ComicStreamTemplatedPath(t *testing.T) {
 	want := normalizeXkcdRecord(t, legacyRecs[0])
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("comic record mismatch:\nengine:  %+v\nlegacy:  %+v", got, want)
+	}
+}
+
+// --- full 11-field record fidelity: previously-dropped fields survive ---
+
+// TestParityXkcd_AllElevenRealFieldsSurvivePassthrough is the REVIEW-B.md
+// finding-1 regression test: legacy's read path is a raw passthrough
+// (xkcd.go:93-97) that emits every field of the real API response body, not
+// just the 6 the bundle's schema used to declare. Before the fix this failed
+// on the ENGINE side only (the "schema" projection mode silently dropped
+// link/news/transcript/alt/img), proving the divergence the fixed-fixture
+// alone would have masked. Both connectors must now emit the identical
+// 11-field set for the SAME real-shape response.
+func TestParityXkcd_AllElevenRealFieldsSurvivePassthrough(t *testing.T) {
+	bundle := loadXkcdBundle(t)
+
+	legacySrv := xkcdSingleObjectServer(t, "/info.0.json", xkcdFixtureBody)
+	legacy := xkcd.New()
+	legacyRecs := readAllXkcdRecords(t, legacy, connectors.ReadRequest{
+		Stream: "latest",
+		Config: xkcdRuntimeConfig(legacySrv.URL, nil),
+	})
+	if len(legacyRecs) != 1 {
+		t.Fatalf("legacy xkcd emitted %d records for stream latest, want 1 (test fixture bug)", len(legacyRecs))
+	}
+
+	engSrv := xkcdSingleObjectServer(t, "/info.0.json", xkcdFixtureBody)
+	eng := engine.New(withXkcdBaseURL(bundle, engSrv.URL), nil)
+	engRecs := readAllXkcdRecords(t, eng, connectors.ReadRequest{
+		Stream: "latest",
+		Config: xkcdRuntimeConfig(engSrv.URL, nil),
+	})
+	if len(engRecs) != 1 {
+		t.Fatalf("engine xkcd emitted %d records for stream latest, want 1", len(engRecs))
+	}
+
+	got := normalizeXkcdRecord(t, engRecs[0])
+	want := normalizeXkcdRecord(t, legacyRecs[0])
+
+	for _, field := range xkcdAllRealFieldNames {
+		if _, ok := want[field]; !ok {
+			t.Fatalf("test fixture bug: legacy record missing real field %q entirely: %+v", field, want)
+		}
+		if _, ok := got[field]; !ok {
+			t.Fatalf("engine record dropped real API field %q (schema-projection silently discarding a field legacy passes through) — got %+v, want field present as in legacy %+v", field, got, want)
+		}
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("11-field record mismatch:\nengine:  %+v\nlegacy:  %+v", got, want)
+	}
+	if len(got) != len(xkcdAllRealFieldNames) {
+		t.Fatalf("engine record has %d fields, want exactly the %d real API fields %v: got %+v", len(got), len(xkcdAllRealFieldNames), xkcdAllRealFieldNames, got)
 	}
 }
 

@@ -11,9 +11,9 @@
     "type": { "type": ["string", "null"] },
     "item_family_id": { "type": ["string", "null"] },
     "status": { "type": ["string", "null"] },
-    "is_shippable": { "type": ["string", "null"], "description": "Boolean, stringified by computed_fields (see docs.md Known limits)." },
-    "enabled_for_checkout": { "type": ["string", "null"], "description": "Boolean, stringified by computed_fields (see docs.md Known limits)." },
-    "created_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
-    "updated_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." }
+    "is_shippable": { "type": ["boolean", "null"] },
+    "enabled_for_checkout": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "updated_at": { "type": ["integer", "null"], "description": "Unix seconds." }
   }
 }

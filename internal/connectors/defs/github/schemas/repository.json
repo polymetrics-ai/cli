@@ -10,6 +10,10 @@
     "node_id"
   ],
   "properties": {
+    "repository": {
+      "type": "string",
+      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
+    },
     "id": {
       "type": "integer"
     },
