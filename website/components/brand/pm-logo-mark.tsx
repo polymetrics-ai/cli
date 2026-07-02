@@ -1,19 +1,24 @@
 type PmLogoMarkProps = {
   className?: string;
+  decorative?: boolean;
   title?: string;
 };
 
 export function PmLogoMark({
   className = '',
+  decorative = false,
   title = 'PM CLI logo',
 }: PmLogoMarkProps) {
+  const accessibilityProps = decorative
+    ? { 'aria-hidden': true }
+    : { role: 'img', 'aria-label': title };
+
   return (
     <svg
       className={className}
       viewBox="0 0 26 26"
-      role="img"
-      aria-label={title}
       focusable="false"
+      {...accessibilityProps}
     >
       <style>
         {`

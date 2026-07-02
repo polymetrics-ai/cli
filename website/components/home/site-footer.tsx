@@ -149,7 +149,7 @@ export function SiteFooter() {
           <div className="flex flex-wrap items-center justify-between gap-2 text-[12px] text-text-tertiary">
             <span>© 2026 Polymetrics AI, public source project.</span>
             <span className="flex items-center gap-2">
-              <PmLogoMark className="h-[18px] w-[18px] shrink-0 select-none" />
+              <PmLogoMark decorative className="h-[18px] w-[18px] shrink-0 select-none" />
               Built in pure Go.
             </span>
           </div>

@@ -414,7 +414,7 @@ export function SiteNavbar() {
               className="flex items-center gap-2 group/logo shrink-0"
               aria-label="PM homepage"
             >
-              <PmLogoMark className="h-[26px] w-[26px] shrink-0 select-none" />
+              <PmLogoMark decorative className="h-[26px] w-[26px] shrink-0 select-none" />
               <span className="navbar-by-tag font-square text-[11px] font-light uppercase tracking-[0.14em] leading-none text-text-tertiary/70 whitespace-nowrap hover:text-text-tertiary transition-colors">
                 command line interface
               </span>

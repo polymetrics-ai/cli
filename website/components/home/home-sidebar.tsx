@@ -176,7 +176,7 @@ export function HomeSidebar({ className = 'home-sidebar-panel' }: { className?: 
             className="link-box group relative grid min-w-0 grid-cols-[2rem_minmax(0,1fr)] items-center gap-2 px-4 py-3 text-[12px] text-text-tertiary transition-colors hover:bg-surface-bg hover:text-text-secondary"
           >
             <span aria-hidden className="corner-box-hover-child" />
-            <PmLogoMark className="h-8 w-8 shrink-0 select-none" />
+            <PmLogoMark decorative className="h-8 w-8 shrink-0 select-none" />
             <span className="min-w-0">
               <span className="block font-square text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
                 pm CLI
