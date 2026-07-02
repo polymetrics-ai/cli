@@ -1,10 +1,5 @@
 package certify
 
-import (
-	"context"
-	"errors"
-)
-
 // Options configures a single-connector certification Runner (certification
 // design §A command spec, single-connector subset only — batch/--all,
 // --sweep, write/flow/schedule flags are out of scope for wave0).
@@ -21,10 +16,16 @@ type Options struct {
 // Runner orchestrates certification stages for exactly one connector,
 // serially, against an ephemeral project root (certification design §E
 // package layout: certify.go "Runner + Options; per-connector
-// orchestration"). Wave0 ships the skeleton only: stage execution
-// (stages_source.go, 0-11) is implemented in a later task (T/B-14).
+// orchestration"). Run (stages_source.go) executes source stages 0-11;
+// write/flow/schedule stages are out of scope for wave0 (SPEC.md §1.6).
 type Runner struct {
 	opts Options
+
+	// sabotage and lastWorkdir support self-tests only (see
+	// SabotageExpectedKind / LastWorkdir in stages_source.go) and are never
+	// set by production callers.
+	sabotage    *sabotage
+	lastWorkdir string
 }
 
 // NewRunner constructs a Runner for the given Options. Validation of
@@ -32,23 +33,4 @@ type Runner struct {
 // never fails.
 func NewRunner(o Options) *Runner {
 	return &Runner{opts: o}
-}
-
-// ErrNotImplemented is returned by Run in wave0: source stage execution
-// (stages_source.go) lands in T/B-14; this package only proves the report
-// schema and CLI harness end-to-end (SPEC.md §1.6).
-var ErrNotImplemented = errors.New("certify: stage execution not implemented in this phase (see T/B-14)")
-
-// Run will orchestrate source stages 0-11 once stages_source.go lands
-// (T/B-14). In wave0's certify-core slice it validates Options and returns
-// ErrNotImplemented so callers get a clear, typed signal rather than a
-// panic or a silently empty report.
-func (r *Runner) Run(ctx context.Context) (Report, error) {
-	if r.opts.Connector == "" {
-		return Report{}, errors.New("certify: Options.Connector is required")
-	}
-	if ctx == nil {
-		return Report{}, errors.New("certify: nil context")
-	}
-	return Report{}, ErrNotImplemented
 }

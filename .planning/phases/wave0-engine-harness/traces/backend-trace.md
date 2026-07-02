@@ -96,3 +96,130 @@ per-defect-class table, GREEN test output, and the complete self-verify command 
   instead). Kept intentionally as documented defense-in-depth; flagging here in case a future
   reviewer wants to either relax the meta-schema enum (making this rule load-bearing) or remove the
   redundant check.
+
+---
+
+# Agent Trace: backend (T/B-14)
+
+## Rendered Prompt Or Prompt Reference
+
+gsd-loop-backend (sonnet) executor for phase `wave0-engine-harness`, task **T/B-14 — certify
+source stages proven against the built-in `sample` connector** (PLAN.md Wave E). Builds on the
+committed `internal/connectors/certify` core (report.go/cliharness.go/certify.go, T/B-12).
+
+## Files Inspected
+
+- `.planning/phases/wave0-engine-harness/{PLAN.md,SPEC.md,TEST-PLAN.md,DECISIONS.md}`
+- `docs/architecture/connector-certification-design.md` (full — stage list, report shape,
+  load-bearing facts / gotchas, tiers)
+- `internal/connectors/certify/{certify.go,report.go,cliharness.go,report_test.go,cliharness_test.go}`
+  (existing T/B-12 core — read before extending)
+- `internal/cli/cli.go` (full command dispatch — `init`, `connectors`, `credentials`,
+  `connections`, `catalog`, `etl`, `query`), `internal/cli/parse.go`, `internal/cli/errors.go`
+  (exit-code categories, envelope `kind: "Error"` shape)
+- `internal/app/sync_modes.go` (5 sync-mode definitions, `RequiresCursor`/`RequiresPrimaryKey`),
+  `internal/app/app.go` (`RunETL`/`runConnectorETL` — deduped modes rejected outside the
+  warehouse destination), `internal/app/local_warehouse.go` (`runWarehouseETL` — the only path
+  supporting deduped modes; overwrite truncate via tmp-file rename; PK-dedup via
+  `materializeDedupedFinal`/`readBestLocalRawRecords`)
+- `internal/connectors/connectors.go` (`Sample`/`File`/`Warehouse` built-in connector
+  implementations — confirmed `Sample` is NOT a `StatefulReader`, i.e. incremental filtering is
+  entirely app-layer; `File.Catalog` derives its stream name from the capture file basename)
+  and `internal/connectors/definition.go` (`Definition`/`DefinitionProvider` — confirmed
+  irrelevant to stage 1 since `sample` has no bundle at all)
+- Manual CLI exploration: built `./pm` from `cmd/pm` and hand-ran the entire intended pipeline
+  (`init` → `credentials add/test` → `connections create` → `catalog refresh` → `etl run` ×2 for
+  append/incremental/resume/overwrite/dedup → `query run`) against real ephemeral roots to derive
+  every stage's exact flags and expected envelope shapes BEFORE writing the test file.
+
+## Actions Taken
+
+1. Manually exercised the real CLI end-to-end (5 separate ephemeral-root sessions) to nail down:
+   exact flag names/shapes for every subcommand used; that `sample`'s `Read` ignores cursor
+   state (app-layer-only incremental filtering, proven live: run2 of `incremental_append` reads
+   3/loads 1 with cursor unchanged — this became the resume-stage proof directly, no synthetic
+   sabotage needed); that deduped sync modes require a `warehouse` destination; that `file`
+   connector capture-replay + `pm query` gives real PK-dedup and truncate-semantics proof.
+2. Authored `stages_source_test.go` FIRST (three tests: full happy-path pipeline assertions
+   covering all 12 stage names + `Capabilities.SyncModes`/`Read`/`Catalog`/`Resume`/
+   `JSONContract`/`SecretRedaction`; a sabotage test; an ephemeral-workdir-cleanup test) — RED
+   confirmed via compiler error (`undefined: certify.SabotageExpectedKind` /
+   `certify.LastWorkdir`), recorded in the ledger before any production code.
+3. Implemented `stages_source.go`: `Runner.Run` (13 recorded stages: init, preflight,
+   fixture_conformance skip, manual_json, credentials_add/test, catalog, 5 sync-mode stages,
+   resume, query_contract) + meta-stage finalizers (`finalizeJSONContract`,
+   `finalizeSecretRedaction`) + `allStagesPassed`. Extended `certify.go`'s `Runner` struct with
+   two unexported self-test-only fields (`sabotage`, `lastWorkdir`); removed the now-superseded
+   `ErrNotImplemented` skeleton `Run` method.
+4. Iterated RED→GREEN: first failure was a missing `pm init` call (credentials add fails against
+   a bare `os.MkdirTemp` root with no `.polymetrics` dir) — added an `init` stage ahead of
+   `preflight`; second failure was the test's own "every stage has a CLI record" assertion not
+   accounting for the by-design CLI-free `fixture_conformance` skip stage — fixed the test.
+5. Ran `gofmt -w`, fixed one `golangci-lint` `errcheck` finding (`defer os.RemoveAll(root)` →
+   wrapped in an ignoring closure).
+6. Recorded full discovery notes, RED/GREEN evidence, and CLI-gap findings (none) in
+   `.planning/phases/wave0-engine-harness/traces/waveE-b14-ledger.md`.
+
+## Commands Run
+
+- `go build -o /tmp/pmcheck ./cmd/pm` + manual `./pm ...` sessions (CLI surface discovery)
+- `go test ./internal/connectors/certify -run TestSourceStages -v` (RED, then iterated to GREEN)
+- `go build ./internal/connectors/certify/... ./cmd/...` (clean)
+- `go vet ./internal/connectors/certify` (clean); `go vet $(go list ./... | grep -v
+  /internal/connectors/conformance)` (whole tree minus the parallel T/B-13 agent's in-flight
+  package, clean)
+- `go test ./internal/connectors/certify -v` (final: 21/21 PASS, ~2.3s)
+- `gofmt -l internal/connectors/certify` (clean)
+- `golangci-lint run ./internal/connectors/certify/...` (0 issues after the errcheck fix)
+- `git status --porcelain` (path-guard: only my owned files + the parallel agent's own untracked
+  `internal/connectors/conformance/`/`waveE-b13-ledger.md`, neither touched by this task)
+
+## Findings
+
+- No `ENGINE_GAP`/`NEEDS_NEW_DEP`/missing-CLI-capability blockers. Every stage 0-11 maps onto an
+  existing `pm` subcommand with no flag gaps (full list in the ledger's "CLI gaps found"
+  section).
+- Design-doc gotcha #5 (`--credential` needed on `etl check`/`etl read`) is confirmed accurate
+  for those two subcommands but doesn't block this task: certify routes live credential
+  validation through `pm credentials test` (vault-resolving) and live reads through `pm etl run`
+  against a declared connection — exactly the wave0-scoped workaround SPEC.md §1.6 already
+  anticipates ("not needed for sample; documented as wave1 prerequisite").
+- `internal/connectors/conformance` (the parallel T/B-13 agent's package) was mid-edit and
+  failing to build during this session (`undefined: runStaticChecks` etc.) — confirmed via
+  untracked status and fresh file mtimes that this is that agent's own in-progress work, not
+  something this task caused or needs to fix. `go build ./...`/`go vet ./...` across the WHOLE
+  tree will fail until that package lands; this task's own package builds/vets/tests clean in
+  isolation and was verified that way.
+
+## Handoff Summary
+
+`internal/connectors/certify.Runner.Run` now executes the full source-stage pipeline (stages
+0-11 per PLAN.md T-14) against the real `sample` connector, through the real CLI, in an
+ephemeral `os.MkdirTemp` root, with no CLI wiring and no changes to `internal/cli`/`internal/app`.
+All three source-stage tests plus all 18 pre-existing T/B-12 report/harness tests pass. Report
+fields populated: `Capabilities.{Check,Catalog,Read,SyncModes,Resume,JSONContract,
+SecretRedaction}`, 12+ named `Stages[]` entries each carrying a `CLI{ArgvRedacted,ExitCode,Kind}`
+record. `Report.Passed` is `true` on the happy path and correctly flips to `false` (naming the
+sabotaged stage) when an expected envelope kind is deliberately wrong.
+
+## Verification Evidence
+
+See `.planning/phases/wave0-engine-harness/traces/waveE-b14-ledger.md` for the full discovery
+log, RED transcript, GREEN test output, and per-stage implementation notes.
+
+## Unresolved Risks
+
+- Stage 1 (`fixture_conformance`) is a permanent, unconditional skip in wave0 because
+  `internal/connectors/defs/` ships zero bundles until Wave F. Real Tier-0 integration (importing
+  the conformance package once it's stable, actually loading `sample`'s — nonexistent — bundle)
+  is deferred; a future V-21 gate task should confirm this stage gets wired for real once goldens
+  land, per this task's explicit instruction not to import `internal/connectors/conformance`.
+- `compareCursorStrings` (used by the resume stage) does a textual/lexicographic comparison
+  rather than `internal/app`'s unexported `compareCursor` RFC3339-aware comparison. This is safe
+  for `sample`'s `updated_at` values (RFC3339 strings compare correctly lexicographically) but
+  would need revisiting if a future multi-connector Runner certifies a connector with non-RFC3339
+  or numeric cursor values.
+- The Runner currently hardcodes `sample`-specific assumptions (`cursorField() == "updated_at"`,
+  default stream `"customers"`, primary key `"id"`) rather than deriving them from a live
+  `Catalog()` call. This matches T/B-14's scope (proven against exactly one connector) but is
+  flagged for whoever extends `Runner` to a second connector in a later phase.
