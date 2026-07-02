@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src=".github/assets/polymetrics-cli-logo.svg" alt="Polymetrics CLI logo" width="324">
+<img src=".github/assets/polymetrics-cli-profile-card.svg" alt="Polymetrics CLI profile card" width="820">
 
 # Polymetrics CLI
 
