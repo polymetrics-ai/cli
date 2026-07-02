@@ -10,10 +10,11 @@
     "title": { "type": ["string", "null"] },
     "content": { "type": ["string", "null"] },
     "engine": { "type": ["string", "null"] },
-    "engines": { "type": ["array", "string", "null"], "description": "The raw API's engines[] array, passed through unjoined (see docs.md Known limits: the engine's declarative dialect has no array-join filter, unlike legacy's comma-joined string)." },
+    "engines": { "type": ["string", "null"], "description": "The raw API's engines[] array, comma-joined via the join:, filter (computed_fields) to match legacy's joinAny output exactly." },
     "score": { "type": ["number", "null"] },
     "category": { "type": ["string", "null"] },
     "published_date": { "type": ["string", "null"], "description": "Mapped from the raw API's publishedDate field; not every result carries it." },
-    "thumbnail": { "type": ["string", "null"] }
+    "thumbnail": { "type": ["string", "null"] },
+    "stream": { "type": "string", "description": "Static-literal computed_field naming which stream ('search' or 'reddit') this record came from, matching legacy's derived marker field." }
   }
 }

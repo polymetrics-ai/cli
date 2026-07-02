@@ -9,7 +9,7 @@
         {
           "id": "cus_fixture_1",
           "object": "customer",
-          "created": "2026-01-01T00:00:01Z",
+          "created": 1767225601,
           "email": "fixture1@example.com",
           "name": "Fixture One",
           "description": "conformance fixture customer",
@@ -22,7 +22,7 @@
         {
           "id": "cus_fixture_2",
           "object": "customer",
-          "created": "2026-01-01T00:00:02Z",
+          "created": 1767225602,
           "email": "fixture2@example.com",
           "name": "Fixture Two",
           "description": "conformance fixture customer",

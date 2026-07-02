@@ -99,33 +99,16 @@ func readAllSearxngRecords(t *testing.T, c connectors.Connector, req connectors.
 // normalizeSearxngRecord re-encodes r through encoding/json (no UseNumber
 // needed: every field on this stream is a string/float/slice, never an
 // int64 vs json.Number identity mismatch) so both connectors compare on
-// canonical JSON shape rather than incidental Go type identity, with two
-// documented, deliberate field-level adjustments (see docs.md "Known
-// limits" and traces/waveF-b16-ledger.md):
-//
-//   - "stream" is dropped entirely: legacy's searxngResultRecord stamps a
-//     derived "stream" key (streams.go:68) naming which stream the record
-//     came from, but that value is neither present on the raw SearXNG API
-//     response nor expressible via the engine's computed_fields (which
-//     resolves only against record.* — there is no static-literal/
-//     stream-name namespace for injecting "search"/"reddit" declaratively).
-//     Dropping it does not affect dedup/incremental semantics (PK is url,
-//     cursor is published_date).
-//   - "engines" is normalized to a canonical sorted, comma-joined string
-//     on BOTH sides: legacy's joinAny (streams.go:75-90) comma-joins the
-//     raw engines[] array; the engine's declarative dialect has no
-//     array-join filter (interpolate.go's applyFilter supports only
-//     urlencode/unix_seconds/base64), so this bundle's schema passes the
-//     raw array through unjoined. Normalizing both representations to the
-//     same canonical form here compares the underlying DATA (which engines
-//     contributed to a result) rather than an incidental string-formatting
-//     difference the engine's dialect cannot produce.
+// canonical JSON shape rather than incidental Go type identity. Both the
+// "engines" array-vs-comma-joined-string deviation and the dropped "stream"
+// marker field (parity-deviation ledger entries 4 and 6, docs/migration/
+// conventions.md) are RESOLVED via R1's join:<sep> filter and static-literal
+// computed_fields (streams.json's computed_fields now emit
+// "engines": "{{ record.engines | join:, }}" and "stream": "search"/"reddit"
+// literally) — this comparison is now RAW record equality, with NO
+// field-level adjustments/stripping.
 func normalizeSearxngRecord(t *testing.T, r connectors.Record) map[string]any {
 	t.Helper()
-	delete(r, "stream")
-	if v, ok := r["engines"]; ok {
-		r["engines"] = canonicalEngines(v)
-	}
 	raw, err := json.Marshal(map[string]any(r))
 	if err != nil {
 		t.Fatalf("marshal record: %v", err)
@@ -135,30 +118,6 @@ func normalizeSearxngRecord(t *testing.T, r connectors.Record) map[string]any {
 		t.Fatalf("unmarshal record: %v", err)
 	}
 	return out
-}
-
-// canonicalEngines renders v (either legacy's comma-joined string or the
-// engine's raw []any/[]string) as a sorted, comma-joined string so both
-// representations of "which engines contributed" compare equal.
-func canonicalEngines(v any) string {
-	var parts []string
-	switch t := v.(type) {
-	case string:
-		if t == "" {
-			return ""
-		}
-		parts = strings.Split(t, ",")
-	case []any:
-		for _, e := range t {
-			parts = append(parts, fmt.Sprintf("%v", e))
-		}
-	case []string:
-		parts = append(parts, t...)
-	default:
-		return fmt.Sprintf("%v", v)
-	}
-	sort.Strings(parts)
-	return strings.Join(parts, ",")
 }
 
 func normalizeSearxngRecords(t *testing.T, recs []connectors.Record) []map[string]any {
@@ -172,10 +131,12 @@ func normalizeSearxngRecords(t *testing.T, recs []connectors.Record) []map[strin
 
 // searxngShortPageServer answers /search with a SINGLE short page (2 results,
 // below any plausible page_size threshold) so pagination naturally stops via
-// the short-page signal on BOTH connectors regardless of max_pages wiring —
-// this isolates stream-record/templated-q parity from the max_pages engine
-// gap (see TestParityStripe_MaxPagesStopEngineGap below, and
-// traces/waveF-b16-ledger.md).
+// the short-page signal on BOTH connectors regardless of max_pages — this
+// isolates stream-record/templated-q parity from max_pages cap behavior,
+// which TestParitySearxng_MaxPagesStop (below) covers directly. The
+// max_pages hard-cap engine gap this comment used to document was closed by
+// the wave0-engine-harness repair (see traces/waveF-repair-ledger.md);
+// PaginationSpec.MaxPages is now enforced by read.go's readDeclarative loop.
 func searxngShortPageServer(t *testing.T) (*httptest.Server, *string) {
 	t.Helper()
 	var sawQuery string
@@ -281,6 +242,85 @@ func TestParitySearxng_RedditStreamScopesQuery(t *testing.T) {
 		if !reflect.DeepEqual(gotNorm[i], wantNorm[i]) {
 			t.Fatalf("reddit record %d mismatch:\nengine:  %+v\nlegacy:  %+v", i, gotNorm[i], wantNorm[i])
 		}
+	}
+}
+
+// --- optional bearer-proxy auth (api_key) parity (F6, REVIEW.md) ---
+
+// searxngAuthCaptureServer answers /search with a single short page and
+// records the Authorization header it observed, for both connectors to be
+// driven against identically.
+func searxngAuthCaptureServer(t *testing.T) (*httptest.Server, *string) {
+	t.Helper()
+	var gotAuth string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotAuth = r.Header.Get("Authorization")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"results":[{"url":"https://x/1","title":"t","content":"c","engine":"e","engines":["e"],"score":1,"category":"general","publishedDate":"2026-01-01T00:00:00","thumbnail":null}]}`))
+	}))
+	t.Cleanup(srv.Close)
+	return srv, &gotAuth
+}
+
+// TestParitySearxng_ApiKeySecretSendsBearerAuth locks in F6's resolution: an
+// optional api_key secret, when set, is applied as a Bearer Authorization
+// header on BOTH connectors (legacy's searxng.go:184-189 requester ->
+// connsdk.Bearer(token); the engine bundle's streams.json base.auth now
+// declares a `when`-gated bearer spec: `{"mode":"bearer","token":"{{
+// secrets.api_key }}","when":"{{ secrets.api_key }}"}` falling back to
+// `{"mode":"none"}, using R1's absent-key-falsy `when` tolerance so an unset
+// secret safely selects "none" instead of erroring).
+func TestParitySearxng_ApiKeySecretSendsBearerAuth(t *testing.T) {
+	bundle := loadSearxngBundle(t)
+	const token = "proxy-token-12345"
+
+	legacySrv, legacyAuth := searxngAuthCaptureServer(t)
+	legacy := searxng.New()
+	legacyCfg := searxngRuntimeConfig(legacySrv.URL, map[string]string{"query": "go etl"})
+	legacyCfg.Secrets = map[string]string{"api_key": token}
+	_ = readAllSearxngRecords(t, legacy, connectors.ReadRequest{Stream: "search", Config: legacyCfg})
+
+	engSrv, engAuth := searxngAuthCaptureServer(t)
+	eng := engine.New(withSearxngBaseURL(bundle, engSrv.URL), nil)
+	engCfg := searxngRuntimeConfig(engSrv.URL, map[string]string{"query": "go etl"})
+	engCfg.Secrets = map[string]string{"api_key": token}
+	_ = readAllSearxngRecords(t, eng, connectors.ReadRequest{Stream: "search", Config: engCfg})
+
+	wantAuth := "Bearer " + token
+	if *legacyAuth != wantAuth {
+		t.Fatalf("legacy Authorization = %q, want %q (test fixture bug)", *legacyAuth, wantAuth)
+	}
+	if *engAuth != wantAuth {
+		t.Fatalf("engine Authorization = %q, want %q (legacy, api_key secret configured)", *engAuth, wantAuth)
+	}
+}
+
+// TestParitySearxng_ApiKeyAbsentSendsNoAuth locks in the OTHER half of F6's
+// resolution: when api_key is unset (the common public-instance case), both
+// connectors send NO Authorization header at all (not an empty one, not an
+// error).
+func TestParitySearxng_ApiKeyAbsentSendsNoAuth(t *testing.T) {
+	bundle := loadSearxngBundle(t)
+
+	legacySrv, legacyAuth := searxngAuthCaptureServer(t)
+	legacy := searxng.New()
+	_ = readAllSearxngRecords(t, legacy, connectors.ReadRequest{
+		Stream: "search",
+		Config: searxngRuntimeConfig(legacySrv.URL, map[string]string{"query": "go etl"}),
+	})
+
+	engSrv, engAuth := searxngAuthCaptureServer(t)
+	eng := engine.New(withSearxngBaseURL(bundle, engSrv.URL), nil)
+	_ = readAllSearxngRecords(t, eng, connectors.ReadRequest{
+		Stream: "search",
+		Config: searxngRuntimeConfig(engSrv.URL, map[string]string{"query": "go etl"}),
+	})
+
+	if *legacyAuth != "" {
+		t.Fatalf("legacy Authorization = %q, want empty (test fixture bug: api_key unset)", *legacyAuth)
+	}
+	if *engAuth != "" {
+		t.Fatalf("engine Authorization = %q, want empty (legacy, api_key secret unset)", *engAuth)
 	}
 }
 

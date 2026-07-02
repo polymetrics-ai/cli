@@ -8,7 +8,7 @@
   "properties": {
     "id": { "type": "string" },
     "object": { "type": "string" },
-    "created": { "type": ["integer", "string"] },
+    "created": { "type": "integer" },
     "amount": { "type": ["integer", "null"] },
     "amount_captured": { "type": ["integer", "null"] },
     "amount_refunded": { "type": ["integer", "null"] },

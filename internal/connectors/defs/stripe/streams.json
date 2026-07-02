@@ -12,9 +12,7 @@
       "type": "cursor",
       "cursor_param": "starting_after",
       "last_record_field": "id",
-      "stop_path": "has_more",
-      "limit_param": "limit",
-      "page_size": 100
+      "stop_path": "has_more"
     },
     "check": { "method": "GET", "path": "/customers" },
     "error_map": [

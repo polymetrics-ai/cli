@@ -67,6 +67,8 @@ func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {
 		{"docs-missing-heading", ruleDocsHeading},
 		{"surface-unknown-category", ruleMetaSchema},
 		{"write-false-with-mutation-endpoint", ruleSurfaceFailFirstRun},
+		{"auth-field-unknown-spec-key", ruleInterpolationUnresolved},
+		{"unknown-filter-in-template", ruleInterpolationUnresolved},
 	}
 
 	seenRules := map[string]bool{}

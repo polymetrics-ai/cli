@@ -9,7 +9,7 @@
         {
           "id": "cus_fixture_3",
           "object": "customer",
-          "created": "2026-01-01T00:00:03Z",
+          "created": 1767225603,
           "email": "fixture3@example.com",
           "name": "Fixture Three",
           "description": "conformance fixture customer",

@@ -64,6 +64,35 @@ func TestCursorAdvances_PostReadCursorIsMaxFixtureCursorAndReReadSendsParam(t *t
 	}
 }
 
+// TestCursorAdvances_NumericCursorFieldSupported is the B2 regression test
+// (REVIEW.md): a fixture whose incremental cursor field is a JSON NUMBER on
+// the wire (Stripe's real `created` shape, decoded as json.Number since the
+// engine's JSON decoders use UseNumber throughout) must be recognized by
+// checkCursorAdvances exactly like a string cursor is — before the fix,
+// dynamic.go's checkCursorAdvances only recognized a cursor value via a Go
+// `string` type assertion, so a numeric cursor field silently produced "no
+// cursor value observed across fixture records" even though two fixture
+// records plainly carry increasing `created` values.
+func TestCursorAdvances_NumericCursorFieldSupported(t *testing.T) {
+	b := loadTestBundle(t, "testdata/good", "acme-numeric-cursor")
+	result := checkCursorAdvances(b)
+	if !result.Passed {
+		t.Fatalf("cursor_advances failed on a numeric (json.Number) cursor field: %s", result.Error)
+	}
+}
+
+// TestCursorAdvances_StringCursorFieldStillSupported locks in that the
+// pre-existing string-cursor shape (param_format: rfc3339, x-cursor-field a
+// JSON string) remains legal and unaffected by numeric-cursor support — both
+// shapes are legal per B2's fix instructions.
+func TestCursorAdvances_StringCursorFieldStillSupported(t *testing.T) {
+	b := loadTestBundle(t, "testdata/good", "acme")
+	result := checkCursorAdvances(b)
+	if !result.Passed {
+		t.Fatalf("cursor_advances failed on a string cursor field (regression): %s", result.Error)
+	}
+}
+
 func TestWriteRequestShape_MatchesExpectBlock(t *testing.T) {
 	b := loadTestBundle(t, "testdata/good", "acme")
 	results := checkWriteRequestShape(b)

@@ -2,6 +2,10 @@
   "base": {
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" },
+      { "mode": "none" }
+    ],
     "pagination": {
       "type": "page_number",
       "page_param": "pageno",
@@ -24,7 +28,9 @@
       },
       "records": { "path": "results" },
       "computed_fields": {
-        "published_date": "{{ record.publishedDate }}"
+        "published_date": "{{ record.publishedDate }}",
+        "engines": "{{ record.engines | join:, }}",
+        "stream": "search"
       },
       "schema": "schemas/search.json"
     },
@@ -37,7 +43,9 @@
       },
       "records": { "path": "results" },
       "computed_fields": {
-        "published_date": "{{ record.publishedDate }}"
+        "published_date": "{{ record.publishedDate }}",
+        "engines": "{{ record.engines | join:, }}",
+        "stream": "reddit"
       },
       "schema": "schemas/reddit.json"
     }

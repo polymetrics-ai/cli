@@ -6,10 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
+	"math/big"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"path"
+	"strconv"
 	"strings"
 	"time"
 
@@ -241,11 +243,21 @@ func checkCursorAdvances(b engine.Bundle) CheckResult {
 
 	sch := b.Schemas[stream.Name]
 	var maxCursor string
+	var maxCursorNumeric bool // true once maxCursor holds a numeric-cursor value, so comparisons stay numeric-aware
 	err := readRawRecords(b, stream.Name, nil, func(raw map[string]any) error {
 		if sch != nil && sch.CursorField != "" {
 			if v, ok := raw[sch.CursorField]; ok {
-				if s, ok := v.(string); ok && s > maxCursor {
-					maxCursor = s
+				if s, numeric, ok := cursorValueString(v); ok {
+					switch {
+					case maxCursor == "":
+						maxCursor, maxCursorNumeric = s, numeric
+					case numeric && maxCursorNumeric:
+						if cursorNumericGreater(s, maxCursor) {
+							maxCursor = s
+						}
+					case s > maxCursor:
+						maxCursor = s
+					}
 				}
 			}
 		}
@@ -415,6 +427,44 @@ func firstIncrementalStreamWithFixtures(b engine.Bundle) (engine.StreamSpec, boo
 	return engine.StreamSpec{}, false
 }
 
+// cursorValueString extracts a comparable/formattable string form from a raw
+// cursor field value decoded from fixture JSON, plus whether that form is
+// numeric (so callers can compare numerically rather than lexicographically
+// — lexicographic comparison of digit strings is wrong in general, e.g. "9" >
+// "10"). Every JSON decoder used across this codebase (connsdk, engine)
+// decodes numbers with UseNumber, so json.Number is the real-world shape for
+// a numeric cursor field (Stripe's `created`, etc.); float64 is accepted
+// defensively for any caller that doesn't. Any other type (bool, object,
+// array, nil) is not a valid cursor value and returns ok=false, matching the
+// prior string-only behavior for non-string/non-numeric values.
+func cursorValueString(v any) (s string, numeric bool, ok bool) {
+	switch t := v.(type) {
+	case string:
+		return t, false, true
+	case json.Number:
+		return t.String(), true, true
+	case float64:
+		return strconv.FormatFloat(t, 'f', -1, 64), true, true
+	default:
+		return "", false, false
+	}
+}
+
+// cursorNumericGreater reports whether digit-string a represents a strictly
+// greater numeric value than digit-string b. Both inputs are guaranteed
+// numeric-shaped by cursorValueString's callers (json.Number/float64
+// canonical forms), so a big.Float parse failure indicates a genuine bug
+// rather than untrusted input; on failure this falls back to lexicographic
+// comparison rather than panicking.
+func cursorNumericGreater(a, b string) bool {
+	af, aok := new(big.Float).SetString(a)
+	bf, bok := new(big.Float).SetString(b)
+	if !aok || !bok {
+		return a > b
+	}
+	return af.Cmp(bf) > 0
+}
+
 // formatCursorForAssertion mirrors read.go's unexported formatParam so this
 // package can independently assert the re-read request shape without
 // reaching into engine internals (read.go does not export formatParam; this
@@ -426,15 +476,15 @@ func formatCursorForAssertion(value, format string) (string, error) {
 	case "", "rfc3339":
 		return value, nil
 	case "unix_seconds":
-		t, err := time.Parse(time.RFC3339, value)
+		t, err := parseLowerBoundTimeForAssertion(value)
 		if err != nil {
-			return "", fmt.Errorf("param_format unix_seconds: invalid RFC3339 value %q: %w", value, err)
+			return "", fmt.Errorf("param_format unix_seconds: %w", err)
 		}
 		return fmt.Sprintf("%d", t.Unix()), nil
 	case "date":
-		t, err := time.Parse(time.RFC3339, value)
+		t, err := parseLowerBoundTimeForAssertion(value)
 		if err != nil {
-			return "", fmt.Errorf("param_format date: invalid RFC3339 value %q: %w", value, err)
+			return "", fmt.Errorf("param_format date: %w", err)
 		}
 		return t.Format("2006-01-02"), nil
 	case "github_date_range":
@@ -442,6 +492,47 @@ func formatCursorForAssertion(value, format string) (string, error) {
 	default:
 		return "", fmt.Errorf("unknown param_format %q", format)
 	}
+}
+
+// parseLowerBoundTimeForAssertion mirrors read.go's unexported
+// parseLowerBoundTime (R1's B1 fix): a digits-only value is treated as
+// Unix-seconds already (the real-world shape a numeric cursor field's
+// max-observed value takes, per cursorValueString above); otherwise it is
+// parsed as RFC3339 (the shape a string cursor field's max-observed value
+// takes). Documented duplication, same rationale as formatCursorForAssertion.
+func parseLowerBoundTimeForAssertion(value string) (time.Time, error) {
+	if isAllDigitsForAssertion(value) {
+		secs, err := strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			return time.Time{}, fmt.Errorf("invalid unix-seconds value %q: %w", value, err)
+		}
+		return time.Unix(secs, 0).UTC(), nil
+	}
+	t, err := time.Parse(time.RFC3339, value)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("invalid RFC3339 value %q: %w", value, err)
+	}
+	return t, nil
+}
+
+// isAllDigitsForAssertion mirrors read.go's unexported isAllDigits.
+func isAllDigitsForAssertion(s string) bool {
+	if s == "" {
+		return false
+	}
+	i := 0
+	if s[0] == '-' {
+		i = 1
+	}
+	if i == len(s) {
+		return false
+	}
+	for ; i < len(s); i++ {
+		if s[i] < '0' || s[i] > '9' {
+			return false
+		}
+	}
+	return true
 }
 
 // --- write fixture parsing -------------------------------------------------

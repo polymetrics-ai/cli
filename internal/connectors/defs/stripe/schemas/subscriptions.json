@@ -8,7 +8,7 @@
   "properties": {
     "id": { "type": "string" },
     "object": { "type": "string" },
-    "created": { "type": ["integer", "string"] },
+    "created": { "type": "integer" },
     "customer": { "type": ["string", "null"] },
     "status": { "type": ["string", "null"] },
     "currency": { "type": ["string", "null"] },

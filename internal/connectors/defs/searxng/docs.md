@@ -14,15 +14,13 @@ No credentials are required by default: public SearXNG instances are open. Only 
 instance's URL) must be provided; there is no default, so an instance must be named explicitly.
 
 Legacy also supports an optional `api_key` secret sent as a Bearer token for instances behind an
-auth proxy. This bundle's `spec.json` still declares `api_key` as an `x-secret` config property for
-documentation purposes, but it is not wired into a conditional auth rule in `streams.json`: the
-engine's declarative `when` truthiness check on a `secrets.*` reference errors (rather than
-evaluating false) when the referenced secret key is entirely absent from the caller's
-`RuntimeConfig.Secrets` map, which would break the default (99% common) no-credential case. Since
-no read/pagination/manifest parity requirement in wave0 exercises the auth-proxy path, this bundle
-intentionally omits an `auth` block entirely (an absent/empty `auth` list resolves to no
-authentication on any request — see `engine/read.go`'s `newRuntime`), matching legacy's own default
-behavior exactly. See "Known limits" below.
+auth proxy (`searxng.go:184-189`). This bundle wires the identical behavior via `streams.json`
+`base.auth`'s `when`-gated bearer spec: `{"mode":"bearer","token":"{{ secrets.api_key }}","when":"{{
+secrets.api_key }}"}` falling back to `{"mode":"none"}`. This is safe in the common no-credential
+case because the engine's `when` truthiness check treats an entirely-absent `secrets.*` key as
+falsy (not an error) — the first spec's `when` evaluates false, so `selectAuth` falls through to the
+unconditional `none` spec. Parity-tested both ways by `TestParitySearxng_ApiKeySecretSendsBearerAuth`
+/ `TestParitySearxng_ApiKeyAbsentSendsNoAuth`.
 
 ## Streams notes
 
@@ -36,12 +34,21 @@ for manifest-surface parity, but neither legacy nor this bundle actually filters
 by it — SearXNG results aren't reliably orderable by a server-side cursor, so both connectors always
 perform a full stream read.
 
+`engines` (the raw API's `engines[]` array) is comma-joined into a string via a `join:,`
+`computed_fields` filter, matching legacy's `joinAny` output byte-for-byte. `stream` is emitted as a
+static-literal `computed_fields` value (`"search"`/`"reddit"`), matching legacy's derived marker
+field. Both were previously documented deviations (parity-deviation ledger entries 4 and 6,
+`docs/migration/conventions.md`) that changed the emitted record shape versus legacy; both are now
+RESOLVED via the engine's `join:<sep>` filter and static-literal `computed_fields` support, and
+`parity_searxng_test.go` asserts RAW record equality (no normalization/stripping) for both fields.
+
 Pagination is `pageno` (1-based `page_number` pagination), matching SearXNG's own pagination
 scheme. No page-size query parameter is ever sent (SearXNG's per-page result count is
-engine/instance-defined; `page_size` is used purely as the client-side short-page stop threshold,
-exactly like legacy's `searxngDefaultPageSize`/`PageNumberPaginator.SizeParam: ""`). The bundle also
-declares `max_pages: 1` (legacy's own default, `searxngDefaultMaxPages`) as a documented **known
-limit**: see below.
+engine/instance-defined; the bundle's `page_size: 10` is used purely as the client-side short-page
+stop threshold, exactly like legacy's `searxngDefaultPageSize`/`PageNumberPaginator.SizeParam: ""`).
+`max_pages: 1` (legacy's own default, `searxngDefaultMaxPages`) IS enforced by the engine read path
+as a hard request-count cap, independent of page fullness — see
+`TestParitySearxng_MaxPagesStop`.
 
 ## Write actions & risks
 
@@ -50,34 +57,17 @@ None. SearXNG is a read-only metasearch API with no mutation endpoints; `capabil
 
 ## Known limits
 
-- **max_pages hard-stop is not enforced by the engine read path (ENGINE_GAP).** Legacy's
-  `max_pages` config (default 1) is a hard request-count cap enforced independently of page
-  fullness by `connsdk.Harvest`'s own `maxPages` parameter (`searxng.go:149`): even a source that
-  always returns full pages stops after exactly `max_pages` requests. `internal/connectors/engine
-  /read.go`'s `readDeclarative` — the only production path `engine.Connector.Read` dispatches to —
-  never reads `PaginationSpec.MaxPages` at all (confirmed by grep: zero references outside
-  `bundle.go`'s field declaration); its loop stops ONLY on a short/empty page. This bundle still
-  declares `max_pages: 1` in `spec.json`/`streams.json` as the spec-correct, honest statement of
-  legacy's real default — it simply has no effect on the engine read path today. This is reported as
-  an ENGINE_GAP blocker (not silently worked around) in
-  `.planning/phases/wave0-engine-harness/traces/waveF-b16-ledger.md`; every parity test in
-  `parity_searxng_test.go` besides the dedicated `TestParitySearxng_MaxPagesStopEngineGap` uses a
-  source whose last page is short, so the correctly-implemented short-page stop signal (both sides
-  agree on this) terminates pagination identically regardless of the gap.
-- **Optional Bearer-proxy auth is not modeled.** See "Auth setup" above: this bundle omits the
-  optional `api_key`-present-then-Bearer conditional auth rule to avoid a `when`-on-absent-secret
-  hard error in the default no-credential path. `api_key` remains declared in `spec.json` for
-  documentation/future-work purposes only.
 - **Subreddit-narrowing is not modeled.** Legacy's `reddit` stream additionally supports a
   `subreddit` config value that scopes the query to `site:reddit.com/r/<sub>` instead of the bare
   `site:reddit.com`. The engine's declarative query templating (`stream.Query`) has no
-  conditional/default-value filter, so a subreddit-present-vs-absent branch cannot be expressed
-  without also risking an unresolved-key error when `subreddit` is unset (the common case). This
-  bundle models only the base case (no subreddit configured); the parity suite documents and tests
-  against this base case only.
-- **`stream` field is not modeled.** Legacy's `searxngResultRecord` stamps a derived `"stream"` key
-  naming which stream a record came from (`streams.go:68`). That value is neither present on the
-  raw SearXNG API response nor expressible via `computed_fields` (which resolves only against
-  `record.*` — there is no static-literal/stream-name namespace). This bundle's schemas omit
-  `stream`; it is not part of the PK/cursor contract (PK is `url`, cursor is `published_date`), so
-  omitting it does not affect dedup or incremental semantics.
+  conditional/default-value filter (an unconditional `{{ config.subreddit }}` reference hard-errors
+  when the key is absent, since only `auth`/`when` templating tolerates absent-key-falsy — query
+  resolution does not), so a subreddit-present-vs-absent branch cannot be expressed without risking
+  an unresolved-key error when `subreddit` is unset (the common case). This bundle models only the
+  base case (no subreddit configured, matching legacy's own default query-scoping behavior when
+  `subreddit` is unset); the parity suite documents and tests against this base case only
+  (`TestParitySearxng_RedditStreamScopesQuery`). Deliberately out-of-scope config, not a defect.
+  `categories`/`engines`/`language`/`time_range`/`safesearch` (legacy's other optional SearXNG filter
+  passthroughs) have the identical limitation and are, for the same reason, not declared in
+  `spec.json` at all (F6, REVIEW.md: a declared-but-unwireable config key is worse than an absent
+  one — see `docs/migration/conventions.md`'s "declared config must be consumed" rule).

@@ -21,11 +21,12 @@ type Options struct {
 type Runner struct {
 	opts Options
 
-	// sabotage and lastWorkdir support self-tests only (see
-	// SabotageExpectedKind / LastWorkdir in stages_source.go) and are never
-	// set by production callers.
-	sabotage    *sabotage
-	lastWorkdir string
+	// sabotage, stdoutLeakSabotage, and lastWorkdir support self-tests only
+	// (see SabotageExpectedKind / SabotageStdoutLeak / LastWorkdir in
+	// stages_source.go) and are never set by production callers.
+	sabotage           *sabotage
+	stdoutLeakSabotage *stdoutLeakSabotage
+	lastWorkdir        string
 }
 
 // NewRunner constructs a Runner for the given Options. Validation of

@@ -17,7 +17,6 @@
     "read_page_size": 100
   },
   "rate_limit": {
-    "strategy": "token_bucket",
     "requests_per_minute": 100
   },
   "risk": {

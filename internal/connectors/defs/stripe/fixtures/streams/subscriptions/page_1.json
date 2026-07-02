@@ -9,7 +9,7 @@
         {
           "id": "sub_fixture_1",
           "object": "subscription",
-          "created": "2026-01-01T00:00:01Z",
+          "created": 1767225601,
           "customer": "cus_fixture_1",
           "status": "active",
           "currency": "usd",

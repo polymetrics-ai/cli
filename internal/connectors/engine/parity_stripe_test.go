@@ -557,3 +557,50 @@ func TestParityStripe_BundleLoadsAndValidates(t *testing.T) {
 		t.Fatal("bundle metadata.capabilities.write = false, want true")
 	}
 }
+
+// TestParityStripe_NoDeadPaginationFields is the F6 golden-hygiene regression
+// test (REVIEW.md): the cursor+last_record_field paginator constructor
+// (paginate.go's newCursorPaginator) never reads PaginationSpec.LimitParam or
+// PaginationSpec.PageSize (only page_number/offset_limit do), so declaring
+// them on stripe's base pagination block was dead config that silently did
+// nothing while appearing to declare an effective page size — the actual
+// limit=100 is sent via each stream's static query.limit. Locks in that the
+// dead fields are gone; limit=100 still goes out on the wire via the
+// existing TestParityStripe_CustomersTwoPagePagination assertion.
+func TestParityStripe_NoDeadPaginationFields(t *testing.T) {
+	bundle := loadStripeBundle(t)
+
+	pag := bundle.HTTP.Pagination
+	if pag == nil {
+		t.Fatal("bundle.HTTP.Pagination is nil, want a cursor pagination spec")
+	}
+	if pag.LimitParam != "" {
+		t.Fatalf("pagination.limit_param = %q, want empty (dead for cursor+last_record_field paginator, F6)", pag.LimitParam)
+	}
+	if pag.PageSize != 0 {
+		t.Fatalf("pagination.page_size = %d, want 0 (dead for cursor+last_record_field paginator, F6)", pag.PageSize)
+	}
+}
+
+// TestParityStripe_MetadataRateLimitIsInformationalOnly is the F6
+// rate-limit-placement regression test (REVIEW.md): metadata.json's
+// rate_limit block is NOT consumed by the read path at all (read.go reads
+// only b.HTTP.RateLimit, streams.json's base rate_limit — Metadata.RateLimit
+// is a separate, purely descriptive field with zero wiring into request
+// throttling) and streams.json intentionally declares NO base.rate_limit,
+// since legacy stripe enforces no client-side rate limit and this bundle
+// must not add new throttling behavior legacy never had. Locks in both
+// halves: metadata.json's rate_limit carries no fields this Go type doesn't
+// already define as informational (RequestsPerMinute only — no
+// "strategy"/enforcement-shape key), and streams.json's HTTP.RateLimit is
+// nil (no enforcement).
+func TestParityStripe_MetadataRateLimitIsInformationalOnly(t *testing.T) {
+	bundle := loadStripeBundle(t)
+
+	if bundle.HTTP.RateLimit != nil {
+		t.Fatalf("bundle.HTTP.RateLimit = %+v, want nil (legacy stripe has no client-side rate limiting; streams.json must not add one)", bundle.HTTP.RateLimit)
+	}
+	if bundle.Metadata.RateLimit.RequestsPerMinute != 100 {
+		t.Fatalf("bundle.Metadata.RateLimit.RequestsPerMinute = %d, want 100 (informational-only, matches Stripe's documented published limit)", bundle.Metadata.RateLimit.RequestsPerMinute)
+	}
+}

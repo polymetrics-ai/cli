@@ -1,0 +1,15 @@
+{
+  "name": "unknown-filter-in-template",
+  "display_name": "Unknown Filter In Template",
+  "description": "a deliberately invalid test connector: a computed_fields template references an unknown filter name",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}

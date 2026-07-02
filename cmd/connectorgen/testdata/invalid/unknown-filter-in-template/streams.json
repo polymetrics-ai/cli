@@ -1,0 +1,21 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "unknownfilter/1.0",
+    "headers": {},
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/ping" },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "widgets",
+      "path": "/widgets",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "tags": "{{ record.tags | reverse }}"
+      },
+      "schema": "schemas/widgets.json"
+    }
+  ]
+}

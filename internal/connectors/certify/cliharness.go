@@ -202,5 +202,27 @@ func containsSecretForm(text, secret string) bool {
 	if strings.Contains(text, (&url.URL{Path: secret}).EscapedPath()) {
 		return true
 	}
+	if strings.Contains(text, jsonEscapedForm(secret)) {
+		return true
+	}
 	return false
+}
+
+// jsonEscapedForm renders secret the way encoding/json would render it as a
+// JSON string VALUE (quotes/backslashes/control characters escaped per RFC
+// 8259), with the wrapping quotes stripped — so a secret containing `"`,
+// `\`, or control characters that survives verbatim inside a --json
+// envelope's string value is still detected (m4, SECURITY-REVIEW.md).
+func jsonEscapedForm(secret string) string {
+	raw, err := json.Marshal(secret)
+	if err != nil {
+		return secret
+	}
+	// json.Marshal of a string always yields a quoted JSON string
+	// ("..."); strip exactly the leading/trailing quote bytes it added.
+	s := string(raw)
+	if len(s) >= 2 && s[0] == '"' && s[len(s)-1] == '"' {
+		return s[1 : len(s)-1]
+	}
+	return s
 }

@@ -240,6 +240,57 @@ func TestSourceStagesSabotageFailsNamedStage(t *testing.T) {
 	}
 }
 
+// TestSourceStagesSecretLeakInStdoutFailsSecretRedactionNamingStage is the
+// M2 regression test (SECURITY-REVIEW.md): finalizeSecretRedaction must scan
+// EVERY stage's raw captured stdout, not just the already-redacted argv
+// string. Before the fix, secret_redaction scanned only
+// stage.CLI.ArgvRedacted, so a secret leaking into a stage's stdout (the
+// realistic leak surface — e.g. an `etl run` verbose/error message) was
+// silently missed and secret_redaction still reported "pass". The
+// SabotageStdoutLeak seam plants a distinctive secret value into the
+// etl_full_refresh_append stage's captured stdout (a live "etl run" stage,
+// the highest-risk call per the security review) without touching that
+// stage's own pass/fail outcome, so this test isolates the redaction
+// capability's own scan completeness.
+func TestSourceStagesSecretLeakInStdoutFailsSecretRedactionNamingStage(t *testing.T) {
+	// The planted "leak" must be a value the harness is actually watching
+	// for (Options.SecretEnv), not an arbitrary string — ScanForSecrets only
+	// ever matches against the run's own known secret values, exactly as it
+	// would need to for a REAL leaked credential to be caught.
+	const knownSecret = "sample-cert-token"
+	t.Setenv("PM_SAMPLE_TOKEN", knownSecret)
+
+	r := certify.NewRunner(certify.Options{
+		Connector: "sample",
+		Stream:    "customers",
+		Limit:     50,
+		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	})
+	certify.SabotageStdoutLeak(r, "etl_full_refresh_append", knownSecret)
+
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+
+	// The sabotaged stage's OWN outcome (envelope kind/exit code) is
+	// unaffected: only secret_redaction should notice the planted leak.
+	fullAppend := mustStage(t, rep, "etl_full_refresh_append")
+	if !fullAppend.Passed {
+		t.Fatalf("etl_full_refresh_append stage Passed = false, want true (sabotage plants a stdout leak, not a stage failure): %+v", fullAppend)
+	}
+
+	if rep.Capabilities.SecretRedaction.Result != "fail" {
+		t.Fatalf("Capabilities.SecretRedaction.Result = %q, want fail (a secret was planted in etl_full_refresh_append's stdout)", rep.Capabilities.SecretRedaction.Result)
+	}
+	if !containsAny(rep.Capabilities.SecretRedaction.Reason, "etl_full_refresh_append") {
+		t.Errorf("Capabilities.SecretRedaction.Reason = %q, want it to name the offending stage etl_full_refresh_append", rep.Capabilities.SecretRedaction.Reason)
+	}
+	if rep.Passed {
+		t.Errorf("Report.Passed = true, want false: secret_redaction failing should fail the overall report")
+	}
+}
+
 // TestSourceStagesEphemeralWorkdirCleanedUp proves the Runner uses an
 // ephemeral os.MkdirTemp root per run and does not leave it behind (unless
 // Options.KeepWork is set) — certification design §A execution model.

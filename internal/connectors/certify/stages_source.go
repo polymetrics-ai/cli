@@ -52,20 +52,63 @@ func SabotageExpectedKind(r *Runner, stage, wrongKind string) {
 	r.sabotage = &sabotage{stage: stage, wrongKind: wrongKind}
 }
 
+// stdoutLeakSabotage lets a test plant a secret value directly into a named
+// stage's CAPTURED STDOUT (simulating a real secret leaking into a CLI
+// stage's output, e.g. an `etl run` verbose/error message) so
+// finalizeSecretRedaction's full-output scan (M2, SECURITY-REVIEW.md) can be
+// proven to actually catch it, naming the offending stage. It is not used by
+// production code paths.
+type stdoutLeakSabotage struct {
+	stage  string
+	secret string
+}
+
+// SabotageStdoutLeak registers a secret value to be appended to the named
+// stage's captured stdout on r's next Run call, for self-test purposes only
+// (see TestSourceStagesSecretLeakInStdoutFailsSecretRedactionNamingStage). It
+// is exported for use by certify_test but is not part of the
+// certify.Runner's real operating mode. The stage's own pass/fail outcome
+// (envelope kind, exit code) is untouched — only secret_redaction should
+// notice the planted leak.
+func SabotageStdoutLeak(r *Runner, stage, secret string) {
+	r.stdoutLeakSabotage = &stdoutLeakSabotage{stage: stage, secret: secret}
+}
+
 // LastWorkdir returns the ephemeral root directory used by r's most recent
 // Run call (for cleanup-verification tests only).
 func LastWorkdir(r *Runner) string {
 	return r.lastWorkdir
 }
 
+// capturedOutput is one CLI invocation's raw (UNREDACTED) stdout/stderr,
+// tagged with the stage that issued it, retained for finalizeSecretRedaction
+// to scan (M2, SECURITY-REVIEW.md: the prior implementation scanned only the
+// already-redacted argv string, never raw stdout/stderr, so a secret leaking
+// into either was silently missed).
+type capturedOutput struct {
+	stage  string
+	stdout string
+	stderr string
+}
+
 // runContext threads the harness, options, secret values, and per-run
 // bookkeeping through the stage functions below.
 type runContext struct {
-	ctx      context.Context
-	harness  *Harness
-	opts     Options
-	sabotage *sabotage
-	root     string
+	ctx                context.Context
+	harness            *Harness
+	opts               Options
+	sabotage           *sabotage
+	stdoutLeakSabotage *stdoutLeakSabotage
+	root               string
+
+	// currentStage names the stage function presently executing, so run()
+	// can tag each captured CLI invocation with its owning stage without
+	// threading a stage name through every one of the ~20 call sites.
+	currentStage string
+
+	// capturedOutputs accumulates every CLI invocation's raw stdout/stderr
+	// across the whole run, for finalizeSecretRedaction's full-output scan.
+	capturedOutputs []capturedOutput
 
 	// capturePath is the JSONL file written from the stage-5 live read,
 	// replayed through the built-in file connector by stages 6/7/10.
@@ -76,6 +119,26 @@ type runContext struct {
 	incrementalConnection  string
 	incrementalRun1Cursor  string
 	incrementalRun1Records int
+}
+
+// run executes args through the harness and records the raw (unredacted)
+// stdout/stderr into rc.capturedOutputs tagged with rc.currentStage, then
+// applies any registered stdoutLeakSabotage for that stage (self-test seam
+// only — see SabotageStdoutLeak). Every stage body in this file calls
+// rc.run instead of rc.harness.Run directly so finalizeSecretRedaction can
+// see everything a real secret leak could hide in.
+func (rc *runContext) run(args ...string) CLIResult {
+	res := rc.harness.Run(args...)
+	stdout := res.Stdout
+	if rc.stdoutLeakSabotage != nil && rc.stdoutLeakSabotage.stage == rc.currentStage {
+		stdout += "\n[sabotage-planted-secret]: " + rc.stdoutLeakSabotage.secret
+	}
+	rc.capturedOutputs = append(rc.capturedOutputs, capturedOutput{
+		stage:  rc.currentStage,
+		stdout: stdout,
+		stderr: res.Stderr,
+	})
+	return res
 }
 
 // stageFunc executes one certification stage, appending its StageResult to
@@ -114,11 +177,12 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	}
 
 	rc := &runContext{
-		ctx:      ctx,
-		harness:  NewHarness(root, WithSecrets(secretValues...)),
-		opts:     r.opts,
-		sabotage: r.sabotage,
-		root:     root,
+		ctx:                ctx,
+		harness:            NewHarness(root, WithSecrets(secretValues...)),
+		opts:               r.opts,
+		sabotage:           r.sabotage,
+		stdoutLeakSabotage: r.stdoutLeakSabotage,
+		root:               root,
 	}
 
 	rep := Report{
@@ -155,16 +219,30 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	}
 
 	finalizeJSONContract(&rep)
-	finalizeSecretRedaction(&rep, secretValues)
+	finalizeSecretRedaction(rc, &rep, secretValues)
 	rep.CompletedAt = time.Now().UTC()
-	rep.Passed = allStagesPassed(rep.Stages)
+	// A secret_redaction failure is a security-relevant fact operators must
+	// not be able to miss by only checking per-stage Passed flags (M2,
+	// SECURITY-REVIEW.md: "operators will treat secret_redaction: pass as a
+	// stronger guarantee than it is" — the converse also holds: a "fail"
+	// must actually fail the report, since the certification-design's own
+	// enablement gate (cmd/certstatus) keys off Report.Passed).
+	rep.Passed = allStagesPassed(rep.Stages) && rep.Capabilities.SecretRedaction.Result != "fail"
 	return rep, nil
 }
 
 // recordStage runs body, timing it, and appends a StageResult to rep.Stages.
 // body returns (passed, cliInfo, errMessage); tier is the certification-design
-// §"Tiers" table value (0 fixture, 1 replay/capture, 2 live).
-func recordStage(rep *Report, name string, tier int, run func() (bool, CLIStageInfo, string)) StageResult {
+// §"Tiers" table value (0 fixture, 1 replay/capture, 2 live). rc.currentStage
+// is set to name for the duration of run so any rc.run(...) calls inside the
+// closure tag their captured stdout/stderr with the correct owning stage
+// (M2, SECURITY-REVIEW.md); restored to its previous value afterward so
+// nested/sequential recordStage calls never mis-tag each other's output.
+func recordStage(rc *runContext, rep *Report, name string, tier int, run func() (bool, CLIStageInfo, string)) StageResult {
+	prevStage := rc.currentStage
+	rc.currentStage = name
+	defer func() { rc.currentStage = prevStage }()
+
 	start := time.Now()
 	passed, cli, errMsg := run()
 	stage := StageResult{
@@ -223,7 +301,7 @@ func (rc *runContext) cursorField() string {
 // queryRowCount runs `pm query run --table <table> --json` and returns the
 // row count, used by the overwrite stage to assert truncate semantics.
 func queryRowCount(rc *runContext, table string) (int, error) {
-	res := rc.harness.Run("query", "run", "--table", table, "--json")
+	res := rc.run("query", "run", "--table", table, "--json")
 	if res.ExitCode != 0 || res.Kind != "QueryResult" {
 		return 0, fmt.Errorf("query --table %s: exit=%d kind=%q", table, res.ExitCode, res.Kind)
 	}
@@ -235,7 +313,7 @@ func queryRowCount(rc *runContext, table string) (int, error) {
 // if any "id" value (the certify-fixed primary key field, see
 // createCaptureConnection's --primary-key id) repeats across rows.
 func assertNoDuplicatePKs(rc *runContext, table string) error {
-	res := rc.harness.Run("query", "run", "--table", table, "--json")
+	res := rc.run("query", "run", "--table", table, "--json")
 	if res.ExitCode != 0 || res.Kind != "QueryResult" {
 		return fmt.Errorf("query --table %s: exit=%d kind=%q", table, res.ExitCode, res.Kind)
 	}
@@ -261,14 +339,14 @@ func assertNoDuplicatePKs(rc *runContext, table string) error {
 // --- stage 0: preflight ---
 
 func stagePreflight(rc *runContext, rep *Report) error {
-	recordStage(rep, "init", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("init", "--json")
+	recordStage(rc, rep, "init", 2, func() (bool, CLIStageInfo, string) {
+		res := rc.run("init", "--json")
 		passed, errMsg := assertKind(rc, "init", res, "InitResult", 0)
 		return passed, cliInfoFrom(res), errMsg
 	})
 
-	recordStage(rep, "preflight", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("connectors", "list", "--json")
+	recordStage(rc, rep, "preflight", 2, func() (bool, CLIStageInfo, string) {
+		res := rc.run("connectors", "list", "--json")
 		passed, errMsg := assertKind(rc, "preflight", res, "ConnectorList", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -304,8 +382,8 @@ func stagePreflight(rc *runContext, rep *Report) error {
 
 // --- stage 1: fixture_conformance (skip-with-reason: wave0 has no bundles) ---
 
-func stageFixtureConformance(_ *runContext, rep *Report) error {
-	stage := recordStage(rep, "fixture_conformance", 0, func() (bool, CLIStageInfo, string) {
+func stageFixtureConformance(rc *runContext, rep *Report) error {
+	stage := recordStage(rc, rep, "fixture_conformance", 0, func() (bool, CLIStageInfo, string) {
 		return false, CLIStageInfo{}, noDefsBundleReason
 	})
 	_ = stage
@@ -315,8 +393,8 @@ func stageFixtureConformance(_ *runContext, rep *Report) error {
 // --- stage 2: manual_json ---
 
 func stageManualJSON(rc *runContext, rep *Report) error {
-	recordStage(rep, "manual_json", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("connectors", "inspect", rc.opts.Connector, "--json")
+	recordStage(rc, rep, "manual_json", 2, func() (bool, CLIStageInfo, string) {
+		res := rc.run("connectors", "inspect", rc.opts.Connector, "--json")
 		passed, errMsg := assertKind(rc, "manual_json", res, "Connector", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -332,7 +410,7 @@ func stageManualJSON(rc *runContext, rep *Report) error {
 // --- stage 3: credentials add/test ---
 
 func stageCredentialsAdd(rc *runContext, rep *Report) error {
-	recordStage(rep, "credentials_add", 2, func() (bool, CLIStageInfo, string) {
+	recordStage(rc, rep, "credentials_add", 2, func() (bool, CLIStageInfo, string) {
 		args := []string{"credentials", "add", sourceCredentialName, "--connector", rc.opts.Connector, "--json"}
 		for field, envName := range rc.opts.SecretEnv {
 			args = append(args, "--from-env", field+"="+envName)
@@ -340,14 +418,14 @@ func stageCredentialsAdd(rc *runContext, rep *Report) error {
 		for k, v := range rc.opts.Config {
 			args = append(args, "--config", k+"="+v)
 		}
-		res := rc.harness.Run(args...)
+		res := rc.run(args...)
 		passed, errMsg := assertKind(rc, "credentials_add", res, "Credential", 0)
 		return passed, cliInfoFrom(res), errMsg
 	})
 
-	recordStage(rep, "warehouse_credentials_add", 2, func() (bool, CLIStageInfo, string) {
+	recordStage(rc, rep, "warehouse_credentials_add", 2, func() (bool, CLIStageInfo, string) {
 		warehouseDir := filepath.Join(rc.root, ".polymetrics", "warehouse")
-		res := rc.harness.Run("credentials", "add", warehouseCredentialName, "--connector", "warehouse",
+		res := rc.run("credentials", "add", warehouseCredentialName, "--connector", "warehouse",
 			"--config", "path="+warehouseDir, "--json")
 		passed, errMsg := assertKind(rc, "warehouse_credentials_add", res, "Credential", 0)
 		return passed, cliInfoFrom(res), errMsg
@@ -356,13 +434,13 @@ func stageCredentialsAdd(rc *runContext, rep *Report) error {
 }
 
 func stageCredentialsTest(rc *runContext, rep *Report) error {
-	recordStage(rep, "credentials_test", 2, func() (bool, CLIStageInfo, string) {
+	recordStage(rc, rep, "credentials_test", 2, func() (bool, CLIStageInfo, string) {
 		// Gotcha #5 (design doc §"Load-bearing facts"): live credential
 		// validation must go through `pm credentials test`, which resolves
 		// vault/secret-backed values, rather than `pm etl check --connector`
 		// (which only builds RuntimeConfig from --config and never resolves
 		// credential Secrets).
-		res := rc.harness.Run("credentials", "test", sourceCredentialName, "--json")
+		res := rc.run("credentials", "test", sourceCredentialName, "--json")
 		passed, errMsg := assertKind(rc, "credentials_test", res, "CredentialTest", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -380,8 +458,8 @@ func stageCredentialsTest(rc *runContext, rep *Report) error {
 
 func stageCatalog(rc *runContext, rep *Report) error {
 	stream := rc.streamName()
-	recordStage(rep, "connection_create", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("connections", "create", liveConnectionName,
+	recordStage(rc, rep, "connection_create", 2, func() (bool, CLIStageInfo, string) {
+		res := rc.run("connections", "create", liveConnectionName,
 			"--source", rc.opts.Connector+":"+sourceCredentialName,
 			"--destination", "warehouse:"+warehouseCredentialName,
 			"--stream", stream,
@@ -394,8 +472,8 @@ func stageCatalog(rc *runContext, rep *Report) error {
 		return passed, cliInfoFrom(res), errMsg
 	})
 
-	recordStage(rep, "catalog", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("catalog", "refresh", "--connection", liveConnectionName, "--json")
+	recordStage(rc, rep, "catalog", 2, func() (bool, CLIStageInfo, string) {
+		res := rc.run("catalog", "refresh", "--connection", liveConnectionName, "--json")
 		passed, errMsg := assertKind(rc, "catalog", res, "Catalog", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -450,8 +528,8 @@ func stageFullRefreshAppend(rc *runContext, rep *Report) error {
 	table := "cert_live_" + stream
 	var capturePath string
 
-	stage := recordStage(rep, "etl_full_refresh_append", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("etl", "run", "--connection", liveConnectionName, "--stream", stream, "--json")
+	stage := recordStage(rc, rep, "etl_full_refresh_append", 2, func() (bool, CLIStageInfo, string) {
+		res := rc.run("etl", "run", "--connection", liveConnectionName, "--stream", stream, "--json")
 		passed, errMsg := assertKind(rc, "etl_full_refresh_append", res, "ETLRun", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -474,8 +552,8 @@ func stageFullRefreshAppend(rc *runContext, rep *Report) error {
 	// file connector) is this stage's live output, queried back out via
 	// `pm query run` and stripped of _polymetrics_* bookkeeping fields.
 	capturePath = filepath.Join(rc.root, "capture_"+stream+".jsonl")
-	recordStage(rep, "capture_write", 1, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("query", "run", "--table", table, "--json")
+	recordStage(rc, rep, "capture_write", 1, func() (bool, CLIStageInfo, string) {
+		res := rc.run("query", "run", "--table", table, "--json")
 		passed, errMsg := assertKind(rc, "capture_write", res, "QueryResult", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -538,15 +616,15 @@ func (rc *runContext) setupCaptureConnection(rep *Report, mode, table string) (b
 	if rc.captureFileRegistered {
 		return true, ""
 	}
-	res := rc.harness.Run("credentials", "add", fileCredentialName, "--connector", "file",
+	res := rc.run("credentials", "add", fileCredentialName, "--connector", "file",
 		"--config", "path="+rc.capturePath, "--json")
 	if passed, errMsg := assertKind(rc, "capture_credentials_add", res, "Credential", 0); !passed {
-		recordStage(rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
+		recordStage(rc, rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
 			return false, cliInfoFrom(res), errMsg
 		})
 		return false, errMsg
 	}
-	recordStage(rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
+	recordStage(rc, rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
 		return true, cliInfoFrom(res), ""
 	})
 	rc.captureFileRegistered = true
@@ -558,7 +636,7 @@ func captureConnectionName(mode string) string {
 }
 
 func (rc *runContext) createCaptureConnection(rep *Report, stageName, mode, table string) (bool, CLIStageInfo, string) {
-	res := rc.harness.Run("connections", "create", captureConnectionName(mode),
+	res := rc.run("connections", "create", captureConnectionName(mode),
 		"--source", "file:"+fileCredentialName,
 		"--destination", "warehouse:"+warehouseCredentialName,
 		"--stream", rc.captureStreamName(),
@@ -582,7 +660,7 @@ func (rc *runContext) captureStreamName() string {
 
 func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 	if rc.capturePath == "" {
-		recordStage(rep, "etl_full_refresh_overwrite", 1, func() (bool, CLIStageInfo, string) {
+		recordStage(rc, rep, "etl_full_refresh_overwrite", 1, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, "etl_full_refresh_overwrite: no capture available (etl_full_refresh_append did not produce one)"
 		})
 		return nil
@@ -591,20 +669,20 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 	mode := "full_refresh_overwrite"
 
 	if ok, errMsg := rc.setupCaptureConnection(rep, mode, table); !ok {
-		recordStage(rep, "etl_full_refresh_overwrite", 1, func() (bool, CLIStageInfo, string) {
+		recordStage(rc, rep, "etl_full_refresh_overwrite", 1, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, errMsg
 		})
 		return nil
 	}
 
-	recordStage(rep, "capture_connection_overwrite", 1, func() (bool, CLIStageInfo, string) {
+	recordStage(rc, rep, "capture_connection_overwrite", 1, func() (bool, CLIStageInfo, string) {
 		return rc.createCaptureConnection(rep, "capture_connection_overwrite", mode, table)
 	})
 
-	recordStage(rep, "etl_full_refresh_overwrite", 1, func() (bool, CLIStageInfo, string) {
+	recordStage(rc, rep, "etl_full_refresh_overwrite", 1, func() (bool, CLIStageInfo, string) {
 		// Run twice: overwrite truncate semantics means the row count must
 		// stay the same after a second run, not double.
-		first := rc.harness.Run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
+		first := rc.run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
 		if passed, errMsg := assertKind(rc, "etl_full_refresh_overwrite", first, "ETLRun", 0); !passed {
 			return false, cliInfoFrom(first), errMsg
 		}
@@ -613,7 +691,7 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 			return false, cliInfoFrom(first), err.Error()
 		}
 
-		second := rc.harness.Run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
+		second := rc.run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
 		if passed, errMsg := assertKind(rc, "etl_full_refresh_overwrite", second, "ETLRun", 0); !passed {
 			return false, cliInfoFrom(second), errMsg
 		}
@@ -634,7 +712,7 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 
 func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 	if rc.capturePath == "" {
-		recordStage(rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
+		recordStage(rc, rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, "etl_full_refresh_overwrite_deduped: no capture available"
 		})
 		return nil
@@ -643,18 +721,18 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 	mode := "full_refresh_overwrite_deduped"
 
 	if ok, errMsg := rc.setupCaptureConnection(rep, mode, table); !ok {
-		recordStage(rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
+		recordStage(rc, rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, errMsg
 		})
 		return nil
 	}
 
-	recordStage(rep, "capture_connection_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
+	recordStage(rc, rep, "capture_connection_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
 		return rc.createCaptureConnection(rep, "capture_connection_overwrite_deduped", mode, table)
 	})
 
-	recordStage(rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
+	recordStage(rc, rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
+		res := rc.run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
 		if passed, errMsg := assertKind(rc, "etl_full_refresh_overwrite_deduped", res, "ETLRun", 0); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
@@ -674,8 +752,8 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 	table := "cert_incremental_" + stream
 	connName := "cert_incremental"
 
-	recordStage(rep, "incremental_connection_create", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("connections", "create", connName,
+	recordStage(rc, rep, "incremental_connection_create", 2, func() (bool, CLIStageInfo, string) {
+		res := rc.run("connections", "create", connName,
 			"--source", rc.opts.Connector+":"+sourceCredentialName,
 			"--destination", "warehouse:"+warehouseCredentialName,
 			"--stream", stream,
@@ -688,8 +766,8 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 		return passed, cliInfoFrom(res), errMsg
 	})
 
-	stage := recordStage(rep, "etl_incremental_append", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("etl", "run", "--connection", connName, "--stream", stream, "--json")
+	stage := recordStage(rc, rep, "etl_incremental_append", 2, func() (bool, CLIStageInfo, string) {
+		res := rc.run("etl", "run", "--connection", connName, "--stream", stream, "--json")
 		passed, errMsg := assertKind(rc, "etl_incremental_append", res, "ETLRun", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -713,15 +791,15 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 
 func stageResume(rc *runContext, rep *Report) error {
 	if rc.incrementalConnection == "" {
-		recordStage(rep, "resume", 2, func() (bool, CLIStageInfo, string) {
+		recordStage(rc, rep, "resume", 2, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, "resume: incremental_append did not complete, nothing to resume"
 		})
 		return nil
 	}
 	stream := rc.streamName()
 
-	recordStage(rep, "resume", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("etl", "run", "--connection", rc.incrementalConnection, "--stream", stream, "--json")
+	recordStage(rc, rep, "resume", 2, func() (bool, CLIStageInfo, string) {
+		res := rc.run("etl", "run", "--connection", rc.incrementalConnection, "--stream", stream, "--json")
 		passed, errMsg := assertKind(rc, "resume", res, "ETLRun", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -773,7 +851,7 @@ func compareCursorStrings(a, b string) int {
 
 func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 	if rc.capturePath == "" {
-		recordStage(rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
+		recordStage(rc, rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, "etl_incremental_append_deduped: no capture available"
 		})
 		return nil
@@ -782,18 +860,18 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 	mode := "incremental_append_deduped"
 
 	if ok, errMsg := rc.setupCaptureConnection(rep, mode, table); !ok {
-		recordStage(rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
+		recordStage(rc, rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, errMsg
 		})
 		return nil
 	}
 
-	recordStage(rep, "capture_connection_incremental_deduped", 1, func() (bool, CLIStageInfo, string) {
+	recordStage(rc, rep, "capture_connection_incremental_deduped", 1, func() (bool, CLIStageInfo, string) {
 		return rc.createCaptureConnection(rep, "capture_connection_incremental_deduped", mode, table)
 	})
 
-	recordStage(rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
+	recordStage(rc, rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
+		res := rc.run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
 		if passed, errMsg := assertKind(rc, "etl_incremental_append_deduped", res, "ETLRun", 0); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
@@ -810,8 +888,8 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 
 func stageQueryContract(rc *runContext, rep *Report) error {
 	table := "cert_live_" + rc.streamName()
-	recordStage(rep, "query_contract", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.harness.Run("query", "run", "--table", table, "--limit", "1", "--json")
+	recordStage(rc, rep, "query_contract", 2, func() (bool, CLIStageInfo, string) {
+		res := rc.run("query", "run", "--table", table, "--limit", "1", "--json")
 		passed, errMsg := assertKind(rc, "query_contract", res, "QueryResult", 0)
 		return passed, cliInfoFrom(res), errMsg
 	})
@@ -847,15 +925,70 @@ func isKindMismatch(msg string, _ **KindMismatchError) bool {
 	return strings.Contains(msg, "cli result mismatch")
 }
 
-func finalizeSecretRedaction(rep *Report, secretValues []string) {
+// finalizeSecretRedaction sets Capabilities.SecretRedaction by scanning
+// EVERY captured surface for a planted secret value (M2, SECURITY-REVIEW.md:
+// the prior implementation scanned only each stage's already-redacted argv
+// string, so a secret leaking into any stage's raw stdout/stderr — most
+// plausibly an `etl run` stage exercising the live connector — was silently
+// missed while still reporting "pass"):
+//  1. every stage's redacted argv (unchanged from before — argv redaction is
+//     a distinct, independent control from output scanning; catching a
+//     redaction bug here is still valuable defense in depth),
+//  2. every CLI invocation's RAW (unredacted) stdout AND stderr, captured by
+//     rc.run into rc.capturedOutputs across the whole run,
+//  3. the report itself, marshaled to JSON exactly as Report.Save will
+//     persist it (pre-save: this function runs before Run returns, and
+//     nothing in this package calls Save before Run returns).
+//
+// A hit anywhere names the offending stage in Reason so an operator does not
+// have to grep the whole report to find the leak.
+func finalizeSecretRedaction(rc *runContext, rep *Report, secretValues []string) {
 	result := "pass"
+	var reason string
+
 	for _, stage := range rep.Stages {
 		if hits := ScanForSecrets(stage.CLI.ArgvRedacted, secretValues); len(hits) != 0 {
 			result = "fail"
+			reason = fmt.Sprintf("stage %q: secret value leaked in argv_redacted (redaction itself failed): %v", stage.Name, hits)
 			break
 		}
 	}
-	rep.Capabilities.SecretRedaction = CapabilityResult{Result: result}
+
+	if result == "pass" {
+		for _, out := range rc.capturedOutputs {
+			if hits := ScanForSecrets(out.stdout, secretValues); len(hits) != 0 {
+				result = "fail"
+				reason = fmt.Sprintf("stage %q: secret value leaked in stdout: %v", out.stage, hits)
+				break
+			}
+			if hits := ScanForSecrets(out.stderr, secretValues); len(hits) != 0 {
+				result = "fail"
+				reason = fmt.Sprintf("stage %q: secret value leaked in stderr: %v", out.stage, hits)
+				break
+			}
+		}
+	}
+
+	rep.Capabilities.SecretRedaction = CapabilityResult{Result: result, Reason: reason}
+
+	// Scan the report JSON itself, exactly as it will be persisted by
+	// Report.Save, so a secret smuggled into any other report field (a
+	// stage Error message, a Capabilities field, etc.) is caught too —
+	// this check runs AFTER setting the capability result above so a
+	// "pass"/"fail" reason string that happens to echo a secret can't
+	// self-trigger (ScanForSecrets only matches the literal secret value,
+	// which reason strings never contain — they name the stage, not the
+	// secret; secret VALUES are never interpolated into Reason text).
+	if result == "pass" {
+		if raw, err := json.Marshal(rep); err == nil {
+			if hits := ScanForSecrets(string(raw), secretValues); len(hits) != 0 {
+				rep.Capabilities.SecretRedaction = CapabilityResult{
+					Result: "fail",
+					Reason: fmt.Sprintf("report JSON itself contains a secret value: %v", hits),
+				}
+			}
+		}
+	}
 }
 
 func allStagesPassed(stages []StageResult) bool {

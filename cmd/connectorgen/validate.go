@@ -259,9 +259,20 @@ func checkInterpolations(b engine.Bundle) []Finding {
 		check("streams.json", h)
 	}
 	for _, a := range b.HTTP.Auth {
-		check("streams.json", a.Token)
-		check("streams.json", a.Value)
-		check("streams.json", a.When)
+		// engine.ResolveCheckAuthSpec validates EVERY templated AuthSpec
+		// field (token/username/password/header/value/token_url/client_id/
+		// client_secret/scopes/when, not just token/value/when) against
+		// specKeys (F9, REVIEW.md — R1 added this engine-side helper;
+		// wiring it here closes the gap connectorgen validate previously
+		// left: a typo'd username/password/token_url/client_id/
+		// client_secret/scopes template passed validate and only failed at
+		// runtime).
+		if err := engine.ResolveCheckAuthSpec(a, specKeys); err != nil {
+			findings = append(findings, Finding{
+				Connector: b.Name, File: "streams.json", Rule: ruleInterpolationUnresolved,
+				Message: err.Error(),
+			})
+		}
 	}
 	for _, s := range b.Streams {
 		check("streams.json", s.Path)

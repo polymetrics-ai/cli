@@ -21,10 +21,20 @@ cursor field `created`. Pagination follows Stripe's `starting_after`/`has_more` 
 convention (`pagination.type: cursor` with `last_record_field: id` and `stop_path: has_more`): the
 next page's `starting_after` is the `id` of the last record on the current page, and pagination
 stops when `has_more` is falsy or a page yields no records. Every request sends `limit=100`
-(matches legacy's default `page_size`). Incremental reads send `created[gte]` as a Unix-seconds
-value (`param_format: unix_seconds`), computed either from the sync's persisted cursor or, on a
-fresh sync, from the RFC3339 `start_date` config value — identical to legacy
-`incrementalLowerBound`/`formatParam`.
+(matches legacy's default `page_size`) via each stream's static `query: {"limit": "100"}` — NOT
+via `pagination.limit_param`/`page_size`, which the `cursor`+`last_record_field` paginator
+constructor never reads (only `page_number`/`offset_limit` do); those fields are intentionally
+absent from this bundle's `base.pagination` block rather than declared-but-dead. Incremental reads
+send `created[gte]` as a Unix-seconds value (`param_format: unix_seconds`), computed either from
+the sync's persisted cursor or, on a fresh sync, from the RFC3339 `start_date` config value —
+identical to legacy `incrementalLowerBound`/`formatParam`.
+
+`metadata.json`'s `rate_limit.requests_per_minute` is **informational only** — it documents
+Stripe's published API rate limit for operator awareness but is never consumed by the read path
+(`read.go` enforces throttling only from `streams.json`'s `base.rate_limit`, a distinct field this
+bundle intentionally does not declare). Legacy stripe enforces no client-side rate limiting, so
+this bundle adds none either — matching legacy's real (lack of) throttling behavior rather than
+introducing new, behavior-changing enforcement under the guise of a migration.
 
 ## Write actions & risks
 
@@ -47,10 +57,7 @@ accept. See `docs/migration/conventions.md`'s parity-deviation ledger.
   for wave0; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B
   capability expansion"}` entries. Only the 5 legacy-parity streams and 2 legacy-parity write
   actions are implemented.
-- This bundle's own `fixtures/streams/customers/*.json` (used by `TestConformance/stripe` and
-  `connectorgen validate`, not by the engine-vs-legacy parity suite) represent the `created` cursor
-  field as an RFC3339 string rather than Stripe's real Unix-seconds integer wire format. This is a
-  fixture-authoring accommodation for `internal/connectors/conformance`'s `cursor_advances` check,
-  which recognizes a cursor value only via a Go `string` type assertion and then parses it as
-  RFC3339 for `unix_seconds` formatting; it does not affect engine-vs-legacy record parity (the
-  schema type is declared as `["integer","string"]` and the read path performs no type coercion).
+- All fixtures (`fixtures/streams/**`, `fixtures/check.json`) represent every field in Stripe's
+  real wire shape, including `created` as a bare Unix-seconds JSON number — `conformance`'s
+  `cursor_advances` check supports both numeric and string cursor field values, so no
+  fixture-authoring accommodation is needed here.

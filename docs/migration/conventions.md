@@ -43,16 +43,25 @@ is the **required 2-page fixture** for a paginated stream (§4). `docs.md` docum
 ### Tier 1 — read-only, no-auth variant
 
 Worked example — **searxng** (`internal/connectors/defs/searxng/`): `metadata.json` has
-`capabilities.write: false` and no `writes.json` file at all. `spec.json` has only `base_url`
-required; `api_key` is declared `x-secret` for documentation but **not** wired into an `auth`
-block (see §3's when-grammar note — an optional secret cannot safely gate an `auth` candidate in
-this dialect without risking a hard error on the common no-credential path; omit the whole `auth`
-list instead, which resolves to "no auth", exactly matching legacy's own default). Pagination is
+`capabilities.write: false` and no `writes.json` file at all. `spec.json` declares only `base_url`
+(required) and `api_key` (`x-secret`, optional) — every OTHER config property this bundle once
+declared (`subreddit`/`categories`/`engines`/`language`/`time_range`/`safesearch`/`page_size`/
+`max_pages`) was removed as genuinely-dead config (F6, REVIEW.md): `stream.Query` templating has no
+absent-key-falsy tolerance, so an optional passthrough filter cannot be wired without guaranteeing
+the caller always sets it, and `page_size`/`max_pages` have no runtime config-driven override
+mechanism at all (they are fixed values baked into `streams.json`'s `base.pagination` block). A
+`spec.json` property that no template anywhere in the bundle consumes should not be declared — see
+§3's "Conditional headers"/query-templating note. `api_key`, by contrast, IS wired: `streams.json`
+`base.auth` gates a `bearer` spec on `{{ secrets.api_key }}`'s truthiness, falling back to `none`
+when unset (§3's `when`-grammar absent-key-falsy tolerance makes this safe). Pagination is
 `page_number` with `size_param` intentionally empty (`""`) — no page-size query param is ever
-sent; `page_size` in the bundle exists purely as the client-side short-page stop threshold.
-`streams.json`'s two streams differ only in query scoping (`q` vs `site:reddit.com {{
+sent; `page_size` in `streams.json`'s base pagination block exists purely as the client-side
+short-page stop threshold, and `max_pages: 1` IS enforced as a hard request-count cap by the engine
+read path. `streams.json`'s two streams differ only in query scoping (`q` vs `site:reddit.com {{
 config.query }}`) and both use `computed_fields` to rename the raw API's `publishedDate` to the
-schema's `published_date` (a schema-projection rename — see §2 and §3).
+schema's `published_date`, join the raw `engines[]` array into a comma-separated string
+(`join:,`), and stamp a static-literal `stream` marker field (`"search"`/`"reddit"`) — see §2 and
+§3.
 
 ### Tier 3 — native component split
 
@@ -134,8 +143,9 @@ not a full override by default.
   field (e.g. searxng's `published_date` vs the raw `publishedDate`), add a `computed_fields`
   rename (§3) — don't just omit it. Every schema declares `x-primary-key` and, when the stream is
   incremental, `x-cursor-field`; both must name properties that actually exist in that same schema
-  (`connectorgen validate`'s `pk_fields_exist`/`cursor_fields_exist` checks, and
-  `conformance`'s static checks of the same names, enforce this).
+  (`connectorgen validate`'s `primary_key_missing`/`cursor_field_missing` rules, and
+  `conformance`'s static `pk_fields_exist`/`cursor_fields_exist` checks — same underlying
+  requirement, two differently-named rule sets — enforce this).
 - **Sync-mode derivation — never declared** (design §B.6): `full_refresh_append`/
   `full_refresh_overwrite` always apply; `*_deduped` variants apply iff `x-primary-key` is
   present; `incremental_append[_deduped]` applies iff the stream has an `incremental` block. Do
@@ -162,18 +172,32 @@ not a full override by default.
 All of this is read from `internal/connectors/engine/{bundle,interpolate,paginate,read,write,
 schema}.go` directly — this section is a map, not a spec; when in doubt, read the source.
 
-**Template references + filters** (`interpolate.go`). `{{ <ref> | <filter> }}`, one optional
-filter. References: `config.<key>`, `secrets.<key>`, `record.<dotted.path>` (walks nested
+**Template references + filters** (`interpolate.go`). `{{ <ref> | <filter1> | <filter2> ... }}` —
+**a filter chain of any length** applies every stage left-to-right (not just one filter); an
+unknown filter name anywhere in the chain is a hard error (validate-time via `ResolveCheck`'s
+filter-name check, wired into both `connectorgen validate` and static-checked chains, and
+runtime). References: `config.<key>`, `secrets.<key>`, `record.<dotted.path>` (walks nested
 `map[string]any`), bare `cursor`. Filters: `urlencode` (percent-encodes for path-segment
 insertion; applied **by default** to every `InterpolatePath` resolution unless an explicit filter
-overrides it — general `Interpolate`/header interpolation do NOT default-apply it),
-`unix_seconds` (RFC3339 string → Unix seconds integer string), `base64` (`base64.StdEncoding`).
-Any resolved value destined for a header (`InterpolateHeader`) or that itself contains `\r`/`\n`
-is rejected outright as a header/injection guard (THREAT-MODEL §2) — this check runs on the
-**pre-filter** value for every interpolation call, not just headers. An absent `config.*`/
+chain overrides it — general `Interpolate`/header interpolation do NOT default-apply it),
+`unix_seconds` (RFC3339 string → Unix seconds integer string), `base64` (`base64.StdEncoding`),
+`join:<sep>` (joins an array-valued reference — e.g. `record.tags` when it resolves to a raw
+`[]any` — with `<sep>`; a non-array value is a hard error, not a silent stringify; the separator is
+everything after the first `:`, so `join:, ` or a multi-character separator both work
+unambiguously, but a literal `|` cannot be the separator since the outer chain-split takes
+precedence). Any resolved value destined for a header (`InterpolateHeader`) or that itself contains
+`\r`/`\n` is rejected outright as a header/injection guard (THREAT-MODEL §2) — this check runs on
+the **pre-filter** value for every interpolation call, not just headers. An absent `config.*`/
 `secrets.*` key is a **hard error** naming the key and namespace in ordinary `Interpolate`/
 `InterpolatePath`/`InterpolateHeader` calls — do not rely on a missing key silently becoming `""`
 outside `when` conditions (next paragraph).
+
+**Path interpolation** (`InterpolatePath`, wired into BOTH reads and writes): a stream's `path` and
+`check.path` are interpolated exactly like a write action's `path` — `{{ }}` templates are legal in
+any of them, urlencoded by default per-segment. A resolved path segment that is exactly `..`, or
+that (after percent-decoding) contains `/../`, ends in `/..`, or starts with `../`, is rejected
+outright even though the slash itself is already percent-encoded — closing the "single dot-dot
+segment survives as an intact same-value encoded literal" traversal gap.
 
 **`when` grammar** (`interpolate.go`'s `EvalWhen`, used only by `auth.go`'s `selectAuth`/
 `authSpecMatches` today): `config.k == 'literal'` (equality against a single-quoted string
@@ -183,10 +207,15 @@ general interpolation**: a `config.*`/`secrets.*` reference whose key is entirel
 runtime resolves to `""` (empty string) here — truthiness is false, `==` compares against `""`,
 `in [...]` treats it as not-contained unless the list itself contains the empty-string literal.
 This is what makes an *optional* credential/config-gated `auth` candidate possible without a
-separate "is this key present" primitive. Static validation (`ResolveCheck`, run by
-`connectorgen validate`/conformance's `interpolations_resolve`) is unaffected by this
-runtime-absence tolerance: a `when` template referencing a key **not even declared** in
-`spec.json`'s properties is still a hard validate-time error.
+separate "is this key present" primitive — e.g. an optional Bearer-proxy secret:
+`[{"mode":"bearer","token":"{{ secrets.api_key }}","when":"{{ secrets.api_key }}"},{"mode":"none"}]`
+safely falls through to `none` when `api_key` is unset, and applies the bearer token when it is set
+(see searxng's `streams.json`). Static validation (`ResolveCheck`, run by `connectorgen
+validate`/conformance's `interpolations_resolve`) is unaffected by this runtime-absence tolerance: a
+`when` template referencing a key **not even declared** in `spec.json`'s properties is still a hard
+validate-time error. `connectorgen validate` validates EVERY templated `AuthSpec` field this way —
+not just `token`/`value`/`when` but also `username`/`password`/`token_url`/`client_id`/
+`client_secret`/`scopes` — via `engine.ResolveCheckAuthSpec(spec, specKeys)`.
 
 **Pagination — 6 types + none** (`bundle.go`'s `PaginationSpec`, `paginate.go`'s `newPaginator`):
 
@@ -201,7 +230,12 @@ runtime-absence tolerance: a `when` template referencing a key **not even declar
 | `next_url` | `next_url_path`, `allow_cross_host` | absolute next-page URL read from the body (aircall-style); same-host SSRF guard by default (THREAT-MODEL §3) — set `allow_cross_host: true` to opt out; also loop-guards against requesting the same URL twice |
 
 `cursor`'s `token_path` and `last_record_field` are **mutually exclusive**; declaring both, or
-neither, is a load-time error. `MaxPages` is a hard request-count cap enforced in `read.go`'s
+neither, is a **read-time** error, not a load-time one — `paginate.go`'s `newPaginator` (which
+enforces this) runs from `read.go`'s `newRuntime`, once per `Read`/`Check` call, not once at bundle
+load. `connectorgen validate` does not check pagination specs at all (no field/rule references
+`PaginationSpec` anywhere in `cmd/connectorgen/validate.go`) — a malformed `token_path`+
+`last_record_field` combination passes `connectorgen validate` cleanly and only surfaces the first
+time the stream is actually read. `MaxPages` is a hard request-count cap enforced in `read.go`'s
 `readDeclarative` loop, independent of page fullness, checked *before* issuing the request for
 that page number; `MaxPages <= 0` (absent/zero) is unbounded. Stream-level `pagination` replaces
 the base-level spec **wholesale** (no field-by-field merge) when present.
@@ -213,17 +247,41 @@ lower-bound-only GitHub search qualifier).
 
 **`computed_fields`** (`streams.json` per-stream): a map of output-field-name → template resolved
 against the **raw** (pre-projection) record, so it can rename a field (`published_date` from
-`{{ record.publishedDate }}`) or reach into nested JSON (`{{ record.user.login }}`). **No
-static-literal injection exists** — a computed field can only derive from `record.*`; there is no
-namespace for a per-call constant (e.g. a "which stream did this come from" marker cannot be
-synthesized this way — see the searxng `stream`-field omission in §5). A computed field whose
-source path is absent on a given record is silently skipped for that record (not an error) —
-common for optional/differently-shaped nested fields across record variants (issues vs PRs).
+`{{ record.publishedDate }}`), reach into nested JSON (`{{ record.user.login }}`), join an array
+(`{{ record.engines | join:, }}`), or inject a **static literal** — a value with no `{{ }}` markers
+at all (e.g. `"stream": "search"`) passes through `Interpolate` verbatim, since a template with no
+markers is a no-op by construction. This is the sanctioned way to stamp a per-stream constant onto
+every emitted record (e.g. "which stream did this come from", matching a legacy connector's own
+derived marker field — see searxng's `stream` field, §5). A computed field whose source path is
+absent on a given record is silently skipped for that record (not an error) — common for
+optional/differently-shaped nested fields across record variants (issues vs PRs); this only applies
+to `record.*`-templated fields, not static literals (which never fail to resolve).
 
-**Conditional headers**: a header template that resolves to an unresolved key (the referenced
-config/secret is simply absent — e.g. an optional per-account header with no value configured) is
-**omitted entirely**, not sent empty. Any other interpolation failure (CRLF, unknown
-namespace/filter) still propagates as a hard error.
+**Conditional headers — omission semantics are namespace-scoped, not blanket-tolerant**
+(`read.go`'s `resolveHeaders`/`classifyHeaderResolutionError`): a header template resolving to an
+unresolved key is handled by a decision table, not a single blanket rule:
+- `secrets.*` (any key) — **always a hard error**. A header templating an absent secret (e.g.
+  `Authorization: Bearer {{ secrets.token }}` with no `token` configured) is NEVER silently
+  omitted — that would send the request unauthenticated instead of failing loudly (F4,
+  REVIEW.md/SECURITY-REVIEW.md). Prefer an `auth` spec over a declared header for anything
+  secret-bearing.
+- `config.*`, key **declared in `spec.json` but NOT in `required[]`** — **omitted** (the
+  Stripe-Account/`account_id` pattern: an optional per-account header with no value configured is
+  left off entirely, not sent empty).
+- `config.*`, key in `required[]` or **not declared in `spec.json` at all** — **hard error**
+  (required-but-missing, or a reference to an undeclared key).
+- Any other interpolation failure (CRLF, unknown namespace/filter) always propagates as a hard
+  error regardless of namespace.
+
+`stream.Query` templating (per-request query params) has **no such omission tolerance at all** —
+every `{{ }}` reference in a `query` map value is resolved unconditionally via `Interpolate`, so an
+absent optional `config.*` key referenced there is always a hard error. This is why a query-driven
+"optional passthrough filter" (e.g. searxng's would-be `categories`/`language`/`time_range`/etc.)
+cannot be expressed today without guaranteeing the caller always supplies a value — do not declare
+such a `spec.json` property unless the query template can actually tolerate its absence (currently:
+never, for `query`; `auth`'s `when` is the only templating surface with absent-key-falsy
+tolerance). A `spec.json` property that no template anywhere in the bundle ever consumes is dead
+config — don't declare it (F6, REVIEW.md).
 
 **`client_filtered`** (`incremental.client_filtered: true`): for APIs with no server-side
 incremental filter parameter, the engine drops already-seen records client-side by comparing each
@@ -237,6 +295,20 @@ applied after projection regardless of mode.
 **`MaxPages` hard cap**: see the pagination table above; this is the only page-count bound the
 engine enforces on the declarative read path (a short/empty final page from the paginator is the
 *other* stop signal, and both must be considered independently when reasoning about termination).
+
+**`metadata.json`'s `rate_limit` is informational-only, NEVER enforced** (F6, REVIEW.md):
+`Metadata.RateLimit.RequestsPerMinute` documents a connector's published rate limit for operator
+awareness but is never consumed by the read path. The ONLY rate-limit field the engine actually
+enforces is `streams.json`'s `base.rate_limit` (`HTTPBase.RateLimit`, a distinct field —
+`read.go` reads only `b.HTTP.RateLimit`) — declare it there, not in `metadata.json`, if a connector
+genuinely needs client-side throttling. Do not add a `streams.json` `rate_limit` block for a
+connector whose legacy implementation enforced no client-side rate limit (that would be new,
+behavior-changing throttling introduced under the guise of a migration, not a parity port) — an
+informational `metadata.json.rate_limit.requests_per_minute` with no `streams.json` counterpart is
+the correct, honest representation of "legacy documented this limit but never enforced it
+client-side" (see stripe's `docs.md`). Any key on `metadata.json.rate_limit` beyond
+`requests_per_minute` (e.g. a `strategy` field) is not even a field on the Go type and is silently
+dropped — don't declare one.
 
 **Write body construction** (`write.go`): `body_type` is `"json"` (default), `"form"`, or
 `"none"`. Default body = every record field **except** those named in `path_fields` (the path
@@ -265,19 +337,17 @@ per-record request error, or ctx cancellation), the loop stops immediately;
   `fixtures/streams/customers/{page_1,page_2}.json` in the stripe golden: page 1 sets
   `has_more: true` and 2 records; page 2's request carries the expected `starting_after` query
   param and sets `has_more: false`.
-- **RFC3339 string cursors in conformance fixtures** — a documented, deliberate convention, not a
-  bug: even when the real API's wire format for a cursor field is numeric (Stripe's `created` is a
-  Unix-seconds integer), **this bundle's own `fixtures/streams/**` files** represent that field as
-  an RFC3339 string. Why: `conformance/dynamic.go`'s `checkCursorAdvances` recognizes a cursor
-  value only via a Go `string` type assertion and then parses it as RFC3339 to compute
-  `unix_seconds`-formatted request params; a numeric fixture value makes that check hard-fail
-  ("no cursor value observed"), not skip gracefully. This does **not** affect engine-vs-legacy
-  parity: the schema type is declared permissively (`["integer","string"]`), and the read path
-  performs no type coercion — it copies the raw value verbatim regardless of declared type. Real
-  parity tests (e.g. `parity_stripe_test.go`) drive their own `httptest` payloads with the field in
-  its real (numeric) wire shape; only this bundle's *own* conformance/`connectorgen validate`
-  fixtures use the RFC3339-string convention. See stripe's `docs.md` "Known limits" for the
-  in-bundle explanation to copy.
+- **Fixtures use the API's REAL wire shape for every field, including cursor fields — no
+  string-ification workaround, ever** (B2, REVIEW.md, now RESOLVED). A numeric cursor field
+  (Stripe's `created` is a Unix-seconds integer) is committed as a bare JSON NUMBER in
+  `fixtures/streams/**`, exactly matching the "recorded-real-shape" rule above — there is no
+  carve-out for cursor fields specifically. `conformance/dynamic.go`'s `checkCursorAdvances`
+  recognizes BOTH shapes: a `string` cursor value (compared/maxed lexicographically — correct for a
+  fixed-width RFC3339 representation) and a `json.Number`/`float64` cursor value (compared/maxed
+  numerically, then canonicalized to a digit string before formatting), so a numeric fixture value
+  is fully supported, not a hard-fail. Schema types stay tight (`"integer"`, not
+  `["integer","string"]`) — declare the field's REAL type, do not widen it to accommodate a
+  conformance limitation that no longer exists.
 - `fixtures/check.json`: `{"request": {...}, "response": {"status": 200, "body": {...}}}` — used
   by `check_fixture`.
 - `fixtures/writes/<action>.json`: `{"record": {...}, "expect": {"method", "path", "body"?}}` —
@@ -303,23 +373,31 @@ change accepted-input behavior, or that the engine genuinely cannot express at a
 | id | connector | description | verdict |
 |---|---|---|---|
 | 1 | stripe | `create_customer`'s legacy "email OR name required" rule (a named-field OR) is approximated by `minProperties: 1` over the four optional fields (`email`,`name`,`description`,`phone`) — the engine's draft-07 subset has no `anyOf`/`oneOf`. Strictly more permissive (a record with only `phone` set passes here, would fail legacy); never stricter; parity tests only exercise legacy-valid records. | ACCEPTABLE |
-| 2 | stripe | Bundle's own `fixtures/streams/**` represent the `created` cursor as an RFC3339 string rather than Stripe's real Unix-seconds wire integer — a fixture-authoring accommodation for `conformance`'s `cursor_advances` string type-assertion (see §4). Schema type is permissive (`["integer","string"]`); read path performs no coercion; real parity tests use the numeric wire shape. | ACCEPTABLE |
-| 3 | stripe | `limit=100` is sent via a static per-stream `query: {"limit": "100"}` rather than `PaginationSpec.LimitParam`/`PageSize`, because the `cursor`+`last_record_field` paginator constructor does not read those fields (only `page_number`/`offset_limit` do). `limit_param`/`page_size` remain declared on the spec anyway as an honest statement of intended page size for a future engine enhancement. | ACCEPTABLE |
-| 4 | searxng | Raw API's `engines[]` array is passed through unjoined (schema types it `["array","string","null"]`) rather than legacy's comma-joined string, because the dialect has no array-join filter. Parity tests normalize both representations to a canonical form before comparing — the underlying DATA (which engines contributed) is unchanged. | ACCEPTABLE |
+| 2 | stripe | ~~Bundle's own `fixtures/streams/**` represented the `created` cursor as an RFC3339 string rather than Stripe's real Unix-seconds wire integer, to work around `conformance`'s `cursor_advances` string-only type assertion.~~ **RESOLVED**: `cursor_advances` now recognizes both string AND numeric (`json.Number`/`float64`) cursor values (B2, REVIEW.md); fixtures were rewritten to Stripe's real numeric wire shape and the schema type tightened back to `"integer"`-only (no more `["integer","string"]` widening). See §4. | RESOLVED |
+| 3 | stripe | ~~`limit=100` was sent via a static per-stream `query: {"limit": "100"}` while `pagination.limit_param`/`page_size` were ALSO declared on the spec despite being dead (the `cursor`+`last_record_field` paginator constructor never reads them).~~ **RESOLVED**: the dead `limit_param`/`page_size` fields were removed from `streams.json`'s `base.pagination` block (F6, REVIEW.md) — `limit=100` still flows via the static per-stream `query`, unchanged, but the bundle no longer declares config that does nothing. See §3's rate_limit rule for the same "informational vs. enforced" distinction applied to `metadata.json.rate_limit`. | RESOLVED |
+| 4 | searxng | ~~Raw API's `engines[]` array was passed through unjoined (schema typed it `["array","string","null"]`) rather than legacy's comma-joined string, because the dialect had no array-join filter.~~ **RESOLVED**: the engine's `join:<sep>` filter (R1) lets `computed_fields` emit `"engines": "{{ record.engines | join:, }}"`, producing legacy's exact comma-joined string; schema tightened to `["string","null"]`. `parity_searxng_test.go` asserts RAW record equality (the prior normalization workaround was removed). | RESOLVED |
 | 5 | searxng | `published_date` requires a `computed_fields` rename from the raw API's camelCase `publishedDate` — plain schema projection copies by exact key match only; without the rename the field would silently drop. Fixed via `computed_fields`, not a deviation once fixed, but recorded because it is a required, non-obvious authoring step for any camelCase-vs-snake_case API. | ACCEPTABLE (mitigated) |
-| 6 | searxng | Legacy's derived `stream` marker field (which stream a record came from) is not modeled: it isn't present on the raw API response and `computed_fields` has no static-literal/stream-name namespace to synthesize it. Not part of the PK (`url`)/cursor (`published_date`) contract, so no dedup/incremental impact. | ACCEPTABLE |
-| 7 | searxng | Subreddit-narrowing (`site:reddit.com/r/<sub>`) is not modeled — the dialect's `stream.Query` templating has no conditional/default-value filter, so a subreddit-present-vs-absent branch risks an unresolved-key hard error when `subreddit` is unset (the common case). Only the base case (`site:reddit.com <query>`, legacy's own no-subreddit fallback) is implemented; out of scope, not silently wrong. | ACCEPTABLE (documented scope narrowing) |
-| 8 | searxng | Optional Bearer-proxy `api_key` secret is not wired into a conditional `auth` rule — `when`-on-an-absent-secret's absent-key-falsy fix (see below) now makes this *possible*, but this golden predates the fix and still omits the `auth` block entirely (absent/empty `auth` = no authentication, matching legacy's real default). Future connectors with an optional secret-gated auth spec should use the now-fixed `when` tolerance instead of omitting `auth`. | ACCEPTABLE (superseded pattern; prefer `when` going forward) |
+| 6 | searxng | ~~Legacy's derived `stream` marker field (which stream a record came from) was not modeled: it isn't present on the raw API response and `computed_fields` had no static-literal namespace to synthesize it.~~ **RESOLVED**: `computed_fields` now supports static-literal values (a template with no `{{ }}` markers passes through verbatim) — `"stream": "search"`/`"reddit"` stamps the identical marker legacy emits. `parity_searxng_test.go` asserts RAW record equality (no more field-stripping workaround). | RESOLVED |
+| 7 | searxng | Subreddit-narrowing (`site:reddit.com/r/<sub>`) is not modeled — the dialect's `stream.Query` templating has no absent-key-falsy tolerance (unlike `auth`'s `when`), so a subreddit-present-vs-absent branch risks an unresolved-key hard error when `subreddit` is unset (the common case). Only the base case (`site:reddit.com <query>`, legacy's own no-subreddit fallback) is implemented; out of scope, not silently wrong. `subreddit` is no longer even declared in `spec.json` (F6: a declared-but-unwireable key is worse than an absent one). | ACCEPTABLE (documented scope narrowing) |
+| 8 | searxng | ~~Optional Bearer-proxy `api_key` secret was not wired into a conditional `auth` rule — this golden predated the `when`-on-an-absent-secret absent-key-falsy fix and omitted the `auth` block entirely.~~ **RESOLVED**: `streams.json` `base.auth` now declares `[{"mode":"bearer","token":"{{ secrets.api_key }}","when":"{{ secrets.api_key }}"},{"mode":"none"}]` (F6, REVIEW.md), parity-tested both ways (`TestParitySearxng_ApiKeySecretSendsBearerAuth`/`ApiKeyAbsentSendsNoAuth`). | RESOLVED |
 | 9 | postgres | Config-validation error **classification** parity, not exact string-match parity: both connectors are asserted to reject the same input for the same *reason* (bucketed: `missing_host`/`missing_database`/`missing_username`/`missing_password`/`invalid_sslmode`/`invalid_port`/`invalid_host`), but native/postgres keeps its own descriptive (still secret-free) error text rather than byte-copying legacy's strings. | ACCEPTABLE |
 | 10 | postgres | Parity is proven against **fixture mode**, not a live pgx connection: `mode=fixture` short-circuits all network access on both legacy and native sides. This is not a coverage reduction — legacy itself has zero live-DB tests; fixture mode exercises 100% of the branches either side's test suite ever covered. `api_surface.json` for a DB connector declares `endpoints: []` (no REST surface to enumerate) rather than the REST-shaped surface pattern — this is the correct Tier-3 minimal-db surface, not a shortcut. | ACCEPTABLE |
 
-Two engine gaps discovered by the searxng golden were **closed** by a follow-up repair (see
-`.planning/phases/wave0-engine-harness/traces/waveF-repair-ledger.md`), not left as deviations:
-`PaginationSpec.MaxPages` is now wired into `read.go`'s loop (previously silently ignored — an
-always-full-page source would have paginated unbounded), and `EvalWhen` now evaluates an absent
-`config.*`/`secrets.*` key as falsy instead of hard-erroring (previously made an
-optional-secret-gated `auth` rule impossible; item 8 above predates this fix). When you hit either
-shape again, rely on the fixed behavior directly — do not re-document them as open gaps.
+Several engine gaps discovered by the goldens and two review passes were **closed**, not left as
+deviations (see `.planning/phases/wave0-engine-harness/traces/waveF-repair-ledger.md`,
+`gaploop-r1-ledger.md`, `gaploop-r2-ledger.md`): `PaginationSpec.MaxPages` enforcement; `EvalWhen`
+absent-key-falsy semantics (both `waveF-repair-ledger.md`; item 8 above predates the latter);
+`formatParam`/`parseLowerBoundTime` digits-only (Unix-seconds) passthrough for
+`unix_seconds`/`date`/`github_date_range` (B1 — the honest shape `internal/app`'s persisted cursor
+actually takes); stream/check path interpolation (F1); filter chains, `join:<sep>`, and
+static-literal `computed_fields` (F9/F7 enablement); `link_header`'s SSRF host/scheme guard and
+fail-closed-on-unparseable-URL (M1/F2/m2); `lastRecordCursor`'s configurable records path + numeric
+last-record ids (F3); header resolution's hard-error-on-absent-secret (F4); `Bundle.RawSpec`
+verbatim `Definition().Spec` (F5); `AuthHook`'s real caller context (F8); numeric-cursor support in
+`cursor_advances` (B2, motivating item 2's RESOLVED above); certify's `secret_redaction` full
+stdout/stderr/report-JSON scan and JSON-escaped-secret detection (M2/m4); `connectorgen validate`'s
+`engine.ResolveCheckAuthSpec` wiring. When you hit any of these shapes again, rely on the
+fixed/wired behavior directly — do not re-document as an open gap or re-introduce a workaround.
 
 ## 6. Escape-hatch decision tree
 

@@ -171,6 +171,24 @@ func TestScanForSecretsDetectsExactBase64AndURLEncodedForms(t *testing.T) {
 	}
 }
 
+// TestScanForSecretsDetectsJSONEscapedForm is the m4 regression test
+// (SECURITY-REVIEW.md): a secret containing JSON-special characters (a
+// double quote and a backslash), rendered inside a --json envelope, is
+// escaped per RFC 8259 — this escaped form must still be detected, not just
+// the exact/base64/URL-encoded forms.
+func TestScanForSecretsDetectsJSONEscapedForm(t *testing.T) {
+	secret := `sk_test_weird"quote\slash`
+	// encoding/json would render this secret (as a JSON string value) with
+	// the quote and backslash backslash-escaped: sk_test_weird\"quote\\slash
+	jsonEscaped := `sk_test_weird\"quote\\slash`
+
+	text := `{"token":"` + jsonEscaped + `"}`
+	hits := certify.ScanForSecrets(text, []string{secret})
+	if len(hits) == 0 {
+		t.Fatalf("ScanForSecrets(JSON-escaped form) = empty, want a hit for secret %q in text %q", secret, text)
+	}
+}
+
 func TestScanForSecretsCleanTextHasNoHits(t *testing.T) {
 	secret := "sk_test_topsecret12345"
 	hits := certify.ScanForSecrets("nothing sensitive here, just records=42", []string{secret})

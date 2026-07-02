@@ -9,7 +9,7 @@
         {
           "id": "ch_fixture_1",
           "object": "charge",
-          "created": "2026-01-01T00:00:01Z",
+          "created": 1767225601,
           "amount": 1000,
           "amount_captured": 1000,
           "amount_refunded": 0,

@@ -8,7 +8,7 @@
   "properties": {
     "id": { "type": "string" },
     "object": { "type": "string" },
-    "created": { "type": ["integer", "string"] },
+    "created": { "type": "integer" },
     "updated": { "type": ["integer", "null"] },
     "name": { "type": ["string", "null"] },
     "description": { "type": ["string", "null"] },

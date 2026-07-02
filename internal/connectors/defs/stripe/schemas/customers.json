@@ -8,7 +8,7 @@
   "properties": {
     "id": { "type": "string" },
     "object": { "type": "string" },
-    "created": { "type": ["integer", "string"], "description": "Unix seconds in the live Stripe API; represented as an RFC3339 string in this bundle's own fixtures so conformance's cursor_advances check can format it (see docs.md Known limits)." },
+    "created": { "type": "integer", "description": "Unix seconds (Stripe's real wire shape for this field)." },
     "email": { "type": ["string", "null"] },
     "name": { "type": ["string", "null"] },
     "description": { "type": ["string", "null"] },
