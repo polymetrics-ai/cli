@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "wave1-pilot",
+  "planRefs": [],
+  "ledgerRef": ".planning/phases/wave1-pilot/TDD-LEDGER.md",
+  "passed": true,
+  "tasks": [],
+  "behaviorTasks": [],
+  "failures": [],
+  "updatedAt": "2026-07-02T12:03:49.352Z"
+}

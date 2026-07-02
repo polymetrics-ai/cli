@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "wave1-pilot",
+  "status": "blocked_missing_artifact",
+  "reason": null,
+  "details": {
+    "lifecycle": [
+      "load-project-context",
+      "profile-repo",
+      "prepare-design-and-prompts",
+      "prd-coverage-gate",
+      "gsd-plan-phase",
+      "tdd-gate-before-execution",
+      "gsd-execute-phase",
+      "local-verification",
+      "gsd-verify-work",
+      "gsd-gap-loop",
+      "write-phase-summary"
+    ],
+    "agentMode": "agents",
+    "coveragePassed": false,
+    "tddGatePassed": true,
+    "verificationMissingRequired": [
+      "install"
+    ]
+  },
+  "updatedAt": "2026-07-02T12:03:49.356Z"
+}
