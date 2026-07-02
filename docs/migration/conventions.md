@@ -350,10 +350,16 @@ per-record request error, or ctx cancellation), the loop stops immediately;
   conformance limitation that no longer exists.
 - `fixtures/check.json`: `{"request": {...}, "response": {"status": 200, "body": {...}}}` — used
   by `check_fixture`.
-- `fixtures/writes/<action>.json`: `{"record": {...}, "expect": {"method", "path", "body"?}}` —
-  used by `write_validate`/`write_request_shape`; the engine's dry-run/actual request must match
-  `expect` exactly for a valid `record`, and a deliberately invalid record (missing a required
-  field) must fail validation in its own dedicated fixture/test case.
+- `fixtures/writes/<action>.json`: `{"record": {...}, "expect": {"method", "path", "body"?},
+  "response"?: {"status", "body"}}` — used by `write_validate`/`write_request_shape`; the engine's
+  dry-run/actual request must match `expect` exactly for a valid `record`, and a deliberately
+  invalid record (missing a required field) must fail validation in its own dedicated fixture/test
+  case. The optional `response` block (R3) lets you declare what the write-replay capture server
+  answers with, instead of the default `200 {}` — needed whenever a `WriteHook`'s follow-up logic
+  reads its own write response (github's `create_pull_request` fixture declares `"response":
+  {"status": 201, "body": {"number": 42}}` because `hooks/github/hooks.go`'s `createPullRequest`
+  decodes the POST response's `number` field before issuing its follow-up requests; a fixture with
+  no `response` block is unaffected, still gets `200 {}`).
 - **No secret-looking values, ever.** `connectorgen validate`'s `secret_literal` rule and
   `conformance`'s `secret_redaction` check both regex-scan every fixture file (and `docs.md`) for
   Bearer-header shapes, `api_key`/`access_token`/`secret`/`password`-adjacent long tokens, and
@@ -361,6 +367,60 @@ per-record request error, or ctx cancellation), the loop stops immediately;
   not a warning. Keep fixture "secrets" obviously synthetic (`sk_test_FAKE...` still trips the
   scanner deliberately — use `fixture_token_placeholder`-style strings instead, or better, don't
   put secret-shaped strings in fixtures at all since fixtures never carry auth).
+
+### Conformance is hook-aware; the skip-marker rule replaces the old "shadow path" pattern (R3)
+
+`conformance`'s dynamic (fixture-replay) checks run the REAL engine, including any registered
+Tier-2 hook (`engine.HooksFor(b.Name)`, `conformance` blank-imports `hooks/hookset`) — a hook that
+CAN run against a declarative-shaped fixture replay is now genuinely exercised, not silently
+bypassed. **github is the worked example**: its `AuthHook` (token-or-app_jwt "auto" resolution) and
+`WriteHook` (the 4 compound write actions) both run for real against conformance's replay harness
+and are fully covered by it — prefer this outcome (full dynamic coverage) wherever a hook CAN run
+in replay; do not add a skip marker "just in case" or to save fixture-authoring effort.
+
+Some hooks genuinely **cannot** be exercised by a declarative fixture replay no matter how the
+fixture is shaped — a custom-auth `AuthHook` whose real request needs a config value (e.g.
+`token_url`) that conformance's synthetic non-secret config (`"synthetic-conformance-value"` for
+every non-x-secret spec property) can never meaningfully populate, or a `StreamHook` whose real
+wire shape (a POST body carrying query text, in-body pagination state) has no declarative
+equivalent for the replay server to match against at all. For exactly this case, declare an
+OPTIONAL, EXPLICIT skip marker instead of shaping a fictional "shadow" fixture just to fool the
+replay harness (the pre-R3 pattern this rule replaces):
+
+- **Stream-level** (`streams.json`, one stream): `"conformance": {"skip_dynamic": true, "reason":
+  "..."}` on that stream's object. Skips that stream's `read_fixture_nonempty:<name>` and excludes
+  it from every other check's candidate-stream selection (`pagination_terminates`'
+  first-eligible-stream pick, `records_match_schema`'s per-stream iteration, `cursor_advances`'
+  first-incremental-stream pick) — as if the stream did not exist for dynamic-check purposes. A
+  bundle with OTHER, unmarked streams still runs their dynamic checks normally (this is the monday/
+  sentry shape: every stream shares the same StreamHook limitation, so every stream is marked, but
+  the mechanism is genuinely per-stream).
+- **Bundle-level** (`metadata.json`, top level): the identical `"conformance": {"skip_dynamic":
+  true, "reason": "..."}` shape. Skips EVERY auth-dependent dynamic check outright
+  (`check_fixture`, every `read_fixture_nonempty:<stream>`, `pagination_terminates`,
+  `records_match_schema`, `cursor_advances`) — this is gmail's shape: a sole `mode: custom` auth
+  candidate with no `when`-gated non-custom fallback means literally every dynamic check that
+  resolves auth would otherwise fail identically and uninformatively.
+- **`reason` is REQUIRED whenever `skip_dynamic` is `true`** — `connectorgen validate`'s
+  `conformance_skip_reason` rule hard-fails a marker with an empty/whitespace-only reason, at
+  either level. The reason MUST name the authoritative substitute that actually proves the skipped
+  behavior, not just assert the skip — e.g. `"hook-covered; proven live by
+  internal/connectors/paritytest/<name>"`, optionally citing the specific test
+  (`TestParitySentry_IssuesTwoPagePaginationAndResultsFalseStop`). **The parity suite
+  (`paritytest/<name>`) is the authoritative correctness bar for any hook-covered behavior a skip
+  marker names** — a marked connector's `migrated` status still requires its parity suite (and the
+  hook's own unit tests) to be green; the marker is an honest description of WHERE the proof lives,
+  never a way to avoid proving the behavior at all.
+- A `CheckResult` produced by a marker is always `Skipped: true` with `Error` set to the marker's
+  `reason` text — never `Passed` (a skip is not a pass) and never a silent, no-reason `Skipped`
+  (every pre-existing structural Skip — e.g. "no incremental stream" — still carries no reason;
+  only a MARKER-caused Skip does, so a report reader can immediately tell the two apart).
+- Do not reach for a skip marker to avoid writing a genuinely fixable fixture. github's own
+  `write_request_shape:create_pull_request` failure (the write-replay capture server always
+  answered `200 {}`, so the `WriteHook`'s post-POST `number` decode always saw `0`) was a real
+  fixture bug, not a hook-vs-replay mismatch — it was fixed by declaring the fixture's `response`
+  block (see above), not by adding a marker. A marker is for behavior a replay genuinely cannot
+  reach, not a substitute for fixture-authoring diligence.
 
 ## 5. Parity-deviation ledger
 

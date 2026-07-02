@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "plans",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "invoice_name": { "type": ["string", "null"] },
+    "price": { "type": ["string", "null"], "description": "Integer, stringified by computed_fields (see docs.md Known limits)." },
+    "currency_code": { "type": ["string", "null"] },
+    "period": { "type": ["string", "null"], "description": "Integer, stringified by computed_fields (see docs.md Known limits)." },
+    "period_unit": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
+    "updated_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." }
+  }
+}

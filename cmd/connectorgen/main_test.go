@@ -69,6 +69,8 @@ func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {
 		{"write-false-with-mutation-endpoint", ruleSurfaceFailFirstRun},
 		{"auth-field-unknown-spec-key", ruleInterpolationUnresolved},
 		{"unknown-filter-in-template", ruleInterpolationUnresolved},
+		{"skip-marker-missing-reason", ruleConformanceSkipReason},
+		{"skip-marker-missing-reason-bundle", ruleConformanceSkipReason},
 	}
 
 	seenRules := map[string]bool{}

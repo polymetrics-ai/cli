@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "latest",
+  "type": "object",
+  "x-primary-key": ["num"],
+  "required": ["num"],
+  "properties": {
+    "num": { "type": "number", "description": "Comic number; the raw XKCD JSON API's num field." },
+    "title": { "type": ["string", "null"] },
+    "safe_title": { "type": ["string", "null"] },
+    "year": { "type": ["string", "null"] },
+    "month": { "type": ["string", "null"] },
+    "day": { "type": ["string", "null"] }
+  }
+}

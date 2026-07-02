@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Vitally Connection Specification",
+  "type": "object",
+  "required": ["basic_auth_header"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://rest.vitally.io",
+      "description": "Vitally REST API base URL override for tests or proxies."
+    },
+    "basic_auth_header": {
+      "type": "string",
+      "x-secret": true,
+      "description": "The full, pre-built Authorization header value Vitally expects (e.g. 'Basic <base64 apiKey:>'). Sent verbatim as the Authorization header — this is not a raw token, it is the entire header value, matching legacy's connsdk.APIKeyHeader(\"Authorization\", auth, \"\") pass-through (vitally.go:100-104)."
+    }
+  }
+}

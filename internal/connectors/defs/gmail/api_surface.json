@@ -1,0 +1,19 @@
+{
+  "api": "Gmail API v1 (https://gmail.googleapis.com/gmail/v1)",
+  "docs": "https://developers.google.com/gmail/api/reference/rest",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave1 pilot migration: the 4 legacy-parity read streams only (messages, threads, drafts, labels); legacy gmail is read-only (Write always returns ErrUnsupportedOperation) and the full Gmail API surface (send, batch modify, history, watch/push, attachments, settings) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/users/{userId}/messages", "covered_by": { "stream": "messages" } },
+    { "method": "GET", "path": "/users/{userId}/threads", "covered_by": { "stream": "threads" } },
+    { "method": "GET", "path": "/users/{userId}/drafts", "covered_by": { "stream": "drafts" } },
+    { "method": "GET", "path": "/users/{userId}/labels", "covered_by": { "stream": "labels" } },
+    { "method": "GET", "path": "/users/{userId}/messages/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/users/{userId}/messages/send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/users/{userId}/messages/batchModify", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/users/{userId}/history", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/users/{userId}/watch", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/users/{userId}/messages/{messageId}/attachments/{id}", "excluded": { "category": "binary_payload", "reason": "attachment bytes are not a syncable record stream" } },
+    { "method": "GET", "path": "/users/{userId}/settings", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

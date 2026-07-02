@@ -101,6 +101,53 @@ func TestLoadFixturePages_MissingStreamReturnsEmpty(t *testing.T) {
 	}
 }
 
+// --- captureServer: optional fixture-declared response (R3) ---------------
+//
+// write_request_shape must be able to assert against a WriteHook whose
+// follow-up logic reads its own write response body (github's
+// createPullRequest decodes the POST response's "number" field before
+// issuing follow-up requests) — a capture server that always answers a
+// hardcoded `{}` makes any such hook fail before write_request_shape's
+// method/path/body assertions are ever reached. newCaptureServer must serve
+// a fixture-declared response.body/status when the write fixture supplies
+// one, defaulting to the pre-existing 200 {} when it does not (so every
+// pre-existing fixture with no "response" block is unaffected).
+
+func TestNewCaptureServer_DefaultsTo200EmptyBodyWhenNoResponseGiven(t *testing.T) {
+	cs := newCaptureServer(nil)
+	defer cs.Close()
+
+	resp, err := cs.Client().Post(cs.URL+"/anything", "application/json", nil)
+	if err != nil {
+		t.Fatalf("POST: %v", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("status = %d, want 200 (default)", resp.StatusCode)
+	}
+}
+
+func TestNewCaptureServer_ServesFixtureDeclaredResponse(t *testing.T) {
+	fx := &fixtureResponse{Status: 201, Body: []byte(`{"number":42}`)}
+	cs := newCaptureServer(fx)
+	defer cs.Close()
+
+	resp, err := cs.Client().Post(cs.URL+"/anything", "application/json", nil)
+	if err != nil {
+		t.Fatalf("POST: %v", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+	if resp.StatusCode != 201 {
+		t.Fatalf("status = %d, want 201 (fixture-declared)", resp.StatusCode)
+	}
+	buf := make([]byte, 64)
+	n, _ := resp.Body.Read(buf)
+	got := string(buf[:n])
+	if got != `{"number":42}` {
+		t.Fatalf("body = %q, want the fixture-declared body", got)
+	}
+}
+
 // context import guard (used indirectly via engine.Read in dynamic checks;
 // kept here so replay_test.go compiles standalone if that changes).
 var _ = context.Background

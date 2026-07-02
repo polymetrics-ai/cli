@@ -1,0 +1,22 @@
+{
+  "name": "calendly",
+  "display_name": "Calendly",
+  "description": "Reads Calendly scheduled events, event types, organization memberships, groups, and the current user through the Calendly v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.calendly.com/api-docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Calendly API read of scheduling and organization data"
+  }
+}

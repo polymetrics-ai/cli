@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "bug",
+    "color": "d73a4a",
+    "description": "Something isn't working"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/labels",
+    "body": {
+      "name": "bug",
+      "color": "d73a4a",
+      "description": "Something isn't working"
+    }
+  }
+}

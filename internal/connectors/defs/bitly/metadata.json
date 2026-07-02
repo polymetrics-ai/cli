@@ -1,0 +1,23 @@
+{
+  "name": "bitly",
+  "display_name": "Bitly",
+  "description": "Reads Bitly organizations, groups, campaigns, and bitlinks through the Bitly v4 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://dev.bitly.com/api-reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Bitly API read of organization, group, campaign, and bitlink data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

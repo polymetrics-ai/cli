@@ -1,0 +1,154 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.site_api_key }}", "password": "" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "offset",
+      "token_path": "next_offset"
+    },
+    "check": { "method": "GET", "path": "/customers" },
+    "error_map": [
+      { "status": 401, "hint": "chargebee site API key is missing or invalid; re-run pm credentials add chargebee" },
+      { "status": 403, "hint": "chargebee API key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "chargebee rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": { "limit": "100" },
+      "records": { "path": "list" },
+      "computed_fields": {
+        "id": "{{ record.customer.id }}",
+        "first_name": "{{ record.customer.first_name }}",
+        "last_name": "{{ record.customer.last_name }}",
+        "email": "{{ record.customer.email }}",
+        "company": "{{ record.customer.company }}",
+        "phone": "{{ record.customer.phone }}",
+        "auto_collection": "{{ record.customer.auto_collection }}",
+        "net_term_days": "{{ record.customer.net_term_days }}",
+        "taxability": "{{ record.customer.taxability }}",
+        "created_at": "{{ record.customer.created_at }}",
+        "updated_at": "{{ record.customer.updated_at }}",
+        "deleted": "{{ record.customer.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "query": { "limit": "100" },
+      "records": { "path": "list" },
+      "computed_fields": {
+        "id": "{{ record.subscription.id }}",
+        "customer_id": "{{ record.subscription.customer_id }}",
+        "plan_id": "{{ record.subscription.plan_id }}",
+        "status": "{{ record.subscription.status }}",
+        "currency_code": "{{ record.subscription.currency_code }}",
+        "plan_quantity": "{{ record.subscription.plan_quantity }}",
+        "plan_amount": "{{ record.subscription.plan_amount }}",
+        "current_term_start": "{{ record.subscription.current_term_start }}",
+        "current_term_end": "{{ record.subscription.current_term_end }}",
+        "created_at": "{{ record.subscription.created_at }}",
+        "started_at": "{{ record.subscription.started_at }}",
+        "updated_at": "{{ record.subscription.updated_at }}",
+        "deleted": "{{ record.subscription.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": { "limit": "100" },
+      "records": { "path": "list" },
+      "computed_fields": {
+        "id": "{{ record.invoice.id }}",
+        "customer_id": "{{ record.invoice.customer_id }}",
+        "subscription_id": "{{ record.invoice.subscription_id }}",
+        "status": "{{ record.invoice.status }}",
+        "currency_code": "{{ record.invoice.currency_code }}",
+        "total": "{{ record.invoice.total }}",
+        "amount_paid": "{{ record.invoice.amount_paid }}",
+        "amount_due": "{{ record.invoice.amount_due }}",
+        "date": "{{ record.invoice.date }}",
+        "due_date": "{{ record.invoice.due_date }}",
+        "paid_at": "{{ record.invoice.paid_at }}",
+        "updated_at": "{{ record.invoice.updated_at }}",
+        "deleted": "{{ record.invoice.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "plans",
+      "path": "/plans",
+      "query": { "limit": "100" },
+      "records": { "path": "list" },
+      "computed_fields": {
+        "id": "{{ record.plan.id }}",
+        "name": "{{ record.plan.name }}",
+        "invoice_name": "{{ record.plan.invoice_name }}",
+        "price": "{{ record.plan.price }}",
+        "currency_code": "{{ record.plan.currency_code }}",
+        "period": "{{ record.plan.period }}",
+        "period_unit": "{{ record.plan.period_unit }}",
+        "status": "{{ record.plan.status }}",
+        "created_at": "{{ record.plan.created_at }}",
+        "updated_at": "{{ record.plan.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/plans.json"
+    },
+    {
+      "name": "items",
+      "path": "/items",
+      "query": { "limit": "100" },
+      "records": { "path": "list" },
+      "computed_fields": {
+        "id": "{{ record.item.id }}",
+        "name": "{{ record.item.name }}",
+        "type": "{{ record.item.type }}",
+        "item_family_id": "{{ record.item.item_family_id }}",
+        "status": "{{ record.item.status }}",
+        "is_shippable": "{{ record.item.is_shippable }}",
+        "enabled_for_checkout": "{{ record.item.enabled_for_checkout }}",
+        "created_at": "{{ record.item.created_at }}",
+        "updated_at": "{{ record.item.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/items.json"
+    }
+  ]
+}

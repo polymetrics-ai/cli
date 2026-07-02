@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/labels",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 801,
+        "node_id": "L_kwDOFixture1",
+        "name": "bug",
+        "color": "d73a4a",
+        "description": "Something isn't working",
+        "default": true,
+        "url": "https://api.github.com/repos/octocat/hello-world/labels/bug"
+      }
+    ]
+  }
+}

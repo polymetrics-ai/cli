@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/organizations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "organizations": [
+        {
+          "guid": "org_fixture_1",
+          "name": "Fixture Organization",
+          "is_active": true,
+          "tier": "enterprise",
+          "tier_family": "enterprise",
+          "tier_display_name": "Enterprise",
+          "role": "org-admin",
+          "created": "2026-01-01T00:00:00+0000",
+          "modified": "2026-01-02T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

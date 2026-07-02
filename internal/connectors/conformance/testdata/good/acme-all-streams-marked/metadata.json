@@ -1,0 +1,8 @@
+{
+  "name": "acme-all-streams-marked",
+  "display_name": "Acme (every-stream-marked conformance marker self-test)",
+  "description": "conformance v2 self-test: a per-stream skip_dynamic marker on EVERY stream (synthetic, not a real API)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false }
+}

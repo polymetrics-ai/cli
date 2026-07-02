@@ -1,0 +1,15 @@
+{
+  "record": {
+    "pull_number": 301,
+    "event": "APPROVE",
+    "body": "LGTM"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/pulls/301/reviews",
+    "body": {
+      "event": "APPROVE",
+      "body": "LGTM"
+    }
+  }
+}

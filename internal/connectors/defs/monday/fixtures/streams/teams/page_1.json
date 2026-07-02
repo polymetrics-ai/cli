@@ -1,0 +1,13 @@
+{
+  "request": { "method": "POST", "path": "/", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "teams": [
+          { "id": "t1", "name": "Fixture Team 1", "picture_url": "https://example.com/fixture-team-1.png" }
+        ]
+      }
+    }
+  }
+}

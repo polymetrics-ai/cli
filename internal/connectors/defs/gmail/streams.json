@@ -1,0 +1,82 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "gmail",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.client_refresh_token }}",
+        "scopes": "{{ config.scopes }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "pageToken",
+      "token_path": "nextPageToken"
+    },
+    "check": { "method": "GET", "path": "/users/{{ config.user_id }}/labels" },
+    "error_map": [
+      { "status": 401, "hint": "gmail OAuth refresh grant failed or access token expired; re-run pm credentials add gmail" },
+      { "status": 403, "hint": "gmail account lacks access for this request/scope" },
+      { "status": 429, "class": "rate_limited", "hint": "gmail API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "messages",
+      "path": "/users/{{ config.user_id }}/messages",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": { "path": "messages" },
+      "computed_fields": {
+        "thread_id": "{{ record.threadId }}"
+      },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "threads",
+      "path": "/users/{{ config.user_id }}/threads",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": { "path": "threads" },
+      "computed_fields": {
+        "history_id": "{{ record.historyId }}"
+      },
+      "schema": "schemas/threads.json"
+    },
+    {
+      "name": "drafts",
+      "path": "/users/{{ config.user_id }}/drafts",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": { "path": "drafts" },
+      "computed_fields": {
+        "message_id": "{{ record.message.id }}",
+        "thread_id": "{{ record.message.threadId }}"
+      },
+      "schema": "schemas/drafts.json"
+    },
+    {
+      "name": "labels",
+      "path": "/users/{{ config.user_id }}/labels",
+      "records": { "path": "labels" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "message_list_visibility": "{{ record.messageListVisibility }}",
+        "label_list_visibility": "{{ record.labelListVisibility }}",
+        "messages_total": "{{ record.messagesTotal }}",
+        "messages_unread": "{{ record.messagesUnread }}",
+        "threads_total": "{{ record.threadsTotal }}",
+        "threads_unread": "{{ record.threadsUnread }}"
+      },
+      "schema": "schemas/labels.json"
+    }
+  ]
+}

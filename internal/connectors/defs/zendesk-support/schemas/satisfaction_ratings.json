@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "satisfaction_ratings",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "score": { "type": ["string", "null"] },
+    "comment": { "type": ["string", "null"] },
+    "reason": { "type": ["string", "null"] },
+    "ticket_id": { "type": ["integer", "null"] },
+    "assignee_id": { "type": ["integer", "null"] },
+    "requester_id": { "type": ["integer", "null"] },
+    "group_id": { "type": ["integer", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

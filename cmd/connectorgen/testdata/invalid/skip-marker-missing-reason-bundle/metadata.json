@@ -1,0 +1,16 @@
+{
+  "name": "skip-marker-missing-reason-bundle",
+  "display_name": "Skip Marker Missing Reason (bundle level)",
+  "description": "seeded-invalid: a bundle-level conformance.skip_dynamic marker with no reason",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "conformance": { "skip_dynamic": true }
+}

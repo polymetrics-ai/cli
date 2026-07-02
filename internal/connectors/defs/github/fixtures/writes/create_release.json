@@ -1,0 +1,14 @@
+{
+  "record": {
+    "tag_name": "v1.0.0",
+    "name": "Version 1.0.0"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/releases",
+    "body": {
+      "tag_name": "v1.0.0",
+      "name": "Version 1.0.0"
+    }
+  }
+}

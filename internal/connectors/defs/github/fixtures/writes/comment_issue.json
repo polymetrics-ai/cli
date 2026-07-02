@@ -1,0 +1,13 @@
+{
+  "record": {
+    "issue_number": 101,
+    "body": "Fixture comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/101/comments",
+    "body": {
+      "body": "Fixture comment"
+    }
+  }
+}

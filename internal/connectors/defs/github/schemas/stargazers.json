@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stargazers",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "relation": {
+      "type": "string"
+    },
+    "login": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "site_admin": {
+      "type": "boolean"
+    },
+    "html_url": {
+      "type": "string"
+    },
+    "contributions": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "role_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

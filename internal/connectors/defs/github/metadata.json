@@ -1,0 +1,24 @@
+{
+  "name": "github",
+  "display_name": "GitHub",
+  "description": "Reads GitHub repository, issue, pull request, code, release, collaboration, and Actions data, and writes approved reverse ETL actions through the GitHub REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.github.com/en/rest",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external API read",
+    "write": "external GitHub API mutation",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GitHub Connection Specification",
+  "type": "object",
+  "required": ["owner", "repo"],
+  "properties": {
+    "owner": {
+      "type": "string",
+      "description": "Repository owner (user or organization login). Legacy accepted a single \"owner/repo\" repository config value and split it at runtime; the engine's path templating urlencodes each {{ }} reference as one opaque path segment (a literal \"/\" would be percent-encoded, not treated as a segment delimiter), so owner and repo are declared as two separate config keys instead."
+    },
+    "repo": {
+      "type": "string",
+      "description": "Repository name (without the owner prefix). See owner's description for why this is a separate config key from legacy's single repository field."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.github.com",
+      "description": "GitHub API base URL override for tests or GitHub Enterprise."
+    },
+    "app_id": {
+      "type": "string",
+      "description": "GitHub App ID for auth_type=github_app."
+    },
+    "installation_id": {
+      "type": "string",
+      "description": "GitHub App installation ID for auth_type=github_app."
+    },
+    "installation_repositories": {
+      "type": "string",
+      "description": "Optional comma-separated repository names for a restricted installation token."
+    },
+    "installation_repository_ids": {
+      "type": "string",
+      "description": "Optional comma-separated repository IDs for a restricted installation token."
+    },
+    "installation_permissions": {
+      "type": "string",
+      "description": "Optional JSON object of requested GitHub App installation-token permissions."
+    },
+    "since": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Lower-bound timestamp for issues, issue_comments, and pull_request_review_comments (incremental start; also usable as a fresh-sync start_config_key value)."
+    },
+    "token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "GitHub token: classic PAT, fine-grained PAT, OAuth token, GitHub Actions GITHUB_TOKEN, or a pre-generated installation access token. Used only for Bearer auth; never logged."
+    },
+    "private_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "GitHub App PEM private key for auth_type=github_app. Never logged."
+    },
+    "private_key_base64": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Base64-encoded GitHub App PEM private key for auth_type=github_app (alternative to private_key). Never logged."
+    }
+  }
+}

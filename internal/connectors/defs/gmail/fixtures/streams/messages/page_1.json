@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/users/me/messages", "query": { "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "messages": [
+        { "id": "msg_fixture_1", "threadId": "thread_fixture_1" },
+        { "id": "msg_fixture_2", "threadId": "thread_fixture_2" }
+      ],
+      "nextPageToken": "page2token",
+      "resultSizeEstimate": 3
+    }
+  }
+}

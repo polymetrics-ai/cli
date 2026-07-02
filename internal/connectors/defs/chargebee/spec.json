@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Chargebee Connection Specification",
+  "type": "object",
+  "required": ["site_api_key"],
+  "properties": {
+    "site_api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Chargebee site API key. Sent as the HTTP Basic username with an empty password; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Chargebee API base URL override for tests or proxies. When unset, derived from site as https://{site}.chargebee.com/api/v2."
+    },
+    "site": {
+      "type": "string",
+      "description": "Chargebee site name; used to derive the base URL as https://{site}.chargebee.com/api/v2 when base_url is not set."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only objects updated at or after this time are read."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

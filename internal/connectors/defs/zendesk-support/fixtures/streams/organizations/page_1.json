@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/organizations", "query": { "page[size]": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "organizations": [
+        {
+          "id": 300,
+          "name": "Acme Corp",
+          "details": "Enterprise account",
+          "notes": "VIP customer",
+          "group_id": 400,
+          "shared_tickets": true,
+          "shared_comments": false,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "meta": { "has_more": false, "after_cursor": null }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/comments",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "node_id": "IC_kwDOFixture1",
+        "issue_url": "https://api.github.com/repos/octocat/hello-world/issues/101",
+        "html_url": "https://github.com/octocat/hello-world/issues/101#issuecomment-1001",
+        "body": "Fixture issue comment.",
+        "user": {
+          "login": "octocat",
+          "id": 1
+        },
+        "author_association": "OWNER",
+        "created_at": "2026-01-07T00:00:00Z",
+        "updated_at": "2026-01-07T00:05:00Z"
+      }
+    ]
+  }
+}

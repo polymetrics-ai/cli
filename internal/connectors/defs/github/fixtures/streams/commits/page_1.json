@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/commits",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "sha": "abc123def456",
+        "node_id": "C_kwDOFixture1",
+        "html_url": "https://github.com/octocat/hello-world/commit/abc123def456",
+        "url": "https://api.github.com/repos/octocat/hello-world/commits/abc123def456",
+        "author": {
+          "login": "octocat",
+          "id": 1
+        },
+        "committer": {
+          "login": "octocat",
+          "id": 1
+        },
+        "commit": {
+          "message": "Fixture commit message",
+          "author": {
+            "name": "Octo Cat",
+            "email": "octocat@example.com",
+            "date": "2026-01-04T00:00:00Z"
+          },
+          "committer": {
+            "name": "Octo Cat",
+            "email": "octocat@example.com",
+            "date": "2026-01-04T00:05:00Z"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/info.0.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "num": 2999,
+      "title": "Fixture Comic",
+      "safe_title": "Fixture Comic",
+      "year": "2026",
+      "month": "7",
+      "day": "2"
+    }
+  }
+}

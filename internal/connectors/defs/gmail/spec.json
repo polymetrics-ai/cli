@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gmail Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_refresh_token"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 client ID for the refresh-token grant. Used only in the token-request form; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 client secret (optional for some client types). Used only in the token-request form; never logged."
+    },
+    "client_refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived Google OAuth 2.0 refresh token. Exchanged for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is out of scope for this connector (credentials layer already owns it)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://gmail.googleapis.com/gmail/v1",
+      "description": "Gmail API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://oauth2.googleapis.com/token",
+      "description": "Google OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a non-https or unparseable value to prevent exfiltrating the refresh token to an attacker-chosen endpoint."
+    },
+    "scopes": {
+      "type": "string",
+      "default": "https://www.googleapis.com/auth/gmail.readonly",
+      "description": "OAuth scope requested on the token-refresh grant."
+    },
+    "user_id": {
+      "type": "string",
+      "default": "me",
+      "description": "Gmail user ID path segment (email address for delegated access, or 'me')."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; translated to a Gmail search query 'after:<unix-seconds>' filter. Not a true incremental cursor: list endpoints are newest-first and publish no cursor field, matching legacy."
+    },
+    "include_spam_and_trash": {
+      "type": "string",
+      "default": "false",
+      "description": "When 'true', includes SPAM and TRASH in list results (includeSpamTrash=true)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-500, maxResults)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

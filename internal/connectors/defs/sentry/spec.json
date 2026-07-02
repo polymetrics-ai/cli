@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sentry Connection Specification",
+  "type": "object",
+  "required": ["auth_token"],
+  "properties": {
+    "auth_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Sentry internal integration / auth token. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Sentry API base URL override for tests or self-hosted instances. Defaults to https://<hostname>."
+    },
+    "hostname": {
+      "type": "string",
+      "default": "sentry.io",
+      "description": "Sentry hostname used to build the base URL when base_url is not set."
+    },
+    "organization": {
+      "type": "string",
+      "description": "Organization slug; required to read the issues, events, and releases streams."
+    },
+    "project": {
+      "type": "string",
+      "description": "Project slug; required to read the issues and events streams."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    }
+  }
+}

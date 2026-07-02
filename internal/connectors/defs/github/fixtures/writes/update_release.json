@@ -1,0 +1,13 @@
+{
+  "record": {
+    "release_id": 701,
+    "name": "Version 1.0.0 (updated)"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/releases/701",
+    "body": {
+      "name": "Version 1.0.0 (updated)"
+    }
+  }
+}

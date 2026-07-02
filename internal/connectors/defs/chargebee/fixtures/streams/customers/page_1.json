@@ -1,0 +1,43 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "customer": {
+            "id": "cus_fixture_1",
+            "first_name": "Fixture1",
+            "last_name": "User",
+            "email": "fixture1@example.com",
+            "company": "Example Inc",
+            "phone": "+15550100",
+            "auto_collection": "on",
+            "net_term_days": 0,
+            "taxability": "taxable",
+            "created_at": 1767225601,
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        },
+        {
+          "customer": {
+            "id": "cus_fixture_2",
+            "first_name": "Fixture2",
+            "last_name": "User",
+            "email": "fixture2@example.com",
+            "company": "Example Inc",
+            "phone": "+15550101",
+            "auto_collection": "on",
+            "net_term_days": 0,
+            "taxability": "taxable",
+            "created_at": 1767225602,
+            "updated_at": 1767225602,
+            "deleted": false
+          }
+        }
+      ],
+      "next_offset": "cus_fixture_2_offset"
+    }
+  }
+}

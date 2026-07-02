@@ -1,0 +1,10 @@
+{
+  "api": "XKCD JSON API (https://xkcd.com/json.html)",
+  "docs": "https://xkcd.com/json.html",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave1-pilot migration: the 2 legacy-parity read streams only (latest, comic); XKCD has no mutation API (read-only comic metadata), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/info.0.json", "covered_by": { "stream": "latest" } },
+    { "method": "GET", "path": "/{num}/info.0.json", "covered_by": { "stream": "comic" } }
+  ]
+}

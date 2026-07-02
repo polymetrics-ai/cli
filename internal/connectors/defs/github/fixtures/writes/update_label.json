@@ -1,0 +1,13 @@
+{
+  "record": {
+    "name": "bug",
+    "color": "ff0000"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/labels/bug",
+    "body": {
+      "color": "ff0000"
+    }
+  }
+}

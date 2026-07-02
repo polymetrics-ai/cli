@@ -1,6 +1,10 @@
 package conformance
 
 import (
+	// Register all per-connector hooks so dynamic checks exercise the real
+	// hook-dispatching engine paths (gap found by the wave1 Tier-2 pilots).
+	_ "polymetrics.ai/internal/connectors/hooks/hookset"
+
 	"bytes"
 	"context"
 	"encoding/json"
@@ -25,12 +29,51 @@ import (
 // (e.g. delete_semantics on a bundle with no delete write action) rather
 // than silently omitted, so callers always see a stable, explainable check
 // list.
+//
+// Skip markers (R3, docs/migration/conventions.md §4): a bundle whose real
+// behavior lives entirely behind a Tier-2 hook that a declarative fixture
+// replay cannot exercise (e.g. a custom-auth-only AuthHook whose token_url
+// conformance's synthetic config can never populate) may declare an
+// explicit, reason-carrying bundle-level marker
+// (Metadata.Conformance.SkipDynamic) that Skips every auth-dependent dynamic
+// check outright — check_fixture, every read_fixture_nonempty:<stream>,
+// pagination_terminates, records_match_schema, and cursor_advances — rather
+// than attempting them and reporting a predictable, uninformative failure. A
+// narrower per-stream marker (StreamSpec.Conformance.SkipDynamic) has the
+// same effect scoped to exactly one stream: that stream's
+// read_fixture_nonempty Skips, and the stream is excluded from every other
+// check's candidate-stream selection (pagination_terminates' first-stream
+// pick, records_match_schema's per-stream iteration, cursor_advances'
+// first-incremental-stream pick) as if it did not exist for dynamic-check
+// purposes. Neither marker affects STATIC checks (checkFixturesPresent
+// etc.) or write checks (write_request_shape/delete_semantics) — no shipped
+// bundle needs that combination today (a marked bundle/stream is always
+// read-only in this wave), and the marker's job is narrowly to describe
+// which READ behavior is hook-only, not to blanket-exempt a bundle from
+// every conformance guarantee.
 func runDynamicChecks(b engine.Bundle) []CheckResult {
 	var checks []CheckResult
+
+	if reason, ok := bundleSkipReason(b); ok {
+		checks = append(checks, CheckResult{Name: "check_fixture", Skipped: true, Error: reason})
+		for _, s := range b.Streams {
+			checks = append(checks, CheckResult{Name: "read_fixture_nonempty:" + s.Name, Skipped: true, Error: reason})
+		}
+		checks = append(checks, CheckResult{Name: "pagination_terminates", Skipped: true, Error: reason})
+		checks = append(checks, CheckResult{Name: "records_match_schema", Skipped: true, Error: reason})
+		checks = append(checks, CheckResult{Name: "cursor_advances", Skipped: true, Error: reason})
+		checks = append(checks, checkWriteRequestShape(b)...)
+		checks = append(checks, checkDeleteSemantics(b))
+		return checks
+	}
 
 	checks = append(checks, checkCheckFixture(b))
 
 	for i, s := range b.Streams {
+		if reason, ok := streamSkipReason(s); ok {
+			checks = append(checks, CheckResult{Name: "read_fixture_nonempty:" + s.Name, Skipped: true, Error: reason})
+			continue
+		}
 		mandatory := i == 0 // "first stream mandatory" per design §E.2
 		checks = append(checks, checkReadFixtureNonempty(b, s.Name, mandatory))
 	}
@@ -42,6 +85,39 @@ func runDynamicChecks(b engine.Bundle) []CheckResult {
 	checks = append(checks, checkDeleteSemantics(b))
 
 	return checks
+}
+
+// bundleSkipReason reports the bundle-level conformance skip marker's reason
+// text, and whether one is present with SkipDynamic set. A marker with
+// SkipDynamic false (or absent Metadata.Conformance) is "no marker" — ok is
+// false — even if Reason happens to be non-empty (connectorgen validate
+// enforces the inverse: SkipDynamic implies a non-empty Reason, but an
+// author is free to leave a stale Reason on a marker they've since flipped
+// off; that is not this package's concern).
+func bundleSkipReason(b engine.Bundle) (reason string, ok bool) {
+	m := b.Metadata.Conformance
+	if m == nil || !m.SkipDynamic {
+		return "", false
+	}
+	return m.Reason, true
+}
+
+// streamSkipReason mirrors bundleSkipReason for a single StreamSpec's own
+// marker.
+func streamSkipReason(s engine.StreamSpec) (reason string, ok bool) {
+	m := s.Conformance
+	if m == nil || !m.SkipDynamic {
+		return "", false
+	}
+	return m.Reason, true
+}
+
+// streamIsSkipped is streamSkipReason without the reason text, for callers
+// that only need the boolean (candidate-stream exclusion in
+// checkPaginationTerminates/checkRecordsMatchSchema/firstIncrementalStreamWithFixtures).
+func streamIsSkipped(s engine.StreamSpec) bool {
+	_, ok := streamSkipReason(s)
+	return ok
 }
 
 // withReplayURL returns a shallow copy of b with HTTP.URL pointed at
@@ -115,7 +191,7 @@ func checkCheckFixture(b engine.Bundle) CheckResult {
 	defer srv.Close()
 
 	rb := withReplayURL(b, srv.URL)
-	err = engine.Check(context.Background(), rb, runtimeConfigForEngine(b), nil)
+	err = engine.Check(context.Background(), rb, runtimeConfigForEngine(b), engine.HooksFor(b.Name))
 	return checkResultFromErr(name, err)
 }
 
@@ -152,19 +228,27 @@ func checkReadFixtureNonempty(b engine.Bundle, streamName string, mandatory bool
 }
 
 // checkPaginationTerminates runs a full engine.Read against the bundle's
-// FIRST stream (the one guaranteed to ship a fixture) and asserts, via
-// tracker, that the read terminated (Read returned, meaning the paginator
-// eventually stopped) and that pagination consumed EXACTLY one request per
-// recorded fixture page (never more, never less — a page served twice
-// would mean the paginator looped; fewer means fixtures were left
-// unconsumed). A bundle with no streams, or whose first stream has zero
-// fixtures, is Skipped.
+// FIRST non-marker-excluded stream (the one guaranteed to ship a fixture)
+// and asserts, via tracker, that the read terminated (Read returned, meaning
+// the paginator eventually stopped) and that pagination consumed EXACTLY one
+// request per recorded fixture page (never more, never less — a page served
+// twice would mean the paginator looped; fewer means fixtures were left
+// unconsumed). A bundle with no eligible streams, or whose candidate stream
+// has zero fixtures, is Skipped; a bundle whose ONLY stream(s) carry a
+// skip_dynamic marker Skips with that marker's reason instead (R3).
 func checkPaginationTerminates(b engine.Bundle, tracker *hitTracker) CheckResult {
 	const name = "pagination_terminates"
 	if len(b.Streams) == 0 {
 		return CheckResult{Name: name, Skipped: true}
 	}
-	stream := b.Streams[0].Name
+	if reason, ok := firstStreamSkipReasonIfAllExcluded(b.Streams); ok {
+		return CheckResult{Name: name, Skipped: true, Error: reason}
+	}
+	first, ok := firstEligibleStream(b.Streams)
+	if !ok {
+		return CheckResult{Name: name, Skipped: true}
+	}
+	stream := first.Name
 	pages, err := loadFixturePages(b.Fixtures, stream)
 	if err != nil {
 		return CheckResult{Name: name, Error: err.Error()}
@@ -184,15 +268,55 @@ func checkPaginationTerminates(b engine.Bundle, tracker *hitTracker) CheckResult
 	return CheckResult{Name: name, Passed: true}
 }
 
-// checkRecordsMatchSchema runs a full read of every stream that has
-// fixtures and validates each emitted RAW record against that stream's
-// compiled schema (validation runs before projection drops undeclared
-// fields, so a type-drifted field is caught even in "schema" projection
-// mode). A bundle with no fixtured stream is Skipped.
+// firstEligibleStream returns the first stream with no skip_dynamic marker,
+// mirroring "the bundle's first stream" for every dynamic check that used to
+// hardcode b.Streams[0] before marker-exclusion existed (R3).
+func firstEligibleStream(streams []engine.StreamSpec) (engine.StreamSpec, bool) {
+	for _, s := range streams {
+		if !streamIsSkipped(s) {
+			return s, true
+		}
+	}
+	return engine.StreamSpec{}, false
+}
+
+// firstStreamSkipReasonIfAllExcluded reports the first marked stream's
+// reason when EVERY declared stream carries a skip_dynamic marker (so a
+// pagination_terminates/cursor_advances-style "pick the first eligible
+// stream" check has literally no candidate left) — this lets the resulting
+// Skip name the authoritative substitute instead of degrading to the
+// pre-existing generic "no streams"/"no fixtures" Skip (which carries no
+// reason at all).
+func firstStreamSkipReasonIfAllExcluded(streams []engine.StreamSpec) (reason string, ok bool) {
+	if len(streams) == 0 {
+		return "", false
+	}
+	for _, s := range streams {
+		if !streamIsSkipped(s) {
+			return "", false
+		}
+	}
+	reason, _ = streamSkipReason(streams[0])
+	return reason, true
+}
+
+// checkRecordsMatchSchema runs a full read of every non-marker-excluded
+// stream that has fixtures and validates each emitted RAW record against
+// that stream's compiled schema (validation runs before projection drops
+// undeclared fields, so a type-drifted field is caught even in "schema"
+// projection mode). A bundle with no eligible fixtured stream is Skipped; a
+// bundle whose ONLY stream(s) carry a skip_dynamic marker Skips with that
+// marker's reason instead (R3).
 func checkRecordsMatchSchema(b engine.Bundle) CheckResult {
 	const name = "records_match_schema"
+	if reason, ok := firstStreamSkipReasonIfAllExcluded(b.Streams); ok {
+		return CheckResult{Name: name, Skipped: true, Error: reason}
+	}
 	anyFixtured := false
 	for _, s := range b.Streams {
+		if streamIsSkipped(s) {
+			continue
+		}
 		pages, err := loadFixturePages(b.Fixtures, s.Name)
 		if err != nil {
 			return CheckResult{Name: name, Error: err.Error()}
@@ -228,14 +352,19 @@ func checkRecordsMatchSchema(b engine.Bundle) CheckResult {
 	return CheckResult{Name: name, Passed: true}
 }
 
-// checkCursorAdvances runs a full read of the first INCREMENTAL stream with
-// fixtures, asserts the resulting max-observed cursor is non-empty, then
-// re-reads seeded with that cursor as read state and asserts the re-read
-// request actually carried the declared incremental.request_param formatted
-// per param_format. A bundle with no incremental+fixtured stream is
-// Skipped.
+// checkCursorAdvances runs a full read of the first non-marker-excluded
+// INCREMENTAL stream with fixtures, asserts the resulting max-observed
+// cursor is non-empty, then re-reads seeded with that cursor as read state
+// and asserts the re-read request actually carried the declared
+// incremental.request_param formatted per param_format. A bundle with no
+// incremental+fixtured stream at all is Skipped; a bundle whose ONLY
+// incremental+fixtured candidate(s) carry a skip_dynamic marker Skips with
+// that marker's reason instead (R3).
 func checkCursorAdvances(b engine.Bundle) CheckResult {
 	const name = "cursor_advances"
+	if reason, ok := incrementalStreamSkipReasonIfOnlyCandidatesExcluded(b); ok {
+		return CheckResult{Name: name, Skipped: true, Error: reason}
+	}
 	stream, ok := firstIncrementalStreamWithFixtures(b)
 	if !ok {
 		return CheckResult{Name: name, Skipped: true}
@@ -285,7 +414,7 @@ func checkCursorAdvances(b engine.Bundle) CheckResult {
 
 	rb := withReplayURL(b, capture.URL)
 	req := readRequestFor(stream.Name, runtimeConfigForEngine(b), map[string]string{"cursor": maxCursor})
-	_ = engine.Read(context.Background(), rb, req, nil, func(connectors.Record) error { return nil })
+	_ = engine.Read(context.Background(), rb, req, engine.HooksFor(b.Name), func(connectors.Record) error { return nil })
 
 	gotParam := capture.CapturedValue()
 	if gotParam != wantParam {
@@ -320,9 +449,9 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 			continue
 		}
 
-		capture := newCaptureServer()
+		capture := newCaptureServer(fx.Response)
 		rb := withReplayURL(b, capture.URL)
-		if _, err := engine.Write(ctx, rb, writeRequestFor(action.Name, cfg), []connectors.Record{record}, nil); err != nil {
+		if _, err := engine.Write(ctx, rb, writeRequestFor(action.Name, cfg), []connectors.Record{record}, engine.HooksFor(b.Name)); err != nil {
 			capture.Close()
 			out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("engine.Write against replay server failed: %v", err)})
 			continue
@@ -408,13 +537,16 @@ func readRawRecords(b engine.Bundle, streamName string, tracker *hitTracker, onR
 
 	rb := withReplayURL(b, srv.URL)
 	req := readRequestFor(streamName, runtimeConfigForEngine(b), nil)
-	return engine.Read(context.Background(), rb, req, nil, func(r connectors.Record) error {
+	return engine.Read(context.Background(), rb, req, engine.HooksFor(b.Name), func(r connectors.Record) error {
 		return onRecord(map[string]any(r))
 	})
 }
 
 func firstIncrementalStreamWithFixtures(b engine.Bundle) (engine.StreamSpec, bool) {
 	for _, s := range b.Streams {
+		if streamIsSkipped(s) {
+			continue
+		}
 		if s.Incremental == nil || s.Incremental.RequestParam == "" {
 			continue
 		}
@@ -425,6 +557,38 @@ func firstIncrementalStreamWithFixtures(b engine.Bundle) (engine.StreamSpec, boo
 		return s, true
 	}
 	return engine.StreamSpec{}, false
+}
+
+// incrementalStreamSkipReasonIfOnlyCandidatesExcluded reports a marked
+// stream's reason when at least one incremental+fixtured stream exists but
+// EVERY such candidate is marker-excluded (R3) — this lets
+// checkCursorAdvances name the authoritative substitute instead of
+// degrading to the pre-existing generic "no incremental stream" Skip (no
+// reason at all). Returns ok=false when there is no incremental+fixtured
+// stream at all (marked or not), which is the pre-existing, unrelated Skip
+// case checkCursorAdvances already handles.
+func incrementalStreamSkipReasonIfOnlyCandidatesExcluded(b engine.Bundle) (reason string, ok bool) {
+	sawCandidate := false
+	for _, s := range b.Streams {
+		if s.Incremental == nil || s.Incremental.RequestParam == "" {
+			continue
+		}
+		pages, err := loadFixturePages(b.Fixtures, s.Name)
+		if err != nil || len(pages) == 0 {
+			continue
+		}
+		sawCandidate = true
+		if !streamIsSkipped(s) {
+			return "", false
+		}
+		if reason == "" {
+			reason, _ = streamSkipReason(s)
+		}
+	}
+	if !sawCandidate {
+		return "", false
+	}
+	return reason, true
 }
 
 // cursorValueString extracts a comparable/formattable string form from a raw
@@ -557,8 +721,9 @@ func isAllDigitsForAssertion(s string) bool {
 // writeFixture is fixtures/writes/<action>.json's shape (design §E.2):
 // {"record": {...}, "expect": {"method","path","body"}}.
 type writeFixture struct {
-	Record map[string]any   `json:"record"`
-	Expect writeExpectation `json:"expect"`
+	Record   map[string]any   `json:"record"`
+	Expect   writeExpectation `json:"expect"`
+	Response *fixtureResponse `json:"response,omitempty"` // optional: what the capture server should answer with (see newCaptureServer)
 }
 
 type writeExpectation struct {
@@ -622,15 +787,26 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 
 // --- capture / synthetic replay servers ------------------------------------
 
-// captureServer is an httptest.Server that always answers 200 {} and
-// records the last request it received (method/path/query/decoded JSON
-// body) for write_request_shape's assertions.
+// captureServer is an httptest.Server that answers every request with a
+// fixed response (200 {} by default, or a fixture-declared response — see
+// newCaptureServer) and records the last request it received (method/path/
+// query/decoded JSON body) for write_request_shape's assertions.
 type captureServer struct {
 	*httptest.Server
 	last *capturedRequest
 }
 
-func newCaptureServer() *captureServer {
+// newCaptureServer builds a captureServer. When resp is non-nil, every
+// request is answered with resp's declared status/body (defaulting an unset
+// status to 200 and an empty body to "{}", mirroring newCheckReplayServer's
+// same defaulting) — this lets write_request_shape assert against a
+// WriteHook whose follow-up logic reads its own write response (e.g.
+// github's createPullRequest decoding the POST response's "number" field
+// before issuing follow-up requests). When resp is nil (no fixture
+// "response" block declared), the pre-existing hardcoded 200 {} behavior is
+// unchanged byte-for-byte, so every write fixture that never needed a
+// custom response is unaffected.
+func newCaptureServer(resp *fixtureResponse) *captureServer {
 	cs := &captureServer{}
 	cs.Server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var body map[string]any
@@ -638,9 +814,20 @@ func newCaptureServer() *captureServer {
 		dec.UseNumber()
 		_ = dec.Decode(&body) // a body-less request (e.g. DELETE) decodes to nil, not an error worth surfacing
 		cs.last = &capturedRequest{Method: r.Method, Path: r.URL.Path, Query: r.URL.Query(), Body: body}
+
+		status := http.StatusOK
+		respBody := []byte("{}")
+		if resp != nil {
+			if resp.Status != 0 {
+				status = resp.Status
+			}
+			if len(resp.Body) > 0 {
+				respBody = resp.Body
+			}
+		}
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte("{}"))
+		w.WriteHeader(status)
+		_, _ = w.Write(respBody)
 	}))
 	return cs
 }

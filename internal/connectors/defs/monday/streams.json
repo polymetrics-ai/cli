@@ -1,0 +1,64 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "API-Version": "{{ config.api_version }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_token }}", "prefix": "", "when": "{{ secrets.api_token }}" },
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.access_token }}", "prefix": "", "when": "{{ secrets.access_token }}" },
+      { "mode": "none" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "POST", "path": "" },
+    "error_map": [
+      { "status": 401, "hint": "monday api_token/access_token is missing or invalid; re-run pm credentials add monday" },
+      { "status": 429, "class": "rate_limited", "hint": "monday complexity-based rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "boards",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "data.boards" },
+      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "schema": "schemas/boards.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/monday and internal/connectors/hooks/monday/hooks_test.go" }
+    },
+    {
+      "name": "items",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "data.next_items_page.items" },
+      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "schema": "schemas/items.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body next_items_page cursor pagination); hook-covered, proven live by internal/connectors/paritytest/monday and internal/connectors/hooks/monday/hooks_test.go" }
+    },
+    {
+      "name": "users",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "data.users" },
+      "schema": "schemas/users.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/monday and internal/connectors/hooks/monday/hooks_test.go" }
+    },
+    {
+      "name": "teams",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "data.teams" },
+      "schema": "schemas/teams.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/monday and internal/connectors/hooks/monday/hooks_test.go" }
+    },
+    {
+      "name": "tags",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "data.tags" },
+      "schema": "schemas/tags.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/monday and internal/connectors/hooks/monday/hooks_test.go" }
+    }
+  ]
+}

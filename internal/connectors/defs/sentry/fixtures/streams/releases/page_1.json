@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/api/0/organizations/synthetic-conformance-value/releases/", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "version": "1.0.0-fixture", "shortVersion": "1.0.0", "ref": "main", "url": "https://example.com/fixture", "status": "open", "dateCreated": "2026-01-01T00:00:00Z", "dateReleased": "2026-01-02T00:00:00Z" }
+    ]
+  }
+}

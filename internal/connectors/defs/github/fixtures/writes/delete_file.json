@@ -1,0 +1,15 @@
+{
+  "record": {
+    "path": "README.md",
+    "message": "Remove fixture file",
+    "sha": "abc123"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/contents/README.md",
+    "body": {
+      "message": "Remove fixture file",
+      "sha": "abc123"
+    }
+  }
+}

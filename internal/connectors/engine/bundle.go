@@ -32,16 +32,33 @@ type Bundle struct {
 
 // Metadata is the parsed metadata.json.
 type Metadata struct {
-	Name            string        `json:"name"`
-	DisplayName     string        `json:"display_name"`
-	Description     string        `json:"description"`
-	IntegrationType string        `json:"integration_type"`
-	DocsURL         string        `json:"docs_url,omitempty"`
-	ReleaseStage    string        `json:"release_stage"`
-	Capabilities    Capabilities  `json:"capabilities"`
-	Batch           BatchSpec     `json:"batch,omitempty"`
-	RateLimit       RateLimitSpec `json:"rate_limit,omitempty"`
-	Risk            RiskSpec      `json:"risk,omitempty"`
+	Name            string             `json:"name"`
+	DisplayName     string             `json:"display_name"`
+	Description     string             `json:"description"`
+	IntegrationType string             `json:"integration_type"`
+	DocsURL         string             `json:"docs_url,omitempty"`
+	ReleaseStage    string             `json:"release_stage"`
+	Capabilities    Capabilities       `json:"capabilities"`
+	Batch           BatchSpec          `json:"batch,omitempty"`
+	RateLimit       RateLimitSpec      `json:"rate_limit,omitempty"`
+	Risk            RiskSpec           `json:"risk,omitempty"`
+	Conformance     *ConformanceMarker `json:"conformance,omitempty"`
+}
+
+// ConformanceMarker is an OPTIONAL, explicit opt-out from
+// conformance's dynamic (fixture-replay) checks, declarable at bundle level
+// (Metadata.Conformance — e.g. a custom-auth-only connector whose hook
+// conformance's synthetic config can never satisfy) or at stream level
+// (StreamSpec.Conformance — e.g. a stream whose real reads dispatch entirely
+// through a Tier-2 StreamHook that a declarative fixture replay cannot
+// exercise). Reason is required whenever SkipDynamic is true
+// (connectorgen validate's ruleConformanceSkipReason enforces this); it must
+// name the authoritative substitute that actually proves the skipped
+// behavior (e.g. "hook-covered; proven live by
+// internal/connectors/paritytest/<name>"), never just assert the skip.
+type ConformanceMarker struct {
+	SkipDynamic bool   `json:"skip_dynamic,omitempty"`
+	Reason      string `json:"reason,omitempty"`
 }
 
 // Capabilities mirrors metadata.json.capabilities.
@@ -153,17 +170,18 @@ type RateLimitSpec struct {
 
 // StreamSpec is one entry in streams.json's "streams" array.
 type StreamSpec struct {
-	Name           string            `json:"name"`
-	Method         string            `json:"method,omitempty"` // default GET
-	Path           string            `json:"path"`
-	Query          map[string]string `json:"query,omitempty"`
-	Body           map[string]any    `json:"body,omitempty"` // POST-body streams
-	Records        RecordsSpec       `json:"records"`
-	Pagination     *PaginationSpec   `json:"pagination,omitempty"` // overrides base
-	Incremental    *IncrementalSpec  `json:"incremental,omitempty"`
-	ComputedFields map[string]string `json:"computed_fields,omitempty"`
-	Projection     string            `json:"projection,omitempty"` // "schema" (default) | "passthrough"
-	SchemaRef      string            `json:"schema"`
+	Name           string             `json:"name"`
+	Method         string             `json:"method,omitempty"` // default GET
+	Path           string             `json:"path"`
+	Query          map[string]string  `json:"query,omitempty"`
+	Body           map[string]any     `json:"body,omitempty"` // POST-body streams
+	Records        RecordsSpec        `json:"records"`
+	Pagination     *PaginationSpec    `json:"pagination,omitempty"` // overrides base
+	Incremental    *IncrementalSpec   `json:"incremental,omitempty"`
+	ComputedFields map[string]string  `json:"computed_fields,omitempty"`
+	Projection     string             `json:"projection,omitempty"` // "schema" (default) | "passthrough"
+	SchemaRef      string             `json:"schema"`
+	Conformance    *ConformanceMarker `json:"conformance,omitempty"`
 }
 
 // RecordsSpec describes how to extract records from a page body.

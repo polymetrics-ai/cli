@@ -4,3 +4,10 @@
 // package so their init() functions run engine.RegisterHooks side effects.
 // It is regenerated deterministically by `go run ./cmd/connectorgen gen`.
 package hookset
+
+import (
+	_ "polymetrics.ai/internal/connectors/hooks/github"
+	_ "polymetrics.ai/internal/connectors/hooks/gmail"
+	_ "polymetrics.ai/internal/connectors/hooks/monday"
+	_ "polymetrics.ai/internal/connectors/hooks/sentry"
+)

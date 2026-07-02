@@ -1,0 +1,60 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues",
+    "query": {
+      "page": "2",
+      "per_page": "100",
+      "state": "all"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 101,
+        "node_id": "I_kwDOFixture101",
+        "number": 201,
+        "state": "open",
+        "state_reason": null,
+        "title": "Fixture issue 101 (final short page)",
+        "body": "Fixture issue body 101.",
+        "html_url": "https://github.com/octocat/hello-world/issues/201",
+        "url": "https://api.github.com/repos/octocat/hello-world/issues/201",
+        "user": {
+          "login": "octocat",
+          "id": 1
+        },
+        "author_association": "OWNER",
+        "comments": 2,
+        "locked": false,
+        "created_at": "2026-01-02T00:00:00Z",
+        "updated_at": "2026-01-02T01:00:00Z",
+        "closed_at": null
+      },
+      {
+        "id": 102,
+        "node_id": "I_kwDOFixturePR",
+        "number": 202,
+        "state": "open",
+        "title": "This is actually a pull request",
+        "body": "Should be filtered out of the issues stream.",
+        "html_url": "https://github.com/octocat/hello-world/pull/202",
+        "url": "https://api.github.com/repos/octocat/hello-world/issues/202",
+        "user": {
+          "login": "octocat",
+          "id": 1
+        },
+        "author_association": "OWNER",
+        "comments": 0,
+        "locked": false,
+        "pull_request": {
+          "url": "https://api.github.com/repos/octocat/hello-world/pulls/202"
+        },
+        "created_at": "2026-01-02T02:00:00Z",
+        "updated_at": "2026-01-02T02:00:00Z",
+        "closed_at": null
+      }
+    ]
+  }
+}

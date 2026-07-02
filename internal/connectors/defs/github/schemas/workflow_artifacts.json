@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "workflow_artifacts",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "size_in_bytes": {
+      "type": "integer"
+    },
+    "url": {
+      "type": "string"
+    },
+    "archive_download_url": {
+      "type": "string"
+    },
+    "expired": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "expires_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workflow_run_id": {
+      "type": [
+        "integer",
+        "null",
+        "string"
+      ],
+      "description": "Emitted as a decimal STRING (not a native JSON number) when sourced from a computed_fields nested-path template \u2014 engine/interpolate.go's Interpolate always stringifies its result; see docs.md Known limits."
+    }
+  }
+}

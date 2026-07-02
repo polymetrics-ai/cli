@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/users/me/labels" },
+  "response": {
+    "status": 200,
+    "body": {
+      "labels": [
+        {
+          "id": "label_fixture_1",
+          "name": "INBOX",
+          "type": "system",
+          "messageListVisibility": "show",
+          "labelListVisibility": "labelShow",
+          "messagesTotal": 10,
+          "messagesUnread": 2,
+          "threadsTotal": 8,
+          "threadsUnread": 1
+        },
+        {
+          "id": "label_fixture_2",
+          "name": "Fixture Label",
+          "type": "user",
+          "messageListVisibility": "show",
+          "labelListVisibility": "labelShow",
+          "messagesTotal": 3,
+          "messagesUnread": 0,
+          "threadsTotal": 3,
+          "threadsUnread": 0
+        }
+      ]
+    }
+  }
+}

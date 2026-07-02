@@ -1,0 +1,18 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.basic_auth_header }}", "prefix": "" }
+    ],
+    "check": { "method": "GET", "path": "/resources/accounts" }
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "/resources/accounts",
+      "records": { "path": "results" },
+      "schema": "schemas/accounts.json"
+    }
+  ]
+}

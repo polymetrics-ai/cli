@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/users/me/threads", "query": { "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "threads": [
+        { "id": "thread_fixture_1", "snippet": "Fixture thread snippet 1", "historyId": "1001" },
+        { "id": "thread_fixture_2", "snippet": "Fixture thread snippet 2", "historyId": "1002" }
+      ],
+      "nextPageToken": "page2token",
+      "resultSizeEstimate": 3
+    }
+  }
+}

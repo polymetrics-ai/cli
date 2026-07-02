@@ -1,0 +1,13 @@
+{
+  "request": { "method": "POST", "path": "/", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "tags": [
+          { "id": "tag1", "name": "fixture-tag-1", "color": "blue" }
+        ]
+      }
+    }
+  }
+}

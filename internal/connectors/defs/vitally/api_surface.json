@@ -1,0 +1,14 @@
+{
+  "api": "Vitally REST API (https://docs.vitally.io/pushing-data-to-vitally/rest-api)",
+  "docs": "https://docs.vitally.io/pushing-data-to-vitally/rest-api",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave1 pilot migration: the 1 legacy-parity read stream only (accounts); minimal-honest api_surface per docs/migration/conventions.md section 2 / DECISIONS.md #4 — full Vitally API-surface research (every documented endpoint) is Pass B (wave5), not this pilot fan-out.",
+  "endpoints": [
+    { "method": "GET", "path": "/resources/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "POST", "path": "/resources/accounts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy implements no write path for accounts (Write returns ErrUnsupportedOperation)" } },
+    { "method": "GET", "path": "/resources/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a users stream" } },
+    { "method": "GET", "path": "/resources/notes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a notes stream" } },
+    { "method": "GET", "path": "/resources/conversations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a conversations stream" } },
+    { "method": "POST", "path": "/resources/customFields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement custom field ingestion" } }
+  ]
+}

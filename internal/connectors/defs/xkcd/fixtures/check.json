@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/info.0.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "num": 1,
+      "title": "Barrel - Part 1",
+      "safe_title": "Barrel - Part 1",
+      "year": "2006",
+      "month": "1",
+      "day": "1"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "title": "v1.0 launch",
+    "state": "open"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/milestones",
+    "body": {
+      "title": "v1.0 launch",
+      "state": "open"
+    }
+  }
+}

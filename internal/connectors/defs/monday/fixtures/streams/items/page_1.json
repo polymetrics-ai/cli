@@ -1,0 +1,16 @@
+{
+  "request": { "method": "POST", "path": "/", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "next_items_page": {
+          "cursor": "CUR_2",
+          "items": [
+            { "id": "i1", "name": "Fixture Item 1", "state": "active", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "group": { "id": "grp_1", "title": "Group One" }, "board": { "id": "1", "name": "Fixture Board 1" } }
+          ]
+        }
+      }
+    }
+  }
+}

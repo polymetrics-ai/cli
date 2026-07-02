@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "repository",
+  "type": "object",
+  "x-primary-key": [
+    "node_id"
+  ],
+  "x-cursor-field": "updated_at",
+  "required": [
+    "node_id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "private": {
+      "type": "boolean"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "html_url": {
+      "type": "string"
+    },
+    "default_branch": {
+      "type": "string"
+    },
+    "language": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stargazers_count": {
+      "type": "integer"
+    },
+    "watchers_count": {
+      "type": "integer"
+    },
+    "forks_count": {
+      "type": "integer"
+    },
+    "open_issues_count": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "pushed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

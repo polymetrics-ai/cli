@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "branches",
+  "type": "object",
+  "x-primary-key": [
+    "name"
+  ],
+  "required": [
+    "name"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "protected": {
+      "type": "boolean"
+    },
+    "commit_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

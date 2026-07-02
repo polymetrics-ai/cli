@@ -1,0 +1,14 @@
+{
+  "request": { "method": "POST", "path": "/", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "boards": [
+          { "id": "1", "name": "Fixture Board 1", "state": "active", "board_kind": "public", "description": "fixture board", "type": "board", "updated_at": "2026-01-01T00:00:00Z", "workspace_id": "ws_1" },
+          { "id": "2", "name": "Fixture Board 2", "state": "active", "board_kind": "private", "description": "fixture board", "type": "board", "updated_at": "2026-01-02T00:00:00Z", "workspace_id": "ws_1" }
+        ]
+      }
+    }
+  }
+}

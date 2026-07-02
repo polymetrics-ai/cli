@@ -1,0 +1,19 @@
+{
+  "api": "Calendly API v2 (https://api.calendly.com)",
+  "docs": "https://developer.calendly.com/api-docs",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave1-pilot migration: the 5 legacy-parity read streams only (calendly is read-only in both legacy and this bundle); the full Calendly v2 surface (webhooks, invitees, availability schedules, routing forms, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/scheduled_events", "covered_by": { "stream": "scheduled_events" } },
+    { "method": "GET", "path": "/event_types", "covered_by": { "stream": "event_types" } },
+    { "method": "GET", "path": "/organization_memberships", "covered_by": { "stream": "organization_memberships" } },
+    { "method": "GET", "path": "/groups", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/users/me", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/scheduled_events/{uuid}/invitees", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/webhook_subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/webhook_subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/availability_schedules", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/routing_forms", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/scheduled_events/{uuid}/cancellation", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy calendly is read-only (Write returns ErrUnsupportedOperation)" } }
+  ]
+}

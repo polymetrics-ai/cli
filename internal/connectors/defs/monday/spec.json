@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Monday Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.monday.com/v2",
+      "description": "monday.com GraphQL API base URL override for tests or proxies. Defaults to https://api.monday.com/v2."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "monday.com personal API token, sent verbatim (no Bearer prefix) as the Authorization header. Provide either api_token or access_token."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "monday.com OAuth access token, sent verbatim (no Bearer prefix) as the Authorization header. Provide either api_token or access_token."
+    },
+    "api_version": {
+      "type": "string",
+      "description": "Optional monday.com API-Version header value (e.g. 2024-01). Omitted entirely when unset."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per GraphQL page (1-500)."
+    }
+  }
+}

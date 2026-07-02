@@ -35,7 +35,15 @@
           "incremental": { "type": "object" },
           "computed_fields": { "type": "object" },
           "projection": { "type": "string", "enum": ["schema", "passthrough"] },
-          "schema": { "type": "string" }
+          "schema": { "type": "string" },
+          "conformance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "skip_dynamic": { "type": "boolean" },
+              "reason": { "type": "string" }
+            }
+          }
         }
       }
     }

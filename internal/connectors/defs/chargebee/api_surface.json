@@ -1,0 +1,21 @@
+{
+  "api": "Chargebee API v2 (https://{site}.chargebee.com/api/v2)",
+  "docs": "https://apidocs.chargebee.com/docs/api/versioning",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave1-pilot migration: the 5 legacy-parity read streams only; the full Chargebee surface (coupons, credit notes, addons, hosted pages, events, webhooks, write endpoints, etc.) is out of scope until Pass B. Chargebee is a read-only connector in both legacy and this bundle.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/v2/subscriptions", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/v2/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/v2/plans", "covered_by": { "stream": "plans" } },
+    { "method": "GET", "path": "/v2/items", "covered_by": { "stream": "items" } },
+    { "method": "GET", "path": "/v2/item_prices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/coupons", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/credit_notes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/transactions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/events", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/webhook_endpoints", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

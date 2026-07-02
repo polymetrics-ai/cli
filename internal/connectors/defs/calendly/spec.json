@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Calendly Connection Specification",
+  "type": "object",
+  "required": ["api_key", "organization_uri"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Calendly personal access token or OAuth token. Used only for Bearer auth (Authorization: Bearer <api_key>); never logged."
+    },
+    "organization_uri": {
+      "type": "string",
+      "format": "uri",
+      "description": "The authenticated user's Calendly organization URI (e.g. https://api.calendly.com/organizations/AAAAAAAAAAAAAAAA), used to scope every organization-level list request (organization=<organization_uri>). Legacy discovers this dynamically on every read via GET /users/me (current_organization); the engine dialect has no mechanism to chain a prior request's response into a later request's query params, so this bundle asks the operator to configure the (per-account invariant) URI once instead — resolvable by calling GET https://api.calendly.com/users/me and reading resource.current_organization. See docs.md's Known limits."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.calendly.com",
+      "description": "Calendly API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only scheduled_events starting at or after this time are read (Calendly's min_start_time filter). Other streams have no server-side lower-bound filter, matching legacy."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100), sent as the count query param."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

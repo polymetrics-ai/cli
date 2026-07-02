@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/resources/accounts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "acct_fixture_1",
+          "name": "Fixture Account One",
+          "traits": { "plan": "pro", "mrr": 1200 }
+        },
+        {
+          "id": "acct_fixture_2",
+          "name": "Fixture Account Two",
+          "traits": { "plan": "free", "mrr": 0 }
+        }
+      ]
+    }
+  }
+}

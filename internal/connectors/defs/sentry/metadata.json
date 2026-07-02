@@ -1,0 +1,22 @@
+{
+  "name": "sentry",
+  "display_name": "Sentry",
+  "description": "Reads Sentry projects, issues, error events, and releases through the Sentry REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://docs.sentry.io/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Sentry API read of project, issue, event, and release data"
+  }
+}

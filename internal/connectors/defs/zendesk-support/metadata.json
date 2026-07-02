@@ -1,0 +1,22 @@
+{
+  "name": "zendesk-support",
+  "display_name": "Zendesk Support",
+  "description": "Reads Zendesk Support tickets, users, organizations, groups, and satisfaction ratings through the Zendesk Support REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.zendesk.com/api-reference/ticketing/introduction/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Zendesk Support API read of ticket, user, and organization data"
+  }
+}

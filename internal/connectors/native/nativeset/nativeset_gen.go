@@ -7,3 +7,7 @@
 // pure wiring, regenerated deterministically as packages are added.
 // It is regenerated deterministically by `go run ./cmd/connectorgen gen`.
 package nativeset
+
+import (
+	_ "polymetrics.ai/internal/connectors/native/postgres"
+)

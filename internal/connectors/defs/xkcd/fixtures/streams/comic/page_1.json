@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/info.0.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "num": 614,
+      "title": "Woodpecker",
+      "safe_title": "Woodpecker",
+      "year": "2009",
+      "month": "9",
+      "day": "9"
+    }
+  }
+}

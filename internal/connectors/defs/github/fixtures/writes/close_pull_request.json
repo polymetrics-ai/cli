@@ -1,0 +1,10 @@
+{
+  "record": {
+    "pull_number": 301
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/pulls/301",
+    "body": {}
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zendesk Support Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Zendesk Support account root, e.g. https://acme.zendesk.com for subdomain 'acme'. The engine appends /api/v2 to every request; do not include /api/v2 yourself. Also usable as a base URL override for tests/proxies."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "OAuth2 access token. Sent as Authorization: Bearer <access_token>. Preferred over api_token when both are present (matches legacy precedence)."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zendesk API token (Admin Center > Apps and integrations > APIs > Zendesk API). Sent via HTTP Basic as '<email>/token:<api_token>'. Requires email."
+    },
+    "email": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zendesk agent email address paired with api_token for API-token Basic auth (the '<email>/token' username half)."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only objects updated at or after this time are read on a fresh sync (no persisted cursor yet)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

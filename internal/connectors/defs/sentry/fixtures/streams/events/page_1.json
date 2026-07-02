@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/api/0/projects/synthetic-conformance-value/synthetic-conformance-value/events/", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "fixture_event_1", "eventID": "evt_fixture_1", "groupID": "grp_fixture_1", "title": "NullPointerException in handler", "message": "fixture message", "platform": "python", "type": "error", "dateCreated": "2026-01-01T00:00:00Z" }
+    ]
+  }
+}

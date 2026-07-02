@@ -1,0 +1,13 @@
+{
+  "record": {
+    "milestone_number": 1,
+    "state": "closed"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/milestones/1",
+    "body": {
+      "state": "closed"
+    }
+  }
+}

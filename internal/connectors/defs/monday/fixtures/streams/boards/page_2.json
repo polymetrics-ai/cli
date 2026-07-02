@@ -1,0 +1,11 @@
+{
+  "request": { "method": "POST", "path": "/", "query": { "page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "boards": []
+      }
+    }
+  }
+}

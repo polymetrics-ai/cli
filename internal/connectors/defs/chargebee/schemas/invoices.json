@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "customer_id": { "type": ["string", "null"] },
+    "subscription_id": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "currency_code": { "type": ["string", "null"] },
+    "total": { "type": ["string", "null"], "description": "Integer, stringified by computed_fields (see docs.md Known limits)." },
+    "amount_paid": { "type": ["string", "null"], "description": "Integer, stringified by computed_fields (see docs.md Known limits)." },
+    "amount_due": { "type": ["string", "null"], "description": "Integer, stringified by computed_fields (see docs.md Known limits)." },
+    "date": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
+    "due_date": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
+    "paid_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
+    "updated_at": { "type": ["string", "null"], "description": "Unix seconds, stringified by computed_fields (see docs.md Known limits)." },
+    "deleted": { "type": ["string", "null"], "description": "Boolean, stringified by computed_fields (see docs.md Known limits)." }
+  }
+}

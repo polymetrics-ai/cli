@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "limit": "100", "offset": "cus_fixture_2_offset" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "customer": {
+            "id": "cus_fixture_3",
+            "first_name": "Fixture3",
+            "last_name": "User",
+            "email": "fixture3@example.com",
+            "company": "Example Inc",
+            "phone": "+15550102",
+            "auto_collection": "off",
+            "net_term_days": 30,
+            "taxability": "exempt",
+            "created_at": 1767225603,
+            "updated_at": 1767225603,
+            "deleted": true
+          }
+        }
+      ]
+    }
+  }
+}

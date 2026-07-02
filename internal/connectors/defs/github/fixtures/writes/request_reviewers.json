@@ -1,0 +1,17 @@
+{
+  "record": {
+    "pull_number": 301,
+    "reviewers": [
+      "octocat"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/pulls/301/requested_reviewers",
+    "body": {
+      "reviewers": [
+        "octocat"
+      ]
+    }
+  }
+}

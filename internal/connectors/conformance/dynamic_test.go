@@ -1,6 +1,7 @@
 package conformance
 
 import (
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
@@ -176,6 +177,153 @@ func TestCheckFixture_AndReadFixtureNonempty(t *testing.T) {
 	if !nonEmpty.Passed {
 		t.Fatalf("read_fixture_nonempty(widgets) failed: %s", nonEmpty.Error)
 	}
+}
+
+// --- conformance skip markers (R3: hook-aware dynamic conformance) --------
+//
+// A bundle may declare an OPTIONAL, explicit "conformance": {"skip_dynamic":
+// true, "reason": "..."} marker at stream level (streams.json) or bundle
+// level (metadata.json), for a connector whose real behavior lives entirely
+// behind a Tier-2 hook that a declarative fixture replay cannot exercise
+// (e.g. monday's GraphQL StreamHook, gmail's custom-auth-only AuthHook).
+// dynamic.go must Skip (never Pass/Fail) the affected checks and surface the
+// marker's reason as the CheckResult's Error text, so a report reader always
+// sees WHY a check didn't run and what proves the behavior instead.
+
+// TestDynamicChecks_StreamLevelSkipMarkerSkipsReadCheckWithReason: a stream
+// whose fixture is deliberately unreplayable via the declarative path (see
+// testdata/good/acme-stream-marker) but carries a skip_dynamic marker must
+// report read_fixture_nonempty:widgets as Skipped with the marker's reason,
+// never as a failure.
+func TestDynamicChecks_StreamLevelSkipMarkerSkipsReadCheckWithReason(t *testing.T) {
+	b := loadTestBundle(t, "testdata/good", "acme-stream-marker")
+	checks := runDynamicChecks(b)
+
+	result := mustFindCheck(t, checks, "read_fixture_nonempty:widgets")
+	if !result.Skipped {
+		t.Fatalf("read_fixture_nonempty:widgets Skipped = false, want true (marker should skip, not fail): %+v", result)
+	}
+	if result.Passed {
+		t.Fatalf("read_fixture_nonempty:widgets Passed = true, want false (a Skipped check is never also Passed)")
+	}
+	if result.Error == "" {
+		t.Fatalf("read_fixture_nonempty:widgets Skipped but carries no reason text")
+	}
+	if !strings.Contains(result.Error, "paritytest/acme-stream-marker") {
+		t.Fatalf("read_fixture_nonempty:widgets Error %q does not name the authoritative substitute", result.Error)
+	}
+
+	// The unmarked sibling stream (notes) must still run normally (Passed),
+	// proving the marker is scoped to the ONE marked stream, not a
+	// connector-wide bypass.
+	notes := mustFindCheck(t, checks, "read_fixture_nonempty:notes")
+	if !notes.Passed {
+		t.Fatalf("read_fixture_nonempty:notes failed on the unmarked sibling stream: %+v", notes)
+	}
+}
+
+// TestDynamicChecks_StreamLevelMarkerExcludesStreamFromPaginationAndCursorChecks
+// asserts that a marked FIRST stream (widgets — otherwise
+// pagination_terminates' natural first-stream candidate, since it's first
+// with fixtures) is excluded from candidate selection: pagination_terminates
+// must not attempt (and therefore not fail against) its deliberately
+// unreplayable fixture — it falls through to the next ELIGIBLE stream
+// (notes) and Passes against that instead, proving exclusion means "treat as
+// if this stream did not exist," not "abort the whole check." cursor_advances
+// has no OTHER incremental stream in this bundle (only widgets declares
+// `incremental`), so once widgets is excluded there is no candidate left at
+// all — it Skips with the marker's reason rather than degrading to the
+// pre-existing generic "no incremental stream" Skip.
+func TestDynamicChecks_StreamLevelMarkerExcludesStreamFromPaginationAndCursorChecks(t *testing.T) {
+	b := loadTestBundle(t, "testdata/good", "acme-stream-marker")
+	checks := runDynamicChecks(b)
+
+	pagination := mustFindCheck(t, checks, "pagination_terminates")
+	if !pagination.Passed {
+		t.Fatalf("pagination_terminates Passed = false, want true (should fall through to the next eligible stream, notes, not attempt the marker-excluded widgets): %+v", pagination)
+	}
+
+	cursor := mustFindCheck(t, checks, "cursor_advances")
+	if !cursor.Skipped {
+		t.Fatalf("cursor_advances Skipped = false, want true (widgets is the only incremental stream and is marker-excluded): %+v", cursor)
+	}
+	if cursor.Error == "" {
+		t.Fatalf("cursor_advances Skipped but carries no reason text")
+	}
+}
+
+// TestDynamicChecks_AllStreamsMarkedSkipsPaginationTerminatesWithReason is the
+// companion case: when EVERY declared stream carries its OWN per-stream
+// skip_dynamic marker (as opposed to acme-bundle-marker's single
+// bundle-level marker, a different code path entirely — see
+// runDynamicChecks), pagination_terminates has no eligible candidate stream
+// left at all and must Skip with the (first) marker's reason, not silently
+// fall back to the pre-existing no-reason "no streams" Skip.
+func TestDynamicChecks_AllStreamsMarkedSkipsPaginationTerminatesWithReason(t *testing.T) {
+	b := loadTestBundle(t, "testdata/good", "acme-all-streams-marked")
+	result := checkPaginationTerminates(b, newHitTracker())
+	if !result.Skipped {
+		t.Fatalf("pagination_terminates Skipped = false, want true (every stream is marker-excluded): %+v", result)
+	}
+	if result.Error == "" {
+		t.Fatalf("pagination_terminates Skipped but carries no reason text")
+	}
+}
+
+// TestDynamicChecks_BundleLevelSkipMarkerSkipsAuthDependentChecks: a
+// bundle-level marker (testdata/good/acme-bundle-marker — every stream
+// fixture AND check.json deliberately unreplayable) must Skip check_fixture,
+// every read_fixture_nonempty:*, pagination_terminates, and
+// records_match_schema, all carrying the marker's reason — none may Fail.
+func TestDynamicChecks_BundleLevelSkipMarkerSkipsAuthDependentChecks(t *testing.T) {
+	b := loadTestBundle(t, "testdata/good", "acme-bundle-marker")
+	checks := runDynamicChecks(b)
+
+	for _, name := range []string{
+		"check_fixture",
+		"read_fixture_nonempty:widgets",
+		"read_fixture_nonempty:notes",
+		"pagination_terminates",
+		"records_match_schema",
+		"cursor_advances",
+	} {
+		result := mustFindCheck(t, checks, name)
+		if !result.Skipped {
+			t.Errorf("%s Skipped = false, want true (bundle-level marker): %+v", name, result)
+		}
+		if result.Passed {
+			t.Errorf("%s Passed = true, want false (a Skipped check is never also Passed)", name)
+		}
+		if result.Error == "" {
+			t.Errorf("%s Skipped but carries no reason text", name)
+		}
+	}
+}
+
+// TestDynamicChecks_UnmarkedHookFailureStillFails proves the marker
+// mechanism does not accidentally widen into a blanket bypass: the
+// pre-existing negative fixtures (no marker present at all) must still
+// report a hard failure, exactly as before this feature existed.
+func TestDynamicChecks_UnmarkedHookFailureStillFails(t *testing.T) {
+	b := loadTestBundleFromDrift(t)
+	result := checkRecordsMatchSchema(b)
+	if result.Passed || result.Skipped {
+		t.Fatalf("records_match_schema on an unmarked schema-drift bundle: Passed=%v Skipped=%v, want a hard failure", result.Passed, result.Skipped)
+	}
+	if result.Error == "" {
+		t.Fatalf("failing records_match_schema has no Error message")
+	}
+}
+
+func mustFindCheck(t *testing.T, checks []CheckResult, name string) CheckResult {
+	t.Helper()
+	for _, c := range checks {
+		if c.Name == name {
+			return c
+		}
+	}
+	t.Fatalf("no check named %q in %+v", name, checks)
+	return CheckResult{}
 }
 
 // --- helpers: alternate bundles for negative dynamic cases ---------------

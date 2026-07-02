@@ -1,0 +1,16 @@
+{
+  "api": "Sentry API (https://docs.sentry.io/api/)",
+  "docs": "https://docs.sentry.io/api/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave1-pilot migration: the 4 legacy-parity read streams only (projects, issues, events, releases); the full Sentry API surface (alerts, dashboards, teams, members, integrations, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/0/projects/", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/api/0/projects/{organization_slug}/{project_slug}/issues/", "covered_by": { "stream": "issues" } },
+    { "method": "GET", "path": "/api/0/projects/{organization_slug}/{project_slug}/events/", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/api/0/organizations/{organization_slug}/releases/", "covered_by": { "stream": "releases" } },
+    { "method": "GET", "path": "/api/0/organizations/{organization_slug}/teams/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/0/organizations/{organization_slug}/members/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/0/organizations/{organization_slug}/alert-rules/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/0/projects/{organization_slug}/{project_slug}/issues/{issue_id}/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (legacy sentry connector is read-only; no write actions exist to port)" } }
+  ]
+}

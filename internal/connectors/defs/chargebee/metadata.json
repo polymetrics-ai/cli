@@ -1,0 +1,22 @@
+{
+  "name": "chargebee",
+  "display_name": "Chargebee",
+  "description": "Reads Chargebee customers, subscriptions, invoices, plans, and items through the Chargebee v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.chargebee.com/docs/api/versioning",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Chargebee API read of customer and billing data"
+  }
+}

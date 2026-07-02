@@ -1,0 +1,661 @@
+package githubparity_test
+
+import (
+	"context"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/json"
+	"encoding/pem"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"reflect"
+	"sort"
+	"strings"
+	"testing"
+
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
+	githublegacy "polymetrics.ai/internal/connectors/github"
+	_ "polymetrics.ai/internal/connectors/hooks/github" // registers the AuthHook/WriteHook via init()
+)
+
+// This file is the migration parity suite for the github bundle (PLAN.md
+// P-9, wave1-pilot): the Tier-2 AuthHook (github_app JWT->installation-token
+// exchange) + WriteHook (compound writes) pilot, and the only pilot with
+// real writes (24 legacy write actions). Both the legacy hand-written
+// github.Connector (internal/connectors/github, read-only reference) and
+// the engine-backed connector (engine.New(bundle, engine.HooksFor("github")))
+// are driven against the SAME httptest.Server; RAW reflect.DeepEqual record
+// equality (after a UseNumber-normalizing round trip) is the parity bar for
+// reads, and method/path/decoded-body equality is the bar for writes. This is
+// the red-first test: it fails to even compile/load until defs/github and
+// hooks/github exist.
+
+func loadGithubBundle(t *testing.T) engine.Bundle {
+	t.Helper()
+	bundles, err := engine.LoadAll(defs.FS)
+	if err != nil {
+		t.Fatalf("engine.LoadAll(defs.FS): %v", err)
+	}
+	for _, b := range bundles {
+		if b.Name == "github" {
+			return b
+		}
+	}
+	names := make([]string, 0, len(bundles))
+	for _, b := range bundles {
+		names = append(names, b.Name)
+	}
+	t.Fatalf("bundle %q not found in defs.FS (bundles: %v)", "github", names)
+	return engine.Bundle{}
+}
+
+func withGithubBaseURL(b engine.Bundle, baseURL string) engine.Bundle {
+	b.HTTP.URL = baseURL
+	return b
+}
+
+func newGithubEngineConnector(b engine.Bundle) connectors.Connector {
+	return engine.New(b, engine.HooksFor("github"))
+}
+
+// githubRuntimeConfig builds a RuntimeConfig usable by BOTH connectors:
+// legacy reads a single "repository" ("owner/repo") config value (or "repo"
+// alias) while the engine bundle reads separate "owner"/"repo" keys (see
+// docs.md Known limits — InterpolatePath urlencodes each {{ }} reference as
+// one opaque path segment, so a combined value can't be split
+// declaratively); setting all three keeps both sides pointed at the same
+// fixture repository.
+func githubRuntimeConfig(baseURL string, extra map[string]string) connectors.RuntimeConfig {
+	cfg := map[string]string{
+		"base_url":   baseURL,
+		"repository": "octocat/hello-world",
+		"owner":      "octocat",
+		"repo":       "hello-world",
+	}
+	for k, v := range extra {
+		cfg[k] = v
+	}
+	return connectors.RuntimeConfig{
+		Config:  cfg,
+		Secrets: map[string]string{"token": "fixture_token_placeholder"},
+	}
+}
+
+func readAllGithubRecords(t *testing.T, c connectors.Connector, req connectors.ReadRequest) []connectors.Record {
+	t.Helper()
+	var out []connectors.Record
+	if err := c.Read(context.Background(), req, func(r connectors.Record) error {
+		out = append(out, r)
+		return nil
+	}); err != nil {
+		t.Fatalf("Read(%s): %v", req.Stream, err)
+	}
+	return out
+}
+
+// normalizeRecord re-encodes r through encoding/json with UseNumber so
+// legacy's native Go types and the engine's json.Number-preserving decode
+// compare equal on numeric fields (mirrors parity_stripe_test.go's helper).
+func normalizeRecord(t *testing.T, r connectors.Record) map[string]any {
+	t.Helper()
+	raw, err := json.Marshal(map[string]any(r))
+	if err != nil {
+		t.Fatalf("marshal record: %v", err)
+	}
+	var out map[string]any
+	dec := json.NewDecoder(strings.NewReader(string(raw)))
+	dec.UseNumber()
+	if err := dec.Decode(&out); err != nil {
+		t.Fatalf("decode record: %v", err)
+	}
+	return out
+}
+
+func normalizeRecords(t *testing.T, recs []connectors.Record) []map[string]any {
+	t.Helper()
+	out := make([]map[string]any, len(recs))
+	for i, r := range recs {
+		out[i] = normalizeRecord(t, r)
+	}
+	return out
+}
+
+func writeJSON(w http.ResponseWriter, body string) {
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = w.Write([]byte(body))
+}
+
+// --- bundle smoke guard ----------------------------------------------------
+
+func TestParityGithub_BundleLoadsAndValidates(t *testing.T) {
+	bundle := loadGithubBundle(t)
+
+	wantStreams := []string{
+		"branches", "collaborators", "commits", "contributors", "deployments",
+		"issue_comments", "issues", "labels", "milestones", "pull_request_review_comments",
+		"pull_requests", "releases", "repository", "stargazers", "subscribers",
+		"tags", "workflow_artifacts", "workflow_runs", "workflows",
+	}
+	gotStreams := make([]string, 0, len(bundle.Streams))
+	for _, s := range bundle.Streams {
+		gotStreams = append(gotStreams, s.Name)
+	}
+	sort.Strings(gotStreams)
+	if !reflect.DeepEqual(gotStreams, wantStreams) {
+		t.Fatalf("bundle streams = %v (%d), want %v (%d)", gotStreams, len(gotStreams), wantStreams, len(wantStreams))
+	}
+
+	wantWrites := []string{
+		"cancel_workflow_run", "close_issue", "close_pull_request", "comment_issue",
+		"create_issue", "create_label", "create_milestone", "create_or_update_file",
+		"create_pull_request", "create_pull_request_review", "create_release",
+		"delete_file", "delete_label", "delete_milestone", "delete_release",
+		"delete_workflow_run", "dispatch_workflow", "merge_pull_request",
+		"request_reviewers", "rerun_workflow_run", "update_issue", "update_label",
+		"update_milestone", "update_pull_request", "update_release",
+	}
+	gotWrites := make([]string, 0, len(bundle.Writes))
+	for _, w := range bundle.Writes {
+		gotWrites = append(gotWrites, w.Name)
+	}
+	sort.Strings(gotWrites)
+	if !reflect.DeepEqual(gotWrites, wantWrites) {
+		t.Fatalf("bundle write actions = %v (%d), want %v (%d)", gotWrites, len(gotWrites), wantWrites, len(wantWrites))
+	}
+
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true")
+	}
+}
+
+// --- per-stream record parity ---------------------------------------------
+
+// githubStreamServer answers every stream path used by the representative
+// parity subset below with a fixed page (or 2 pages for issues, exercising
+// page_number pagination + the pull_request filter simultaneously). Both
+// legacy and engine hit this SAME server.
+func githubStreamServer(t *testing.T) *httptest.Server {
+	t.Helper()
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/repos/octocat/hello-world", func(w http.ResponseWriter, r *http.Request) {
+		writeJSON(w, `{"id":1296269,"node_id":"MDEwOlJlcG9zaXRvcnkxMjk2MjY5","name":"hello-world","full_name":"octocat/hello-world","private":false,"description":"Fixture.","html_url":"https://github.com/octocat/hello-world","default_branch":"main","language":"Go","stargazers_count":42,"watchers_count":42,"forks_count":7,"open_issues_count":3,"created_at":"2026-01-01T00:00:00Z","updated_at":"2026-01-02T00:00:00Z","pushed_at":"2026-01-02T00:00:00Z"}`)
+	})
+
+	mux.HandleFunc("/repos/octocat/hello-world/issues", func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Query().Get("page") {
+		case "", "1":
+			writeJSON(w, `[
+				{"id":1,"node_id":"I1","number":101,"state":"open","title":"First","body":"b1","html_url":"https://github.com/octocat/hello-world/issues/101","url":"https://api.github.com/repos/octocat/hello-world/issues/101","user":{"login":"octocat","id":1},"author_association":"OWNER","comments":0,"locked":false,"created_at":"2026-01-01T00:00:00Z","updated_at":"2026-01-01T01:00:00Z"},
+				{"id":2,"node_id":"I2","number":102,"state":"open","title":"PR-shaped","body":"b2","html_url":"https://github.com/octocat/hello-world/pull/102","url":"https://api.github.com/repos/octocat/hello-world/issues/102","user":{"login":"octocat","id":1},"author_association":"OWNER","comments":0,"locked":false,"pull_request":{"url":"https://api.github.com/repos/octocat/hello-world/pulls/102"},"created_at":"2026-01-01T02:00:00Z","updated_at":"2026-01-01T02:00:00Z"}
+			]`)
+		case "2":
+			writeJSON(w, `[{"id":3,"node_id":"I3","number":103,"state":"open","title":"Second page","body":"b3","html_url":"https://github.com/octocat/hello-world/issues/103","url":"https://api.github.com/repos/octocat/hello-world/issues/103","user":{"login":"octocat","id":1},"author_association":"OWNER","comments":1,"locked":false,"created_at":"2026-01-02T00:00:00Z","updated_at":"2026-01-02T01:00:00Z"}]`)
+		default:
+			writeJSON(w, `[]`)
+		}
+	})
+
+	mux.HandleFunc("/repos/octocat/hello-world/pulls", func(w http.ResponseWriter, r *http.Request) {
+		writeJSON(w, `[{"id":501,"node_id":"PR1","number":301,"state":"open","title":"Fixture PR","body":"pr body","html_url":"https://github.com/octocat/hello-world/pull/301","url":"https://api.github.com/repos/octocat/hello-world/pulls/301","user":{"login":"octocat","id":1},"author_association":"OWNER","comments":0,"locked":false,"created_at":"2026-01-03T00:00:00Z","updated_at":"2026-01-03T01:00:00Z","merged_at":null,"draft":false,"merge_commit_sha":null,"base":{"ref":"main","sha":"abc"},"head":{"ref":"feat","sha":"def"}}]`)
+	})
+
+	mux.HandleFunc("/repos/octocat/hello-world/actions/workflows", func(w http.ResponseWriter, r *http.Request) {
+		writeJSON(w, `{"total_count":1,"workflows":[{"id":1201,"node_id":"W1","name":"CI","path":".github/workflows/ci.yml","state":"active","badge_url":"https://github.com/octocat/hello-world/workflows/CI/badge.svg","html_url":"https://github.com/octocat/hello-world/actions/workflows/ci.yml","created_at":"2026-01-09T00:00:00Z","updated_at":"2026-01-09T01:00:00Z"}]}`)
+	})
+
+	srv := httptest.NewServer(mux)
+	t.Cleanup(srv.Close)
+	return srv
+}
+
+func TestParityGithub_StreamRecords(t *testing.T) {
+	bundle := loadGithubBundle(t)
+	streams := []string{"repository", "issues", "pull_requests", "workflows"}
+
+	for _, stream := range streams {
+		stream := stream
+		t.Run(stream, func(t *testing.T) {
+			srv := githubStreamServer(t)
+
+			legacy := githublegacy.New()
+			legacyRecs := readAllGithubRecords(t, legacy, connectors.ReadRequest{Stream: stream, Config: githubRuntimeConfig(srv.URL, nil)})
+
+			eng := newGithubEngineConnector(withGithubBaseURL(bundle, srv.URL))
+			engRecs := readAllGithubRecords(t, eng, connectors.ReadRequest{Stream: stream, Config: githubRuntimeConfig(srv.URL, nil)})
+
+			if len(legacyRecs) == 0 {
+				t.Fatalf("legacy github emitted zero records for stream %q (test fixture bug)", stream)
+			}
+			if len(engRecs) != len(legacyRecs) {
+				t.Fatalf("record count = %d, want %d (legacy)\nengine: %+v\nlegacy: %+v", len(engRecs), len(legacyRecs), engRecs, legacyRecs)
+			}
+
+			gotNorm := normalizeRecords(t, engRecs)
+			wantNorm := normalizeRecords(t, legacyRecs)
+			for i := range wantNorm {
+				// Compare only the fields BOTH sides are expected to emit
+				// (the engine bundle documents a small, ledgered set of
+				// dropped/omitted fields — labels_count/assignees_count/
+				// is_pull_request/assets_count — that legacy emits but the
+				// dialect cannot express; see docs.md Known limits and
+				// ledger items). Every remaining field must match exactly.
+				for key, legacyVal := range wantNorm[i] {
+					if isDocumentedDrop(key) {
+						continue
+					}
+					engVal, ok := gotNorm[i][key]
+					if !ok {
+						// Schema-projection ("schema" mode, projectRecord)
+						// only copies a raw key when it is PRESENT on the raw
+						// record; legacy's hand-written *Record functions
+						// unconditionally write every declared field
+						// (item["x"] on a Go map miss is nil), so a raw
+						// record that never carries an optional field (e.g.
+						// state_reason/closed_at absent rather than
+						// JSON-null) surfaces as legacy=nil vs engine=absent.
+						// Both mean "no value" to any downstream consumer;
+						// treat legacy nil + engine absent as equivalent
+						// rather than a mismatch.
+						if legacyVal == nil {
+							continue
+						}
+						t.Fatalf("stream %q record %d missing field %q in engine output (legacy=%v)", stream, i, key, legacyVal)
+					}
+					if isStringifiedNestedID(key) {
+						// Documented deviation: computed_fields' Interpolate
+						// always stringifies its result (engine/interpolate.go),
+						// so a nested-path numeric id (user.id, author.id, ...)
+						// is emitted as a decimal STRING, not a native JSON
+						// number, unlike every other numeric field (which
+						// passes through raw JSON via schema projection and
+						// keeps its real type). Compare string forms only.
+						if fmt.Sprint(engVal) != fmt.Sprint(legacyVal) {
+							t.Fatalf("stream %q record %d field %q mismatch:\nengine:  %+v\nlegacy:  %+v", stream, i, key, engVal, legacyVal)
+						}
+						continue
+					}
+					if !reflect.DeepEqual(engVal, legacyVal) {
+						t.Fatalf("stream %q record %d field %q mismatch:\nengine:  %+v\nlegacy:  %+v", stream, i, key, engVal, legacyVal)
+					}
+				}
+			}
+		})
+	}
+}
+
+// isDocumentedDrop names the record fields legacy emits that this bundle's
+// dialect genuinely cannot express (no count/length filter) — see docs.md
+// Known limits. Anything else must match exactly.
+func isDocumentedDrop(field string) bool {
+	switch field {
+	case "labels_count", "assignees_count", "is_pull_request", "assets_count", "repository":
+		return true
+	default:
+		return false
+	}
+}
+
+// isStringifiedNestedID names the computed_fields-sourced nested-id fields
+// that the engine emits as decimal STRINGS rather than native JSON numbers
+// (see docs.md Known limits: computed_fields' Interpolate always
+// stringifies). Every other numeric field passes through raw JSON via
+// schema projection and keeps its real type.
+func isStringifiedNestedID(field string) bool {
+	switch field {
+	case "user_id", "author_id", "committer_id", "workflow_run_id":
+		return true
+	default:
+		return false
+	}
+}
+
+// TestParityGithub_IssuesPaginationFiltersOutPullRequests exercises
+// page_number pagination (2 full pages of the bundle's fixed page_size=100)
+// AND the pull_request-filter simultaneously: page 1 has 100 real issues
+// plus one PR-shaped item (filtered), page 2 has one more real issue. The
+// bundle's page_size is a fixed 100 (not runtime-configurable — see docs.md
+// Known limits), so a genuine multi-page proof needs a full 100-item first
+// page, matching exactly what fixtures/streams/issues/{page_1,page_2}.json
+// already commits for conformance's pagination_terminates check; this test
+// reuses that same shape against a shared httptest.Server for both
+// connectors. Legacy is configured with max_pages=all (its own default,
+// max_pages=1, is a disclosed deviation — see docs.md Known limits) so both
+// sides exhibit the SAME effective pagination behavior.
+func TestParityGithub_IssuesPaginationFiltersOutPullRequests(t *testing.T) {
+	bundle := loadGithubBundle(t)
+	srv := githubTwoPageIssuesServer(t)
+
+	legacy := githublegacy.New()
+	legacyRecs := readAllGithubRecords(t, legacy, connectors.ReadRequest{Stream: "issues", Config: githubRuntimeConfig(srv.URL, map[string]string{"max_pages": "all"})})
+
+	eng := newGithubEngineConnector(withGithubBaseURL(bundle, srv.URL))
+	engRecs := readAllGithubRecords(t, eng, connectors.ReadRequest{Stream: "issues", Config: githubRuntimeConfig(srv.URL, nil)})
+
+	if len(legacyRecs) != 101 {
+		t.Fatalf("legacy issues records = %d, want 101 (100 page-1 issues + 1 page-2 issue; PR filtered on both pages, test fixture bug)", len(legacyRecs))
+	}
+	if len(engRecs) != len(legacyRecs) {
+		t.Fatalf("engine issues records = %d, want %d (legacy)", len(engRecs), len(legacyRecs))
+	}
+
+	gotIDs := recordIDs(t, engRecs)
+	wantIDs := recordIDs(t, legacyRecs)
+	if !reflect.DeepEqual(gotIDs, wantIDs) {
+		t.Fatalf("issues record id sequence mismatch (engine vs legacy)")
+	}
+}
+
+// githubTwoPageIssuesServer builds a 100-record page 1 (+ 1 PR-shaped item
+// filtered out) and a 2-record page 2 (1 real issue + 1 PR-shaped item
+// filtered out), matching fixtures/streams/issues/{page_1,page_2}.json's
+// shape so the SAME page_size=100 short-page-stop rule genuinely exercises
+// two requests on both connectors.
+func githubTwoPageIssuesServer(t *testing.T) *httptest.Server {
+	t.Helper()
+	mux := http.NewServeMux()
+	mux.HandleFunc("/repos/octocat/hello-world/issues", func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Query().Get("page") {
+		case "", "1":
+			var items []string
+			for i := 1; i <= 100; i++ {
+				items = append(items, fmt.Sprintf(`{"id":%d,"node_id":"I%d","number":%d,"state":"open","title":"Issue %d","body":"b","html_url":"https://github.com/octocat/hello-world/issues/%d","url":"https://api.github.com/repos/octocat/hello-world/issues/%d","user":{"login":"octocat","id":1},"author_association":"OWNER","comments":0,"locked":false,"created_at":"2026-01-01T00:00:00Z","updated_at":"2026-01-01T01:00:00Z"}`, i, i, 100+i, i, 100+i, 100+i))
+			}
+			items = append(items, `{"id":9001,"node_id":"IPR","number":9101,"state":"open","title":"PR-shaped","body":"b","html_url":"https://github.com/octocat/hello-world/pull/9101","url":"https://api.github.com/repos/octocat/hello-world/issues/9101","user":{"login":"octocat","id":1},"author_association":"OWNER","comments":0,"locked":false,"pull_request":{"url":"https://api.github.com/repos/octocat/hello-world/pulls/9101"},"created_at":"2026-01-01T02:00:00Z","updated_at":"2026-01-01T02:00:00Z"}`)
+			writeJSON(w, "["+strings.Join(items, ",")+"]")
+		case "2":
+			writeJSON(w, `[
+				{"id":101,"node_id":"I101","number":201,"state":"open","title":"Page 2 issue","body":"b","html_url":"https://github.com/octocat/hello-world/issues/201","url":"https://api.github.com/repos/octocat/hello-world/issues/201","user":{"login":"octocat","id":1},"author_association":"OWNER","comments":0,"locked":false,"created_at":"2026-01-02T00:00:00Z","updated_at":"2026-01-02T01:00:00Z"},
+				{"id":9002,"node_id":"IPR2","number":9102,"state":"open","title":"PR-shaped page 2","body":"b","html_url":"https://github.com/octocat/hello-world/pull/9102","url":"https://api.github.com/repos/octocat/hello-world/issues/9102","user":{"login":"octocat","id":1},"author_association":"OWNER","comments":0,"locked":false,"pull_request":{"url":"https://api.github.com/repos/octocat/hello-world/pulls/9102"},"created_at":"2026-01-02T02:00:00Z","updated_at":"2026-01-02T02:00:00Z"}
+			]`)
+		default:
+			writeJSON(w, `[]`)
+		}
+	})
+	srv := httptest.NewServer(mux)
+	t.Cleanup(srv.Close)
+	return srv
+}
+
+func recordIDs(t *testing.T, recs []connectors.Record) []string {
+	t.Helper()
+	out := make([]string, len(recs))
+	for i, r := range recs {
+		out[i] = normalizeRecord(t, r)["id"].(json.Number).String()
+	}
+	return out
+}
+
+// --- AuthHook parity: github_app JWT -> installation-token exchange ------
+
+// TestParityGithub_AuthGithubAppInstallationTokenBearerHeader asserts BOTH
+// connectors send the SAME "Authorization: Bearer <installation token>"
+// header on a read request when configured for auth_type=github_app,
+// exercising the shared installation-token-exchange double from both sides.
+func TestParityGithub_AuthGithubAppInstallationTokenBearerHeader(t *testing.T) {
+	bundle := loadGithubBundle(t)
+	privKey := testRSAKeyPEM(t)
+	const installationToken = "ghs_shared_fixture_installation_token"
+
+	var legacyAuthHeader, engAuthHeader string
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/app/installations/67890/access_tokens", func(w http.ResponseWriter, r *http.Request) {
+		writeJSON(w, `{"token":"`+installationToken+`"}`)
+	})
+	mux.HandleFunc("/repos/octocat/hello-world", func(w http.ResponseWriter, r *http.Request) {
+		if legacyAuthHeader == "" {
+			legacyAuthHeader = r.Header.Get("Authorization")
+		} else {
+			engAuthHeader = r.Header.Get("Authorization")
+		}
+		writeJSON(w, `{"id":1,"node_id":"n","name":"hello-world","full_name":"octocat/hello-world","private":false,"html_url":"https://github.com/octocat/hello-world","default_branch":"main","stargazers_count":0,"watchers_count":0,"forks_count":0,"open_issues_count":0,"created_at":"2026-01-01T00:00:00Z","updated_at":"2026-01-01T00:00:00Z"}`)
+	})
+	srv := httptest.NewServer(mux)
+	defer srv.Close()
+
+	appCfg := connectors.RuntimeConfig{
+		Config: map[string]string{
+			"base_url": srv.URL, "repository": "octocat/hello-world",
+			"owner": "octocat", "repo": "hello-world",
+			"app_id": "12345", "installation_id": "67890",
+		},
+		Secrets: map[string]string{"private_key": privKey},
+	}
+
+	legacy := githublegacy.New()
+	_ = readAllGithubRecords(t, legacy, connectors.ReadRequest{Stream: "repository", Config: appCfg})
+
+	eng := newGithubEngineConnector(withGithubBaseURL(bundle, srv.URL))
+	_ = readAllGithubRecords(t, eng, connectors.ReadRequest{Stream: "repository", Config: appCfg})
+
+	want := "Bearer " + installationToken
+	if legacyAuthHeader != want {
+		t.Fatalf("legacy Authorization = %q, want %q (test fixture bug)", legacyAuthHeader, want)
+	}
+	if engAuthHeader != legacyAuthHeader {
+		t.Fatalf("engine Authorization = %q, want %q (legacy)", engAuthHeader, legacyAuthHeader)
+	}
+}
+
+func testRSAKeyPEM(t *testing.T) string {
+	t.Helper()
+	key, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		t.Fatalf("generate rsa key: %v", err)
+	}
+	der := x509.MarshalPKCS1PrivateKey(key)
+	return string(pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: der}))
+}
+
+// --- write parity: parity floor actions -----------------------------------
+
+type writeCaptureRequest struct {
+	Method string
+	Path   string
+	Body   map[string]any
+}
+
+// writeCaptureServer answers every request 200 with response (or {"number":N}
+// style bodies as needed per-action) and records EVERY request received, in
+// order (compound actions issue more than one).
+func writeCaptureServer(t *testing.T, response string) (*httptest.Server, *[]writeCaptureRequest) {
+	t.Helper()
+	var reqs []writeCaptureRequest
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]any
+		if r.Body != nil {
+			_ = json.NewDecoder(r.Body).Decode(&body)
+		}
+		reqs = append(reqs, writeCaptureRequest{Method: r.Method, Path: r.URL.Path, Body: body})
+		w.Header().Set("Content-Type", "application/json")
+		if response == "" {
+			response = "{}"
+		}
+		writeJSON(w, response)
+	}))
+	t.Cleanup(srv.Close)
+	return srv, &reqs
+}
+
+func runWriteParity(t *testing.T, action string, record connectors.Record, response string) (legacyReqs, engReqs []writeCaptureRequest) {
+	t.Helper()
+
+	legacySrv, legacyGot := writeCaptureServer(t, response)
+	legacy := githublegacy.New()
+	if _, err := legacy.Write(context.Background(), connectors.WriteRequest{Action: action, Config: githubRuntimeConfig(legacySrv.URL, nil)}, []connectors.Record{record}); err != nil {
+		t.Fatalf("legacy Write(%s): %v", action, err)
+	}
+
+	bundle := loadGithubBundle(t)
+	engSrv, engGot := writeCaptureServer(t, response)
+	eng := newGithubEngineConnector(withGithubBaseURL(bundle, engSrv.URL))
+	if _, err := eng.Write(context.Background(), connectors.WriteRequest{Action: action, Config: githubRuntimeConfig(engSrv.URL, nil)}, []connectors.Record{record}); err != nil {
+		t.Fatalf("engine Write(%s): %v", action, err)
+	}
+	return *legacyGot, *engGot
+}
+
+func TestParityGithub_WriteCreateIssue(t *testing.T) {
+	record := connectors.Record{"title": "Fixture issue", "body": "Fixture body"}
+	legacyReqs, engReqs := runWriteParity(t, "create_issue", record, `{"number":1}`)
+
+	if len(legacyReqs) != 1 || len(engReqs) != 1 {
+		t.Fatalf("request counts = legacy:%d engine:%d, want 1 and 1", len(legacyReqs), len(engReqs))
+	}
+	if legacyReqs[0].Method != http.MethodPost || legacyReqs[0].Path != "/repos/octocat/hello-world/issues" {
+		t.Fatalf("legacy request = %+v (test fixture bug)", legacyReqs[0])
+	}
+	if !reflect.DeepEqual(engReqs[0], legacyReqs[0]) {
+		t.Fatalf("engine request = %+v, want %+v (legacy)", engReqs[0], legacyReqs[0])
+	}
+}
+
+func TestParityGithub_WriteUpdateIssue(t *testing.T) {
+	record := connectors.Record{"issue_number": 101, "title": "Updated", "state": "closed"}
+	legacyReqs, engReqs := runWriteParity(t, "update_issue", record, "")
+
+	if legacyReqs[0].Method != http.MethodPatch || legacyReqs[0].Path != "/repos/octocat/hello-world/issues/101" {
+		t.Fatalf("legacy request = %+v (test fixture bug)", legacyReqs[0])
+	}
+	if !reflect.DeepEqual(engReqs[0], legacyReqs[0]) {
+		t.Fatalf("engine request = %+v, want %+v (legacy)", engReqs[0], legacyReqs[0])
+	}
+}
+
+func TestParityGithub_WriteCommentIssue(t *testing.T) {
+	record := connectors.Record{"issue_number": 101, "body": "Fixture comment"}
+	legacyReqs, engReqs := runWriteParity(t, "comment_issue", record, "")
+
+	if legacyReqs[0].Method != http.MethodPost || legacyReqs[0].Path != "/repos/octocat/hello-world/issues/101/comments" {
+		t.Fatalf("legacy request = %+v (test fixture bug)", legacyReqs[0])
+	}
+	if !reflect.DeepEqual(engReqs[0], legacyReqs[0]) {
+		t.Fatalf("engine request = %+v, want %+v (legacy)", engReqs[0], legacyReqs[0])
+	}
+}
+
+// TestParityGithub_WriteCreatePullRequestCompound is the compound-write bar:
+// both connectors must issue the SAME sequence of requests (create POST,
+// issue-metadata PATCH, reviewers POST) for a record carrying labels AND
+// reviewers.
+func TestParityGithub_WriteCreatePullRequestCompound(t *testing.T) {
+	record := connectors.Record{
+		"head": "feature-1", "base": "main", "title": "Fixture PR",
+		"labels": []any{"bug"}, "reviewers": []any{"octocat"},
+	}
+	legacyReqs, engReqs := runWriteParity(t, "create_pull_request", record, `{"number":301}`)
+
+	if len(legacyReqs) != 3 {
+		t.Fatalf("legacy request count = %d, want 3 (create, metadata, reviewers) (test fixture bug): %+v", len(legacyReqs), legacyReqs)
+	}
+	if len(engReqs) != len(legacyReqs) {
+		t.Fatalf("engine request count = %d, want %d (legacy): engine=%+v legacy=%+v", len(engReqs), len(legacyReqs), engReqs, legacyReqs)
+	}
+	for i := range legacyReqs {
+		if engReqs[i].Method != legacyReqs[i].Method || engReqs[i].Path != legacyReqs[i].Path {
+			t.Fatalf("request %d method/path = %s %s, want %s %s (legacy)", i, engReqs[i].Method, engReqs[i].Path, legacyReqs[i].Method, legacyReqs[i].Path)
+		}
+	}
+}
+
+func TestParityGithub_WriteMergePullRequest(t *testing.T) {
+	record := connectors.Record{"pull_number": 301, "merge_method": "squash"}
+	legacyReqs, engReqs := runWriteParity(t, "merge_pull_request", record, "")
+
+	if legacyReqs[0].Method != http.MethodPut || legacyReqs[0].Path != "/repos/octocat/hello-world/pulls/301/merge" {
+		t.Fatalf("legacy request = %+v (test fixture bug)", legacyReqs[0])
+	}
+	if !reflect.DeepEqual(engReqs[0], legacyReqs[0]) {
+		t.Fatalf("engine request = %+v, want %+v (legacy)", engReqs[0], legacyReqs[0])
+	}
+}
+
+// TestParityGithub_WriteDeleteLabel asserts both connectors send the SAME
+// DELETE request and both succeed against a 204 response. Legacy has NO
+// idempotent/missing_ok delete semantics (any non-2xx, including 404, is a
+// hard failure in legacy's doJSONWithAuth) — this bundle intentionally does
+// NOT declare delete.missing_ok_status either, matching legacy exactly (see
+// docs.md Known limits / ledger).
+func TestParityGithub_WriteDeleteLabel(t *testing.T) {
+	record := connectors.Record{"name": "bug"}
+	legacyReqs, engReqs := runWriteParity(t, "delete_label", record, "")
+
+	if legacyReqs[0].Method != http.MethodDelete || legacyReqs[0].Path != "/repos/octocat/hello-world/labels/bug" {
+		t.Fatalf("legacy request = %+v (test fixture bug)", legacyReqs[0])
+	}
+	if engReqs[0].Method != legacyReqs[0].Method || engReqs[0].Path != legacyReqs[0].Path {
+		t.Fatalf("engine request = %+v, want %+v (legacy)", engReqs[0], legacyReqs[0])
+	}
+}
+
+// TestParityGithub_WriteDeleteLabelNotFoundFailsOnBothSides asserts a 404 on
+// delete_label is a hard FAILURE on both connectors (legacy has no
+// missing_ok/idempotent-delete semantics; this bundle deliberately matches
+// that rather than adding new engine leniency legacy never had).
+func TestParityGithub_WriteDeleteLabelNotFoundFailsOnBothSides(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		_, _ = w.Write([]byte(`{"message":"Not Found"}`))
+	}))
+	defer srv.Close()
+
+	record := connectors.Record{"name": "bug"}
+
+	legacy := githublegacy.New()
+	_, legacyErr := legacy.Write(context.Background(), connectors.WriteRequest{Action: "delete_label", Config: githubRuntimeConfig(srv.URL, nil)}, []connectors.Record{record})
+	if legacyErr == nil {
+		t.Fatal("legacy Write(delete_label) with 404 response = nil error, want a failure (test fixture bug: legacy has no idempotent-delete semantics)")
+	}
+
+	bundle := loadGithubBundle(t)
+	eng := newGithubEngineConnector(withGithubBaseURL(bundle, srv.URL))
+	_, engErr := eng.Write(context.Background(), connectors.WriteRequest{Action: "delete_label", Config: githubRuntimeConfig(srv.URL, nil)}, []connectors.Record{record})
+	if engErr == nil {
+		t.Fatal("engine Write(delete_label) with 404 response = nil error, want a failure (matches legacy: no missing_ok_status declared)")
+	}
+}
+
+// --- manifest-surface parity ------------------------------------------------
+
+func TestParityGithub_ManifestSurface(t *testing.T) {
+	bundle := loadGithubBundle(t)
+
+	legacyManifest := connectors.ManifestOf(githublegacy.New())
+	eng := newGithubEngineConnector(bundle)
+	engManifest := connectors.ManifestOf(eng)
+
+	wantStreams := manifestStreamNames(legacyManifest.Streams)
+	gotStreams := manifestStreamNames(engManifest.Streams)
+	if !reflect.DeepEqual(gotStreams, wantStreams) {
+		t.Fatalf("stream names = %v, want %v (legacy)", gotStreams, wantStreams)
+	}
+
+	wantWrites := writeActionNames(legacyManifest.WriteActions)
+	gotWrites := writeActionNames(engManifest.WriteActions)
+	if !reflect.DeepEqual(gotWrites, wantWrites) {
+		t.Fatalf("write action names = %v, want %v (legacy)", gotWrites, wantWrites)
+	}
+}
+
+func manifestStreamNames(streams []connectors.Stream) []string {
+	out := make([]string, len(streams))
+	for i, s := range streams {
+		out[i] = s.Name
+	}
+	sort.Strings(out)
+	return out
+}
+
+func writeActionNames(actions []connectors.WriteActionSpec) []string {
+	out := make([]string, len(actions))
+	for i, a := range actions {
+		out[i] = a.Name
+	}
+	sort.Strings(out)
+	return out
+}

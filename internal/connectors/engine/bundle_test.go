@@ -341,3 +341,116 @@ func TestBundleLoadFromOnDiskTestdata(t *testing.T) {
 		t.Fatalf("LoadAll(testdata/bundles) returned %d bundles, want 1", len(bundles))
 	}
 }
+
+// --- optional conformance skip markers (R3: hook-aware dynamic conformance) --
+//
+// A bundle may declare an OPTIONAL, explicit "conformance" marker at either
+// stream level (streams.json's per-stream {"conformance": {"skip_dynamic":
+// true, "reason": "..."}}) or bundle level (metadata.json's top-level
+// equivalent), for connectors whose dynamic (fixture-replay) checks cannot
+// meaningfully run because the bundle's real behavior lives entirely behind
+// a Tier-2 hook that conformance's declarative-only replay harness cannot
+// exercise. This is parsed by the loader (no behavior beyond struct
+// population); dynamic.go interprets the marker, connectorgen validate
+// requires a non-empty reason.
+
+const streamsWithStreamConformanceMarker = `{
+	"base": {
+		"url": "{{ config.base_url }}",
+		"user_agent": "test-agent",
+		"headers": {},
+		"auth": [ { "mode": "bearer", "token": "{{ secrets.token }}", "when": "{{ cursor }}" } ],
+		"pagination": { "type": "none" },
+		"check": { "method": "GET", "path": "/ping" },
+		"error_map": []
+	},
+	"streams": [
+		{
+			"name": "widgets",
+			"path": "/widgets",
+			"records": { "path": "data" },
+			"schema": "schemas/widgets.json",
+			"conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by internal/connectors/paritytest/acme" }
+		}
+	]
+}`
+
+func TestBundleLoadParsesStreamConformanceMarker(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(streamsWithStreamConformanceMarker)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if len(b.Streams) != 1 {
+		t.Fatalf("Streams = %+v, want 1", b.Streams)
+	}
+	s := b.Streams[0]
+	if s.Conformance == nil {
+		t.Fatalf("stream %q Conformance marker not parsed (got nil)", s.Name)
+	}
+	if !s.Conformance.SkipDynamic {
+		t.Fatalf("stream %q Conformance.SkipDynamic = false, want true", s.Name)
+	}
+	if s.Conformance.Reason == "" {
+		t.Fatalf("stream %q Conformance.Reason is empty", s.Name)
+	}
+}
+
+// TestBundleLoadStreamWithNoConformanceMarkerIsNil locks in that an ordinary
+// stream (no "conformance" key at all) parses with a nil marker, not a
+// zero-value non-nil struct — dynamic.go's marker-presence check must be
+// able to distinguish "no marker" from "marker present but false".
+func TestBundleLoadStreamWithNoConformanceMarkerIsNil(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Streams[0].Conformance != nil {
+		t.Fatalf("Conformance = %+v, want nil for a stream with no conformance block", b.Streams[0].Conformance)
+	}
+}
+
+func metadataWithBundleConformanceMarker(name string) string {
+	return `{
+		"name": "` + name + `",
+		"display_name": "Test Connector",
+		"description": "a test connector",
+		"integration_type": "api",
+		"release_stage": "ga",
+		"capabilities": { "check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false },
+		"conformance": { "skip_dynamic": true, "reason": "custom-auth-only; hook not registered in conformance's replay harness" }
+	}`
+}
+
+func TestBundleLoadParsesBundleLevelConformanceMarker(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(metadataWithBundleConformanceMarker("acme"))}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Metadata.Conformance == nil {
+		t.Fatalf("Metadata.Conformance marker not parsed (got nil)")
+	}
+	if !b.Metadata.Conformance.SkipDynamic {
+		t.Fatalf("Metadata.Conformance.SkipDynamic = false, want true")
+	}
+	if b.Metadata.Conformance.Reason == "" {
+		t.Fatalf("Metadata.Conformance.Reason is empty")
+	}
+}
+
+func TestBundleLoadMetadataWithNoConformanceMarkerIsNil(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Metadata.Conformance != nil {
+		t.Fatalf("Metadata.Conformance = %+v, want nil for metadata with no conformance block", b.Metadata.Conformance)
+	}
+}

@@ -1,0 +1,17 @@
+{
+  "api": "Bitly REST API v4 (https://dev.bitly.com/api-reference/)",
+  "docs": "https://dev.bitly.com/api-reference/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave1-pilot migration: the 4 legacy-parity read streams only (organizations, groups, campaigns, bitlinks); Bitly's write endpoints (bitlink shorten/create/update, bitlink clicks/qr-code) are out of scope for this pilot (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v4/organizations", "covered_by": { "stream": "organizations" } },
+    { "method": "GET", "path": "/v4/groups", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/v4/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/v4/groups/{group_guid}/bitlinks", "covered_by": { "stream": "bitlinks" } },
+    { "method": "POST", "path": "/v4/bitlinks", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented bitlink creation; Pass B capability expansion" } },
+    { "method": "PATCH", "path": "/v4/bitlinks/{bitlink}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented bitlink updates; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v4/bitlinks/{bitlink}/clicks", "excluded": { "category": "out_of_scope", "reason": "click analytics not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v4/bitlinks/{bitlink}/qr", "excluded": { "category": "out_of_scope", "reason": "QR code retrieval not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v4/user", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream" } }
+  ]
+}

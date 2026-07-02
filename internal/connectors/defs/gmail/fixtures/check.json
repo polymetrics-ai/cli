@@ -1,0 +1,6 @@
+{
+  "response": {
+    "status": 200,
+    "body": { "labels": [{ "id": "INBOX", "name": "INBOX", "type": "system" }] }
+  }
+}

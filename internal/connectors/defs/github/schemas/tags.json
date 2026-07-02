@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tags",
+  "type": "object",
+  "x-primary-key": [
+    "name"
+  ],
+  "required": [
+    "name"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "zipball_url": {
+      "type": "string"
+    },
+    "tarball_url": {
+      "type": "string"
+    },
+    "commit_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "node_id": {
+      "type": "string"
+    }
+  }
+}

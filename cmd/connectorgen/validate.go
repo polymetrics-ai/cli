@@ -31,6 +31,7 @@ const (
 	ruleSecretLiteral           = "secret_literal"
 	ruleDocsHeading             = "docs_heading"
 	ruleStartDateFreeFormString = "start_date_free_form_string"
+	ruleConformanceSkipReason   = "conformance_skip_reason"
 )
 
 // dateShapedParamFormats are the incremental.param_format values whose
@@ -197,6 +198,7 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkAPISurface(b)...)
 	findings = append(findings, checkDocsHeadings(b)...)
 	findings = append(findings, checkFixtureSecrets(b)...)
+	findings = append(findings, checkConformanceSkipReason(b)...)
 	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
 	return findings, warnings
 }
@@ -591,6 +593,36 @@ func checkFixtureSecrets(b engine.Bundle) []Finding {
 		}
 		return nil
 	})
+	return findings
+}
+
+// checkConformanceSkipReason enforces R3's skip-marker contract (docs/
+// migration/conventions.md §4/§6): a bundle-level (metadata.json) or
+// stream-level (streams.json) "conformance": {"skip_dynamic": true} marker
+// MUST carry a non-empty, non-whitespace-only "reason" — an unreasoned
+// skip is indistinguishable from silently hiding a real failure, which
+// defeats the whole point of an EXPLICIT marker. A marker with
+// skip_dynamic:false (or entirely absent) is never flagged, regardless of
+// its reason field.
+func checkConformanceSkipReason(b engine.Bundle) []Finding {
+	var findings []Finding
+	if m := b.Metadata.Conformance; m != nil && m.SkipDynamic && strings.TrimSpace(m.Reason) == "" {
+		findings = append(findings, Finding{
+			Connector: b.Name, File: "metadata.json", Rule: ruleConformanceSkipReason,
+			Message: "metadata.json conformance.skip_dynamic is true but reason is empty",
+		})
+	}
+	for _, s := range b.Streams {
+		if s.Conformance == nil || !s.Conformance.SkipDynamic {
+			continue
+		}
+		if strings.TrimSpace(s.Conformance.Reason) == "" {
+			findings = append(findings, Finding{
+				Connector: b.Name, File: "streams.json", Rule: ruleConformanceSkipReason,
+				Message: fmt.Sprintf("stream %q conformance.skip_dynamic is true but reason is empty", s.Name),
+			})
+		}
+	}
 	return findings
 }
 
