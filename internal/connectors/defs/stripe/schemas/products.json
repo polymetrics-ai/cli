@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": "string" },
+    "created": { "type": ["integer", "string"] },
+    "updated": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "type": { "type": ["string", "null"] },
+    "livemode": { "type": "boolean" }
+  }
+}

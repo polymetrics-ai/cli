@@ -1,0 +1,44 @@
+{
+  "actions": [
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "POST",
+      "path": "/customers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "charges",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": "string" },
+    "created": { "type": ["integer", "string"] },
+    "amount": { "type": ["integer", "null"] },
+    "amount_captured": { "type": ["integer", "null"] },
+    "amount_refunded": { "type": ["integer", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "customer": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "paid": { "type": ["boolean", "null"] },
+    "refunded": { "type": ["boolean", "null"] },
+    "livemode": { "type": "boolean" }
+  }
+}

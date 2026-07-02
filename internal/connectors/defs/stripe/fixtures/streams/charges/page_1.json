@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/charges", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        {
+          "id": "ch_fixture_1",
+          "object": "charge",
+          "created": "2026-01-01T00:00:01Z",
+          "amount": 1000,
+          "amount_captured": 1000,
+          "amount_refunded": 0,
+          "currency": "usd",
+          "customer": "cus_fixture_1",
+          "status": "succeeded",
+          "paid": true,
+          "refunded": false,
+          "livemode": false
+        }
+      ]
+    }
+  }
+}

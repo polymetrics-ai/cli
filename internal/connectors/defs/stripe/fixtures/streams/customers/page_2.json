@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "limit": "100", "starting_after": "cus_fixture_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        {
+          "id": "cus_fixture_3",
+          "object": "customer",
+          "created": "2026-01-01T00:00:03Z",
+          "email": "fixture3@example.com",
+          "name": "Fixture Three",
+          "description": "conformance fixture customer",
+          "phone": "+15550102",
+          "currency": "usd",
+          "balance": 1200,
+          "delinquent": true,
+          "livemode": false
+        }
+      ]
+    }
+  }
+}

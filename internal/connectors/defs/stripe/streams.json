@@ -1,0 +1,93 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Stripe-Account": "{{ config.account_id }}"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.client_secret }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "starting_after",
+      "last_record_field": "id",
+      "stop_path": "has_more",
+      "limit_param": "limit",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/customers" },
+    "error_map": [
+      { "status": 401, "hint": "stripe secret API key is missing or invalid; re-run pm credentials add stripe" },
+      { "status": 403, "hint": "stripe account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "stripe rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "created",
+        "request_param": "created[gte]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "charges",
+      "path": "/charges",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "created",
+        "request_param": "created[gte]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/charges.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "created",
+        "request_param": "created[gte]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "created",
+        "request_param": "created[gte]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "created",
+        "request_param": "created[gte]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/products.json"
+    }
+  ]
+}

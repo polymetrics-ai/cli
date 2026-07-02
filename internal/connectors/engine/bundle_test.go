@@ -292,17 +292,24 @@ func TestBundleLoadAllEmptyTreeIsFine(t *testing.T) {
 	}
 }
 
-// TestBundleLoadAllDefsFSEmpty exercises the real embedded defs.FS scaffold
-// (the `all:*` embed directive in defs.go) end-to-end: wave0 ships zero
-// bundles (goldens land in Wave F), so this must succeed with a zero-length
-// result rather than erroring on the stray embedded defs.go file.
-func TestBundleLoadAllDefsFSEmpty(t *testing.T) {
+// TestBundleLoadAllDefsFS exercises the real embedded defs.FS scaffold
+// (the `all:*` embed directive in defs.go) end-to-end: every embedded bundle
+// must load cleanly (the stray embedded defs.go file is ignored), and the
+// Wave F goldens must be present. Updated from the pre-golden zero-bundle
+// assertion when stripe/postgres landed (coordinator, Wave F).
+func TestBundleLoadAllDefsFS(t *testing.T) {
 	bundles, err := LoadAll(defs.FS)
 	if err != nil {
 		t.Fatalf("LoadAll(defs.FS): %v", err)
 	}
-	if len(bundles) != 0 {
-		t.Fatalf("LoadAll(defs.FS) returned %d bundles, want 0 (wave0 ships no goldens yet)", len(bundles))
+	byName := map[string]bool{}
+	for _, b := range bundles {
+		byName[b.Name] = true
+	}
+	for _, golden := range []string{"stripe", "postgres"} {
+		if !byName[golden] {
+			t.Fatalf("LoadAll(defs.FS) missing golden bundle %q (got %v)", golden, byName)
+		}
 	}
 }
 

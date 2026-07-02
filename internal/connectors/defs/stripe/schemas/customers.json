@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": "string" },
+    "created": { "type": ["integer", "string"], "description": "Unix seconds in the live Stripe API; represented as an RFC3339 string in this bundle's own fixtures so conformance's cursor_advances check can format it (see docs.md Known limits)." },
+    "email": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "balance": { "type": ["integer", "null"] },
+    "delinquent": { "type": ["boolean", "null"] },
+    "livemode": { "type": "boolean" }
+  }
+}
