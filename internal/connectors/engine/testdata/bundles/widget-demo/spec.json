@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Widget Demo Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "base_url": { "type": "string", "format": "uri" },
+    "token": { "type": "string", "x-secret": true }
+  }
+}

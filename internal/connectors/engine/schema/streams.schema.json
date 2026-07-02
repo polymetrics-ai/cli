@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "streams.json",
+  "type": "object",
+  "required": ["base", "streams"],
+  "additionalProperties": false,
+  "properties": {
+    "base": {
+      "type": "object",
+      "required": ["url"],
+      "properties": {
+        "url": { "type": "string" },
+        "user_agent": { "type": "string" },
+        "headers": { "type": "object" },
+        "auth": { "type": "array" },
+        "pagination": { "type": "object" },
+        "check": { "type": "object" },
+        "error_map": { "type": "array" },
+        "rate_limit": { "type": "object" }
+      }
+    },
+    "streams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "records", "schema"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "method": { "type": "string" },
+          "path": { "type": "string" },
+          "query": { "type": "object" },
+          "body": { "type": "object" },
+          "records": { "type": "object" },
+          "pagination": { "type": "object" },
+          "incremental": { "type": "object" },
+          "computed_fields": { "type": "object" },
+          "projection": { "type": "string", "enum": ["schema", "passthrough"] },
+          "schema": { "type": "string" }
+        }
+      }
+    }
+  }
+}
