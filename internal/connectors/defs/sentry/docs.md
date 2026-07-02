@@ -91,3 +91,23 @@ None. Sentry is read-only in legacy (`Write` returns `connectors.ErrUnsupportedO
   dynamic (fixture replay) checks Skip these streams outright rather than exercising a declarative
   shape that would never match Sentry's real Link-header/`results=` wire behavior. The StreamHook
   (always `handled=true`) is what every real `Read()` call actually dispatches through.
+- **RESOLVED — removed the 4 streams' inert static `query: {"per_page": "100"}` entries** (S3 engine
+  mini-wave carried minor — SUMMARY.md carried minors: "sentry inert per_page entries"). Every stream
+  is `StreamHook`-handled (previous bullet), so `readDeclarative`'s `stream.Query` resolution never
+  runs for any of them — `hooks/sentry/hooks.go`'s `ReadStream` builds its OWN `per_page` value from
+  `pageSizeFor(req.Config)` (default 100, `config.page_size`-overridable, capped at `maxPageSize`)
+  independently of anything in `streams.json`. The removed entries were dead JSON with no effect on
+  any real request, ever — this is a docs-honesty/dead-config cleanup, not a behavior change (proven
+  unchanged by the full `paritytest/sentry`/`hooks/sentry` suite re-run after removal).
+- **OPEN — `Check`'s `per_page=1` is not reproduced.** Legacy's `Check` sends `per_page=1` on its
+  bounded `/api/0/projects/` probe (`sentry.go:88`, minimizing response payload for a mere
+  connectivity/auth check). This bundle's `base.check` (`{"method":"GET","path":"/api/0/projects/"}`)
+  has no query at all: `engine.RequestSpec` (the type backing `base.check`) declares only
+  `method`/`path`, no `query` field — `engine.Check`'s `rt.Requester.Do(...)` call passes a literal
+  `nil` query unconditionally (`engine/read.go`), so there is no dialect surface to express this
+  today without an engine change. Verified BENIGN: Sentry's API returns 200 for the check either way
+  regardless of `per_page`, and this bundle's `Check` never reads/validates the response body — the
+  only difference is a (harmless, larger) response payload on every `Check` call. Not pursued as an
+  engine increment in this pass (a single-connector `RequestSpec.Query` field for one non-functional
+  payload-size optimization does not meet the ≥3-occurrence recurrence bar, conventions.md §6);
+  documented here as the honest, ledgered residual gap rather than silently left unmentioned.

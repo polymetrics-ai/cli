@@ -1,0 +1,15 @@
+{
+  "name": "when-clause-equality-valid",
+  "display_name": "When Clause Equality Valid",
+  "description": "a control connector proving a spec-known ==/in when clause passes connectorgen validate cleanly (S3 engine mini-wave item 2)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}

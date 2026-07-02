@@ -29,6 +29,29 @@ func TestValidate_AcceptsGoodBundle(t *testing.T) {
 	}
 }
 
+// TestValidate_WhenClauseEqualityAndMembershipAgainstSpecKnownKeyPasses is the
+// S3 engine mini-wave item 2 regression case (wave1-pilot SUMMARY.md carried
+// queue / REVIEW-A.md re-review R1/R3): a `when` clause using the `==`/`in`
+// grammar against a REAL, spec-declared key (`auth_type`) must pass
+// connectorgen validate cleanly. Before ResolveCheckWhen existed,
+// ResolveCheck's bare-namespace.key-only parsing treated the entire
+// "auth_type == 'token'" expression as one dotted reference and always
+// hard-failed with an "unknown spec key" finding — even though `auth_type`
+// IS declared — because no `==`/`in`-shaped reference could ever look like a
+// valid two-segment "namespace.key" split. This fixture lives in its own
+// parent dir (not testdata/valid, which TestValidate_AcceptsGoodBundle
+// asserts contains exactly one connector) so it doesn't disturb that count.
+func TestValidate_WhenClauseEqualityAndMembershipAgainstSpecKnownKeyPasses(t *testing.T) {
+	fsys := singleBundleFS(t, "testdata/valid-extra", "when-clause-equality-valid")
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for a spec-known ==/in when clause, got %+v", report.Findings)
+	}
+}
+
 // TestValidate_EmptyTreeIsFine mirrors the loader contract: an empty defs/
 // tree (no bundle directories) passes with a zero connector count, so wave0's
 // bundle-less internal/connectors/defs/ tree does not fail CI.
@@ -69,6 +92,7 @@ func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {
 		{"write-false-with-mutation-endpoint", ruleSurfaceFailFirstRun},
 		{"auth-field-unknown-spec-key", ruleInterpolationUnresolved},
 		{"unknown-filter-in-template", ruleInterpolationUnresolved},
+		{"when-clause-equality-unknown-spec-key", ruleInterpolationUnresolved},
 		{"skip-marker-missing-reason", ruleConformanceSkipReason},
 		{"skip-marker-missing-reason-bundle", ruleConformanceSkipReason},
 		{"default-type-mismatch", ruleDefaultTypeMismatch},

@@ -28,6 +28,10 @@
       "type": "string",
       "default": "50",
       "description": "Records per GraphQL page (1-500)."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional hard cap on the number of pages read per stream, consumed by hooks/monday/hooks.go's StreamHook (mondayMaxPages) — NOT a declarative streams.json field (monday's pagination is entirely hook-driven, so there is no PaginationSpec.MaxPages to wire this into). Permissive parse, never errors: an empty value, \"all\", \"unlimited\", or any non-positive-integer string means unbounded (0, the same as leaving this unset); a positive integer string caps the page count at that value. Was previously consumed by the hook but undeclared here (a dead-config-surface gap the S3 engine mini-wave carried-minor cleanup closed) — see docs.md Known limits."
     }
   }
 }

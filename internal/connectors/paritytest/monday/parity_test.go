@@ -435,3 +435,23 @@ func TestParityMonday_BundleLoadsAndValidates(t *testing.T) {
 		t.Fatal("bundle metadata.capabilities.write = true, want false (monday has no mutation API)")
 	}
 }
+
+// TestParityMonday_MaxPagesDeclaredInSpec is the S3 engine mini-wave carried
+// minor regression (wave1-pilot SUMMARY.md carried minors: "monday max_pages
+// consumed but undeclared in spec.json"): hooks/monday/hooks.go's StreamHook
+// has always consumed config.max_pages (mondayMaxPages), but spec.json never
+// declared the key — a dead-config-surface gap in the direction opposite
+// F6's usual case (a genuinely-consumed key with no operator-facing
+// declaration). This locks in that spec.json now declares it.
+func TestParityMonday_MaxPagesDeclaredInSpec(t *testing.T) {
+	bundle := loadMondayBundle(t)
+	if bundle.Spec == nil {
+		t.Fatal("bundle.Spec is nil")
+	}
+	for _, k := range bundle.Spec.Properties() {
+		if k == "max_pages" {
+			return
+		}
+	}
+	t.Fatalf("spec.json properties = %v, want \"max_pages\" declared (consumed by hooks/monday/hooks.go's mondayMaxPages)", bundle.Spec.Properties())
+}

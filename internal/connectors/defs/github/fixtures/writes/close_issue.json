@@ -7,6 +7,7 @@
     "method": "PATCH",
     "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/101",
     "body": {
+      "state": "closed",
       "state_reason": "completed"
     }
   }

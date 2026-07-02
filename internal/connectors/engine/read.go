@@ -392,27 +392,51 @@ func requestVars(cfg connectors.RuntimeConfig, record map[string]any, cursor str
 	return Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: record, Cursor: cursor}
 }
 
-// buildInitialQuery resolves stream.Query (static, templated values) plus
-// the incremental lower bound (state cursor, falling back to
-// start_config_key) formatted per param_format.
+// buildInitialQuery resolves the incremental lower bound (state cursor,
+// falling back to start_config_key) formatted per param_format FIRST, then
+// stream.Query (static, templated values) against Vars that already carry
+// that resolved value as "{{ incremental.lower_bound }}" (S3 engine
+// mini-wave item 1, wave1-pilot SUMMARY.md carried queue / REVIEW-A.md
+// re-review R2): this is what makes a param legacy sends ONLY when the
+// incremental lower bound resolves (chargebee's sort_by[asc]=updated_at,
+// chargebee.go:151-155 — set in the SAME branch as updated_at[after], on
+// every state-cursor-driven repeat sync as well as a start_date-seeded fresh
+// sync) expressible via the existing optional-query dialect. Ordering matters
+// here: the lower bound MUST be computed before stream.Query's own resolution
+// loop runs, since that loop's Vars is what a "{{ incremental.lower_bound }}"
+// template reads.
 //
-// Per-entry dialect (gap-loop item 3): a plain-string-sourced QueryParam
-// (OmitWhenAbsent false, Default "") keeps the exact pre-existing semantics
-// — Interpolate errors hard on any unresolved config/secrets key, with no
-// tolerance at all. An object-form entry gets exactly one of two
-// resolutions when its template hits an unresolved config/secrets key:
-// OmitWhenAbsent true means the param is left off entirely (no error);
-// otherwise a non-empty Default is sent verbatim instead of erroring. An
-// object-form entry with NEITHER set behaves identically to a plain string
-// entry (hard error on unresolved key) — declaring the object shape alone
-// changes nothing.
+// Per-entry dialect (gap-loop item 3, extended by S3 item 1): a
+// plain-string-sourced QueryParam (OmitWhenAbsent false, Default "") keeps
+// the exact pre-existing semantics — Interpolate errors hard on any
+// unresolved config/secrets/incremental key, with no tolerance at all. An
+// object-form entry gets exactly one of two resolutions when its template
+// hits an unresolved config/secrets/incremental key: OmitWhenAbsent true
+// means the param is left off entirely (no error); otherwise a non-empty
+// Default is sent verbatim instead of erroring. An object-form entry with
+// NEITHER set behaves identically to a plain string entry (hard error on
+// unresolved key) — declaring the object shape alone changes nothing.
 func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Values, error) {
+	lower, err := incrementalLowerBoundValue(stream, req)
+	if err != nil {
+		return nil, err
+	}
+
+	var formattedLower string
+	if lower != "" && stream.Incremental != nil {
+		formattedLower, err = formatParam(lower, stream.Incremental.ParamFormat)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	q := url.Values{}
 	vars := requestVars(req.Config, nil, "")
+	vars.IncrementalLowerBound = formattedLower
 	for k, param := range stream.Query {
 		val, err := Interpolate(param.Template, vars)
 		if err != nil {
-			if isUnresolvedConfigOrSecret(err) {
+			if isUnresolvedConfigSecretOrIncremental(err) {
 				switch {
 				case param.OmitWhenAbsent:
 					continue
@@ -426,16 +450,8 @@ func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Value
 		q.Set(k, val)
 	}
 
-	lower, err := incrementalLowerBoundValue(stream, req)
-	if err != nil {
-		return nil, err
-	}
-	if lower != "" && stream.Incremental != nil && stream.Incremental.RequestParam != "" {
-		formatted, err := formatParam(lower, stream.Incremental.ParamFormat)
-		if err != nil {
-			return nil, err
-		}
-		q.Set(stream.Incremental.RequestParam, formatted)
+	if formattedLower != "" && stream.Incremental.RequestParam != "" {
+		q.Set(stream.Incremental.RequestParam, formattedLower)
 	}
 	return q, nil
 }
@@ -717,18 +733,27 @@ func isUnresolvedRecordPath(err error) bool {
 	return errors.As(err, &unresolved) && unresolved.Namespace == "record"
 }
 
-// isUnresolvedConfigOrSecret reports whether err is the typed
-// unresolvedKeyError for the "config" or "secrets" namespace (gap-loop item
-// 3: buildInitialQuery's object-form QueryParam tolerance is scoped to an
-// absent config/secrets key specifically — any OTHER interpolation failure,
-// e.g. CRLF injection or an unknown filter/namespace, still propagates as a
-// hard error even for an omit_when_absent/default-bearing entry).
-func isUnresolvedConfigOrSecret(err error) bool {
+// isUnresolvedConfigSecretOrIncremental reports whether err is the typed
+// unresolvedKeyError for the "config", "secrets", or "incremental" namespace
+// (gap-loop item 3, extended by S3 item 1: buildInitialQuery's object-form
+// QueryParam tolerance is scoped to an absent config/secrets/incremental-
+// lower-bound key specifically — any OTHER interpolation failure, e.g. CRLF
+// injection or an unknown filter/namespace, still propagates as a hard error
+// even for an omit_when_absent/default-bearing entry). "incremental" covers
+// exactly one key today ("lower_bound"), which resolves as unresolved/absent
+// whenever no incremental lower bound applies (fresh full sync, or no
+// incremental spec at all) — see resolveIncrementalRef, interpolate.go.
+func isUnresolvedConfigSecretOrIncremental(err error) bool {
 	var unresolved *unresolvedKeyError
 	if !errors.As(err, &unresolved) {
 		return false
 	}
-	return unresolved.Namespace == "config" || unresolved.Namespace == "secrets"
+	switch unresolved.Namespace {
+	case "config", "secrets", "incremental":
+		return true
+	default:
+		return false
+	}
 }
 
 func methodOrDefault(method string) string {

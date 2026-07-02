@@ -20,6 +20,10 @@
       {
         "mode": "none",
         "when": "{{ config.public_access }}"
+      },
+      {
+        "mode": "none",
+        "when": "{{ config.auth_type in ['public', 'none', 'anonymous', 'unauthenticated'] }}"
       }
     ],
     "pagination": {

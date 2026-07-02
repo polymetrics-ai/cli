@@ -660,6 +660,74 @@ func TestParityGithub_AuthExplicitPublicOptIn(t *testing.T) {
 	}
 }
 
+// TestParityGithub_AuthTypePublicEnumOptIn is the S3 engine mini-wave item 2
+// restoration (wave1-pilot SUMMARY.md carried queue / REVIEW-A.md re-review
+// R1 CONDITION): now that engine.ResolveCheckWhen statically validates the
+// FULL when-grammar (==/in/truthiness), legacy's exact
+// `auth_type=public|none|anonymous|unauthenticated` string-enum selection
+// (auth.go:81-82) is restored as an ADDITIONAL, purely-additive opt-in
+// alongside `public_access` (never a replacement — `public_access` stays the
+// primary documented surface; EvalWhen has no `||` operator, so the two
+// opt-ins are expressed as two separate `mode:none` candidates in the auth
+// list rather than one OR'd condition). Every legacy synonym is asserted.
+func TestParityGithub_AuthTypePublicEnumOptIn(t *testing.T) {
+	bundle := loadGithubBundle(t)
+
+	for _, synonym := range []string{"public", "none", "anonymous", "unauthenticated"} {
+		synonym := synonym
+		t.Run(synonym, func(t *testing.T) {
+			srv := githubStreamServer(t)
+			cfg := connectors.RuntimeConfig{
+				Config: map[string]string{
+					"base_url":  srv.URL,
+					"owner":     "octocat",
+					"repo":      "hello-world",
+					"auth_type": synonym,
+				},
+			}
+
+			eng := newGithubEngineConnector(withGithubBaseURL(bundle, srv.URL))
+			var recs []connectors.Record
+			err := eng.Read(context.Background(), connectors.ReadRequest{Stream: "repository", Config: cfg}, func(r connectors.Record) error {
+				recs = append(recs, r)
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("engine Read with auth_type=%q: %v (want success, legacy string-enum opt-in restored)", synonym, err)
+			}
+			if len(recs) == 0 {
+				t.Fatalf("engine Read with auth_type=%q emitted zero records (test fixture bug)", synonym)
+			}
+		})
+	}
+}
+
+// TestParityGithub_AuthTypeUnrelatedValueDoesNotGrantPublicAccess proves the
+// auth_type enum restoration is NARROW (only the 4 legacy public synonyms
+// arm mode:none) — an unrelated/garbage auth_type value must still hard-error
+// exactly like TestParityGithub_AuthNoCredentialsFailsLoudRatherThanSilentlyPublic,
+// not silently fall through to unauthenticated reads for every possible
+// auth_type string.
+func TestParityGithub_AuthTypeUnrelatedValueDoesNotGrantPublicAccess(t *testing.T) {
+	bundle := loadGithubBundle(t)
+	srv := githubStreamServer(t)
+
+	cfg := connectors.RuntimeConfig{
+		Config: map[string]string{
+			"base_url":  srv.URL,
+			"owner":     "octocat",
+			"repo":      "hello-world",
+			"auth_type": "some_other_value",
+		},
+	}
+
+	eng := newGithubEngineConnector(withGithubBaseURL(bundle, srv.URL))
+	err := eng.Read(context.Background(), connectors.ReadRequest{Stream: "repository", Config: cfg}, func(connectors.Record) error { return nil })
+	if err == nil {
+		t.Fatal("engine Read with an unrelated auth_type value = nil error, want a hard failure (only the 4 legacy public synonyms arm mode:none)")
+	}
+}
+
 func testRSAKeyPEM(t *testing.T) string {
 	t.Helper()
 	key, err := rsa.GenerateKey(rand.Reader, 2048)
@@ -760,7 +828,12 @@ func TestParityGithub_WriteCommentIssue(t *testing.T) {
 // TestParityGithub_WriteCreatePullRequestCompound is the compound-write bar:
 // both connectors must issue the SAME sequence of requests (create POST,
 // issue-metadata PATCH, reviewers POST) for a record carrying labels AND
-// reviewers.
+// reviewers — method, path, AND decoded body, matching every non-compound
+// write test's bar (S3 engine mini-wave carried minor — SUMMARY.md carried
+// minors: "github compound-write test still compares method/path only
+// (bodies compared in all non-compound tests)"). Body comparison was not a
+// gap in engine BEHAVIOR — it was a gap in this test's own assertion
+// strength; flipping to full reflect.DeepEqual is a strict strengthening.
 func TestParityGithub_WriteCreatePullRequestCompound(t *testing.T) {
 	record := connectors.Record{
 		"head": "feature-1", "base": "main", "title": "Fixture PR",
@@ -775,8 +848,8 @@ func TestParityGithub_WriteCreatePullRequestCompound(t *testing.T) {
 		t.Fatalf("engine request count = %d, want %d (legacy): engine=%+v legacy=%+v", len(engReqs), len(legacyReqs), engReqs, legacyReqs)
 	}
 	for i := range legacyReqs {
-		if engReqs[i].Method != legacyReqs[i].Method || engReqs[i].Path != legacyReqs[i].Path {
-			t.Fatalf("request %d method/path = %s %s, want %s %s (legacy)", i, engReqs[i].Method, engReqs[i].Path, legacyReqs[i].Method, legacyReqs[i].Path)
+		if !reflect.DeepEqual(engReqs[i], legacyReqs[i]) {
+			t.Fatalf("request %d = %+v, want %+v (legacy)", i, engReqs[i], legacyReqs[i])
 		}
 	}
 }

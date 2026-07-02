@@ -208,6 +208,51 @@ func TestAuthenticator_ScopeOmittedWhenUnset(t *testing.T) {
 	}
 }
 
+// TestInterpolateOptional_AnyErrorResolvesToEmptyString is the S3 engine
+// mini-wave carried minor fix (wave1-pilot SUMMARY.md carried minors: "gmail
+// interpolateOptional comment drift" — the doc comment claimed CRLF
+// injection/unknown-filter errors "still propagate", but the code's `if err
+// != nil { return "" }` swallows EVERY interpolation error identically, not
+// just an unresolved-key one). This pins the ACTUAL behavior directly so the
+// comment (now corrected to match) can never silently drift from the code
+// again: a CRLF-injecting resolved value and an unknown-filter template both
+// resolve to "" here, exactly like a genuinely-absent key does. This is
+// verified benign for interpolateOptional's only two call sites
+// (client_secret/scope, both of which are optional-when-empty POST-form
+// values per legacy's own semantics, not headers or paths) — see hooks.go's
+// updated doc comment for the full reasoning.
+func TestInterpolateOptional_AnyErrorResolvesToEmptyString(t *testing.T) {
+	cfg := connectors.RuntimeConfig{
+		Config:  map[string]string{"crlf_value": "bad\r\nvalue"},
+		Secrets: map[string]string{},
+	}
+
+	t.Run("genuinely absent key resolves to empty string", func(t *testing.T) {
+		if got := interpolateOptional("{{ config.nope }}", cfg); got != "" {
+			t.Fatalf("interpolateOptional(absent key) = %q, want \"\"", got)
+		}
+	})
+
+	t.Run("CRLF injection in the resolved value ALSO resolves to empty string, not propagated", func(t *testing.T) {
+		if got := interpolateOptional("{{ config.crlf_value }}", cfg); got != "" {
+			t.Fatalf("interpolateOptional(CRLF value) = %q, want \"\" (current code swallows every interpolation error identically, per the corrected doc comment)", got)
+		}
+	})
+
+	t.Run("unknown filter ALSO resolves to empty string, not propagated", func(t *testing.T) {
+		if got := interpolateOptional("{{ config.crlf_value | bogus_filter }}", cfg); got != "" {
+			t.Fatalf("interpolateOptional(unknown filter) = %q, want \"\"", got)
+		}
+	})
+
+	t.Run("a value that resolves cleanly is returned unchanged", func(t *testing.T) {
+		clean := connectors.RuntimeConfig{Config: map[string]string{"clean": "hello"}}
+		if got := interpolateOptional("{{ config.clean }}", clean); got != "hello" {
+			t.Fatalf("interpolateOptional(clean value) = %q, want %q", got, "hello")
+		}
+	})
+}
+
 // --- caching / expiry ----------------------------------------------------
 
 // TestAuthenticator_CachesTokenAcrossRequests: a second Apply before expiry

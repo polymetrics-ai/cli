@@ -146,7 +146,13 @@ func checkCursorFieldsExist(b engine.Bundle) error {
 
 // checkInterpolationsResolve statically resolves every {{ }} template found
 // in the bundle's streams.json/writes.json against spec.json's declared
-// property set, via engine.ResolveCheck.
+// property set, via engine.ResolveCheck. AuthSpec's `when` field is checked
+// via engine.ResolveCheckWhen instead (S3 engine mini-wave item 2): a `when`
+// clause is the one field here that legitimately uses the `==`/`in`/
+// truthiness when-grammar rather than plain `{{ }}` interpolation, and
+// ResolveCheck's bare-namespace.key-only parsing would otherwise hard-fail
+// any `==`/`in`-shaped when clause even when its referenced key IS
+// spec-declared (github's auth_type in [...] restoration, ledger G14).
 func checkInterpolationsResolve(b engine.Bundle) error {
 	specKeys := map[string]bool{}
 	if b.Spec != nil {
@@ -160,6 +166,12 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 			return nil
 		}
 		return engine.ResolveCheck(template, specKeys)
+	}
+	checkWhen := func(template string) error {
+		if template == "" {
+			return nil
+		}
+		return engine.ResolveCheckWhen(template, specKeys)
 	}
 
 	if err := check(b.HTTP.URL); err != nil {
@@ -177,7 +189,7 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 		if err := check(a.Value); err != nil {
 			return err
 		}
-		if err := check(a.When); err != nil {
+		if err := checkWhen(a.When); err != nil {
 			return err
 		}
 	}

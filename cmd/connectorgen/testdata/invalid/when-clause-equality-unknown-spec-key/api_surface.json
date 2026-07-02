@@ -1,0 +1,9 @@
+{
+  "api": "When Clause Equality Unknown Spec Key API v1",
+  "docs": "https://example.invalid/docs",
+  "reviewed_at": "2026-07-02",
+  "scope": "widgets endpoint only",
+  "endpoints": [
+    { "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } }
+  ]
+}

@@ -182,7 +182,8 @@ schema}.go` directly — this section is a map, not a spec; when in doubt, read 
 unknown filter name anywhere in the chain is a hard error (validate-time via `ResolveCheck`'s
 filter-name check, wired into both `connectorgen validate` and static-checked chains, and
 runtime). References: `config.<key>`, `secrets.<key>`, `record.<dotted.path>` (walks nested
-`map[string]any`), bare `cursor`. Filters: `urlencode` (percent-encodes for path-segment
+`map[string]any`), bare `cursor`, `incremental.lower_bound` (S3 engine mini-wave item 1, below).
+Filters: `urlencode` (percent-encodes for path-segment
 insertion; applied **by default** to every `InterpolatePath` resolution unless an explicit filter
 chain overrides it — general `Interpolate`/header interpolation do NOT default-apply it),
 `unix_seconds` (RFC3339 string → Unix seconds integer string), `base64` (`base64.StdEncoding`),
@@ -195,7 +196,12 @@ returns the final non-empty `/`-delimited segment of the resolved value — a tr
 ignored, a value with no `/` at all passes through unchanged, never errors — the sanctioned way to
 derive a HAL/URI-keyed API's trailing-segment id, e.g. `"id": "{{ record.uri | last_path_segment
 }}"` for calendly's `idFromURI(uri)` legacy convention; use this instead of a RecordHook for any
-URI-shaped derived-id field). Any resolved value destined for a header (`InterpolateHeader`) or that itself contains
+URI-shaped derived-id field), `const:<value>` (S3 engine mini-wave item 1, below: discards the
+resolved value entirely and always returns the literal text after the first `:` — its purpose is
+composing with `omit_when_absent`/`default` to express "send this FIXED literal iff a reference
+resolves" without depending on the reference's own value; the gating reference must still fail to
+resolve for absence to propagate, `const` only replaces a SUCCESSFULLY resolved value). Any resolved
+value destined for a header (`InterpolateHeader`) or that itself contains
 `\r`/`\n` is rejected outright as a header/injection guard (THREAT-MODEL §2) — this check runs on
 the **pre-filter** value for every interpolation call, not just headers. An absent `config.*`/
 `secrets.*` key is a **hard error** naming the key and namespace in ordinary `Interpolate`/
@@ -220,12 +226,34 @@ This is what makes an *optional* credential/config-gated `auth` candidate possib
 separate "is this key present" primitive — e.g. an optional Bearer-proxy secret:
 `[{"mode":"bearer","token":"{{ secrets.api_key }}","when":"{{ secrets.api_key }}"},{"mode":"none"}]`
 safely falls through to `none` when `api_key` is unset, and applies the bearer token when it is set
-(see searxng's `streams.json`). Static validation (`ResolveCheck`, run by `connectorgen
-validate`/conformance's `interpolations_resolve`) is unaffected by this runtime-absence tolerance: a
+(see searxng's `streams.json`). Static validation is unaffected by this runtime-absence tolerance: a
 `when` template referencing a key **not even declared** in `spec.json`'s properties is still a hard
 validate-time error. `connectorgen validate` validates EVERY templated `AuthSpec` field this way —
-not just `token`/`value`/`when` but also `username`/`password`/`token_url`/`client_id`/
-`client_secret`/`scopes` — via `engine.ResolveCheckAuthSpec(spec, specKeys)`.
+`token`/`username`/`password`/`value`/`token_url`/`client_id`/`client_secret`/`scopes` via
+`ResolveCheck`, and `when` via **`ResolveCheckWhen`** (S3 engine mini-wave item 2, wave1-pilot
+SUMMARY.md carried queue / REVIEW-A.md re-review R1/R3) — both wired through
+`engine.ResolveCheckAuthSpec(spec, specKeys)`.
+
+**`ResolveCheckWhen` — full when-grammar static validation** (`interpolate.go`, S3 engine mini-wave
+item 2): before this increment, `ResolveCheck`'s bare `namespace.key`-only parsing treated an ENTIRE
+`==`/`in`-shaped `when` expression as a single dotted reference — `{{ config.auth_type ==
+'public' }}` hard-failed validate as an "unknown spec key `auth_type == 'public'`" finding even when
+`auth_type` genuinely IS a declared spec property, because `resolve check: unknown spec key` reads
+the whole clause after the first split-on-`.`, not just the intended left-hand-side reference. Every
+`when` clause in every bundle in this repo was therefore restricted to bare truthiness only — not
+because `EvalWhen` (the runtime evaluator) couldn't handle `==`/`in`, but because static validation
+couldn't statically ACCEPT one. `ResolveCheckWhen(template, specKeys)` parses the IDENTICAL grammar
+`EvalWhen` evaluates at runtime (equality, membership, truthiness, and the same rejected-operator set
+— `!=`/`>=`/`<=`/`>`/`<`/`&&`/`||`) and validates only the left-hand-side reference against
+`specKeys` (via the same `checkNamespaceRef` helper `ResolveCheck` itself uses) — the right-hand-side
+literal/list syntax is checked for well-formedness (a missing quote or bracket is still a
+validate-time error) but its literal VALUES are never checked against anything (there is no enum to
+validate against; the bundle author chooses the literal set). Use `ResolveCheckWhen` for ANY `when`
+field check; `ResolveCheck` remains correct for every other templated field (paths, headers, query,
+computed_fields, non-`when` AuthSpec fields) which are plain `{{ }}` interpolation, never the
+when-grammar. `internal/connectors/conformance/static.go`'s `checkInterpolationsResolve` routes
+`AuthSpec.When` through `ResolveCheckWhen` the same way `cmd/connectorgen`'s `checkInterpolations`
+does — keep both wired consistently if either changes.
 
 **Dual-auth ordering is load-bearing — the golden pattern** (gap-loop cycle-1 item 7, lifting
 zendesk-support's ledger item 3 per REVIEW-B.md's fan-out-readiness note): `base.auth` is evaluated
@@ -283,6 +311,39 @@ the base-level spec **wholesale** (no field-by-field merge) when present.
 RFC3339 lower-bound value before sending it as `request_param`): `rfc3339` (default; send
 verbatim), `unix_seconds`, `date` (`2006-01-02`), `github_date_range` (`>=<value>`, a
 lower-bound-only GitHub search qualifier).
+
+**`{{ incremental.lower_bound }}` in `stream.Query`** (S3 engine mini-wave item 1, wave1-pilot
+SUMMARY.md carried queue / REVIEW-A.md re-review R2 ACCEPT-WITH-QUEUE): exposes the RESOLVED,
+post-`formatParam` incremental lower bound (state cursor, falling back to `start_config_key`; ""
+when neither resolves — a fresh full sync, or a stream with no `incremental` spec at all) to
+`stream.Query` template resolution, closing the recurring "a query param legacy sends ONLY when the
+computed incremental lower bound resolves" gap class (chargebee's `sort_by[asc]=updated_at`, sent in
+the SAME branch as `updated_at[after]`, never on a full-refresh read). Mechanically: `read.go`'s
+`buildInitialQuery` now computes the lower bound and formats it via `formatParam` BEFORE
+`stream.Query`'s own resolution loop runs, and wires the formatted value into that loop's `Vars`
+(`Vars.IncrementalLowerBound`) — this is why ORDER matters and why this could not be expressed with
+the pre-existing `omit_when_absent`/`default` dialect alone (item 3, below): that dialect's
+absence-detection is keyed to a CONFIG/SECRET reference resolving or not, and there is no
+config/secret key whose presence tracks "the incremental lower bound resolved" on the common
+state-cursor-driven repeat-sync path (an app-persisted `State["cursor"]` is not a config key at
+all). An absent lower bound is represented as the SAME `unresolvedKeyError` shape (namespace
+`"incremental"`) the config/secrets dialect uses, so `omit_when_absent`/`default` compose with it
+identically — no new tolerance mechanism was needed, just a new resolvable reference. Because the
+literal VALUE a legacy connector sends alongside the lower bound is often a fixed constant (not the
+lower bound's own value — chargebee always sends the literal string `"updated_at"`, never the
+timestamp itself), pair this reference with the `const:<value>` filter (above) rather than sending
+the raw lower-bound value:
+
+```json
+"query": {
+  "sort_by[asc]": { "template": "{{ incremental.lower_bound | const:updated_at }}", "omit_when_absent": true }
+}
+```
+
+— present with the literal `updated_at` iff the incremental lower bound resolves (state cursor or
+`start_config_key`), absent on a full-refresh read. If a param genuinely needs the lower bound's OWN
+value (not a fixed literal), omit the `const:` filter and reference `{{ incremental.lower_bound }}`
+directly — it resolves to the exact same formatted string `request_param` itself receives.
 
 **`computed_fields`** (`streams.json` per-stream): a map of output-field-name → template resolved
 against the **raw** (pre-projection) record AND `config.*` (Config only — **never** `secrets.*`, see
@@ -364,8 +425,11 @@ existing bundle) OR as an object:
 ```
 
 `omit_when_absent: true` means the param is left off the request ENTIRELY when its template hits an
-unresolved `config.*`/`secrets.*` key (vitally's `status`, bitly's `size` config override) —
-**scoped to config/secrets absence only**: any OTHER interpolation failure (CRLF injection, an
+unresolved `config.*`/`secrets.*`/`incremental.*` key (vitally's `status`, bitly's `size` config
+override, chargebee's `sort_by[asc]` incremental-lower-bound gate above) —
+**scoped to config/secrets/incremental absence only** (`read.go`'s
+`isUnresolvedConfigSecretOrIncremental`, extended by S3 item 1 to cover the `incremental` namespace
+alongside `config`/`secrets`): any OTHER interpolation failure (CRLF injection, an
 unknown filter/namespace) still hard-errors regardless. `default` sends that literal instead of
 erroring when the referenced key is absent (closes calendly's `page_size`-defaults-to-100 gap and
 the same class of legacy-default-base-URL-style shape at the per-param level — see also `default`
@@ -376,9 +440,11 @@ that explicitly opts into the object form gets any tolerance at all, so a mis-de
 query param can never silently degrade into an unfiltered request (the F4 fail-open class the engine
 deliberately rejects elsewhere). Static validation (`connectorgen validate`'s
 `checkInterpolations`) still resolves EVERY entry's `template` field, string or object — the
-referenced key must still be DECLARED in `spec.json`'s properties either way. A `spec.json` property
-that no template anywhere in the bundle ever consumes is still dead config — don't declare it (F6,
-REVIEW.md).
+referenced key must still be DECLARED in `spec.json`'s properties either way (`config.*` keys) or a
+known engine pseudo-namespace key (`incremental.lower_bound`, checked against
+`knownIncrementalKeys` rather than `specKeys` — it is not a spec.json property). A `spec.json`
+property that no template anywhere in the bundle ever consumes is still dead config — don't declare
+it (F6, REVIEW.md).
 
 **`client_filtered`** (`incremental.client_filtered: true`): for APIs with no server-side
 incremental filter parameter, the engine drops already-seen records client-side by comparing each

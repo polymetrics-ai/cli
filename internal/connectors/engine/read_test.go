@@ -397,6 +397,131 @@ func TestReadIncrementalParamFormats(t *testing.T) {
 	}
 }
 
+// --- incremental.lower_bound query-var dialect (S3 engine mini-wave item 1,
+// wave1-pilot SUMMARY.md carried queue / REVIEW-A.md re-review R2): expose the
+// RESOLVED (state cursor or start_config_key, post-formatParam) incremental
+// lower bound to stream.Query template resolution, so a param legacy sends
+// ONLY when the incremental lower bound resolves (chargebee's
+// sort_by[asc]=updated_at, chargebee.go:151-155) is expressible via the
+// existing optional-query dialect instead of requiring a new engine
+// primitive. ---
+
+// TestReadIncrementalLowerBoundQueryVarOmittedOnFreshFullSync proves a
+// stream.Query entry templated as "{{ incremental.lower_bound }}" with
+// omit_when_absent:true is left off the request entirely on a fresh full
+// sync (no state cursor, no start_config_key value) — incremental.lower_bound
+// resolves to "" (genuinely absent), and the dialect's existing
+// omit_when_absent semantics apply to that absence exactly like a
+// config/secrets absence.
+func TestReadIncrementalLowerBoundQueryVarOmittedOnFreshFullSync(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Query: map[string]QueryParam{
+			"sort_by[asc]": {Template: "{{ incremental.lower_bound }}", OmitWhenAbsent: true},
+		},
+		Incremental: &IncrementalSpec{CursorField: "updated_at", RequestParam: "updated_at[after]", ParamFormat: "unix_seconds", StartConfigKey: "start_date"},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v (an omit_when_absent incremental.lower_bound entry must never hard-error on a fresh full sync)", err)
+	}
+	if _, present := gotQuery["sort_by[asc]"]; present {
+		t.Fatalf("query = %v, want sort_by[asc] OMITTED when no incremental lower bound resolves", gotQuery)
+	}
+}
+
+// TestReadIncrementalLowerBoundQueryVarSentFromStateCursor proves the SAME
+// entry sends a literal value once a state cursor resolves the lower bound —
+// this is exactly the state-cursor-driven repeat-sync path the S-2 STOP
+// identified as inexpressible (a config.start_date-gated entry would get
+// this path wrong, since a persisted State["cursor"] is not a config key at
+// all).
+func TestReadIncrementalLowerBoundQueryVarSentFromStateCursor(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Query: map[string]QueryParam{
+			"sort_by[asc]": {Template: "{{ incremental.lower_bound }}", OmitWhenAbsent: true},
+		},
+		Incremental: &IncrementalSpec{CursorField: "updated_at", RequestParam: "updated_at[after]", ParamFormat: "unix_seconds", StartConfigKey: "start_date"},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", State: map[string]string{"cursor": "1700000100"}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotQuery.Get("sort_by[asc]") != "1700000100" {
+		t.Fatalf("query = %v, want sort_by[asc]=1700000100 (the RESOLVED, post-formatParam lower bound value, from the state cursor)", gotQuery)
+	}
+}
+
+// TestReadIncrementalLowerBoundQueryVarSentFromStartConfigKey proves the same
+// dialect resolves from the start_config_key fallback (fresh sync, config
+// start_date set) and formats the value per the stream's own param_format —
+// the value seen by the query var is the SAME resolved/formatted value sent
+// as the request_param, not the raw unformatted cursor.
+func TestReadIncrementalLowerBoundQueryVarSentFromStartConfigKey(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Query: map[string]QueryParam{
+			"sort_by[asc]": {Template: "{{ incremental.lower_bound }}", OmitWhenAbsent: true},
+		},
+		Incremental: &IncrementalSpec{CursorField: "updated_at", RequestParam: "updated_at[after]", ParamFormat: "unix_seconds", StartConfigKey: "start_date"},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"start_date": "2023-11-14T22:15:00Z"}}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotQuery.Get("sort_by[asc]") != "1700000100" {
+		t.Fatalf("query = %v, want sort_by[asc]=1700000100 (start_date formatted as unix_seconds, matching the request_param's own formatted value)", gotQuery)
+	}
+	if gotQuery.Get("updated_at[after]") != gotQuery.Get("sort_by[asc]") {
+		t.Fatalf("sort_by[asc] (%q) and updated_at[after] (%q) must carry the identical formatted lower-bound value", gotQuery.Get("sort_by[asc]"), gotQuery.Get("updated_at[after]"))
+	}
+}
+
+// TestReadIncrementalLowerBoundQueryVarAbsentIncrementalSpecOmits proves a
+// stream with NO incremental spec at all still resolves
+// "{{ incremental.lower_bound }}" as genuinely absent (never a hard error,
+// never a literal "incremental.lower_bound"-shaped string) — the query var
+// is defined even for a non-incremental stream, it just always resolves
+// empty there.
+func TestReadIncrementalLowerBoundQueryVarAbsentIncrementalSpecOmits(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Query: map[string]QueryParam{
+			"sort_by[asc]": {Template: "{{ incremental.lower_bound }}", OmitWhenAbsent: true},
+		},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if _, present := gotQuery["sort_by[asc]"]; present {
+		t.Fatalf("query = %v, want sort_by[asc] OMITTED for a stream with no incremental spec at all", gotQuery)
+	}
+}
+
 // --- B1 (REVIEW.md BLOCK): formatParam must accept a digits-only
 // (unix-seconds) cursor input as well as RFC3339, since that is the ONLY
 // shape internal/app actually ever persists for a numeric cursor field

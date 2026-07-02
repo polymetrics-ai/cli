@@ -128,3 +128,13 @@ matching legacy's `Write` returning `connectors.ErrUnsupportedOperation` uncondi
   `connector: "monday"` and `fixture: true` (`monday.go:329-330`) — these are fixture-mode-only
   fields, never emitted by legacy's live GraphQL read path, so they are correctly absent from this
   bundle's schemas.
+- **RESOLVED — `max_pages` is now declared in `spec.json`** (S3 engine mini-wave carried minor —
+  SUMMARY.md carried minors: "monday `max_pages` consumed but undeclared in spec.json"). The config
+  key was always consumed by `hooks/monday/hooks.go`'s `StreamHook` (`mondayMaxPages`, a hard
+  page-count cap independent of the GraphQL API's own pagination signal) but was missing from
+  `spec.json` entirely — a dead-config-surface gap in the OPPOSITE direction of F6's usual case (a
+  genuinely-consumed key with no operator-facing declaration, rather than a declared-but-unwireable
+  one). `mondayMaxPages`'s parse is permissive by design and never errors: absent/`"all"`/
+  `"unlimited"`/non-positive-integer values all mean unbounded (0); a positive integer string caps
+  the page count. See `hooks/monday/hooks_test.go`'s `mondayMaxPages` unit tests for the exact
+  parse-tolerance matrix.

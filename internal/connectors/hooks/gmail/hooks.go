@@ -109,13 +109,21 @@ func interpolateRequired(tmpl, field string, cfg connectors.RuntimeConfig) (stri
 	return val, nil
 }
 
-// interpolateOptional resolves tmpl best-effort: a reference to a key that
-// is simply absent from cfg.Config/cfg.Secrets resolves to "" (legacy's
-// optional-field semantics) rather than propagating engine.Interpolate's
-// hard error for an unresolved config/secrets key. Any OTHER interpolation
-// failure (CRLF injection, unknown filter/namespace) still propagates, since
-// those indicate a genuine bundle/config defect, not "field intentionally
-// unset".
+// interpolateOptional resolves tmpl best-effort: ANY engine.Interpolate
+// error — an absent config/secrets key (legacy's optional-field semantics,
+// the intended case), but ALSO a CRLF-injecting resolved value or an unknown
+// filter/namespace reference — resolves to "" rather than propagating (S3
+// engine mini-wave carried minor fix: this comment previously claimed only
+// the absent-key case was tolerated and every other failure "still
+// propagates", which was never true of the code below — see
+// TestInterpolateOptional_AnyErrorResolvesToEmptyString for the pinned,
+// verified-against-the-real-code behavior). Verified benign at this
+// function's only two call sites (spec.ClientSecret/spec.Scopes, both
+// optional-when-empty OAuth token-request POST-form values per legacy's own
+// "omit when unset" semantics, never a header or path) — a caller-supplied
+// value degrading to "" on a bizarre CRLF/unknown-filter input is no worse
+// than the value being genuinely absent, which this function already treats
+// as a normal, non-error case.
 func interpolateOptional(tmpl string, cfg connectors.RuntimeConfig) string {
 	if strings.TrimSpace(tmpl) == "" {
 		return ""

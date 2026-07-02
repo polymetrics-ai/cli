@@ -1,9 +1,14 @@
 package engine
 
 import (
+	"context"
 	"encoding/base64"
+	"net/http"
+	"net/url"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors"
 )
 
 func baseVars() Vars {
@@ -297,6 +302,63 @@ func TestApplyFilterLastPathSegmentKnownToResolveCheck(t *testing.T) {
 	}
 }
 
+// --- const:<value> filter (S3 engine mini-wave item 1, wave1-pilot
+// SUMMARY.md carried queue / REVIEW-A.md re-review R2): send a FIXED literal
+// value iff a reference resolves, without leaking or otherwise depending on
+// the resolved value itself — chargebee's sort_by[asc]=updated_at is always
+// the constant string "updated_at", gated on whether the incremental lower
+// bound resolves at all, not templated FROM the lower bound's own value. ---
+
+func TestApplyFilterConstReplacesResolvedValueWithFixedLiteral(t *testing.T) {
+	vars := baseVars()
+	got, err := Interpolate("{{ config.base_url | const:updated_at }}", vars)
+	if err != nil {
+		t.Fatalf("Interpolate const filter: unexpected error: %v", err)
+	}
+	if got != "updated_at" {
+		t.Fatalf("Interpolate(const:updated_at) = %q, want updated_at (fixed literal, ignoring the resolved base_url value)", got)
+	}
+}
+
+func TestApplyFilterConstStillFailsWhenReferenceUnresolved(t *testing.T) {
+	vars := baseVars()
+	_, err := Interpolate("{{ config.nope | const:updated_at }}", vars)
+	if err == nil {
+		t.Fatalf("Interpolate const filter: expected error for an unresolved reference (const only replaces the VALUE, it never suppresses a resolution failure)")
+	}
+}
+
+func TestApplyFilterConstComposesWithOmitWhenAbsentQueryDialect(t *testing.T) {
+	// This is the actual production shape: gate on incremental.lower_bound's
+	// presence (via omit_when_absent), but SEND a fixed literal, not the
+	// lower bound's own value.
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Query: map[string]QueryParam{
+			"sort_by[asc]": {Template: "{{ incremental.lower_bound | const:updated_at }}", OmitWhenAbsent: true},
+		},
+		Incremental: &IncrementalSpec{CursorField: "updated_at", RequestParam: "updated_at[after]", ParamFormat: "unix_seconds"},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", State: map[string]string{"cursor": "1700000100"}}
+	if _, err := readAll(t, context.Background(), b, req, nil); err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotQuery.Get("sort_by[asc]") != "updated_at" {
+		t.Fatalf("query sort_by[asc] = %q, want the fixed literal %q (not the lower bound value %q)", gotQuery.Get("sort_by[asc]"), "updated_at", "1700000100")
+	}
+}
+
+func TestApplyFilterConstKnownToResolveCheck(t *testing.T) {
+	if err := ResolveCheck("{{ incremental.lower_bound | const:updated_at }}", map[string]bool{}); err != nil {
+		t.Fatalf("ResolveCheck: unexpected error for known filter const: %v", err)
+	}
+}
+
 // --- static-literal computed_fields (no {{ }} markers at all): already
 // supported by Interpolate's no-op-on-no-match semantics; locked in here as
 // a named regression test per F7's meta-rule enablement. ---
@@ -509,6 +571,129 @@ func TestResolveCheck(t *testing.T) {
 	}
 	if err := ResolveCheck("{{ cursor }}", specKeys); err != nil {
 		t.Fatalf("unexpected error for cursor reference: %v", err)
+	}
+}
+
+// TestResolveCheckAcceptsIncrementalLowerBoundReference proves ResolveCheck
+// statically accepts "{{ incremental.lower_bound }}" (S3 engine mini-wave
+// item 1): it is not a spec.json-declared key (like record/cursor/secrets,
+// it is not checked against specKeys), and an unknown key under the
+// "incremental" namespace (a typo, e.g. "incremental.lowre_bound") is still a
+// validate-time error naming the offending reference.
+func TestResolveCheckAcceptsIncrementalLowerBoundReference(t *testing.T) {
+	specKeys := map[string]bool{"repository": true}
+
+	if err := ResolveCheck("{{ incremental.lower_bound }}", specKeys); err != nil {
+		t.Fatalf("ResolveCheck: unexpected error for incremental.lower_bound reference: %v", err)
+	}
+
+	err := ResolveCheck("{{ incremental.lowre_bound }}", specKeys)
+	if err == nil {
+		t.Fatalf("ResolveCheck: expected validation finding for unknown incremental key (typo)")
+	}
+	if !strings.Contains(err.Error(), "lowre_bound") {
+		t.Fatalf("error %q does not name the offending key", err.Error())
+	}
+}
+
+// --- ResolveCheckWhen: full when-grammar (==, in, truthiness) static parsing
+// (S3 engine mini-wave item 2, wave1-pilot SUMMARY.md carried queue /
+// REVIEW-A.md re-review R1/R3): ResolveCheck's bare namespace.key-only
+// parsing previously forced a `when: "{{ config.auth_type == 'public' }}"`
+// clause to hard-fail validate even when auth_type IS a declared spec key,
+// since ResolveCheck split the WHOLE inner expression (including "== 'public'")
+// on "." as if it were one reference. ResolveCheckWhen parses the identical
+// grammar EvalWhen evaluates at runtime and statically validates only the
+// left-hand-side reference (plus literal/list syntax), so `==`/`in`-shaped
+// when clauses referencing a real spec key now pass, while a typo'd/
+// spec-unknown key or malformed literal/list syntax is still a validate-time
+// error. ---
+
+func TestResolveCheckWhenEqualityAgainstSpecKnownKeyPasses(t *testing.T) {
+	specKeys := map[string]bool{"auth_type": true}
+	if err := ResolveCheckWhen("{{ config.auth_type == 'public' }}", specKeys); err != nil {
+		t.Fatalf("ResolveCheckWhen: unexpected error for spec-known key in == comparison: %v", err)
+	}
+}
+
+func TestResolveCheckWhenInMembershipAgainstSpecKnownKeyPasses(t *testing.T) {
+	specKeys := map[string]bool{"auth_type": true}
+	if err := ResolveCheckWhen("{{ config.auth_type in ['public', 'none', 'anonymous'] }}", specKeys); err != nil {
+		t.Fatalf("ResolveCheckWhen: unexpected error for spec-known key in `in` comparison: %v", err)
+	}
+}
+
+func TestResolveCheckWhenTruthinessStillWorksUnchanged(t *testing.T) {
+	specKeys := map[string]bool{"public_access": true}
+	if err := ResolveCheckWhen("{{ config.public_access }}", specKeys); err != nil {
+		t.Fatalf("ResolveCheckWhen: unexpected error for bare truthiness reference: %v", err)
+	}
+}
+
+func TestResolveCheckWhenEqualityAgainstSpecUnknownKeyFails(t *testing.T) {
+	specKeys := map[string]bool{"auth_type": true}
+	err := ResolveCheckWhen("{{ config.auth_typo == 'public' }}", specKeys)
+	if err == nil {
+		t.Fatalf("ResolveCheckWhen: expected validation finding for spec-unknown key in == comparison")
+	}
+	if !strings.Contains(err.Error(), "auth_typo") {
+		t.Fatalf("error %q does not name the offending key", err.Error())
+	}
+}
+
+func TestResolveCheckWhenInMembershipAgainstSpecUnknownKeyFails(t *testing.T) {
+	specKeys := map[string]bool{"auth_type": true}
+	err := ResolveCheckWhen("{{ config.auth_typo in ['public','none'] }}", specKeys)
+	if err == nil {
+		t.Fatalf("ResolveCheckWhen: expected validation finding for spec-unknown key in `in` comparison")
+	}
+	if !strings.Contains(err.Error(), "auth_typo") {
+		t.Fatalf("error %q does not name the offending key", err.Error())
+	}
+}
+
+func TestResolveCheckWhenMalformedLiteralFails(t *testing.T) {
+	specKeys := map[string]bool{"auth_type": true}
+	err := ResolveCheckWhen("{{ config.auth_type == public }}", specKeys) // missing quotes
+	if err == nil {
+		t.Fatalf("ResolveCheckWhen: expected validation finding for unquoted == literal")
+	}
+}
+
+func TestResolveCheckWhenMalformedListFails(t *testing.T) {
+	specKeys := map[string]bool{"auth_type": true}
+	err := ResolveCheckWhen("{{ config.auth_type in 'public','none' }}", specKeys) // missing brackets
+	if err == nil {
+		t.Fatalf("ResolveCheckWhen: expected validation finding for malformed `in` list (missing brackets)")
+	}
+}
+
+func TestResolveCheckWhenUnsupportedOperatorFails(t *testing.T) {
+	specKeys := map[string]bool{"auth_type": true}
+	err := ResolveCheckWhen("{{ config.auth_type != 'public' }}", specKeys)
+	if err == nil {
+		t.Fatalf("ResolveCheckWhen: expected validation finding for unsupported operator !=")
+	}
+}
+
+// TestResolveCheckAuthSpecWhenUsesFullGrammar proves ResolveCheckAuthSpec's
+// `when` field is checked via the SAME when-grammar-aware path (not plain
+// ResolveCheck), so an ==/in-shaped when clause on a real AuthSpec passes
+// static validation when its key is spec-known.
+func TestResolveCheckAuthSpecWhenUsesFullGrammar(t *testing.T) {
+	specKeys := map[string]bool{"auth_type": true}
+	spec := AuthSpec{Mode: "none", When: "{{ config.auth_type == 'public' }}"}
+	if err := ResolveCheckAuthSpec(spec, specKeys); err != nil {
+		t.Fatalf("ResolveCheckAuthSpec: unexpected error for spec-known key in == when clause: %v", err)
+	}
+
+	badSpec := AuthSpec{Mode: "none", When: "{{ config.auth_typo == 'public' }}"}
+	err := ResolveCheckAuthSpec(badSpec, specKeys)
+	if err == nil {
+		t.Fatalf("ResolveCheckAuthSpec: expected validation finding for spec-unknown key in == when clause")
+	}
+	if !strings.Contains(err.Error(), "auth_typo") {
+		t.Fatalf("error %q does not name the offending key", err.Error())
 	}
 }
 

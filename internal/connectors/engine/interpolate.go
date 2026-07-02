@@ -11,13 +11,25 @@ import (
 )
 
 // Vars is the variable environment available to templates: config values,
-// secret values, the current raw record (nil outside record contexts), and
-// the current cursor value.
+// secret values, the current raw record (nil outside record contexts), the
+// current cursor value, and the resolved incremental lower bound (S3 engine
+// mini-wave item 1, wave1-pilot SUMMARY.md carried queue).
 type Vars struct {
 	Config  map[string]string
 	Secrets map[string]string
 	Record  map[string]any
 	Cursor  string
+
+	// IncrementalLowerBound is the RESOLVED, post-formatParam incremental
+	// lower bound for the current stream.Query resolution pass — "" on a
+	// fresh full sync (no state cursor, no start_config_key value, or no
+	// incremental spec at all), never an error to reference regardless of
+	// whether the current stream declares incremental at all. Populated only
+	// by buildInitialQuery's Vars (read.go); every other Vars-builder in the
+	// engine (requestVars, authVars, applyComputedFields's vars) leaves this
+	// at its zero value "", so "{{ incremental.lower_bound }}" resolves empty
+	// (never a hard error) anywhere outside stream.Query resolution too.
+	IncrementalLowerBound string
 }
 
 // templatePattern matches a single {{ ... }} expression, capturing its inner
@@ -208,8 +220,34 @@ func resolveRefValue(ref string, vars Vars) (any, error) {
 		return v, nil
 	case "record":
 		return resolveRecordPathValue(vars.Record, segs[1:])
+	case "incremental":
+		return resolveIncrementalRef(key, vars)
 	default:
 		return nil, fmt.Errorf("interpolate: unknown namespace %q in reference %q", namespace, ref)
+	}
+}
+
+// resolveIncrementalRef resolves an "incremental.<key>" reference (S3 engine
+// mini-wave item 1). Today the only supported key is "lower_bound":
+// vars.IncrementalLowerBound, the RESOLVED, post-formatParam value computed
+// by buildInitialQuery BEFORE stream.Query is resolved (read.go). An empty
+// value (fresh full sync — no state cursor, no start_config_key value, or no
+// incremental spec declared at all) is treated as UNRESOLVED/absent, exactly
+// like a config/secrets key that is genuinely absent — this is what makes
+// "{{ incremental.lower_bound }}" compose with the existing
+// omit_when_absent/default optional-query dialect instead of requiring a
+// brand new tolerance mechanism. A plain string query entry referencing this
+// key (no omit_when_absent/default) still hard-errors on an empty lower
+// bound, exactly like any other absent-key reference in that dialect shape.
+func resolveIncrementalRef(key string, vars Vars) (any, error) {
+	switch key {
+	case "lower_bound":
+		if vars.IncrementalLowerBound == "" {
+			return nil, &unresolvedKeyError{Namespace: "incremental", Key: key}
+		}
+		return vars.IncrementalLowerBound, nil
+	default:
+		return nil, fmt.Errorf("interpolate: unknown incremental reference %q", key)
 	}
 }
 
@@ -266,6 +304,24 @@ func applyFilter(filter, val string) (string, error) {
 // PRE-STRINGIFY shape of the value (currently only join:<sep>, which
 // requires an actual []any — not its already-stringified form). Every other
 // filter ignores rawVal and behaves exactly as before.
+//
+// const:<value> (S3 engine mini-wave item 1, wave1-pilot SUMMARY.md carried
+// queue / REVIEW-A.md re-review R2) discards val (and rawVal) ENTIRELY and
+// always returns the literal text after the first ":" — it never fails on
+// its own. Its purpose is composing with the optional-query dialect's
+// omit_when_absent/default to express "send this FIXED literal iff a
+// reference resolves" without depending on (or leaking) the reference's own
+// resolved value: chargebee's sort_by[asc]=updated_at is always the constant
+// string "updated_at", present iff the incremental lower bound resolves —
+// `"sort_by[asc]": {"template": "{{ incremental.lower_bound | const:updated_at }}",
+// "omit_when_absent": true}` gates presence on incremental.lower_bound while
+// rendering the fixed literal, not the lower bound's own timestamp value. The
+// GATING reference must still fail-to-resolve for omit_when_absent to trigger
+// absence (const only replaces a SUCCESSFULLY resolved value; it does not
+// suppress or convert a resolution error). Like join:<sep>, everything after
+// the first ":" is the literal value verbatim (a literal containing ":" is
+// therefore fine; a literal cannot itself contain "|", the outer chain-split
+// delimiter).
 func applyFilterValue(filter, val string, rawVal any) (string, error) {
 	switch {
 	case filter == "":
@@ -285,6 +341,8 @@ func applyFilterValue(filter, val string, rawVal any) (string, error) {
 	case strings.HasPrefix(filter, "join:"):
 		sep := strings.TrimPrefix(filter, "join:")
 		return applyJoinFilter(sep, rawVal)
+	case strings.HasPrefix(filter, "const:"):
+		return strings.TrimPrefix(filter, "const:"), nil
 	default:
 		return "", fmt.Errorf("interpolate: unknown filter %q", filter)
 	}
@@ -415,6 +473,63 @@ func EvalWhen(cond string, vars Vars) (bool, error) {
 	return v != "", nil
 }
 
+// ResolveCheckWhen statically validates a `when` condition template against
+// specKeys, parsing the IDENTICAL grammar EvalWhen evaluates at runtime
+// (equality, membership, truthiness) rather than ResolveCheck's
+// bare-namespace.key-only parsing (S3 engine mini-wave item 2, wave1-pilot
+// SUMMARY.md carried queue / REVIEW-A.md re-review R1/R3 — "ResolveCheck
+// needs when-aware static parsing for ==/in, not just bare truthiness"). Only
+// the left-hand-side reference is checked against specKeys (via
+// checkNamespaceRef, the same helper ResolveCheck itself uses); the
+// right-hand-side literal/list syntax is validated for well-formedness (a
+// missing quote or bracket is a validate-time error) but its literal VALUES
+// are never checked against anything (there is no enum to check against —
+// the whole point of `when` is that the bundle author chooses the literal
+// set). An unsupported operator (the same rejected set EvalWhen rejects:
+// !=, >=, <=, >, <, &&, ||) is a validate-time error here too, so a bundle
+// author gets the same "compile error" feedback at `connectorgen validate`
+// time instead of only discovering it the first time the when clause
+// actually runs.
+func ResolveCheckWhen(cond string, specKeys map[string]bool) error {
+	inner, err := extractWhenExpr(cond)
+	if err != nil {
+		return err
+	}
+
+	if idx := strings.Index(inner, "=="); idx >= 0 {
+		left := strings.TrimSpace(inner[:idx])
+		right := strings.TrimSpace(inner[idx+2:])
+		if err := checkNamespaceRef(left, specKeys); err != nil {
+			return err
+		}
+		if _, err := parseLiteral(right); err != nil {
+			return fmt.Errorf("resolve check: when clause %q: %w", cond, err)
+		}
+		return nil
+	}
+
+	if idx := strings.Index(inner, " in "); idx >= 0 {
+		left := strings.TrimSpace(inner[:idx])
+		right := strings.TrimSpace(inner[idx+len(" in "):])
+		if err := checkNamespaceRef(left, specKeys); err != nil {
+			return err
+		}
+		if _, err := parseList(right); err != nil {
+			return fmt.Errorf("resolve check: when clause %q: %w", cond, err)
+		}
+		return nil
+	}
+
+	for _, op := range []string{"!=", ">=", "<=", ">", "<", "&&", "||"} {
+		if strings.Contains(inner, op) {
+			return fmt.Errorf("resolve check: unsupported operator %q in when condition %q", op, cond)
+		}
+	}
+
+	// Truthiness: a bare dotted reference.
+	return checkNamespaceRef(strings.TrimSpace(inner), specKeys)
+}
+
 // resolveRefForWhen resolves ref exactly like resolveRef, EXCEPT that a
 // config.* or secrets.* reference whose key is absent from vars resolves to
 // ("", nil) instead of propagating resolveRef's "unresolved key" error. This
@@ -500,7 +615,52 @@ func isKnownFilter(filter string) bool {
 	if knownFilterNames[filter] {
 		return true
 	}
-	return strings.HasPrefix(filter, "join:")
+	return strings.HasPrefix(filter, "join:") || strings.HasPrefix(filter, "const:")
+}
+
+// knownIncrementalKeys is the set of "incremental.<key>" references
+// ResolveCheck/ResolveCheckWhen accept statically (S3 engine mini-wave item
+// 1) — today exactly one, mirroring resolveIncrementalRef's runtime support.
+var knownIncrementalKeys = map[string]bool{
+	"lower_bound": true,
+}
+
+// checkNamespaceRef statically validates a single dotted reference (e.g.
+// "config.repository", "incremental.lower_bound", "cursor") against specKeys,
+// shared by ResolveCheck (plain interpolation templates) and
+// ResolveCheckWhen (when-grammar comparison operands, S3 item 2) so both
+// entry points enforce the identical namespace/key rules. A bare "cursor"
+// reference always passes (no namespace to check). record/secrets references
+// are accepted without a specKeys check (not spec-declared surfaces).
+// "incremental.<key>" is checked against knownIncrementalKeys instead of
+// specKeys (it is an engine-provided pseudo-namespace, not a spec.json
+// property). "config.<key>" must be a declared spec.json property. Any other
+// namespace, or a bare single-segment reference other than "cursor", is a
+// validate-time error.
+func checkNamespaceRef(ref string, specKeys map[string]bool) error {
+	if ref == "cursor" {
+		return nil
+	}
+	refSegs := strings.Split(ref, ".")
+	if len(refSegs) < 2 {
+		return fmt.Errorf("resolve check: malformed reference %q", ref)
+	}
+	namespace, key := refSegs[0], refSegs[1]
+	switch namespace {
+	case "config":
+		if !specKeys[key] {
+			return fmt.Errorf("resolve check: unknown spec key %q referenced as %q", key, ref)
+		}
+	case "secrets", "record":
+		// not statically checkable against specKeys here.
+	case "incremental":
+		if !knownIncrementalKeys[key] {
+			return fmt.Errorf("resolve check: unknown incremental key %q referenced as %q", key, ref)
+		}
+	default:
+		return fmt.Errorf("resolve check: unknown namespace %q in reference %q", namespace, ref)
+	}
+	return nil
 }
 
 // ResolveCheck statically validates every {{ }} reference in template against
@@ -524,23 +684,8 @@ func ResolveCheck(template string, specKeys map[string]bool) error {
 				return fmt.Errorf("resolve check: unknown filter %q referenced in %q", filter, strings.TrimSpace(m[1]))
 			}
 		}
-		if ref == "cursor" {
-			continue
-		}
-		refSegs := strings.Split(ref, ".")
-		if len(refSegs) < 2 {
-			return fmt.Errorf("resolve check: malformed reference %q", ref)
-		}
-		namespace, key := refSegs[0], refSegs[1]
-		switch namespace {
-		case "config":
-			if !specKeys[key] {
-				return fmt.Errorf("resolve check: unknown spec key %q referenced as %q", key, ref)
-			}
-		case "secrets", "record":
-			// not statically checkable against specKeys here.
-		default:
-			return fmt.Errorf("resolve check: unknown namespace %q in reference %q", namespace, ref)
+		if err := checkNamespaceRef(ref, specKeys); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -550,9 +695,14 @@ func ResolveCheck(template string, specKeys map[string]bool) error {
 // AuthSpec against specKeys (F9, REVIEW.md: cmd/connectorgen/validate.go's
 // checkInterpolations only checked Token/Value/When, leaving username/
 // password/token_url/client_id/client_secret/scopes typos to pass static
-// validation and fail only at runtime). Wiring this into `connectorgen
-// validate` itself is a follow-up (cmd/connectorgen is outside this task's
-// editable file set); this is the engine-side building block for it.
+// validation and fail only at runtime). `when` is checked via
+// ResolveCheckWhen (S3 engine mini-wave item 2) rather than plain
+// ResolveCheck, since a `when` clause is the ONE field in this list that
+// legitimately uses the `==`/`in`/truthiness when-grammar rather than plain
+// `{{ }}` interpolation — every other field here is checked with
+// ResolveCheck, unchanged. Wiring this into `connectorgen validate` itself is
+// a follow-up (cmd/connectorgen is outside this task's editable file set);
+// this is the engine-side building block for it.
 func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
 	fields := []struct {
 		name, tmpl string
@@ -565,7 +715,6 @@ func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
 		{"client_id", spec.ClientID},
 		{"client_secret", spec.ClientSecret},
 		{"scopes", spec.Scopes},
-		{"when", spec.When},
 	}
 	for _, f := range fields {
 		if f.tmpl == "" {
@@ -573,6 +722,11 @@ func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
 		}
 		if err := ResolveCheck(f.tmpl, specKeys); err != nil {
 			return fmt.Errorf("auth spec (mode %q) field %q: %w", spec.Mode, f.name, err)
+		}
+	}
+	if spec.When != "" {
+		if err := ResolveCheckWhen(spec.When, specKeys); err != nil {
+			return fmt.Errorf("auth spec (mode %q) field %q: %w", spec.Mode, "when", err)
 		}
 	}
 	return nil

@@ -5,6 +5,8 @@
   "expect": {
     "method": "PATCH",
     "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/pulls/301",
-    "body": {}
+    "body": {
+      "state": "closed"
+    }
   }
 }

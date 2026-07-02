@@ -32,9 +32,14 @@ Incremental reads send `updated_at[after]` as a Unix-seconds value (`param_forma
 computed either from the sync's persisted cursor or, on a fresh sync, from the RFC3339 `start_date`
 config value — identical to legacy `incrementalLowerBound`/`formatParam`. Primary key is `["id"]`
 and the incremental cursor field is `["updated_at"]` across every stream, matching legacy's
-`chargebeeStreams()` catalog uniformly. **Not yet reproduced**: legacy also sends
-`sort_by[asc]=updated_at` alongside `updated_at[after]` on every incremental request
-(`chargebee.go:152-154`) — see "Known limits" below.
+`chargebeeStreams()` catalog uniformly. **RESOLVED — `sort_by[asc]=updated_at` is now reproduced**:
+legacy also sends `sort_by[asc]=updated_at` alongside `updated_at[after]` on every incremental
+request (`chargebee.go:152-154`), never on a full-refresh read; this bundle now expresses that via
+the `incremental.lower_bound` query-var dialect (S3 engine mini-wave item 1) — see "Known limits"
+below for the fix and `paritytest/chargebee/parity_test.go`'s
+`TestParityChargebee_SortByAscSentOnIncrementalFromState`/
+`TestParityChargebee_SortByAscSentOnIncrementalFromStartDate`/
+`TestParityChargebee_SortByAscOmittedOnFullSync`.
 
 **Envelope unwrap via per-field `computed_fields`** (conventions.md §2 schema-as-projection):
 Chargebee wraps every list item in a single-key resource envelope, so plain schema projection
@@ -86,22 +91,29 @@ searxng read-only-variant pattern in conventions.md §1).
     originally documented. See `.planning/phases/wave1-pilot/traces/p6-chargebee-ledger.md` and
     `.planning/phases/wave1-pilot/traces/gaploop-s1-ledger.md`/`s2-chargebee-sentry-ledger.md` for
     the full design-decision trace.
-- **OPEN — `sort_by[asc]=updated_at` is not sent on incremental requests.** Legacy sets
-  `sort_by[asc]=updated_at` alongside `updated_at[after]` on every incremental request whenever the
-  computed lower bound is non-empty (`chargebee.go:151-155`), never on a full-refresh read. The
-  emitted record SET is unchanged (the app-persisted cursor is a max over emitted records, so record
-  order doesn't affect correctness at the app layer), but the wire request shape and record ORDER
-  for incremental syncs diverge from legacy. This is not expressible with the current
-  optional-query dialect (`stream.Query`'s `omit_when_absent`/`default` gate on whether a
-  CONFIG/SECRET key resolves, not on whether the incremental lower bound — which may come from the
-  persisted `state.cursor` rather than any config key — resolved) and is not fixed by a
-  per-connector hook either (chargebee uses zero hook interfaces; a new Tier-2 hook package for one
-  static query param would be a disproportionate escalation for what is fundamentally an
-  engine-dialect gap). Tracked as an open ENGINE_GAP for the next engine mini-wave (see
+- ~~**OPEN — `sort_by[asc]=updated_at` is not sent on incremental requests.**~~ **RESOLVED (S3 engine
+  mini-wave item 1).** Legacy sets `sort_by[asc]=updated_at` alongside `updated_at[after]` on every
+  incremental request whenever the computed lower bound is non-empty (`chargebee.go:151-155`), never
+  on a full-refresh read. The engine now exposes the RESOLVED, post-`formatParam` incremental lower
+  bound to `stream.Query` template resolution as `{{ incremental.lower_bound }}` (populated in
+  `buildInitialQuery` BEFORE the query-template resolution loop runs, so it reflects EITHER the
+  persisted `state.cursor` OR the `start_config_key` fallback — exactly the same value/precedence
+  `updated_at[after]` itself uses). Composed with the existing `omit_when_absent` dialect and the new
+  `const:<value>` filter (send a FIXED literal iff a reference resolves, without depending on the
+  reference's own value), each stream's `query` now declares:
+  ```json
+  "sort_by[asc]": { "template": "{{ incremental.lower_bound | const:updated_at }}", "omit_when_absent": true }
+  ```
+  — present with the constant value `updated_at` iff the incremental lower bound resolves (state
+  cursor or `start_date`), absent on a full-refresh read, exactly matching legacy's
+  `if updatedAfter != ""` gate. See `paritytest/chargebee/parity_test.go`'s
+  `TestParityChargebee_SortByAscSentOnIncrementalFromState`/
+  `TestParityChargebee_SortByAscSentOnIncrementalFromStartDate`/
+  `TestParityChargebee_SortByAscOmittedOnFullSync` and
+  `.planning/phases/wave2-fanout-http-sm/traces/s3-engine-ledger.md` for the full design trace; the
+  original STOP analysis remains at
   `.planning/phases/wave1-pilot/traces/s2-chargebee-sentry-ledger.md`'s chargebee item 2 section for
-  the full analysis and a candidate design: expose the resolved incremental lower bound to
-  `stream.Query`'s own template Vars, or add a dedicated `IncrementalSpec` field for an
-  incremental-only extra query param).
+  historical reference.
 - **`site` config key dropped; `base_url` is now required.** Legacy derives the API host from a
   `site` config value (`https://{site}.chargebee.com/api/v2`) when `base_url` is unset
   (`chargebeeBaseURL`). The engine's spec-default materialization (gap-loop cycle-1 item 6, C3)

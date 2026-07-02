@@ -3,6 +3,8 @@ package conformance
 import (
 	"os"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // TestRunStaticChecks_GoodBundleAllPass exercises runStaticChecks directly
@@ -78,6 +80,50 @@ func TestReportFromLoadError_SkipsRemainingChecks(t *testing.T) {
 	}
 	if skipped == 0 {
 		t.Fatalf("expected at least one Skipped check when Load fails, got none: %+v", rep.Checks)
+	}
+}
+
+// TestCheckInterpolationsResolve_AuthWhenClauseUsesFullGrammar is the S3
+// engine mini-wave item 2 regression case (wave1-pilot SUMMARY.md carried
+// queue / REVIEW-A.md re-review R1/R3): conformance's own
+// interpolations_resolve check must accept an `==`/`in`-shaped `when` clause
+// on a spec-known key, not just bare truthiness — this is the exact bug the
+// github auth_type restoration surfaced (TestConformance/github regressed
+// with "unknown spec key ... referenced as config.auth_type in [...]" until
+// checkInterpolationsResolve's `when` field was routed through
+// engine.ResolveCheckWhen instead of plain engine.ResolveCheck).
+func TestCheckInterpolationsResolve_AuthWhenClauseUsesFullGrammar(t *testing.T) {
+	specRaw := []byte(`{
+		"type": "object",
+		"properties": { "auth_type": {"type": "string"}, "base_url": {"type": "string"} }
+	}`)
+	spec, err := engine.CompileSchema(specRaw)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+
+	b := engine.Bundle{
+		Name: "acme",
+		Spec: spec,
+		HTTP: engine.HTTPBase{
+			URL: "{{ config.base_url }}",
+			Auth: []engine.AuthSpec{
+				{Mode: "none", When: "{{ config.auth_type in ['public', 'none'] }}"},
+			},
+		},
+	}
+
+	if err := checkInterpolationsResolve(b); err != nil {
+		t.Fatalf("checkInterpolationsResolve: unexpected error for a spec-known ==/in when clause: %v", err)
+	}
+
+	// A spec-UNKNOWN key inside the same grammar must still be rejected.
+	badB := b
+	badB.HTTP.Auth = []engine.AuthSpec{
+		{Mode: "none", When: "{{ config.auth_typo in ['public', 'none'] }}"},
+	}
+	if err := checkInterpolationsResolve(badB); err == nil {
+		t.Fatalf("checkInterpolationsResolve: expected an error for a spec-unknown key in an `in` when clause")
 	}
 }
 

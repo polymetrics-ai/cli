@@ -3,26 +3,51 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "basic", "username": "{{ secrets.site_api_key }}", "password": "" }
+      {
+        "mode": "basic",
+        "username": "{{ secrets.site_api_key }}",
+        "password": ""
+      }
     ],
     "pagination": {
       "type": "cursor",
       "cursor_param": "offset",
       "token_path": "next_offset"
     },
-    "check": { "method": "GET", "path": "/customers" },
+    "check": {
+      "method": "GET",
+      "path": "/customers"
+    },
     "error_map": [
-      { "status": 401, "hint": "chargebee site API key is missing or invalid; re-run pm credentials add chargebee" },
-      { "status": 403, "hint": "chargebee API key lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "chargebee rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "chargebee site API key is missing or invalid; re-run pm credentials add chargebee"
+      },
+      {
+        "status": 403,
+        "hint": "chargebee API key lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "chargebee rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "customers",
       "path": "/customers",
-      "query": { "limit": "100" },
-      "records": { "path": "list" },
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
       "computed_fields": {
         "id": "{{ record.customer.id }}",
         "first_name": "{{ record.customer.first_name }}",
@@ -48,8 +73,16 @@
     {
       "name": "subscriptions",
       "path": "/subscriptions",
-      "query": { "limit": "100" },
-      "records": { "path": "list" },
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
       "computed_fields": {
         "id": "{{ record.subscription.id }}",
         "customer_id": "{{ record.subscription.customer_id }}",
@@ -76,8 +109,16 @@
     {
       "name": "invoices",
       "path": "/invoices",
-      "query": { "limit": "100" },
-      "records": { "path": "list" },
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
       "computed_fields": {
         "id": "{{ record.invoice.id }}",
         "customer_id": "{{ record.invoice.customer_id }}",
@@ -104,8 +145,16 @@
     {
       "name": "plans",
       "path": "/plans",
-      "query": { "limit": "100" },
-      "records": { "path": "list" },
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
       "computed_fields": {
         "id": "{{ record.plan.id }}",
         "name": "{{ record.plan.name }}",
@@ -129,8 +178,16 @@
     {
       "name": "items",
       "path": "/items",
-      "query": { "limit": "100" },
-      "records": { "path": "list" },
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
       "computed_fields": {
         "id": "{{ record.item.id }}",
         "name": "{{ record.item.name }}",

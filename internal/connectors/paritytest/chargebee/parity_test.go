@@ -16,6 +16,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"reflect"
 	"sort"
 	"testing"
@@ -81,27 +82,20 @@ func readAllRecords(t *testing.T, c connectors.Connector, req connectors.ReadReq
 	return out
 }
 
-// normalizeRecordStringify re-encodes every value to its string form so
-// legacy's native Go numeric/boolean types (int64, bool from map literals)
-// compare equal against the engine's computed_fields output, which always
-// resolves to a string (engine.Interpolate's return type; see
-// docs/migration/conventions.md §5 chargebee entry / this bundle's docs.md
-// "Known limits" for the documented type-widening deviation: the envelope
-// unwrap mechanism available to a Tier-1 bundle, per-field computed_fields,
-// cannot preserve non-string raw JSON types when flattening a resource
-// envelope). This is intentionally NOT the same raw-type DeepEqual bar
-// stripe/searxng use — the deviation is real and is asserted explicitly by
-// TestParityChargebee_ComputedFieldsStringifyNumericAndBooleanFields below,
-// not hidden by this helper.
-func normalizeRecordStringify(t *testing.T, r connectors.Record) map[string]any {
-	t.Helper()
-	out := make(map[string]any, len(r))
-	for k, v := range r {
-		out[k] = stringifyAny(v)
-	}
-	return out
-}
-
+// normalizeRecordStringify/normalizeRecordsStringify (the pre-gap-loop-
+// cycle-1 tolerant stringify-based RECORD-shape compare helpers) were REMOVED
+// here (S3 engine mini-wave carried minor — REVIEW-A.md re-review's residual
+// watch item / SUMMARY.md carried minors): their sole justifying deviation —
+// computed_fields always stringifying its output, so a real numeric/boolean
+// field's native Go type could never match across legacy and the engine
+// without a tolerant string-form compare — was RESOLVED by the typed
+// computed_fields extraction (see
+// TestParityChargebee_ComputedFieldsPreserveNativeNumericAndBooleanTypes).
+// TestParityChargebee_StreamRecords, the main record-shape assertion, now
+// uses RAW reflect.DeepEqual directly. stringifyAny itself stays (below) —
+// recordIDs still uses it to build a plain string ID sequence for the
+// pagination-order assertions, an orthogonal, still-legitimate use that was
+// never about tolerating a type mismatch.
 func stringifyAny(v any) string {
 	switch t := v.(type) {
 	case nil:
@@ -121,15 +115,6 @@ func stringifyAny(v any) string {
 		}
 		return string(raw)
 	}
-}
-
-func normalizeRecordsStringify(t *testing.T, recs []connectors.Record) []map[string]any {
-	t.Helper()
-	out := make([]map[string]any, len(recs))
-	for i, r := range recs {
-		out[i] = normalizeRecordStringify(t, r)
-	}
-	return out
 }
 
 // --- stream fixtures: one deterministic page per stream, shaped exactly
@@ -193,6 +178,22 @@ func writeJSON(w http.ResponseWriter, body string) {
 
 // --- per-stream record parity across all 5 streams ---
 
+// TestParityChargebee_StreamRecords is the main per-stream record-shape
+// parity assertion, RAW `reflect.DeepEqual` on the emitted records directly
+// (S3 engine mini-wave carried minor — REVIEW-A.md re-review's residual
+// watch item / SUMMARY.md carried minors: "chargebee parity's blanket
+// normalizeRecordsStringify main-compare should flip to raw DeepEqual now
+// that types match"). The stringify-based tolerant compare's justifying
+// deviation was RESOLVED by the gap-loop cycle-1 typed computed_fields
+// extraction (chargebee item 1: numeric/boolean fields now flow through as
+// native json.Number/bool on BOTH sides, matching legacy's own
+// UseNumber-decoded envelope exactly) — a string-form comparison of
+// identical typed values was always trivially equal after that fix, so this
+// is a strict strengthening (raw DeepEqual catches a TYPE divergence a
+// stringify compare would silently mask), not a behavior change.
+// normalizeRecordsStringify/stringifyAny stay defined (still used by the
+// dedicated type-shape assertion below) but are no longer the main-compare
+// bar.
 func TestParityChargebee_StreamRecords(t *testing.T) {
 	bundle := loadChargebeeBundle(t)
 
@@ -217,11 +218,9 @@ func TestParityChargebee_StreamRecords(t *testing.T) {
 				t.Fatalf("record count = %d, want %d (legacy)\nengine:  %+v\nlegacy:  %+v", len(engRecs), len(legacyRecs), engRecs, legacyRecs)
 			}
 
-			gotNorm := normalizeRecordsStringify(t, engRecs)
-			wantNorm := normalizeRecordsStringify(t, legacyRecs)
-			for i := range wantNorm {
-				if !reflect.DeepEqual(gotNorm[i], wantNorm[i]) {
-					t.Fatalf("stream %q record %d mismatch (stringified compare):\nengine:  %+v\nlegacy:  %+v", stream, i, gotNorm[i], wantNorm[i])
+			for i := range legacyRecs {
+				if !reflect.DeepEqual(map[string]any(engRecs[i]), map[string]any(legacyRecs[i])) {
+					t.Fatalf("stream %q record %d mismatch (raw DeepEqual):\nengine:  %#v\nlegacy:  %#v", stream, i, engRecs[i], legacyRecs[i])
 				}
 			}
 		})
@@ -349,6 +348,122 @@ func TestParityChargebee_IncrementalUpdatedAtFromStartDate(t *testing.T) {
 	}
 	if *engGot != *legacyGot {
 		t.Fatalf("engine updated_at[after] = %q, want %q (legacy)", *engGot, *legacyGot)
+	}
+}
+
+// --- sort_by[asc]=updated_at incremental-only query param (S3 engine
+// mini-wave item 1, wave1-pilot SUMMARY.md carried queue / REVIEW-A.md
+// re-review R2 ACCEPT-WITH-QUEUE): legacy sets sort_by[asc]=updated_at in the
+// SAME branch as updated_at[after] (chargebee.go:151-155), never on a
+// full-refresh read. The engine now expresses this via the
+// incremental.lower_bound query-var dialect (streams.json's
+// "sort_by[asc]": {"template": "{{ incremental.lower_bound }}",
+// "omit_when_absent": true}). ---
+
+// queryCaptureServer answers every request with an empty customers page and
+// records the full observed query string, for both connectors to be driven
+// against identically.
+func queryCaptureServer(t *testing.T) (*httptest.Server, *url.Values) {
+	t.Helper()
+	var got url.Values
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		got = r.URL.Query()
+		writeJSON(w, `{"list":[]}`)
+	}))
+	t.Cleanup(srv.Close)
+	return srv, &got
+}
+
+// TestParityChargebee_SortByAscSentOnIncrementalFromState proves the engine
+// now sends sort_by[asc]=updated_at alongside updated_at[after] on a
+// state-cursor-driven incremental read — the repeat-sync path the original
+// S-2 STOP identified as inexpressible (a config.start_date-gated entry would
+// silently omit sort_by[asc] on every subsequent incremental sync, since a
+// persisted State["cursor"] is not a config key at all).
+func TestParityChargebee_SortByAscSentOnIncrementalFromState(t *testing.T) {
+	bundle := loadChargebeeBundle(t)
+	const appPersistedCursor = "1700000100"
+
+	legacySrv, legacyGot := queryCaptureServer(t)
+	legacy := chargebee.New()
+	_ = readAllRecords(t, legacy, connectors.ReadRequest{
+		Stream: "customers",
+		Config: chargebeeRuntimeConfig(legacySrv.URL, nil),
+		State:  map[string]string{"cursor": appPersistedCursor},
+	})
+
+	engSrv, engGot := queryCaptureServer(t)
+	eng := engine.New(withChargebeeBaseURL(bundle, engSrv.URL), nil)
+	_ = readAllRecords(t, eng, connectors.ReadRequest{
+		Stream: "customers",
+		Config: chargebeeRuntimeConfig(engSrv.URL, nil),
+		State:  map[string]string{"cursor": appPersistedCursor},
+	})
+
+	if legacyGot.Get("sort_by[asc]") != "updated_at" {
+		t.Fatalf("legacy sort_by[asc] = %q, want updated_at (test fixture bug)", legacyGot.Get("sort_by[asc]"))
+	}
+	if engGot.Get("sort_by[asc]") != legacyGot.Get("sort_by[asc]") {
+		t.Fatalf("engine sort_by[asc] = %q, want %q (legacy)", engGot.Get("sort_by[asc]"), legacyGot.Get("sort_by[asc]"))
+	}
+}
+
+// TestParityChargebee_SortByAscSentOnIncrementalFromStartDate exercises the
+// config.start_date fallback (fresh sync, start_date seeded) — legacy also
+// sends sort_by[asc] on this path since incrementalLowerBound resolves
+// non-empty here too.
+func TestParityChargebee_SortByAscSentOnIncrementalFromStartDate(t *testing.T) {
+	bundle := loadChargebeeBundle(t)
+	const startDate = "2025-06-15T00:00:00Z"
+
+	legacySrv, legacyGot := queryCaptureServer(t)
+	legacy := chargebee.New()
+	_ = readAllRecords(t, legacy, connectors.ReadRequest{
+		Stream: "customers",
+		Config: chargebeeRuntimeConfig(legacySrv.URL, map[string]string{"start_date": startDate}),
+	})
+
+	engSrv, engGot := queryCaptureServer(t)
+	eng := engine.New(withChargebeeBaseURL(bundle, engSrv.URL), nil)
+	_ = readAllRecords(t, eng, connectors.ReadRequest{
+		Stream: "customers",
+		Config: chargebeeRuntimeConfig(engSrv.URL, map[string]string{"start_date": startDate}),
+	})
+
+	if legacyGot.Get("sort_by[asc]") != "updated_at" {
+		t.Fatalf("legacy sort_by[asc] = %q, want updated_at (test fixture bug)", legacyGot.Get("sort_by[asc]"))
+	}
+	if engGot.Get("sort_by[asc]") != legacyGot.Get("sort_by[asc]") {
+		t.Fatalf("engine sort_by[asc] = %q, want %q (legacy)", engGot.Get("sort_by[asc]"), legacyGot.Get("sort_by[asc]"))
+	}
+}
+
+// TestParityChargebee_SortByAscOmittedOnFullSync proves the SAME dialect
+// entry is correctly ABSENT on a full-refresh read (no state cursor, no
+// start_date) — legacy's harvest() only sets sort_by[asc] inside the
+// `if updatedAfter != ""` branch, never unconditionally.
+func TestParityChargebee_SortByAscOmittedOnFullSync(t *testing.T) {
+	bundle := loadChargebeeBundle(t)
+
+	legacySrv, legacyGot := queryCaptureServer(t)
+	legacy := chargebee.New()
+	_ = readAllRecords(t, legacy, connectors.ReadRequest{
+		Stream: "customers",
+		Config: chargebeeRuntimeConfig(legacySrv.URL, nil),
+	})
+
+	engSrv, engGot := queryCaptureServer(t)
+	eng := engine.New(withChargebeeBaseURL(bundle, engSrv.URL), nil)
+	_ = readAllRecords(t, eng, connectors.ReadRequest{
+		Stream: "customers",
+		Config: chargebeeRuntimeConfig(engSrv.URL, nil),
+	})
+
+	if _, present := (*legacyGot)["sort_by[asc]"]; present {
+		t.Fatalf("legacy sort_by[asc] present on a full sync (test fixture bug): %v", *legacyGot)
+	}
+	if _, present := (*engGot)["sort_by[asc]"]; present {
+		t.Fatalf("engine query = %v, want sort_by[asc] OMITTED on a full sync (matches legacy)", *engGot)
 	}
 }
 

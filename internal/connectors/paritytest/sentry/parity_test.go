@@ -339,6 +339,23 @@ func TestParitySentry_BundleLoadsAndValidates(t *testing.T) {
 	}
 }
 
+// TestParitySentry_NoInertStaticQueryEntries is the S3 engine mini-wave
+// carried minor regression (wave1-pilot SUMMARY.md carried minors: "sentry
+// inert static per_page entries"): every stream is StreamHook-handled
+// (ReadStream always returns handled=true), so readDeclarative's
+// stream.Query resolution never runs — a static "per_page": "100" query
+// entry in streams.json was dead JSON with zero effect on any real request.
+// Locks in that streams.json declares no query entries at all for any
+// sentry stream, so a future edit can't silently reintroduce dead config.
+func TestParitySentry_NoInertStaticQueryEntries(t *testing.T) {
+	bundle := loadSentryBundle(t)
+	for _, s := range bundle.Streams {
+		if len(s.Query) != 0 {
+			t.Fatalf("stream %q declares query %+v, want none (StreamHook builds its own per_page from config.page_size; a streams.json query entry here would be dead/inert)", s.Name, s.Query)
+		}
+	}
+}
+
 // TestParitySentry_CatalogSurface compares the engine-synthesized Manifest's
 // stream surface against legacy's PUBLISHED Catalog() surface, not
 // connectors.ManifestOf(legacy): legacy sentry has no hand-written

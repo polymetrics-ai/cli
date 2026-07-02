@@ -40,46 +40,58 @@ matched for the token/github_app precedence, but the final fallback is now a doc
    connector's own base URL to exchange it for a one-hour installation access token, and returns a
    `connsdk.Authenticator` that sets `Authorization: Bearer <installation_token>`. Matches legacy
    exactly, including the **uncached** re-mint-on-every-call behavior (Known limits).
-3. **Public** (`{"mode":"none","when":"{{ config.public_access }}"}`) — unauthenticated reads only,
-   reachable ONLY when `public_access` is explicitly set to a non-empty value (see the config
-   surface paragraph below); writes fail per-request with a GitHub 401/403 (no separate "requires
-   write auth" precheck is reproduced — see Known limits).
+3. **Public** — unauthenticated reads only, reachable via EITHER of two candidates (see the config
+   surface paragraph below): `{"mode":"none","when":"{{ config.public_access }}"}` (the primary,
+   dedicated boolean opt-in), OR `{"mode":"none","when":"{{ config.auth_type in ['public', 'none',
+   'anonymous', 'unauthenticated'] }}"}` (S3 engine mini-wave item 2: legacy's exact string-enum
+   selection, restored as an additional opt-in once `engine.ResolveCheckWhen` made the `in` operator
+   statically validatable — see ledger G14 R1 CONDITION). Writes fail per-request with a GitHub
+   401/403 (no separate "requires write auth" precheck is reproduced — see Known limits).
 
 `app_id`+`installation_id` must both be configured for the github_app path; `installation_id`
 absence is caught by the hook itself (not the `when` gate, which only tests `app_id`'s truthiness —
 see the parity-deviation ledger item G5) with the same error class legacy raises.
 
-**Auth config surface vs legacy — `auth_type`/secret aliases are NOT reproduced; `public_access` is
-a new explicit opt-in closing a silent-fallthrough hazard (ledger G14).** Legacy honors an explicit
-`auth_type`/`auth`/`authentication` config value (`auth.go:61-96`, case/hyphen-insensitive, many
-synonyms per mode: `auth_type=github_app` forces app auth even when a token secret is ALSO set,
+**Auth config surface vs legacy — secret ALIASES and `auth_type`'s non-public modes are NOT
+reproduced; `public_access` (primary) and `auth_type`'s 4 public synonyms (additional, S3 restored)
+close a silent-fallthrough hazard (ledger G14).** Legacy honors an explicit `auth_type`/`auth`/
+`authentication` config value (`auth.go:61-96`, case/hyphen-insensitive, many synonyms per mode:
+`auth_type=github_app` forces app auth even when a token secret is ALSO set,
 `auth_type=public`/`none`/`anonymous`/`unauthenticated` forces anonymous reads) plus a wide set of
 secret aliases for the token (`personalAccessToken`/`accessToken`/`oauthToken`/`installationToken`/
 `githubToken`/`GITHUB_TOKEN`, `github.go:1634-1644`), the private key
 (`privateKey`/`githubAppPrivateKey`/`privateKeyBase64`/`githubAppPrivateKeyBase64`), and the app ID
-(`client_id`/`github_app_id`, `auth.go:256-257`). None of these are reproduced — this bundle reads
-only the canonical `token`/`private_key`/`private_key_base64`/`app_id` keys. The dangerous failure
-mode this created (REVIEW-A.md major finding) was that a caller who supplied ONLY an alias-shaped
-secret (e.g. `personalAccessToken` but not `token`) got a **silent, unauthenticated** read with zero
-error — the bundle's `base.auth` chain fell through the token candidate (unset `token`) and the
-github_app candidate (no `app_id`) straight to an unconditional `mode:none`. This is now fixed: the
-`none` candidate is gated on a new, dedicated `public_access` config key (any non-empty value opts
-in), so a config that resolves to none of token/github_app/explicit-public-opt-in now hard-errors
-("select auth: no auth spec matched") instead of silently reading unauthenticated (F4, THREAT-MODEL:
-never fail open). This is intentionally **stricter than legacy** (legacy's own `auto` mode silently
-falls through to public in this exact shape) — a deliberate, documented deviation, not a
-parity-preserving one, closing a real security-relevant gap rather than reproducing it. Legacy's
-`auth_type=public` string-value selection itself (as opposed to the alias/typo silent-fallthrough
-hazard) is NOT reproduced 1:1 by `public_access`: the engine's `when` grammar has no
-statically-validated string-equality/membership check today (`connectorgen validate`'s
-`engine.ResolveCheck` only parses a bare `namespace.key` truthiness reference, not `==`/`in` — every
-existing `when` clause in every bundle in this repo is bare truthiness only), so a dedicated
-boolean-shaped opt-in key was used instead of trying to match legacy's exact enum. Any caller who
-previously depended on an alias secret name, `auth_type=github_app` forcing app auth over a
-simultaneously-set token, or the exact `auth_type=public` string must migrate to the canonical
-`token`/`app_id`+`installation_id`+`private_key`/`public_access` keys (see ledger G14; new parity
-tests: `TestParityGithub_AuthNoCredentialsFailsLoudRatherThanSilentlyPublic`,
-`TestParityGithub_AuthExplicitPublicOptIn`).
+(`client_id`/`github_app_id`, `auth.go:256-257`). None of the secret ALIASES, and none of `auth_type`'s
+non-public-synonym behavior (forcing github_app over a simultaneously-set token; the
+token/oauth/actions/installation mode distinctions, which this bundle collapses into the single
+`bearer` candidate since it never needs to distinguish them), are reproduced — this bundle reads
+only the canonical `token`/`private_key`/`private_key_base64`/`app_id` keys for credential material.
+The dangerous failure mode this created (REVIEW-A.md major finding) was that a caller who supplied
+ONLY an alias-shaped secret (e.g. `personalAccessToken` but not `token`) got a **silent,
+unauthenticated** read with zero error — the bundle's `base.auth` chain fell through the token
+candidate (unset `token`) and the github_app candidate (no `app_id`) straight to an unconditional
+`mode:none`. This is now fixed: the `none` outcome requires an EXPLICIT opt-in — either the
+dedicated `public_access` config key (any non-empty value; the primary, documented surface) OR
+`auth_type` set to one of the 4 legacy public synonyms (`public`/`none`/`anonymous`/`unauthenticated`
+— S3 engine mini-wave item 2, restored once `engine.ResolveCheckWhen` made the `in` operator
+statically validatable; see ledger G14 R1 CONDITION) — so a config that resolves to none of
+token/github_app/either-public-opt-in now hard-errors ("select auth: no auth spec matched") instead
+of silently reading unauthenticated (F4, THREAT-MODEL: never fail open). This is intentionally
+**stricter than legacy** (legacy's own `auto` mode silently falls through to public in this exact
+shape) — a deliberate, documented deviation, not a parity-preserving one, closing a real
+security-relevant gap rather than reproducing it. The two opt-ins are two SEPARATE `mode:none`
+candidates in the `auth` list (not one OR'd condition) since `EvalWhen`'s grammar has no `||`
+operator; both gate on an explicit signal, so this is purely additive — no new way to reach
+`mode:none` implicitly exists. `auth_type`'s restoration is intentionally NARROW: it reproduces only
+the 4 public-synonym STRING VALUES, not legacy's full mode-selection semantics (e.g.
+`auth_type=github_app` forcing app auth ahead of a configured token) — any other `auth_type` value
+is inert (auth selection still resolves via the token/app_id-presence candidates ahead of it in the
+list). Any caller who previously depended on an alias secret name, `auth_type=github_app` forcing
+app auth over a simultaneously-set token, or another non-public `auth_type` synonym must migrate to
+the canonical `token`/`app_id`+`installation_id`+`private_key` keys (see ledger G14; parity tests:
+`TestParityGithub_AuthNoCredentialsFailsLoudRatherThanSilentlyPublic`,
+`TestParityGithub_AuthExplicitPublicOptIn`, `TestParityGithub_AuthTypePublicEnumOptIn`,
+`TestParityGithub_AuthTypeUnrelatedValueDoesNotGrantPublicAccess`).
 
 ## Streams notes
 
@@ -171,14 +183,21 @@ automation.
 
 ## Known limits
 
-- **`auth_type`/`auth`/`authentication` explicit mode selection and every legacy secret ALIAS
-  (`personalAccessToken`/`accessToken`/`oauthToken`/`installationToken`/`githubToken`/
-  `GITHUB_TOKEN`; `privateKey`/`githubAppPrivateKey`/`privateKeyBase64`/`githubAppPrivateKeyBase64`;
-  `client_id`/`github_app_id`) are NOT reproduced — only the canonical `token`/`private_key`/
-  `private_key_base64`/`app_id` config/secret keys are read. See "Auth setup"'s config-surface
-  paragraph above for the full alias list and the fix for the silent-fallthrough hazard this
-  previously caused (ledger G14): a config resolving to none of token/github_app/explicit
-  `public_access` opt-in now hard-errors instead of silently reading unauthenticated.
+- **`auth`/`authentication` aliases, every legacy secret ALIAS, and `auth_type`'s non-public modes
+  are NOT reproduced** (`personalAccessToken`/`accessToken`/`oauthToken`/`installationToken`/
+  `githubToken`/`GITHUB_TOKEN`; `privateKey`/`githubAppPrivateKey`/`privateKeyBase64`/
+  `githubAppPrivateKeyBase64`; `client_id`/`github_app_id`; `auth_type=github_app`'s
+  override-token-precedence behavior) — only the canonical `token`/`private_key`/
+  `private_key_base64`/`app_id` config/secret keys are read for credential material. **RESOLVED (S3
+  engine mini-wave item 2) — `auth_type`'s 4 public synonyms ARE now reproduced**: `auth_type`
+  set to `public`/`none`/`anonymous`/`unauthenticated` is an additional, purely-additive opt-in for
+  unauthenticated reads, restored once `engine.ResolveCheckWhen` made the when-grammar's `in`
+  operator statically validatable (previously `connectorgen validate`'s `engine.ResolveCheck` only
+  parsed bare `namespace.key` truthiness, hard-failing any `==`/`in`-shaped `when` clause even when
+  the referenced key was spec-declared). See "Auth setup"'s config-surface paragraph above for the
+  full alias list and the fix for the silent-fallthrough hazard this previously caused (ledger G14):
+  a config resolving to none of token/github_app/either-public-opt-in now hard-errors instead of
+  silently reading unauthenticated.
 - **`ENGINE_GAP` G0 — RESOLVED.** Legacy's `repository` marker field (every stream stamps the
   `owner/repo` string onto every emitted record) was NOT reproducible at pilot time because
   `streams.json`'s `computed_fields` templates were resolved via `Vars{Record: raw}` only
@@ -264,3 +283,25 @@ automation.
 - Full GitHub REST surface (orgs, teams, projects v2, notifications, code scanning, dependabot,
   secrets administration, webhooks, GraphQL) is out of scope; see `api_surface.json`'s
   `excluded: {category: out_of_scope, ...}` entries.
+- **STANDING EXCEPTION — `hooks/github/hooks.go` stays at exactly 400 lines (the Tier-2 hard
+  ceiling), zero headroom, evaluated and NOT reduced this pass** (S3 engine mini-wave item 3, carried
+  minor: "github hooks.go sits exactly AT the 400-line hard ceiling — reduce ONLY if achievable
+  without gaming"). Re-evaluated at S3: the wave1-pilot gap-loop repair round (REVIEW-A.md's
+  github label major fix) already trimmed this file from 424 to exactly 400 lines by removing
+  redundant comment prose and collapsing 3 near-identical `updateLabel` field-ifs into one loop — the
+  cheap, safe reductions were already taken. Surveyed again here for any REMAINING safe reduction:
+  the file's ~21 comment lines are all load-bearing (explaining non-obvious legacy-parity behavior —
+  e.g. the uncached JWT re-mint, the OR-rule approximation, the label color-strip rationale — not
+  restatements of the code); its ~29 blank lines are single standard `gofmt`-conventional separators
+  between logical blocks (`gofmt -l` reports the file clean; removing any would violate normal Go
+  formatting purely to hit a number). The one candidate logic consolidation considered
+  (`createLabel`/`updateLabel` sharing a payload-builder) was rejected: the two functions have
+  different validation rules (create requires name+color both; update requires only name, every
+  other field optional) and merging them would trade a couple of lines for reduced clarity/increased
+  coupling risk in Tier-2 escape-hatch code, which is a net-negative trade, not a genuine
+  simplification. Conclusion: no further reduction is achievable without removing genuine
+  documentation or forcing an artificial merge — this is a standing exception, not deferred work.
+  Reviewer citation: REVIEW-A.md's "Re-review (gap loop cycle 1)" disposition table (github label
+  major row: "hooks.go trimmed 424→400 (AT the hard ceiling — watch item)") and SUMMARY.md's carried
+  minors list (wave1-pilot phase summary) name this exact line as the standing watch item this
+  bullet resolves the evaluation of.
