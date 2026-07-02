@@ -13,6 +13,10 @@ this index tracks status. Coordinator merges after each dispatch wave.
 | T/B-03 bundle loader + defs | red-confirmed → green | traces/waveA-ledger.md §T-03 | 12 |
 | T/B-04 typed errors + error_map | red-confirmed → green | traces/waveA-ledger.md §T-04 | 10 |
 | T/B-12 certify report + cliharness | red-confirmed → green | traces/waveA-b12-ledger.md §T-12 | 18 |
+| T/B-19 inventorygen + inventory.json | red-confirmed → green | traces/waveB-b19-ledger.md §T-19 | 19 |
+| T/B-07 hook interfaces + registry | red-confirmed → green | traces/waveB-ledger.md §T-07 | 9 |
+| T/B-05 auth selection | red-confirmed → green | traces/waveB-ledger.md §T-05 | 17 |
+| T/B-06 paginators (6 types + SSRF guard) | red-confirmed → green | traces/waveB-ledger.md §T-06 | 21 |
 
 Wave A gate (coordinator, 2026-07-02): `go build ./...` ok · engine+certify tests ok · gofmt clean ·
 path guard clean (no tracked-file modifications outside plan). Noted deviations (agent-documented):

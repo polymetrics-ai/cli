@@ -45,6 +45,15 @@ Git: single-writer — agents do NOT commit; coordinator commits after each disp
 Agents write ledger evidence to traces/<task>-ledger.md (disjoint files); coordinator merges into
 TDD-LEDGER.md.
 
+## Execution log
+
+- Wave A (T/B-01..04) + T/B-12 (floated) complete, gate green → commit c05edb4 (30 files, 75 tests).
+- T/B-19 (floated, disjoint package): inventory.json generated — **557 connectors, real buckets
+  S:137 / M:388 / L:31 / XL:1** (loc incl. tests). This is milder than orchestration-plan's
+  estimate (S90/M294/L155/XL20): projected Pass A fan-out drops ~105 → **~77 bundle agents**.
+  Feed into wave1 pilot-cost report + wave2-4 rosters. Commit edf40a6.
+- Wave B (T/B-07, 05, 06) dispatched, in flight.
+
 ## Verification Evidence
 
 - PRD coverage: passed=True after n/a markers (prd-coverage.mjs re-run).
