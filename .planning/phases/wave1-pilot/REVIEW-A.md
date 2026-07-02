@@ -454,3 +454,120 @@ this batch had to hand-document per connector.
   ]
 }
 ```
+
+---
+
+# Re-review (gap loop cycle 1) — phase-close pass
+
+Reviewer: gsd-loop-reviewer (Fable). HEAD f7632b9165fd87623105d93015c608d51b36d6e3, reviewing
+`git diff d96253a...HEAD` (S-1 engine mini-wave dc7ad63 + S-2 pilot repairs f7632b9). Date:
+2026-07-02. Every disposition below was verified by reading the fixed files, not the repair
+ledgers; red-evidence transcripts were cross-checked against shipped test/compiler format strings
+(4 spot-checks, all verbatim matches — see TDD-LEDGER.md).
+
+Verification re-run by reviewer at HEAD: `go build ./...` clean · `go test -count=1
+./internal/connectors/... ./cmd/...` full uncached suite PASS · `go run ./cmd/connectorgen
+validate internal/connectors/defs` → 13 connectors, 0 findings · `make lint` → 0 issues
+(transcripts in VERIFICATION.md).
+
+## Disposition of prior findings
+
+| Prior finding | Disposition | Evidence |
+|---|---|---|
+| REVIEW-B xkcd BLOCKER (schema projection drops 5 fields) | **RESOLVED** | `projection: "passthrough"` on both streams; schemas widened to all 11 real fields as doc surface; fixtures + parity bodies re-recorded in real 11-field shape; new `TestParityXkcd_AllElevenRealFieldsSurvivePassthrough` asserts per-field survival + exact-count + DeepEqual |
+| REVIEW-B calendly BLOCKER 1 (dropped derived `id`, stripDerivedID) | **RESOLVED** | `"id": "{{ record.uri \| last_path_segment }}"` on all 5 streams; `x-primary-key: ["id"]` restored; `stripDerivedID` DELETED; manifest test now compares primary keys against legacy Catalog() |
+| REVIEW-B calendly BLOCKER 2 (page_size hard-error) | **RESOLVED** | spec.json `"default": "100"` materialized via C3 mechanism; parity tests pin BOTH the unset-default (count=100 both sides) and explicit-override (count=50) paths; test crutch `page_size: "100"` removed from shared config |
+| REVIEW-B calendly majors (dead keys; users pagination) | **RESOLVED** | `max_pages`/`mode` deleted; users stream declares `"pagination": {"type": "none"}` + lock-in test |
+| REVIEW-B zendesk BLOCKER (invented `updated_at[gte]`) | **RESOLVED** | `incremental` blocks removed from all 5 streams; `x-cursor-field` kept (calendly pattern); `StartDateConfigRaisesLowerBound` INVERTED to `StartDateConfigNeverSendsServerFilter` (asserts NO filter param, whole-query allowlist); stale comment reconciled; TEST-PLAN row honestly amended ("planning error" named) |
+| REVIEW-B zendesk major (has_more stop) | **RESOLVED** | `stop_path: "meta.has_more"` declared; S-1 `tokenPathCursor` honors stop_path + loop guard; new parity test pins has_more:false-with-non-null-cursor (1 request both sides); RED trapped the pre-fix bug via the loop guard |
+| REVIEW-B zendesk minors (dead keys; email note) | **RESOLVED** | `page_size`/`max_pages`/`mode`/`start_date` all removed from spec.json; docs config-surface note extended |
+| A1 (stringified computed_fields — chargebee ~30, gmail 4, github 4) | **RESOLVED** | S-1 typed extraction landed; schemas retightened to `["integer","null"]`/`["boolean","null"]`; gmail `stringifyCountField` + github `isStringifiedNestedID` masking helpers DELETED; lock-in tests flipped to native-type assertions (json.Number/bool) |
+| A3/G0 (github repository marker) | **RESOLVED** | Config (not Secrets) wired into `applyComputedFields` Vars with a secrets-stay-excluded regression test; `"repository": "{{ config.owner }}/{{ config.repo }}"` on all 19 streams; `TestParityGithub_RepositoryMarkerFieldRestored`; `isDocumentedDrop` now covers only the 4 genuinely-unproducible fields |
+| github major (auth surface / silent mode:none) | **RESOLVED with adjudication below** | `mode:none` gated on `when: {{ config.public_access }}`; no-credentials config now hard-errors ("no auth spec matched"); parity tests pin fail-loud AND explicit opt-in; alias drop fully documented (spec description + docs Auth-setup paragraph + ledger G14) |
+| github major (since-param honesty) | **RESOLVED** | docs corrected ("matches legacy exactly ONLY on the config path"); `SinceConfigOnlyMatchesLegacy` (config-path equality) + `SinceStateCursorForwardingIsEngineOnlyBehavior` (pins legacy ignores state AND engine forwards it) |
+| github major (label color `#`-strip) | **RESOLVED** | WriteHook createLabel/updateLabel port legacy's TrimPrefix exactly (existing interface, no 3rd hook); 4 parity tests + hook unit tests; hooks.go trimmed 424→400 (AT the hard ceiling — watch item) |
+| gmail majors (stale conformance bullet; dead keys) | **RESOLVED** | bullet rewritten around the R3 hook-aware reality + genuine https-guard skip reason; `max_pages`/`mode` deleted |
+| sentry major (hostname dead config) | **RESOLVED** | `hostname` dropped, `base_url` required, docs rewritten with operator migration note — see C3 adjudication below |
+| chargebee major (site dead config) | **RESOLVED** | same shape as sentry |
+| chargebee major (sort_by[asc]) | **CARRIED — properly ledgered STOP** | see adjudication below |
+| vitally/bitly minors | **RESOLVED** | vitally Check-dials-network Known-limits note; bitly size-every-page docs correction + comment fix + NEW dedicated divergence-pinning test (`BitlinksSizeParamResentOnEveryPage`) |
+| C3 (base-URL defaults) | **RESOLVED (decision + mechanism)** | S-1 materializes spec defaults into RuntimeConfig (Read + Check) with never-override semantics + `default_type_mismatch` hard validate rule; DERIVED urls (sentry/chargebee) take the sanctioned "require base_url, drop derivation, document" branch — correctly so: a base_url literal default would silently send a configured-hostname legacy config to the WRONG host, while required-base_url fails loud |
+| C1/C4 and conventions items | **RESOLVED** | line-cap wording (soft 300 / self-report / hard 400 / 3rd interface = Tier 3), optional-query dialect, dual-auth golden pattern, next_url fixture exception, §5 closures — all verified present in conventions.md; C4 artifacts populated in this close pass (TDD-GATE.json rows, TDD-LEDGER.md index, SUMMARY.md, VERIFICATION.md) |
+
+**No test was weakened anywhere in the repair diff.** Every removed assertion was audited: all are
+strict strengthenings (strip/coercion helpers deleted in favor of raw equality; stringify
+assertions flipped to native-type) or legacy-ground-truth inversions (zendesk). The zendesk
+inversion is the one deliberate assertion flip and it is the fix REVIEW-B mandated.
+
+## New adjudications
+
+### R1 — github `public_access` as the rendering of legacy `auth_type=public`: **ACCEPT**
+
+Verified in engine source: runtime `EvalWhen` DOES support `== 'literal'` and `in [...]`
+(interpolate.go:363-395), but static validation (`ResolveCheck`, applied to every auth field
+including `when` via `ResolveCheckAuthSpec`, run by connectorgen validate AND conformance's
+interpolations_resolve) parses only bare `namespace.key` refs — `{{ config.auth_type == 'public' }}`
+hard-fails validate as an unknown-spec-key parse. A bare-truthiness `when: {{ config.auth_type }}`
+would be semantically WRONG (any value, e.g. `github_app`, would arm anonymous reads). So the
+dedicated opt-in key is the only faithful, statically-valid gating available today, and it is
+strictly fail-loud where legacy silently fell through to unauthenticated reads — the exact hazard
+the original major named. Documented in three places + ledger G14 + two directional parity tests.
+CONDITION: the ResolveCheck `==`/`in` gap is queued (SUMMARY.md carried queue) so fan-out gets ONE
+sanctioned auth-enum pattern instead of ~500 improvised booleans. Not a fan-out blocker for github
+itself.
+
+### R2 — chargebee ships without `sort_by[asc]=updated_at`: **ACCEPT-WITH-QUEUE**
+
+The S-2 STOP is genuine, independently verified: `buildInitialQuery` resolves `stream.Query` with
+`Cursor=""` BEFORE the incremental lower bound is computed (read.go:409-441), so the landed
+optional-query dialect cannot express "send only when the lower bound resolved"; a
+`config.start_date`-gated entry would be WORSE (silently omits the param on every state-cursor
+sync). Meta-rule analysis: emitted record SET and final cursor are identical on completed syncs;
+the divergence is wire-request shape + record ORDER. Verified the app layer persists the cursor
+only after a fully-successful read+flush (internal/app/app.go) — order therefore cannot cause
+resume data loss today, keeping this in the documented-request-shape-delta class (same class as
+the accepted bitly size-on-every-page delta), NOT the emitted-data class. It is documented as OPEN
+in docs.md Known limits (not silently absorbed) and the engine item is on the pre-fan-out queue —
+mandatory there because "extra param only-when-incremental" recurs across legacy and any future
+mid-sync checkpointing flips this from benign to data-loss.
+
+### R3 — the two OPEN engine items are queue-ready but were NOT yet in a canonical queue
+
+The incremental-lower-bound and ResolveCheck items lived only in trace ledgers + per-connector
+docs at re-review time (GAP-LOOP-PLAN.md predates their discovery). This close pass materializes
+them in SUMMARY.md ("Carried queue") + RUN-STATE.json warnings; the orchestrator must carry them
+into the pre-fan-out dispatch plan.
+
+## Residual watch items (non-blocking, enumerated in SUMMARY.md carried minors)
+
+chargebee main-compare still uses the blanket `normalizeRecordsStringify` helper whose justifying
+deviation is now RESOLVED (flip to raw DeepEqual before chargebee is templated as THE fan-out
+paritytest reference; stale comment cites the renamed test); github compound-write method/path-only
+compare; github close_* fixture bodies; monday consumed-but-undeclared `max_pages`; sentry inert
+static `per_page` entries + check `per_page=1` note; gmail interpolateOptional comment-vs-code
+drift; github hooks.go at exactly the 400-line hard ceiling.
+
+## Gate verdict
+
+**GO for phase close** (status `completed_with_warnings`): all 3 REVIEW-B blocker verdicts and all
+8 REVIEW-A majors are genuinely resolved in code with strengthened tests; the full gate is green
+at HEAD; gate artifacts are now populated with verified evidence. **Pass A fan-out remains
+CONDITIONED on the 2 queued engine items landing first** (incremental-lower-bound query vars;
+ResolveCheck ==/in static parsing) plus the carried-minors template cleanup — fan-out dispatched
+before those would re-improvise per-connector answers to both gaps at ~500-connector scale. No
+quality gate was reduced; no human gate is triggered by this close.
+
+```json
+{
+  "re_review": {
+    "resolved": 16,
+    "carried": [
+      "ENGINE_GAP: incremental-lower-bound query vars (chargebee sort_by[asc])",
+      "ENGINE_GAP: ResolveCheck ==/in when-grammar static parsing (github auth_type rendering)",
+      "minors: chargebee blanket stringify main-compare, github compound-body assertions, github close_* fixture bodies, monday max_pages declaration, sentry inert per_page entries, gmail interpolateOptional comment, github hooks.go at 400-line ceiling"
+    ],
+    "go_no_go": "GO (phase close, completed_with_warnings)",
+    "fanout_condition": "Pass A dispatch BLOCKED until the 2 queued engine items land (+ carried minors folded into the fan-out template pass)"
+  }
+}
+```

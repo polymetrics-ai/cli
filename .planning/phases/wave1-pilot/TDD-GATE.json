@@ -1,11 +1,185 @@
 {
   "schemaVersion": "1.0",
   "phase": "wave1-pilot",
-  "planRefs": [],
+  "planRefs": [
+    ".planning/phases/wave1-pilot/PLAN.md",
+    ".planning/phases/wave1-pilot/TEST-PLAN.md",
+    ".planning/phases/wave1-pilot/GAP-LOOP-PLAN.md"
+  ],
   "ledgerRef": ".planning/phases/wave1-pilot/TDD-LEDGER.md",
   "passed": true,
-  "tasks": [],
-  "behaviorTasks": [],
+  "tasks": [
+    {
+      "id": "t-p-0",
+      "text": "id: t-p-0 type: test \u2014 Red-first evidence for P-0 conformance/connectorgen pre-pilot follow-ups (N1,N2,N4). Transcript: traces/p0-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-p-1",
+      "text": "id: t-p-1 type: test \u2014 Red-first evidence for P-1 xkcd bundle + paritytest. Transcript: traces/p1-xkcd-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-p-2",
+      "text": "id: t-p-2 type: test \u2014 Red-first evidence for P-2 vitally bundle + paritytest. Transcript: traces/p2-vitally-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-p-3",
+      "text": "id: t-p-3 type: test \u2014 Red-first evidence for P-3 bitly bundle + paritytest. Transcript: traces/p3-bitly-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-p-4",
+      "text": "id: t-p-4 type: test \u2014 Red-first evidence for P-4 calendly bundle + paritytest. Transcript: traces/p4-calendly-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-p-5",
+      "text": "id: t-p-5 type: test \u2014 Red-first evidence for P-5 sentry bundle + StreamHook + paritytest. Transcript: traces/p5-sentry-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-p-6",
+      "text": "id: t-p-6 type: test \u2014 Red-first evidence for P-6 chargebee bundle + paritytest. Transcript: traces/p6-chargebee-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-p-7",
+      "text": "id: t-p-7 type: test \u2014 Red-first evidence for P-7 zendesk-support bundle + paritytest (dual auth). Transcript: traces/p7-zendesk-support-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-p-8",
+      "text": "id: t-p-8 type: test \u2014 Red-first evidence for P-8 monday bundle + StreamHook/CheckHook + paritytest. Transcript: traces/p8-monday-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-p-9",
+      "text": "id: t-p-9 type: test \u2014 Red-first evidence for P-9 github bundle + AuthHook/WriteHook + 25 write actions + paritytest. Transcript: traces/p9-github-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-p-10",
+      "text": "id: t-p-10 type: test \u2014 Red-first evidence for P-10 gmail bundle + OAuth2 refresh AuthHook + paritytest. Transcript: traces/p10-gmail-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-r-3",
+      "text": "id: t-r-3 type: test \u2014 Red-first evidence for R-3 conformance hook-aware dynamic checks + skip-marker honesty. Transcript: traces/r3-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-s-1",
+      "text": "id: t-s-1 type: test \u2014 Red-first evidence for S-1 gap-loop cycle-1 engine mini-wave: typed computed_fields, config-in-computed_fields Vars (secrets excluded), optional-query dialect, last_path_segment filter, token_path stop_path + loop guard, spec-default materialization, default_type_mismatch validate rule. Transcript: traces/gaploop-s1-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    },
+    {
+      "id": "t-s-2",
+      "text": "id: t-s-2 type: test \u2014 Red-first evidence for S-2 gap-loop cycle-1 pilot repairs: xkcd passthrough, calendly id/page_size/users-pagination, zendesk incremental removal + stop_path, github public_access/repository-marker/color-strip/since-honesty, gmail+chargebee native-type retightening, sentry/chargebee dead-config, vitally/bitly docs. Transcript: traces/s2-xkcd-ledger.md traces/s2-calendly-ledger.md traces/s2-zendesk-ledger.md traces/s2-github-gmail-ledger.md traces/s2-chargebee-sentry-ledger.md (RED failure signatures verified against shipped test/compiler format strings by gsd-loop-reviewer at P-14; see TDD-LEDGER.md).",
+      "docsOnly": false,
+      "behavior": false
+    }
+  ],
+  "behaviorTasks": [
+    {
+      "id": "b-p-0",
+      "text": "id: b-p-0 type: behavior \u2014 P-0 conformance/connectorgen pre-pilot follow-ups (N1,N2,N4). GREEN evidence + final self-verify in traces/p0-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-p-1",
+      "text": "id: b-p-1 type: behavior \u2014 P-1 xkcd bundle + paritytest. GREEN evidence + final self-verify in traces/p1-xkcd-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-p-2",
+      "text": "id: b-p-2 type: behavior \u2014 P-2 vitally bundle + paritytest. GREEN evidence + final self-verify in traces/p2-vitally-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-p-3",
+      "text": "id: b-p-3 type: behavior \u2014 P-3 bitly bundle + paritytest. GREEN evidence + final self-verify in traces/p3-bitly-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-p-4",
+      "text": "id: b-p-4 type: behavior \u2014 P-4 calendly bundle + paritytest. GREEN evidence + final self-verify in traces/p4-calendly-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-p-5",
+      "text": "id: b-p-5 type: behavior \u2014 P-5 sentry bundle + StreamHook + paritytest. GREEN evidence + final self-verify in traces/p5-sentry-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-p-6",
+      "text": "id: b-p-6 type: behavior \u2014 P-6 chargebee bundle + paritytest. GREEN evidence + final self-verify in traces/p6-chargebee-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-p-7",
+      "text": "id: b-p-7 type: behavior \u2014 P-7 zendesk-support bundle + paritytest (dual auth). GREEN evidence + final self-verify in traces/p7-zendesk-support-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-p-8",
+      "text": "id: b-p-8 type: behavior \u2014 P-8 monday bundle + StreamHook/CheckHook + paritytest. GREEN evidence + final self-verify in traces/p8-monday-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-p-9",
+      "text": "id: b-p-9 type: behavior \u2014 P-9 github bundle + AuthHook/WriteHook + 25 write actions + paritytest. GREEN evidence + final self-verify in traces/p9-github-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-p-10",
+      "text": "id: b-p-10 type: behavior \u2014 P-10 gmail bundle + OAuth2 refresh AuthHook + paritytest. GREEN evidence + final self-verify in traces/p10-gmail-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-r-3",
+      "text": "id: b-r-3 type: behavior \u2014 R-3 conformance hook-aware dynamic checks + skip-marker honesty. GREEN evidence + final self-verify in traces/r3-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-s-1",
+      "text": "id: b-s-1 type: behavior \u2014 S-1 gap-loop cycle-1 engine mini-wave: typed computed_fields, config-in-computed_fields Vars (secrets excluded), optional-query dialect, last_path_segment filter, token_path stop_path + loop guard, spec-default materialization, default_type_mismatch validate rule. GREEN evidence + final self-verify in traces/gaploop-s1-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "b-s-2",
+      "text": "id: b-s-2 type: behavior \u2014 S-2 gap-loop cycle-1 pilot repairs: xkcd passthrough, calendly id/page_size/users-pagination, zendesk incremental removal + stop_path, github public_access/repository-marker/color-strip/since-honesty, gmail+chargebee native-type retightening, sentry/chargebee dead-config, vitally/bitly docs. GREEN evidence + final self-verify in traces/s2-xkcd-ledger.md traces/s2-calendly-ledger.md traces/s2-zendesk-ledger.md traces/s2-github-gmail-ledger.md traces/s2-chargebee-sentry-ledger.md; re-verified at HEAD f7632b9 by the P-14 gate re-run (VERIFICATION.md).",
+      "docsOnly": false,
+      "behavior": true
+    }
+  ],
   "failures": [],
-  "updatedAt": "2026-07-02T12:03:49.352Z"
+  "updatedAt": "2026-07-02T15:37:03.178Z"
 }

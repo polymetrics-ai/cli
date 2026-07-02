@@ -148,3 +148,34 @@ undefined-symbol, unresolved-key signatures all consistent).
   sentry's markers should be revisited (not grandfathered) if that lands.
 - github incremental state filtering changes destination-visible record sets for
   incremental_append (non-deduped) syncs at flip time; needs an explicit product decision note.
+
+---
+
+# Re-review + phase-close trace (gap-loop cycle 1, P-14) — gsd-loop-reviewer (Fable)
+
+Date: 2026-07-02. HEAD f7632b9165fd87623105d93015c608d51b36d6e3. Scope: `git diff d96253a...HEAD`.
+
+Method: read every repaired file directly (defs/{xkcd,calendly,zendesk-support,github,gmail,
+sentry,chargebee,vitally,bitly}, hooks/github, paritytest/{xkcd,calendly,zendesk-support,github,
+gmail,chargebee,bitly}, engine/{read,paginate,interpolate,bundle,schema}.go + tests,
+cmd/connectorgen/validate.go, conventions.md) against the prior findings; never trusted ledgers
+for dispositions. Audited every removed test assertion in the diff (`git diff -- '*_test.go'` +
+grep for removed Fatalf/func Test) — zero weakenings; all removals are strengthenings or the
+mandated zendesk inversion. Cross-checked 4 red-evidence transcripts against shipped format
+strings (s2-xkcd, s2-zendesk, gaploop-s1 item 5, p4-calendly embed error) — all verbatim.
+Independently verified: engine passthrough projection support (bundle.go:182, read.go:596-614);
+buildInitialQuery Cursor="" ordering (read.go:409-441) confirming the chargebee sort_by STOP;
+EvalWhen ==/in vs ResolveCheck bare-ref parsing (interpolate.go:363-395, 513-540) confirming the
+public_access adjudication; app-layer end-of-sync-only cursor persistence (internal/app/app.go)
+bounding the sort_by order-delta risk; hooks/github line count exactly 400 (at the new hard
+ceiling).
+
+Gate re-run at HEAD (transcripts in VERIFICATION.md): go build clean; go test -count=1
+./internal/connectors/... ./cmd/... exit 0 (582 ok / 0 FAIL); connectorgen validate 13/0;
+make lint 0 issues.
+
+Verdict: GO for phase close as completed_with_warnings; 16 findings resolved; 2 ENGINE_GAP items
+carried as pre-fan-out blockers + 7 carried minors (full detail in REVIEW-A.md "Re-review (gap
+loop cycle 1)" and SUMMARY.md). Artifacts written this pass: TDD-LEDGER.md (index + verification
+notes), TDD-GATE.json (14 task + 14 behavior rows), SUMMARY.md, VERIFICATION.md, RUN-STATE.json,
+REVIEW-A.md re-review section.

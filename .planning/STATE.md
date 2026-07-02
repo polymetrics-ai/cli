@@ -2,9 +2,13 @@
 
 Current milestone: connector-architecture-v2
 
-Current phase: wave1-pilot
+Current phase: wave2-fanout-http-sm
 
-Status: pending
+Status: pending (BLOCKED on S3 engine mini-wave: incremental-lower-bound query vars + ResolveCheck ==/in when-grammar + carried minors)
+
+Completed: wave1-pilot (2026-07-02) — 10/10 pilots migrated at parity, 2 Fable review rounds,
+gap-loop cycle 1 (engine mini-wave + 10-pilot repair), re-review GO completed_with_warnings.
+See .planning/phases/wave1-pilot/SUMMARY.md + docs/migration/pilot-costs.json.
 
 Completed: wave0-engine-harness (2026-07-02) — declarative engine (85.7% cov), 3 goldens with
 parity (stripe/searxng/postgres), connectorgen, conformance v2, certify source stages, lint gates,
