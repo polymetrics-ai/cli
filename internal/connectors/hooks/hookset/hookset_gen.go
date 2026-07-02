@@ -2,8 +2,5 @@
 //
 // Package hookset blank-imports every internal/connectors/hooks/<name>
 // package so their init() functions run engine.RegisterHooks side effects.
-// It is wave0's placeholder: no bundle in defs/ needs a hook yet (stripe and
-// searxng are pure declarative; postgres is Tier-3), so the import list
-// below is intentionally empty. `connectorgen gen` regenerates this file
-// deterministically as hooks/<name> packages are added in later waves.
+// It is regenerated deterministically by `go run ./cmd/connectorgen gen`.
 package hookset

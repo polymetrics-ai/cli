@@ -1,0 +1,15 @@
+{
+  "name": "unresolvable-interpolation",
+  "display_name": "Good Connector",
+  "description": "a valid test connector used as the connectorgen validate control case",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}
