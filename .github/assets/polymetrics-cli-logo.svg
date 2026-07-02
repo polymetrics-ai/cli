@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324 96" role="img" aria-labelledby="title desc">
   <title id="title">Polymetrics CLI logo</title>
   <desc id="desc">A PM command line mark where the M transitions into an underscore cursor.</desc>
   <style>
@@ -58,8 +58,8 @@
       }
     }
   </style>
-  <rect x="1" y="1" width="358" height="94" fill="#f4faf6" rx="0"/>
-  <rect x="1" y="1" width="358" height="94" fill="none" stroke="#c7ddcf"/>
+  <rect x="1" y="1" width="322" height="94" fill="#f4faf6" rx="0"/>
+  <rect x="1" y="1" width="322" height="94" fill="none" stroke="#c7ddcf"/>
   <rect x="31" y="28" width="40" height="40" fill="#065f46"/>
   <text class="letter" x="39" y="55">P</text>
   <text class="letter m" x="55" y="55">M</text>

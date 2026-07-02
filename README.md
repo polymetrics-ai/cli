@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src=".github/assets/polymetrics-cli-logo.svg" alt="Polymetrics CLI logo" width="360">
+<img src=".github/assets/polymetrics-cli-logo.svg" alt="Polymetrics CLI logo" width="324">
 
 # Polymetrics CLI
 
@@ -12,7 +12,7 @@ credentials local, and speaks JSON everywhere.
 
 [![Website](https://img.shields.io/badge/website-cli.polymetrics.ai-0f3d2e?logo=icloud&logoColor=white)](https://cli.polymetrics.ai)
 [![License: Elastic 2.0](https://img.shields.io/badge/license-Elastic%202.0-244c3a.svg)](LICENSE)
-[![Go Report Card](https://goreportcard.com/badge/github.com/polymetrics-ai/cli)](https://goreportcard.com/report/github.com/polymetrics-ai/cli)
+[![Verify](https://github.com/polymetrics-ai/cli/actions/workflows/verify.yml/badge.svg)](https://github.com/polymetrics-ai/cli/actions/workflows/verify.yml)
 ![Go](https://img.shields.io/badge/go-1.25.11+-00ADD8?logo=go&logoColor=white)
 [![GitHub stars](https://img.shields.io/github/stars/polymetrics-ai/cli?style=social)](https://github.com/polymetrics-ai/cli/stargazers)
 
