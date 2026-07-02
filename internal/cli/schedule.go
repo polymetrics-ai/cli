@@ -120,9 +120,10 @@ func runScheduleRemove(ctx context.Context, root string, args []string, stdout i
 	flags := parseFlags(args)
 	positionals := flags.values["_"]
 	if len(positionals) == 0 {
-		return usageErrorf("pm schedule remove <name>")
+		return usageErrorf("pm schedule remove <name> [--crontab]")
 	}
 	name := positionals[0]
+	forceCrontab := flags.first("crontab") == "true"
 
 	if _, err := schedule.Load(root, name); err != nil {
 		if errors.Is(err, os.ErrNotExist) {
@@ -132,8 +133,11 @@ func runScheduleRemove(ctx context.Context, root string, args []string, stdout i
 	}
 
 	// Best-effort backend removal (ignores errors if backend binary absent).
-	backend := schedule.SelectBackend(ctx, false, nil)
+	backend := schedule.SelectBackend(ctx, forceCrontab, nil)
 	_ = backend.Remove(ctx, name)
+	if backend.Kind() != schedule.KindCrontab {
+		_ = (schedule.CrontabBackend{}).Remove(ctx, name)
+	}
 
 	if err := schedule.Delete(root, name); err != nil {
 		return err

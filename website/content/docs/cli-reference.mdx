@@ -173,7 +173,7 @@ pm flow list --flows-dir .polymetrics/flows --json
 pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --json
 pm schedule list --json
 pm schedule install nightly --crontab --json
-pm schedule remove nightly --json
+pm schedule remove nightly --crontab --json
 ```
 
 Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. Schedules install named flows into the local scheduler backend.
