@@ -58,6 +58,24 @@ func withSearxngBaseURL(b engine.Bundle, baseURL string) engine.Bundle {
 	return b
 }
 
+// withSearxngUnboundedMaxPages returns a shallow copy of b whose base
+// pagination spec's MaxPages is 0 (unbounded), mirroring how the legacy side
+// of a short-page-stop test feeds config max_pages: "all" (searxng.go:292) to
+// isolate the short-page stop signal from the (now correctly enforced)
+// max_pages hard-cap — see TestParitySearxng_MaxPagesStop for the dedicated
+// max_pages-cap parity assertion. Does not mutate b.HTTP.Pagination in place
+// (a fresh PaginationSpec value is assigned), so the loaded original from
+// loadSearxngBundle is never affected.
+func withSearxngUnboundedMaxPages(b engine.Bundle) engine.Bundle {
+	if b.HTTP.Pagination == nil {
+		return b
+	}
+	pag := *b.HTTP.Pagination
+	pag.MaxPages = 0
+	b.HTTP.Pagination = &pag
+	return b
+}
+
 func searxngRuntimeConfig(baseURL string, extra map[string]string) connectors.RuntimeConfig {
 	cfg := map[string]string{"base_url": baseURL}
 	for k, v := range extra {
@@ -348,7 +366,13 @@ func TestParitySearxng_PagenoSequenceAndShortPageStop(t *testing.T) {
 	}
 
 	engSrv := searxngTwoPageServer(t)
-	eng := engine.New(withSearxngBaseURL(bundle, engSrv.URL), nil)
+	// Unbounded max_pages on this side, matching legacy's own max_pages:"all"
+	// above: this test's concern is the pageno sequence + short-page stop,
+	// not the max_pages cap (which TestParitySearxng_MaxPagesStop covers
+	// directly) — without this override the bundle's declared max_pages:1
+	// would stop the engine after page 1, before the short-page signal on
+	// page 2 is ever reached.
+	eng := engine.New(withSearxngUnboundedMaxPages(withSearxngBaseURL(bundle, engSrv.URL)), nil)
 	engRecs := readAllSearxngRecords(t, eng, connectors.ReadRequest{
 		Stream: "search",
 		Config: searxngRuntimeConfig(engSrv.URL, map[string]string{"query": "go etl"}),
@@ -374,33 +398,27 @@ func recordURLs(t *testing.T, recs []connectors.Record) []string {
 	return out
 }
 
-// --- KNOWN, DOCUMENTED ENGINE_GAP: max_pages hard-stop is not enforced by
-// the declarative read path ---
+// --- max_pages hard-stop parity (formerly a documented ENGINE_GAP, closed by
+// the wave0-engine-harness repair — see traces/waveF-repair-ledger.md) ---
 //
 // Legacy's default max_pages=1 is a HARD request-count cap enforced by
 // connsdk.Harvest's own maxPages parameter (searxng.go:149), independent of
 // page fullness: even if the source keeps returning full pages, legacy
 // issues at most maxPages requests. internal/connectors/engine/read.go's
-// readDeclarative loop (the ONLY production read path engine.Connector.Read
-// dispatches to) never reads PaginationSpec.MaxPages at all — grep confirms
-// zero references to "MaxPages" in read.go — so the engine's page_number
-// paginator stops ONLY on a short/empty page (recordCount < PageSize), never
-// on a request-count cap. This is confirmed both by reading read.go in full
-// and by paginate_test.go's own TestNewPaginatorPageNumberMaxPagesStop: that
-// test drives connsdk.Harvest directly with maxPages hard-coded to 1 as
-// Harvest's explicit parameter — it does NOT exercise
-// PaginationSpec.MaxPages being read out of the spec by any production
-// caller, because no such caller exists.
+// readDeclarative loop now enforces the SAME cap by consulting
+// PaginationSpec.MaxPages directly (the effective spec after stream-overrides
+// -base resolution), so a page_number stream whose source always returns a
+// full page stops at exactly max_pages requests on BOTH connectors.
 //
-// This test documents the gap directly rather than papering over it: with a
-// source that ALWAYS returns a full page (so the short-page stop signal
-// never fires), the engine's real Read() keeps paginating past what
-// max_pages:1 would have bounded, while legacy's real Read() (fed the same
-// max_pages=1 config, its default) stops at exactly one request. This is an
-// ENGINE_GAP (see traces/waveF-b16-ledger.md), reported to the coordinator,
-// NOT worked around in this bundle or this test file — read.go is out of
-// this task's sanctioned file set.
-func TestParitySearxng_MaxPagesStopEngineGap(t *testing.T) {
+// Only the DEFAULT case (max_pages=1, legacy's default and this bundle's
+// declared streams.json base value) is asserted for parity here. Legacy also
+// supports a CONFIG-driven max_pages override (max_pages: "all"/"unlimited"/N
+// read from cfg.Config at request time, searxng.go:287-303) — the engine's
+// PaginationSpec.MaxPages is a static int with no template support, so a
+// config-driven override is NOT modeled by this bundle. This remains a
+// documented, deliberate deviation (docs.md "Known limits"; not re-litigated
+// here since it does not affect the DEFAULT-case parity this test asserts).
+func TestParitySearxng_MaxPagesStop(t *testing.T) {
 	bundle := loadSearxngBundle(t)
 
 	// A page is "full" relative to EACH side's own effective page_size
@@ -408,7 +426,7 @@ func TestParitySearxng_MaxPagesStopEngineGap(t *testing.T) {
 	// streams.json page_size and legacy's own default): serving exactly
 	// searxngPageSize records on every page means the short-page stop signal
 	// (which both sides correctly implement) never fires on its own, so any
-	// stop that DOES happen is attributable only to a max_pages cap.
+	// stop that DOES happen is attributable only to the max_pages cap.
 	const capServerMaxHits = 5 // safety valve: never serve unboundedly many full pages
 	fullPageBody := []byte(searxngFullPageBody(searxngPageSize, "full"))
 
@@ -438,10 +456,9 @@ func TestParitySearxng_MaxPagesStopEngineGap(t *testing.T) {
 		engHits++
 		w.Header().Set("Content-Type", "application/json")
 		if engHits > capServerMaxHits {
-			// Safety valve so this documented-gap test cannot hang the suite
-			// if the gap is ever silently widened: degrade to an empty page
-			// so the engine's short-page stop signal eventually fires and
-			// the test completes deterministically either way.
+			// Safety valve so a regression cannot hang the suite: degrade to
+			// an empty page so the engine's short-page stop signal eventually
+			// fires and the test completes deterministically either way.
 			_, _ = w.Write([]byte(`{"results":[]}`))
 			return
 		}
@@ -450,17 +467,24 @@ func TestParitySearxng_MaxPagesStopEngineGap(t *testing.T) {
 	t.Cleanup(engSrv.Close)
 
 	eng := engine.New(withSearxngBaseURL(bundle, engSrv.URL), nil)
-	// The bundle's own max_pages:1 (spec.json/streams.json default) has NO
-	// effect on the engine read path today (the documented gap): assert
-	// current, real behavior — the engine does NOT stop at 1 request the way
-	// legacy does.
-	_ = readAllSearxngRecords(t, eng, connectors.ReadRequest{
+	// The bundle's own max_pages:1 (streams.json base pagination block) must
+	// now stop the engine's read at exactly 1 request, matching legacy.
+	engRecs := readAllSearxngRecords(t, eng, connectors.ReadRequest{
 		Stream: "search",
 		Config: searxngRuntimeConfig(engSrv.URL, map[string]string{"query": "go etl"}),
 	})
 
-	if engHits <= 1 {
-		t.Fatalf("engine issued %d requests; expected this documented gap test to demonstrate engHits > 1 (max_pages not enforced) — if this now fails, PaginationSpec.MaxPages has been wired into read.go and traces/waveF-b16-ledger.md's ENGINE_GAP entry should be closed, not this test loosened silently", engHits)
+	if engHits != 1 {
+		t.Fatalf("engine issued %d requests against an always-full page source, want exactly 1 (max_pages:1 hard stop, matching legacy's default) — if this fails, PaginationSpec.MaxPages wiring in read.go has regressed", engHits)
+	}
+	if len(engRecs) != searxngPageSize {
+		t.Fatalf("engine records = %d, want %d (one page only, matching legacy)", len(engRecs), searxngPageSize)
+	}
+
+	gotURLs := recordURLs(t, engRecs)
+	wantURLs := recordURLs(t, legacyRecs)
+	if !reflect.DeepEqual(gotURLs, wantURLs) {
+		t.Fatalf("record url sequence = %v, want %v (legacy) — max_pages stop must yield byte-identical record sets on both sides", gotURLs, wantURLs)
 	}
 }
 

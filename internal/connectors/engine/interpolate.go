@@ -201,6 +201,19 @@ func urlencodeSegment(val string) string {
 // grammar (design §B.3): equality (`config.k == 'v'`), membership
 // (`config.k in ['a','b']`), and truthiness (`config.k` alone). Anything else
 // is a compile error — no eval, no arithmetic, no user functions.
+//
+// Unlike general template interpolation (Interpolate/InterpolatePath/
+// InterpolateHeader), a config/secrets reference whose key is entirely
+// ABSENT at runtime does not error here: it resolves as an empty string, so
+// truthiness is false, `==` compares against "", and `in [...]` treats it as
+// not contained (unless the list itself contains the empty-string literal).
+// This is what makes the OPTIONAL-credential pattern possible — e.g.
+// `when: "{{ secrets.api_key }}"` gating an auth spec off when the caller
+// never populated that secret — without requiring a separate "is this key
+// present" primitive. Static validation (ResolveCheck, run by connectorgen
+// validate) is unaffected: a when-template referencing a key that isn't even
+// DECLARED in spec.json's properties is still a hard validate-time error;
+// only RUNTIME absence of a spec-known key is tolerated here.
 func EvalWhen(cond string, vars Vars) (bool, error) {
 	inner, err := extractWhenExpr(cond)
 	if err != nil {
@@ -210,7 +223,7 @@ func EvalWhen(cond string, vars Vars) (bool, error) {
 	if idx := strings.Index(inner, "=="); idx >= 0 {
 		left := strings.TrimSpace(inner[:idx])
 		right := strings.TrimSpace(inner[idx+2:])
-		lv, err := resolveRef(left, vars)
+		lv, err := resolveRefForWhen(left, vars)
 		if err != nil {
 			return false, err
 		}
@@ -224,7 +237,7 @@ func EvalWhen(cond string, vars Vars) (bool, error) {
 	if idx := strings.Index(inner, " in "); idx >= 0 {
 		left := strings.TrimSpace(inner[:idx])
 		right := strings.TrimSpace(inner[idx+len(" in "):])
-		lv, err := resolveRef(left, vars)
+		lv, err := resolveRefForWhen(left, vars)
 		if err != nil {
 			return false, err
 		}
@@ -249,11 +262,38 @@ func EvalWhen(cond string, vars Vars) (bool, error) {
 	}
 
 	// Truthiness: a bare dotted reference.
-	v, err := resolveRef(strings.TrimSpace(inner), vars)
+	v, err := resolveRefForWhen(strings.TrimSpace(inner), vars)
 	if err != nil {
 		return false, err
 	}
 	return v != "", nil
+}
+
+// resolveRefForWhen resolves ref exactly like resolveRef, EXCEPT that a
+// config.* or secrets.* reference whose key is absent from vars resolves to
+// ("", nil) instead of propagating resolveRef's "unresolved key" error. This
+// tolerance is intentionally scoped to when-condition evaluation only:
+// resolveRef itself is untouched, so every other caller (Interpolate and its
+// path/header variants, buildAuthenticator's per-mode field resolution)
+// keeps hard-erroring on an absent key exactly as before. cursor and
+// record.* references are delegated straight through (unaffected — EvalWhen
+// is never invoked today with a non-nil vars.Record, since authVars, its
+// only production vars-builder, never sets one).
+func resolveRefForWhen(ref string, vars Vars) (string, error) {
+	segs := strings.Split(ref, ".")
+	if len(segs) >= 2 {
+		switch segs[0] {
+		case "config":
+			if _, ok := vars.Config[segs[1]]; !ok {
+				return "", nil
+			}
+		case "secrets":
+			if _, ok := vars.Secrets[segs[1]]; !ok {
+				return "", nil
+			}
+		}
+	}
+	return resolveRef(ref, vars)
 }
 
 // extractWhenExpr strips the {{ }} wrapper a `when` string is conventionally

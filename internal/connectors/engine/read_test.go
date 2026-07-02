@@ -839,6 +839,128 @@ func TestCheckHookErrorPropagates(t *testing.T) {
 	}
 }
 
+// --- PaginationSpec.MaxPages wiring (ENGINE_GAP repair, wave0-engine-harness) ---
+
+// TestReadMaxPagesHardStopsRequestCount proves readDeclarative enforces a
+// hard request-count cap independent of page fullness: a source that ALWAYS
+// returns a full page (so the short-page stop signal never fires on its own)
+// must still stop after exactly MaxPages requests.
+func TestReadMaxPagesHardStopsRequestCount(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		// Always full (PageSize=2, always return exactly 2 records): the
+		// short-page stop signal never fires by itself.
+		_, _ = fmt.Fprintf(w, `{"data":[{"id":"%d-a","name":"a","updated_at":"2026-01-01T00:00:00Z"},{"id":"%d-b","name":"b","updated_at":"2026-01-01T00:00:00Z"}]}`, hits, hits)
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		Pagination: &PaginationSpec{
+			Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 2,
+		},
+	})
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if hits != 2 {
+		t.Fatalf("requests issued = %d, want exactly 2 (MaxPages=2 hard stop against an always-full-page source)", hits)
+	}
+	if len(recs) != 4 {
+		t.Fatalf("records = %d, want 4 (2 pages x 2 records)", len(recs))
+	}
+}
+
+// TestReadMaxPagesZeroIsUnbounded proves MaxPages==0 (the zero value/absent
+// case) preserves today's behavior: pagination is bounded only by the
+// short/empty-page stop signal, never by a request-count cap.
+func TestReadMaxPagesZeroIsUnbounded(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		switch {
+		case hits < 3:
+			_, _ = fmt.Fprintf(w, `{"data":[{"id":"%d-a","name":"a","updated_at":"2026-01-01T00:00:00Z"},{"id":"%d-b","name":"b","updated_at":"2026-01-01T00:00:00Z"}]}`, hits, hits)
+		default:
+			// Short (empty) page: the ordinary stop signal fires here.
+			_, _ = w.Write([]byte(`{"data":[]}`))
+		}
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		Pagination: &PaginationSpec{
+			Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 0,
+		},
+	})
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if hits != 3 {
+		t.Fatalf("requests issued = %d, want 3 (MaxPages=0 means unbounded; only the short-page stop applies)", hits)
+	}
+	if len(recs) != 4 {
+		t.Fatalf("records = %d, want 4 (2 full pages x 2 records, 3rd page empty)", len(recs))
+	}
+}
+
+// TestReadMaxPagesAbsentPaginationSpecIsUnbounded proves a stream with NO
+// pagination spec at all (nil) is unaffected by the MaxPages wiring — same
+// as MaxPages==0, existing short-page-stop-only behavior must stay green.
+func TestReadMaxPagesAbsentPaginationSpecIsUnbounded(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		_, _ = w.Write([]byte(`{"data":[{"id":"1","name":"a","updated_at":"2026-01-01T00:00:00Z"}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if hits != 1 {
+		t.Fatalf("requests issued = %d, want 1 (nonePaginator issues exactly one request)", hits)
+	}
+	if len(recs) != 1 {
+		t.Fatalf("records = %d, want 1", len(recs))
+	}
+}
+
+// TestReadMaxPagesStreamLevelOverridesBase proves the stream-level
+// PaginationSpec's MaxPages overrides the base-level spec's MaxPages,
+// matching read.go's existing "stream overrides base" merge semantics (the
+// stream spec is used wholesale when non-nil; there is no field-by-field
+// merge between base and stream pagination specs).
+func TestReadMaxPagesStreamLevelOverridesBase(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		_, _ = fmt.Fprintf(w, `{"data":[{"id":"%d-a","name":"a","updated_at":"2026-01-01T00:00:00Z"},{"id":"%d-b","name":"b","updated_at":"2026-01-01T00:00:00Z"}]}`, hits, hits)
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		Pagination: &PaginationSpec{
+			Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 3,
+		},
+	})
+	// Base declares MaxPages=1; if the stream-level override did not win, the
+	// engine would stop after only 1 request instead of the stream's 3.
+	b.HTTP.Pagination = &PaginationSpec{
+		Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 1,
+	}
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if hits != 3 {
+		t.Fatalf("requests issued = %d, want 3 (stream-level MaxPages=3 must override base-level MaxPages=1)", hits)
+	}
+}
+
 // --- next_url pagination through a real Read call (exercises requesterHost) ---
 
 func TestReadNextURLPaginationSetsBaseHostFromRequester(t *testing.T) {

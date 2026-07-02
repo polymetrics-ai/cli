@@ -96,10 +96,22 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
 
+	maxPages := specForPaginator.MaxPages
+
 	page := paginator.Start()
 	for pageNum := 0; page != nil; pageNum++ {
 		if err := ctx.Err(); err != nil {
 			return err
+		}
+
+		// Hard request-count cap, independent of page fullness: mirrors
+		// connsdk.Harvest's own maxPages parameter (paginate.go:201), checked
+		// before issuing the request for this page number. maxPages<=0 (the
+		// zero value, i.e. absent/unset) means unbounded — pagination is
+		// bounded only by the paginator's own short/empty-page stop signal,
+		// same as before this cap existed.
+		if maxPages > 0 && pageNum >= maxPages {
+			break
 		}
 
 		if pageNum > 0 {

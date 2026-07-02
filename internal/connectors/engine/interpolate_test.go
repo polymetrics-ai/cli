@@ -216,6 +216,89 @@ func TestEvalWhenUnknownOperatorIsCompileError(t *testing.T) {
 	}
 }
 
+// TestEvalWhenAbsentKeyEvaluatesFalsy proves that, unlike general template
+// interpolation (Interpolate/InterpolatePath/InterpolateHeader — which still
+// hard-error on any unresolved config/secrets key), a `when` condition
+// referencing a config/secrets key that is entirely ABSENT from vars (not
+// merely empty-string) evaluates as falsy rather than erroring. This is the
+// OPTIONAL-credential pattern: `when: "{{ secrets.api_key }}"` must be able to
+// gate an auth spec off when the caller never populated that secret at all,
+// without the bundle author needing a companion "is this key present"
+// primitive the dialect doesn't have.
+func TestEvalWhenAbsentKeyEvaluatesFalsy(t *testing.T) {
+	vars := baseVars() // vars.Secrets has "token" only; vars.Config has no "api_key" or "missing_cfg" key.
+
+	tests := []struct {
+		name string
+		cond string
+		want bool
+	}{
+		{"truthiness: absent secret key", "{{ secrets.api_key }}", false},
+		{"truthiness: absent config key", "{{ config.missing_cfg }}", false},
+		{"equality: absent secret key compares as empty string, mismatch", "{{ secrets.api_key == 'sekret-token' }}", false},
+		{"equality: absent secret key compares as empty string, match empty literal", "{{ secrets.api_key == '' }}", true},
+		{"equality: absent config key compares as empty string", "{{ config.missing_cfg == 'anything' }}", false},
+		{"in: absent secret key is not contained in any non-empty list", "{{ secrets.api_key in ['a', 'b'] }}", false},
+		{"in: absent config key is not contained even in a list containing empty string", "{{ config.missing_cfg in ['', 'x'] }}", true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := EvalWhen(tt.cond, vars)
+			if err != nil {
+				t.Fatalf("EvalWhen(%q) unexpected error: %v (absent key must evaluate falsy in a when-condition, not error)", tt.cond, err)
+			}
+			if got != tt.want {
+				t.Fatalf("EvalWhen(%q) = %v, want %v", tt.cond, got, tt.want)
+			}
+		})
+	}
+}
+
+// TestEvalWhenAbsentKeyDoesNotLeakIntoGeneralInterpolation proves the fix is
+// scoped to when-evaluation only: ordinary Interpolate (and its path/header
+// variants) must STILL hard-error on an unresolved config/secrets key. A
+// when-condition's absent-key tolerance must never leak into general
+// template resolution (bearer tokens, URLs, headers, query params, etc.).
+func TestEvalWhenAbsentKeyDoesNotLeakIntoGeneralInterpolation(t *testing.T) {
+	vars := baseVars()
+
+	if _, err := Interpolate("{{ secrets.api_key }}", vars); err == nil {
+		t.Fatalf("Interpolate: expected error for unresolved secrets key outside a when-condition")
+	}
+	if _, err := Interpolate("{{ config.missing_cfg }}", vars); err == nil {
+		t.Fatalf("Interpolate: expected error for unresolved config key outside a when-condition")
+	}
+}
+
+// TestResolveCheckStillRejectsSpecUnknownKeyForWhenTemplates proves static
+// validation is unaffected by the when-absent-key runtime fix: a `when`
+// template referencing a key NOT declared in spec.json's properties (a typo)
+// is still caught at connectorgen validate / ResolveCheck time, exactly like
+// any other config reference. Only RUNTIME absence of a spec-KNOWN key is
+// tolerated by EvalWhen — spec-unknown keys remain a hard validate-time
+// error.
+func TestResolveCheckStillRejectsSpecUnknownKeyForWhenTemplates(t *testing.T) {
+	specKeys := map[string]bool{"api_key": true, "base_url": true}
+
+	// A when-template referencing a spec-KNOWN key (api_key) passes static
+	// validation even though it may be absent at runtime (that's exactly the
+	// optional-credential pattern this fix enables).
+	if err := ResolveCheck("{{ config.api_key }}", specKeys); err != nil {
+		t.Fatalf("ResolveCheck: unexpected error for spec-known when-template key: %v", err)
+	}
+
+	// A when-template referencing a spec-UNKNOWN key (typo) must still fail
+	// static validation.
+	err := ResolveCheck("{{ config.api_kay }}", specKeys)
+	if err == nil {
+		t.Fatalf("ResolveCheck: expected validation finding for spec-unknown when-template key (typo)")
+	}
+	if !strings.Contains(err.Error(), "api_kay") {
+		t.Fatalf("error %q does not name the offending key", err.Error())
+	}
+}
+
 func TestResolveCheck(t *testing.T) {
 	specKeys := map[string]bool{"repository": true, "base_url": true}
 
