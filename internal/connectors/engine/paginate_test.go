@@ -350,6 +350,125 @@ func TestNewPaginatorCursorTokenPathExhausts(t *testing.T) {
 	}
 }
 
+// TestNewPaginatorCursorTokenPathStopPathHonoredEvenWithNonEmptyCursor is the
+// RED test for gap-loop item 5 (REVIEW-B.md zendesk-support finding 2):
+// Zendesk's own docs say the cursor properties may be POPULATED even when
+// has_more is false — the token_path cursor variant must stop on a falsy
+// stop_path value (meta.has_more) REGARDLESS of whether a next_cursor value
+// is also present on that same page, exactly like last_record_field's
+// stop_path semantics. Without stop_path wired, the paginator would issue
+// one extra (empty) page-3 request past the has_more:false page.
+func TestNewPaginatorCursorTokenPathStopPathHonoredEvenWithNonEmptyCursor(t *testing.T) {
+	hits := newHitCounter()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		key := r.URL.RawQuery
+		if hits.record(key) > 1 {
+			t.Fatalf("page fetched more than once: %s", key)
+		}
+		cursor := r.URL.Query().Get("cursor")
+		switch cursor {
+		case "":
+			_, _ = w.Write([]byte(`{"data":[{"id":1}],"meta":{"after_cursor":"page2","has_more":true}}`))
+		case "page2":
+			// has_more:false but after_cursor is STILL populated (Zendesk's
+			// documented behavior) — pagination must stop here, not follow
+			// the non-empty cursor to a phantom page 3.
+			_, _ = w.Write([]byte(`{"data":[{"id":2}],"meta":{"after_cursor":"page3","has_more":false}}`))
+		default:
+			t.Fatalf("unexpected cursor (must not be requested): %s", cursor)
+		}
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{
+		Type:        "cursor",
+		CursorParam: "cursor",
+		TokenPath:   "meta.after_cursor",
+		StopPath:    "meta.has_more",
+	}, 0, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	records, err := collectPages(t, requester(srv.URL), p, "data")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("got %d records, want 2 (stop_path=has_more:false must stop pagination even though after_cursor is non-empty)", len(records))
+	}
+}
+
+// TestNewPaginatorCursorTokenPathNoStopPathKeepsPriorBehavior locks in that a
+// token_path cursor spec with NO stop_path declared keeps stopping purely on
+// an absent/empty token, exactly as before this increment (zero migration
+// risk for every bundle that never declares stop_path on a token_path
+// variant).
+func TestNewPaginatorCursorTokenPathNoStopPathKeepsPriorBehavior(t *testing.T) {
+	hits := newHitCounter()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		key := r.URL.RawQuery
+		if hits.record(key) > 1 {
+			t.Fatalf("page fetched more than once: %s", key)
+		}
+		cursor := r.URL.Query().Get("cursor")
+		switch cursor {
+		case "":
+			_, _ = w.Write([]byte(`{"data":[{"id":1}],"meta":{"next_cursor":"abc"}}`))
+		case "abc":
+			_, _ = w.Write([]byte(`{"data":[{"id":2}],"meta":{"next_cursor":""}}`))
+		default:
+			t.Fatalf("unexpected cursor: %s", cursor)
+		}
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "cursor", CursorParam: "cursor", TokenPath: "meta.next_cursor"}, 0, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	records, err := collectPages(t, requester(srv.URL), p, "data")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("got %d records, want 2 (no stop_path: stop on empty token, unchanged behavior)", len(records))
+	}
+}
+
+// TestNewPaginatorCursorTokenPathLoopGuardSameTokenTwice proves the
+// token_path cursor variant now guards against a hostile/buggy API that
+// repeats the same next-page token forever, mirroring nextURL's/
+// linkHeaderPaginator's existing "seen" loop guard: Harvest itself stops
+// cleanly (guard violations surface via Err(), not Harvest's return, exactly
+// like nextURL's TestNewPaginatorNextURLLoopGuardSameURLTwice), and the
+// paginator's Err() reports the loop.
+func TestNewPaginatorCursorTokenPathLoopGuardSameTokenTwice(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Always returns the SAME next_cursor, regardless of what was
+		// requested — a buggy/hostile API that never actually advances.
+		_, _ = w.Write([]byte(`{"data":[{"id":1}],"meta":{"next_cursor":"stuck"}}`))
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "cursor", CursorParam: "cursor", TokenPath: "meta.next_cursor"}, 0, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	err = connsdk.Harvest(context.Background(), requester(srv.URL), http.MethodGet, "list", url.Values{}, p, "data", 100, func(connsdk.Record) error {
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Harvest() error = %v, want nil (guard violations surface via Err(), not Harvest's return)", err)
+	}
+	guard, ok := p.(interface{ Err() error })
+	if !ok {
+		t.Fatalf("token_path cursor paginator %T does not implement Err() error", p)
+	}
+	if guardErr := guard.Err(); guardErr == nil {
+		t.Fatalf("Err() = nil, want a loop-guard error when the same cursor token repeats")
+	}
+}
+
 // --- cursor(last_record_field + stop_path) — stripe shape ---
 
 func TestNewPaginatorCursorLastRecordFieldStripeShape(t *testing.T) {

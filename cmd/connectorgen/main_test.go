@@ -71,6 +71,7 @@ func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {
 		{"unknown-filter-in-template", ruleInterpolationUnresolved},
 		{"skip-marker-missing-reason", ruleConformanceSkipReason},
 		{"skip-marker-missing-reason-bundle", ruleConformanceSkipReason},
+		{"default-type-mismatch", ruleDefaultTypeMismatch},
 	}
 
 	seenRules := map[string]bool{}
@@ -128,6 +129,57 @@ func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {
 	}
 	if len(seenRules) < 8 {
 		t.Fatalf("seeded corpus covers %d distinct rules, want >= 8: %v", len(seenRules), seenRules)
+	}
+}
+
+// --- gap-loop cycle-1 item 6 (REVIEW-A.md C3): validate-time hard FINDING
+// for a spec.json "default" that does not type-check against its own
+// declared "type" -------------------------------------------------------
+//
+// C3's materialization increment (engine/read.go's materializeConfigDefaults)
+// fills an absent config key from spec.json's "default" verbatim; a default
+// whose JSON type mismatches the property's declared type would silently
+// materialize a wrong-shaped config value (e.g. default: 100 landing in a
+// string-typed RuntimeConfig.Config, or a non-boolean string landing where a
+// boolean was declared) — a hard validate FINDING (not a warning: this is a
+// structural defect a bundle author can and must fix, unlike N2's
+// plausibility heuristic below).
+
+func TestValidate_DefaultTypeMismatchIsHardFinding(t *testing.T) {
+	fsys := singleBundleFS(t, "testdata/invalid", "default-type-mismatch")
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	var found *Finding
+	for i := range report.Findings {
+		if report.Findings[i].Connector == "default-type-mismatch" && report.Findings[i].Rule == ruleDefaultTypeMismatch {
+			found = &report.Findings[i]
+			break
+		}
+	}
+	if found == nil {
+		t.Fatalf("validateDir(default-type-mismatch): expected a %q finding, got %+v", ruleDefaultTypeMismatch, report.Findings)
+	}
+	if !strings.Contains(found.Message, "max_pages") {
+		t.Fatalf("finding message %q does not name the offending property max_pages", found.Message)
+	}
+}
+
+// TestValidate_WellTypedDefaultDoesNotTriggerMismatchRule proves a
+// well-typed default (base_url's string default in the same seeded bundle)
+// never itself triggers the rule — only the genuinely mismatched property
+// (max_pages) does.
+func TestValidate_WellTypedDefaultDoesNotTriggerMismatchRule(t *testing.T) {
+	fsys := singleBundleFS(t, "testdata/invalid", "default-type-mismatch")
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	for _, f := range report.Findings {
+		if f.Rule == ruleDefaultTypeMismatch && strings.Contains(f.Message, "base_url") {
+			t.Fatalf("well-typed base_url default incorrectly flagged: %+v", f)
+		}
 	}
 }
 

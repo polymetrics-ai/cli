@@ -170,18 +170,71 @@ type RateLimitSpec struct {
 
 // StreamSpec is one entry in streams.json's "streams" array.
 type StreamSpec struct {
-	Name           string             `json:"name"`
-	Method         string             `json:"method,omitempty"` // default GET
-	Path           string             `json:"path"`
-	Query          map[string]string  `json:"query,omitempty"`
-	Body           map[string]any     `json:"body,omitempty"` // POST-body streams
-	Records        RecordsSpec        `json:"records"`
-	Pagination     *PaginationSpec    `json:"pagination,omitempty"` // overrides base
-	Incremental    *IncrementalSpec   `json:"incremental,omitempty"`
-	ComputedFields map[string]string  `json:"computed_fields,omitempty"`
-	Projection     string             `json:"projection,omitempty"` // "schema" (default) | "passthrough"
-	SchemaRef      string             `json:"schema"`
-	Conformance    *ConformanceMarker `json:"conformance,omitempty"`
+	Name           string                `json:"name"`
+	Method         string                `json:"method,omitempty"` // default GET
+	Path           string                `json:"path"`
+	Query          map[string]QueryParam `json:"query,omitempty"`
+	Body           map[string]any        `json:"body,omitempty"` // POST-body streams
+	Records        RecordsSpec           `json:"records"`
+	Pagination     *PaginationSpec       `json:"pagination,omitempty"` // overrides base
+	Incremental    *IncrementalSpec      `json:"incremental,omitempty"`
+	ComputedFields map[string]string     `json:"computed_fields,omitempty"`
+	Projection     string                `json:"projection,omitempty"` // "schema" (default) | "passthrough"
+	SchemaRef      string                `json:"schema"`
+	Conformance    *ConformanceMarker    `json:"conformance,omitempty"`
+}
+
+// QueryParam is one stream.Query entry (gap-loop cycle-1 item 3,
+// REVIEW-B.md cross-cutting adjudication 2: the recurring
+// "optional/config-driven query param not expressible" gap — vitally
+// `status`, bitly `size`, calendly `count`/page_size, gmail's two filters,
+// searxng wave0 F6 — met the >=3 recurrence threshold). Declared in
+// streams.json either as a PLAIN STRING (today's exact dialect: `Template`
+// is that string, `OmitWhenAbsent` false, `Default` empty — a template
+// referencing an absent config/secrets key is ALWAYS a hard error, zero
+// migration risk for every existing bundle) or as an OBJECT
+// `{"template": "...", "omit_when_absent": true, "default": "..."}` — an
+// explicit opt-in dialect, never a blanket absent-key-falsy change to query
+// templating (which would silently convert a mistyped/missing REQUIRED key
+// from a fail-loud error into a silently-unfiltered request, the F4
+// fail-open class the engine deliberately rejects elsewhere).
+//
+// OmitWhenAbsent and Default are mutually usable but conceptually distinct:
+// OmitWhenAbsent means "leave the param off the request entirely when its
+// template resolves to an unresolved/absent key" (vitally's status filter);
+// Default means "send this literal instead of hard-erroring, when the
+// template's referenced key is absent" (calendly's page_size — closes the
+// same gap class as a legacy in-code default). If both are set,
+// OmitWhenAbsent takes priority conceptually but read.go's buildInitialQuery
+// checks Default first only when OmitWhenAbsent is false — see that
+// function's doc comment. Declaring both on the same entry is unusual
+// authoring (contradictory intents) but not itself a validate-time error;
+// bundle authors should pick one.
+type QueryParam struct {
+	Template       string `json:"template"`
+	OmitWhenAbsent bool   `json:"omit_when_absent,omitempty"`
+	Default        string `json:"default,omitempty"`
+}
+
+// UnmarshalJSON accepts EITHER a bare JSON string (sets Template, leaves
+// OmitWhenAbsent/Default at their zero values — today's exact dialect) OR a
+// JSON object matching QueryParam's fields verbatim. Any other JSON shape
+// (number, array, bool, null) is a decode error.
+func (q *QueryParam) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err == nil {
+		q.Template = s
+		q.OmitWhenAbsent = false
+		q.Default = ""
+		return nil
+	}
+	type alias QueryParam
+	var obj alias
+	if err := json.Unmarshal(data, &obj); err != nil {
+		return fmt.Errorf("query param: expected a string or an object with a \"template\" field: %w", err)
+	}
+	*q = QueryParam(obj)
+	return nil
 }
 
 // RecordsSpec describes how to extract records from a page body.

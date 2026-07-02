@@ -102,8 +102,13 @@ out-of-scope capability without faking it. The package has **no `init()`/`Regist
 ### Tier 2 — hooks (bundle + Go escape hatch, target ~8%)
 
 The bundle still declares every stream/write/schema; a single `internal/connectors/hooks/<name>/
-hooks.go` (+ `hooks_test.go`) attaches Go at named extension points only, hard-capped at ~300
-lines (design §F.1) — past that, escalate to Tier 3. Five interfaces
+hooks.go` (+ `hooks_test.go`) attaches Go at named extension points only. Line-cap wording (gap-loop
+cycle-1 REVIEW-A.md §C1 — the prior "~300, hard-capped" phrasing was self-contradictory, a tilde is
+not a hard cap): **~300 lines is a soft target; exceeding it requires a self-reported justification
+in the connector's trace/deviation ledger (name which mandated interfaces/shapes account for the
+size, e.g. github's RS256 JWT exchange + 4 compound writes, monday's 2 pagination shapes + 5 record
+mappers + GraphQL-errors-in-HTTP-200 envelope); 400 lines is a hard ceiling; exceeding 400, OR
+needing a 3rd hook interface regardless of line count, escalates to Tier 3.** Five interfaces
 (`internal/connectors/engine/hooks.go`), a hook set implements any subset:
 
 | Interface | Signature | Use for |
@@ -185,7 +190,12 @@ chain overrides it — general `Interpolate`/header interpolation do NOT default
 `[]any` — with `<sep>`; a non-array value is a hard error, not a silent stringify; the separator is
 everything after the first `:`, so `join:, ` or a multi-character separator both work
 unambiguously, but a literal `|` cannot be the separator since the outer chain-split takes
-precedence). Any resolved value destined for a header (`InterpolateHeader`) or that itself contains
+precedence), `last_path_segment` (gap-loop cycle-1 item 4, REVIEW-B.md finding 1/adjudication 1:
+returns the final non-empty `/`-delimited segment of the resolved value — a trailing slash is
+ignored, a value with no `/` at all passes through unchanged, never errors — the sanctioned way to
+derive a HAL/URI-keyed API's trailing-segment id, e.g. `"id": "{{ record.uri | last_path_segment
+}}"` for calendly's `idFromURI(uri)` legacy convention; use this instead of a RecordHook for any
+URI-shaped derived-id field). Any resolved value destined for a header (`InterpolateHeader`) or that itself contains
 `\r`/`\n` is rejected outright as a header/injection guard (THREAT-MODEL §2) — this check runs on
 the **pre-filter** value for every interpolation call, not just headers. An absent `config.*`/
 `secrets.*` key is a **hard error** naming the key and namespace in ordinary `Interpolate`/
@@ -217,6 +227,29 @@ validate-time error. `connectorgen validate` validates EVERY templated `AuthSpec
 not just `token`/`value`/`when` but also `username`/`password`/`token_url`/`client_id`/
 `client_secret`/`scopes` — via `engine.ResolveCheckAuthSpec(spec, specKeys)`.
 
+**Dual-auth ordering is load-bearing — the golden pattern** (gap-loop cycle-1 item 7, lifting
+zendesk-support's ledger item 3 per REVIEW-B.md's fan-out-readiness note): `base.auth` is evaluated
+as a **first-match-wins candidate list** (`selectAuth`), so when legacy accepts more than one
+credential shape with a defined precedence (e.g. an OAuth bearer token taking priority over
+Basic-auth email+API-token when BOTH secrets happen to be configured), the candidate list's
+DECLARATION ORDER must reproduce that exact precedence — reordering silently changes which
+credential wins when both are present, an accepted-input-behavior change the §5 meta-rule forbids.
+zendesk-support's golden shape:
+
+```json
+"auth": [
+  { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+  { "mode": "basic", "username": "{{ secrets.email }}/token", "password": "{{ secrets.api_token }}",
+    "when": "{{ secrets.api_token }}" }
+]
+```
+
+— bearer is declared FIRST (matches legacy's access-token-first precedence under its own
+first-match-wins auth selection), Basic is the fallback candidate, and the both-secrets-present
+corner case is explicitly parity-tested (not just each candidate in isolation) to prove the ordering
+itself, not just that each mode individually works. Any dual/multi-candidate `auth` list must carry
+an equivalent both-present parity test asserting which candidate actually wins.
+
 **Pagination — 6 types + none** (`bundle.go`'s `PaginationSpec`, `paginate.go`'s `newPaginator`):
 
 | `type` | Fields used | When to use |
@@ -225,9 +258,15 @@ not just `token`/`value`/`when` but also `username`/`password`/`token_url`/`clie
 | `link_header` | — | RFC 5988 `Link: <url>; rel="next"` header (GitHub-style) |
 | `page_number` | `page_param`, `size_param` (empty string = never send a size param), `start_page`, `page_size` | 1-based/N-based page-number APIs; short-page stop when a page returns fewer than `page_size` records |
 | `offset_limit` | `limit_param`, `offset_param`, `page_size` | offset+limit APIs |
-| `cursor` (`token_path`) | `cursor_param`, `token_path` | next-page token read from the response body |
+| `cursor` (`token_path`) | `cursor_param`, `token_path`, optional `stop_path` | next-page token read from the response body; optional `stop_path` (gap-loop cycle-1 item 5) names a body path whose falsy value stops pagination REGARDLESS of whether the token itself is still non-empty (Zendesk's `meta.has_more`: its own docs warn the cursor properties may be populated even when `has_more` is false) — a spec that never sets `stop_path` keeps the exact prior stop-on-empty-token-only behavior; also loop-guards against the same token repeating twice in a row |
 | `cursor` (`last_record_field`+`stop_path`) | `cursor_param`, `last_record_field`, `stop_path` | Stripe-style `starting_after`/`has_more`: next cursor = a named field on the **last record** of the current page; `stop_path` names a body path whose falsy value stops (its absence, or an empty/malformed page, is defensive "never loop forever") |
 | `next_url` | `next_url_path`, `allow_cross_host` | absolute next-page URL read from the body (aircall-style); same-host SSRF guard by default (THREAT-MODEL §3) — set `allow_cross_host: true` to opt out; also loop-guards against requesting the same URL twice |
+
+A `stop_path` body value (both cursor variants) is read via `connsdk.StringAt`; ANY value other than
+the literal string `"true"` (a JSON `false`, a missing path, or a read error) is falsy and stops
+pagination — this is the exact rule to use for Zendesk-shaped `has_more` boolean stop signals: any
+API whose real stop signal is a boolean, not just Stripe's shape, should declare `stop_path` on
+whichever cursor variant it uses.
 
 `cursor`'s `token_path` and `last_record_field` are **mutually exclusive**; declaring both, or
 neither, is a **read-time** error, not a load-time one — `paginate.go`'s `newPaginator` (which
@@ -246,16 +285,50 @@ verbatim), `unix_seconds`, `date` (`2006-01-02`), `github_date_range` (`>=<value
 lower-bound-only GitHub search qualifier).
 
 **`computed_fields`** (`streams.json` per-stream): a map of output-field-name → template resolved
-against the **raw** (pre-projection) record, so it can rename a field (`published_date` from
-`{{ record.publishedDate }}`), reach into nested JSON (`{{ record.user.login }}`), join an array
-(`{{ record.engines | join:, }}`), or inject a **static literal** — a value with no `{{ }}` markers
-at all (e.g. `"stream": "search"`) passes through `Interpolate` verbatim, since a template with no
-markers is a no-op by construction. This is the sanctioned way to stamp a per-stream constant onto
-every emitted record (e.g. "which stream did this come from", matching a legacy connector's own
-derived marker field — see searxng's `stream` field, §5). A computed field whose source path is
-absent on a given record is silently skipped for that record (not an error) — common for
-optional/differently-shaped nested fields across record variants (issues vs PRs); this only applies
-to `record.*`-templated fields, not static literals (which never fail to resolve).
+against the **raw** (pre-projection) record AND `config.*` (Config only — **never** `secrets.*`, see
+below), so it can rename a field (`published_date` from `{{ record.publishedDate }}`), reach into
+nested JSON (`{{ record.user.login }}`), join an array (`{{ record.engines | join:, }}`), stamp a
+config-scoped marker (`{{ config.owner }}/{{ config.repo }}`, below), or inject a **static literal**
+— a value with no `{{ }}` markers at all (e.g. `"stream": "search"`) passes through `Interpolate`
+verbatim, since a template with no markers is a no-op by construction. This is the sanctioned way to
+stamp a per-stream constant onto every emitted record (e.g. "which stream did this come from",
+matching a legacy connector's own derived marker field — see searxng's `stream` field, §5). A
+computed field whose source path is absent on a given record is silently skipped for that record
+(not an error) — common for optional/differently-shaped nested fields across record variants (issues
+vs PRs); this only applies to `record.*`-templated fields, not static literals (which never fail to
+resolve).
+
+**Typed extraction — bare `{{ record.<path> }}` copies the raw typed value** (gap-loop cycle-1 item
+1, REVIEW-A.md adjudication A1: chargebee/gmail/github all had to widen a real integer/boolean
+schema type to `["string", ...]` because `computed_fields`' `Interpolate` always stringified its
+result — a JSON type change is an emitted-record-DATA change, not cosmetic, since every warehouse
+destination derives column types from it; this recurred ≥3 times in one wave, meeting the §6
+recurrence threshold). **When a `computed_fields` entry is a SINGLE bare `{{ record.<path> }}`
+reference — no filter stage, no surrounding literal text, no second `{{ }}` segment — the engine
+copies the RAW (pre-stringify) JSON value found at that record path straight into the projected
+record, preserving its native type** (number/bool/null/object/array survive; schema types should
+declare the field's REAL wire type, e.g. `"integer"`/`"boolean"`, never a widened
+`["integer","string"]` union). Any other shape — a filter chain (`{{ record.tags | join:, }}`), a
+mixed template with literal text or more than one reference (`"count={{ record.count }}"`), or a
+static literal — is UNCHANGED and still produces a STRING via `Interpolate`, exactly as before. This
+is what makes the increment backward compatible: only the bare-single-reference shape gets typed
+extraction; every existing `join:`/rename/marker-stamp computed_fields keeps its current string
+output untouched. When porting a pilot's stringify-workaround (chargebee's ~30 fields, gmail's 4,
+github's `user_id`/`author_id`/`committer_id`/`workflow_run_id`), re-tighten the schema back to the
+real type and flip the parity lock-in test from string-equality to native-type equality — do not
+leave the widened union in place now that typed extraction exists.
+
+**`config.*` in `computed_fields` — Config only, Secrets is EXCLUDED by design** (gap-loop cycle-1
+item 2, REVIEW-A.md adjudication A3/`ENGINE_GAP` G0): before this increment, `computed_fields`
+templates were resolved against the record ONLY, so a legacy connector's config-derived per-record
+marker field (github's `repository: "{{ config.owner }}/{{ config.repo }}"`, stamped on every record
+of every stream) could not be expressed at all short of a 3rd Tier-2 hook interface (forbidden — see
+§1's Tier-2 cap). `config.*` is now resolvable inside `computed_fields` exactly like every other
+templating surface. **`secrets.*` is deliberately NEVER wired into this Vars environment** — a
+computed field must never be able to copy a secret value into emitted record data (a record is what
+flows to a destination warehouse; a secret leaking there is a credential-exfiltration path). A
+`{{ secrets.* }}` reference inside a `computed_fields` template therefore still hard-errors exactly
+as it always has (unresolved key) — this is intentional and permanent, not a gap to close later.
 
 **Conditional headers — omission semantics are namespace-scoped, not blanket-tolerant**
 (`read.go`'s `resolveHeaders`/`classifyHeaderResolutionError`): a header template resolving to an
@@ -273,15 +346,39 @@ unresolved key is handled by a decision table, not a single blanket rule:
 - Any other interpolation failure (CRLF, unknown namespace/filter) always propagates as a hard
   error regardless of namespace.
 
-`stream.Query` templating (per-request query params) has **no such omission tolerance at all** —
-every `{{ }}` reference in a `query` map value is resolved unconditionally via `Interpolate`, so an
-absent optional `config.*` key referenced there is always a hard error. This is why a query-driven
-"optional passthrough filter" (e.g. searxng's would-be `categories`/`language`/`time_range`/etc.)
-cannot be expressed today without guaranteeing the caller always supplies a value — do not declare
-such a `spec.json` property unless the query template can actually tolerate its absence (currently:
-never, for `query`; `auth`'s `when` is the only templating surface with absent-key-falsy
-tolerance). A `spec.json` property that no template anywhere in the bundle ever consumes is dead
-config — don't declare it (F6, REVIEW.md).
+**`stream.Query` — an explicit opt-in optional-query dialect** (gap-loop cycle-1 item 3, REVIEW-B.md
+cross-cutting adjudication 2: this recurring gap — vitally `status`, bitly `page_size`/`max_pages`,
+calendly's `count`/page_size workaround, zendesk's dead keys, gmail's two filters, searxng wave0
+F6 — hit the ≥3-occurrence threshold several times over). Each `streams.json` `query` entry
+(`engine.QueryParam`) is declared EITHER as a plain JSON string (today's exact pre-existing
+semantics: the string IS the template, resolved unconditionally via `Interpolate`; an absent
+referenced `config.*`/`secrets.*` key is **always a hard error**, zero migration risk for every
+existing bundle) OR as an object:
+
+```json
+"query": {
+  "page[size]": "100",
+  "status":   { "template": "{{ config.status }}", "omit_when_absent": true },
+  "count":    { "template": "{{ config.page_size }}", "default": "100" }
+}
+```
+
+`omit_when_absent: true` means the param is left off the request ENTIRELY when its template hits an
+unresolved `config.*`/`secrets.*` key (vitally's `status`, bitly's `size` config override) —
+**scoped to config/secrets absence only**: any OTHER interpolation failure (CRLF injection, an
+unknown filter/namespace) still hard-errors regardless. `default` sends that literal instead of
+erroring when the referenced key is absent (closes calendly's `page_size`-defaults-to-100 gap and
+the same class of legacy-default-base-URL-style shape at the per-param level — see also `default`
+materialization at the config layer, below). Declaring both is unusual (contradictory intents); pick
+one. **This is deliberately NOT a blanket absent-key-falsy change to query templating** — a plain
+string entry keeps hard-erroring on a typo'd/missing REQUIRED key exactly as before; only an entry
+that explicitly opts into the object form gets any tolerance at all, so a mis-declared required
+query param can never silently degrade into an unfiltered request (the F4 fail-open class the engine
+deliberately rejects elsewhere). Static validation (`connectorgen validate`'s
+`checkInterpolations`) still resolves EVERY entry's `template` field, string or object — the
+referenced key must still be DECLARED in `spec.json`'s properties either way. A `spec.json` property
+that no template anywhere in the bundle ever consumes is still dead config — don't declare it (F6,
+REVIEW.md).
 
 **`client_filtered`** (`incremental.client_filtered: true`): for APIs with no server-side
 incremental filter parameter, the engine drops already-seen records client-side by comparing each
@@ -295,6 +392,27 @@ applied after projection regardless of mode.
 **`MaxPages` hard cap**: see the pagination table above; this is the only page-count bound the
 engine enforces on the declarative read path (a short/empty final page from the paginator is the
 *other* stop signal, and both must be considered independently when reasoning about termination).
+
+**`spec.json` `"default"` values ARE now materialized into `RuntimeConfig.Config`** (gap-loop
+cycle-1 item 6, REVIEW-A.md C3 — RESOLVED: previously `default` was accepted-but-only-preserved,
+never read back out anywhere, so EVERY migrated connector hard-errored on a config shape legacy
+accepted, e.g. an unset `base_url` when legacy derived `https://api.github.com`/
+`https://api.monday.com/v2`/etc. in code). `engine.Check`/`engine.Read` both call
+`materializeConfigDefaults` before any template resolution: for every `spec.json` property that
+declares a `"default"` AND is genuinely ABSENT from the caller's `RuntimeConfig.Config` (a key
+already present — even as an explicit empty string — is NEVER overridden), the default's JSON value
+is stringified and filled in. This is the single, uniform mechanism for every legacy base-URL
+default: `base_url: {{ config.base_url }}` + `"default": "https://api.github.com"` on the `base_url`
+property now round-trips exactly like legacy's in-code fallback, with no template-level special
+case needed. For a DERIVED default (sentry's `hostname`-based URL, chargebee's `site`-based URL —
+the base URL is a function of another config value, not a fixed literal) this mechanism alone is not
+enough; either require `base_url` and drop the derivation (documented config-surface narrowing,
+ledgered), or express the derivation as a `computed_fields`-style template if/when the dialect grows
+one for base-URL construction — do not invent ad hoc Go for it (Tier-2 escalation only if genuinely
+needed). **Validate rule**: `connectorgen validate`'s `default_type_mismatch` rule hard-fails a
+`spec.json` property whose `"default"` value's JSON type does not match its own declared `"type"`
+(e.g. `"type":"integer","default":"not-a-number"`) — a mismatched default would otherwise silently
+materialize a wrong-shaped config value into every read/check.
 
 **`metadata.json`'s `rate_limit` is informational-only, NEVER enforced** (F6, REVIEW.md):
 `Metadata.RateLimit.RequestsPerMinute` documents a connector's published rate limit for operator
@@ -337,6 +455,22 @@ per-record request error, or ctx cancellation), the loop stops immediately;
   `fixtures/streams/customers/{page_1,page_2}.json` in the stripe golden: page 1 sets
   `has_more: true` and 2 records; page 2's request carries the expected `starting_after` query
   param and sets `has_more: false`.
+- **Sanctioned exception — `next_url` pagination MAY ship a single-page conformance fixture**
+  (gap-loop cycle-1 item 7, formalizing bitly's REVIEW-B.md finding 3 / fan-out-readiness item 4,
+  and calendly's identical accepted shape for the same reason): a `next_url` stream's next-page URL
+  is the REPLAY SERVER'S OWN address, unknown until the harness picks a port at runtime — a static
+  fixture file literally cannot embed the correct absolute URL for a second page. This is a genuine
+  harness limitation, not a fixture-authoring shortcut: ship a single-page fixture for the
+  `next_url` stream (satisfies `fixtures_present`/`read_fixture_nonempty`; `pagination_terminates`
+  exercises a DIFFERENT, non-paginated stream in the same bundle instead — see bitly's
+  `organizations` stream), and prove real 2-page `next_url` correctness with a LIVE
+  `paritytest/<name>` test that drives an actual `httptest.Server` and asserts the second page is
+  requested with the expected query/params (bitly's
+  `TestParityBitly_BitlinksStreamPaginates`, calendly's
+  `TestParityCalendly_ScheduledEventsTwoPagePagination`). Do not invent a fake absolute URL in the
+  fixture to work around this (it would never match the actual replay server's origin and would
+  either fail the SSRF guard or require weakening it) — the single-page-fixture-plus-live-parity-test
+  pattern is the correct, honest representation, not a corner cut.
 - **Fixtures use the API's REAL wire shape for every field, including cursor fields — no
   string-ification workaround, ever** (B2, REVIEW.md, now RESOLVED). A numeric cursor field
   (Stripe's `created` is a Unix-seconds integer) is committed as a bare JSON NUMBER in
@@ -458,6 +592,21 @@ verbatim `Definition().Spec` (F5); `AuthHook`'s real caller context (F8); numeri
 stdout/stderr/report-JSON scan and JSON-escaped-secret detection (M2/m4); `connectorgen validate`'s
 `engine.ResolveCheckAuthSpec` wiring. When you hit any of these shapes again, rely on the
 fixed/wired behavior directly — do not re-document as an open gap or re-introduce a workaround.
+
+The wave1-pilot gap-loop cycle-1 engine mini-wave (`.planning/phases/wave1-pilot/traces/
+gaploop-s1-ledger.md`) closed six more, per REVIEW-A.md adjudications A1/A3/C3 and REVIEW-B.md
+cross-cutting adjudications 1-2 + zendesk finding 2: typed `computed_fields` extraction for a bare
+`{{ record.<path> }}` reference (A1 — see the typed-extraction paragraph above); `config.*` (never
+`secrets.*`) wired into `computed_fields`' Vars (A3/`ENGINE_GAP` G0); the opt-in optional-query
+dialect on `stream.Query` (`engine.QueryParam`, REVIEW-B.md adjudication 2); the `last_path_segment`
+interpolation filter (REVIEW-B.md adjudication 1); `stop_path` + a loop guard on the token_path
+cursor paginator (`tokenPathCursor`, zendesk finding 2); and spec.json `"default"` materialization
+into `RuntimeConfig.Config` at `Read`/`Check` time (C3), plus its `default_type_mismatch` validate
+rule. Pilots carrying the pre-increment workarounds for any of these (chargebee/gmail/github's
+stringify-widened schemas for A1; calendly's dropped `id` for the filter; zendesk-support's invented
+incremental filter and unguarded `has_more` for the paginator; sentry/chargebee's dead
+hostname/site config for C3) are Step-2 (pilot repair wave) scope — re-tighten those bundles to use
+the now-available engine mechanism instead of re-deriving the workaround.
 
 ## 6. Escape-hatch decision tree
 

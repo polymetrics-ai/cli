@@ -40,6 +40,8 @@ func ReadWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 		return err
 	}
 
+	req.Config = materializeConfigDefaults(b, req.Config)
+
 	rt, err := newRuntime(ctx, b, req.Config, h)
 	if err != nil {
 		return err
@@ -164,7 +166,7 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			}
 
 			projected := projectRecord(raw, schema, stream.Projection)
-			if err := applyComputedFields(projected, raw, stream.ComputedFields); err != nil {
+			if err := applyComputedFields(projected, raw, req.Config.Config, stream.ComputedFields); err != nil {
 				return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 			}
 
@@ -210,6 +212,47 @@ func findStream(b Bundle, name string) (StreamSpec, error) {
 		return b.Streams[0], nil
 	}
 	return StreamSpec{}, fmt.Errorf("engine: stream %q not found in bundle %q", name, b.Name)
+}
+
+// materializeConfigDefaults returns cfg with every spec.json-declared
+// "default" value filled in for a key genuinely ABSENT from cfg.Config (gap-
+// loop cycle-1 item 6, REVIEW-A.md C3): the single mechanism for every
+// legacy connector's in-code base-URL default/derivation (github
+// api.github.com, gmail base+token URLs, monday api.monday.com/v2,
+// chargebee/sentry site/hostname-derived, stripe's own base_url default) —
+// before this, EVERY migrated connector hard-errored on a config shape
+// legacy accepted (an unset base_url), since the engine never read
+// spec.json's "default" annotation back out anywhere.
+//
+// A key already present in cfg.Config (even as an explicit empty string —
+// "explicitly set to empty" is a caller decision, not absence) is NEVER
+// overridden: defaults only fill genuinely missing keys, exactly like every
+// other "default" semantics (JSON Schema's own definition, and legacy's own
+// in-code `if cfg.BaseURL == "" { cfg.BaseURL = defaultBaseURL }` pattern —
+// though note legacy's pattern typically treated an EMPTY string the same as
+// absent, which this narrower "only when the key itself is missing" rule
+// deliberately does not replicate; an explicit empty-string config value is
+// preserved as-is rather than silently defaulted, since RuntimeConfig.Config
+// is a plain map with no separate "was this key set" bit beyond key presence).
+// b.Spec == nil (no compiled spec.json at all, e.g. many ad hoc test
+// bundles) is a no-op — cfg is returned unchanged.
+func materializeConfigDefaults(b Bundle, cfg connectors.RuntimeConfig) connectors.RuntimeConfig {
+	if b.Spec == nil {
+		return cfg
+	}
+	defaults := b.Spec.Defaults()
+	if len(defaults) == 0 {
+		return cfg
+	}
+	merged := make(map[string]string, len(defaults)+len(cfg.Config))
+	for k, v := range defaults {
+		merged[k] = v
+	}
+	for k, v := range cfg.Config {
+		merged[k] = v
+	}
+	cfg.Config = merged
+	return cfg
 }
 
 // newRuntime builds the shared *Runtime (Requester + Bundle + Config) used
@@ -352,12 +395,32 @@ func requestVars(cfg connectors.RuntimeConfig, record map[string]any, cursor str
 // buildInitialQuery resolves stream.Query (static, templated values) plus
 // the incremental lower bound (state cursor, falling back to
 // start_config_key) formatted per param_format.
+//
+// Per-entry dialect (gap-loop item 3): a plain-string-sourced QueryParam
+// (OmitWhenAbsent false, Default "") keeps the exact pre-existing semantics
+// — Interpolate errors hard on any unresolved config/secrets key, with no
+// tolerance at all. An object-form entry gets exactly one of two
+// resolutions when its template hits an unresolved config/secrets key:
+// OmitWhenAbsent true means the param is left off entirely (no error);
+// otherwise a non-empty Default is sent verbatim instead of erroring. An
+// object-form entry with NEITHER set behaves identically to a plain string
+// entry (hard error on unresolved key) — declaring the object shape alone
+// changes nothing.
 func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Values, error) {
 	q := url.Values{}
 	vars := requestVars(req.Config, nil, "")
-	for k, tmpl := range stream.Query {
-		val, err := Interpolate(tmpl, vars)
+	for k, param := range stream.Query {
+		val, err := Interpolate(param.Template, vars)
 		if err != nil {
+			if isUnresolvedConfigOrSecret(err) {
+				switch {
+				case param.OmitWhenAbsent:
+					continue
+				case param.Default != "":
+					q.Set(k, param.Default)
+					continue
+				}
+			}
 			return nil, fmt.Errorf("engine: resolve query %q: %w", k, err)
 		}
 		q.Set(k, val)
@@ -556,12 +619,49 @@ func projectRecord(raw map[string]any, schema *StreamSchema, projection string) 
 // result into projected. A missing intermediate path resolves to an absent
 // (nil-safe) value rather than erroring, matching interpolate.go's
 // resolveRecordPath semantics for record. references.
-func applyComputedFields(projected, raw map[string]any, computed map[string]string) error {
+//
+// cfg is the runtime's Config map (design-adjudication A3/G0, REVIEW-A.md):
+// wired into the template Vars so a computed field can stamp a config-scoped
+// marker onto every record (e.g. github's dropped `repository` field —
+// "{{ config.owner }}/{{ config.repo }}"). Secrets is deliberately NEVER
+// passed here (threat-model line, A3): a computed field must never be able
+// to copy a secret value into emitted record data, so a `{{ secrets.* }}`
+// reference in a computed_fields template continues to hard-error exactly as
+// before (resolveRefValue's "secrets" case looks up vars.Secrets, which is
+// always nil/empty in this Vars — it therefore always misses and returns the
+// same unresolved-key error a template author would see if they mistakenly
+// tried it).
+//
+// Typed extraction (adjudication A1, REVIEW-A.md): when a computed_fields
+// template is a SINGLE bare `{{ record.<path> }}` reference — no filter
+// stage, no surrounding literal text, no second `{{ }}` segment — the RAW
+// (pre-stringify) JSON value found at that record path is copied directly
+// into the projected record, preserving its native type (number/bool/null/
+// object/array), instead of being forced through Interpolate's
+// always-string return type. Any other shape (a filter chain, a mixed
+// template with literal text or multiple references, a static literal) is
+// UNCHANGED and keeps producing a string via Interpolate, exactly as
+// before — this is what makes the increment backward compatible with every
+// existing bundle's `join:`/rename/marker-stamp computed_fields.
+func applyComputedFields(projected, raw map[string]any, cfg map[string]string, computed map[string]string) error {
 	if len(computed) == 0 {
 		return nil
 	}
+	vars := Vars{Record: raw, Config: cfg}
 	for name, tmpl := range computed {
-		val, err := Interpolate(tmpl, Vars{Record: raw})
+		if path, ok := bareRecordPathReference(tmpl); ok {
+			val, err := resolveRecordPathValue(raw, strings.Split(path, "."))
+			if err != nil {
+				if isUnresolvedRecordPath(err) {
+					continue
+				}
+				return fmt.Errorf("engine: computed_fields %q: %w", name, err)
+			}
+			projected[name] = val
+			continue
+		}
+
+		val, err := Interpolate(tmpl, vars)
 		if err != nil {
 			// A computed field whose source path is absent is intentionally
 			// left out of the projected record (not an error): dotted record
@@ -578,6 +678,36 @@ func applyComputedFields(projected, raw map[string]any, computed map[string]stri
 	return nil
 }
 
+// bareRecordPathReference reports whether tmpl is EXACTLY one `{{ ... }}`
+// template covering the whole string (no surrounding literal text, no second
+// `{{ }}` occurrence) whose inner expression is a plain `record.<path>`
+// reference with NO filter stage (`|`). When it is, ok is true and path is
+// the dotted path after "record." (e.g. "meta.count"). A static literal (no
+// `{{ }}` at all), a `cursor`/`config.*`/`secrets.*` bare reference, a
+// filtered reference, or any mixed/multi-part template returns ok=false so
+// the caller falls through to ordinary string Interpolate.
+func bareRecordPathReference(tmpl string) (path string, ok bool) {
+	matches := templatePattern.FindAllStringSubmatchIndex(tmpl, -1)
+	if len(matches) != 1 {
+		return "", false
+	}
+	m := matches[0]
+	if m[0] != 0 || m[1] != len(tmpl) {
+		// The single {{ }} match doesn't span the entire template — there is
+		// surrounding literal text (a mixed template like "count={{ record.count }}").
+		return "", false
+	}
+	inner := strings.TrimSpace(tmpl[m[2]:m[3]])
+	if strings.Contains(inner, "|") {
+		return "", false
+	}
+	const prefix = "record."
+	if !strings.HasPrefix(inner, prefix) {
+		return "", false
+	}
+	return strings.TrimPrefix(inner, prefix), true
+}
+
 // isUnresolvedRecordPath reports whether err is the typed unresolvedKeyError
 // with Namespace "record" (F4/REVIEW.md: replaced brittle
 // strings.Contains(err.Error(), ...) classification with errors.As against
@@ -585,6 +715,20 @@ func applyComputedFields(projected, raw map[string]any, computed map[string]stri
 func isUnresolvedRecordPath(err error) bool {
 	var unresolved *unresolvedKeyError
 	return errors.As(err, &unresolved) && unresolved.Namespace == "record"
+}
+
+// isUnresolvedConfigOrSecret reports whether err is the typed
+// unresolvedKeyError for the "config" or "secrets" namespace (gap-loop item
+// 3: buildInitialQuery's object-form QueryParam tolerance is scoped to an
+// absent config/secrets key specifically — any OTHER interpolation failure,
+// e.g. CRLF injection or an unknown filter/namespace, still propagates as a
+// hard error even for an omit_when_absent/default-bearing entry).
+func isUnresolvedConfigOrSecret(err error) bool {
+	var unresolved *unresolvedKeyError
+	if !errors.As(err, &unresolved) {
+		return false
+	}
+	return unresolved.Namespace == "config" || unresolved.Namespace == "secrets"
 }
 
 func methodOrDefault(method string) string {
@@ -688,6 +832,8 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if err := ctx.Err(); err != nil {
 		return err
 	}
+
+	cfg = materializeConfigDefaults(b, cfg)
 
 	rt, err := newRuntime(ctx, b, cfg, h)
 	if err != nil {

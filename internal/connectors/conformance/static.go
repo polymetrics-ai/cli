@@ -186,7 +186,13 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 			return fmt.Errorf("stream %q: %w", s.Name, err)
 		}
 		for _, v := range s.Query {
-			if err := check(v); err != nil {
+			// engine.StreamSpec.Query values are engine.QueryParam (gap-loop
+			// item 3: optional-query dialect) as of this change, not bare
+			// strings; check() only ever needed the template text, which is
+			// QueryParam.Template regardless of whether the JSON source was a
+			// plain string or the new {template, omit_when_absent, default}
+			// object form.
+			if err := check(v.Template); err != nil {
 				return fmt.Errorf("stream %q: %w", s.Name, err)
 			}
 		}

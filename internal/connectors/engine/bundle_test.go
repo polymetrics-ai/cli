@@ -454,3 +454,64 @@ func TestBundleLoadMetadataWithNoConformanceMarkerIsNil(t *testing.T) {
 		t.Fatalf("Metadata.Conformance = %+v, want nil for metadata with no conformance block", b.Metadata.Conformance)
 	}
 }
+
+// streamsWithOptionalQueryDialect exercises the gap-loop item-3 optional-query
+// dialect (REVIEW-B.md cross-cutting adjudication 2): a stream.Query entry
+// may be either a plain string (today's exact hard-error semantics,
+// "page[size]") or an object {template, omit_when_absent, default}.
+const streamsWithOptionalQueryDialect = `{
+	"base": { "url": "{{ config.base_url }}" },
+	"streams": [
+		{
+			"name": "widgets",
+			"path": "/widgets",
+			"records": { "path": "data" },
+			"schema": "schemas/widgets.json",
+			"query": {
+				"page[size]": "100",
+				"status": { "template": "{{ config.status }}", "omit_when_absent": true },
+				"count": { "template": "{{ config.page_size }}", "default": "100" }
+			}
+		}
+	]
+}`
+
+// TestBundleLoadParsesOptionalQueryDialect proves streams.json's per-entry
+// query dialect round-trips through the loader: a plain string entry stays a
+// hard-required template; an object entry carries its template/
+// omit_when_absent/default fields distinctly.
+func TestBundleLoadParsesOptionalQueryDialect(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(streamsWithOptionalQueryDialect)}
+	fsys["acme/spec.json"] = &fstest.MapFile{Data: []byte(`{
+		"$schema": "http://json-schema.org/draft-07/schema#",
+		"type": "object",
+		"required": ["base_url"],
+		"properties": {
+			"base_url": { "type": "string" },
+			"status": { "type": "string" },
+			"page_size": { "type": "string" }
+		}
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if len(b.Streams) != 1 {
+		t.Fatalf("Streams = %+v, want 1", b.Streams)
+	}
+	q := b.Streams[0].Query
+	staticEntry, ok := q["page[size]"]
+	if !ok || staticEntry.Template != "100" || staticEntry.OmitWhenAbsent {
+		t.Fatalf("query[page[size]] = %+v, want plain string entry Template=100 OmitWhenAbsent=false", staticEntry)
+	}
+	statusEntry, ok := q["status"]
+	if !ok || statusEntry.Template != "{{ config.status }}" || !statusEntry.OmitWhenAbsent {
+		t.Fatalf("query[status] = %+v, want Template={{ config.status }} OmitWhenAbsent=true", statusEntry)
+	}
+	countEntry, ok := q["count"]
+	if !ok || countEntry.Template != "{{ config.page_size }}" || countEntry.Default != "100" {
+		t.Fatalf("query[count] = %+v, want Template={{ config.page_size }} Default=100", countEntry)
+	}
+}

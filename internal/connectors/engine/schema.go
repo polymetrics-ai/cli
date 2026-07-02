@@ -36,6 +36,15 @@ type schemaNode struct {
 	secret      bool     // x-secret
 	primaryKey  []string // x-primary-key (only meaningful at the root)
 	cursorField string   // x-cursor-field (only meaningful at the root)
+
+	// defaultVal/hasDefault capture the "default" annotation keyword's raw
+	// decoded value (gap-loop cycle-1 item 6, REVIEW-A.md C3): "default" was
+	// previously accepted-but-only-preserved (never read back out anywhere);
+	// this is now consumed by Defaults() so the engine can materialize a
+	// spec.json property's default into RuntimeConfig.Config when a caller's
+	// config omits that key entirely.
+	defaultVal any
+	hasDefault bool
 }
 
 // annotationKeywords are accepted but only preserved, never enforced.
@@ -169,6 +178,17 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		}
 		n.minProperties = mp
 		n.hasMinProperties = true
+	}
+
+	if raw, ok := m["default"]; ok {
+		var def any
+		dec := json.NewDecoder(strings.NewReader(string(raw)))
+		dec.UseNumber()
+		if err := dec.Decode(&def); err != nil {
+			return nil, fmt.Errorf("compile schema: default: %w", err)
+		}
+		n.defaultVal = def
+		n.hasDefault = true
 	}
 
 	if raw, ok := m["additionalProperties"]; ok {
@@ -450,6 +470,61 @@ func (s *Schema) Properties() []string {
 	out := make([]string, 0, len(s.node.properties))
 	for name := range s.node.properties {
 		out = append(out, name)
+	}
+	sort.Strings(out)
+	return out
+}
+
+// Defaults returns the top-level property-name -> stringified-default map
+// for every root property that declares a JSON Schema "default" annotation
+// (gap-loop cycle-1 item 6, REVIEW-A.md C3). The stored default's raw
+// decoded JSON value is stringified via the same rules
+// engine/interpolate.go's stringify() uses for every other config-shaped
+// value (a JSON string returns verbatim; a number/bool/other value is
+// formatted via fmt.Sprint) so a materialized default slots into
+// RuntimeConfig.Config — a map[string]string — exactly like any other
+// caller-supplied config value would. A property with no "default" key at
+// all is simply absent from the returned map (never a zero-value entry).
+func (s *Schema) Defaults() map[string]string {
+	if s.node.properties == nil {
+		return nil
+	}
+	var out map[string]string
+	for name, child := range s.node.properties {
+		if !child.hasDefault {
+			continue
+		}
+		if out == nil {
+			out = make(map[string]string, len(s.node.properties))
+		}
+		out[name] = stringify(child.defaultVal)
+	}
+	return out
+}
+
+// DefaultTypeMismatches returns the sorted list of root property names whose
+// declared "default" JSON value does NOT type-check against that same
+// property's declared "type" (gap-loop cycle-1 item 6 validate rule,
+// REVIEW-A.md C3: "default must type-check"). Used by
+// `cmd/connectorgen validate` to hard-fail a spec.json whose default would
+// silently materialize a value of the wrong shape into config (e.g. a
+// default: 100 on a "type":"string" property, or a default:"yes" on a
+// "type":"boolean" property) — connectorgen's own compiled *Schema already
+// enforces "properties" structurally, so this reuses the same type-matching
+// logic Validate() uses for ordinary instance data, applied to the default
+// value itself.
+func (s *Schema) DefaultTypeMismatches() []string {
+	if s.node.properties == nil {
+		return nil
+	}
+	var out []string
+	for name, child := range s.node.properties {
+		if !child.hasDefault {
+			continue
+		}
+		if len(child.types) > 0 && !typeMatches(child.defaultVal, child.types) {
+			out = append(out, name)
+		}
 	}
 	sort.Strings(out)
 	return out

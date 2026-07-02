@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"sync"
 	"testing"
 	"time"
@@ -88,7 +89,7 @@ func TestReadStaticQuery(t *testing.T) {
 		gotQuery = r.URL.RawQuery
 		_, _ = w.Write([]byte(`{"data":[]}`))
 	})
-	b := newTestBundle(t, srv, StreamSpec{Query: map[string]string{"sort": "asc", "state": "all"}})
+	b := newTestBundle(t, srv, StreamSpec{Query: map[string]QueryParam{"sort": {Template: "asc"}, "state": {Template: "all"}}})
 
 	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
 	if err != nil {
@@ -96,6 +97,226 @@ func TestReadStaticQuery(t *testing.T) {
 	}
 	if gotQuery != "sort=asc&state=all" {
 		t.Fatalf("query = %q, want sort=asc&state=all", gotQuery)
+	}
+}
+
+// --- optional-query dialect (gap-loop item 3, REVIEW-B.md adjudication 2) ---
+
+// TestReadOptionalQueryOmittedWhenConfigAbsent proves an object-form query
+// entry with omit_when_absent:true is silently left off the request when its
+// referenced config key is unset — the vitally `status`/bitly
+// `page_size` shape a plain string entry cannot express without a hard
+// error.
+func TestReadOptionalQueryOmittedWhenConfigAbsent(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Query: map[string]QueryParam{
+			"status": {Template: "{{ config.status }}", OmitWhenAbsent: true},
+		},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v (an omit_when_absent entry referencing an absent config key must never hard-error)", err)
+	}
+	if _, present := gotQuery["status"]; present {
+		t.Fatalf("query = %v, want status param OMITTED when config.status is unset", gotQuery)
+	}
+}
+
+// TestReadOptionalQuerySentWhenConfigPresent proves the SAME object-form
+// entry sends the resolved value normally once the config key IS set —
+// omit_when_absent only tolerates ABSENCE, it never suppresses a genuinely
+// present value.
+func TestReadOptionalQuerySentWhenConfigPresent(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Query: map[string]QueryParam{
+			"status": {Template: "{{ config.status }}", OmitWhenAbsent: true},
+		},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"status": "active"}}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotQuery.Get("status") != "active" {
+		t.Fatalf("query = %v, want status=active", gotQuery)
+	}
+}
+
+// TestReadOptionalQueryDefaultAppliedWhenConfigAbsent proves the `default`
+// field closes the calendly page_size gap: an object-form entry with a
+// default literal sends that default when the referenced config key is
+// absent, instead of hard-erroring OR omitting the param entirely.
+func TestReadOptionalQueryDefaultAppliedWhenConfigAbsent(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Query: map[string]QueryParam{
+			"count": {Template: "{{ config.page_size }}", Default: "100"},
+		},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotQuery.Get("count") != "100" {
+		t.Fatalf("query = %v, want count=100 (default applied)", gotQuery)
+	}
+}
+
+// TestReadOptionalQueryDefaultOverriddenByConfig proves a `default`-bearing
+// entry still resolves the templated config value normally when it IS set —
+// default is a fallback, never a fixed override.
+func TestReadOptionalQueryDefaultOverriddenByConfig(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Query: map[string]QueryParam{
+			"count": {Template: "{{ config.page_size }}", Default: "100"},
+		},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"page_size": "25"}}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotQuery.Get("count") != "25" {
+		t.Fatalf("query = %v, want count=25 (config value overrides default)", gotQuery)
+	}
+}
+
+// TestReadQueryStringEntryStillHardErrorsOnAbsentConfig locks in that a
+// PLAIN STRING query entry (the pre-existing dialect shape, zero migration
+// risk) keeps today's exact hard-error semantics — no blanket
+// absent-key-falsy tolerance leaks into string entries.
+func TestReadQueryStringEntryStillHardErrorsOnAbsentConfig(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Query: map[string]QueryParam{
+			"status": {Template: "{{ config.status }}"},
+		},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err == nil {
+		t.Fatalf("Read: want hard error for a plain string query entry referencing an absent config key, got nil")
+	}
+}
+
+// --- spec.json default materialization (gap-loop item 6, REVIEW-A.md C3) ---
+
+// TestReadBaseURLDefaultMaterializedWhenConfigAbsent is the RED test for C3:
+// a spec.json property carrying a "default" (e.g. base_url:
+// "https://api.example.com") must be materialized into RuntimeConfig.Config
+// when the caller's config omits that key entirely — closing the
+// hard-error-on-every-legacy-default-shaped-config gap C3 names (github
+// api.github.com, gmail base+token URLs, monday api.monday.com/v2, etc).
+func TestReadBaseURLDefaultMaterializedWhenConfigAbsent(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	spec, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string", "default": "` + srv.URL + `"}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+	b.Spec = spec
+	b.HTTP.URL = "{{ config.base_url }}"
+
+	// No base_url in config at all — must resolve via spec.json's default,
+	// not hard-error "unresolved key base_url in config".
+	_, err = readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v (spec.json default for base_url must be materialized into config)", err)
+	}
+}
+
+// TestReadConfigDefaultDoesNotOverrideExplicitValue proves a materialized
+// default never clobbers a value the caller DID supply — defaults only fill
+// genuinely absent keys.
+func TestReadConfigDefaultDoesNotOverrideExplicitValue(t *testing.T) {
+	var gotHost string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotHost = r.Host
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	otherSrv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	spec, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string", "default": "` + otherSrv.URL + `"}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+	b.Spec = spec
+	b.HTTP.URL = "{{ config.base_url }}"
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"base_url": srv.URL}}}
+	_, err = readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotHost == "" {
+		t.Fatalf("request never reached the explicitly-configured server — default incorrectly took priority")
+	}
+}
+
+// TestCheckBaseURLDefaultMaterializedWhenConfigAbsent proves Check's config
+// path materializes spec defaults too (same single mechanism, not just
+// Read's).
+func TestCheckBaseURLDefaultMaterializedWhenConfigAbsent(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{}`))
+	})
+	spec, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string", "default": "` + srv.URL + `"}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b := Bundle{
+		Name: "acme",
+		Spec: spec,
+		HTTP: HTTPBase{URL: "{{ config.base_url }}", Check: &RequestSpec{Method: "GET", Path: "/ping"}},
+	}
+
+	err = Check(context.Background(), b, connectors.RuntimeConfig{}, nil)
+	if err != nil {
+		t.Fatalf("Check: %v (spec.json default for base_url must be materialized into config)", err)
 	}
 }
 
@@ -569,6 +790,154 @@ func TestReadComputedFieldsJoinFilterArrayField(t *testing.T) {
 	}
 	if len(recs) != 1 || recs[0]["engines_csv"] != "google,bing,ddg" {
 		t.Fatalf("records = %+v, want engines_csv=google,bing,ddg", recs)
+	}
+}
+
+// TestReadComputedFieldsBareRecordPathPreservesNativeType is the RED test for
+// the wave1-pilot gap-loop A1 adjudication (chargebee ~30 fields / gmail 4
+// fields / github 4 fields all forced to widen a real integer/boolean schema
+// type to string because computed_fields' Interpolate always stringifies).
+// A computed_fields template that is a SINGLE bare `{{ record.<path> }}`
+// reference with NO filter stage must copy the RAW typed JSON value
+// (number/bool/null preserved) into the projected record, bypassing
+// Interpolate's stringify entirely. A template with a filter, or with more
+// than one `{{ }}` segment / surrounding text, keeps today's string
+// semantics unchanged (see the next test).
+func TestReadComputedFieldsBareRecordPathPreservesNativeType(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[{"id":"1","name":"a","updated_at":"2026-01-01T00:00:00Z","meta":{"count":42,"active":true,"missing":null}}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		ComputedFields: map[string]string{
+			"count_typed":  "{{ record.meta.count }}",
+			"active_typed": "{{ record.meta.active }}",
+		},
+	})
+	raw := json.RawMessage(`{
+		"type": "object", "x-primary-key": ["id"], "x-cursor-field": "updated_at",
+		"properties": {
+			"id": {"type": "string"}, "name": {"type": "string"}, "updated_at": {"type": "string"},
+			"count_typed": {"type": "integer"}, "active_typed": {"type": "boolean"}
+		}
+	}`)
+	sch, err := CompileSchema(raw)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b.Schemas["widgets"] = &StreamSchema{Schema: sch, PrimaryKey: sch.PrimaryKeys(), CursorField: sch.CursorFieldName()}
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(recs) != 1 {
+		t.Fatalf("records = %+v", recs)
+	}
+	if _, isString := recs[0]["count_typed"].(string); isString {
+		t.Fatalf("count_typed = %#v (%T), want a native number (json.Number/float64/int), not a string", recs[0]["count_typed"], recs[0]["count_typed"])
+	}
+	if _, isString := recs[0]["active_typed"].(string); isString {
+		t.Fatalf("active_typed = %#v (%T), want a native bool, not a string", recs[0]["active_typed"], recs[0]["active_typed"])
+	}
+	if b, ok := recs[0]["active_typed"].(bool); !ok || b != true {
+		t.Fatalf("active_typed = %#v, want bool true", recs[0]["active_typed"])
+	}
+}
+
+// TestReadComputedFieldsFilteredOrMixedTemplateKeepsStringSemantics locks in
+// the OTHER half of A1's ruling: a template with a filter stage (join:,
+// unix_seconds, etc.) or with more than a single bare {{ record.path }}
+// reference (mixed/multi-part text) keeps producing a STRING, exactly as
+// before — only the single-bare-reference shape gets typed extraction.
+func TestReadComputedFieldsFilteredOrMixedTemplateKeepsStringSemantics(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[{"id":"1","name":"a","updated_at":"2026-01-01T00:00:00Z","count":42,"engines":["google","bing"]}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		ComputedFields: map[string]string{
+			"engines_csv": "{{ record.engines | join:, }}",
+			"count_label": "count={{ record.count }}",
+		},
+	})
+	raw := json.RawMessage(`{
+		"type": "object", "x-primary-key": ["id"], "x-cursor-field": "updated_at",
+		"properties": {
+			"id": {"type": "string"}, "name": {"type": "string"}, "updated_at": {"type": "string"},
+			"engines_csv": {"type": "string"}, "count_label": {"type": "string"}
+		}
+	}`)
+	sch, err := CompileSchema(raw)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b.Schemas["widgets"] = &StreamSchema{Schema: sch, PrimaryKey: sch.PrimaryKeys(), CursorField: sch.CursorFieldName()}
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(recs) != 1 || recs[0]["engines_csv"] != "google,bing" {
+		t.Fatalf("records = %+v, want engines_csv=google,bing (string, filtered template)", recs)
+	}
+	if recs[0]["count_label"] != "count=42" {
+		t.Fatalf("records = %+v, want count_label=count=42 (string, mixed template)", recs)
+	}
+}
+
+// TestReadComputedFieldsConfigReference proves A3/G0: applyComputedFields'
+// Vars must wire Config (not Secrets) so a computed field can stamp a
+// config-derived marker onto every record (github's dropped `repository`
+// field, e.g. "{{ config.owner }}/{{ config.repo }}").
+func TestReadComputedFieldsConfigReference(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[{"id":"1","name":"a","updated_at":"2026-01-01T00:00:00Z"}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records:        RecordsSpec{Path: "data"},
+		ComputedFields: map[string]string{"repository": "{{ config.owner }}/{{ config.repo }}"},
+	})
+	raw := json.RawMessage(`{
+		"type": "object", "x-primary-key": ["id"], "x-cursor-field": "updated_at",
+		"properties": {
+			"id": {"type": "string"}, "name": {"type": "string"}, "updated_at": {"type": "string"},
+			"repository": {"type": "string"}
+		}
+	}`)
+	sch, err := CompileSchema(raw)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b.Schemas["widgets"] = &StreamSchema{Schema: sch, PrimaryKey: sch.PrimaryKeys(), CursorField: sch.CursorFieldName()}
+
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"owner": "octo-org", "repo": "hello-world"}}
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", Config: cfg}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(recs) != 1 || recs[0]["repository"] != "octo-org/hello-world" {
+		t.Fatalf("records = %+v, want repository=octo-org/hello-world", recs)
+	}
+}
+
+// TestReadComputedFieldsSecretsNotAccessible proves the A3 threat-model line:
+// Secrets must stay EXCLUDED from applyComputedFields' Vars — a computed
+// field must never be able to copy a secret value into an emitted record.
+// A template referencing secrets.* must still hard-error (unresolved key),
+// exactly like today, never silently resolve a secret into record data.
+func TestReadComputedFieldsSecretsNotAccessible(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[{"id":"1","name":"a","updated_at":"2026-01-01T00:00:00Z"}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records:        RecordsSpec{Path: "data"},
+		ComputedFields: map[string]string{"leaked": "{{ secrets.token }}"},
+	})
+	cfg := connectors.RuntimeConfig{Secrets: map[string]string{"token": "sk_should_never_appear"}}
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", Config: cfg}, nil)
+	if err == nil {
+		t.Fatalf("Read: want error (secrets.* must never resolve inside computed_fields), got nil")
 	}
 }
 

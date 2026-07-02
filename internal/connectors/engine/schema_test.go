@@ -229,6 +229,64 @@ func TestSchemaSecretKeys(t *testing.T) {
 	}
 }
 
+// TestSchemaDefaults proves Defaults() returns a stringified
+// property-name -> default map for every root property that declares a
+// JSON Schema "default" annotation (gap-loop cycle-1 item 6, REVIEW-A.md
+// C3), and omits properties with no default at all.
+func TestSchemaDefaults(t *testing.T) {
+	raw := `{
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string", "default": "https://api.example.com"},
+			"max_pages": {"type": "string", "default": "0"},
+			"api_key": {"type": "string", "x-secret": true}
+		}
+	}`
+	sch, err := CompileSchema(json.RawMessage(raw))
+	if err != nil {
+		t.Fatalf("compile: %v", err)
+	}
+	defaults := sch.Defaults()
+	if defaults["base_url"] != "https://api.example.com" {
+		t.Fatalf("Defaults()[base_url] = %q, want https://api.example.com", defaults["base_url"])
+	}
+	if defaults["max_pages"] != "0" {
+		t.Fatalf("Defaults()[max_pages] = %q, want 0", defaults["max_pages"])
+	}
+	if _, ok := defaults["api_key"]; ok {
+		t.Fatalf("Defaults()[api_key] present, want absent (no default declared)")
+	}
+}
+
+// TestSchemaDefaultTypeMismatches proves DefaultTypeMismatches() flags a
+// property whose "default" value's JSON type does not match its declared
+// "type" (gap-loop cycle-1 item 6 validate rule: "default must
+// type-check"), and does not flag a well-typed default.
+func TestSchemaDefaultTypeMismatches(t *testing.T) {
+	raw := `{
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string", "default": "https://api.example.com"},
+			"max_pages": {"type": "integer", "default": "not-a-number"},
+			"enabled": {"type": "boolean", "default": "yes"}
+		}
+	}`
+	sch, err := CompileSchema(json.RawMessage(raw))
+	if err != nil {
+		t.Fatalf("compile: %v", err)
+	}
+	mismatches := sch.DefaultTypeMismatches()
+	want := map[string]bool{"max_pages": true, "enabled": true}
+	if len(mismatches) != len(want) {
+		t.Fatalf("DefaultTypeMismatches() = %v, want keys matching %v", mismatches, want)
+	}
+	for _, k := range mismatches {
+		if !want[k] {
+			t.Fatalf("unexpected mismatch key %q", k)
+		}
+	}
+}
+
 func TestSchemaProperties(t *testing.T) {
 	raw := `{
 		"type": "object",

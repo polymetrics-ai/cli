@@ -32,6 +32,7 @@ const (
 	ruleDocsHeading             = "docs_heading"
 	ruleStartDateFreeFormString = "start_date_free_form_string"
 	ruleConformanceSkipReason   = "conformance_skip_reason"
+	ruleDefaultTypeMismatch     = "default_type_mismatch"
 )
 
 // dateShapedParamFormats are the incremental.param_format values whose
@@ -199,6 +200,7 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkDocsHeadings(b)...)
 	findings = append(findings, checkFixtureSecrets(b)...)
 	findings = append(findings, checkConformanceSkipReason(b)...)
+	findings = append(findings, checkDefaultTypeMismatch(b)...)
 	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
 	return findings, warnings
 }
@@ -319,7 +321,7 @@ func checkInterpolations(b engine.Bundle) []Finding {
 	for _, s := range b.Streams {
 		check("streams.json", s.Path)
 		for _, v := range s.Query {
-			check("streams.json", v)
+			check("streams.json", v.Template)
 		}
 		for _, v := range s.ComputedFields {
 			check("streams.json", v)
@@ -622,6 +624,35 @@ func checkConformanceSkipReason(b engine.Bundle) []Finding {
 				Message: fmt.Sprintf("stream %q conformance.skip_dynamic is true but reason is empty", s.Name),
 			})
 		}
+	}
+	return findings
+}
+
+// checkDefaultTypeMismatch is gap-loop cycle-1 item 6's validate rule
+// (REVIEW-A.md C3: "Validate rule: default must type-check"). engine's
+// `materializeConfigDefaults` (read.go) now fills an absent RuntimeConfig
+// config key straight from spec.json's declared "default" value — a default
+// whose JSON type mismatches its own property's declared "type" (e.g.
+// `"type":"integer","default":"not-a-number"`) would silently materialize a
+// wrong-shaped config value into every read/check that hits this bundle. A
+// HARD FINDING (not a warning, unlike checkIncrementalStartDateFormat's N2
+// plausibility heuristic below): this is a structural defect in the bundle
+// author's own spec.json, always fixable by correcting the default, never a
+// legitimate authoring choice worth tolerating.
+func checkDefaultTypeMismatch(b engine.Bundle) []Finding {
+	if b.Spec == nil {
+		return nil
+	}
+	mismatches := b.Spec.DefaultTypeMismatches()
+	if len(mismatches) == 0 {
+		return nil
+	}
+	findings := make([]Finding, 0, len(mismatches))
+	for _, name := range mismatches {
+		findings = append(findings, Finding{
+			Connector: b.Name, File: "spec.json", Rule: ruleDefaultTypeMismatch,
+			Message: fmt.Sprintf("spec.json property %q declares a \"default\" value that does not type-check against its own declared \"type\"", name),
+		})
 	}
 	return findings
 }

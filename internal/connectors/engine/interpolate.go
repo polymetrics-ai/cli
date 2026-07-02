@@ -280,6 +280,8 @@ func applyFilterValue(filter, val string, rawVal any) (string, error) {
 		return strconv.FormatInt(t.Unix(), 10), nil
 	case filter == "base64":
 		return base64.StdEncoding.EncodeToString([]byte(val)), nil
+	case filter == "last_path_segment":
+		return lastPathSegment(val), nil
 	case strings.HasPrefix(filter, "join:"):
 		sep := strings.TrimPrefix(filter, "join:")
 		return applyJoinFilter(sep, rawVal)
@@ -317,6 +319,28 @@ func applyJoinFilter(sep string, rawVal any) (string, error) {
 // literal space encoded as "%20" rather than "+".
 func urlencodeSegment(val string) string {
 	return strings.ReplaceAll(url.QueryEscape(val), "+", "%20")
+}
+
+// lastPathSegment returns the final "/"-delimited, non-empty segment of val
+// (gap-loop item 4, REVIEW-B.md finding 1 / cross-cutting adjudication 1):
+// the trailing-URI-segment convention a legacy HAL/URI-keyed API commonly
+// derives its record id from (calendly's idFromURI(uri)). A trailing slash
+// is ignored (does not produce an empty final segment); a value with no "/"
+// at all passes through unchanged (nothing to split); an entirely empty
+// value returns "". This mirrors the semantics of trimming a trailing slash
+// then taking strings.LastIndex(val, "/")+1: onward, never an error — a
+// computed_fields template using this filter on a genuinely malformed source
+// value degrades to returning that value's own trailing text rather than
+// hard-failing the whole record.
+func lastPathSegment(val string) string {
+	trimmed := strings.TrimRight(val, "/")
+	if trimmed == "" {
+		return ""
+	}
+	if idx := strings.LastIndex(trimmed, "/"); idx >= 0 {
+		return trimmed[idx+1:]
+	}
+	return trimmed
 }
 
 // EvalWhen evaluates a `when` condition template against vars. Supported
@@ -466,9 +490,10 @@ func parseList(s string) ([]string, error) {
 // not silently error only at runtime). "join:<sep>" is a prefix form, not a
 // fixed name, and is checked separately in isKnownFilter.
 var knownFilterNames = map[string]bool{
-	"urlencode":    true,
-	"unix_seconds": true,
-	"base64":       true,
+	"urlencode":         true,
+	"unix_seconds":      true,
+	"base64":            true,
+	"last_path_segment": true,
 }
 
 func isKnownFilter(filter string) bool {

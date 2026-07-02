@@ -94,9 +94,10 @@ func newCursorPaginator(spec PaginationSpec, recordsPath string) (connsdk.Pagina
 	case hasToken && hasLastRecord:
 		return nil, fmt.Errorf("new paginator: cursor: token_path and last_record_field are mutually exclusive")
 	case hasToken:
-		return &connsdk.CursorPaginator{
-			CursorParam: spec.CursorParam,
-			TokenPath:   spec.TokenPath,
+		return &tokenPathCursor{
+			cursorParam: spec.CursorParam,
+			tokenPath:   spec.TokenPath,
+			stopPath:    spec.StopPath,
 		}, nil
 	case hasLastRecord:
 		path := recordsPath
@@ -231,6 +232,81 @@ func stringifyLastRecordID(v any) (string, bool) {
 		return "", false
 	}
 }
+
+// tokenPathCursor implements pagination.type == "cursor" with the token_path
+// token source (a next-page token read from the response body at a fixed
+// dotted path, e.g. Zendesk's meta.after_cursor) — an engine-local
+// reimplementation of connsdk.CursorPaginator's exact Start/Next shape, plus
+// two additions connsdk's version does not have (gap-loop cycle-1 item 5,
+// REVIEW-B.md zendesk-support finding 2; connsdk/paginate.go itself is
+// outside this task's editable file set):
+//
+//  1. optional stopPath (mirrors lastRecordCursor's stripe-shape stopPath):
+//     when set, a FALSY body value at that path stops pagination
+//     unconditionally, even when the token itself is still non-empty.
+//     Zendesk's own cursor-pagination docs warn the cursor properties "may
+//     be populated even when has_more is false" — legacy stops on
+//     `has_more != "true" || after_cursor == ""`, and without this the
+//     engine would issue one extra (or infinitely looping, absent any other
+//     guard) request past the real last page.
+//  2. a loop guard refusing to follow the same token twice in a row
+//     (defends against a hostile/buggy API that never actually advances the
+//     cursor), mirroring nextURL's/linkHeaderPaginator's existing "seen" map
+//     — connsdk.CursorPaginator has no such guard today.
+//
+// A stop_path body value is read via connsdk.StringAt exactly like
+// lastRecordCursor's stopPath check: any value other than the literal string
+// "true" (including a JSON `false`, a missing path, or a read error) is
+// falsy and stops pagination. A spec that never sets stop_path (the
+// zero-value/absent case) preserves the exact prior behavior: stop only on
+// an absent/empty token, no stop_path check at all.
+type tokenPathCursor struct {
+	cursorParam string
+	tokenPath   string
+	stopPath    string
+
+	seen    map[string]bool
+	lastErr error
+}
+
+func (p *tokenPathCursor) Start() *connsdk.NextPage {
+	p.seen = map[string]bool{}
+	p.lastErr = nil
+	return &connsdk.NextPage{}
+}
+
+func (p *tokenPathCursor) Next(resp *connsdk.Response, _ int) *connsdk.NextPage {
+	if resp == nil {
+		return nil
+	}
+
+	if p.stopPath != "" {
+		stopVal, err := connsdk.StringAt(resp.Body, p.stopPath)
+		if err != nil || stopVal != "true" {
+			return nil
+		}
+	}
+
+	token, err := connsdk.StringAt(resp.Body, p.tokenPath)
+	if err != nil || strings.TrimSpace(token) == "" {
+		return nil
+	}
+
+	if p.seen[token] {
+		p.lastErr = fmt.Errorf("cursor(token_path): loop detected — token %q requested twice", token)
+		return nil
+	}
+	p.seen[token] = true
+
+	q := url.Values{}
+	q.Set(p.cursorParam, token)
+	return &connsdk.NextPage{Query: q}
+}
+
+// Err returns the sticky loop-detection error, or nil when pagination
+// stopped for a benign reason (absent/empty token, or a falsy stop_path
+// value) — mirrors nextURL.Err()/linkHeaderPaginator.Err().
+func (p *tokenPathCursor) Err() error { return p.lastErr }
 
 // baseOrigin is the (scheme, host) pair an SSRF-guarded paginator compares a
 // discovered next-page URL against. Both nextURL and linkHeaderPaginator

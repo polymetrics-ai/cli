@@ -1,0 +1,15 @@
+{
+  "name": "default-type-mismatch",
+  "display_name": "Bad Default Connector",
+  "description": "a connector whose spec.json declares a default value that does not type-check against its own declared type (gap-loop item 6 validate rule)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}

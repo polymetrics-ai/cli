@@ -239,6 +239,64 @@ func TestApplyFilterJoinNonArrayErrors(t *testing.T) {
 	}
 }
 
+// --- last_path_segment filter (gap-loop item 4, REVIEW-B.md finding 1 /
+// cross-cutting adjudication 1): calendly's dropped derived `id` field
+// (legacy idFromURI(uri) — the trailing segment of a HAL/URI-shaped field)
+// and every other URI-keyed API. ---
+
+func TestApplyFilterLastPathSegment(t *testing.T) {
+	vars := baseVars()
+	vars.Record = map[string]any{"uri": "https://api.calendly.com/scheduled_events/AAAAAAAAAAAAAAAA"}
+	got, err := Interpolate("{{ record.uri | last_path_segment }}", vars)
+	if err != nil {
+		t.Fatalf("Interpolate last_path_segment: unexpected error: %v", err)
+	}
+	if got != "AAAAAAAAAAAAAAAA" {
+		t.Fatalf("Interpolate(last_path_segment) = %q, want AAAAAAAAAAAAAAAA", got)
+	}
+}
+
+// TestApplyFilterLastPathSegmentTrailingSlashIgnored proves a trailing
+// slash on the source value does not produce an empty last segment (a
+// defensive edge case no legacy URI is expected to hit, but worth locking
+// down since idFromURI-style helpers commonly get this wrong).
+func TestApplyFilterLastPathSegmentTrailingSlashIgnored(t *testing.T) {
+	vars := baseVars()
+	vars.Record = map[string]any{"uri": "https://api.calendly.com/scheduled_events/AAAAAAAAAAAAAAAA/"}
+	got, err := Interpolate("{{ record.uri | last_path_segment }}", vars)
+	if err != nil {
+		t.Fatalf("Interpolate last_path_segment: unexpected error: %v", err)
+	}
+	if got != "AAAAAAAAAAAAAAAA" {
+		t.Fatalf("Interpolate(last_path_segment) = %q, want AAAAAAAAAAAAAAAA (trailing slash ignored)", got)
+	}
+}
+
+// TestApplyFilterLastPathSegmentNoSlashReturnsWholeValue proves a value with
+// no "/" at all (nothing to split) passes through unchanged rather than
+// erroring — the filter degrades gracefully for a bare-id source field.
+func TestApplyFilterLastPathSegmentNoSlashReturnsWholeValue(t *testing.T) {
+	vars := baseVars()
+	vars.Record = map[string]any{"id": "AAAAAAAAAAAAAAAA"}
+	got, err := Interpolate("{{ record.id | last_path_segment }}", vars)
+	if err != nil {
+		t.Fatalf("Interpolate last_path_segment: unexpected error: %v", err)
+	}
+	if got != "AAAAAAAAAAAAAAAA" {
+		t.Fatalf("Interpolate(last_path_segment) = %q, want AAAAAAAAAAAAAAAA (no slash, whole value)", got)
+	}
+}
+
+// TestApplyFilterLastPathSegmentKnownToResolveCheck proves the new filter
+// name is accepted by ResolveCheck's static filter-name validation (F9) —
+// connectorgen validate must not flag a bundle using last_path_segment as an
+// "unknown filter" typo.
+func TestApplyFilterLastPathSegmentKnownToResolveCheck(t *testing.T) {
+	if err := ResolveCheck("{{ record.uri | last_path_segment }}", map[string]bool{}); err != nil {
+		t.Fatalf("ResolveCheck: unexpected error for known filter last_path_segment: %v", err)
+	}
+}
+
 // --- static-literal computed_fields (no {{ }} markers at all): already
 // supported by Interpolate's no-op-on-no-match semantics; locked in here as
 // a named regression test per F7's meta-rule enablement. ---
