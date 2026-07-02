@@ -44,7 +44,7 @@ export default async function ChangelogPage() {
                 <PackageCheck className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
                 Product log
               </span>
-              <h1 className="mt-4 max-w-[11ch] font-analog text-[44px] leading-[1] text-text-primary md:text-[68px]">
+              <h1 className="mt-4 max-w-[11ch] font-square text-[44px] font-semibold leading-[1] text-text-primary md:text-[68px]">
                 Changes that ship the loop.
               </h1>
             </div>
@@ -114,7 +114,7 @@ export default async function ChangelogPage() {
                             href={release.htmlUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-1.5 border border-line-structure bg-surface-1 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-wider text-text-secondary transition-colors hover:border-line-cta hover:text-text-primary"
+                            className="inline-flex items-center gap-1.5 border border-line-structure bg-surface-1 px-2.5 py-1.5 font-square text-[10px] font-semibold uppercase tracking-normal text-text-secondary transition-colors hover:border-line-cta hover:text-text-primary"
                           >
                             Open
                             <ExternalLink className="h-3 w-3" aria-hidden="true" />

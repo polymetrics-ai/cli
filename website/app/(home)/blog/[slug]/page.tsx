@@ -90,7 +90,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           <Link
             href="/blog"
-            className="mb-8 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-text-tertiary transition-colors hover:text-text-primary"
+            className="mb-8 inline-flex items-center gap-2 font-square text-[11px] font-semibold uppercase tracking-normal text-text-tertiary transition-colors hover:text-text-primary"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             Blog
@@ -110,7 +110,7 @@ export default async function BlogPostPage({ params }: Props) {
                 {post.readingTime}
               </span>
             </div>
-            <h1 className="max-w-[13ch] font-analog text-[48px] leading-[1] text-text-primary md:text-[76px]">
+            <h1 className="max-w-[13ch] font-square text-[48px] font-semibold leading-[1] text-text-primary md:text-[76px]">
               {post.title}
             </h1>
             <p className="mt-6 max-w-[72ch] text-[17px] leading-relaxed text-text-tertiary">
@@ -207,7 +207,7 @@ export default async function BlogPostPage({ params }: Props) {
                     <span className="font-square text-[17px] font-semibold leading-[1.2] text-text-primary">
                       {item.title}
                     </span>
-                    <span className="mt-auto inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-text-secondary">
+                    <span className="mt-auto inline-flex items-center gap-1.5 font-square text-[11px] font-semibold uppercase tracking-normal text-text-secondary">
                       Open
                       <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                     </span>

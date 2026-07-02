@@ -174,7 +174,7 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3 justify-center items-center relative">
               <Link
                 href="/docs/quickstart"
-                className="btn-shine inline-flex items-center gap-2 border border-emerald-900 bg-emerald-800 px-5 py-2.5 text-[14px] font-medium text-white transition-opacity hover:opacity-90"
+                className="btn-shine inline-flex items-center gap-2 border border-emerald-900 bg-emerald-800 px-5 py-2.5 font-square text-[14px] font-semibold text-white transition-opacity hover:opacity-90"
               >
                 Get started <ArrowRight size={14} />
               </Link>
@@ -182,7 +182,7 @@ export default function HomePage() {
                 href="https://github.com/polymetrics-ai/cli"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-sm border border-line-structure bg-surface-bg px-5 py-2.5 text-[14px] font-medium text-text-secondary transition-colors hover:bg-surface-1"
+                className="inline-flex items-center gap-2 rounded-sm border border-line-structure bg-surface-bg px-5 py-2.5 font-square text-[14px] font-semibold text-text-secondary transition-colors hover:bg-surface-1"
               >
                 <Github size={14} /> View on GitHub
               </a>
@@ -235,7 +235,7 @@ export default function HomePage() {
               <Heading className="text-left">
                 <TextHighlight className="pr-1.5">Extract</TextHighlight>
                 → query → act.<br />
-                <span className="text-text-tertiary font-analog">Repeat.</span>
+                <span className="font-square text-text-tertiary">Repeat.</span>
               </Heading>
               <Text className="text-left">
                 Every data problem is a loop. Pull data from a source, shape it with SQL, push results to a destination, and run again. pm makes this loop a single binary invocation.
@@ -246,7 +246,7 @@ export default function HomePage() {
               <div className="flex gap-3 flex-wrap">
                 <Link
                   href="/docs/quickstart"
-                  className="inline-flex items-center gap-1.5 text-[14px] text-text-secondary border-b border-line-structure hover:border-text-primary transition-colors pb-0.5"
+                  className="inline-flex items-center gap-1.5 border-b border-line-structure pb-0.5 font-square text-[14px] font-semibold text-text-secondary transition-colors hover:border-text-primary"
                 >
                   60-second quickstart <ArrowRight size={12} />
                 </Link>
@@ -378,7 +378,7 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3 justify-center relative">
               <Link
                 href="/docs/quickstart"
-                className="btn-shine inline-flex items-center gap-2 border border-emerald-900 bg-emerald-800 px-5 py-2.5 text-[14px] font-medium text-white transition-opacity hover:opacity-90"
+                className="btn-shine inline-flex items-center gap-2 border border-emerald-900 bg-emerald-800 px-5 py-2.5 font-square text-[14px] font-semibold text-white transition-opacity hover:opacity-90"
               >
                 Read the docs <ArrowRight size={14} />
               </Link>
@@ -386,7 +386,7 @@ export default function HomePage() {
                 href="https://github.com/polymetrics-ai/cli"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-sm border border-line-structure bg-surface-bg px-5 py-2.5 text-[14px] font-medium text-text-secondary transition-colors hover:bg-surface-1"
+                className="inline-flex items-center gap-2 rounded-sm border border-line-structure bg-surface-bg px-5 py-2.5 font-square text-[14px] font-semibold text-text-secondary transition-colors hover:bg-surface-1"
               >
                 <Github size={14} /> Star on GitHub
               </a>

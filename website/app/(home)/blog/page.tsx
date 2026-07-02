@@ -64,7 +64,7 @@ export default function BlogPage() {
                 <Rss className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
                 Polymetrics writing
               </span>
-              <h1 className="mt-4 max-w-[12ch] font-analog text-[44px] leading-[1] text-text-primary md:text-[68px]">
+              <h1 className="mt-4 max-w-[12ch] font-square text-[44px] font-semibold leading-[1] text-text-primary md:text-[68px]">
                 Notes for the data loop.
               </h1>
             </div>
@@ -97,7 +97,7 @@ export default function BlogPage() {
                     <span>{featured.category}</span>
                     <span>{featured.publishedAt}</span>
                   </div>
-                  <h2 className="max-w-[14ch] font-analog text-[40px] leading-[1.02] text-text-primary md:text-[58px]">
+                  <h2 className="max-w-[14ch] font-square text-[40px] font-semibold leading-[1.02] text-text-primary md:text-[58px]">
                     {featured.title}
                   </h2>
                   <p className="mt-5 max-w-[68ch] text-[15px] leading-relaxed text-text-tertiary">
@@ -119,7 +119,7 @@ export default function BlogPage() {
                       </span>
                     ))}
                   </div>
-                  <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-text-secondary">
+                  <span className="inline-flex items-center gap-2 font-square text-[11px] font-semibold uppercase tracking-normal text-text-secondary">
                     Read article
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                   </span>
@@ -157,7 +157,7 @@ export default function BlogPage() {
                     <span className="font-mono text-[10px] uppercase tracking-widest text-text-disabled">
                       {post.publishedAt}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-text-secondary">
+                    <span className="inline-flex items-center gap-1.5 font-square text-[11px] font-semibold uppercase tracking-normal text-text-secondary">
                       Read
                       <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                     </span>

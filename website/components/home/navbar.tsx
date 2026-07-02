@@ -35,6 +35,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
+import { PmLogoMark } from '@/components/brand/pm-logo-mark';
 import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.generated';
 
 /* ─── Product dropdown items ──────────────────────────────────────────── */
@@ -61,7 +62,7 @@ function Kbd({ k, variant }: { k: string; variant: 'primary' | 'secondary' }) {
   return (
     <kbd
       aria-hidden
-      className={`flex justify-center items-center not-italic shrink-0 w-[20px] h-[20px] font-mono text-[11px] font-[450] leading-none tracking-[-0.06px] ${cls}`}
+      className={`flex justify-center items-center not-italic shrink-0 w-[20px] h-[20px] font-mono text-[11px] font-[450] leading-none tracking-normal ${cls}`}
     >
       {k.toUpperCase()}
     </kbd>
@@ -122,7 +123,7 @@ function useKeyboardShortcut<T extends HTMLElement>(kbdKey?: string) {
 
 /* ─── CTA button — exact Langfuse button.tsx structure ───────────────── */
 const btnBase =
-  'inline-flex w-full min-w-0 max-w-full items-center justify-start no-underline gap-[6px] overflow-hidden py-0.5 shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] rounded-[2px] border transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer font-sans text-[12px] font-[450] leading-[150%] tracking-[-0.06px] whitespace-nowrap';
+  'inline-flex w-full min-w-0 max-w-full items-center justify-start no-underline gap-[6px] overflow-hidden py-0.5 shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] rounded-[2px] border transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer font-square text-[12px] font-semibold leading-[150%] tracking-normal whitespace-nowrap';
 
 const btnVariants = {
   primary:   'border-emerald-900 bg-emerald-800 text-white h-[26px] pl-[8px] pr-[3px]',
@@ -130,7 +131,7 @@ const btnVariants = {
 };
 
 const navChipCls =
-  'inline-flex h-[26px] items-center justify-center gap-[6px] overflow-hidden border border-emerald-900 bg-emerald-800 py-0.5 pl-[8px] pr-[3px] font-sans text-[12px] font-[450] leading-[150%] tracking-[-0.06px] text-white shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] transition-opacity group-hover:opacity-90 whitespace-nowrap';
+  'inline-flex h-[26px] items-center justify-center gap-[6px] overflow-hidden border border-emerald-900 bg-emerald-800 py-0.5 pl-[8px] pr-[3px] font-square text-[12px] font-semibold leading-[150%] tracking-normal text-white shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] transition-opacity group-hover:opacity-90 whitespace-nowrap';
 
 function NavBtn({
   href,
@@ -173,16 +174,6 @@ function NavBtn({
   );
 }
 
-/* ─── Logo mark — terminal CLI: PM_ (blinking cursor) on emerald square ── */
-function PmLogoMark() {
-  return (
-    <span className="flex items-center justify-center h-[26px] min-w-[26px] px-1 bg-emerald-800 select-none">
-      <span className="font-mono font-bold text-[13px] leading-none text-white tracking-tight">PM</span>
-      <span aria-hidden className="font-mono font-bold text-[13px] leading-none text-white cursor-blink">_</span>
-    </span>
-  );
-}
-
 /* ─── Product dropdown panel item ────────────────────────────────────── */
 function DropdownItem({ href, icon: Icon, label, desc, shortcutKey }: {
   href: string; icon: LucideIcon; label: string; desc: string; shortcutKey: string;
@@ -201,7 +192,7 @@ function DropdownItem({ href, icon: Icon, label, desc, shortcutKey }: {
           <Icon className="size-4" aria-hidden="true" />
         </span>
         <div className="relative z-[1] min-w-0">
-          <div className="font-sans text-[13px] font-medium leading-[1.2] text-text-secondary transition-colors group-hover/link:text-text-primary">
+          <div className="font-square text-[13px] font-semibold leading-[1.2] text-text-secondary transition-colors group-hover/link:text-text-primary">
             {label}
           </div>
           <div className="mt-1 text-[12px] leading-snug text-text-tertiary">{desc}</div>
@@ -280,7 +271,7 @@ function ProductDropdown({ kbdKey }: { kbdKey?: string }) {
         <DropdownMenuItem asChild className="cursor-pointer p-0 focus:bg-surface-bg">
           <Link
             href="/docs"
-            className="flex items-center justify-between px-2.5 py-2 font-mono text-[11px] uppercase tracking-wider text-text-secondary hover:text-text-primary"
+            className="flex items-center justify-between px-2.5 py-2 font-square text-[11px] font-semibold uppercase tracking-normal text-text-secondary hover:text-text-primary"
           >
             Browse all documentation
             <Kbd k="D" variant="secondary" />
@@ -359,7 +350,7 @@ function MobileMenu({ open, onOpenChange }: { open: boolean; onOpenChange: (open
           <SheetClose key={item.href} asChild>
             <Link
               href={item.href}
-              className="flex items-start gap-3 border border-transparent px-2 py-2.5 font-sans text-[14px] font-medium text-text-secondary transition-colors hover:border-line-cta hover:bg-surface-1 hover:text-text-primary"
+              className="flex items-start gap-3 border border-transparent px-2 py-2.5 font-square text-[14px] font-semibold text-text-secondary transition-colors hover:border-line-cta hover:bg-surface-1 hover:text-text-primary"
             >
               <span className="flex size-8 shrink-0 items-center justify-center border border-line-structure bg-surface-1 text-line-cta">
                 <item.icon className="size-4" aria-hidden="true" />
@@ -373,21 +364,21 @@ function MobileMenu({ open, onOpenChange }: { open: boolean; onOpenChange: (open
         ))}
         <div className="mt-3 pt-3 border-t border-line-structure flex flex-col gap-0.5">
           <SheetClose asChild>
-            <Link href="/docs" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Docs</Link>
+            <Link href="/docs" className="py-2 font-square text-[14px] font-semibold text-text-secondary hover:text-text-primary transition-colors">Docs</Link>
           </SheetClose>
           <SheetClose asChild>
-            <Link href="/blog" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Blog</Link>
+            <Link href="/blog" className="py-2 font-square text-[14px] font-semibold text-text-secondary hover:text-text-primary transition-colors">Blog</Link>
           </SheetClose>
           <SheetClose asChild>
-            <Link href="/changelog" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Changelog</Link>
+            <Link href="/changelog" className="py-2 font-square text-[14px] font-semibold text-text-secondary hover:text-text-primary transition-colors">Changelog</Link>
           </SheetClose>
-          <a href="https://github.com/polymetrics-ai/cli" target="_blank" rel="noreferrer" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">GitHub</a>
+          <a href="https://github.com/polymetrics-ai/cli" target="_blank" rel="noreferrer" className="py-2 font-square text-[14px] font-semibold text-text-secondary hover:text-text-primary transition-colors">GitHub</a>
         </div>
         <div className="mt-4 flex flex-col gap-2">
           <SheetClose asChild>
             <Link
               href="/docs"
-              className="flex items-center justify-center border border-line-cta bg-line-cta px-4 py-2.5 font-sans text-[13px] font-medium text-surface-bg"
+              className="flex items-center justify-center border border-line-cta bg-line-cta px-4 py-2.5 font-square text-[13px] font-semibold text-surface-bg"
             >
               Get Started
             </Link>
@@ -423,7 +414,7 @@ export function SiteNavbar() {
               className="flex items-center gap-2 group/logo shrink-0"
               aria-label="PM homepage"
             >
-              <PmLogoMark />
+              <PmLogoMark decorative className="h-[26px] w-[26px] shrink-0 select-none" />
               <span className="navbar-by-tag font-square text-[11px] font-light uppercase tracking-[0.14em] leading-none text-text-tertiary/70 whitespace-nowrap hover:text-text-tertiary transition-colors">
                 command line interface
               </span>

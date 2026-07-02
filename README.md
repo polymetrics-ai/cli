@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src=".github/assets/polymetrics-cli-logo.svg" alt="Polymetrics CLI logo" width="360">
+
 # Polymetrics CLI
 
 ### One CLI to rule them all.
