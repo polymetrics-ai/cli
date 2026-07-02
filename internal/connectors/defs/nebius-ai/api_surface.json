@@ -1,0 +1,17 @@
+{
+  "api": "Nebius AI Studio REST API (https://api.studio.nebius.com, OpenAI-compatible)",
+  "docs": "https://docs.nebius.com/studio/inference/api-reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 3 legacy-parity read-only list streams only; chat/embeddings/completions inference endpoints and any mutation surface (file upload, batch creation/cancellation) are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/models", "covered_by": { "stream": "models" } },
+    { "method": "GET", "path": "/v1/files", "covered_by": { "stream": "files" } },
+    { "method": "GET", "path": "/v1/batches", "covered_by": { "stream": "batches" } },
+    { "method": "POST", "path": "/v1/files", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (file upload is a write, not a read stream)" } },
+    { "method": "DELETE", "path": "/v1/files/{id}", "excluded": { "category": "destructive_admin", "reason": "deletes an uploaded file" } },
+    { "method": "POST", "path": "/v1/batches", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (creates a real batch job)" } },
+    { "method": "POST", "path": "/v1/batches/{id}/cancel", "excluded": { "category": "destructive_admin", "reason": "cancels a running batch job" } },
+    { "method": "POST", "path": "/v1/chat/completions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (inference endpoint, not a list/read stream)" } },
+    { "method": "POST", "path": "/v1/embeddings", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (inference endpoint, not a list/read stream)" } }
+  ]
+}

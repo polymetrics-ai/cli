@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "pageNumber",
+      "size_param": "pageSize",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/getHotels" },
+    "error_map": [
+      { "status": 401, "hint": "cloudbeds api_key is missing or invalid; re-run pm credentials add cloudbeds" },
+      { "status": 403, "hint": "cloudbeds account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "cloudbeds rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "guests",
+      "path": "/getGuestList",
+      "records": { "path": "data" },
+      "schema": "schemas/guests.json"
+    },
+    {
+      "name": "hotels",
+      "path": "/getHotels",
+      "records": { "path": "data" },
+      "schema": "schemas/hotels.json"
+    },
+    {
+      "name": "rooms",
+      "path": "/getRoomBlocks",
+      "records": { "path": "data" },
+      "schema": "schemas/rooms.json"
+    },
+    {
+      "name": "reservations",
+      "path": "/getReservations",
+      "records": { "path": "data" },
+      "schema": "schemas/reservations.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/getTransactions",
+      "records": { "path": "data" },
+      "schema": "schemas/transactions.json"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/cards/search",
+    "query": {
+      "q": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        {
+          "id": "card_fixture_1",
+          "name": "Fixture Atraxa",
+          "set": "one"
+        },
+        {
+          "id": "card_fixture_2",
+          "name": "Fixture Jodah",
+          "set": "dmu"
+        }
+      ]
+    }
+  }
+}

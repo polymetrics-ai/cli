@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/carts", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "carts": [
+        { "cartID": "cart_fixture_1", "contactID": "contact_fixture_1", "email": "fixture1@example.com", "phone": "+15550100", "currency": "USD", "cartSum": 50, "cartRecoveryUrl": "https://example.com/cart/cart_fixture_1", "products": [], "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-01T00:00:00Z" }
+      ],
+      "paging": { "next": null }
+    }
+  }
+}

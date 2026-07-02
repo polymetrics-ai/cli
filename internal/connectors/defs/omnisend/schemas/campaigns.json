@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["campaignID"],
+  "x-cursor-field": "createdAt",
+  "required": ["campaignID"],
+  "properties": {
+    "campaignID": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "fromName": { "type": ["string", "null"] },
+    "sent": { "type": ["number", "null"] },
+    "opened": { "type": ["number", "null"] },
+    "clicked": { "type": ["number", "null"] },
+    "bounced": { "type": ["number", "null"] },
+    "unsubscribed": { "type": ["number", "null"] },
+    "startDate": { "type": ["string", "null"] },
+    "endDate": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/issues/search",
+    "query": {
+      "p": "1",
+      "ps": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 2,
+      "p": 1,
+      "ps": 100,
+      "issues": [
+        {
+          "key": "AZfixture000000000000001",
+          "rule": "go:S1481",
+          "severity": "MINOR",
+          "component": "fixture-org_fixture-repo:main.go",
+          "project": "fixture-org_fixture-repo",
+          "line": 42,
+          "status": "OPEN",
+          "message": "Remove this unused variable.",
+          "type": "CODE_SMELL",
+          "organization": "fixture-org",
+          "author": "fixture-author@example.com",
+          "tags": [
+            "unused"
+          ],
+          "creationDate": "2026-01-01T00:00:00+0000",
+          "updateDate": "2026-01-01T00:00:00+0000"
+        },
+        {
+          "key": "AZfixture000000000000002",
+          "rule": "go:S1192",
+          "severity": "MAJOR",
+          "component": "fixture-org_fixture-repo:handler.go",
+          "project": "fixture-org_fixture-repo",
+          "line": 17,
+          "status": "CONFIRMED",
+          "message": "Define a constant instead of duplicating this literal.",
+          "type": "CODE_SMELL",
+          "organization": "fixture-org",
+          "author": "fixture-author@example.com",
+          "tags": [],
+          "creationDate": "2026-01-02T00:00:00+0000",
+          "updateDate": "2026-01-02T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

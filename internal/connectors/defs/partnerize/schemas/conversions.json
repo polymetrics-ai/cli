@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "status": { "type": ["string", "null"] },
+    "value": { "type": ["number", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

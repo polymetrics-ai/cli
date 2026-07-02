@@ -1,0 +1,20 @@
+{
+  "name": "zendesk-sunshine",
+  "display_name": "Zendesk Sunshine",
+  "description": "Reads Zendesk Sunshine object types, objects, and relationships.",
+  "integration_type": "api",
+  "docs_url": "https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Zendesk account read of custom object types, objects, and relationships",
+    "approval": "none; read-only basic-auth token access"
+  }
+}

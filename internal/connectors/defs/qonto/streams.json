@@ -1,0 +1,74 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/transactions",
+      "query": { "page": "1", "per_page": "1", "iban": "{{ config.iban }}" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "qonto api_key is missing or invalid; re-run pm credentials add qonto" },
+      { "status": 403, "hint": "qonto account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "qonto rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "transactions",
+      "path": "/transactions",
+      "query": {
+        "page": "1",
+        "per_page": "100",
+        "iban": "{{ config.iban }}",
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "transactions" },
+      "computed_fields": {
+        "id": "{{ record.transaction_id }}"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page",
+        "token_path": "meta.next_page"
+      },
+      "incremental": {
+        "cursor_field": "settled_at"
+      },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "memberships",
+      "path": "/memberships",
+      "query": {
+        "page": "1",
+        "per_page": "100"
+      },
+      "records": { "path": "memberships" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page",
+        "token_path": "meta.next_page"
+      },
+      "schema": "schemas/memberships.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "query": {
+        "page": "1",
+        "per_page": "100"
+      },
+      "records": { "path": "accounts" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page",
+        "token_path": "meta.next_page"
+      },
+      "schema": "schemas/accounts.json"
+    }
+  ]
+}

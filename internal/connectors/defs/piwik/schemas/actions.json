@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Piwik Page Action",
+  "type": "object",
+  "x-primary-key": ["label"],
+  "required": ["label"],
+  "properties": {
+    "label": { "type": ["string", "null"] },
+    "hits": { "type": ["number", "null"] },
+    "visits": { "type": ["number", "null"] }
+  }
+}

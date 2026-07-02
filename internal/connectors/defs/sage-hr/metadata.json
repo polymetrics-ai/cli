@@ -1,0 +1,23 @@
+{
+  "name": "sage-hr",
+  "display_name": "Sage HR",
+  "description": "Reads Sage HR employees, teams, and time off requests through the Sage HR API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.sage.hr/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Sage HR API read of employee, team, and time off request data",
+    "approval": "none; read-only, no writes implemented by legacy"
+  }
+}

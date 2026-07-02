@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SharePoint Lists Enterprise Connection Specification",
+  "type": "object",
+  "required": ["tenant_id", "site_id", "client_id", "client_secret"],
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "description": "Azure AD tenant ID (GUID or verified domain) used to build the OAuth2 token endpoint https://login.microsoftonline.com/<tenant_id>/oauth2/v2.0/token."
+    },
+    "site_id": {
+      "type": "string",
+      "description": "SharePoint site ID (or hostname:path pair) whose lists are read; used in every request path."
+    },
+    "list_id": {
+      "type": "string",
+      "description": "SharePoint list ID; required only for the list_items stream (the list whose items are read)."
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Azure AD application (client) ID for OAuth2 client-credentials. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Azure AD application client secret for OAuth2 client-credentials. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://graph.microsoft.com/v1.0",
+      "description": "Microsoft Graph API base URL override for tests or proxies."
+    },
+    "login_base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://login.microsoftonline.com",
+      "description": "Azure AD login base URL override for tests or proxies; combined with tenant_id to form the OAuth2 token endpoint."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full OAuth2 token endpoint override. When set, takes priority over the derived login_base_url/tenant_id endpoint (see docs.md Known limits for the dual-candidate auth mechanism used to express this)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

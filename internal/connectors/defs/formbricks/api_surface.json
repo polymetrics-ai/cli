@@ -1,0 +1,16 @@
+{
+  "api": "Formbricks management API (https://formbricks.com/docs/api/overview)",
+  "docs": "https://formbricks.com/docs/api/overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (surveys, responses, action_classes, attribute_classes, webhooks); Formbricks' broader management surface (single-resource detail endpoints, contacts, tags, integrations) is out of scope for this pass",
+  "endpoints": [
+    { "method": "GET", "path": "management/surveys", "covered_by": { "stream": "surveys" } },
+    { "method": "GET", "path": "management/responses", "covered_by": { "stream": "responses" } },
+    { "method": "GET", "path": "management/action-classes", "covered_by": { "stream": "action_classes" } },
+    { "method": "GET", "path": "management/attribute-classes", "covered_by": { "stream": "attribute_classes" } },
+    { "method": "GET", "path": "webhooks", "covered_by": { "stream": "webhooks" } },
+    { "method": "GET", "path": "management/surveys/{id}", "excluded": { "category": "out_of_scope", "reason": "single-record detail endpoint; the list endpoint already covers full-stream sync, Pass B capability expansion" } },
+    { "method": "POST", "path": "management/surveys", "excluded": { "category": "out_of_scope", "reason": "write surface not exposed by this read-only connector, Pass B capability expansion" } },
+    { "method": "GET", "path": "management/contacts", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy; Pass B capability expansion" } }
+  ]
+}

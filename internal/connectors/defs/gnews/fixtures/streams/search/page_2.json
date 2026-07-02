@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/search",
+    "query": {
+      "page": "2",
+      "max": "10"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "totalArticles": 11,
+      "articles": [
+        {
+          "id": "art_fixture_11",
+          "title": "Fixture article 11",
+          "description": "Fixture description 11",
+          "content": "Fixture content 11",
+          "url": "https://example.com/search/11",
+          "image": "https://example.com/search/11.jpg",
+          "publishedAt": "2026-01-01T00:11:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        }
+      ]
+    }
+  }
+}

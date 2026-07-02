@@ -1,0 +1,23 @@
+{
+  "name": "statsig",
+  "display_name": "Statsig",
+  "description": "Reads Statsig feature gates, dynamic configs, experiments, and segments through the Statsig Console API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.statsig.com/console-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Statsig Console API read of feature gates, dynamic configs, experiments, and segments",
+    "approval": "none; read-only"
+  }
+}

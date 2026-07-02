@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apikey", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/fnd/market-information/us/sector-performance" },
+    "error_map": [
+      { "status": 401, "hint": "finage api key is missing or invalid; re-run pm credentials add finage" },
+      { "status": 403, "hint": "finage account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "finage rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "most_active_us_stocks",
+      "path": "/fnd/market-information/us/most-actives",
+      "records": { "path": "" },
+      "schema": "schemas/most_active_us_stocks.json"
+    },
+    {
+      "name": "most_gainers",
+      "path": "/fnd/market-information/us/most-gainers",
+      "records": { "path": "" },
+      "schema": "schemas/most_gainers.json"
+    },
+    {
+      "name": "most_losers",
+      "path": "/fnd/market-information/us/most-losers",
+      "records": { "path": "" },
+      "schema": "schemas/most_losers.json"
+    },
+    {
+      "name": "sector_performance",
+      "path": "/fnd/market-information/us/sector-performance",
+      "records": { "path": "" },
+      "schema": "schemas/sector_performance.json"
+    },
+    {
+      "name": "delisted_companies",
+      "path": "/fnd/delisted-companies/",
+      "query": { "limit": "1000", "period": "annual" },
+      "records": { "path": "" },
+      "schema": "schemas/delisted_companies.json"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/resource/Company",
+    "query": {
+      "max": "5",
+      "start": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "Id": 1,
+        "CompanyName": "Fixture Location 1",
+        "Code": "LOC-1",
+        "Active": true,
+        "Address": 1,
+        "Country": 1,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      },
+      {
+        "Id": 2,
+        "CompanyName": "Fixture Location 2",
+        "Code": "LOC-2",
+        "Active": true,
+        "Address": 1,
+        "Country": 1,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      },
+      {
+        "Id": 3,
+        "CompanyName": "Fixture Location 3",
+        "Code": "LOC-3",
+        "Active": true,
+        "Address": 1,
+        "Country": 1,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      },
+      {
+        "Id": 4,
+        "CompanyName": "Fixture Location 4",
+        "Code": "LOC-4",
+        "Active": true,
+        "Address": 1,
+        "Country": 1,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      },
+      {
+        "Id": 5,
+        "CompanyName": "Fixture Location 5",
+        "Code": "LOC-5",
+        "Active": true,
+        "Address": 1,
+        "Country": 1,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      }
+    ]
+  }
+}

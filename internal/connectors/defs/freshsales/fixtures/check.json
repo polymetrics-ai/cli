@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/contacts/view/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": { "contacts": [], "meta": { "total": 0, "total_pages": 0 } }
+  }
+}

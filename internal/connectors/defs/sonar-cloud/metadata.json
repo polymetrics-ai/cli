@@ -1,0 +1,23 @@
+{
+  "name": "sonar-cloud",
+  "display_name": "SonarCloud",
+  "description": "Reads SonarCloud issues, components, quality gates, and measures through the Web API.",
+  "integration_type": "api",
+  "docs_url": "https://sonarcloud.io/web_api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external SonarCloud API read of issues, components, quality gates, and measures",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

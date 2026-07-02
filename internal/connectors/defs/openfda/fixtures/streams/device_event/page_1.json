@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/device/event.json", "query": { "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "results": { "skip": 0, "limit": 2, "total": 1 } },
+      "results": [
+        {
+          "mdr_report_key": "device_event_fixture_1",
+          "report_number": "9999999-2026-00001",
+          "event_type": "Malfunction",
+          "date_received": "20260101",
+          "date_of_event": "20251230",
+          "report_source_code": "Manufacturer",
+          "manufacturer_name": "Fixture Devices Inc",
+          "product_problem_flag": "Y",
+          "adverse_event_flag": "N"
+        }
+      ]
+    }
+  }
+}

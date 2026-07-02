@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/catalog/print_providers.json" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 3,
+        "title": "Fixture Print Co",
+        "location": { "address1": "1 Fixture St", "city": "Brooklyn", "country": "US", "region": "NY", "zip": "11221" }
+      }
+    ]
+  }
+}

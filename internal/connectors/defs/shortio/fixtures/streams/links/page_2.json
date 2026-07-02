@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/links", "query": { "nextPageToken": "fixture_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "links": [
+        { "idString": "lnk_fixture_3", "path": "fixture-path-3", "title": "Fixture link three", "updatedAt": "2026-01-03T00:00:00Z" }
+      ],
+      "nextPageToken": null
+    }
+  }
+}

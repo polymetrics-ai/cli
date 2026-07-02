@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "metrics",
+  "type": "object",
+  "x-primary-key": [],
+  "properties": {
+    "nps": { "type": ["integer", "null"] },
+    "promoter_count": { "type": ["integer", "null"] },
+    "promoter_percent": { "type": ["number", "null"] },
+    "passive_count": { "type": ["integer", "null"] },
+    "passive_percent": { "type": ["number", "null"] },
+    "detractor_count": { "type": ["integer", "null"] },
+    "detractor_percent": { "type": ["number", "null"] },
+    "response_count": { "type": ["integer", "null"] }
+  }
+}

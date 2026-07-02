@@ -1,0 +1,23 @@
+{
+  "name": "tinyemail",
+  "display_name": "TinyEmail",
+  "description": "Reads subscribers, lists, and campaigns from the tinyEmail API.",
+  "integration_type": "api",
+  "docs_url": "https://tinyemail.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external tinyEmail API read of subscriber, list, and campaign data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

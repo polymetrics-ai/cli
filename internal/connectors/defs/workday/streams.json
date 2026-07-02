@@ -1,0 +1,42 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/ccx/api/v1/{{ config.tenant }}/workers", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "workday tenant username/password is missing or invalid; re-run pm credentials add workday" },
+      { "status": 429, "class": "rate_limited", "hint": "workday rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "workers",
+      "path": "/ccx/api/v1/{{ config.tenant }}/workers",
+      "records": { "path": "data" },
+      "schema": "schemas/workers.json"
+    },
+    {
+      "name": "organizations",
+      "path": "/ccx/api/v1/{{ config.tenant }}/organizations",
+      "records": { "path": "data" },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "positions",
+      "path": "/ccx/api/v1/{{ config.tenant }}/positions",
+      "records": { "path": "data" },
+      "schema": "schemas/positions.json"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/resource/OperationalUnit",
+    "query": { "max": "5", "start": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "Id": 1,
+        "OperationalUnitName": "Fixture Department 1",
+        "Company": 1,
+        "Active": true,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      },
+      {
+        "Id": 2,
+        "OperationalUnitName": "Fixture Department 2",
+        "Company": 1,
+        "Active": true,
+        "Creator": 1,
+        "Created": "2026-01-01T01:00:00",
+        "Modified": "2026-01-01T01:05:00"
+      }
+    ]
+  }
+}

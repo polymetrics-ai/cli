@@ -1,0 +1,42 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/events", "query": { "page": "1", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "tickettailor api_key is missing or invalid; re-run pm credentials add tickettailor" },
+      { "status": 403, "hint": "tickettailor account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "tickettailor rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "events",
+      "path": "/events",
+      "records": { "path": "data" },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "orders",
+      "path": "/orders",
+      "records": { "path": "data" },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "issued_tickets",
+      "path": "/issued_tickets",
+      "records": { "path": "data" },
+      "schema": "schemas/issued_tickets.json"
+    }
+  ]
+}

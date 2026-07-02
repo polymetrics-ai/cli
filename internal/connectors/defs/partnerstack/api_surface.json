@@ -1,0 +1,15 @@
+{
+  "api": "PartnerStack API v2 (https://api.partnerstack.com/api/v2)",
+  "docs": "https://docs.partnerstack.com/docs/api-overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full PartnerStack surface (rewards, leads, deals, links, custom-fields) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/partnerships", "covered_by": { "stream": "partnerships" } },
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/groups", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/rewards", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/leads", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/deals", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

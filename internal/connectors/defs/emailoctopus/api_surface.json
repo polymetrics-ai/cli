@@ -1,0 +1,15 @@
+{
+  "api": "EmailOctopus API v1.6",
+  "docs": "https://emailoctopus.com/api-documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only, matching internal/connectors/emailoctopus's exact endpoint set; the full EmailOctopus surface (campaign/list/contact mutation, campaign reports) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/lists/{list_id}/contacts", "covered_by": { "stream": "list_contacts" } },
+    { "method": "POST", "path": "/lists", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/lists/{list_id}/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/campaigns/{campaign_id}/reports/summary", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

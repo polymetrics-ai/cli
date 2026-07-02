@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "apod",
+  "type": "object",
+  "x-primary-key": ["date"],
+  "x-cursor-field": "date",
+  "required": ["date"],
+  "properties": {
+    "date": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "explanation": { "type": ["string", "null"] },
+    "media_type": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "hdurl": { "type": ["string", "null"] },
+    "thumbnail_url": { "type": ["string", "null"] },
+    "copyright": { "type": ["string", "null"] },
+    "service_version": { "type": ["string", "null"] }
+  }
+}

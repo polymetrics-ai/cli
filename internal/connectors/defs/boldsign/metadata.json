@@ -1,0 +1,23 @@
+{
+  "name": "boldsign",
+  "display_name": "BoldSign",
+  "description": "Reads BoldSign documents, templates, teams, contacts, and brands through the BoldSign REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.boldsign.com/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external BoldSign API read of documents, templates, teams, contacts, and brands",
+    "approval": "none; read-only API"
+  }
+}

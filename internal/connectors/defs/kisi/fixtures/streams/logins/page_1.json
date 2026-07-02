@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/logins", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture Login 1", "type": "api", "user_id": 1, "last_used_at": "2026-01-03T00:00:00Z", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" }
+    ]
+  }
+}

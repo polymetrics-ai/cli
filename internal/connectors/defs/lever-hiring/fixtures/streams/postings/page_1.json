@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/postings", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "posting_fixture_1",
+          "text": "Fixture Posting",
+          "state": "published",
+          "user": "user_fixture_1",
+          "owner": "user_fixture_1",
+          "hiringManager": "user_fixture_1",
+          "categories": { "team": "Engineering" },
+          "createdAt": 1767225601,
+          "updatedAt": 1767225601
+        }
+      ],
+      "hasNext": false,
+      "next": null
+    }
+  }
+}

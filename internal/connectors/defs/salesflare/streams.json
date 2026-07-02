@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "pagination.next_page",
+      "page_size": 100,
+      "max_pages": 100
+    },
+    "check": { "method": "GET", "path": "/accounts", "query": { "page": "1", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "salesflare api_key is missing or invalid; re-run pm credentials add salesflare" },
+      { "status": 403, "hint": "salesflare account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "salesflare rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "query": {
+        "page": "1",
+        "limit": "100"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/accounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "query": {
+        "page": "1",
+        "limit": "100"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/contacts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "opportunities",
+      "path": "/opportunities",
+      "query": {
+        "page": "1",
+        "limit": "100"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/opportunities.json",
+      "projection": "passthrough"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Clarif-ai Connection Specification",
+  "type": "object",
+  "required": ["api_key", "user_id"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Clarifai personal access token (PAT). Sent as 'Authorization: Key <api_key>'; never logged."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Clarifai user id all streams are scoped under (users/{user_id}/...)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.clarifai.com/v2",
+      "description": "Clarifai API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

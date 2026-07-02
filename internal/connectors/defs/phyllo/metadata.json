@@ -1,0 +1,23 @@
+{
+  "name": "phyllo",
+  "display_name": "Phyllo",
+  "description": "Reads Phyllo users, accounts, profiles, and social content using Basic-auth REST endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://docs.getphyllo.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Phyllo API read of user, account, profile, and social content data",
+    "approval": "none; read-only, no writes"
+  }
+}

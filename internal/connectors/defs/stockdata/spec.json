@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StockData Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "StockData API access token, sent as the api_token query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.stockdata.org/v1",
+      "description": "StockData API base URL override for tests or proxies."
+    },
+    "symbols": {
+      "type": "string",
+      "description": "Comma-separated ticker symbols. Required (hard error) for the eod_prices and intraday_prices streams; not used by tickers or news."
+    },
+    "date_from": {
+      "type": "string",
+      "description": "Optional lower-bound date filter (YYYY-MM-DD) sent on eod_prices and intraday_prices requests when set."
+    },
+    "date_to": {
+      "type": "string",
+      "description": "Optional upper-bound date filter (YYYY-MM-DD) sent on eod_prices and intraday_prices requests when set."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

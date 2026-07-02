@@ -1,0 +1,18 @@
+{
+  "api": "100ms server-side REST API (https://api.100ms.live/v2)",
+  "docs": "https://www.100ms.live/docs/api-reference/javascript/v2/home/content",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; 100ms is read-only (no reverse-ETL writes) both in legacy and here. The full 100ms management API (webhooks, active-room actions, polls, recording assets, RTMP streaming config, etc.) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/rooms", "covered_by": { "stream": "rooms" } },
+    { "method": "GET", "path": "/v2/sessions", "covered_by": { "stream": "sessions" } },
+    { "method": "GET", "path": "/v2/recordings", "covered_by": { "stream": "recordings" } },
+    { "method": "GET", "path": "/v2/templates", "covered_by": { "stream": "templates" } },
+    { "method": "POST", "path": "/v2/rooms", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/rooms/{room_id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/room-codes/room/{room_id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/active-rooms", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/policy", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

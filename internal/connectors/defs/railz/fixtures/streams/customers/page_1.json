@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "customerUuid": "cust_fixture_1",
+          "businessUuid": "biz_fixture_1",
+          "name": "Fixture Customer One",
+          "email": "fixture1@example.com"
+        },
+        {
+          "customerUuid": "cust_fixture_2",
+          "businessUuid": "biz_fixture_1",
+          "name": "Fixture Customer Two",
+          "email": "fixture2@example.com"
+        }
+      ]
+    }
+  }
+}

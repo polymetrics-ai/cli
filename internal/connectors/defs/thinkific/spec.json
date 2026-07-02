@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Thinkific Connection Specification",
+  "type": "object",
+  "required": ["subdomain", "api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Thinkific API key, sent as the X-Auth-API-Key header. Never logged."
+    },
+    "subdomain": {
+      "type": "string",
+      "description": "Thinkific site subdomain, sent as the X-Auth-Subdomain header (e.g. 'academy' for academy.thinkific.com)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.thinkific.com",
+      "description": "Thinkific API base URL override for tests or proxies."
+    }
+  }
+}

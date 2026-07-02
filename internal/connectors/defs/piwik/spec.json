@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Piwik / Matomo Connection Specification",
+  "type": "object",
+  "required": ["token_auth"],
+  "properties": {
+    "token_auth": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Piwik/Matomo API auth token, sent as the token_auth query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://matomo.example.com",
+      "description": "Piwik/Matomo instance base URL override for tests or proxies."
+    },
+    "site_id": {
+      "type": "string",
+      "description": "Matomo idSite; required for the visits, actions, and goals streams."
+    },
+    "period": {
+      "type": "string",
+      "default": "day",
+      "description": "Matomo reporting period (day, week, month, year, range) for the visits, actions, and goals streams."
+    },
+    "date": {
+      "type": "string",
+      "default": "today",
+      "description": "Matomo reporting date (or date range) for the visits, actions, and goals streams."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "x-api-key",
+        "value": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/ng/api/organizations"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "harness api_key is missing or invalid; re-run pm credentials add harness"
+      },
+      {
+        "status": 403,
+        "hint": "harness account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "harness rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "organizations",
+      "path": "/ng/api/organizations",
+      "query": {
+        "accountIdentifier": "{{ config.account_id }}",
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data.content"
+      },
+      "computed_fields": {
+        "identifier": "{{ record.organization.identifier }}",
+        "name": "{{ record.organization.name }}",
+        "account_identifier": "{{ record.organization.accountIdentifier }}",
+        "description": "{{ record.organization.description }}"
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "projects",
+      "path": "/ng/api/projects",
+      "query": {
+        "accountIdentifier": "{{ config.account_id }}",
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data.content"
+      },
+      "computed_fields": {
+        "identifier": "{{ record.project.identifier }}",
+        "org_identifier": "{{ record.project.orgIdentifier }}",
+        "account_identifier": "{{ record.project.accountIdentifier }}",
+        "name": "{{ record.project.name }}",
+        "color": "{{ record.project.color }}",
+        "description": "{{ record.project.description }}",
+        "modules": "{{ record.project.modules }}"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "services",
+      "path": "/ng/api/servicesV2",
+      "query": {
+        "accountIdentifier": "{{ config.account_id }}",
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data.content"
+      },
+      "computed_fields": {
+        "identifier": "{{ record.service.identifier }}",
+        "org_identifier": "{{ record.service.orgIdentifier }}",
+        "project_identifier": "{{ record.service.projectIdentifier }}",
+        "account_identifier": "{{ record.service.accountIdentifier }}",
+        "name": "{{ record.service.name }}",
+        "description": "{{ record.service.description }}",
+        "deleted": "{{ record.service.deleted }}"
+      },
+      "schema": "schemas/services.json"
+    },
+    {
+      "name": "connectors",
+      "path": "/ng/api/connectors",
+      "query": {
+        "accountIdentifier": "{{ config.account_id }}",
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data.content"
+      },
+      "computed_fields": {
+        "identifier": "{{ record.connector.identifier }}",
+        "org_identifier": "{{ record.connector.orgIdentifier }}",
+        "project_identifier": "{{ record.connector.projectIdentifier }}",
+        "name": "{{ record.connector.name }}",
+        "type": "{{ record.connector.type }}",
+        "description": "{{ record.connector.description }}"
+      },
+      "schema": "schemas/connectors.json"
+    },
+    {
+      "name": "pipelines",
+      "path": "/pipeline/api/pipelines/list",
+      "query": {
+        "accountIdentifier": "{{ config.account_id }}",
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data.content"
+      },
+      "computed_fields": {
+        "identifier": "{{ record.identifier }}",
+        "org_identifier": "{{ record.orgIdentifier }}",
+        "project_identifier": "{{ record.projectIdentifier }}",
+        "name": "{{ record.name }}",
+        "description": "{{ record.description }}",
+        "stage_count": "{{ record.numOfStages }}"
+      },
+      "schema": "schemas/pipelines.json"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FullStory Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "FullStory API key. Sent as 'Authorization: Basic <api_key>'; never logged."
+    },
+    "uid": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional FullStory user id sent as the FS-Uid header. Not currently wired into any request (see docs.md Known limits: the engine's header dialect always hard-errors on an absent secret rather than omitting the header, so an optional secret-sourced header cannot be expressed safely)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.fullstory.com",
+      "description": "FullStory API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "200",
+      "description": "Records per page (1-1000)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "solarwinds-service-desk",
+  "display_name": "SolarWinds Service Desk",
+  "description": "Reads SolarWinds Service Desk incidents, users, departments, categories, problems, and changes. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://documentation.solarwinds.com/en/success_center/swsd/content/api/swsd-api.htm",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external SolarWinds Service Desk API read of incident, user, department, category, problem, and change data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

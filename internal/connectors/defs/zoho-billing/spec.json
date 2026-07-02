@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zoho Billing Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.zohoapis.com/billing/v1",
+      "description": "Zoho Billing API base URL override for tests or proxies."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zoho OAuth access token. Sent as 'Authorization: Zoho-oauthtoken <access_token>'; never logged."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Optional Zoho Billing organization ID; sent as the organization_id query parameter on every request."
+    }
+  }
+}

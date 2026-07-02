@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/issued_tickets", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "tkt_fixture_1",
+          "event_id": "ev_fixture_1",
+          "order_id": "ord_fixture_1",
+          "ticket_type_id": "tt_fixture_1",
+          "status": "valid"
+        },
+        {
+          "id": "tkt_fixture_2",
+          "event_id": "ev_fixture_1",
+          "order_id": "ord_fixture_2",
+          "ticket_type_id": "tt_fixture_1",
+          "status": "valid"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Api-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "links.next"
+    },
+    "check": { "method": "GET", "path": "/courses" },
+    "error_map": [
+      { "status": 401, "hint": "northpass-lms api_key is missing or invalid; re-run pm credentials add northpass-lms" },
+      { "status": 403, "hint": "northpass-lms account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "northpass-lms rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "people",
+      "path": "/people",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "email": "{{ record.attributes.email }}",
+        "first_name": "{{ record.attributes.first_name }}",
+        "last_name": "{{ record.attributes.last_name }}",
+        "status": "{{ record.attributes.status }}",
+        "created_at": "{{ record.attributes.created_at }}",
+        "updated_at": "{{ record.attributes.updated_at }}"
+      },
+      "schema": "schemas/people.json"
+    },
+    {
+      "name": "courses",
+      "path": "/courses",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "slug": "{{ record.attributes.slug }}",
+        "status": "{{ record.attributes.status }}",
+        "created_at": "{{ record.attributes.created_at }}",
+        "updated_at": "{{ record.attributes.updated_at }}"
+      },
+      "schema": "schemas/courses.json"
+    },
+    {
+      "name": "course_enrollments",
+      "path": "/course_enrollments",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "status": "{{ record.attributes.status }}",
+        "percentage": "{{ record.attributes.percentage }}",
+        "learner_id": "{{ record.attributes.learner_id }}",
+        "course_id": "{{ record.attributes.course_id }}",
+        "created_at": "{{ record.attributes.created_at }}",
+        "updated_at": "{{ record.attributes.updated_at }}",
+        "completed_at": "{{ record.attributes.completed_at }}"
+      },
+      "schema": "schemas/course_enrollments.json"
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "slug": "{{ record.attributes.slug }}",
+        "created_at": "{{ record.attributes.created_at }}",
+        "updated_at": "{{ record.attributes.updated_at }}"
+      },
+      "schema": "schemas/groups.json"
+    }
+  ]
+}

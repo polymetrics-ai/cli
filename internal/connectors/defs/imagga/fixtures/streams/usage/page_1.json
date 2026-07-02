@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/usage" },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": { "total": 42, "monthly_processed": 100, "monthly_limit": 2000, "daily_processed": 7 },
+      "status": { "type": "success" }
+    }
+  }
+}

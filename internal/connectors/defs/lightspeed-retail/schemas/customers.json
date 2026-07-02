@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "version",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": ["integer", "null"] },
+    "customer_code": { "type": ["string", "null"] },
+    "customer_group_id": { "type": ["string", "null"] },
+    "balance": { "type": ["number", "null"] },
+    "loyalty_balance": { "type": ["number", "null"] },
+    "year_to_date": { "type": ["number", "null"] },
+    "do_not_email": { "type": ["boolean", "null"] },
+    "enable_loyalty": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

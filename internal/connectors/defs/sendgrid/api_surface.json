@@ -1,0 +1,17 @@
+{
+  "api": "SendGrid v3 REST API (https://docs.sendgrid.com/api-reference)",
+  "docs": "https://docs.sendgrid.com/api-reference/how-to-use-the-sendgrid-v3-api/authentication",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (lists, segments, contacts, suppression_bounces); the full SendGrid surface (mail send, templates, stats, sender identities, webhooks) is out of scope until Pass B. SendGrid is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/marketing/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/v3/marketing/segments/2.0", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "/v3/marketing/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/v3/suppression/bounces", "covered_by": { "stream": "suppression_bounces" } },
+    { "method": "POST", "path": "/v3/mail/send", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented mail sending; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/templates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/stats", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/senders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/v3/suppression/bounces/{email}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; SendGrid connector is read-only" } }
+  ]
+}

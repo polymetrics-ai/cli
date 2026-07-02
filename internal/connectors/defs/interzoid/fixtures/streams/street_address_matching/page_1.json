@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/getaddressmatchadvanced",
+    "query": { "address": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "Code": "Success", "SimKey": "FIXTUREKEY0003", "Credits": "9997" }
+  }
+}

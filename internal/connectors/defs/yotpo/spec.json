@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Yotpo Connection Specification",
+  "type": "object",
+  "required": ["access_token", "store_id"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Yotpo API access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged."
+    },
+    "store_id": {
+      "type": "string",
+      "description": "Yotpo store ID; substituted into every stream's store-scoped path."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.yotpo.com",
+      "description": "Yotpo API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

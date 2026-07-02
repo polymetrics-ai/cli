@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "fuel_entries",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "vehicle_id": { "type": ["integer", "null"] },
+    "vehicle_name": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"], "format": "date-time" },
+    "us_gallons": { "type": ["string", "null"] },
+    "cost": { "type": ["string", "null"] },
+    "total_amount": { "type": ["string", "null"] },
+    "meter_value": { "type": ["string", "null"] },
+    "is_sample": { "type": ["boolean", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

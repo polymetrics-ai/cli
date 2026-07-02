@@ -1,0 +1,14 @@
+{
+  "api": "HiBob REST API v1 (https://apidocs.hibob.com/)",
+  "docs": "https://apidocs.hibob.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (profiles, named_lists, company_lists); HiBob is a read-only HR data source in the legacy connector (capabilities.write is false, no obviously-safe reverse-ETL writes).",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/profiles", "covered_by": { "stream": "profiles" } },
+    { "method": "GET", "path": "/v1/company/named-lists", "covered_by": { "stream": "named_lists" } },
+    { "method": "GET", "path": "/v1/company/people/fields", "covered_by": { "stream": "company_lists" } },
+    { "method": "GET", "path": "/v1/timeoff/*", "excluded": { "category": "out_of_scope", "reason": "time-off requests not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/docs/*", "excluded": { "category": "out_of_scope", "reason": "employee documents not modeled by legacy; Pass B capability expansion" } },
+    { "method": "PUT", "path": "/v1/people/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented employee-profile writes; Pass B capability expansion" } }
+  ]
+}

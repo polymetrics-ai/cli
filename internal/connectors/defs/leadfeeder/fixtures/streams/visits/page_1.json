@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/visits",
+    "query": { "page[size]": "100", "start_date": "2020-01-01T00:00:00Z", "end_date": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "visit_fixture_1",
+          "type": "visits",
+          "attributes": {
+            "visit_length": 120,
+            "pageviews": 3,
+            "source": "organic",
+            "referring_url": "https://google.com",
+            "hostname": "example.test",
+            "visit_date": "2026-01-02",
+            "started_at": "2026-01-02T10:00:00Z",
+            "ended_at": "2026-01-02T10:05:00Z"
+          }
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

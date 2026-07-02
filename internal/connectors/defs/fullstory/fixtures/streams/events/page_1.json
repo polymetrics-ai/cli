@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/v2/events", "query": { "limit": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "event_fixture_1",
+          "name": "page_view",
+          "user_id": "user_fixture_1",
+          "session_id": "sess_fixture_1",
+          "event_time": "2026-01-01T00:00:00Z",
+          "device_id": "dev_fixture_1",
+          "type": "custom"
+        },
+        {
+          "id": "event_fixture_2",
+          "name": "click",
+          "user_id": "user_fixture_2",
+          "session_id": "sess_fixture_2",
+          "event_time": "2026-01-02T00:00:00Z",
+          "device_id": "dev_fixture_2",
+          "type": "custom"
+        }
+      ],
+      "next_page_token": ""
+    }
+  }
+}

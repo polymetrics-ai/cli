@@ -1,0 +1,717 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/content",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "content_fixture_1",
+          "title": "Fixture Content 1",
+          "type": "course",
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_2",
+          "title": "Fixture Content 2",
+          "type": "course",
+          "created_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_3",
+          "title": "Fixture Content 3",
+          "type": "course",
+          "created_at": "2026-01-04T00:00:00Z",
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_4",
+          "title": "Fixture Content 4",
+          "type": "course",
+          "created_at": "2026-01-05T00:00:00Z",
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_5",
+          "title": "Fixture Content 5",
+          "type": "course",
+          "created_at": "2026-01-06T00:00:00Z",
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_6",
+          "title": "Fixture Content 6",
+          "type": "course",
+          "created_at": "2026-01-07T00:00:00Z",
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_7",
+          "title": "Fixture Content 7",
+          "type": "course",
+          "created_at": "2026-01-08T00:00:00Z",
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_8",
+          "title": "Fixture Content 8",
+          "type": "course",
+          "created_at": "2026-01-09T00:00:00Z",
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_9",
+          "title": "Fixture Content 9",
+          "type": "course",
+          "created_at": "2026-01-10T00:00:00Z",
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_10",
+          "title": "Fixture Content 10",
+          "type": "course",
+          "created_at": "2026-01-11T00:00:00Z",
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_11",
+          "title": "Fixture Content 11",
+          "type": "course",
+          "created_at": "2026-01-12T00:00:00Z",
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_12",
+          "title": "Fixture Content 12",
+          "type": "course",
+          "created_at": "2026-01-13T00:00:00Z",
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_13",
+          "title": "Fixture Content 13",
+          "type": "course",
+          "created_at": "2026-01-14T00:00:00Z",
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_14",
+          "title": "Fixture Content 14",
+          "type": "course",
+          "created_at": "2026-01-15T00:00:00Z",
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_15",
+          "title": "Fixture Content 15",
+          "type": "course",
+          "created_at": "2026-01-16T00:00:00Z",
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_16",
+          "title": "Fixture Content 16",
+          "type": "course",
+          "created_at": "2026-01-17T00:00:00Z",
+          "updated_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_17",
+          "title": "Fixture Content 17",
+          "type": "course",
+          "created_at": "2026-01-18T00:00:00Z",
+          "updated_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_18",
+          "title": "Fixture Content 18",
+          "type": "course",
+          "created_at": "2026-01-19T00:00:00Z",
+          "updated_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_19",
+          "title": "Fixture Content 19",
+          "type": "course",
+          "created_at": "2026-01-20T00:00:00Z",
+          "updated_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_20",
+          "title": "Fixture Content 20",
+          "type": "course",
+          "created_at": "2026-01-21T00:00:00Z",
+          "updated_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_21",
+          "title": "Fixture Content 21",
+          "type": "course",
+          "created_at": "2026-01-22T00:00:00Z",
+          "updated_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_22",
+          "title": "Fixture Content 22",
+          "type": "course",
+          "created_at": "2026-01-23T00:00:00Z",
+          "updated_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_23",
+          "title": "Fixture Content 23",
+          "type": "course",
+          "created_at": "2026-01-24T00:00:00Z",
+          "updated_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_24",
+          "title": "Fixture Content 24",
+          "type": "course",
+          "created_at": "2026-01-25T00:00:00Z",
+          "updated_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_25",
+          "title": "Fixture Content 25",
+          "type": "course",
+          "created_at": "2026-01-26T00:00:00Z",
+          "updated_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_26",
+          "title": "Fixture Content 26",
+          "type": "course",
+          "created_at": "2026-01-27T00:00:00Z",
+          "updated_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_27",
+          "title": "Fixture Content 27",
+          "type": "course",
+          "created_at": "2026-01-28T00:00:00Z",
+          "updated_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_28",
+          "title": "Fixture Content 28",
+          "type": "course",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_29",
+          "title": "Fixture Content 29",
+          "type": "course",
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_30",
+          "title": "Fixture Content 30",
+          "type": "course",
+          "created_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_31",
+          "title": "Fixture Content 31",
+          "type": "course",
+          "created_at": "2026-01-04T00:00:00Z",
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_32",
+          "title": "Fixture Content 32",
+          "type": "course",
+          "created_at": "2026-01-05T00:00:00Z",
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_33",
+          "title": "Fixture Content 33",
+          "type": "course",
+          "created_at": "2026-01-06T00:00:00Z",
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_34",
+          "title": "Fixture Content 34",
+          "type": "course",
+          "created_at": "2026-01-07T00:00:00Z",
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_35",
+          "title": "Fixture Content 35",
+          "type": "course",
+          "created_at": "2026-01-08T00:00:00Z",
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_36",
+          "title": "Fixture Content 36",
+          "type": "course",
+          "created_at": "2026-01-09T00:00:00Z",
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_37",
+          "title": "Fixture Content 37",
+          "type": "course",
+          "created_at": "2026-01-10T00:00:00Z",
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_38",
+          "title": "Fixture Content 38",
+          "type": "course",
+          "created_at": "2026-01-11T00:00:00Z",
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_39",
+          "title": "Fixture Content 39",
+          "type": "course",
+          "created_at": "2026-01-12T00:00:00Z",
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_40",
+          "title": "Fixture Content 40",
+          "type": "course",
+          "created_at": "2026-01-13T00:00:00Z",
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_41",
+          "title": "Fixture Content 41",
+          "type": "course",
+          "created_at": "2026-01-14T00:00:00Z",
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_42",
+          "title": "Fixture Content 42",
+          "type": "course",
+          "created_at": "2026-01-15T00:00:00Z",
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_43",
+          "title": "Fixture Content 43",
+          "type": "course",
+          "created_at": "2026-01-16T00:00:00Z",
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_44",
+          "title": "Fixture Content 44",
+          "type": "course",
+          "created_at": "2026-01-17T00:00:00Z",
+          "updated_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_45",
+          "title": "Fixture Content 45",
+          "type": "course",
+          "created_at": "2026-01-18T00:00:00Z",
+          "updated_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_46",
+          "title": "Fixture Content 46",
+          "type": "course",
+          "created_at": "2026-01-19T00:00:00Z",
+          "updated_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_47",
+          "title": "Fixture Content 47",
+          "type": "course",
+          "created_at": "2026-01-20T00:00:00Z",
+          "updated_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_48",
+          "title": "Fixture Content 48",
+          "type": "course",
+          "created_at": "2026-01-21T00:00:00Z",
+          "updated_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_49",
+          "title": "Fixture Content 49",
+          "type": "course",
+          "created_at": "2026-01-22T00:00:00Z",
+          "updated_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_50",
+          "title": "Fixture Content 50",
+          "type": "course",
+          "created_at": "2026-01-23T00:00:00Z",
+          "updated_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_51",
+          "title": "Fixture Content 51",
+          "type": "course",
+          "created_at": "2026-01-24T00:00:00Z",
+          "updated_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_52",
+          "title": "Fixture Content 52",
+          "type": "course",
+          "created_at": "2026-01-25T00:00:00Z",
+          "updated_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_53",
+          "title": "Fixture Content 53",
+          "type": "course",
+          "created_at": "2026-01-26T00:00:00Z",
+          "updated_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_54",
+          "title": "Fixture Content 54",
+          "type": "course",
+          "created_at": "2026-01-27T00:00:00Z",
+          "updated_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_55",
+          "title": "Fixture Content 55",
+          "type": "course",
+          "created_at": "2026-01-28T00:00:00Z",
+          "updated_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_56",
+          "title": "Fixture Content 56",
+          "type": "course",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_57",
+          "title": "Fixture Content 57",
+          "type": "course",
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_58",
+          "title": "Fixture Content 58",
+          "type": "course",
+          "created_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_59",
+          "title": "Fixture Content 59",
+          "type": "course",
+          "created_at": "2026-01-04T00:00:00Z",
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_60",
+          "title": "Fixture Content 60",
+          "type": "course",
+          "created_at": "2026-01-05T00:00:00Z",
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_61",
+          "title": "Fixture Content 61",
+          "type": "course",
+          "created_at": "2026-01-06T00:00:00Z",
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_62",
+          "title": "Fixture Content 62",
+          "type": "course",
+          "created_at": "2026-01-07T00:00:00Z",
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_63",
+          "title": "Fixture Content 63",
+          "type": "course",
+          "created_at": "2026-01-08T00:00:00Z",
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_64",
+          "title": "Fixture Content 64",
+          "type": "course",
+          "created_at": "2026-01-09T00:00:00Z",
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_65",
+          "title": "Fixture Content 65",
+          "type": "course",
+          "created_at": "2026-01-10T00:00:00Z",
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_66",
+          "title": "Fixture Content 66",
+          "type": "course",
+          "created_at": "2026-01-11T00:00:00Z",
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_67",
+          "title": "Fixture Content 67",
+          "type": "course",
+          "created_at": "2026-01-12T00:00:00Z",
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_68",
+          "title": "Fixture Content 68",
+          "type": "course",
+          "created_at": "2026-01-13T00:00:00Z",
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_69",
+          "title": "Fixture Content 69",
+          "type": "course",
+          "created_at": "2026-01-14T00:00:00Z",
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_70",
+          "title": "Fixture Content 70",
+          "type": "course",
+          "created_at": "2026-01-15T00:00:00Z",
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_71",
+          "title": "Fixture Content 71",
+          "type": "course",
+          "created_at": "2026-01-16T00:00:00Z",
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_72",
+          "title": "Fixture Content 72",
+          "type": "course",
+          "created_at": "2026-01-17T00:00:00Z",
+          "updated_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_73",
+          "title": "Fixture Content 73",
+          "type": "course",
+          "created_at": "2026-01-18T00:00:00Z",
+          "updated_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_74",
+          "title": "Fixture Content 74",
+          "type": "course",
+          "created_at": "2026-01-19T00:00:00Z",
+          "updated_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_75",
+          "title": "Fixture Content 75",
+          "type": "course",
+          "created_at": "2026-01-20T00:00:00Z",
+          "updated_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_76",
+          "title": "Fixture Content 76",
+          "type": "course",
+          "created_at": "2026-01-21T00:00:00Z",
+          "updated_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_77",
+          "title": "Fixture Content 77",
+          "type": "course",
+          "created_at": "2026-01-22T00:00:00Z",
+          "updated_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_78",
+          "title": "Fixture Content 78",
+          "type": "course",
+          "created_at": "2026-01-23T00:00:00Z",
+          "updated_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_79",
+          "title": "Fixture Content 79",
+          "type": "course",
+          "created_at": "2026-01-24T00:00:00Z",
+          "updated_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_80",
+          "title": "Fixture Content 80",
+          "type": "course",
+          "created_at": "2026-01-25T00:00:00Z",
+          "updated_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_81",
+          "title": "Fixture Content 81",
+          "type": "course",
+          "created_at": "2026-01-26T00:00:00Z",
+          "updated_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_82",
+          "title": "Fixture Content 82",
+          "type": "course",
+          "created_at": "2026-01-27T00:00:00Z",
+          "updated_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_83",
+          "title": "Fixture Content 83",
+          "type": "course",
+          "created_at": "2026-01-28T00:00:00Z",
+          "updated_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_84",
+          "title": "Fixture Content 84",
+          "type": "course",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_85",
+          "title": "Fixture Content 85",
+          "type": "course",
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_86",
+          "title": "Fixture Content 86",
+          "type": "course",
+          "created_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_87",
+          "title": "Fixture Content 87",
+          "type": "course",
+          "created_at": "2026-01-04T00:00:00Z",
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_88",
+          "title": "Fixture Content 88",
+          "type": "course",
+          "created_at": "2026-01-05T00:00:00Z",
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_89",
+          "title": "Fixture Content 89",
+          "type": "course",
+          "created_at": "2026-01-06T00:00:00Z",
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_90",
+          "title": "Fixture Content 90",
+          "type": "course",
+          "created_at": "2026-01-07T00:00:00Z",
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_91",
+          "title": "Fixture Content 91",
+          "type": "course",
+          "created_at": "2026-01-08T00:00:00Z",
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_92",
+          "title": "Fixture Content 92",
+          "type": "course",
+          "created_at": "2026-01-09T00:00:00Z",
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_93",
+          "title": "Fixture Content 93",
+          "type": "course",
+          "created_at": "2026-01-10T00:00:00Z",
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_94",
+          "title": "Fixture Content 94",
+          "type": "course",
+          "created_at": "2026-01-11T00:00:00Z",
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_95",
+          "title": "Fixture Content 95",
+          "type": "course",
+          "created_at": "2026-01-12T00:00:00Z",
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_96",
+          "title": "Fixture Content 96",
+          "type": "course",
+          "created_at": "2026-01-13T00:00:00Z",
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_97",
+          "title": "Fixture Content 97",
+          "type": "course",
+          "created_at": "2026-01-14T00:00:00Z",
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_98",
+          "title": "Fixture Content 98",
+          "type": "course",
+          "created_at": "2026-01-15T00:00:00Z",
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_99",
+          "title": "Fixture Content 99",
+          "type": "course",
+          "created_at": "2026-01-16T00:00:00Z",
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "content_fixture_100",
+          "title": "Fixture Content 100",
+          "type": "course",
+          "created_at": "2026-01-17T00:00:00Z",
+          "updated_at": "2026-01-17T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

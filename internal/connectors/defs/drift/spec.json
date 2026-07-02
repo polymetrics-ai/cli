@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Drift Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Drift OAuth access token. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://driftapi.com",
+      "description": "Drift API base URL override for tests or proxies."
+    },
+    "email": {
+      "type": "string",
+      "description": "Optional email filter for the contacts stream lookup."
+    }
+  }
+}

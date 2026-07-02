@@ -1,0 +1,82 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "LinkedIn-Version": "{{ config.linkedin_version }}",
+      "X-Restli-Protocol-Version": "2.0.0"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "count",
+      "offset_param": "start",
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/adAccounts" },
+    "error_map": [
+      { "status": 401, "hint": "linkedin-ads access_token is missing or invalid; re-run pm credentials add linkedin-ads" },
+      { "status": 403, "hint": "linkedin-ads credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "linkedin-ads rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "/adAccounts",
+      "query": { "q": "search" },
+      "records": { "path": "elements" },
+      "computed_fields": {
+        "created_at": "{{ record.changeAuditStamps.created.time }}",
+        "last_modified": "{{ record.changeAuditStamps.lastModified.time }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "campaign_groups",
+      "path": "/adCampaignGroups",
+      "query": { "q": "search" },
+      "records": { "path": "elements" },
+      "computed_fields": {
+        "total_budget": "{{ record.totalBudget }}",
+        "run_schedule": "{{ record.runSchedule }}",
+        "created_at": "{{ record.changeAuditStamps.created.time }}",
+        "last_modified": "{{ record.changeAuditStamps.lastModified.time }}"
+      },
+      "schema": "schemas/campaign_groups.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/adCampaigns",
+      "query": { "q": "search" },
+      "records": { "path": "elements" },
+      "computed_fields": {
+        "campaign_group": "{{ record.campaignGroup }}",
+        "cost_type": "{{ record.costType }}",
+        "objective_type": "{{ record.objectiveType }}",
+        "daily_budget": "{{ record.dailyBudget }}",
+        "unit_cost": "{{ record.unitCost }}",
+        "run_schedule": "{{ record.runSchedule }}",
+        "created_at": "{{ record.changeAuditStamps.created.time }}",
+        "last_modified": "{{ record.changeAuditStamps.lastModified.time }}"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "creatives",
+      "path": "/creatives",
+      "query": { "q": "search" },
+      "records": { "path": "elements" },
+      "computed_fields": {
+        "is_serving": "{{ record.isServing }}",
+        "intended_status": "{{ record.intendedStatus }}",
+        "review_status": "{{ record.reviewStatus }}",
+        "created_at": "{{ record.createdAt }}",
+        "last_modified": "{{ record.lastModifiedAt }}"
+      },
+      "schema": "schemas/creatives.json"
+    }
+  ]
+}

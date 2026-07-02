@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/1/indexes" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "name": "fixture_index_1", "entries": 10, "dataSize": 1024, "fileSize": 2048, "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-02T00:00:00Z", "pendingTask": false }
+      ],
+      "nbPages": 1
+    }
+  }
+}

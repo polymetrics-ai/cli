@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/projects" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "as:1001",
+        "name": "Fixture Website",
+        "type": "board",
+        "platform": "everhour",
+        "status": "open",
+        "workspaceId": "ws_fixture",
+        "workspaceName": "Fixture Workspace",
+        "favorite": false,
+        "foreign": false,
+        "createdAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": "as:1002",
+        "name": "Fixture Mobile",
+        "type": "board",
+        "platform": "everhour",
+        "status": "open",
+        "workspaceId": "ws_fixture",
+        "workspaceName": "Fixture Workspace",
+        "favorite": true,
+        "foreign": false,
+        "createdAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

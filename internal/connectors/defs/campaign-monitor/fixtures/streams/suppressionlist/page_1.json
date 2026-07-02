@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/clients/synthetic-conformance-value/suppressionlist.json",
+    "query": {
+      "page": "1",
+      "pagesize": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Results": [
+        {
+          "EmailAddress": "fixture1@example.com",
+          "Date": "2026-01-01 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        }
+      ],
+      "PageNumber": 1,
+      "PageSize": 1,
+      "RecordsOnThisPage": 1,
+      "TotalNumberOfRecords": 1,
+      "NumberOfPages": 1
+    }
+  }
+}

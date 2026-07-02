@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "roles",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "purpose": { "type": ["string", "null"] },
+    "is_core": { "type": ["boolean", "null"] },
+    "elected_until": { "type": ["string", "null"] },
+    "name_with_circle_for_core_roles": { "type": ["string", "null"] },
+    "organization_id": { "type": ["integer", "null"] }
+  }
+}

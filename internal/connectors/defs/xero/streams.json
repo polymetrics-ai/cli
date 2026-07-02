@@ -1,0 +1,97 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Xero-tenant-id": "{{ secrets.tenant_id }}"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "Organisation" },
+    "error_map": [
+      { "status": 401, "hint": "xero access_token is missing, invalid, or expired; re-run pm credentials add xero" },
+      { "status": 403, "hint": "xero tenant_id is missing or the connected app lacks access to this tenant" },
+      { "status": 429, "class": "rate_limited", "hint": "xero rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "invoices",
+      "path": "Invoices",
+      "records": { "path": "Invoices" },
+      "computed_fields": {
+        "id": "{{ record.InvoiceID }}",
+        "type": "{{ record.Type }}",
+        "status": "{{ record.Status }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}",
+        "ContactID": "{{ record.Contact.ContactID }}"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "contacts",
+      "path": "Contacts",
+      "records": { "path": "Contacts" },
+      "computed_fields": {
+        "id": "{{ record.ContactID }}",
+        "status": "{{ record.ContactStatus }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "accounts",
+      "path": "Accounts",
+      "records": { "path": "Accounts" },
+      "computed_fields": {
+        "id": "{{ record.AccountID }}",
+        "type": "{{ record.Type }}",
+        "status": "{{ record.Status }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "bank_transactions",
+      "path": "BankTransactions",
+      "records": { "path": "BankTransactions" },
+      "computed_fields": {
+        "id": "{{ record.BankTransactionID }}",
+        "type": "{{ record.Type }}",
+        "status": "{{ record.Status }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}",
+        "ContactID": "{{ record.Contact.ContactID }}"
+      },
+      "schema": "schemas/bank_transactions.json"
+    },
+    {
+      "name": "items",
+      "path": "Items",
+      "records": { "path": "Items" },
+      "computed_fields": {
+        "id": "{{ record.ItemID }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}"
+      },
+      "schema": "schemas/items.json"
+    },
+    {
+      "name": "payments",
+      "path": "Payments",
+      "records": { "path": "Payments" },
+      "computed_fields": {
+        "id": "{{ record.PaymentID }}",
+        "status": "{{ record.Status }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}"
+      },
+      "schema": "schemas/payments.json"
+    }
+  ]
+}

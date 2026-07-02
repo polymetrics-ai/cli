@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "email": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "language": { "type": ["string", "null"] },
+    "custom_fields": { "type": ["object", "null"] }
+  }
+}

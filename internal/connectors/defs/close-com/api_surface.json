@@ -1,0 +1,16 @@
+{
+  "api": "Close REST API v1 (https://api.close.com/api/v1)",
+  "docs": "https://developer.close.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Close surface (tasks, custom fields, smart views, webhooks, CRUD writes, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/lead/", "covered_by": { "stream": "leads" } },
+    { "method": "GET", "path": "/contact/", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/opportunity/", "covered_by": { "stream": "opportunities" } },
+    { "method": "GET", "path": "/activity/", "covered_by": { "stream": "activities" } },
+    { "method": "GET", "path": "/user/", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/task/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/lead/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/custom_field/lead/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

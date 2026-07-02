@@ -1,0 +1,23 @@
+{
+  "name": "hellobaton",
+  "display_name": "Hellobaton",
+  "description": "Reads Hellobaton projects, milestones, tasks, phases, companies, and users through the Hellobaton REST API.",
+  "integration_type": "api",
+  "docs_url": "manual intervention needed",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Hellobaton API read of project, milestone, task, phase, company, and user data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

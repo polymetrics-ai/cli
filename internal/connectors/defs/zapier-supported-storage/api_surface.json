@@ -1,0 +1,11 @@
+{
+  "api": "Zapier Storage API (https://help.zapier.com/hc/en-us/articles/8496293271053-Save-and-retrieve-data-from-Zaps)",
+  "docs": "https://help.zapier.com/hc/en-us/articles/8496293271053-Save-and-retrieve-data-from-Zaps",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only (records); legacy is read-only (capabilities.write: false), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/api/records", "covered_by": { "stream": "records" } },
+    { "method": "POST", "path": "/api/records", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not covered by legacy (read-only connector)" } },
+    { "method": "DELETE", "path": "/api/records", "excluded": { "category": "destructive_admin", "reason": "bulk-delete admin operation; not covered by legacy (read-only connector)" } }
+  ]
+}

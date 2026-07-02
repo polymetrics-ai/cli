@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/edit/segments", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "segments": [
+        {
+          "id": "seg_fixture_1",
+          "name": "Fixture Power Users",
+          "description": "Deterministic fixture segment.",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

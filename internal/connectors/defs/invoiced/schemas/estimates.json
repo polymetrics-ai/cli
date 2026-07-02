@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "estimates",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "object": { "type": ["string", "null"] },
+    "customer": { "type": ["integer", "null"] },
+    "number": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "total": { "type": ["number", "null"] },
+    "approved": { "type": ["boolean", "null"] },
+    "closed": { "type": ["boolean", "null"] },
+    "expiration_date": { "type": ["integer", "null"] },
+    "created_at": { "type": "integer" },
+    "updated_at": { "type": "integer" }
+  }
+}

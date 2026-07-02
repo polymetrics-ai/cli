@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/top-headlines/sources", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "sources": [
+        { "id": "fixture-source-1", "name": "Fixture Source 1", "description": "conformance fixture source", "url": "https://example.com/source/1", "category": "technology", "language": "en", "country": "us" }
+      ]
+    }
+  }
+}

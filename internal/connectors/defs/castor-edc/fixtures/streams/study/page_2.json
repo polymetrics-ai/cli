@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/study", "query": { "page": "2", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "study": [
+          {
+            "study_id": "study_fixture_3",
+            "crf_id": "crf_fixture_3",
+            "name": "Fixture Trial Three",
+            "live": false,
+            "randomization_enabled": false,
+            "gcp_enabled": true,
+            "surveys_enabled": false,
+            "premium_support_enabled": true,
+            "main_contact": "fixture3@example.com",
+            "institute_id": "inst_fixture_3",
+            "created_on": "2026-01-03T00:00:00Z",
+            "updated_on": "2026-01-03T00:00:00Z",
+            "duration": 90
+          }
+        ]
+      },
+      "page": 2,
+      "page_count": 2,
+      "total_items": 3
+    }
+  }
+}

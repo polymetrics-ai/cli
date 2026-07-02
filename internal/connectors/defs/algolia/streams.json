@@ -1,0 +1,45 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Algolia-Application-Id": "{{ config.application_id }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Algolia-API-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/1/indexes" },
+    "error_map": [
+      { "status": 401, "hint": "algolia api_key is missing or invalid; re-run pm credentials add algolia" },
+      { "status": 403, "hint": "algolia api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "algolia rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "api_keys",
+      "path": "/1/keys",
+      "records": { "path": "keys" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "max_hits_per_query": "{{ record.maxHitsPerQuery }}",
+        "max_queries_per_ip_per_hour": "{{ record.maxQueriesPerIPPerHour }}"
+      },
+      "schema": "schemas/api_keys.json"
+    },
+    {
+      "name": "index_settings",
+      "path": "/1/indexes/{{ config.index_name }}/settings",
+      "records": { "path": "." },
+      "computed_fields": {
+        "index_name": "{{ config.index_name }}",
+        "searchable_attributes": "{{ record.searchableAttributes }}",
+        "attributes_for_faceting": "{{ record.attributesForFaceting }}",
+        "custom_ranking": "{{ record.customRanking }}",
+        "hits_per_page": "{{ record.hitsPerPage }}",
+        "pagination_limited_to": "{{ record.paginationLimitedTo }}"
+      },
+      "schema": "schemas/index_settings.json"
+    }
+  ]
+}

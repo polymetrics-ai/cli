@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/candidates" },
+  "response": {
+    "status": 200,
+    "body": { "next": null, "previous": null, "results": [] }
+  }
+}

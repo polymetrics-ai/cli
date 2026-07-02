@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/users/synthetic-conformance-value/datasets",
+    "query": { "Limit": "100", "Offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Items": [
+          {
+            "Id": "dataset_fixture_1",
+            "Name": "Fixture Dataset One",
+            "Href": "v1pre3/datasets/dataset_fixture_1",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "TotalSize": 3000,
+            "DatasetType": { "Id": "common.fastq", "Name": "FASTQ" },
+            "Project": { "Id": "project_fixture_1", "Name": "Fixture Project One" }
+          }
+        ],
+        "Offset": 0,
+        "Limit": 100,
+        "TotalCount": 1
+      }
+    }
+  }
+}

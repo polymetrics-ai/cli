@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "shortcuts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "options": { "type": ["string", "null"] },
+    "message": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "scope": { "type": ["string", "null"] }
+  }
+}

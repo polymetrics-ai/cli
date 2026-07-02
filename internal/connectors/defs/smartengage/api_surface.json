@@ -1,0 +1,13 @@
+{
+  "api": "SmartEngage API (https://smartengage.com/docs/api/)",
+  "docs": "https://smartengage.com/docs/api/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (avatars, tags, custom_fields, sequences, subscribers); legacy is read-only, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "avatars/list", "covered_by": { "stream": "avatars" } },
+    { "method": "GET", "path": "tags/list/", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "customfields/list/", "covered_by": { "stream": "custom_fields" } },
+    { "method": "GET", "path": "sequences/list/", "covered_by": { "stream": "sequences" } },
+    { "method": "GET", "path": "subscribers/list/", "covered_by": { "stream": "subscribers" } }
+  ]
+}

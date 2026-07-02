@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zenefits Connection Specification",
+  "type": "object",
+  "required": ["token"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Zenefits API base URL.",
+      "default": "https://api.zenefits.com/core"
+    },
+    "token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zenefits API token, sent as an 'Authorization: Bearer <token>' header."
+    }
+  }
+}

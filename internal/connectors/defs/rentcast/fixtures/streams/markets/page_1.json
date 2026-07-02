@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/markets",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "90000",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000"
+      },
+      {
+        "id": "90001",
+        "city": "Fixture Town",
+        "state": "CA",
+        "zipCode": "90001"
+      }
+    ]
+  }
+}

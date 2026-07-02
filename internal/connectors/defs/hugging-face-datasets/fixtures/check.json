@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/is-valid", "query": { "dataset": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": { "viewer": true, "preview": true, "search": true, "filter": true, "statistics": true }
+  }
+}

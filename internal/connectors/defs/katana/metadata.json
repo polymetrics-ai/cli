@@ -1,0 +1,23 @@
+{
+  "name": "katana",
+  "display_name": "Katana",
+  "description": "Reads Katana MRP (Cloud Inventory) products, materials, variants, sales orders, and customers through the Katana REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.katanamrp.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Katana MRP API read of inventory, order, and customer data",
+    "approval": "none; read-only source"
+  }
+}

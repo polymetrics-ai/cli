@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mailgun Connection Specification",
+  "type": "object",
+  "required": ["private_key"],
+  "properties": {
+    "private_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mailgun account private API key, sent as the password of HTTP Basic auth (username is the literal 'api'). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.mailgun.net",
+      "description": "Mailgun API base URL. Defaults to the US region host; EU-region accounts must override this to https://api.eu.mailgun.net explicitly (see docs.md's Known limits)."
+    },
+    "domain_name": {
+      "type": "string",
+      "description": "Mailgun sending domain name, substituted into domain-scoped resource paths (required for the events and tags streams)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "locations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "code": { "type": ["string", "null"] },
+    "address": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "latitude": { "type": ["number", "null"] },
+    "longitude": { "type": ["number", "null"] },
+    "region": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "company_code": { "type": ["string", "null"] },
+    "company_name": { "type": ["string", "null"] }
+  }
+}

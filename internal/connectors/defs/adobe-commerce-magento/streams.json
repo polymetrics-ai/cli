@@ -1,0 +1,99 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "searchCriteria[currentPage]",
+      "size_param": "searchCriteria[pageSize]",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/products" },
+    "error_map": [
+      { "status": 401, "hint": "adobe-commerce-magento integration access token is missing or invalid; re-run pm credentials add adobe-commerce-magento" },
+      { "status": 403, "hint": "adobe-commerce-magento account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "adobe-commerce-magento rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/products",
+      "query": {
+        "searchCriteria[filter_groups][0][filters][0][field]": { "template": "{{ incremental.lower_bound | const:updated_at }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][value]": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][condition_type]": { "template": "{{ incremental.lower_bound | const:gt }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "orders",
+      "path": "/orders",
+      "query": {
+        "searchCriteria[filter_groups][0][filters][0][field]": { "template": "{{ incremental.lower_bound | const:updated_at }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][value]": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][condition_type]": { "template": "{{ incremental.lower_bound | const:gt }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "customers",
+      "path": "/customers/search",
+      "query": {
+        "searchCriteria[filter_groups][0][filters][0][field]": { "template": "{{ incremental.lower_bound | const:updated_at }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][value]": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][condition_type]": { "template": "{{ incremental.lower_bound | const:gt }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "categories",
+      "path": "/categories/list",
+      "query": {
+        "searchCriteria[filter_groups][0][filters][0][field]": { "template": "{{ incremental.lower_bound | const:updated_at }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][value]": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][condition_type]": { "template": "{{ incremental.lower_bound | const:gt }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": {
+        "searchCriteria[filter_groups][0][filters][0][field]": { "template": "{{ incremental.lower_bound | const:updated_at }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][value]": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][condition_type]": { "template": "{{ incremental.lower_bound | const:gt }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/invoices.json"
+    }
+  ]
+}

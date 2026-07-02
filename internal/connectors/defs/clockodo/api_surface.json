@@ -1,0 +1,15 @@
+{
+  "api": "Clockodo API v2 (https://my.clockodo.com/api)",
+  "docs": "https://www.clockodo.com/en/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Clockodo surface (time entries, absences, teams CRUD, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/v2/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/v2/services", "covered_by": { "stream": "services" } },
+    { "method": "GET", "path": "/v2/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/v2/entries", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/absences", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

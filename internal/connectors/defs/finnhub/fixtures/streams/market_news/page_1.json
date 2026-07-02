@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/news", "query": { "category": "general" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "category": "general",
+        "datetime": 1767225601,
+        "headline": "Fixture headline one",
+        "source": "Fixture Source",
+        "summary": "Deterministic fixture market news summary.",
+        "related": "AAPL",
+        "url": "https://example.com/news/1",
+        "image": "https://example.com/img/1.png"
+      },
+      {
+        "id": 1002,
+        "category": "general",
+        "datetime": 1767225602,
+        "headline": "Fixture headline two",
+        "source": "Fixture Source",
+        "summary": "Second deterministic fixture market news summary.",
+        "related": "MSFT",
+        "url": "https://example.com/news/2",
+        "image": "https://example.com/img/2.png"
+      }
+    ]
+  }
+}

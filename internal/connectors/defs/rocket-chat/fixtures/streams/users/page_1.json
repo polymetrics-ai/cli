@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/users.list", "query": { "count": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        { "_id": "user_fixture_1", "username": "fixture.one", "name": "Fixture One", "emails": [{ "address": "fixture.one@example.com", "verified": true }], "status": "online", "active": true, "_updatedAt": "2026-01-01T00:00:00.000Z" },
+        { "_id": "user_fixture_2", "username": "fixture.two", "name": "Fixture Two", "emails": [{ "address": "fixture.two@example.com", "verified": true }], "status": "offline", "active": true, "_updatedAt": "2026-01-01T00:05:00.000Z" }
+      ],
+      "count": 2,
+      "offset": 0,
+      "total": 3,
+      "success": true
+    }
+  }
+}

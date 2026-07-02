@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/tables" },
+  "response": {
+    "status": 200,
+    "body": { "results": [] }
+  }
+}

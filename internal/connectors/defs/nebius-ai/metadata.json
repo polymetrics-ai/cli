@@ -1,0 +1,22 @@
+{
+  "name": "nebius-ai",
+  "display_name": "Nebius AI",
+  "description": "Reads Nebius AI Studio models, files, and batch jobs through the OpenAI-compatible Nebius AI Studio REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.nebius.com/studio/inference/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 20
+  },
+  "risk": {
+    "read": "external Nebius AI Studio API read of model, file, and batch-job metadata"
+  }
+}

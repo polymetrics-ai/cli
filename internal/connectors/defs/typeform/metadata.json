@@ -1,0 +1,23 @@
+{
+  "name": "typeform",
+  "display_name": "Typeform",
+  "description": "Reads Typeform forms, workspaces, themes, and images through the Typeform REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.typeform.com/developers/changelog/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Typeform API read of form, workspace, theme, and image metadata",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

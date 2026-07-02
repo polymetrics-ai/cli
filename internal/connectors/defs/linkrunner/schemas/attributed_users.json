@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "attributed_users",
+  "type": "object",
+  "x-primary-key": ["campaign_display_id", "attributed_at"],
+  "x-cursor-field": "attributed_at",
+  "required": ["campaign_display_id", "attributed_at"],
+  "properties": {
+    "attributed_at": { "type": "string" },
+    "campaign_display_id": { "type": "string" },
+    "campaign_name": { "type": ["string", "null"] },
+    "link": { "type": ["string", "null"] },
+    "installed_at": { "type": ["string", "null"] },
+    "store_click_at": { "type": ["string", "null"] },
+    "ad_set_id": { "type": ["string", "null"] },
+    "user_data": { "type": ["object", "null"] }
+  }
+}

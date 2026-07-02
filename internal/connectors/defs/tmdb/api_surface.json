@@ -1,0 +1,14 @@
+{
+  "api": "TMDb API v3 (https://developer.themoviedb.org/reference/intro/getting-started)",
+  "docs": "https://developer.themoviedb.org/reference/intro/getting-started",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full TMDb surface (TV shows, people, credits, reviews, watch providers, account features, etc.) is out of scope until Pass B. tmdb is read-only in legacy (Capabilities.Write is false) so no writes.json.",
+  "endpoints": [
+    { "method": "GET", "path": "/movie/popular", "covered_by": { "stream": "popular_movies" } },
+    { "method": "GET", "path": "/movie/now_playing", "covered_by": { "stream": "now_playing_movies" } },
+    { "method": "GET", "path": "/search/movie", "covered_by": { "stream": "search_movies" } },
+    { "method": "GET", "path": "/movie/{movie_id}", "covered_by": { "stream": "movie_details" } },
+    { "method": "GET", "path": "/movie/{movie_id}/credits", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/tv/popular", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

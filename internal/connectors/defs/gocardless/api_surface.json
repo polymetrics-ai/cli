@@ -1,0 +1,18 @@
+{
+  "api": "GoCardless REST API (https://developer.gocardless.com/api-reference/)",
+  "docs": "https://developer.gocardless.com/api-reference/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (payments, mandates, payouts, refunds); GoCardless is read-only here (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/payments", "covered_by": { "stream": "payments" } },
+    { "method": "GET", "path": "/mandates", "covered_by": { "stream": "mandates" } },
+    { "method": "GET", "path": "/payouts", "covered_by": { "stream": "payouts" } },
+    { "method": "GET", "path": "/refunds", "covered_by": { "stream": "refunds" } },
+    { "method": "POST", "path": "/payments", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented payment creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/payments/{identity}/actions/cancel", "excluded": { "category": "destructive_admin", "reason": "cancels an in-flight payment; not modeled by legacy, requires elevated operator approval" } },
+    { "method": "GET", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented customer reads; Pass B capability expansion" } },
+    { "method": "GET", "path": "/subscriptions", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented subscription reads; Pass B capability expansion" } },
+    { "method": "GET", "path": "/events", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented event reads; Pass B capability expansion" } },
+    { "method": "GET", "path": "/creditors", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented creditor reads; Pass B capability expansion" } }
+  ]
+}

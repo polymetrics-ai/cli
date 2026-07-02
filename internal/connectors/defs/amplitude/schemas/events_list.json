@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "events_list",
+  "type": "object",
+  "x-primary-key": ["value"],
+  "required": ["value"],
+  "properties": {
+    "value": { "type": "string" },
+    "display": { "type": ["string", "null"] },
+    "totals": { "type": ["integer", "null"] },
+    "non_active": { "type": ["boolean", "null"] },
+    "deleted": { "type": ["boolean", "null"] },
+    "hidden": { "type": ["boolean", "null"] },
+    "flow_hidden": { "type": ["boolean", "null"] }
+  }
+}

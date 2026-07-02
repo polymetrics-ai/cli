@@ -1,0 +1,18 @@
+{
+  "api": "Brevo API v3 (https://api.brevo.com/v3)",
+  "docs": "https://developers.brevo.com/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Brevo surface (transactional email/SMS send, templates, webhooks, deals, companies, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/v3/emailCampaigns", "covered_by": { "stream": "email_campaigns" } },
+    { "method": "GET", "path": "/v3/contacts/lists", "covered_by": { "stream": "contacts_lists" } },
+    { "method": "GET", "path": "/v3/senders", "covered_by": { "stream": "senders" } },
+    { "method": "GET", "path": "/v3/account", "excluded": { "category": "non_data_endpoint", "reason": "account identity/plan snapshot, used only by check, not a syncable object stream" } },
+    { "method": "POST", "path": "/v3/smtp/email", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v3/smsCampaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/deals", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/companies", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

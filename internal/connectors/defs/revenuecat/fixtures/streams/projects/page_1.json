@@ -1,0 +1,619 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "proj_fixture_1",
+          "object": "project",
+          "name": "Fixture Project 1",
+          "created_at": 1735689600001
+        },
+        {
+          "id": "proj_fixture_2",
+          "object": "project",
+          "name": "Fixture Project 2",
+          "created_at": 1735689600002
+        },
+        {
+          "id": "proj_fixture_3",
+          "object": "project",
+          "name": "Fixture Project 3",
+          "created_at": 1735689600003
+        },
+        {
+          "id": "proj_fixture_4",
+          "object": "project",
+          "name": "Fixture Project 4",
+          "created_at": 1735689600004
+        },
+        {
+          "id": "proj_fixture_5",
+          "object": "project",
+          "name": "Fixture Project 5",
+          "created_at": 1735689600005
+        },
+        {
+          "id": "proj_fixture_6",
+          "object": "project",
+          "name": "Fixture Project 6",
+          "created_at": 1735689600006
+        },
+        {
+          "id": "proj_fixture_7",
+          "object": "project",
+          "name": "Fixture Project 7",
+          "created_at": 1735689600007
+        },
+        {
+          "id": "proj_fixture_8",
+          "object": "project",
+          "name": "Fixture Project 8",
+          "created_at": 1735689600008
+        },
+        {
+          "id": "proj_fixture_9",
+          "object": "project",
+          "name": "Fixture Project 9",
+          "created_at": 1735689600009
+        },
+        {
+          "id": "proj_fixture_10",
+          "object": "project",
+          "name": "Fixture Project 10",
+          "created_at": 1735689600010
+        },
+        {
+          "id": "proj_fixture_11",
+          "object": "project",
+          "name": "Fixture Project 11",
+          "created_at": 1735689600011
+        },
+        {
+          "id": "proj_fixture_12",
+          "object": "project",
+          "name": "Fixture Project 12",
+          "created_at": 1735689600012
+        },
+        {
+          "id": "proj_fixture_13",
+          "object": "project",
+          "name": "Fixture Project 13",
+          "created_at": 1735689600013
+        },
+        {
+          "id": "proj_fixture_14",
+          "object": "project",
+          "name": "Fixture Project 14",
+          "created_at": 1735689600014
+        },
+        {
+          "id": "proj_fixture_15",
+          "object": "project",
+          "name": "Fixture Project 15",
+          "created_at": 1735689600015
+        },
+        {
+          "id": "proj_fixture_16",
+          "object": "project",
+          "name": "Fixture Project 16",
+          "created_at": 1735689600016
+        },
+        {
+          "id": "proj_fixture_17",
+          "object": "project",
+          "name": "Fixture Project 17",
+          "created_at": 1735689600017
+        },
+        {
+          "id": "proj_fixture_18",
+          "object": "project",
+          "name": "Fixture Project 18",
+          "created_at": 1735689600018
+        },
+        {
+          "id": "proj_fixture_19",
+          "object": "project",
+          "name": "Fixture Project 19",
+          "created_at": 1735689600019
+        },
+        {
+          "id": "proj_fixture_20",
+          "object": "project",
+          "name": "Fixture Project 20",
+          "created_at": 1735689600020
+        },
+        {
+          "id": "proj_fixture_21",
+          "object": "project",
+          "name": "Fixture Project 21",
+          "created_at": 1735689600021
+        },
+        {
+          "id": "proj_fixture_22",
+          "object": "project",
+          "name": "Fixture Project 22",
+          "created_at": 1735689600022
+        },
+        {
+          "id": "proj_fixture_23",
+          "object": "project",
+          "name": "Fixture Project 23",
+          "created_at": 1735689600023
+        },
+        {
+          "id": "proj_fixture_24",
+          "object": "project",
+          "name": "Fixture Project 24",
+          "created_at": 1735689600024
+        },
+        {
+          "id": "proj_fixture_25",
+          "object": "project",
+          "name": "Fixture Project 25",
+          "created_at": 1735689600025
+        },
+        {
+          "id": "proj_fixture_26",
+          "object": "project",
+          "name": "Fixture Project 26",
+          "created_at": 1735689600026
+        },
+        {
+          "id": "proj_fixture_27",
+          "object": "project",
+          "name": "Fixture Project 27",
+          "created_at": 1735689600027
+        },
+        {
+          "id": "proj_fixture_28",
+          "object": "project",
+          "name": "Fixture Project 28",
+          "created_at": 1735689600028
+        },
+        {
+          "id": "proj_fixture_29",
+          "object": "project",
+          "name": "Fixture Project 29",
+          "created_at": 1735689600029
+        },
+        {
+          "id": "proj_fixture_30",
+          "object": "project",
+          "name": "Fixture Project 30",
+          "created_at": 1735689600030
+        },
+        {
+          "id": "proj_fixture_31",
+          "object": "project",
+          "name": "Fixture Project 31",
+          "created_at": 1735689600031
+        },
+        {
+          "id": "proj_fixture_32",
+          "object": "project",
+          "name": "Fixture Project 32",
+          "created_at": 1735689600032
+        },
+        {
+          "id": "proj_fixture_33",
+          "object": "project",
+          "name": "Fixture Project 33",
+          "created_at": 1735689600033
+        },
+        {
+          "id": "proj_fixture_34",
+          "object": "project",
+          "name": "Fixture Project 34",
+          "created_at": 1735689600034
+        },
+        {
+          "id": "proj_fixture_35",
+          "object": "project",
+          "name": "Fixture Project 35",
+          "created_at": 1735689600035
+        },
+        {
+          "id": "proj_fixture_36",
+          "object": "project",
+          "name": "Fixture Project 36",
+          "created_at": 1735689600036
+        },
+        {
+          "id": "proj_fixture_37",
+          "object": "project",
+          "name": "Fixture Project 37",
+          "created_at": 1735689600037
+        },
+        {
+          "id": "proj_fixture_38",
+          "object": "project",
+          "name": "Fixture Project 38",
+          "created_at": 1735689600038
+        },
+        {
+          "id": "proj_fixture_39",
+          "object": "project",
+          "name": "Fixture Project 39",
+          "created_at": 1735689600039
+        },
+        {
+          "id": "proj_fixture_40",
+          "object": "project",
+          "name": "Fixture Project 40",
+          "created_at": 1735689600040
+        },
+        {
+          "id": "proj_fixture_41",
+          "object": "project",
+          "name": "Fixture Project 41",
+          "created_at": 1735689600041
+        },
+        {
+          "id": "proj_fixture_42",
+          "object": "project",
+          "name": "Fixture Project 42",
+          "created_at": 1735689600042
+        },
+        {
+          "id": "proj_fixture_43",
+          "object": "project",
+          "name": "Fixture Project 43",
+          "created_at": 1735689600043
+        },
+        {
+          "id": "proj_fixture_44",
+          "object": "project",
+          "name": "Fixture Project 44",
+          "created_at": 1735689600044
+        },
+        {
+          "id": "proj_fixture_45",
+          "object": "project",
+          "name": "Fixture Project 45",
+          "created_at": 1735689600045
+        },
+        {
+          "id": "proj_fixture_46",
+          "object": "project",
+          "name": "Fixture Project 46",
+          "created_at": 1735689600046
+        },
+        {
+          "id": "proj_fixture_47",
+          "object": "project",
+          "name": "Fixture Project 47",
+          "created_at": 1735689600047
+        },
+        {
+          "id": "proj_fixture_48",
+          "object": "project",
+          "name": "Fixture Project 48",
+          "created_at": 1735689600048
+        },
+        {
+          "id": "proj_fixture_49",
+          "object": "project",
+          "name": "Fixture Project 49",
+          "created_at": 1735689600049
+        },
+        {
+          "id": "proj_fixture_50",
+          "object": "project",
+          "name": "Fixture Project 50",
+          "created_at": 1735689600050
+        },
+        {
+          "id": "proj_fixture_51",
+          "object": "project",
+          "name": "Fixture Project 51",
+          "created_at": 1735689600051
+        },
+        {
+          "id": "proj_fixture_52",
+          "object": "project",
+          "name": "Fixture Project 52",
+          "created_at": 1735689600052
+        },
+        {
+          "id": "proj_fixture_53",
+          "object": "project",
+          "name": "Fixture Project 53",
+          "created_at": 1735689600053
+        },
+        {
+          "id": "proj_fixture_54",
+          "object": "project",
+          "name": "Fixture Project 54",
+          "created_at": 1735689600054
+        },
+        {
+          "id": "proj_fixture_55",
+          "object": "project",
+          "name": "Fixture Project 55",
+          "created_at": 1735689600055
+        },
+        {
+          "id": "proj_fixture_56",
+          "object": "project",
+          "name": "Fixture Project 56",
+          "created_at": 1735689600056
+        },
+        {
+          "id": "proj_fixture_57",
+          "object": "project",
+          "name": "Fixture Project 57",
+          "created_at": 1735689600057
+        },
+        {
+          "id": "proj_fixture_58",
+          "object": "project",
+          "name": "Fixture Project 58",
+          "created_at": 1735689600058
+        },
+        {
+          "id": "proj_fixture_59",
+          "object": "project",
+          "name": "Fixture Project 59",
+          "created_at": 1735689600059
+        },
+        {
+          "id": "proj_fixture_60",
+          "object": "project",
+          "name": "Fixture Project 60",
+          "created_at": 1735689600060
+        },
+        {
+          "id": "proj_fixture_61",
+          "object": "project",
+          "name": "Fixture Project 61",
+          "created_at": 1735689600061
+        },
+        {
+          "id": "proj_fixture_62",
+          "object": "project",
+          "name": "Fixture Project 62",
+          "created_at": 1735689600062
+        },
+        {
+          "id": "proj_fixture_63",
+          "object": "project",
+          "name": "Fixture Project 63",
+          "created_at": 1735689600063
+        },
+        {
+          "id": "proj_fixture_64",
+          "object": "project",
+          "name": "Fixture Project 64",
+          "created_at": 1735689600064
+        },
+        {
+          "id": "proj_fixture_65",
+          "object": "project",
+          "name": "Fixture Project 65",
+          "created_at": 1735689600065
+        },
+        {
+          "id": "proj_fixture_66",
+          "object": "project",
+          "name": "Fixture Project 66",
+          "created_at": 1735689600066
+        },
+        {
+          "id": "proj_fixture_67",
+          "object": "project",
+          "name": "Fixture Project 67",
+          "created_at": 1735689600067
+        },
+        {
+          "id": "proj_fixture_68",
+          "object": "project",
+          "name": "Fixture Project 68",
+          "created_at": 1735689600068
+        },
+        {
+          "id": "proj_fixture_69",
+          "object": "project",
+          "name": "Fixture Project 69",
+          "created_at": 1735689600069
+        },
+        {
+          "id": "proj_fixture_70",
+          "object": "project",
+          "name": "Fixture Project 70",
+          "created_at": 1735689600070
+        },
+        {
+          "id": "proj_fixture_71",
+          "object": "project",
+          "name": "Fixture Project 71",
+          "created_at": 1735689600071
+        },
+        {
+          "id": "proj_fixture_72",
+          "object": "project",
+          "name": "Fixture Project 72",
+          "created_at": 1735689600072
+        },
+        {
+          "id": "proj_fixture_73",
+          "object": "project",
+          "name": "Fixture Project 73",
+          "created_at": 1735689600073
+        },
+        {
+          "id": "proj_fixture_74",
+          "object": "project",
+          "name": "Fixture Project 74",
+          "created_at": 1735689600074
+        },
+        {
+          "id": "proj_fixture_75",
+          "object": "project",
+          "name": "Fixture Project 75",
+          "created_at": 1735689600075
+        },
+        {
+          "id": "proj_fixture_76",
+          "object": "project",
+          "name": "Fixture Project 76",
+          "created_at": 1735689600076
+        },
+        {
+          "id": "proj_fixture_77",
+          "object": "project",
+          "name": "Fixture Project 77",
+          "created_at": 1735689600077
+        },
+        {
+          "id": "proj_fixture_78",
+          "object": "project",
+          "name": "Fixture Project 78",
+          "created_at": 1735689600078
+        },
+        {
+          "id": "proj_fixture_79",
+          "object": "project",
+          "name": "Fixture Project 79",
+          "created_at": 1735689600079
+        },
+        {
+          "id": "proj_fixture_80",
+          "object": "project",
+          "name": "Fixture Project 80",
+          "created_at": 1735689600080
+        },
+        {
+          "id": "proj_fixture_81",
+          "object": "project",
+          "name": "Fixture Project 81",
+          "created_at": 1735689600081
+        },
+        {
+          "id": "proj_fixture_82",
+          "object": "project",
+          "name": "Fixture Project 82",
+          "created_at": 1735689600082
+        },
+        {
+          "id": "proj_fixture_83",
+          "object": "project",
+          "name": "Fixture Project 83",
+          "created_at": 1735689600083
+        },
+        {
+          "id": "proj_fixture_84",
+          "object": "project",
+          "name": "Fixture Project 84",
+          "created_at": 1735689600084
+        },
+        {
+          "id": "proj_fixture_85",
+          "object": "project",
+          "name": "Fixture Project 85",
+          "created_at": 1735689600085
+        },
+        {
+          "id": "proj_fixture_86",
+          "object": "project",
+          "name": "Fixture Project 86",
+          "created_at": 1735689600086
+        },
+        {
+          "id": "proj_fixture_87",
+          "object": "project",
+          "name": "Fixture Project 87",
+          "created_at": 1735689600087
+        },
+        {
+          "id": "proj_fixture_88",
+          "object": "project",
+          "name": "Fixture Project 88",
+          "created_at": 1735689600088
+        },
+        {
+          "id": "proj_fixture_89",
+          "object": "project",
+          "name": "Fixture Project 89",
+          "created_at": 1735689600089
+        },
+        {
+          "id": "proj_fixture_90",
+          "object": "project",
+          "name": "Fixture Project 90",
+          "created_at": 1735689600090
+        },
+        {
+          "id": "proj_fixture_91",
+          "object": "project",
+          "name": "Fixture Project 91",
+          "created_at": 1735689600091
+        },
+        {
+          "id": "proj_fixture_92",
+          "object": "project",
+          "name": "Fixture Project 92",
+          "created_at": 1735689600092
+        },
+        {
+          "id": "proj_fixture_93",
+          "object": "project",
+          "name": "Fixture Project 93",
+          "created_at": 1735689600093
+        },
+        {
+          "id": "proj_fixture_94",
+          "object": "project",
+          "name": "Fixture Project 94",
+          "created_at": 1735689600094
+        },
+        {
+          "id": "proj_fixture_95",
+          "object": "project",
+          "name": "Fixture Project 95",
+          "created_at": 1735689600095
+        },
+        {
+          "id": "proj_fixture_96",
+          "object": "project",
+          "name": "Fixture Project 96",
+          "created_at": 1735689600096
+        },
+        {
+          "id": "proj_fixture_97",
+          "object": "project",
+          "name": "Fixture Project 97",
+          "created_at": 1735689600097
+        },
+        {
+          "id": "proj_fixture_98",
+          "object": "project",
+          "name": "Fixture Project 98",
+          "created_at": 1735689600098
+        },
+        {
+          "id": "proj_fixture_99",
+          "object": "project",
+          "name": "Fixture Project 99",
+          "created_at": 1735689600099
+        },
+        {
+          "id": "proj_fixture_100",
+          "object": "project",
+          "name": "Fixture Project 100",
+          "created_at": 1735689600100
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

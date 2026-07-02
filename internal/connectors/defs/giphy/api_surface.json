@@ -1,0 +1,17 @@
+{
+  "api": "Giphy API v1 (https://api.giphy.com/v1)",
+  "docs": "https://developers.giphy.com/docs/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; Giphy's other endpoints (get-by-id, random, categories, translate) are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/gifs/search", "covered_by": { "stream": "gif_search" } },
+    { "method": "GET", "path": "/stickers/search", "covered_by": { "stream": "sticker_search" } },
+    { "method": "GET", "path": "/clips/search", "covered_by": { "stream": "clip_search" } },
+    { "method": "GET", "path": "/gifs/trending", "covered_by": { "stream": "trending_gifs" } },
+    { "method": "GET", "path": "/gifs/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/gifs/random", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/gifs/translate", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/stickers/trending", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/clips/trending", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

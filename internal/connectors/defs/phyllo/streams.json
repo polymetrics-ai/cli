@@ -1,0 +1,46 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.client_id }}", "password": "{{ secrets.client_secret }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/v1/users" },
+    "error_map": [
+      { "status": 401, "hint": "phyllo client_id/client_secret is missing or invalid; re-run pm credentials add phyllo" },
+      { "status": 429, "class": "rate_limited", "hint": "phyllo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/v1/users",
+      "records": { "path": "data" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/v1/accounts",
+      "records": { "path": "data" },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "profiles",
+      "path": "/v1/profiles",
+      "records": { "path": "data" },
+      "schema": "schemas/profiles.json"
+    },
+    {
+      "name": "social_contents",
+      "path": "/v1/social/contents",
+      "records": { "path": "data" },
+      "schema": "schemas/social_contents.json"
+    }
+  ]
+}

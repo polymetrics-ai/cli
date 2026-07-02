@@ -1,0 +1,75 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/v2/images/search" },
+    "error_map": [
+      { "status": 401, "hint": "shutterstock access_token secret is missing or invalid; re-run pm credentials add shutterstock" },
+      { "status": 403, "hint": "shutterstock account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "shutterstock rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "images",
+      "path": "/v2/images/search",
+      "query": {
+        "query": { "template": "{{ config.query }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true },
+        "orientation": { "template": "{{ config.orientation }}", "omit_when_absent": true },
+        "category": { "template": "{{ config.category }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "description": "{{ record.description }}",
+        "media_type": "{{ record.media_type }}",
+        "updated_at": "{{ record.updated_time }}"
+      },
+      "schema": "schemas/images.json"
+    },
+    {
+      "name": "videos",
+      "path": "/v2/videos/search",
+      "query": {
+        "query": { "template": "{{ config.query }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true },
+        "orientation": { "template": "{{ config.orientation }}", "omit_when_absent": true },
+        "category": { "template": "{{ config.category }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "description": "{{ record.description }}",
+        "media_type": "{{ record.media_type }}",
+        "updated_at": "{{ record.updated_time }}"
+      },
+      "schema": "schemas/videos.json"
+    },
+    {
+      "name": "audio",
+      "path": "/v2/audio/search",
+      "query": {
+        "query": { "template": "{{ config.query }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true },
+        "orientation": { "template": "{{ config.orientation }}", "omit_when_absent": true },
+        "category": { "template": "{{ config.category }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "description": "{{ record.description }}",
+        "media_type": "{{ record.media_type }}",
+        "updated_at": "{{ record.updated_time }}"
+      },
+      "schema": "schemas/audio.json"
+    }
+  ]
+}

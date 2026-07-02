@@ -1,0 +1,96 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/vnd.recurly.v2021-02-25"
+    },
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "" }
+    ],
+    "pagination": {
+      "type": "link_header",
+      "page_size": 200
+    },
+    "check": { "method": "GET", "path": "/accounts", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "recurly api_key is missing or invalid; re-run pm credentials add recurly" },
+      { "status": 403, "hint": "recurly account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "recurly rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "query": { "limit": "200" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "code": "{{ record.code }}",
+        "email": "{{ record.email }}",
+        "state": "{{ record.state }}",
+        "created_at": "{{ record.created_at }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "query": { "limit": "200" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "account_id": "{{ record.account.id }}",
+        "plan_id": "{{ record.plan.id }}",
+        "state": "{{ record.state }}",
+        "created_at": "{{ record.created_at }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": { "limit": "200" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "account_id": "{{ record.account.id }}",
+        "state": "{{ record.state }}",
+        "total": "{{ record.total }}",
+        "created_at": "{{ record.created_at }}"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/transactions",
+      "query": { "limit": "200" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "account_id": "{{ record.account.id }}",
+        "status": "{{ record.status }}",
+        "amount": "{{ record.amount }}",
+        "created_at": "{{ record.created_at }}"
+      },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "plans",
+      "path": "/plans",
+      "query": { "limit": "200" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "code": "{{ record.code }}",
+        "name": "{{ record.name }}",
+        "state": "{{ record.state }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/plans.json"
+    }
+  ]
+}

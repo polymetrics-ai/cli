@@ -1,0 +1,19 @@
+{
+  "api": "Square Connect v2 API (https://connect.squareup.com/v2)",
+  "docs": "https://developer.squareup.com/reference/square",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (payments, refunds, customers, locations); Square is read-only in legacy (no reverse-ETL write surface) and the full Square surface (orders, catalog, invoices, team members, disputes, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/payments", "covered_by": { "stream": "payments" } },
+    { "method": "GET", "path": "/v2/refunds", "covered_by": { "stream": "refunds" } },
+    { "method": "GET", "path": "/v2/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/v2/locations", "covered_by": { "stream": "locations" } },
+    { "method": "GET", "path": "/v2/orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/catalog/list", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/team-members", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/disputes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/payments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy connector is read-only" } },
+    { "method": "POST", "path": "/v2/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy connector is read-only" } }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "ticketNumber": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "priority": { "type": ["string", "null"] },
+    "channel": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "createdTime": { "type": ["string", "null"] },
+    "modifiedTime": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

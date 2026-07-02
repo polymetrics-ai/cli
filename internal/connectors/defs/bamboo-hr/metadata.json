@@ -1,0 +1,23 @@
+{
+  "name": "bamboo-hr",
+  "display_name": "BambooHR",
+  "description": "Reads BambooHR employees, field metadata, list metadata, and time off types through the BambooHR REST API.",
+  "integration_type": "api",
+  "docs_url": "https://documentation.bamboohr.com/reference/getting-started",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external BambooHR API read of employee directory and HR metadata",
+    "approval": "none; read-only API-key access"
+  }
+}

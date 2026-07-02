@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/countries", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "limit": 2, "offset": 0, "count": 1, "total": 1 },
+      "data": [
+        {
+          "id": "fixture_country_1",
+          "country_name": "Fixtureland",
+          "country_iso2": "FX",
+          "country_iso3": "FXL",
+          "country_iso_numeric": "999",
+          "capital": "Fixture City",
+          "continent": "FX",
+          "currency_code": "FXC",
+          "population": "1000",
+          "phone_prefix": "999"
+        }
+      ]
+    }
+  }
+}

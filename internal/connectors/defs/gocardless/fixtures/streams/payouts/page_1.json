@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payouts",
+    "query": { "limit": "50", "created_at[gt]": "2020-01-01T00:00:00Z" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payouts": [
+        {
+          "id": "PO_fixture_1",
+          "created_at": "2026-01-01T00:00:00Z",
+          "amount": 5000,
+          "deducted_fees": 100,
+          "currency": "GBP",
+          "status": "paid",
+          "payout_type": "merchant",
+          "reference": "REF-PO-1",
+          "arrival_date": "2026-01-03",
+          "links": {
+            "creditor": "CR_fixture_1",
+            "creditor_bank_account": "BA_fixture_2"
+          }
+        }
+      ],
+      "meta": { "cursors": { "before": null, "after": null } }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "api": "SendPulse API (https://api.sendpulse.com)",
+  "docs": "https://sendpulse.com/integrations/api",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; SendPulse's much larger surface (SMTP/email sending, SMS, chatbots, push notifications, web push) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/addressbooks", "covered_by": { "stream": "addressbooks" } },
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/senders", "covered_by": { "stream": "senders" } },
+    { "method": "POST", "path": "/addressbooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/addressbooks/{id}/emails", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/smtp/emails", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/sms/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

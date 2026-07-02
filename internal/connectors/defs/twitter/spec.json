@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Twitter (X) Connection Specification",
+  "type": "object",
+  "required": ["query"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Twitter (X) API v2 App-only Bearer token. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.twitter.com/2",
+      "description": "Twitter API base URL override for tests or proxies."
+    },
+    "query": {
+      "type": "string",
+      "description": "Recent-search query string (Twitter v2 search syntax), e.g. \"from:example\"."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional RFC3339 lower bound sent as start_time; only tweets created at or after this time are returned."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional RFC3339 upper bound sent as end_time; only tweets created at or before this time are returned."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (10-100, Twitter's max_results bounds)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Segment Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Segment Public API access token, sent as a Bearer token (Authorization: Bearer <api_token>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.segmentapis.com",
+      "description": "Segment Public API base URL override for tests, proxies, or a region-specific endpoint (e.g. https://api.eu1.segmentapis.com). Takes precedence over any region-based derivation legacy performed in code; see docs.md's Known limits."
+    }
+  }
+}

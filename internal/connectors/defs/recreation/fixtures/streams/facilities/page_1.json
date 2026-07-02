@@ -1,0 +1,322 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/facilities",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "RECDATA": [
+        {
+          "FacilityID": "1",
+          "FacilityName": "Fixture Facility 1",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "2",
+          "FacilityName": "Fixture Facility 2",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "3",
+          "FacilityName": "Fixture Facility 3",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "4",
+          "FacilityName": "Fixture Facility 4",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "5",
+          "FacilityName": "Fixture Facility 5",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "6",
+          "FacilityName": "Fixture Facility 6",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "7",
+          "FacilityName": "Fixture Facility 7",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "8",
+          "FacilityName": "Fixture Facility 8",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "9",
+          "FacilityName": "Fixture Facility 9",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "10",
+          "FacilityName": "Fixture Facility 10",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "11",
+          "FacilityName": "Fixture Facility 11",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "12",
+          "FacilityName": "Fixture Facility 12",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "13",
+          "FacilityName": "Fixture Facility 13",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "14",
+          "FacilityName": "Fixture Facility 14",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "15",
+          "FacilityName": "Fixture Facility 15",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "16",
+          "FacilityName": "Fixture Facility 16",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "17",
+          "FacilityName": "Fixture Facility 17",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "18",
+          "FacilityName": "Fixture Facility 18",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "19",
+          "FacilityName": "Fixture Facility 19",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "20",
+          "FacilityName": "Fixture Facility 20",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "21",
+          "FacilityName": "Fixture Facility 21",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "22",
+          "FacilityName": "Fixture Facility 22",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "23",
+          "FacilityName": "Fixture Facility 23",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "24",
+          "FacilityName": "Fixture Facility 24",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "25",
+          "FacilityName": "Fixture Facility 25",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "26",
+          "FacilityName": "Fixture Facility 26",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "27",
+          "FacilityName": "Fixture Facility 27",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "28",
+          "FacilityName": "Fixture Facility 28",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "29",
+          "FacilityName": "Fixture Facility 29",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "30",
+          "FacilityName": "Fixture Facility 30",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "31",
+          "FacilityName": "Fixture Facility 31",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "32",
+          "FacilityName": "Fixture Facility 32",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "33",
+          "FacilityName": "Fixture Facility 33",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "34",
+          "FacilityName": "Fixture Facility 34",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "35",
+          "FacilityName": "Fixture Facility 35",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "36",
+          "FacilityName": "Fixture Facility 36",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "37",
+          "FacilityName": "Fixture Facility 37",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "38",
+          "FacilityName": "Fixture Facility 38",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "39",
+          "FacilityName": "Fixture Facility 39",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "40",
+          "FacilityName": "Fixture Facility 40",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "41",
+          "FacilityName": "Fixture Facility 41",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "42",
+          "FacilityName": "Fixture Facility 42",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "43",
+          "FacilityName": "Fixture Facility 43",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "44",
+          "FacilityName": "Fixture Facility 44",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "45",
+          "FacilityName": "Fixture Facility 45",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "46",
+          "FacilityName": "Fixture Facility 46",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "47",
+          "FacilityName": "Fixture Facility 47",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "48",
+          "FacilityName": "Fixture Facility 48",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "49",
+          "FacilityName": "Fixture Facility 49",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        },
+        {
+          "FacilityID": "50",
+          "FacilityName": "Fixture Facility 50",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        }
+      ],
+      "METADATA": {
+        "RESULTS": {
+          "TOTAL_COUNT": "51"
+        }
+      }
+    }
+  }
+}

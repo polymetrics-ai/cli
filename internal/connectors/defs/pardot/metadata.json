@@ -1,0 +1,23 @@
+{
+  "name": "pardot",
+  "display_name": "Pardot",
+  "description": "Reads Account Engagement prospects, campaigns, and lists through Pardot API v5 REST endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://developer.salesforce.com/docs/marketing/pardot/overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Salesforce Account Engagement (Pardot) API read of prospect and marketing data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

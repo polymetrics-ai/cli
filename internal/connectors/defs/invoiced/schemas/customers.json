@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "object": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "number": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "balance": { "type": ["number", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "created_at": { "type": "integer" },
+    "updated_at": { "type": "integer" }
+  }
+}

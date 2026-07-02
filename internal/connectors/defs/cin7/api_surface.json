@@ -1,0 +1,18 @@
+{
+  "api": "Cin7 Core (DEAR Inventory) External API v2 (https://inventory.dearsystems.com/externalapi/v2)",
+  "docs": "https://api.cin7.com/api/v1",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Cin7 Core surface (stock, purchase orders detail, production, quotes, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/product", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/customer", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/supplier", "covered_by": { "stream": "suppliers" } },
+    { "method": "GET", "path": "/saleList", "covered_by": { "stream": "sale_list" } },
+    { "method": "GET", "path": "/purchaseList", "covered_by": { "stream": "purchase_list" } },
+    { "method": "GET", "path": "/sale", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/purchase", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/stocktake", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/product/availability", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/product", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only" } }
+  ]
+}

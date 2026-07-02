@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/loadtests/v2/tests"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "k6-tests": [
+        {
+          "id": 33,
+          "name": "k6-test-fixture-33",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_33",
+          "test_run_ids": [
+            "run_33"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

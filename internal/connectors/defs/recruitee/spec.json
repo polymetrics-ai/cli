@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recruitee Connection Specification",
+  "type": "object",
+  "required": ["api_key", "company_id"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Recruitee personal API token, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+    },
+    "company_id": {
+      "type": "string",
+      "description": "Recruitee company (tenant) ID; every request path is scoped under /c/{company_id}/ so paths stay allow-listed rather than accepting arbitrary request paths."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.recruitee.com",
+      "description": "Recruitee API base URL override for tests or proxies."
+    }
+  }
+}

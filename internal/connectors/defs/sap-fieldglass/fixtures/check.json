@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/workers" },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "next": null }
+  }
+}

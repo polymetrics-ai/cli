@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/recipient-lists" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "list_fixture_1",
+          "name": "Fixture Newsletter",
+          "description": "conformance fixture recipient list",
+          "attributes": { "internal_id": 1 },
+          "total_accepted_recipients": 42
+        }
+      ]
+    }
+  }
+}

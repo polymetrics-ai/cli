@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/getfullnamematch",
+    "query": { "fullname": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "Code": "Success", "SimKey": "FIXTUREKEY0002", "Credits": "9998" }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/units/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Result": {
+        "units": [
+          {
+            "UnitNum": "1",
+            "MarId": "fixture_1",
+            "FullAddress": "100 FIXTURE ST NW",
+            "UnitType": "CONDO",
+            "UnitSSL": "0101    0801",
+            "Status": "ACTIVE"
+          }
+        ]
+      }
+    }
+  }
+}

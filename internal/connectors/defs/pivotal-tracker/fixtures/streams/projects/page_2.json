@@ -1,0 +1,1 @@
+{"request": {"method": "GET", "path": "/projects", "query": {"limit": "100", "offset": "100"}}, "response": {"status": 200, "body": [{"id": 101, "name": "Fixture Project 101", "kind": "project", "updated_at": "2026-01-02T00:00:00Z"}]}}

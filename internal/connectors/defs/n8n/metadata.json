@@ -1,0 +1,23 @@
+{
+  "name": "n8n",
+  "display_name": "n8n",
+  "description": "Reads n8n workflows, executions, tags, and users from a self-hosted or cloud n8n instance via its public REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.n8n.io/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external n8n instance API read of workflow, execution, tag, and user data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

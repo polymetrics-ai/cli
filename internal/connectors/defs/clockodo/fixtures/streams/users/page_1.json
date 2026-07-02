@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/v2/users" },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "id": 1,
+          "name": "Fixture User One",
+          "email": "fixture1@example.com",
+          "role": "co-worker",
+          "active": true,
+          "number": "4001",
+          "language": "en",
+          "timezone": "Europe/Berlin",
+          "teams_id": null
+        }
+      ]
+    }
+  }
+}

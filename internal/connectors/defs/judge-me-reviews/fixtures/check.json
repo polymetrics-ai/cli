@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/reviews" },
+  "response": {
+    "status": 200,
+    "body": { "reviews": [] }
+  }
+}

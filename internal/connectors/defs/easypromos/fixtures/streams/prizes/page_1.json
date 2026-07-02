@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/prizes/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "prize_fixture_1",
+          "participation_id": "participation_fixture_1",
+          "stage_id": "stage_fixture_1",
+          "code": "CODE-1",
+          "redeem_url": "https://example.com/redeem/1",
+          "download_url": "https://example.com/download/1",
+          "created": "2026-01-01T00:00:00Z",
+          "prize_type": { "id": "prizetype_fixture_1", "name": "Fixture Prize" }
+        }
+      ],
+      "paging": { "next_cursor": null }
+    }
+  }
+}

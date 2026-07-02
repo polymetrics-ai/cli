@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_entries",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "workspace_id": { "type": ["integer", "null"] },
+    "project_id": { "type": ["integer", "null"] },
+    "description": { "type": ["string", "null"] },
+    "start": { "type": ["string", "null"] },
+    "stop": { "type": ["string", "null"] },
+    "duration": { "type": ["integer", "null"] }
+  }
+}

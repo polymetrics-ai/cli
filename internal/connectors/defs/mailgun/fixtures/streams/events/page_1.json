@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/v3/synthetic-conformance-value/events" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "event_fixture_1",
+          "event": "delivered",
+          "timestamp": 1767225601,
+          "recipient": "fixture1@example.com",
+          "message-id": "<fixture1@example.com>",
+          "log-level": "info",
+          "reason": null
+        },
+        {
+          "id": "event_fixture_2",
+          "event": "opened",
+          "timestamp": 1767225602,
+          "recipient": "fixture2@example.com",
+          "message-id": "<fixture2@example.com>",
+          "log-level": "info",
+          "reason": null
+        }
+      ],
+      "paging": {
+        "next": ""
+      }
+    }
+  }
+}

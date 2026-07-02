@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/facilities", "query": { "limit": "1", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "RECDATA": [],
+      "METADATA": { "RESULTS": { "TOTAL_COUNT": "0" } }
+    }
+  }
+}

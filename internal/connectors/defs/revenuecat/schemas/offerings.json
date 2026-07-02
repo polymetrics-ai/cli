@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "offerings",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "identifier": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "integer", "null"] },
+    "stream": { "type": "string" }
+  }
+}

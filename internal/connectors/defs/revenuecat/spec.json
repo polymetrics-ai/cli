@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RevenueCat Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "RevenueCat secret API key, sent as an Authorization: Bearer <api_key> header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.revenuecat.com/v2",
+      "description": "RevenueCat API base URL override for tests or proxies."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "RevenueCat project id. Required by the apps/products/offerings/customers streams (project-scoped resources); not required by the projects stream itself, matching legacy's per-stream project_id check."
+    },
+    "starting_after": {
+      "type": "string",
+      "description": "Optional passthrough filter: cursor id to resume a customers/apps/products/offerings listing after."
+    },
+    "created_after": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return records created at or after this value."
+    },
+    "updated_after": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return records updated at or after this value."
+    }
+  }
+}

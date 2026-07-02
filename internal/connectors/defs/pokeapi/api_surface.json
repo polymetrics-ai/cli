@@ -1,0 +1,17 @@
+{
+  "api": "PokeAPI v2 (https://pokeapi.co/api/v2)",
+  "docs": "https://pokeapi.co/docs/v2",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (pokemon, types, abilities, moves); PokeAPI's much larger resource catalog (items, locations, games, berries, evolution chains, egg groups, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/pokemon", "covered_by": { "stream": "pokemon" } },
+    { "method": "GET", "path": "/type", "covered_by": { "stream": "types" } },
+    { "method": "GET", "path": "/ability", "covered_by": { "stream": "abilities" } },
+    { "method": "GET", "path": "/move", "covered_by": { "stream": "moves" } },
+    { "method": "GET", "path": "/item", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/location", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/berry", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/evolution-chain", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/generation", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

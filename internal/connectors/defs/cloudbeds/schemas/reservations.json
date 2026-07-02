@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reservations",
+  "type": "object",
+  "x-primary-key": ["reservationID"],
+  "required": ["reservationID"],
+  "properties": {
+    "reservationID": { "type": "string" },
+    "propertyID": { "type": ["string", "null"] },
+    "guestID": { "type": ["string", "null"] },
+    "guestName": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "startDate": { "type": ["string", "null"] },
+    "endDate": { "type": ["string", "null"] },
+    "adults": { "type": ["integer", "null"] },
+    "children": { "type": ["integer", "null"] },
+    "balance": { "type": ["number", "null"] },
+    "sourceName": { "type": ["string", "null"] },
+    "origin": { "type": ["string", "null"] },
+    "dateCreated": { "type": ["string", "null"] },
+    "dateModified": { "type": ["string", "null"] }
+  }
+}

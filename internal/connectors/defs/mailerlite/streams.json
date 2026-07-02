@@ -1,0 +1,56 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "meta.next_cursor"
+    },
+    "check": { "method": "GET", "path": "/subscribers", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "mailerlite api_token is missing or invalid; re-run pm credentials add mailerlite" },
+      { "status": 429, "class": "rate_limited", "hint": "mailerlite rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "subscribers",
+      "path": "/subscribers",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/subscribers.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "segments",
+      "path": "/segments",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "automations",
+      "path": "/automations",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/automations.json"
+    }
+  ]
+}

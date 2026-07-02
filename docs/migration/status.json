@@ -1,0 +1,935 @@
+{
+ "wave": "wave2",
+ "migrated_reported": 257,
+ "on_disk_bundles": 406,
+ "conformance_failing": [
+  "assemblyai",
+  "chartmogul",
+  "drift",
+  "finnhub",
+  "firehydrant",
+  "fleetio",
+  "freshbooks",
+  "freshchat",
+  "gitbook",
+  "gologin",
+  "gong",
+  "google-webfonts",
+  "gorgias",
+  "granola",
+  "greenhouse",
+  "intruder",
+  "invoiced",
+  "invoiceninja",
+  "marketstack",
+  "nebius-ai",
+  "ninjaone-rmm",
+  "onepagecrm",
+  "segment",
+  "statuspage",
+  "survey-sparrow",
+  "survicate",
+  "ticketmaster",
+  "tmdb",
+  "workflowmax",
+  "workramp",
+  "wrike",
+  "wufoo",
+  "zonka-feedback",
+  "zoom"
+ ],
+ "partial": [
+  {
+   "name": "algolia",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The 'indices' stream (GET /1/indexes) is not migrated. Legacy pages this endpoint starting at page 0 (Algolia's real 0-based convention for this list). The engine's page_number pagination type delegates directly to connsdk.PageNumberPaginator, whose Start() method is `p.page = p.StartPage; if p.page"
+    }
+   ]
+  },
+  {
+   "name": "appfigures",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "products, sales, ratings, and categories streams read a JSON object keyed by an arbitrary id (e.g. products/mine returns {\"111\":{...},\"222\":{...}}); legacy's flattenKeyedObject (streams.go:224) turns each value into its own record. The engine's connsdk.RecordsAt (internal/connectors/connsdk/extract."
+    }
+   ]
+  },
+  {
+   "name": "appfollow",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "app_lists and ratings are sub-resource fan-out reads: legacy's readAppLists (appfollow.go:157) issues one GET /account/apps/app?apps_id=<id> request per configured (or auto-discovered) app_collection_ids entry, and readRatings (appfollow.go:205) issues one GET /meta/ratings?ext_id=<id> request per c"
+    }
+   ]
+  },
+  {
+   "name": "auth0",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy accepts M2M client_id/client_secret credentials and performs an OAuth2 client-credentials exchange that always includes an 'audience' form parameter (explicit config or derived as <base_url>/api/v2/). The engine's oauth2_client_credentials AuthSpec (internal/connectors/engine/bundle.go) expos"
+    },
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Auth0's Management API list endpoints are 0-indexed (legacy's harvest starts its loop at page:=0). Both internal/connectors/engine/paginate.go's newPaginator and internal/connectors/connsdk/paginate.go's PageNumberPaginator.Start() force start:=1 whenever PaginationSpec.StartPage==0, since JSON-unma"
+    }
+   ]
+  },
+  {
+   "name": "bigmailer",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "contacts/lists/fields are brand-scoped substreams: legacy lists every brand id then paginates GET /brands/{brand_id}/<resource> once per brand, stamping brand_id onto every record (bigmailer.go:195-260 harvestSubstream/listBrandIDs). This is a sub-resource fan-out read -- a legitimate Tier-2 StreamH"
+    }
+   ]
+  },
+  {
+   "name": "breezy-hr",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The 'candidates' stream is a genuine sub-resource fan-out: legacy's readCandidates first fully paginates 'positions' to collect every position id, then issues one GET /position/{id}/candidates request per id, stamping the enclosing position_id onto every emitted row. The engine's declarative read pa"
+    }
+   ]
+  },
+  {
+   "name": "cal-com",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "event_types stream flattens a two-level nested envelope (data.eventTypeGroups[] each holding its own nested eventTypes[]) in legacy. The declarative records.path / connsdk.RecordsAt dialect only extracts a single JSON path as a flat array or one object, with no mechanism to walk into a nested per-el"
+    }
+   ]
+  },
+  {
+   "name": "campayn",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "forms and contacts are list-scoped substreams: legacy first lists every subscriber list id, then fans out one request per list to GET /lists/{id}/forms.json or /lists/{id}/contacts.json, stamping the parent list_id onto every emitted record (campayn.go readSubstream/listIDs). This is a sub-resource "
+    }
+   ]
+  },
+  {
+   "name": "cimis",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "daily/hourly streams read Data.Providers[].Records[] (array nested within an array across a dynamic number of providers) plus a dynamic, config-driven set of nested {Value,Qc,Unit} data-item objects that legacy flattens into 3 synthetic sibling fields per key present. The engine's RecordsAt only wal"
+    }
+   ]
+  },
+  {
+   "name": "cisco-meraki",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "3 of 4 legacy streams (organization_networks, organization_devices, organization_admins) are org-scoped: legacy first lists every accessible organization, then issues one additional request per organization id against an org-parameterized sub-path, stamping organizationId onto every emitted record. "
+    }
+   ]
+  },
+  {
+   "name": "clickup-api",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "ClickUp's task list endpoint is genuinely 0-indexed (legacy: for page := 0; ...). PaginationSpec.StartPage is a plain Go int; engine/paginate.go's newPaginator unconditionally coerces an explicit start_page:0 to 1 because the zero value cannot be distinguished from unset. Declaring start_page:0 woul"
+    }
+   ]
+  },
+  {
+   "name": "datadog",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "monitors (pageV1) and slo (pageV1) and users (pageV2) all start pagination at page 0 in legacy's harvest loop (`for page := 0; ...`, sent as page=0 or page[number]=0 on the first request) - the identical 0-based-start coercion gap as customerly/algolia's indices. Only dashboards and downtimes (pageN"
+    }
+   ]
+  },
+  {
+   "name": "discord",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The members stream's after=highest-user-id cursor is derived from the nested user.id field of the last record on each page (legacy's memberAfterID, streams.go:196-201), but the engine's cursor pagination last_record_field variant (paginate.go's lastRecordFieldValue) reads only a flat top-level key o"
+    }
+   ]
+  },
+  {
+   "name": "eventzilla",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "attendees and tickets are legacy per-event sub-resource fan-out reads (list /events to discover event ids, then GET /events/{event_id}/attendees|tickets for each, stamping the parent event_id) \u2014 one of conventions.md \u00a71's explicitly named Tier-2 StreamHook triggers. This wave is JSON+docs only (no h"
+    }
+   ]
+  },
+  {
+   "name": "everhour",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "legacy 'tasks' substream is a sub-resource fan-out read (list /projects, then one GET /projects/<id>/tasks request per project, stitching project_id onto each child record). The declarative dialect's path/pagination/records fields have no mechanism to drive a per-parent-record child-request loop wit"
+    }
+   ]
+  },
+  {
+   "name": "exchange-rates",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "exchange_rates (daily historical) stream iterates one ISO date at a time (up to 366 GET /<YYYY-MM-DD> requests, skipping weekends) within a single Read call, computing each request's PATH from a loop counter/date sequence. None of the engine's 6 pagination types can vary the request path per iterati"
+    },
+    {
+     "type": "ENGINE_GAP",
+     "reason": "symbols stream's response is a {code: display_name} map that legacy explodes into one record per map key (sorted). The declarative records-extraction dialect (connsdk.RecordsAt via streams.json records.path) supports only an array-of-objects shape or a single-object passthrough (single_object: true)"
+    }
+   ]
+  },
+  {
+   "name": "finage",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy's market_news stream (6th stream) is symbol-partitioned: it issues one HTTP GET per value in the runtime `symbols` config list (internal/connectors/finage/finage.go Read/configSymbols fan-out). The declarative engine's stream.path/query resolves to exactly one request path per pagination page"
+    }
+   ]
+  },
+  {
+   "name": "finnhub",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "company_news, company_profile, and stock_recommendations (3 of 5 legacy streams) are symbol-partitioned via harvest's scopeSymbol branch (one GET per configured symbol; company_news additionally computes a from/to date window). No fan-out mechanism exists in the declarative dialect (same gap class a"
+    }
+   ]
+  },
+  {
+   "name": "granola",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The legacy detailed_notes stream fans out from the paginated notes list to a per-note GET /notes/{id} detail fetch for every note (sub-resource fan-out read). This is a named Tier-2 StreamHook trigger (conventions.md \u00a71) with no declarative streams.json expression; this wave is Tier-1 JSON-only (no "
+    }
+   ]
+  },
+  {
+   "name": "gutendex",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "computed_fields dialect has no array-index addressing (resolveRecordPathValue only walks map[string]any) and join:<sep> stringifies whole array elements rather than plucking a sub-field first, so legacy's authors/translators (name-only, comma-joined) and first-author-promoted author_name/author_birt"
+    }
+   ]
+  },
+  {
+   "name": "harness",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "PaginationSpec.StartPage cannot express a 0-based page index: engine/paginate.go's newPaginator unconditionally coerces StartPage==0 to 1 (cannot distinguish 'explicitly 0' from 'omitted'). Harness NextGen's pageIndex is genuinely 0-based (verified against legacy's own test fixture: org_1 at pageInd"
+    }
+   ]
+  },
+  {
+   "name": "hugging-face-datasets",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The legacy 'rows' stream's rowRecord (internal/connectors/hugging-face-datasets/streams.go:114-130) hoists every key of each row's nested 'row' object to the TOP LEVEL of the emitted record -- the column set varies per dataset schema, so it cannot be statically declared in a fixed JSON-schema proper"
+    }
+   ]
+  },
+  {
+   "name": "imagga",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy's 4 per-image detection streams (tags, categories, colors, faces_detections) each issue one HTTP request per configured image URL (imaggaImages/readOne loop, imagga.go:126-168,243-261), a client-side config-driven multi-request fan-out. The declarative dialect has no pagination type or query "
+    }
+   ]
+  },
+  {
+   "name": "instagram",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "user_insights stream excluded (streams_before=4, streams_after=3). Legacy's instagramUserInsightRecord mapper (1) hoists the LAST element of the raw values[] array's value/end_time fields onto the flat record, and (2) conditionally synthesizes a derived id (name+\"_\"+end_time) only when the raw recor"
+    }
+   ]
+  },
+  {
+   "name": "intruder",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "occurrences stream is a sub-resource fan-out (list /issues ids, then GET /issues/{id}/occurrences per issue, tagging issue_id) with no Tier-1 expression; requires a Tier-2 StreamHook. issues/scans/targets migrated at full parity (bearer auth, offset_limit pagination matching legacy limit/offset/resu"
+    }
+   ]
+  },
+  {
+   "name": "justcall",
+   "blockers": [
+    {
+     "type": "OTHER",
+     "reason": "contacts (POST /v1/contacts/list) and phone_numbers (POST /v1/numbers/list) are fully expressible read streams (method:POST, empty body, page_number pagination all supported declaratively) but cmd/connectorgen validate's api_surface_fail_first_run rule (checkAPISurface, cmd/connectorgen/validate.go)"
+    }
+   ]
+  },
+  {
+   "name": "k6-cloud",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "projects (GET /v3/organizations/{id}/projects) is a sub-resource fan-out read: legacy first lists every accessible organization id via the organizations endpoint, then issues one paginated request PER organization id, aggregating all into one stream. docs/migration/conventions.md section 1 explicitl"
+    }
+   ]
+  },
+  {
+   "name": "klaus-api",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy's reviews stream (harvestWindowed) walks forward through fixed-step fromDate/toDate weekly date windows, issuing one sequential HTTP request per window from a lower bound to an upper bound. None of the engine's 6 PaginationSpec types (none/link_header/page_number/offset_limit/cursor/next_url)"
+    }
+   ]
+  },
+  {
+   "name": "marketstack",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "engine/read.go's parseLowerBoundTime (used by param_format:\"date\" for the eod/splits/dividends incremental streams) accepts only an all-digits Unix-seconds string or strict time.RFC3339 (colon-delimited UTC offset). Marketstack's real wire format for the date cursor field uses a NO-COLON numeric off"
+    }
+   ]
+  },
+  {
+   "name": "nytimes",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The archive stream iterates one calendar-month request at a time from start_date to end_date (nytimes.go readArchive), a genuine multi-request fan-out over a config-computed sequence of path segments. The declarative dialect has no primitive for generating N path-templated requests per Read call; th"
+    }
+   ]
+  },
+  {
+   "name": "openweather",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Two field-level (not whole-connector-blocking) gaps prevented full parity even though the connector itself ships as a working Tier-1 bundle: (1) no array-index dereference in computed_fields/dotted-path resolution, so weather[0].{main,description,icon} cannot be lifted into scalar columns; (2) compu"
+    }
+   ]
+  },
+  {
+   "name": "postmarkapp",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy's servers stream requires the X-Postmark-Account-Token header while the two migrated message streams require X-Postmark-Server-Token \u2014 a different auth/header selected by STREAM NAME, not by config/secret presence. The engine resolves base.auth and base.headers exactly once per bundle in engi"
+    }
+   ]
+  },
+  {
+   "name": "pypi",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The releases stream's primary (version-unset, legacy-default) mode reads a response body's 'releases' object -- a map keyed by version string -- sorts the keys, flattens each key's file array into the record stream, and stamps each record's version field with the map key it came from. The engine's r"
+    }
+   ]
+  }
+ ],
+ "blocked": [
+  {
+   "name": "rootly",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy's pagination follows a JSON:API links.next body path whose real wire value is a RELATIVE URL/path (proven by rootly_test.go's fixture: \"links\":{\"next\":\"/v1/incidents?page[number]=2&page[size]=2\"}). The engine's only pagination type that reads a next-page URL from the body (pagination.type: ne"
+    }
+   ]
+  },
+  {
+   "name": "safetyculture",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Identical gap to rootly: legacy's pagination reads next_page (falling back to links.next) from the response body and follows it as the literal next request path (safetyculture.go: 'path = next; query = nil'); safetyculture_test.go proves the real wire value is a RELATIVE path (\"next_page\":\"/audits?p"
+    }
+   ]
+  },
+  {
+   "name": "serpstat",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Serpstat's real API is a JSON-RPC-over-HTTP style endpoint: every stream (domain_keywords, domain_competitors) requires a POST request whose body carries {\"id\":page,\"method\":\"<procedure>\",\"params\":{\"domain\",\"se\",\"page\",\"size\"}} \u2014 pagination state (page number) lives INSIDE the request body, not in q"
+    }
+   ]
+  },
+  {
+   "name": "stigg",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Stigg's legacy connector is a GraphQL-over-HTTP API: every read is a POST to /graphql with a JSON body carrying a query string, and records are extracted from data.<field> in the response. The engine's declarative read path always issues its request with a nil body - there is no streams.json mechani"
+    }
+   ]
+  },
+  {
+   "name": "us-census",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy's query stream returns a raw top-level JSON array-of-arrays (a header row followed by data rows) with entirely dynamic, caller-driven field names derived at read-time from the header row, itself a function of the caller-supplied query_path/query_params get= qualifier; there is no fixed schema"
+    }
+   ]
+  },
+  {
+   "name": "wasabi-stats-api",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy's requester() branches auth mode on the CONTENTS of the api_key secret at runtime: connsdk.APIKeyHeader(\"Authorization\", key, \"Bearer \") is used unless strings.SplitN(key, \":\", 2) yields exactly two parts, in which case it switches to connsdk.Basic(parts[0], parts[1]). The engine's `when` gra"
+    }
+   ]
+  },
+  {
+   "name": "yahoo-finance-price",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The legacy connector's single 'prices' stream flattens ONE Yahoo Finance chart API response into N per-timestamp OHLCV records by zipping parallel arrays by index: chart.result[0].timestamp[i] with chart.result[0].indicators.quote[0].{open,high,low,close,volume}[i] and indicators.adjclose[0].adjclos"
+    }
+   ]
+  },
+  {
+   "name": "zoho-bigin",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy performs an OAuth2 refresh_token grant token exchange (POST to token_url with grant_type=refresh_token, client_id, client_secret, client_refresh_token secrets, decoding access_token from the JSON response) before every read/check. The engine's declarative auth dialect only supports the oauth2"
+    }
+   ]
+  },
+  {
+   "name": "akeneo",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy uses OAuth2 password grant: POST /api/oauth/v1/token with HTTP Basic (client_id:secret) plus a JSON body {grant_type:password, username, password}, caching/refreshing the resulting bearer token. The engine's declarative auth dialect only supports oauth2_client_credentials (client_credentials "
+    }
+   ]
+  },
+  {
+   "name": "alpha-vantage",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Alpha Vantage's /query endpoint returns a single date-keyed JSON object (e.g. {\"Time Series (Daily)\": {\"2026-01-02\": {...}, \"2026-01-01\": {...}}}), not a JSON array. Legacy (internal/connectors/alpha-vantage/alpha_vantage.go's emitFromBody) decodes this object and explodes each dated key into its ow"
+    }
+   ]
+  },
+  {
+   "name": "apify-dataset",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The item_collection stream (GET /datasets/{id}/items, a top-level JSON array of actor-defined dynamic-schema items) is emitted by legacy wrapped under a stable envelope key: apifyItemRecord returns connectors.Record{\"data\": map[string]any(item)} \u2014 the WHOLE raw item nested under a top-level \"data\" f"
+    }
+   ]
+  },
+  {
+   "name": "ashby",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Ashby's list endpoints are POST requests whose pagination state (cursor, limit) is carried in a JSON request BODY ({\"limit\":N,\"cursor\":\"...\"}), read back from the response body's nextCursor/moreDataAvailable fields (ashby.go:147 harvest). The engine's declarative read path (internal/connectors/engin"
+    }
+   ]
+  },
+  {
+   "name": "aws-cloudtrail",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy authenticates every LookupEvents request with a hand-rolled AWS Signature Version 4 signer (internal/connectors/aws-cloudtrail/sigv4.go): canonical-request construction (sorted signed headers, URI/query canonicalization, SHA256 payload hash read via GetBody), a 4-stage HMAC-SHA256 signing-key"
+    }
+   ]
+  },
+  {
+   "name": "babelforce",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy's page-cursor pagination (babelforce.go harvest, verified by TestReadPaginatesAndAuthenticates) sends page=<response.pagination.current + 1> on every page after the first (no page param at all on page 1), and stops the instant a response omits the pagination.current key entirely -- NOT on a s"
+    }
+   ]
+  },
+  {
+   "name": "basecamp",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy's primary, documented auth flow is a token-exchange OAuth2 refresh grant against Basecamp/37signals Launchpad (auth.go's oauthRefreshAuth), but Launchpad's token endpoint expects a NON-STANDARD form parameter shape: type=refresh (not the standard grant_type=refresh_token, and not client_crede"
+    }
+   ]
+  },
+  {
+   "name": "beamer",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Beamer's pagination is genuinely 0-indexed (page=0,1,2,...; legacy's own beamer_test.go:27-35 asserts page=0 on the first request, errors on anything else). The engine's page_number paginator (connsdk/paginate.go PageNumberPaginator.Start(): `p.page = p.StartPage; if p.page == 0 { p.page = 1 }`) can"
+    }
+   ]
+  },
+  {
+   "name": "box",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Box authenticates via OAuth2 client-credentials with two Box-specific extra token-request form params (box_subject_type=enterprise|user, box_subject_id=<enterprise or user id>) that scope the issued token \u2014 legacy's authenticator sets these on every token exchange (box.go's authenticator/boxSubject)"
+    }
+   ]
+  },
+  {
+   "name": "braze",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Braze's campaigns/canvases/segments list-export endpoints paginate with a genuinely 0-based ?page= query param (legacy's harvest loop's first request is page=0; braze.go's harvest starts `for page := 0; ...`). The engine's page_number paginator cannot express a 0-based start page: both engine/pagina"
+    }
+   ]
+  },
+  {
+   "name": "bunny-inc",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Not an auth issue per se, but genuinely Tier-2/ENGINE_GAP: bunny-inc's legacy connector talks to a single per-tenant GraphQL endpoint (POST /graphql) with a query document + variables JSON body, and paginates via an in-body cursor (data.<field>.pageInfo.{endCursor,hasNextPage}) read from the POST re"
+    }
+   ]
+  },
+  {
+   "name": "canny",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Canny's documented API (developers.canny.io) requires every list endpoint to be called as POST with the secret apiKey AND pagination params (limit/skip) carried in a form-encoded request body \u2014 never a header or query string. The engine's declarative read path (internal/connectors/engine/read.go rea"
+    }
+   ]
+  },
+  {
+   "name": "chift",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Chift authenticates via a session-token exchange that is NOT the dialect's oauth2_client_credentials grant: legacy POSTs a JSON body {clientId, clientSecret, accountId} (no grant_type field at all, and a 3rd accountId field the standard grant has no slot for) to <base>/token and reads {access_token}"
+    }
+   ]
+  },
+  {
+   "name": "coingecko-coins",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "market_chart (legacy /coins/{id}/market_chart) zips three parallel [timestamp,value] arrays (prices/market_caps/total_volumes) into one record per timestamp via indexByTimestamp; the dialect has no array-zip/parallel-array-join primitive (computed_fields/join:<sep> only joins ONE array into a delimi"
+    }
+   ]
+  },
+  {
+   "name": "coinmarketcap",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "4 of 5 streams (map, listings_latest, categories, fiat) use CoinMarketCap's documented 1-based `start` pagination: legacy sends start=1 on the first request then start += pageSize on each subsequent page (harvest() in coinmarketcap.go). The engine's offset_limit paginator (connsdk.OffsetPaginator) i"
+    }
+   ]
+  },
+  {
+   "name": "concord",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "All 5 streams (agreements, user_organizations, folders, reports, tags) share Concord's harvest() pagination: pages are explicitly 0-indexed (`for page := 0; ...; page++`, limit sent as the page-size param) - the legacy comment states 'Pages start at 0' as deliberate, tested API behavior. The engine'"
+    }
+   ]
+  },
+  {
+   "name": "configcat",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "3 of 5 streams (configs, environments, tags) require sub-resource fan-out: legacy's readNested first lists /v1/products, then issues one request per product id (path fmt '/v1/products/%s/configs' etc.) and stamps product_id onto every nested record. The declarative dialect has no mechanism to drive "
+    }
+   ]
+  },
+  {
+   "name": "copper",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Copper's legacy connector paginates via POST /<resource>/search with page_number/page_size carried in a JSON request BODY (not query params), returning a top-level JSON array. The engine's declarative read path (engine/read.go's readDeclarative) unconditionally calls rt.Requester.Do(ctx, method, pat"
+    }
+   ]
+  },
+  {
+   "name": "customerly",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Both streams (users, leads) page from 0 in legacy (harvest's `for page := 0; ...` sends page=0 as the true first request). The engine's page_number PaginationSpec delegates to connsdk.PageNumberPaginator, whose Start() unconditionally coerces StartPage 0 to 1 (verified by direct execution of the pag"
+    }
+   ]
+  },
+  {
+   "name": "dixa",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Dixa has no per-request paginator at all: legacy's harvest() walks an arbitrary [start_date, end_date) range one batch_size-day date window at a time (max 31 days per request, dixaMaxWindows=4096 loop guard), issuing a variable, config-dependent number of GET conversation_export requests with cross-"
+    }
+   ]
+  },
+  {
+   "name": "dolibarr",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Dolibarr's REST API is genuinely 0-indexed (legacy sends page=0 for the first page, page=1 for the second, etc. \u2014 internal/connectors/dolibarr/dolibarr.go's harvest loop starts at `for page := 0; ...`). The engine's page_number pagination cannot express a 0-indexed start: both engine/paginate.go's n"
+    }
+   ]
+  },
+  {
+   "name": "fastbill",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "FastBill's only endpoint (.../api/1.0/api.php) is a single POST with a JSON body carrying SERVICE (e.g. \"customer.get\") plus LIMIT/OFFSET pagination fields; records come back nested under RESPONSE.<COLLECTION>. The Tier-1 declarative read path (internal/connectors/engine/read.go:144, `rt.Requester.D"
+    }
+   ]
+  },
+  {
+   "name": "feishu",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Feishu/Lark authenticates via a tenant_access_token EXCHANGE: app_id + app_secret are POSTed to open-apis/auth/v3/tenant_access_token/internal, which returns a token cached with a TTL (legacy: internal/connectors/feishu/auth.go's tenantTokenAuth, ~2h default, refreshed 60s before expiry) and then ap"
+    }
+   ]
+  },
+  {
+   "name": "fillout",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "2 of Fillout's 3 streams (questions, submissions) require per-form sub-resource fan-out: the connector first resolves a list of form IDs (either the configured comma-separated form_id, or discovered via GET /forms), then issues one request PER form (GET /forms/{id} for questions; GET /forms/{id}/sub"
+    }
+   ]
+  },
+  {
+   "name": "finnworlds",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "All 4 legacy streams (dividends, stock_splits, historical_candlestick, commodities) are fundamentally partition-fan-out streams: harvest() iterates a config list (tickers or commodities) and issues one independent HTTP GET per value, stitching the partition value onto each emitted record when the AP"
+    }
+   ]
+  },
+  {
+   "name": "free-agent-connector",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy authenticates via OAuth2 grant_type=refresh_token against /token_endpoint, with HTTP Basic client-credential auth (client_id:client_secret) plus refresh_token in the form body, then caches/refreshes the resulting bearer access token (internal/connectors/free-agent-connector/free_agent_connect"
+    }
+   ]
+  },
+  {
+   "name": "google-analytics-data-api",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "GA4 Data API has no REST list endpoints: every report is a POST /v1beta/properties/{id}:runReport call whose request body itself carries offset/limit pagination state and a dimension/metric query, and each response row is a positional dimensionValues/metricValues array projected against dimensionHea"
+    }
+   ]
+  },
+  {
+   "name": "google-pagespeed-insights",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy's Read (internal/connectors/google-pagespeed-insights/google_pagespeed_insights.go:141-165) issues one GET /runPagespeed request per (url, strategy) pair, iterating the full cartesian product of the configured urls and strategies config lists and emitting one record per request. The Tier-1 di"
+    }
+   ]
+  },
+  {
+   "name": "google-tasks",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The tasklists stream alone is plain Tier-1 cursor pagination (nextPageToken/pageToken over GET /users/@me/lists) and would migrate cleanly on its own. But the tasks stream (internal/connectors/google-tasks/google_tasks.go:156-196, readTasks/collectTaskListIDs) requires first listing every task list,"
+    }
+   ]
+  },
+  {
+   "name": "hoorayhr",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy uses a custom session-token exchange auth flow: POST {email,password,strategy:'local'} JSON body to /authentication, read accessToken from the response, cache it, and inject it RAW (no 'Bearer ' prefix) into every subsequent Authorization header (internal/connectors/hoorayhr/hoorayhr.go:242-2"
+    }
+   ]
+  },
+  {
+   "name": "hubplanner",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy's pagination is genuinely 0-indexed: harvest() starts at page=0 and that first request returns real, distinct records (internal/connectors/hubplanner/hubplanner.go:134-165; hubplanner_test.go:18-72 explicitly serves different data on page=0 vs page=1 and asserts both pages are requested). The"
+    }
+   ]
+  },
+  {
+   "name": "ip2whois",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy performs one HTTP lookup per domain in a config-supplied comma-separated domain list (N requests per stream read from one config value) and fans each single-object lookup response out into 1 (whois), 0..4 (contacts), or 0..N (nameservers) output records. Neither 'iterate a delimited config li"
+    }
+   ]
+  },
+  {
+   "name": "jamf-pro",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Jamf Pro's auth is a Basic-credential token exchange (POST username/password as HTTP Basic to /v1/auth/token, no request body) returning a custom JSON shape {\"token\":..., \"expires\":...}, then that token used as Bearer on every subsequent request. The engine's only declarative auth mode built for thi"
+    }
+   ]
+  },
+  {
+   "name": "less-annoying-crm",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Every legacy stream (users/contacts/tasks/notes/events) is selected ONLY by a POST request to the single RPC path '/' whose JSON body carries {\"Function\": \"<Name>\"} (e.g. GetContacts); Page/MaxNumberOfResults ride as request query params on the same POST. The engine's declarative read path (engine/r"
+    }
+   ]
+  },
+  {
+   "name": "lokalise",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Lokalise's real stop-of-pagination signal is the X-Pagination-Page-Count RESPONSE HEADER (legacy: 'page >= pageCount' from the header, falling back to a short-page-length check only when the header is absent). No declarative pagination type in engine/paginate.go can read a response header as a stop "
+    }
+   ]
+  },
+  {
+   "name": "mendeley",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy internal/connectors/mendeley authenticates via an OAuth2 REFRESH-TOKEN grant (grant_type=refresh_token, POST client_id/client_secret/refresh_token to a token endpoint) with a mutex-guarded, TTL-cached access token that self-refreshes 60s before expiry (mendeley.go's refreshTokenAuth). The eng"
+    }
+   ]
+  },
+  {
+   "name": "mercado-ads",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy uses a custom OAuth2 refresh_token grant (POST grant_type=refresh_token+client_id+client_secret+refresh_token to a token endpoint, with token caching/60s-early refresh). The engine's only OAuth2 auth mode (oauth2_client_credentials) hardcodes grant_type=client_credentials (connsdk/auth.go) an"
+    },
+    {
+     "type": "ENGINE_GAP",
+     "reason": "The 3 *_campaigns_metrics streams require advertiser_id/campaign_id substream partition keys supplied via req.State (a parent-child fan-out from a campaigns list this legacy connector doesn't even expose as its own stream). The declarative streams.json/pagination dialect has no substream/parent-stre"
+    }
+   ]
+  },
+  {
+   "name": "metabase",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy accepts EITHER a direct session_token secret OR mints one via a POST username+password to /session (a token-exchange auth flow -- exactly the Tier-2 table's named example, 'token-exchange auth: GitHub App JWT->installation token'). The engine's declarative auth modes (bearer/basic/api_key_hea"
+    }
+   ]
+  },
+  {
+   "name": "metricool",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy Read fans out one HTTP request per configured blog_id for every per-brand stream (instagram_posts/facebook_posts/linkedin_posts/tiktok_posts) within a single stream read, stamping blogId onto each record. The declarative dialect has no mechanism to repeat a request once per item in a runtime "
+    }
+   ]
+  },
+  {
+   "name": "microsoft-entra-id",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy follows Microsoft Graph's @odata.nextLink absolute-URL pagination cursor via a hand-written harvest loop (explicitly because connsdk has no paginator for the body-embedded absolute-next-link shape). The engine's next_url pagination type reads its cursor via connsdk.StringAt/selectPath, which "
+    }
+   ]
+  },
+  {
+   "name": "microsoft-lists",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Identical @odata.nextLink dotted-literal-key pagination gap as microsoft-entra-id/microsoft-teams: legacy's harvest loop follows the absolute nextLink URL for lists/list_items/columns/content_types, but the engine's next_url_path dotted-path parser (connsdk.StringAt/selectPath) cannot address a JSON"
+    }
+   ]
+  },
+  {
+   "name": "microsoft-teams",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Identical @odata.nextLink dotted-literal-key pagination gap as microsoft-entra-id/microsoft-lists: legacy's harvest loop follows the absolute nextLink URL for users/groups/channels/team_device_usage_report, but the engine's next_url_path dotted-path parser (connsdk.StringAt/selectPath) cannot addres"
+    }
+   ]
+  },
+  {
+   "name": "mode",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Mode's REST API is HAL+JSON with pagination via _links.next.href, and legacy's own package doc + test fixture confirm this href is commonly a RELATIVE path-with-query (e.g. \"/acme/spaces?page=2\"), which legacy resolves against base_url via its Requester (documented explicitly in mode.go: \"The href m"
+    }
+   ]
+  },
+  {
+   "name": "my-hours",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy authenticates by POSTing email/password (custom body shape: email, password, grantType:\"password\", clientId:\"api\", plus an api-version header) to tokens/login and caching the returned accessToken as a Bearer token. This is a dynamic login-token-exchange, not a static credential. The engine's "
+    }
+   ]
+  },
+  {
+   "name": "navan",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Navan's /v1/bookings list endpoint uses genuinely 0-indexed page-increment pagination (legacy internal/connectors/navan/navan.go's harvest loop is `for page := 0; ...`, and its own test TestReadPaginatesAndAuthenticates asserts the FIRST request sent is literally page=0, with page=1 returning distin"
+    }
+   ]
+  },
+  {
+   "name": "notion",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Notion's databases/pages streams require POST /search with the pagination cursor (start_cursor) and object filter injected into the JSON request body on every page. The engine's declarative read path (engine/read.go readDeclarative) always issues rt.Requester.Do(...) with a hardcoded nil body; Strea"
+    }
+   ]
+  },
+  {
+   "name": "nutshell",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy's page[page]/page[limit] pagination is genuinely 0-indexed (harvest loop starts 'for page := 0'; the Check request itself sends page[page]=0). The engine's PaginationSpec.StartPage (int, JSON omitempty) and connsdk.PageNumberPaginator.Start() both treat StartPage==0 as unset and silently coer"
+    }
+   ]
+  },
+  {
+   "name": "onesignal",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "OneSignal legitimately needs two DIFFERENT credential values used simultaneously across streams in the same bundle: the account-level 'apps' stream must always authenticate with user_auth_key, while devices/notifications/outcomes must always authenticate with app_api_key (fallback rest_api_key) -- a"
+    }
+   ]
+  },
+  {
+   "name": "open-exchange-rates",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Every stream (latest, historical, currencies) flattens a raw JSON OBJECT into N records (one per map key: currencies-in-rates for latest/historical, currency-code-to-name for currencies) \u2014 connsdk.RecordsAt/the engine's records.path extraction only ever yields exactly ONE record for an object path ("
+    }
+   ]
+  },
+  {
+   "name": "plaid",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Plaid's entire API is POST-only with ALL credentials (client_id/secret) and ALL pagination/filter state (count/offset/country_codes) carried in the JSON request body, never in headers or query params. The engine's read path (engine/read.go's readDeclarative) always calls Requester.Do(ctx, method, pa"
+    }
+   ]
+  },
+  {
+   "name": "pocket",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Legacy pocket authenticates and paginates entirely via JSON fields inside a POST request body (consumer_key, access_token, count, offset all sent in requestBody() to POST /v3/get) \u2014 there is no query-param or header-based auth/pagination at all. The engine's declarative read path never sends a reque"
+    }
+   ]
+  },
+  {
+   "name": "prestashop",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "PrestaShop's Webservice pagination wire format is a single combined query parameter limit=<offset>,<count> (e.g. limit=0,100) \u2014 confirmed in legacy's harvest(): query.Set(\"limit\", fmt.Sprintf(\"%d,%d\", offset, pageSize)). The engine's only offset-based pagination type, offset_limit, always sends offs"
+    }
+   ]
+  },
+  {
+   "name": "quickbooks",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "QuickBooks' entire pagination scheme (STARTPOSITION/MAXRESULTS) is embedded inside a single Query-API query string value (query=SELECT * FROM <Entity> STARTPOSITION <n> MAXRESULTS <size>), not sent as independent query parameters. The engine's 6 pagination types (page_number, offset_limit, cursor x2"
+    }
+   ]
+  },
+  {
+   "name": "slack",
+   "blockers": [
+    {
+     "type": "ENGINE_GAP",
+     "reason": "Slack's Web API always returns HTTP 200 even for logical failures, signaling errors solely via a JSON body field ({\"ok\":false,\"error\":\"<code>\"}) -- this is Slack's primary, first-class error-signaling mechanism (auth failures, invalid_auth, token_revoked, missing_scope, etc. all surface this way, no"
+    }
+   ]
+  },
+  {
+   "name": "twilio",
+   "blockers": []
+  },
+  {
+   "name": "youtube-analytics",
+   "blockers": [
+    {
+     "type": "AUTH_COMPLEX",
+     "reason": "Legacy auth.go implements Google OAuth 2.0 refresh-token grant (client_id/client_secret/refresh_token exchanged for a short-lived access token via POST to a token endpoint with grant_type=refresh_token, form-encoded body, caching until near-expiry, then Bearer <access_token> on the Reporting API). T"
+    }
+   ]
+  }
+ ],
+ "missing_after_dropped_bundles": [
+  "zoho-analytics-metadata-api",
+  "codefresh",
+  "coin-api",
+  "nexus-datasets",
+  "opinion-stage",
+  "outlook",
+  "outreach",
+  "pandadoc"
+ ]
+}

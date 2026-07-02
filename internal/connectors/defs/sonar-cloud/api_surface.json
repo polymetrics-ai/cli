@@ -1,0 +1,15 @@
+{
+  "api": "SonarCloud Web API (https://sonarcloud.io)",
+  "docs": "https://sonarcloud.io/web_api",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only, matching internal/connectors/sonar-cloud's exact endpoint set; the full SonarCloud Web API (projects, hotspots, webhooks, security reports, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/issues/search", "covered_by": { "stream": "issues" } },
+    { "method": "GET", "path": "/api/components/search", "covered_by": { "stream": "components" } },
+    { "method": "GET", "path": "/api/qualitygates/list", "covered_by": { "stream": "quality_gates" } },
+    { "method": "GET", "path": "/api/measures/search", "covered_by": { "stream": "measures" } },
+    { "method": "GET", "path": "/api/hotspots/search", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/projects/search", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/webhooks/create", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "incidents",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "incident_number": { "type": ["integer", "null"] },
+    "title": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

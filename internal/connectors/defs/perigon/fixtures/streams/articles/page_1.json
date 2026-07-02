@@ -1,0 +1,918 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/articles/all",
+    "query": {
+      "page": "1",
+      "size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "numResults": 101,
+      "articles": [
+        {
+          "articleId": "article-fixture-1",
+          "title": "Fixture Article 1",
+          "pubDate": "2026-01-01T00:01:00Z",
+          "url": "https://example.com/articles/1",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-2",
+          "title": "Fixture Article 2",
+          "pubDate": "2026-01-01T00:02:00Z",
+          "url": "https://example.com/articles/2",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-3",
+          "title": "Fixture Article 3",
+          "pubDate": "2026-01-01T00:03:00Z",
+          "url": "https://example.com/articles/3",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-4",
+          "title": "Fixture Article 4",
+          "pubDate": "2026-01-01T00:04:00Z",
+          "url": "https://example.com/articles/4",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-5",
+          "title": "Fixture Article 5",
+          "pubDate": "2026-01-01T00:05:00Z",
+          "url": "https://example.com/articles/5",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-6",
+          "title": "Fixture Article 6",
+          "pubDate": "2026-01-01T00:06:00Z",
+          "url": "https://example.com/articles/6",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-7",
+          "title": "Fixture Article 7",
+          "pubDate": "2026-01-01T00:07:00Z",
+          "url": "https://example.com/articles/7",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-8",
+          "title": "Fixture Article 8",
+          "pubDate": "2026-01-01T00:08:00Z",
+          "url": "https://example.com/articles/8",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-9",
+          "title": "Fixture Article 9",
+          "pubDate": "2026-01-01T00:09:00Z",
+          "url": "https://example.com/articles/9",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-10",
+          "title": "Fixture Article 10",
+          "pubDate": "2026-01-01T00:10:00Z",
+          "url": "https://example.com/articles/10",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-11",
+          "title": "Fixture Article 11",
+          "pubDate": "2026-01-01T00:11:00Z",
+          "url": "https://example.com/articles/11",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-12",
+          "title": "Fixture Article 12",
+          "pubDate": "2026-01-01T00:12:00Z",
+          "url": "https://example.com/articles/12",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-13",
+          "title": "Fixture Article 13",
+          "pubDate": "2026-01-01T00:13:00Z",
+          "url": "https://example.com/articles/13",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-14",
+          "title": "Fixture Article 14",
+          "pubDate": "2026-01-01T00:14:00Z",
+          "url": "https://example.com/articles/14",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-15",
+          "title": "Fixture Article 15",
+          "pubDate": "2026-01-01T00:15:00Z",
+          "url": "https://example.com/articles/15",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-16",
+          "title": "Fixture Article 16",
+          "pubDate": "2026-01-01T00:16:00Z",
+          "url": "https://example.com/articles/16",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-17",
+          "title": "Fixture Article 17",
+          "pubDate": "2026-01-01T00:17:00Z",
+          "url": "https://example.com/articles/17",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-18",
+          "title": "Fixture Article 18",
+          "pubDate": "2026-01-01T00:18:00Z",
+          "url": "https://example.com/articles/18",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-19",
+          "title": "Fixture Article 19",
+          "pubDate": "2026-01-01T00:19:00Z",
+          "url": "https://example.com/articles/19",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-20",
+          "title": "Fixture Article 20",
+          "pubDate": "2026-01-01T00:20:00Z",
+          "url": "https://example.com/articles/20",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-21",
+          "title": "Fixture Article 21",
+          "pubDate": "2026-01-01T00:21:00Z",
+          "url": "https://example.com/articles/21",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-22",
+          "title": "Fixture Article 22",
+          "pubDate": "2026-01-01T00:22:00Z",
+          "url": "https://example.com/articles/22",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-23",
+          "title": "Fixture Article 23",
+          "pubDate": "2026-01-01T00:23:00Z",
+          "url": "https://example.com/articles/23",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-24",
+          "title": "Fixture Article 24",
+          "pubDate": "2026-01-01T00:24:00Z",
+          "url": "https://example.com/articles/24",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-25",
+          "title": "Fixture Article 25",
+          "pubDate": "2026-01-01T00:25:00Z",
+          "url": "https://example.com/articles/25",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-26",
+          "title": "Fixture Article 26",
+          "pubDate": "2026-01-01T00:26:00Z",
+          "url": "https://example.com/articles/26",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-27",
+          "title": "Fixture Article 27",
+          "pubDate": "2026-01-01T00:27:00Z",
+          "url": "https://example.com/articles/27",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-28",
+          "title": "Fixture Article 28",
+          "pubDate": "2026-01-01T00:28:00Z",
+          "url": "https://example.com/articles/28",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-29",
+          "title": "Fixture Article 29",
+          "pubDate": "2026-01-01T00:29:00Z",
+          "url": "https://example.com/articles/29",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-30",
+          "title": "Fixture Article 30",
+          "pubDate": "2026-01-01T00:30:00Z",
+          "url": "https://example.com/articles/30",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-31",
+          "title": "Fixture Article 31",
+          "pubDate": "2026-01-01T00:31:00Z",
+          "url": "https://example.com/articles/31",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-32",
+          "title": "Fixture Article 32",
+          "pubDate": "2026-01-01T00:32:00Z",
+          "url": "https://example.com/articles/32",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-33",
+          "title": "Fixture Article 33",
+          "pubDate": "2026-01-01T00:33:00Z",
+          "url": "https://example.com/articles/33",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-34",
+          "title": "Fixture Article 34",
+          "pubDate": "2026-01-01T00:34:00Z",
+          "url": "https://example.com/articles/34",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-35",
+          "title": "Fixture Article 35",
+          "pubDate": "2026-01-01T00:35:00Z",
+          "url": "https://example.com/articles/35",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-36",
+          "title": "Fixture Article 36",
+          "pubDate": "2026-01-01T00:36:00Z",
+          "url": "https://example.com/articles/36",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-37",
+          "title": "Fixture Article 37",
+          "pubDate": "2026-01-01T00:37:00Z",
+          "url": "https://example.com/articles/37",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-38",
+          "title": "Fixture Article 38",
+          "pubDate": "2026-01-01T00:38:00Z",
+          "url": "https://example.com/articles/38",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-39",
+          "title": "Fixture Article 39",
+          "pubDate": "2026-01-01T00:39:00Z",
+          "url": "https://example.com/articles/39",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-40",
+          "title": "Fixture Article 40",
+          "pubDate": "2026-01-01T00:40:00Z",
+          "url": "https://example.com/articles/40",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-41",
+          "title": "Fixture Article 41",
+          "pubDate": "2026-01-01T00:41:00Z",
+          "url": "https://example.com/articles/41",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-42",
+          "title": "Fixture Article 42",
+          "pubDate": "2026-01-01T00:42:00Z",
+          "url": "https://example.com/articles/42",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-43",
+          "title": "Fixture Article 43",
+          "pubDate": "2026-01-01T00:43:00Z",
+          "url": "https://example.com/articles/43",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-44",
+          "title": "Fixture Article 44",
+          "pubDate": "2026-01-01T00:44:00Z",
+          "url": "https://example.com/articles/44",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-45",
+          "title": "Fixture Article 45",
+          "pubDate": "2026-01-01T00:45:00Z",
+          "url": "https://example.com/articles/45",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-46",
+          "title": "Fixture Article 46",
+          "pubDate": "2026-01-01T00:46:00Z",
+          "url": "https://example.com/articles/46",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-47",
+          "title": "Fixture Article 47",
+          "pubDate": "2026-01-01T00:47:00Z",
+          "url": "https://example.com/articles/47",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-48",
+          "title": "Fixture Article 48",
+          "pubDate": "2026-01-01T00:48:00Z",
+          "url": "https://example.com/articles/48",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-49",
+          "title": "Fixture Article 49",
+          "pubDate": "2026-01-01T00:49:00Z",
+          "url": "https://example.com/articles/49",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-50",
+          "title": "Fixture Article 50",
+          "pubDate": "2026-01-01T00:50:00Z",
+          "url": "https://example.com/articles/50",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-51",
+          "title": "Fixture Article 51",
+          "pubDate": "2026-01-01T00:51:00Z",
+          "url": "https://example.com/articles/51",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-52",
+          "title": "Fixture Article 52",
+          "pubDate": "2026-01-01T00:52:00Z",
+          "url": "https://example.com/articles/52",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-53",
+          "title": "Fixture Article 53",
+          "pubDate": "2026-01-01T00:53:00Z",
+          "url": "https://example.com/articles/53",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-54",
+          "title": "Fixture Article 54",
+          "pubDate": "2026-01-01T00:54:00Z",
+          "url": "https://example.com/articles/54",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-55",
+          "title": "Fixture Article 55",
+          "pubDate": "2026-01-01T00:55:00Z",
+          "url": "https://example.com/articles/55",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-56",
+          "title": "Fixture Article 56",
+          "pubDate": "2026-01-01T00:56:00Z",
+          "url": "https://example.com/articles/56",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-57",
+          "title": "Fixture Article 57",
+          "pubDate": "2026-01-01T00:57:00Z",
+          "url": "https://example.com/articles/57",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-58",
+          "title": "Fixture Article 58",
+          "pubDate": "2026-01-01T00:58:00Z",
+          "url": "https://example.com/articles/58",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-59",
+          "title": "Fixture Article 59",
+          "pubDate": "2026-01-01T00:59:00Z",
+          "url": "https://example.com/articles/59",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-60",
+          "title": "Fixture Article 60",
+          "pubDate": "2026-01-01T00:00:00Z",
+          "url": "https://example.com/articles/60",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-61",
+          "title": "Fixture Article 61",
+          "pubDate": "2026-01-01T00:01:00Z",
+          "url": "https://example.com/articles/61",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-62",
+          "title": "Fixture Article 62",
+          "pubDate": "2026-01-01T00:02:00Z",
+          "url": "https://example.com/articles/62",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-63",
+          "title": "Fixture Article 63",
+          "pubDate": "2026-01-01T00:03:00Z",
+          "url": "https://example.com/articles/63",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-64",
+          "title": "Fixture Article 64",
+          "pubDate": "2026-01-01T00:04:00Z",
+          "url": "https://example.com/articles/64",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-65",
+          "title": "Fixture Article 65",
+          "pubDate": "2026-01-01T00:05:00Z",
+          "url": "https://example.com/articles/65",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-66",
+          "title": "Fixture Article 66",
+          "pubDate": "2026-01-01T00:06:00Z",
+          "url": "https://example.com/articles/66",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-67",
+          "title": "Fixture Article 67",
+          "pubDate": "2026-01-01T00:07:00Z",
+          "url": "https://example.com/articles/67",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-68",
+          "title": "Fixture Article 68",
+          "pubDate": "2026-01-01T00:08:00Z",
+          "url": "https://example.com/articles/68",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-69",
+          "title": "Fixture Article 69",
+          "pubDate": "2026-01-01T00:09:00Z",
+          "url": "https://example.com/articles/69",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-70",
+          "title": "Fixture Article 70",
+          "pubDate": "2026-01-01T00:10:00Z",
+          "url": "https://example.com/articles/70",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-71",
+          "title": "Fixture Article 71",
+          "pubDate": "2026-01-01T00:11:00Z",
+          "url": "https://example.com/articles/71",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-72",
+          "title": "Fixture Article 72",
+          "pubDate": "2026-01-01T00:12:00Z",
+          "url": "https://example.com/articles/72",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-73",
+          "title": "Fixture Article 73",
+          "pubDate": "2026-01-01T00:13:00Z",
+          "url": "https://example.com/articles/73",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-74",
+          "title": "Fixture Article 74",
+          "pubDate": "2026-01-01T00:14:00Z",
+          "url": "https://example.com/articles/74",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-75",
+          "title": "Fixture Article 75",
+          "pubDate": "2026-01-01T00:15:00Z",
+          "url": "https://example.com/articles/75",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-76",
+          "title": "Fixture Article 76",
+          "pubDate": "2026-01-01T00:16:00Z",
+          "url": "https://example.com/articles/76",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-77",
+          "title": "Fixture Article 77",
+          "pubDate": "2026-01-01T00:17:00Z",
+          "url": "https://example.com/articles/77",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-78",
+          "title": "Fixture Article 78",
+          "pubDate": "2026-01-01T00:18:00Z",
+          "url": "https://example.com/articles/78",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-79",
+          "title": "Fixture Article 79",
+          "pubDate": "2026-01-01T00:19:00Z",
+          "url": "https://example.com/articles/79",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-80",
+          "title": "Fixture Article 80",
+          "pubDate": "2026-01-01T00:20:00Z",
+          "url": "https://example.com/articles/80",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-81",
+          "title": "Fixture Article 81",
+          "pubDate": "2026-01-01T00:21:00Z",
+          "url": "https://example.com/articles/81",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-82",
+          "title": "Fixture Article 82",
+          "pubDate": "2026-01-01T00:22:00Z",
+          "url": "https://example.com/articles/82",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-83",
+          "title": "Fixture Article 83",
+          "pubDate": "2026-01-01T00:23:00Z",
+          "url": "https://example.com/articles/83",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-84",
+          "title": "Fixture Article 84",
+          "pubDate": "2026-01-01T00:24:00Z",
+          "url": "https://example.com/articles/84",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-85",
+          "title": "Fixture Article 85",
+          "pubDate": "2026-01-01T00:25:00Z",
+          "url": "https://example.com/articles/85",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-86",
+          "title": "Fixture Article 86",
+          "pubDate": "2026-01-01T00:26:00Z",
+          "url": "https://example.com/articles/86",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-87",
+          "title": "Fixture Article 87",
+          "pubDate": "2026-01-01T00:27:00Z",
+          "url": "https://example.com/articles/87",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-88",
+          "title": "Fixture Article 88",
+          "pubDate": "2026-01-01T00:28:00Z",
+          "url": "https://example.com/articles/88",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-89",
+          "title": "Fixture Article 89",
+          "pubDate": "2026-01-01T00:29:00Z",
+          "url": "https://example.com/articles/89",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-90",
+          "title": "Fixture Article 90",
+          "pubDate": "2026-01-01T00:30:00Z",
+          "url": "https://example.com/articles/90",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-91",
+          "title": "Fixture Article 91",
+          "pubDate": "2026-01-01T00:31:00Z",
+          "url": "https://example.com/articles/91",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-92",
+          "title": "Fixture Article 92",
+          "pubDate": "2026-01-01T00:32:00Z",
+          "url": "https://example.com/articles/92",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-93",
+          "title": "Fixture Article 93",
+          "pubDate": "2026-01-01T00:33:00Z",
+          "url": "https://example.com/articles/93",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-94",
+          "title": "Fixture Article 94",
+          "pubDate": "2026-01-01T00:34:00Z",
+          "url": "https://example.com/articles/94",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-95",
+          "title": "Fixture Article 95",
+          "pubDate": "2026-01-01T00:35:00Z",
+          "url": "https://example.com/articles/95",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-96",
+          "title": "Fixture Article 96",
+          "pubDate": "2026-01-01T00:36:00Z",
+          "url": "https://example.com/articles/96",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-97",
+          "title": "Fixture Article 97",
+          "pubDate": "2026-01-01T00:37:00Z",
+          "url": "https://example.com/articles/97",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-98",
+          "title": "Fixture Article 98",
+          "pubDate": "2026-01-01T00:38:00Z",
+          "url": "https://example.com/articles/98",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-99",
+          "title": "Fixture Article 99",
+          "pubDate": "2026-01-01T00:39:00Z",
+          "url": "https://example.com/articles/99",
+          "source": {
+            "domain": "example.com"
+          }
+        },
+        {
+          "articleId": "article-fixture-100",
+          "title": "Fixture Article 100",
+          "pubDate": "2026-01-01T00:40:00Z",
+          "url": "https://example.com/articles/100",
+          "source": {
+            "domain": "example.com"
+          }
+        }
+      ]
+    }
+  }
+}

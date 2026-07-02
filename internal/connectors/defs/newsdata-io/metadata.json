@@ -1,0 +1,22 @@
+{
+  "name": "newsdata-io",
+  "display_name": "NewsData.io",
+  "description": "Reads latest, crypto, and archived news articles plus available news sources from the NewsData.io REST API.",
+  "integration_type": "api",
+  "docs_url": "https://newsdata.io/documentation",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 10
+  },
+  "risk": {
+    "read": "external NewsData.io API read of news articles and sources"
+  }
+}

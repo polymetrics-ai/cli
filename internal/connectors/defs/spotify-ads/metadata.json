@@ -1,0 +1,23 @@
+{
+  "name": "spotify-ads",
+  "display_name": "Spotify Ads",
+  "description": "Reads Spotify Ads ad accounts, campaigns, ad sets, and ads through the Spotify Ads API.",
+  "integration_type": "api",
+  "docs_url": "https://ads.spotify.com/en-US/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Spotify Ads API read of ad account, campaign, ad set, and ad data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

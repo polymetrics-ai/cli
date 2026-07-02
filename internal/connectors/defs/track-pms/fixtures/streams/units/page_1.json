@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/units", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "units": [
+        { "id": "unt_fixture_1", "name": "Fixture Unit One", "status": "active" },
+        { "id": "unt_fixture_2", "name": "Fixture Unit Two", "status": "inactive" }
+      ]
+    }
+  }
+}

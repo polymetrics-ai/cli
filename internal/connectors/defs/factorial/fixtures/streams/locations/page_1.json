@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/locations/locations", "query": { "page": "1", "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 100,
+          "company_id": 1,
+          "name": "Barcelona HQ",
+          "country": "ES",
+          "state": "Catalonia",
+          "city": "Barcelona",
+          "address_line_1": "1 Fixture Ave",
+          "postal_code": "08001",
+          "timezone": "Europe/Madrid",
+          "main": true
+        }
+      ]
+    }
+  }
+}

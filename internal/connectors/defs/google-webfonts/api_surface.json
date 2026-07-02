@@ -1,0 +1,13 @@
+{
+  "api": "Google Fonts Developer API (https://developers.google.com/fonts/docs/developer_api)",
+  "docs": "https://developers.google.com/fonts/docs/developer_api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (webfonts, popular_fonts, trending_fonts, newest_fonts, alpha_fonts); the Google Fonts Developer API has no mutation endpoints (read-only public catalog), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/webfonts", "covered_by": { "stream": "webfonts" } },
+    { "method": "GET", "path": "/webfonts", "covered_by": { "stream": "popular_fonts" } },
+    { "method": "GET", "path": "/webfonts", "covered_by": { "stream": "trending_fonts" } },
+    { "method": "GET", "path": "/webfonts", "covered_by": { "stream": "newest_fonts" } },
+    { "method": "GET", "path": "/webfonts", "covered_by": { "stream": "alpha_fonts" } }
+  ]
+}

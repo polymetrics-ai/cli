@@ -1,0 +1,23 @@
+{
+  "name": "appfigures",
+  "display_name": "Appfigures",
+  "description": "Reads Appfigures app-store reviews through the Appfigures v2 REST API (page-number pagination). Products, sales, ratings, and category reports are not modeled by this bundle; see docs.md Known limits.",
+  "integration_type": "api",
+  "docs_url": "https://docs.appfigures.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Appfigures API read of app-store review data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

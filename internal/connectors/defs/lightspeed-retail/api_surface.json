@@ -1,0 +1,19 @@
+{
+  "api": "Lightspeed Retail (X-Series) API 2.0 (https://<subdomain>.retail.lightspeed.app/api/2.0)",
+  "docs": "https://developers.lightspeedhq.com/retail/introduction/introduction/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Lightspeed Retail surface (inventory adjustments, consignments, price books, gift cards, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/2.0/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/api/2.0/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/api/2.0/sales", "covered_by": { "stream": "sales" } },
+    { "method": "GET", "path": "/api/2.0/outlets", "covered_by": { "stream": "outlets" } },
+    { "method": "GET", "path": "/api/2.0/registers", "covered_by": { "stream": "registers" } },
+    { "method": "POST", "path": "/api/2.0/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/2.0/inventory", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/2.0/consignments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/2.0/price_books", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/2.0/gift_cards", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/2.0/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

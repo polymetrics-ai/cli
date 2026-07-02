@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/docs/synthetic-conformance-value/tables" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "grid-fixture-1",
+          "type": "table",
+          "tableType": "table",
+          "name": "Tasks",
+          "href": "https://coda.io/apis/v1/docs/synthetic-conformance-value/tables/grid-fixture-1",
+          "browserLink": "https://coda.io/d/_dsynthetic-conformance-value#Tasks_tugrid-fixture-1",
+          "rowCount": 42
+        }
+      ],
+      "href": "https://coda.io/apis/v1/docs/synthetic-conformance-value/tables"
+    }
+  }
+}

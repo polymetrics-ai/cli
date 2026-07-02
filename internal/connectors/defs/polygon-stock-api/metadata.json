@@ -1,0 +1,23 @@
+{
+  "name": "polygon-stock-api",
+  "display_name": "Polygon Stock API",
+  "description": "Reads Polygon.io stock tickers, dividends, and splits through the Polygon.io reference REST API.",
+  "integration_type": "api",
+  "docs_url": "https://polygon.io/docs/stocks/getting-started",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Polygon.io API read of stock reference data (tickers, dividends, splits)",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

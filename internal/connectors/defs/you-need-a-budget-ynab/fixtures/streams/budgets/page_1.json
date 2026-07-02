@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/budgets"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "budgets": [
+          {
+            "id": "budget_fixture_1",
+            "name": "Fixture Household",
+            "last_modified_on": "2026-01-01T00:00:00Z",
+            "first_month": "2026-01-01",
+            "last_month": "2026-06-01",
+            "currency_format": { "iso_code": "USD" },
+            "date_format": { "format": "YYYY-MM-DD" }
+          },
+          {
+            "id": "budget_fixture_2",
+            "name": "Fixture Side Business",
+            "last_modified_on": "2026-01-02T00:00:00Z",
+            "first_month": "2026-01-01",
+            "last_month": "2026-06-01",
+            "currency_format": { "iso_code": "USD" },
+            "date_format": { "format": "YYYY-MM-DD" }
+          }
+        ]
+      }
+    }
+  }
+}

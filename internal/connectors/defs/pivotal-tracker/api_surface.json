@@ -1,0 +1,16 @@
+{
+  "api": "Pivotal Tracker API v5 (https://www.pivotaltracker.com/services/v5)",
+  "docs": "https://www.pivotaltracker.com/help/api/rest/v5",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read-only streams (projects, stories, iterations, epics) only, matching internal/connectors/pivotal-tracker's exact endpoint set; the full Pivotal Tracker surface (labels, tasks, comments, memberships, mutation endpoints) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/projects/{project_id}/stories", "covered_by": { "stream": "stories" } },
+    { "method": "GET", "path": "/projects/{project_id}/iterations", "covered_by": { "stream": "iterations" } },
+    { "method": "GET", "path": "/projects/{project_id}/epics", "covered_by": { "stream": "epics" } },
+    { "method": "GET", "path": "/projects/{project_id}/labels", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/projects/{project_id}/memberships", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/projects/{project_id}/stories", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/projects/{project_id}/stories/{story_id}", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } }
+  ]
+}

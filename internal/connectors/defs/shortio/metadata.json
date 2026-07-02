@@ -1,0 +1,23 @@
+{
+  "name": "shortio",
+  "display_name": "Short.io",
+  "description": "Reads Short.io links and domains through the Short.io REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.short.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 150
+  },
+  "risk": {
+    "read": "external Short.io API read of link and domain data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

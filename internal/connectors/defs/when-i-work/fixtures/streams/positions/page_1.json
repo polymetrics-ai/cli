@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/2/positions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "positions": [
+        { "id": 20, "name": "Cashier", "color": "#ff0000" },
+        { "id": 21, "name": "Manager", "color": "#00ff00" }
+      ]
+    }
+  }
+}

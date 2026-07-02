@@ -1,0 +1,29 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/v2/costs" },
+    "error_map": [
+      { "status": 401, "hint": "vantage access_token is missing or invalid; re-run pm credentials add vantage" },
+      { "status": 403, "hint": "vantage account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "vantage rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "costs",
+      "path": "/v2/costs",
+      "records": { "path": "costs" },
+      "computed_fields": {
+        "id": "{{ record.id | last_path_segment }}",
+        "service": "{{ record.service }}",
+        "amount": "{{ record.amount }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/costs.json"
+    }
+  ]
+}

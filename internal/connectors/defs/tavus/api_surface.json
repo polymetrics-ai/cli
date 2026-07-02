@@ -1,0 +1,13 @@
+{
+  "api": "Tavus API v2 (https://tavusapi.com/v2)",
+  "docs": "https://docs.tavus.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the single legacy-parity read stream (replicas) only; the full Tavus surface (videos, conversations, personas) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/replicas", "covered_by": { "stream": "replicas" } },
+    { "method": "POST", "path": "/v2/replicas", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/videos", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/conversations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/personas", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Humanitix Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Humanitix API key, sent as the x-api-key header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.humanitix.com/v1",
+      "description": "Humanitix API base URL override for tests or proxies."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Humanitix event id the 'orders' and 'tickets' streams are scoped to (required for those two streams; substituted into the event-scoped path)."
+    },
+    "since": {
+      "type": "string",
+      "description": "Optional ISO-8601 lower bound for the 'events' stream's incremental `since` filter; the stream's own state cursor takes precedence once a sync has run once."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 100,
+      "description": "Page size for the pageSize query parameter (1-100)."
+    }
+  }
+}

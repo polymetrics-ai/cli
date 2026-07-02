@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/api/V1/GetProviders", "query": { "Skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Items": [
+        {
+          "ProviderCode": "PROV1",
+          "Name": "Fixture Provider 1",
+          "CountryIso": "US",
+          "RegionCodes": ["CA", "NY"],
+          "PaymentTypes": ["CreditCard"],
+          "CustomerCareNumber": "+18005550100",
+          "LogoUrl": "https://example.com/logo1.png",
+          "ValidationRegex": "^[0-9]{10}$"
+        }
+      ]
+    }
+  }
+}

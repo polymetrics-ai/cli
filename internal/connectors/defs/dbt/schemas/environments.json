@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "environments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "account_id": { "type": "integer" },
+    "project_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "dbt_version": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "use_custom_branch": { "type": ["boolean", "null"] },
+    "custom_branch": { "type": ["string", "null"] },
+    "state": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

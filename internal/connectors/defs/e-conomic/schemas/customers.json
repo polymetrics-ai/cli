@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["customer_number"],
+  "required": ["customer_number"],
+  "properties": {
+    "customer_number": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "zip": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "address": { "type": ["string", "null"] },
+    "balance": { "type": ["number", "null"] },
+    "barred": { "type": ["boolean", "null"] },
+    "credit_limit": { "type": ["number", "null"] },
+    "vat_zone_number": { "type": ["integer", "null"] },
+    "customer_group_number": { "type": ["integer", "null"] },
+    "self": { "type": ["string", "null"] }
+  }
+}

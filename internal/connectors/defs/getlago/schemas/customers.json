@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["lago_id"],
+  "x-cursor-field": "created_at",
+  "required": ["lago_id"],
+  "properties": {
+    "lago_id": { "type": "string" },
+    "sequential_id": { "type": ["integer", "null"] },
+    "external_id": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "customer_type": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

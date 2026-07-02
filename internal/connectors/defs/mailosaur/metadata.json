@@ -1,0 +1,23 @@
+{
+  "name": "mailosaur",
+  "display_name": "Mailosaur",
+  "description": "Reads Mailosaur virtual servers, message summaries, and account usage transactions through the Mailosaur REST API.",
+  "integration_type": "api",
+  "docs_url": "https://mailosaur.com/docs/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Mailosaur API read of virtual-server, message-summary, and usage-transaction data",
+    "approval": "none; read-only source connector"
+  }
+}

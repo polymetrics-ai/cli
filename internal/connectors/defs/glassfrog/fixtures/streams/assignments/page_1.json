@@ -1,0 +1,1117 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/assignments",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "assignments": [
+        {
+          "id": 1,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 1",
+          "links": {
+            "person": 101,
+            "role": 201,
+            "supported_role": 301
+          }
+        },
+        {
+          "id": 2,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 2",
+          "links": {
+            "person": 102,
+            "role": 202,
+            "supported_role": 302
+          }
+        },
+        {
+          "id": 3,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 3",
+          "links": {
+            "person": 103,
+            "role": 203,
+            "supported_role": 303
+          }
+        },
+        {
+          "id": 4,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 4",
+          "links": {
+            "person": 104,
+            "role": 204,
+            "supported_role": 304
+          }
+        },
+        {
+          "id": 5,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 5",
+          "links": {
+            "person": 105,
+            "role": 205,
+            "supported_role": 305
+          }
+        },
+        {
+          "id": 6,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 6",
+          "links": {
+            "person": 106,
+            "role": 206,
+            "supported_role": 306
+          }
+        },
+        {
+          "id": 7,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 7",
+          "links": {
+            "person": 107,
+            "role": 207,
+            "supported_role": 307
+          }
+        },
+        {
+          "id": 8,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 8",
+          "links": {
+            "person": 108,
+            "role": 208,
+            "supported_role": 308
+          }
+        },
+        {
+          "id": 9,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 9",
+          "links": {
+            "person": 109,
+            "role": 209,
+            "supported_role": 309
+          }
+        },
+        {
+          "id": 10,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 10",
+          "links": {
+            "person": 110,
+            "role": 210,
+            "supported_role": 310
+          }
+        },
+        {
+          "id": 11,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 11",
+          "links": {
+            "person": 111,
+            "role": 211,
+            "supported_role": 311
+          }
+        },
+        {
+          "id": 12,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 12",
+          "links": {
+            "person": 112,
+            "role": 212,
+            "supported_role": 312
+          }
+        },
+        {
+          "id": 13,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 13",
+          "links": {
+            "person": 113,
+            "role": 213,
+            "supported_role": 313
+          }
+        },
+        {
+          "id": 14,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 14",
+          "links": {
+            "person": 114,
+            "role": 214,
+            "supported_role": 314
+          }
+        },
+        {
+          "id": 15,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 15",
+          "links": {
+            "person": 115,
+            "role": 215,
+            "supported_role": 315
+          }
+        },
+        {
+          "id": 16,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 16",
+          "links": {
+            "person": 116,
+            "role": 216,
+            "supported_role": 316
+          }
+        },
+        {
+          "id": 17,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 17",
+          "links": {
+            "person": 117,
+            "role": 217,
+            "supported_role": 317
+          }
+        },
+        {
+          "id": 18,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 18",
+          "links": {
+            "person": 118,
+            "role": 218,
+            "supported_role": 318
+          }
+        },
+        {
+          "id": 19,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 19",
+          "links": {
+            "person": 119,
+            "role": 219,
+            "supported_role": 319
+          }
+        },
+        {
+          "id": 20,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 20",
+          "links": {
+            "person": 120,
+            "role": 220,
+            "supported_role": 320
+          }
+        },
+        {
+          "id": 21,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 21",
+          "links": {
+            "person": 121,
+            "role": 221,
+            "supported_role": 321
+          }
+        },
+        {
+          "id": 22,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 22",
+          "links": {
+            "person": 122,
+            "role": 222,
+            "supported_role": 322
+          }
+        },
+        {
+          "id": 23,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 23",
+          "links": {
+            "person": 123,
+            "role": 223,
+            "supported_role": 323
+          }
+        },
+        {
+          "id": 24,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 24",
+          "links": {
+            "person": 124,
+            "role": 224,
+            "supported_role": 324
+          }
+        },
+        {
+          "id": 25,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 25",
+          "links": {
+            "person": 125,
+            "role": 225,
+            "supported_role": 325
+          }
+        },
+        {
+          "id": 26,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 26",
+          "links": {
+            "person": 126,
+            "role": 226,
+            "supported_role": 326
+          }
+        },
+        {
+          "id": 27,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 27",
+          "links": {
+            "person": 127,
+            "role": 227,
+            "supported_role": 327
+          }
+        },
+        {
+          "id": 28,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 28",
+          "links": {
+            "person": 128,
+            "role": 228,
+            "supported_role": 328
+          }
+        },
+        {
+          "id": 29,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 29",
+          "links": {
+            "person": 129,
+            "role": 229,
+            "supported_role": 329
+          }
+        },
+        {
+          "id": 30,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 30",
+          "links": {
+            "person": 130,
+            "role": 230,
+            "supported_role": 330
+          }
+        },
+        {
+          "id": 31,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 31",
+          "links": {
+            "person": 131,
+            "role": 231,
+            "supported_role": 331
+          }
+        },
+        {
+          "id": 32,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 32",
+          "links": {
+            "person": 132,
+            "role": 232,
+            "supported_role": 332
+          }
+        },
+        {
+          "id": 33,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 33",
+          "links": {
+            "person": 133,
+            "role": 233,
+            "supported_role": 333
+          }
+        },
+        {
+          "id": 34,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 34",
+          "links": {
+            "person": 134,
+            "role": 234,
+            "supported_role": 334
+          }
+        },
+        {
+          "id": 35,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 35",
+          "links": {
+            "person": 135,
+            "role": 235,
+            "supported_role": 335
+          }
+        },
+        {
+          "id": 36,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 36",
+          "links": {
+            "person": 136,
+            "role": 236,
+            "supported_role": 336
+          }
+        },
+        {
+          "id": 37,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 37",
+          "links": {
+            "person": 137,
+            "role": 237,
+            "supported_role": 337
+          }
+        },
+        {
+          "id": 38,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 38",
+          "links": {
+            "person": 138,
+            "role": 238,
+            "supported_role": 338
+          }
+        },
+        {
+          "id": 39,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 39",
+          "links": {
+            "person": 139,
+            "role": 239,
+            "supported_role": 339
+          }
+        },
+        {
+          "id": 40,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 40",
+          "links": {
+            "person": 140,
+            "role": 240,
+            "supported_role": 340
+          }
+        },
+        {
+          "id": 41,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 41",
+          "links": {
+            "person": 141,
+            "role": 241,
+            "supported_role": 341
+          }
+        },
+        {
+          "id": 42,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 42",
+          "links": {
+            "person": 142,
+            "role": 242,
+            "supported_role": 342
+          }
+        },
+        {
+          "id": 43,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 43",
+          "links": {
+            "person": 143,
+            "role": 243,
+            "supported_role": 343
+          }
+        },
+        {
+          "id": 44,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 44",
+          "links": {
+            "person": 144,
+            "role": 244,
+            "supported_role": 344
+          }
+        },
+        {
+          "id": 45,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 45",
+          "links": {
+            "person": 145,
+            "role": 245,
+            "supported_role": 345
+          }
+        },
+        {
+          "id": 46,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 46",
+          "links": {
+            "person": 146,
+            "role": 246,
+            "supported_role": 346
+          }
+        },
+        {
+          "id": 47,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 47",
+          "links": {
+            "person": 147,
+            "role": 247,
+            "supported_role": 347
+          }
+        },
+        {
+          "id": 48,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 48",
+          "links": {
+            "person": 148,
+            "role": 248,
+            "supported_role": 348
+          }
+        },
+        {
+          "id": 49,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 49",
+          "links": {
+            "person": 149,
+            "role": 249,
+            "supported_role": 349
+          }
+        },
+        {
+          "id": 50,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 50",
+          "links": {
+            "person": 150,
+            "role": 250,
+            "supported_role": 350
+          }
+        },
+        {
+          "id": 51,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 51",
+          "links": {
+            "person": 151,
+            "role": 251,
+            "supported_role": 351
+          }
+        },
+        {
+          "id": 52,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 52",
+          "links": {
+            "person": 152,
+            "role": 252,
+            "supported_role": 352
+          }
+        },
+        {
+          "id": 53,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 53",
+          "links": {
+            "person": 153,
+            "role": 253,
+            "supported_role": 353
+          }
+        },
+        {
+          "id": 54,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 54",
+          "links": {
+            "person": 154,
+            "role": 254,
+            "supported_role": 354
+          }
+        },
+        {
+          "id": 55,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 55",
+          "links": {
+            "person": 155,
+            "role": 255,
+            "supported_role": 355
+          }
+        },
+        {
+          "id": 56,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 56",
+          "links": {
+            "person": 156,
+            "role": 256,
+            "supported_role": 356
+          }
+        },
+        {
+          "id": 57,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 57",
+          "links": {
+            "person": 157,
+            "role": 257,
+            "supported_role": 357
+          }
+        },
+        {
+          "id": 58,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 58",
+          "links": {
+            "person": 158,
+            "role": 258,
+            "supported_role": 358
+          }
+        },
+        {
+          "id": 59,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 59",
+          "links": {
+            "person": 159,
+            "role": 259,
+            "supported_role": 359
+          }
+        },
+        {
+          "id": 60,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 60",
+          "links": {
+            "person": 160,
+            "role": 260,
+            "supported_role": 360
+          }
+        },
+        {
+          "id": 61,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 61",
+          "links": {
+            "person": 161,
+            "role": 261,
+            "supported_role": 361
+          }
+        },
+        {
+          "id": 62,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 62",
+          "links": {
+            "person": 162,
+            "role": 262,
+            "supported_role": 362
+          }
+        },
+        {
+          "id": 63,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 63",
+          "links": {
+            "person": 163,
+            "role": 263,
+            "supported_role": 363
+          }
+        },
+        {
+          "id": 64,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 64",
+          "links": {
+            "person": 164,
+            "role": 264,
+            "supported_role": 364
+          }
+        },
+        {
+          "id": 65,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 65",
+          "links": {
+            "person": 165,
+            "role": 265,
+            "supported_role": 365
+          }
+        },
+        {
+          "id": 66,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 66",
+          "links": {
+            "person": 166,
+            "role": 266,
+            "supported_role": 366
+          }
+        },
+        {
+          "id": 67,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 67",
+          "links": {
+            "person": 167,
+            "role": 267,
+            "supported_role": 367
+          }
+        },
+        {
+          "id": 68,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 68",
+          "links": {
+            "person": 168,
+            "role": 268,
+            "supported_role": 368
+          }
+        },
+        {
+          "id": 69,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 69",
+          "links": {
+            "person": 169,
+            "role": 269,
+            "supported_role": 369
+          }
+        },
+        {
+          "id": 70,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 70",
+          "links": {
+            "person": 170,
+            "role": 270,
+            "supported_role": 370
+          }
+        },
+        {
+          "id": 71,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 71",
+          "links": {
+            "person": 171,
+            "role": 271,
+            "supported_role": 371
+          }
+        },
+        {
+          "id": 72,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 72",
+          "links": {
+            "person": 172,
+            "role": 272,
+            "supported_role": 372
+          }
+        },
+        {
+          "id": 73,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 73",
+          "links": {
+            "person": 173,
+            "role": 273,
+            "supported_role": 373
+          }
+        },
+        {
+          "id": 74,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 74",
+          "links": {
+            "person": 174,
+            "role": 274,
+            "supported_role": 374
+          }
+        },
+        {
+          "id": 75,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 75",
+          "links": {
+            "person": 175,
+            "role": 275,
+            "supported_role": 375
+          }
+        },
+        {
+          "id": 76,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 76",
+          "links": {
+            "person": 176,
+            "role": 276,
+            "supported_role": 376
+          }
+        },
+        {
+          "id": 77,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 77",
+          "links": {
+            "person": 177,
+            "role": 277,
+            "supported_role": 377
+          }
+        },
+        {
+          "id": 78,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 78",
+          "links": {
+            "person": 178,
+            "role": 278,
+            "supported_role": 378
+          }
+        },
+        {
+          "id": 79,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 79",
+          "links": {
+            "person": 179,
+            "role": 279,
+            "supported_role": 379
+          }
+        },
+        {
+          "id": 80,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 80",
+          "links": {
+            "person": 180,
+            "role": 280,
+            "supported_role": 380
+          }
+        },
+        {
+          "id": 81,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 81",
+          "links": {
+            "person": 181,
+            "role": 281,
+            "supported_role": 381
+          }
+        },
+        {
+          "id": 82,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 82",
+          "links": {
+            "person": 182,
+            "role": 282,
+            "supported_role": 382
+          }
+        },
+        {
+          "id": 83,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 83",
+          "links": {
+            "person": 183,
+            "role": 283,
+            "supported_role": 383
+          }
+        },
+        {
+          "id": 84,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 84",
+          "links": {
+            "person": 184,
+            "role": 284,
+            "supported_role": 384
+          }
+        },
+        {
+          "id": 85,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 85",
+          "links": {
+            "person": 185,
+            "role": 285,
+            "supported_role": 385
+          }
+        },
+        {
+          "id": 86,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 86",
+          "links": {
+            "person": 186,
+            "role": 286,
+            "supported_role": 386
+          }
+        },
+        {
+          "id": 87,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 87",
+          "links": {
+            "person": 187,
+            "role": 287,
+            "supported_role": 387
+          }
+        },
+        {
+          "id": 88,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 88",
+          "links": {
+            "person": 188,
+            "role": 288,
+            "supported_role": 388
+          }
+        },
+        {
+          "id": 89,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 89",
+          "links": {
+            "person": 189,
+            "role": 289,
+            "supported_role": 389
+          }
+        },
+        {
+          "id": 90,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 90",
+          "links": {
+            "person": 190,
+            "role": 290,
+            "supported_role": 390
+          }
+        },
+        {
+          "id": 91,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 91",
+          "links": {
+            "person": 191,
+            "role": 291,
+            "supported_role": 391
+          }
+        },
+        {
+          "id": 92,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 92",
+          "links": {
+            "person": 192,
+            "role": 292,
+            "supported_role": 392
+          }
+        },
+        {
+          "id": 93,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 93",
+          "links": {
+            "person": 193,
+            "role": 293,
+            "supported_role": 393
+          }
+        },
+        {
+          "id": 94,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 94",
+          "links": {
+            "person": 194,
+            "role": 294,
+            "supported_role": 394
+          }
+        },
+        {
+          "id": 95,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 95",
+          "links": {
+            "person": 195,
+            "role": 295,
+            "supported_role": 395
+          }
+        },
+        {
+          "id": 96,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 96",
+          "links": {
+            "person": 196,
+            "role": 296,
+            "supported_role": 396
+          }
+        },
+        {
+          "id": 97,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 97",
+          "links": {
+            "person": 197,
+            "role": 297,
+            "supported_role": 397
+          }
+        },
+        {
+          "id": 98,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 98",
+          "links": {
+            "person": 198,
+            "role": 298,
+            "supported_role": 398
+          }
+        },
+        {
+          "id": 99,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 99",
+          "links": {
+            "person": 199,
+            "role": 299,
+            "supported_role": 399
+          }
+        },
+        {
+          "id": 100,
+          "election": null,
+          "exclude_from_meetings": false,
+          "focus": "fixture focus 100",
+          "links": {
+            "person": 200,
+            "role": 300,
+            "supported_role": 400
+          }
+        }
+      ]
+    }
+  }
+}

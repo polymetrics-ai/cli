@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounting/account/fixture_acct/users/clients",
+    "query": { "page": "1", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "result": {
+          "clients": [
+            { "id": 1, "userid": 1, "organization": "Fixture Org 1", "fname": "Fixture", "lname": "Client 1", "email": "fixture1@example.com", "currency_code": "USD", "vis_state": 0, "updated": "2026-01-01 00:00:00" },
+            { "id": 2, "userid": 1, "organization": "Fixture Org 2", "fname": "Fixture", "lname": "Client 2", "email": "fixture2@example.com", "currency_code": "USD", "vis_state": 0, "updated": "2026-01-02 00:00:00" }
+          ],
+          "page": 1,
+          "pages": 2,
+          "per_page": 100,
+          "total": 3
+        }
+      }
+    }
+  }
+}

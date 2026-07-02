@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/customers",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "cust_fixture_1",
+          "object": "customer",
+          "app_user_id": "user_fixture_1",
+          "created_at": 1735689600000,
+          "updated_at": 1735689600000
+        },
+        {
+          "id": "cust_fixture_2",
+          "object": "customer",
+          "app_user_id": "user_fixture_2",
+          "created_at": 1735776000000,
+          "updated_at": 1735776000000
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

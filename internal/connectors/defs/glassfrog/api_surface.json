@@ -1,0 +1,17 @@
+{
+  "api": "GlassFrog API v3 (https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY)",
+  "docs": "https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (assignments, circles, people, projects, roles); GlassFrog exposes no write endpoints in this connector (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v3/assignments", "covered_by": { "stream": "assignments" } },
+    { "method": "GET", "path": "/api/v3/circles", "covered_by": { "stream": "circles" } },
+    { "method": "GET", "path": "/api/v3/people", "covered_by": { "stream": "people" } },
+    { "method": "GET", "path": "/api/v3/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/api/v3/roles", "covered_by": { "stream": "roles" } },
+    { "method": "GET", "path": "/api/v3/checklist_items", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented checklist items; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v3/metrics", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented metrics; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v3/action_items", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented action items; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v3/organization", "excluded": { "category": "non_data_endpoint", "reason": "single organization profile introspection, not a syncable list stream" } }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/account", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "acc_fixture_1", "name": "Fixture Account One", "lastVisit": "2026-01-01T00:00:00Z" },
+        { "id": "acc_fixture_2", "name": "Fixture Account Two", "lastVisit": "2026-01-02T00:00:00Z" }
+      ],
+      "next": ""
+    }
+  }
+}

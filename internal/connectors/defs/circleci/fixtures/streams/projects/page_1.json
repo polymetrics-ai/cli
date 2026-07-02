@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "proj_fixture_1",
+      "slug": "gh/fixture-org/fixture-repo",
+      "name": "fixture-repo",
+      "organization_name": "fixture-org",
+      "organization_slug": "gh/fixture-org",
+      "organization_id": "org_fixture_1",
+      "vcs_url": "https://github.com/fixture-org/fixture-repo",
+      "vcs_info": { "default_branch": "main" }
+    }
+  }
+}

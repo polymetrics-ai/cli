@@ -1,0 +1,56 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/users/list" },
+    "error_map": [
+      { "status": 401, "hint": "drift access token is missing or invalid; re-run pm credentials add drift" },
+      { "status": 403, "hint": "drift account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "drift rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/users/list",
+      "records": { "path": "data" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "query": { "size": "65", "index": "0" },
+      "records": { "path": "data.accounts" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "data.next"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "conversations",
+      "path": "/conversations/list",
+      "query": { "limit": "50" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next",
+        "token_path": "pagination.next",
+        "stop_path": "pagination.more"
+      },
+      "schema": "schemas/conversations.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "query": {
+        "email": { "template": "{{ config.email }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/contacts.json"
+    }
+  ]
+}

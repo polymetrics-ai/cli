@@ -1,0 +1,23 @@
+{
+  "name": "goldcast",
+  "display_name": "Goldcast",
+  "description": "Reads Goldcast organizations, events, agenda items, discussion groups, and tracks through the Goldcast customapi REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.goldcast.io/api-docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Goldcast API read of organization, event, and event-scoped data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/users/synthetic-conformance-value/webinars", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "webinars": [
+        { "id": "webinar_fixture_1", "uuid": "uuid_fixture_1", "topic": "Fixture Webinar One", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "webinar_fixture_2", "uuid": "uuid_fixture_2", "topic": "Fixture Webinar Two", "start_time": "2026-01-02T00:00:00Z" }
+      ],
+      "next_page_token": ""
+    }
+  }
+}

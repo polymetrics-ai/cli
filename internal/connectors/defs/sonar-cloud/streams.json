@@ -1,0 +1,73 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.user_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/api/issues/search" },
+    "error_map": [
+      { "status": 401, "hint": "sonar-cloud user token is missing or invalid; re-run pm credentials add sonar-cloud" },
+      { "status": 403, "hint": "sonar-cloud account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "sonar-cloud rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "issues",
+      "path": "/api/issues/search",
+      "query": {
+        "p": "1",
+        "ps": { "template": "{{ config.page_size }}", "default": "100" },
+        "organization": { "template": "{{ config.organization }}", "omit_when_absent": true },
+        "componentKeys": { "template": "{{ config.component_keys }}", "omit_when_absent": true },
+        "createdAfter": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "createdBefore": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "issues" },
+      "schema": "schemas/issues.json"
+    },
+    {
+      "name": "components",
+      "path": "/api/components/search",
+      "query": {
+        "p": "1",
+        "ps": { "template": "{{ config.page_size }}", "default": "100" },
+        "organization": { "template": "{{ config.organization }}", "omit_when_absent": true },
+        "component": { "template": "{{ config.component_keys }}", "omit_when_absent": true },
+        "createdAfter": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "createdBefore": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "components" },
+      "schema": "schemas/components.json"
+    },
+    {
+      "name": "quality_gates",
+      "path": "/api/qualitygates/list",
+      "query": {
+        "p": "1",
+        "ps": { "template": "{{ config.page_size }}", "default": "100" },
+        "organization": { "template": "{{ config.organization }}", "omit_when_absent": true },
+        "componentKeys": { "template": "{{ config.component_keys }}", "omit_when_absent": true },
+        "createdAfter": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "createdBefore": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "qualitygates" },
+      "schema": "schemas/quality_gates.json"
+    },
+    {
+      "name": "measures",
+      "path": "/api/measures/search",
+      "query": {
+        "p": "1",
+        "ps": { "template": "{{ config.page_size }}", "default": "100" },
+        "organization": { "template": "{{ config.organization }}", "omit_when_absent": true },
+        "componentKeys": { "template": "{{ config.component_keys }}", "omit_when_absent": true },
+        "createdAfter": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "createdBefore": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "measures" },
+      "schema": "schemas/measures.json"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "templates",
+  "type": "object",
+  "x-primary-key": ["document_id"],
+  "x-cursor-field": "created_date",
+  "required": ["document_id"],
+  "properties": {
+    "document_id": { "type": "string" },
+    "template_name": { "type": ["string", "null"] },
+    "template_description": { "type": ["string", "null"] },
+    "created_date": { "type": ["string", "null"] },
+    "sender_email": { "type": ["string", "null"] },
+    "is_shared_template": { "type": ["boolean", "null"] },
+    "labels": { "type": ["array", "null"] }
+  }
+}

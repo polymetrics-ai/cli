@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/agents", "query": { "per_page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "available": true,
+        "occasional": false,
+        "ticket_scope": 1,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

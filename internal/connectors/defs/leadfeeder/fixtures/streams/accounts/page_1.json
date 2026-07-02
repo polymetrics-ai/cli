@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "page[size]": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "acct_fixture_1",
+          "type": "accounts",
+          "attributes": { "name": "Fixture Account 1", "industry": "Software", "status": "active", "time_zone": "UTC", "currency": "USD" }
+        },
+        {
+          "id": "acct_fixture_2",
+          "type": "accounts",
+          "attributes": { "name": "Fixture Account 2", "industry": "Retail", "status": "active", "time_zone": "UTC", "currency": "EUR" }
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

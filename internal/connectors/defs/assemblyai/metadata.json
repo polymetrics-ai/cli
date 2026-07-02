@@ -1,0 +1,22 @@
+{
+  "name": "assemblyai",
+  "display_name": "AssemblyAI",
+  "description": "Reads AssemblyAI transcripts and per-transcript sentence, paragraph, and subtitle references through the AssemblyAI REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.assemblyai.com/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external AssemblyAI API read of transcript metadata and references"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TikTok Advertiser",
+  "type": "object",
+  "x-primary-key": ["advertiser_id"],
+  "properties": {
+    "advertiser_id": { "type": "string" },
+    "advertiser_name": { "type": "string" },
+    "company": { "type": "string" },
+    "status": { "type": "string" },
+    "currency": { "type": "string" },
+    "timezone": { "type": "string" },
+    "country": { "type": "string" },
+    "role": { "type": "string" }
+  }
+}

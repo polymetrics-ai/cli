@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "persons",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "update_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["array", "null"] },
+    "phone": { "type": ["array", "null"] },
+    "org_id": { "type": ["integer", "object", "null"] },
+    "owner_id": { "type": ["integer", "object", "null"] },
+    "add_time": { "type": ["string", "null"] },
+    "update_time": { "type": ["string", "null"] }
+  }
+}

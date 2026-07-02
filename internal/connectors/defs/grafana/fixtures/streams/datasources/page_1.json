@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/api/datasources" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "uid": "ds_fixture_1",
+        "orgId": 1,
+        "name": "Fixture Prometheus",
+        "type": "prometheus",
+        "access": "proxy",
+        "url": "http://prometheus.fixture.internal:9090",
+        "isDefault": true,
+        "readOnly": false
+      },
+      {
+        "id": 2,
+        "uid": "ds_fixture_2",
+        "orgId": 1,
+        "name": "Fixture Loki",
+        "type": "loki",
+        "access": "proxy",
+        "url": "http://loki.fixture.internal:3100",
+        "isDefault": false,
+        "readOnly": false
+      }
+    ]
+  }
+}

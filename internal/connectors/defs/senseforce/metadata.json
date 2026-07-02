@@ -1,0 +1,23 @@
+{
+  "name": "senseforce",
+  "display_name": "Senseforce",
+  "description": "Reads records from a configured Senseforce dataset through the Senseforce API.",
+  "integration_type": "api",
+  "docs_url": "https://manual.senseforce.io/manual/sf-platform/public-api/endpoints",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Senseforce API read of a configured dataset's rows",
+    "approval": "none; read-only"
+  }
+}

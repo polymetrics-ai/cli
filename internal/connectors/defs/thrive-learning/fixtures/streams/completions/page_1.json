@@ -1,0 +1,717 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/completions",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "completion_fixture_1",
+          "user_id": "user_fixture_1",
+          "content_id": "content_fixture_1",
+          "completed_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_2",
+          "user_id": "user_fixture_2",
+          "content_id": "content_fixture_2",
+          "completed_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_3",
+          "user_id": "user_fixture_3",
+          "content_id": "content_fixture_3",
+          "completed_at": "2026-01-04T00:00:00Z",
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_4",
+          "user_id": "user_fixture_4",
+          "content_id": "content_fixture_4",
+          "completed_at": "2026-01-05T00:00:00Z",
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_5",
+          "user_id": "user_fixture_5",
+          "content_id": "content_fixture_5",
+          "completed_at": "2026-01-06T00:00:00Z",
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_6",
+          "user_id": "user_fixture_6",
+          "content_id": "content_fixture_6",
+          "completed_at": "2026-01-07T00:00:00Z",
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_7",
+          "user_id": "user_fixture_7",
+          "content_id": "content_fixture_7",
+          "completed_at": "2026-01-08T00:00:00Z",
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_8",
+          "user_id": "user_fixture_8",
+          "content_id": "content_fixture_8",
+          "completed_at": "2026-01-09T00:00:00Z",
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_9",
+          "user_id": "user_fixture_9",
+          "content_id": "content_fixture_9",
+          "completed_at": "2026-01-10T00:00:00Z",
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_10",
+          "user_id": "user_fixture_10",
+          "content_id": "content_fixture_10",
+          "completed_at": "2026-01-11T00:00:00Z",
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_11",
+          "user_id": "user_fixture_11",
+          "content_id": "content_fixture_11",
+          "completed_at": "2026-01-12T00:00:00Z",
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_12",
+          "user_id": "user_fixture_12",
+          "content_id": "content_fixture_12",
+          "completed_at": "2026-01-13T00:00:00Z",
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_13",
+          "user_id": "user_fixture_13",
+          "content_id": "content_fixture_13",
+          "completed_at": "2026-01-14T00:00:00Z",
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_14",
+          "user_id": "user_fixture_14",
+          "content_id": "content_fixture_14",
+          "completed_at": "2026-01-15T00:00:00Z",
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_15",
+          "user_id": "user_fixture_15",
+          "content_id": "content_fixture_15",
+          "completed_at": "2026-01-16T00:00:00Z",
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_16",
+          "user_id": "user_fixture_16",
+          "content_id": "content_fixture_16",
+          "completed_at": "2026-01-17T00:00:00Z",
+          "updated_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_17",
+          "user_id": "user_fixture_17",
+          "content_id": "content_fixture_17",
+          "completed_at": "2026-01-18T00:00:00Z",
+          "updated_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_18",
+          "user_id": "user_fixture_18",
+          "content_id": "content_fixture_18",
+          "completed_at": "2026-01-19T00:00:00Z",
+          "updated_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_19",
+          "user_id": "user_fixture_19",
+          "content_id": "content_fixture_19",
+          "completed_at": "2026-01-20T00:00:00Z",
+          "updated_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_20",
+          "user_id": "user_fixture_20",
+          "content_id": "content_fixture_20",
+          "completed_at": "2026-01-21T00:00:00Z",
+          "updated_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_21",
+          "user_id": "user_fixture_21",
+          "content_id": "content_fixture_21",
+          "completed_at": "2026-01-22T00:00:00Z",
+          "updated_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_22",
+          "user_id": "user_fixture_22",
+          "content_id": "content_fixture_22",
+          "completed_at": "2026-01-23T00:00:00Z",
+          "updated_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_23",
+          "user_id": "user_fixture_23",
+          "content_id": "content_fixture_23",
+          "completed_at": "2026-01-24T00:00:00Z",
+          "updated_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_24",
+          "user_id": "user_fixture_24",
+          "content_id": "content_fixture_24",
+          "completed_at": "2026-01-25T00:00:00Z",
+          "updated_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_25",
+          "user_id": "user_fixture_25",
+          "content_id": "content_fixture_25",
+          "completed_at": "2026-01-26T00:00:00Z",
+          "updated_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_26",
+          "user_id": "user_fixture_26",
+          "content_id": "content_fixture_26",
+          "completed_at": "2026-01-27T00:00:00Z",
+          "updated_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_27",
+          "user_id": "user_fixture_27",
+          "content_id": "content_fixture_27",
+          "completed_at": "2026-01-28T00:00:00Z",
+          "updated_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_28",
+          "user_id": "user_fixture_28",
+          "content_id": "content_fixture_28",
+          "completed_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_29",
+          "user_id": "user_fixture_29",
+          "content_id": "content_fixture_29",
+          "completed_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_30",
+          "user_id": "user_fixture_30",
+          "content_id": "content_fixture_30",
+          "completed_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_31",
+          "user_id": "user_fixture_31",
+          "content_id": "content_fixture_31",
+          "completed_at": "2026-01-04T00:00:00Z",
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_32",
+          "user_id": "user_fixture_32",
+          "content_id": "content_fixture_32",
+          "completed_at": "2026-01-05T00:00:00Z",
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_33",
+          "user_id": "user_fixture_33",
+          "content_id": "content_fixture_33",
+          "completed_at": "2026-01-06T00:00:00Z",
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_34",
+          "user_id": "user_fixture_34",
+          "content_id": "content_fixture_34",
+          "completed_at": "2026-01-07T00:00:00Z",
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_35",
+          "user_id": "user_fixture_35",
+          "content_id": "content_fixture_35",
+          "completed_at": "2026-01-08T00:00:00Z",
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_36",
+          "user_id": "user_fixture_36",
+          "content_id": "content_fixture_36",
+          "completed_at": "2026-01-09T00:00:00Z",
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_37",
+          "user_id": "user_fixture_37",
+          "content_id": "content_fixture_37",
+          "completed_at": "2026-01-10T00:00:00Z",
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_38",
+          "user_id": "user_fixture_38",
+          "content_id": "content_fixture_38",
+          "completed_at": "2026-01-11T00:00:00Z",
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_39",
+          "user_id": "user_fixture_39",
+          "content_id": "content_fixture_39",
+          "completed_at": "2026-01-12T00:00:00Z",
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_40",
+          "user_id": "user_fixture_40",
+          "content_id": "content_fixture_40",
+          "completed_at": "2026-01-13T00:00:00Z",
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_41",
+          "user_id": "user_fixture_41",
+          "content_id": "content_fixture_41",
+          "completed_at": "2026-01-14T00:00:00Z",
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_42",
+          "user_id": "user_fixture_42",
+          "content_id": "content_fixture_42",
+          "completed_at": "2026-01-15T00:00:00Z",
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_43",
+          "user_id": "user_fixture_43",
+          "content_id": "content_fixture_43",
+          "completed_at": "2026-01-16T00:00:00Z",
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_44",
+          "user_id": "user_fixture_44",
+          "content_id": "content_fixture_44",
+          "completed_at": "2026-01-17T00:00:00Z",
+          "updated_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_45",
+          "user_id": "user_fixture_45",
+          "content_id": "content_fixture_45",
+          "completed_at": "2026-01-18T00:00:00Z",
+          "updated_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_46",
+          "user_id": "user_fixture_46",
+          "content_id": "content_fixture_46",
+          "completed_at": "2026-01-19T00:00:00Z",
+          "updated_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_47",
+          "user_id": "user_fixture_47",
+          "content_id": "content_fixture_47",
+          "completed_at": "2026-01-20T00:00:00Z",
+          "updated_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_48",
+          "user_id": "user_fixture_48",
+          "content_id": "content_fixture_48",
+          "completed_at": "2026-01-21T00:00:00Z",
+          "updated_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_49",
+          "user_id": "user_fixture_49",
+          "content_id": "content_fixture_49",
+          "completed_at": "2026-01-22T00:00:00Z",
+          "updated_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_50",
+          "user_id": "user_fixture_50",
+          "content_id": "content_fixture_50",
+          "completed_at": "2026-01-23T00:00:00Z",
+          "updated_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_51",
+          "user_id": "user_fixture_51",
+          "content_id": "content_fixture_51",
+          "completed_at": "2026-01-24T00:00:00Z",
+          "updated_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_52",
+          "user_id": "user_fixture_52",
+          "content_id": "content_fixture_52",
+          "completed_at": "2026-01-25T00:00:00Z",
+          "updated_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_53",
+          "user_id": "user_fixture_53",
+          "content_id": "content_fixture_53",
+          "completed_at": "2026-01-26T00:00:00Z",
+          "updated_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_54",
+          "user_id": "user_fixture_54",
+          "content_id": "content_fixture_54",
+          "completed_at": "2026-01-27T00:00:00Z",
+          "updated_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_55",
+          "user_id": "user_fixture_55",
+          "content_id": "content_fixture_55",
+          "completed_at": "2026-01-28T00:00:00Z",
+          "updated_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_56",
+          "user_id": "user_fixture_56",
+          "content_id": "content_fixture_56",
+          "completed_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_57",
+          "user_id": "user_fixture_57",
+          "content_id": "content_fixture_57",
+          "completed_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_58",
+          "user_id": "user_fixture_58",
+          "content_id": "content_fixture_58",
+          "completed_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_59",
+          "user_id": "user_fixture_59",
+          "content_id": "content_fixture_59",
+          "completed_at": "2026-01-04T00:00:00Z",
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_60",
+          "user_id": "user_fixture_60",
+          "content_id": "content_fixture_60",
+          "completed_at": "2026-01-05T00:00:00Z",
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_61",
+          "user_id": "user_fixture_61",
+          "content_id": "content_fixture_61",
+          "completed_at": "2026-01-06T00:00:00Z",
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_62",
+          "user_id": "user_fixture_62",
+          "content_id": "content_fixture_62",
+          "completed_at": "2026-01-07T00:00:00Z",
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_63",
+          "user_id": "user_fixture_63",
+          "content_id": "content_fixture_63",
+          "completed_at": "2026-01-08T00:00:00Z",
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_64",
+          "user_id": "user_fixture_64",
+          "content_id": "content_fixture_64",
+          "completed_at": "2026-01-09T00:00:00Z",
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_65",
+          "user_id": "user_fixture_65",
+          "content_id": "content_fixture_65",
+          "completed_at": "2026-01-10T00:00:00Z",
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_66",
+          "user_id": "user_fixture_66",
+          "content_id": "content_fixture_66",
+          "completed_at": "2026-01-11T00:00:00Z",
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_67",
+          "user_id": "user_fixture_67",
+          "content_id": "content_fixture_67",
+          "completed_at": "2026-01-12T00:00:00Z",
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_68",
+          "user_id": "user_fixture_68",
+          "content_id": "content_fixture_68",
+          "completed_at": "2026-01-13T00:00:00Z",
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_69",
+          "user_id": "user_fixture_69",
+          "content_id": "content_fixture_69",
+          "completed_at": "2026-01-14T00:00:00Z",
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_70",
+          "user_id": "user_fixture_70",
+          "content_id": "content_fixture_70",
+          "completed_at": "2026-01-15T00:00:00Z",
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_71",
+          "user_id": "user_fixture_71",
+          "content_id": "content_fixture_71",
+          "completed_at": "2026-01-16T00:00:00Z",
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_72",
+          "user_id": "user_fixture_72",
+          "content_id": "content_fixture_72",
+          "completed_at": "2026-01-17T00:00:00Z",
+          "updated_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_73",
+          "user_id": "user_fixture_73",
+          "content_id": "content_fixture_73",
+          "completed_at": "2026-01-18T00:00:00Z",
+          "updated_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_74",
+          "user_id": "user_fixture_74",
+          "content_id": "content_fixture_74",
+          "completed_at": "2026-01-19T00:00:00Z",
+          "updated_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_75",
+          "user_id": "user_fixture_75",
+          "content_id": "content_fixture_75",
+          "completed_at": "2026-01-20T00:00:00Z",
+          "updated_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_76",
+          "user_id": "user_fixture_76",
+          "content_id": "content_fixture_76",
+          "completed_at": "2026-01-21T00:00:00Z",
+          "updated_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_77",
+          "user_id": "user_fixture_77",
+          "content_id": "content_fixture_77",
+          "completed_at": "2026-01-22T00:00:00Z",
+          "updated_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_78",
+          "user_id": "user_fixture_78",
+          "content_id": "content_fixture_78",
+          "completed_at": "2026-01-23T00:00:00Z",
+          "updated_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_79",
+          "user_id": "user_fixture_79",
+          "content_id": "content_fixture_79",
+          "completed_at": "2026-01-24T00:00:00Z",
+          "updated_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_80",
+          "user_id": "user_fixture_80",
+          "content_id": "content_fixture_80",
+          "completed_at": "2026-01-25T00:00:00Z",
+          "updated_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_81",
+          "user_id": "user_fixture_81",
+          "content_id": "content_fixture_81",
+          "completed_at": "2026-01-26T00:00:00Z",
+          "updated_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_82",
+          "user_id": "user_fixture_82",
+          "content_id": "content_fixture_82",
+          "completed_at": "2026-01-27T00:00:00Z",
+          "updated_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_83",
+          "user_id": "user_fixture_83",
+          "content_id": "content_fixture_83",
+          "completed_at": "2026-01-28T00:00:00Z",
+          "updated_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_84",
+          "user_id": "user_fixture_84",
+          "content_id": "content_fixture_84",
+          "completed_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_85",
+          "user_id": "user_fixture_85",
+          "content_id": "content_fixture_85",
+          "completed_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_86",
+          "user_id": "user_fixture_86",
+          "content_id": "content_fixture_86",
+          "completed_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_87",
+          "user_id": "user_fixture_87",
+          "content_id": "content_fixture_87",
+          "completed_at": "2026-01-04T00:00:00Z",
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_88",
+          "user_id": "user_fixture_88",
+          "content_id": "content_fixture_88",
+          "completed_at": "2026-01-05T00:00:00Z",
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_89",
+          "user_id": "user_fixture_89",
+          "content_id": "content_fixture_89",
+          "completed_at": "2026-01-06T00:00:00Z",
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_90",
+          "user_id": "user_fixture_90",
+          "content_id": "content_fixture_90",
+          "completed_at": "2026-01-07T00:00:00Z",
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_91",
+          "user_id": "user_fixture_91",
+          "content_id": "content_fixture_91",
+          "completed_at": "2026-01-08T00:00:00Z",
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_92",
+          "user_id": "user_fixture_92",
+          "content_id": "content_fixture_92",
+          "completed_at": "2026-01-09T00:00:00Z",
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_93",
+          "user_id": "user_fixture_93",
+          "content_id": "content_fixture_93",
+          "completed_at": "2026-01-10T00:00:00Z",
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_94",
+          "user_id": "user_fixture_94",
+          "content_id": "content_fixture_94",
+          "completed_at": "2026-01-11T00:00:00Z",
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_95",
+          "user_id": "user_fixture_95",
+          "content_id": "content_fixture_95",
+          "completed_at": "2026-01-12T00:00:00Z",
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_96",
+          "user_id": "user_fixture_96",
+          "content_id": "content_fixture_96",
+          "completed_at": "2026-01-13T00:00:00Z",
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_97",
+          "user_id": "user_fixture_97",
+          "content_id": "content_fixture_97",
+          "completed_at": "2026-01-14T00:00:00Z",
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_98",
+          "user_id": "user_fixture_98",
+          "content_id": "content_fixture_98",
+          "completed_at": "2026-01-15T00:00:00Z",
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_99",
+          "user_id": "user_fixture_99",
+          "content_id": "content_fixture_99",
+          "completed_at": "2026-01-16T00:00:00Z",
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "completion_fixture_100",
+          "user_id": "user_fixture_100",
+          "content_id": "content_fixture_100",
+          "completed_at": "2026-01-17T00:00:00Z",
+          "updated_at": "2026-01-17T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

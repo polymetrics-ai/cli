@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/organizations/synthetic-conformance-value/builds", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "build_fixture_1",
+        "graphql_id": "gql_build_fixture_1",
+        "number": 42,
+        "state": "passed",
+        "blocked": false,
+        "message": "Fixture commit message",
+        "commit": "0000000000000000000000000000000000000001",
+        "branch": "main",
+        "source": "webhook",
+        "url": "https://api.buildkite.com/v2/organizations/fixture-org/pipelines/fixture-web/builds/42",
+        "web_url": "https://buildkite.com/fixture-org/fixture-web/builds/42",
+        "created_at": "2026-01-01T00:00:00Z",
+        "scheduled_at": "2026-01-01T00:00:01Z",
+        "started_at": "2026-01-01T00:00:02Z",
+        "finished_at": "2026-01-01T00:05:00Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/transfer", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "limit": 2,
+      "offset": 0,
+      "transfers": [
+        { "transferId": "transfer_fixture_1", "transferStatus": "COMPLETED", "transferType": "WITHDRAWAL", "transferDate": "2026-01-04T00:00:00.000Z", "reason": "SHIPPING_LABEL", "amount": { "value": "20.00", "currency": "USD" } }
+      ]
+    }
+  }
+}

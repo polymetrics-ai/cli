@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/air-quality/v2/historical/hourly",
+    "query": {
+      "lat": "synthetic-conformance-value",
+      "lon": "synthetic-conformance-value",
+      "features": "local_aqi",
+      "hours": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "datetime": "2025-12-31T23:00:00Z",
+          "indexes": { "baqi": { "aqi": 39, "category": "Good air quality" } },
+          "pollutants": { "co": { "concentration": { "value": 98 } } },
+          "data_available": true
+        }
+      ]
+    }
+  }
+}

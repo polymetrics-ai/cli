@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/tasks/all", "query": { "lastId": "task_fixture_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "lastId": "",
+      "tasks": [
+        {
+          "id": "task_fixture_3",
+          "shortId": "03",
+          "state": 3,
+          "completed": true,
+          "trackingURL": "https://onf.lt/fixture3",
+          "worker": "worker_fixture_1",
+          "merchant": "org_fixture_1",
+          "executor": "org_fixture_1",
+          "creator": "admin_fixture_1",
+          "timeCreated": 1767225603000,
+          "timeLastModified": 1767225603000
+        }
+      ]
+    }
+  }
+}

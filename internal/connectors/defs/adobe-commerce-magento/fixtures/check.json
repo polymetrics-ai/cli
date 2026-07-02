@@ -1,0 +1,6 @@
+{
+  "response": {
+    "status": 200,
+    "body": { "items": [], "total_count": 0, "search_criteria": { "page_size": 1, "current_page": 1 } }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects",
+    "query": {
+      "page": "1",
+      "per-page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "project_id": 10,
+        "name": "Apollo",
+        "client_id": 5,
+        "color": "#ffffff",
+        "notes": "fixture project",
+        "tags": [
+          "fixture"
+        ],
+        "budget_type": 1,
+        "budget_total": 1000,
+        "default_hourly_rate": 100,
+        "non_billable": 0,
+        "active": 1,
+        "project_manager": 1,
+        "created": "2026-01-01T00:00:00Z",
+        "modified": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

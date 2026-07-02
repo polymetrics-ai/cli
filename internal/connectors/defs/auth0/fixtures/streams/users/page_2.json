@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/users", "query": { "page": "2", "per_page": "2", "include_totals": "true" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "start": 2,
+      "limit": 2,
+      "length": 1,
+      "total": 3,
+      "users": [
+        {
+          "user_id": "auth0|fixture_user_3",
+          "email": "fixture3@example.com",
+          "email_verified": false,
+          "username": "fixture_user_3",
+          "name": "Fixture Three",
+          "nickname": "fix3",
+          "given_name": "Fixture",
+          "family_name": "Three",
+          "picture": "https://example.com/avatar3.png",
+          "created_at": "2026-01-03T00:00:00.000Z",
+          "updated_at": "2026-01-03T00:00:00.000Z",
+          "last_login": "2026-01-03T00:00:00.000Z",
+          "logins_count": 3,
+          "blocked": false
+        }
+      ]
+    }
+  }
+}

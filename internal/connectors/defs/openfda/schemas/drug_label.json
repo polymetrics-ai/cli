@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "drug_label",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "set_id": { "type": ["string", "null"] },
+    "version": { "type": ["string", "null"] },
+    "effective_time": { "type": ["string", "null"] },
+    "indications_and_usage": { "type": ["array", "null"] },
+    "purpose": { "type": ["array", "null"] },
+    "warnings": { "type": ["array", "null"] },
+    "openfda": { "type": ["object", "null"] }
+  }
+}

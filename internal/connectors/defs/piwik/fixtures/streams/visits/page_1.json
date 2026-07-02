@@ -1,0 +1,521 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Live.getLastVisitsDetails",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idVisit": "v1",
+        "visitorId": "visitor-1",
+        "lastActionDateTime": "2026-01-01 00:00:01"
+      },
+      {
+        "idVisit": "v2",
+        "visitorId": "visitor-2",
+        "lastActionDateTime": "2026-01-01 00:00:02"
+      },
+      {
+        "idVisit": "v3",
+        "visitorId": "visitor-3",
+        "lastActionDateTime": "2026-01-01 00:00:03"
+      },
+      {
+        "idVisit": "v4",
+        "visitorId": "visitor-4",
+        "lastActionDateTime": "2026-01-01 00:00:04"
+      },
+      {
+        "idVisit": "v5",
+        "visitorId": "visitor-5",
+        "lastActionDateTime": "2026-01-01 00:00:05"
+      },
+      {
+        "idVisit": "v6",
+        "visitorId": "visitor-6",
+        "lastActionDateTime": "2026-01-01 00:00:06"
+      },
+      {
+        "idVisit": "v7",
+        "visitorId": "visitor-7",
+        "lastActionDateTime": "2026-01-01 00:00:07"
+      },
+      {
+        "idVisit": "v8",
+        "visitorId": "visitor-8",
+        "lastActionDateTime": "2026-01-01 00:00:08"
+      },
+      {
+        "idVisit": "v9",
+        "visitorId": "visitor-9",
+        "lastActionDateTime": "2026-01-01 00:00:09"
+      },
+      {
+        "idVisit": "v10",
+        "visitorId": "visitor-10",
+        "lastActionDateTime": "2026-01-01 00:00:10"
+      },
+      {
+        "idVisit": "v11",
+        "visitorId": "visitor-11",
+        "lastActionDateTime": "2026-01-01 00:00:11"
+      },
+      {
+        "idVisit": "v12",
+        "visitorId": "visitor-12",
+        "lastActionDateTime": "2026-01-01 00:00:12"
+      },
+      {
+        "idVisit": "v13",
+        "visitorId": "visitor-13",
+        "lastActionDateTime": "2026-01-01 00:00:13"
+      },
+      {
+        "idVisit": "v14",
+        "visitorId": "visitor-14",
+        "lastActionDateTime": "2026-01-01 00:00:14"
+      },
+      {
+        "idVisit": "v15",
+        "visitorId": "visitor-15",
+        "lastActionDateTime": "2026-01-01 00:00:15"
+      },
+      {
+        "idVisit": "v16",
+        "visitorId": "visitor-16",
+        "lastActionDateTime": "2026-01-01 00:00:16"
+      },
+      {
+        "idVisit": "v17",
+        "visitorId": "visitor-17",
+        "lastActionDateTime": "2026-01-01 00:00:17"
+      },
+      {
+        "idVisit": "v18",
+        "visitorId": "visitor-18",
+        "lastActionDateTime": "2026-01-01 00:00:18"
+      },
+      {
+        "idVisit": "v19",
+        "visitorId": "visitor-19",
+        "lastActionDateTime": "2026-01-01 00:00:19"
+      },
+      {
+        "idVisit": "v20",
+        "visitorId": "visitor-20",
+        "lastActionDateTime": "2026-01-01 00:00:20"
+      },
+      {
+        "idVisit": "v21",
+        "visitorId": "visitor-21",
+        "lastActionDateTime": "2026-01-01 00:00:21"
+      },
+      {
+        "idVisit": "v22",
+        "visitorId": "visitor-22",
+        "lastActionDateTime": "2026-01-01 00:00:22"
+      },
+      {
+        "idVisit": "v23",
+        "visitorId": "visitor-23",
+        "lastActionDateTime": "2026-01-01 00:00:23"
+      },
+      {
+        "idVisit": "v24",
+        "visitorId": "visitor-24",
+        "lastActionDateTime": "2026-01-01 00:00:24"
+      },
+      {
+        "idVisit": "v25",
+        "visitorId": "visitor-25",
+        "lastActionDateTime": "2026-01-01 00:00:25"
+      },
+      {
+        "idVisit": "v26",
+        "visitorId": "visitor-26",
+        "lastActionDateTime": "2026-01-01 00:00:26"
+      },
+      {
+        "idVisit": "v27",
+        "visitorId": "visitor-27",
+        "lastActionDateTime": "2026-01-01 00:00:27"
+      },
+      {
+        "idVisit": "v28",
+        "visitorId": "visitor-28",
+        "lastActionDateTime": "2026-01-01 00:00:28"
+      },
+      {
+        "idVisit": "v29",
+        "visitorId": "visitor-29",
+        "lastActionDateTime": "2026-01-01 00:00:29"
+      },
+      {
+        "idVisit": "v30",
+        "visitorId": "visitor-30",
+        "lastActionDateTime": "2026-01-01 00:00:30"
+      },
+      {
+        "idVisit": "v31",
+        "visitorId": "visitor-31",
+        "lastActionDateTime": "2026-01-01 00:00:31"
+      },
+      {
+        "idVisit": "v32",
+        "visitorId": "visitor-32",
+        "lastActionDateTime": "2026-01-01 00:00:32"
+      },
+      {
+        "idVisit": "v33",
+        "visitorId": "visitor-33",
+        "lastActionDateTime": "2026-01-01 00:00:33"
+      },
+      {
+        "idVisit": "v34",
+        "visitorId": "visitor-34",
+        "lastActionDateTime": "2026-01-01 00:00:34"
+      },
+      {
+        "idVisit": "v35",
+        "visitorId": "visitor-35",
+        "lastActionDateTime": "2026-01-01 00:00:35"
+      },
+      {
+        "idVisit": "v36",
+        "visitorId": "visitor-36",
+        "lastActionDateTime": "2026-01-01 00:00:36"
+      },
+      {
+        "idVisit": "v37",
+        "visitorId": "visitor-37",
+        "lastActionDateTime": "2026-01-01 00:00:37"
+      },
+      {
+        "idVisit": "v38",
+        "visitorId": "visitor-38",
+        "lastActionDateTime": "2026-01-01 00:00:38"
+      },
+      {
+        "idVisit": "v39",
+        "visitorId": "visitor-39",
+        "lastActionDateTime": "2026-01-01 00:00:39"
+      },
+      {
+        "idVisit": "v40",
+        "visitorId": "visitor-40",
+        "lastActionDateTime": "2026-01-01 00:00:40"
+      },
+      {
+        "idVisit": "v41",
+        "visitorId": "visitor-41",
+        "lastActionDateTime": "2026-01-01 00:00:41"
+      },
+      {
+        "idVisit": "v42",
+        "visitorId": "visitor-42",
+        "lastActionDateTime": "2026-01-01 00:00:42"
+      },
+      {
+        "idVisit": "v43",
+        "visitorId": "visitor-43",
+        "lastActionDateTime": "2026-01-01 00:00:43"
+      },
+      {
+        "idVisit": "v44",
+        "visitorId": "visitor-44",
+        "lastActionDateTime": "2026-01-01 00:00:44"
+      },
+      {
+        "idVisit": "v45",
+        "visitorId": "visitor-45",
+        "lastActionDateTime": "2026-01-01 00:00:45"
+      },
+      {
+        "idVisit": "v46",
+        "visitorId": "visitor-46",
+        "lastActionDateTime": "2026-01-01 00:00:46"
+      },
+      {
+        "idVisit": "v47",
+        "visitorId": "visitor-47",
+        "lastActionDateTime": "2026-01-01 00:00:47"
+      },
+      {
+        "idVisit": "v48",
+        "visitorId": "visitor-48",
+        "lastActionDateTime": "2026-01-01 00:00:48"
+      },
+      {
+        "idVisit": "v49",
+        "visitorId": "visitor-49",
+        "lastActionDateTime": "2026-01-01 00:00:49"
+      },
+      {
+        "idVisit": "v50",
+        "visitorId": "visitor-50",
+        "lastActionDateTime": "2026-01-01 00:00:50"
+      },
+      {
+        "idVisit": "v51",
+        "visitorId": "visitor-51",
+        "lastActionDateTime": "2026-01-01 00:00:51"
+      },
+      {
+        "idVisit": "v52",
+        "visitorId": "visitor-52",
+        "lastActionDateTime": "2026-01-01 00:00:52"
+      },
+      {
+        "idVisit": "v53",
+        "visitorId": "visitor-53",
+        "lastActionDateTime": "2026-01-01 00:00:53"
+      },
+      {
+        "idVisit": "v54",
+        "visitorId": "visitor-54",
+        "lastActionDateTime": "2026-01-01 00:00:54"
+      },
+      {
+        "idVisit": "v55",
+        "visitorId": "visitor-55",
+        "lastActionDateTime": "2026-01-01 00:00:55"
+      },
+      {
+        "idVisit": "v56",
+        "visitorId": "visitor-56",
+        "lastActionDateTime": "2026-01-01 00:00:56"
+      },
+      {
+        "idVisit": "v57",
+        "visitorId": "visitor-57",
+        "lastActionDateTime": "2026-01-01 00:00:57"
+      },
+      {
+        "idVisit": "v58",
+        "visitorId": "visitor-58",
+        "lastActionDateTime": "2026-01-01 00:00:58"
+      },
+      {
+        "idVisit": "v59",
+        "visitorId": "visitor-59",
+        "lastActionDateTime": "2026-01-01 00:00:59"
+      },
+      {
+        "idVisit": "v60",
+        "visitorId": "visitor-60",
+        "lastActionDateTime": "2026-01-01 00:00:60"
+      },
+      {
+        "idVisit": "v61",
+        "visitorId": "visitor-61",
+        "lastActionDateTime": "2026-01-01 00:00:61"
+      },
+      {
+        "idVisit": "v62",
+        "visitorId": "visitor-62",
+        "lastActionDateTime": "2026-01-01 00:00:62"
+      },
+      {
+        "idVisit": "v63",
+        "visitorId": "visitor-63",
+        "lastActionDateTime": "2026-01-01 00:00:63"
+      },
+      {
+        "idVisit": "v64",
+        "visitorId": "visitor-64",
+        "lastActionDateTime": "2026-01-01 00:00:64"
+      },
+      {
+        "idVisit": "v65",
+        "visitorId": "visitor-65",
+        "lastActionDateTime": "2026-01-01 00:00:65"
+      },
+      {
+        "idVisit": "v66",
+        "visitorId": "visitor-66",
+        "lastActionDateTime": "2026-01-01 00:00:66"
+      },
+      {
+        "idVisit": "v67",
+        "visitorId": "visitor-67",
+        "lastActionDateTime": "2026-01-01 00:00:67"
+      },
+      {
+        "idVisit": "v68",
+        "visitorId": "visitor-68",
+        "lastActionDateTime": "2026-01-01 00:00:68"
+      },
+      {
+        "idVisit": "v69",
+        "visitorId": "visitor-69",
+        "lastActionDateTime": "2026-01-01 00:00:69"
+      },
+      {
+        "idVisit": "v70",
+        "visitorId": "visitor-70",
+        "lastActionDateTime": "2026-01-01 00:00:70"
+      },
+      {
+        "idVisit": "v71",
+        "visitorId": "visitor-71",
+        "lastActionDateTime": "2026-01-01 00:00:71"
+      },
+      {
+        "idVisit": "v72",
+        "visitorId": "visitor-72",
+        "lastActionDateTime": "2026-01-01 00:00:72"
+      },
+      {
+        "idVisit": "v73",
+        "visitorId": "visitor-73",
+        "lastActionDateTime": "2026-01-01 00:00:73"
+      },
+      {
+        "idVisit": "v74",
+        "visitorId": "visitor-74",
+        "lastActionDateTime": "2026-01-01 00:00:74"
+      },
+      {
+        "idVisit": "v75",
+        "visitorId": "visitor-75",
+        "lastActionDateTime": "2026-01-01 00:00:75"
+      },
+      {
+        "idVisit": "v76",
+        "visitorId": "visitor-76",
+        "lastActionDateTime": "2026-01-01 00:00:76"
+      },
+      {
+        "idVisit": "v77",
+        "visitorId": "visitor-77",
+        "lastActionDateTime": "2026-01-01 00:00:77"
+      },
+      {
+        "idVisit": "v78",
+        "visitorId": "visitor-78",
+        "lastActionDateTime": "2026-01-01 00:00:78"
+      },
+      {
+        "idVisit": "v79",
+        "visitorId": "visitor-79",
+        "lastActionDateTime": "2026-01-01 00:00:79"
+      },
+      {
+        "idVisit": "v80",
+        "visitorId": "visitor-80",
+        "lastActionDateTime": "2026-01-01 00:00:80"
+      },
+      {
+        "idVisit": "v81",
+        "visitorId": "visitor-81",
+        "lastActionDateTime": "2026-01-01 00:00:81"
+      },
+      {
+        "idVisit": "v82",
+        "visitorId": "visitor-82",
+        "lastActionDateTime": "2026-01-01 00:00:82"
+      },
+      {
+        "idVisit": "v83",
+        "visitorId": "visitor-83",
+        "lastActionDateTime": "2026-01-01 00:00:83"
+      },
+      {
+        "idVisit": "v84",
+        "visitorId": "visitor-84",
+        "lastActionDateTime": "2026-01-01 00:00:84"
+      },
+      {
+        "idVisit": "v85",
+        "visitorId": "visitor-85",
+        "lastActionDateTime": "2026-01-01 00:00:85"
+      },
+      {
+        "idVisit": "v86",
+        "visitorId": "visitor-86",
+        "lastActionDateTime": "2026-01-01 00:00:86"
+      },
+      {
+        "idVisit": "v87",
+        "visitorId": "visitor-87",
+        "lastActionDateTime": "2026-01-01 00:00:87"
+      },
+      {
+        "idVisit": "v88",
+        "visitorId": "visitor-88",
+        "lastActionDateTime": "2026-01-01 00:00:88"
+      },
+      {
+        "idVisit": "v89",
+        "visitorId": "visitor-89",
+        "lastActionDateTime": "2026-01-01 00:00:89"
+      },
+      {
+        "idVisit": "v90",
+        "visitorId": "visitor-90",
+        "lastActionDateTime": "2026-01-01 00:00:90"
+      },
+      {
+        "idVisit": "v91",
+        "visitorId": "visitor-91",
+        "lastActionDateTime": "2026-01-01 00:00:91"
+      },
+      {
+        "idVisit": "v92",
+        "visitorId": "visitor-92",
+        "lastActionDateTime": "2026-01-01 00:00:92"
+      },
+      {
+        "idVisit": "v93",
+        "visitorId": "visitor-93",
+        "lastActionDateTime": "2026-01-01 00:00:93"
+      },
+      {
+        "idVisit": "v94",
+        "visitorId": "visitor-94",
+        "lastActionDateTime": "2026-01-01 00:00:94"
+      },
+      {
+        "idVisit": "v95",
+        "visitorId": "visitor-95",
+        "lastActionDateTime": "2026-01-01 00:00:95"
+      },
+      {
+        "idVisit": "v96",
+        "visitorId": "visitor-96",
+        "lastActionDateTime": "2026-01-01 00:00:96"
+      },
+      {
+        "idVisit": "v97",
+        "visitorId": "visitor-97",
+        "lastActionDateTime": "2026-01-01 00:00:97"
+      },
+      {
+        "idVisit": "v98",
+        "visitorId": "visitor-98",
+        "lastActionDateTime": "2026-01-01 00:00:98"
+      },
+      {
+        "idVisit": "v99",
+        "visitorId": "visitor-99",
+        "lastActionDateTime": "2026-01-01 00:00:99"
+      },
+      {
+        "idVisit": "v100",
+        "visitorId": "visitor-100",
+        "lastActionDateTime": "2026-01-01 00:00:100"
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "api": "Gutendex API (https://gutendex.com)",
+  "docs": "https://gutendex.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read views over the single /books resource; Gutendex exposes no other resource",
+  "endpoints": [
+    { "method": "GET", "path": "/books/", "covered_by": { "stream": "books" } },
+    { "method": "GET", "path": "/books/?sort=popular", "covered_by": { "stream": "popular_books" } },
+    { "method": "GET", "path": "/books/?sort=descending", "covered_by": { "stream": "latest_books" } },
+    { "method": "GET", "path": "/books/?languages=en", "covered_by": { "stream": "english_books" } }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/v1/workspaces", "query": { "page": "2" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "ws_fixture_51",
+        "name": "Fixture Workspace 51",
+        "hourlyRate": { "amount": 510, "currency": "USD" },
+        "memberships": [],
+        "workspaceSettings": { "timeTrackingMode": "DEFAULT" },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      }
+    ]
+  }
+}

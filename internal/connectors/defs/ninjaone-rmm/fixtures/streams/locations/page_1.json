@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/v2/locations", "query": { "pageSize": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 20, "organizationId": 1, "name": "Fixture Location", "address": "1 Example St", "description": "fixture location" }
+    ]
+  }
+}

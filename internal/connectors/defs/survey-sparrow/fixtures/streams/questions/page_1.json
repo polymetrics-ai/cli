@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/surveys/synthetic-conformance-value/questions", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "question": "How satisfied are you?", "survey_id": 1 }
+      ]
+    }
+  }
+}

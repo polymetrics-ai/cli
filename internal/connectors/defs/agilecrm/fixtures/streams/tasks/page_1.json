@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/tasks" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 20,
+        "subject": "Fixture task one",
+        "type": "TASK",
+        "priority_type": "HIGH",
+        "status": "YET_TO_START",
+        "created_time": 1767225601,
+        "due": 1767225601,
+        "is_complete": false,
+        "owner": { "id": "fixture-owner-1" }
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/partners" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "company": "Acme", "description": "Fixture partner one.", "address": "1 Fixture St", "code": "acme", "email": "a@acme.test", "phone": "", "web": "https://acme.test", "sponsor": true, "exhibitor": false, "created_at": "2026-05-01T00:00:00Z", "updated_at": "2026-05-02T00:00:00Z" },
+      { "id": 2, "company": "Globex", "description": "Fixture partner two.", "address": "2 Fixture St", "code": "globex", "email": "b@globex.test", "phone": "", "web": "https://globex.test", "sponsor": false, "exhibitor": true, "created_at": "2026-05-01T00:00:00Z", "updated_at": "2026-05-02T00:00:00Z" }
+    ]
+  }
+}

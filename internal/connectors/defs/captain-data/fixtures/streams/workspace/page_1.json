@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/workspace" },
+  "response": {
+    "status": 200,
+    "body": { "uid": "workspace_fixture_1", "name": "Fixture Workspace", "plan": "scale", "created_at": "2026-01-01T00:00:00Z" }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "api": "Criteo Marketing Solutions API (https://api.criteo.com)",
+  "docs": "https://developers.criteo.com/marketing-solutions/reference/getting-started",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; Criteo's much larger surface (ad-set/campaign mutation, budget management, catalog/product feeds, audience creation, creative management) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/2024-01/marketing-solutions/ad-sets/search", "covered_by": { "stream": "ad_sets" } },
+    { "method": "GET", "path": "/2024-01/marketing-solutions/advertisers", "covered_by": { "stream": "advertisers" } },
+    { "method": "GET", "path": "/2024-01/marketing-solutions/campaigns/search", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/2024-01/marketing-solutions/audiences", "covered_by": { "stream": "audiences" } },
+    { "method": "GET", "path": "/2024-01/statistics/report", "covered_by": { "stream": "statistics" } },
+    { "method": "PATCH", "path": "/2024-01/marketing-solutions/ad-sets/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/2024-01/marketing-solutions/audiences", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PATCH", "path": "/2024-01/marketing-solutions/campaigns/{id}/budget", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/2024-01/catalogs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/oauth2/token", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 token exchange endpoint, not a syncable object stream" } }
+  ]
+}

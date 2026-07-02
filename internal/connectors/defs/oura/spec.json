@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Oura Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Oura personal access token, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.ouraring.com/v2/usercollection",
+      "description": "Oura API v2 user-collection base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional start_date (YYYY-MM-DD) query filter applied to the daily_sleep/daily_activity/daily_readiness streams. Must be pre-formatted as a date-only string; unlike legacy's start_datetime this bundle does not accept and truncate an RFC3339 timestamp (documented scope narrowing, docs.md Known limits)."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Optional end_date (YYYY-MM-DD) query filter applied to the daily_sleep/daily_activity/daily_readiness streams. Must be pre-formatted as a date-only string; see start_date."
+    }
+  }
+}

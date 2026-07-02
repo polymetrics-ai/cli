@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/responses", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "responses": [
+        { "id": "resp_fixture_1", "survey_id": "survey_fixture_1", "respondent_name": "Fixture Respondent One", "rating": 9, "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "resp_fixture_2", "survey_id": "survey_fixture_1", "respondent_name": "Fixture Respondent Two", "rating": 8, "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

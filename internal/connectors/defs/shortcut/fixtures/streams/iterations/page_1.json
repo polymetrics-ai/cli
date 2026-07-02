@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/v3/iterations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 4001, "name": "Fixture iteration one", "state": "started", "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "next": null
+    }
+  }
+}

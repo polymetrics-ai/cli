@@ -1,0 +1,78 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "apikey", "value": "{{ secrets.api_key }}", "prefix": "" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/facilities", "query": { "limit": "1", "offset": "0" } },
+    "error_map": [
+      { "status": 401, "hint": "recreation.gov api_key is missing or invalid; re-run pm credentials add recreation" },
+      { "status": 403, "hint": "recreation.gov account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "recreation.gov rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "facilities",
+      "path": "/facilities",
+      "records": { "path": "RECDATA" },
+      "computed_fields": {
+        "id": "{{ record.FacilityID }}",
+        "name": "{{ record.FacilityName }}",
+        "type": "{{ record.FacilityTypeDescription }}",
+        "updated_at": "{{ record.LastUpdatedDate }}"
+      },
+      "schema": "schemas/facilities.json"
+    },
+    {
+      "name": "campsites",
+      "path": "/campsites",
+      "records": { "path": "RECDATA" },
+      "computed_fields": {
+        "id": "{{ record.CampsiteID }}",
+        "name": "{{ record.CampsiteName }}",
+        "type": "{{ record.CampsiteType }}",
+        "updated_at": "{{ record.LastUpdatedDate }}"
+      },
+      "schema": "schemas/campsites.json"
+    },
+    {
+      "name": "activities",
+      "path": "/activities",
+      "records": { "path": "RECDATA" },
+      "computed_fields": {
+        "id": "{{ record.ActivityID }}",
+        "name": "{{ record.ActivityName }}"
+      },
+      "schema": "schemas/activities.json"
+    },
+    {
+      "name": "organizations",
+      "path": "/organizations",
+      "records": { "path": "RECDATA" },
+      "computed_fields": {
+        "id": "{{ record.OrgID }}",
+        "name": "{{ record.OrgName }}"
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "recareas",
+      "path": "/recareas",
+      "records": { "path": "RECDATA" },
+      "computed_fields": {
+        "id": "{{ record.RecAreaID }}",
+        "name": "{{ record.RecAreaName }}",
+        "updated_at": "{{ record.LastUpdatedDate }}"
+      },
+      "schema": "schemas/recareas.json"
+    }
+  ]
+}

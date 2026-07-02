@@ -1,0 +1,1913 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reviews"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reviews": [
+        {
+          "id": 1,
+          "title": "Fixture review 1",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_1",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1001,
+            "name": "Fixture Reviewer 1",
+            "email": "reviewer1@example.com"
+          }
+        },
+        {
+          "id": 2,
+          "title": "Fixture review 2",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_2",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1002,
+            "name": "Fixture Reviewer 2",
+            "email": "reviewer2@example.com"
+          }
+        },
+        {
+          "id": 3,
+          "title": "Fixture review 3",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_3",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1003,
+            "name": "Fixture Reviewer 3",
+            "email": "reviewer3@example.com"
+          }
+        },
+        {
+          "id": 4,
+          "title": "Fixture review 4",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_4",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1004,
+            "name": "Fixture Reviewer 4",
+            "email": "reviewer4@example.com"
+          }
+        },
+        {
+          "id": 5,
+          "title": "Fixture review 5",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_5",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1005,
+            "name": "Fixture Reviewer 5",
+            "email": "reviewer5@example.com"
+          }
+        },
+        {
+          "id": 6,
+          "title": "Fixture review 6",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_6",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1006,
+            "name": "Fixture Reviewer 6",
+            "email": "reviewer6@example.com"
+          }
+        },
+        {
+          "id": 7,
+          "title": "Fixture review 7",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_7",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1007,
+            "name": "Fixture Reviewer 7",
+            "email": "reviewer7@example.com"
+          }
+        },
+        {
+          "id": 8,
+          "title": "Fixture review 8",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_8",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1008,
+            "name": "Fixture Reviewer 8",
+            "email": "reviewer8@example.com"
+          }
+        },
+        {
+          "id": 9,
+          "title": "Fixture review 9",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_9",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1009,
+            "name": "Fixture Reviewer 9",
+            "email": "reviewer9@example.com"
+          }
+        },
+        {
+          "id": 10,
+          "title": "Fixture review 10",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_10",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1010,
+            "name": "Fixture Reviewer 10",
+            "email": "reviewer10@example.com"
+          }
+        },
+        {
+          "id": 11,
+          "title": "Fixture review 11",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_11",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1011,
+            "name": "Fixture Reviewer 11",
+            "email": "reviewer11@example.com"
+          }
+        },
+        {
+          "id": 12,
+          "title": "Fixture review 12",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_12",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1012,
+            "name": "Fixture Reviewer 12",
+            "email": "reviewer12@example.com"
+          }
+        },
+        {
+          "id": 13,
+          "title": "Fixture review 13",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_13",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1013,
+            "name": "Fixture Reviewer 13",
+            "email": "reviewer13@example.com"
+          }
+        },
+        {
+          "id": 14,
+          "title": "Fixture review 14",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_14",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1014,
+            "name": "Fixture Reviewer 14",
+            "email": "reviewer14@example.com"
+          }
+        },
+        {
+          "id": 15,
+          "title": "Fixture review 15",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_15",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1015,
+            "name": "Fixture Reviewer 15",
+            "email": "reviewer15@example.com"
+          }
+        },
+        {
+          "id": 16,
+          "title": "Fixture review 16",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_16",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1016,
+            "name": "Fixture Reviewer 16",
+            "email": "reviewer16@example.com"
+          }
+        },
+        {
+          "id": 17,
+          "title": "Fixture review 17",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_17",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1017,
+            "name": "Fixture Reviewer 17",
+            "email": "reviewer17@example.com"
+          }
+        },
+        {
+          "id": 18,
+          "title": "Fixture review 18",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_18",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1018,
+            "name": "Fixture Reviewer 18",
+            "email": "reviewer18@example.com"
+          }
+        },
+        {
+          "id": 19,
+          "title": "Fixture review 19",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_19",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1019,
+            "name": "Fixture Reviewer 19",
+            "email": "reviewer19@example.com"
+          }
+        },
+        {
+          "id": 20,
+          "title": "Fixture review 20",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_20",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1020,
+            "name": "Fixture Reviewer 20",
+            "email": "reviewer20@example.com"
+          }
+        },
+        {
+          "id": 21,
+          "title": "Fixture review 21",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_21",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1021,
+            "name": "Fixture Reviewer 21",
+            "email": "reviewer21@example.com"
+          }
+        },
+        {
+          "id": 22,
+          "title": "Fixture review 22",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_22",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1022,
+            "name": "Fixture Reviewer 22",
+            "email": "reviewer22@example.com"
+          }
+        },
+        {
+          "id": 23,
+          "title": "Fixture review 23",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_23",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1023,
+            "name": "Fixture Reviewer 23",
+            "email": "reviewer23@example.com"
+          }
+        },
+        {
+          "id": 24,
+          "title": "Fixture review 24",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_24",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1024,
+            "name": "Fixture Reviewer 24",
+            "email": "reviewer24@example.com"
+          }
+        },
+        {
+          "id": 25,
+          "title": "Fixture review 25",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_25",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1025,
+            "name": "Fixture Reviewer 25",
+            "email": "reviewer25@example.com"
+          }
+        },
+        {
+          "id": 26,
+          "title": "Fixture review 26",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_26",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1026,
+            "name": "Fixture Reviewer 26",
+            "email": "reviewer26@example.com"
+          }
+        },
+        {
+          "id": 27,
+          "title": "Fixture review 27",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_27",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1027,
+            "name": "Fixture Reviewer 27",
+            "email": "reviewer27@example.com"
+          }
+        },
+        {
+          "id": 28,
+          "title": "Fixture review 28",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_28",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1028,
+            "name": "Fixture Reviewer 28",
+            "email": "reviewer28@example.com"
+          }
+        },
+        {
+          "id": 29,
+          "title": "Fixture review 29",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_29",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1029,
+            "name": "Fixture Reviewer 29",
+            "email": "reviewer29@example.com"
+          }
+        },
+        {
+          "id": 30,
+          "title": "Fixture review 30",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_30",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1030,
+            "name": "Fixture Reviewer 30",
+            "email": "reviewer30@example.com"
+          }
+        },
+        {
+          "id": 31,
+          "title": "Fixture review 31",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_31",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1031,
+            "name": "Fixture Reviewer 31",
+            "email": "reviewer31@example.com"
+          }
+        },
+        {
+          "id": 32,
+          "title": "Fixture review 32",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_32",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1032,
+            "name": "Fixture Reviewer 32",
+            "email": "reviewer32@example.com"
+          }
+        },
+        {
+          "id": 33,
+          "title": "Fixture review 33",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_33",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1033,
+            "name": "Fixture Reviewer 33",
+            "email": "reviewer33@example.com"
+          }
+        },
+        {
+          "id": 34,
+          "title": "Fixture review 34",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_34",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1034,
+            "name": "Fixture Reviewer 34",
+            "email": "reviewer34@example.com"
+          }
+        },
+        {
+          "id": 35,
+          "title": "Fixture review 35",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_35",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1035,
+            "name": "Fixture Reviewer 35",
+            "email": "reviewer35@example.com"
+          }
+        },
+        {
+          "id": 36,
+          "title": "Fixture review 36",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_36",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1036,
+            "name": "Fixture Reviewer 36",
+            "email": "reviewer36@example.com"
+          }
+        },
+        {
+          "id": 37,
+          "title": "Fixture review 37",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_37",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1037,
+            "name": "Fixture Reviewer 37",
+            "email": "reviewer37@example.com"
+          }
+        },
+        {
+          "id": 38,
+          "title": "Fixture review 38",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_38",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1038,
+            "name": "Fixture Reviewer 38",
+            "email": "reviewer38@example.com"
+          }
+        },
+        {
+          "id": 39,
+          "title": "Fixture review 39",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_39",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1039,
+            "name": "Fixture Reviewer 39",
+            "email": "reviewer39@example.com"
+          }
+        },
+        {
+          "id": 40,
+          "title": "Fixture review 40",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_40",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1040,
+            "name": "Fixture Reviewer 40",
+            "email": "reviewer40@example.com"
+          }
+        },
+        {
+          "id": 41,
+          "title": "Fixture review 41",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_41",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1041,
+            "name": "Fixture Reviewer 41",
+            "email": "reviewer41@example.com"
+          }
+        },
+        {
+          "id": 42,
+          "title": "Fixture review 42",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_42",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1042,
+            "name": "Fixture Reviewer 42",
+            "email": "reviewer42@example.com"
+          }
+        },
+        {
+          "id": 43,
+          "title": "Fixture review 43",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_43",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1043,
+            "name": "Fixture Reviewer 43",
+            "email": "reviewer43@example.com"
+          }
+        },
+        {
+          "id": 44,
+          "title": "Fixture review 44",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_44",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1044,
+            "name": "Fixture Reviewer 44",
+            "email": "reviewer44@example.com"
+          }
+        },
+        {
+          "id": 45,
+          "title": "Fixture review 45",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_45",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1045,
+            "name": "Fixture Reviewer 45",
+            "email": "reviewer45@example.com"
+          }
+        },
+        {
+          "id": 46,
+          "title": "Fixture review 46",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_46",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1046,
+            "name": "Fixture Reviewer 46",
+            "email": "reviewer46@example.com"
+          }
+        },
+        {
+          "id": 47,
+          "title": "Fixture review 47",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_47",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1047,
+            "name": "Fixture Reviewer 47",
+            "email": "reviewer47@example.com"
+          }
+        },
+        {
+          "id": 48,
+          "title": "Fixture review 48",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_48",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1048,
+            "name": "Fixture Reviewer 48",
+            "email": "reviewer48@example.com"
+          }
+        },
+        {
+          "id": 49,
+          "title": "Fixture review 49",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_49",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1049,
+            "name": "Fixture Reviewer 49",
+            "email": "reviewer49@example.com"
+          }
+        },
+        {
+          "id": 50,
+          "title": "Fixture review 50",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_50",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1050,
+            "name": "Fixture Reviewer 50",
+            "email": "reviewer50@example.com"
+          }
+        },
+        {
+          "id": 51,
+          "title": "Fixture review 51",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_51",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1051,
+            "name": "Fixture Reviewer 51",
+            "email": "reviewer51@example.com"
+          }
+        },
+        {
+          "id": 52,
+          "title": "Fixture review 52",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_52",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1052,
+            "name": "Fixture Reviewer 52",
+            "email": "reviewer52@example.com"
+          }
+        },
+        {
+          "id": 53,
+          "title": "Fixture review 53",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_53",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1053,
+            "name": "Fixture Reviewer 53",
+            "email": "reviewer53@example.com"
+          }
+        },
+        {
+          "id": 54,
+          "title": "Fixture review 54",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_54",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1054,
+            "name": "Fixture Reviewer 54",
+            "email": "reviewer54@example.com"
+          }
+        },
+        {
+          "id": 55,
+          "title": "Fixture review 55",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_55",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1055,
+            "name": "Fixture Reviewer 55",
+            "email": "reviewer55@example.com"
+          }
+        },
+        {
+          "id": 56,
+          "title": "Fixture review 56",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_56",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1056,
+            "name": "Fixture Reviewer 56",
+            "email": "reviewer56@example.com"
+          }
+        },
+        {
+          "id": 57,
+          "title": "Fixture review 57",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_57",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1057,
+            "name": "Fixture Reviewer 57",
+            "email": "reviewer57@example.com"
+          }
+        },
+        {
+          "id": 58,
+          "title": "Fixture review 58",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_58",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1058,
+            "name": "Fixture Reviewer 58",
+            "email": "reviewer58@example.com"
+          }
+        },
+        {
+          "id": 59,
+          "title": "Fixture review 59",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_59",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1059,
+            "name": "Fixture Reviewer 59",
+            "email": "reviewer59@example.com"
+          }
+        },
+        {
+          "id": 60,
+          "title": "Fixture review 60",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_60",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1060,
+            "name": "Fixture Reviewer 60",
+            "email": "reviewer60@example.com"
+          }
+        },
+        {
+          "id": 61,
+          "title": "Fixture review 61",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_61",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1061,
+            "name": "Fixture Reviewer 61",
+            "email": "reviewer61@example.com"
+          }
+        },
+        {
+          "id": 62,
+          "title": "Fixture review 62",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_62",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1062,
+            "name": "Fixture Reviewer 62",
+            "email": "reviewer62@example.com"
+          }
+        },
+        {
+          "id": 63,
+          "title": "Fixture review 63",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_63",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1063,
+            "name": "Fixture Reviewer 63",
+            "email": "reviewer63@example.com"
+          }
+        },
+        {
+          "id": 64,
+          "title": "Fixture review 64",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_64",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1064,
+            "name": "Fixture Reviewer 64",
+            "email": "reviewer64@example.com"
+          }
+        },
+        {
+          "id": 65,
+          "title": "Fixture review 65",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_65",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1065,
+            "name": "Fixture Reviewer 65",
+            "email": "reviewer65@example.com"
+          }
+        },
+        {
+          "id": 66,
+          "title": "Fixture review 66",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_66",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1066,
+            "name": "Fixture Reviewer 66",
+            "email": "reviewer66@example.com"
+          }
+        },
+        {
+          "id": 67,
+          "title": "Fixture review 67",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_67",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1067,
+            "name": "Fixture Reviewer 67",
+            "email": "reviewer67@example.com"
+          }
+        },
+        {
+          "id": 68,
+          "title": "Fixture review 68",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_68",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1068,
+            "name": "Fixture Reviewer 68",
+            "email": "reviewer68@example.com"
+          }
+        },
+        {
+          "id": 69,
+          "title": "Fixture review 69",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_69",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1069,
+            "name": "Fixture Reviewer 69",
+            "email": "reviewer69@example.com"
+          }
+        },
+        {
+          "id": 70,
+          "title": "Fixture review 70",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_70",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1070,
+            "name": "Fixture Reviewer 70",
+            "email": "reviewer70@example.com"
+          }
+        },
+        {
+          "id": 71,
+          "title": "Fixture review 71",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_71",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1071,
+            "name": "Fixture Reviewer 71",
+            "email": "reviewer71@example.com"
+          }
+        },
+        {
+          "id": 72,
+          "title": "Fixture review 72",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_72",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1072,
+            "name": "Fixture Reviewer 72",
+            "email": "reviewer72@example.com"
+          }
+        },
+        {
+          "id": 73,
+          "title": "Fixture review 73",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_73",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1073,
+            "name": "Fixture Reviewer 73",
+            "email": "reviewer73@example.com"
+          }
+        },
+        {
+          "id": 74,
+          "title": "Fixture review 74",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_74",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1074,
+            "name": "Fixture Reviewer 74",
+            "email": "reviewer74@example.com"
+          }
+        },
+        {
+          "id": 75,
+          "title": "Fixture review 75",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_75",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1075,
+            "name": "Fixture Reviewer 75",
+            "email": "reviewer75@example.com"
+          }
+        },
+        {
+          "id": 76,
+          "title": "Fixture review 76",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_76",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1076,
+            "name": "Fixture Reviewer 76",
+            "email": "reviewer76@example.com"
+          }
+        },
+        {
+          "id": 77,
+          "title": "Fixture review 77",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_77",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1077,
+            "name": "Fixture Reviewer 77",
+            "email": "reviewer77@example.com"
+          }
+        },
+        {
+          "id": 78,
+          "title": "Fixture review 78",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_78",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1078,
+            "name": "Fixture Reviewer 78",
+            "email": "reviewer78@example.com"
+          }
+        },
+        {
+          "id": 79,
+          "title": "Fixture review 79",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_79",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1079,
+            "name": "Fixture Reviewer 79",
+            "email": "reviewer79@example.com"
+          }
+        },
+        {
+          "id": 80,
+          "title": "Fixture review 80",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_80",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1080,
+            "name": "Fixture Reviewer 80",
+            "email": "reviewer80@example.com"
+          }
+        },
+        {
+          "id": 81,
+          "title": "Fixture review 81",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_81",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1081,
+            "name": "Fixture Reviewer 81",
+            "email": "reviewer81@example.com"
+          }
+        },
+        {
+          "id": 82,
+          "title": "Fixture review 82",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_82",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1082,
+            "name": "Fixture Reviewer 82",
+            "email": "reviewer82@example.com"
+          }
+        },
+        {
+          "id": 83,
+          "title": "Fixture review 83",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_83",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1083,
+            "name": "Fixture Reviewer 83",
+            "email": "reviewer83@example.com"
+          }
+        },
+        {
+          "id": 84,
+          "title": "Fixture review 84",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_84",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1084,
+            "name": "Fixture Reviewer 84",
+            "email": "reviewer84@example.com"
+          }
+        },
+        {
+          "id": 85,
+          "title": "Fixture review 85",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_85",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1085,
+            "name": "Fixture Reviewer 85",
+            "email": "reviewer85@example.com"
+          }
+        },
+        {
+          "id": 86,
+          "title": "Fixture review 86",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_86",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1086,
+            "name": "Fixture Reviewer 86",
+            "email": "reviewer86@example.com"
+          }
+        },
+        {
+          "id": 87,
+          "title": "Fixture review 87",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_87",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1087,
+            "name": "Fixture Reviewer 87",
+            "email": "reviewer87@example.com"
+          }
+        },
+        {
+          "id": 88,
+          "title": "Fixture review 88",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_88",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1088,
+            "name": "Fixture Reviewer 88",
+            "email": "reviewer88@example.com"
+          }
+        },
+        {
+          "id": 89,
+          "title": "Fixture review 89",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_89",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1089,
+            "name": "Fixture Reviewer 89",
+            "email": "reviewer89@example.com"
+          }
+        },
+        {
+          "id": 90,
+          "title": "Fixture review 90",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_90",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1090,
+            "name": "Fixture Reviewer 90",
+            "email": "reviewer90@example.com"
+          }
+        },
+        {
+          "id": 91,
+          "title": "Fixture review 91",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_91",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1091,
+            "name": "Fixture Reviewer 91",
+            "email": "reviewer91@example.com"
+          }
+        },
+        {
+          "id": 92,
+          "title": "Fixture review 92",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_92",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1092,
+            "name": "Fixture Reviewer 92",
+            "email": "reviewer92@example.com"
+          }
+        },
+        {
+          "id": 93,
+          "title": "Fixture review 93",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_93",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1093,
+            "name": "Fixture Reviewer 93",
+            "email": "reviewer93@example.com"
+          }
+        },
+        {
+          "id": 94,
+          "title": "Fixture review 94",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_94",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1094,
+            "name": "Fixture Reviewer 94",
+            "email": "reviewer94@example.com"
+          }
+        },
+        {
+          "id": 95,
+          "title": "Fixture review 95",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_95",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1095,
+            "name": "Fixture Reviewer 95",
+            "email": "reviewer95@example.com"
+          }
+        },
+        {
+          "id": 96,
+          "title": "Fixture review 96",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_96",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1096,
+            "name": "Fixture Reviewer 96",
+            "email": "reviewer96@example.com"
+          }
+        },
+        {
+          "id": 97,
+          "title": "Fixture review 97",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_97",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1097,
+            "name": "Fixture Reviewer 97",
+            "email": "reviewer97@example.com"
+          }
+        },
+        {
+          "id": 98,
+          "title": "Fixture review 98",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_98",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1098,
+            "name": "Fixture Reviewer 98",
+            "email": "reviewer98@example.com"
+          }
+        },
+        {
+          "id": 99,
+          "title": "Fixture review 99",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_99",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1099,
+            "name": "Fixture Reviewer 99",
+            "email": "reviewer99@example.com"
+          }
+        },
+        {
+          "id": 100,
+          "title": "Fixture review 100",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_100",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1100,
+            "name": "Fixture Reviewer 100",
+            "email": "reviewer100@example.com"
+          }
+        }
+      ]
+    }
+  }
+}

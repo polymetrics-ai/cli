@@ -1,0 +1,22 @@
+{
+  "name": "awin-advertiser",
+  "display_name": "Awin Advertiser",
+  "description": "Reads Awin advertiser transactions, publisher-aggregated performance reports, and publisher relationships through the Awin Advertiser REST API.",
+  "integration_type": "api",
+  "docs_url": "https://wiki.awin.com/index.php/Advertiser_API",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Awin API read of advertiser commission transactions and publisher performance data"
+  }
+}

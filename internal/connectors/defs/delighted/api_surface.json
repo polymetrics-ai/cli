@@ -1,0 +1,16 @@
+{
+  "api": "Delighted API v1 (https://api.delighted.com/v1)",
+  "docs": "https://delighted.com/docs/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the Delighted write surface (sending surveys, creating/updating people) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/survey_responses.json", "covered_by": { "stream": "survey_responses" } },
+    { "method": "GET", "path": "/people.json", "covered_by": { "stream": "people" } },
+    { "method": "GET", "path": "/bounces.json", "covered_by": { "stream": "bounces" } },
+    { "method": "GET", "path": "/unsubscribes.json", "covered_by": { "stream": "unsubscribes" } },
+    { "method": "GET", "path": "/metrics.json", "covered_by": { "stream": "metrics" } },
+    { "method": "POST", "path": "/people.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/people/{person_id}.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/survey_responses/{id}.json", "excluded": { "category": "duplicate_of", "reason": "single-record fetch of the same object already covered by the survey_responses list stream" } }
+  ]
+}

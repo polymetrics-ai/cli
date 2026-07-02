@@ -1,0 +1,17 @@
+{
+  "api": "Insightful API v1 (https://app.insightful.io/api/v1)",
+  "docs": "https://developer.insightful.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Insightful surface (time windows, screenshots, activity, apps/URLs tracking, projects/tasks writes, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/employee", "covered_by": { "stream": "employee" } },
+    { "method": "GET", "path": "/team", "covered_by": { "stream": "team" } },
+    { "method": "GET", "path": "/project", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/directory", "covered_by": { "stream": "directory" } },
+    { "method": "GET", "path": "/time-windows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/screenshots", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/analytics/activity", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/project", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/task", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

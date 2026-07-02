@@ -1,0 +1,23 @@
+{
+  "name": "inflowinventory",
+  "display_name": "inFlow Inventory",
+  "description": "Reads inFlow Inventory products, customers, vendors, sales orders, and categories through the inFlow cloud REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.inflowinventory.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external inFlow Inventory API read of products, customers, vendors, sales orders, and categories",
+    "approval": "none; read-only source"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v2/transcript", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "transcripts": [], "page_details": { "limit": 1, "result_count": 0, "next_url": null } }
+  }
+}

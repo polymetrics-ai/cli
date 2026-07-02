@@ -1,0 +1,15 @@
+{
+  "api": "Wufoo API v3 (https://wufoo.github.io/docs/)",
+  "docs": "https://wufoo.github.io/docs/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only, matching internal/connectors/wufoo's exact endpoint set; the full Wufoo surface (form/entry mutation, widgets, comments, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/forms.json", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/forms/{form_hash}/entries.json", "covered_by": { "stream": "entries" } },
+    { "method": "GET", "path": "/reports.json", "covered_by": { "stream": "reports" } },
+    { "method": "POST", "path": "/forms/{form_hash}/entries.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/forms/{form_hash}/fields.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/forms/{form_hash}/comments.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/webhooks.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "api": "Intruder API v1 (https://api.intruder.io/v1)",
+  "docs": "https://developers.intruder.io/docs/welcome",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 top-level list streams that the declarative dialect can express directly; the occurrences sub-resource fan-out stream (per-issue GET /issues/{id}/occurrences) requires a Tier-2 StreamHook (sub-resource fan-out is not expressible in Tier 1) and is out of scope for this wave",
+  "endpoints": [
+    { "method": "GET", "path": "/issues", "covered_by": { "stream": "issues" } },
+    { "method": "GET", "path": "/scans", "covered_by": { "stream": "scans" } },
+    { "method": "GET", "path": "/targets", "covered_by": { "stream": "targets" } },
+    { "method": "GET", "path": "/issues/{id}/occurrences", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out per parent issue id requires a Tier-2 StreamHook; not expressible in the declarative dialect alone" } }
+  ]
+}

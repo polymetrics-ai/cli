@@ -1,0 +1,913 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "products": [
+        {
+          "id": 1,
+          "external_id": "prod_1",
+          "handle": "fixture-product-1",
+          "title": "Fixture Product 1",
+          "url": "https://example.myshopify.com/products/fixture-1",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "external_id": "prod_2",
+          "handle": "fixture-product-2",
+          "title": "Fixture Product 2",
+          "url": "https://example.myshopify.com/products/fixture-2",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "external_id": "prod_3",
+          "handle": "fixture-product-3",
+          "title": "Fixture Product 3",
+          "url": "https://example.myshopify.com/products/fixture-3",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 4,
+          "external_id": "prod_4",
+          "handle": "fixture-product-4",
+          "title": "Fixture Product 4",
+          "url": "https://example.myshopify.com/products/fixture-4",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 5,
+          "external_id": "prod_5",
+          "handle": "fixture-product-5",
+          "title": "Fixture Product 5",
+          "url": "https://example.myshopify.com/products/fixture-5",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 6,
+          "external_id": "prod_6",
+          "handle": "fixture-product-6",
+          "title": "Fixture Product 6",
+          "url": "https://example.myshopify.com/products/fixture-6",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 7,
+          "external_id": "prod_7",
+          "handle": "fixture-product-7",
+          "title": "Fixture Product 7",
+          "url": "https://example.myshopify.com/products/fixture-7",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 8,
+          "external_id": "prod_8",
+          "handle": "fixture-product-8",
+          "title": "Fixture Product 8",
+          "url": "https://example.myshopify.com/products/fixture-8",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 9,
+          "external_id": "prod_9",
+          "handle": "fixture-product-9",
+          "title": "Fixture Product 9",
+          "url": "https://example.myshopify.com/products/fixture-9",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 10,
+          "external_id": "prod_10",
+          "handle": "fixture-product-10",
+          "title": "Fixture Product 10",
+          "url": "https://example.myshopify.com/products/fixture-10",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 11,
+          "external_id": "prod_11",
+          "handle": "fixture-product-11",
+          "title": "Fixture Product 11",
+          "url": "https://example.myshopify.com/products/fixture-11",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "external_id": "prod_12",
+          "handle": "fixture-product-12",
+          "title": "Fixture Product 12",
+          "url": "https://example.myshopify.com/products/fixture-12",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 13,
+          "external_id": "prod_13",
+          "handle": "fixture-product-13",
+          "title": "Fixture Product 13",
+          "url": "https://example.myshopify.com/products/fixture-13",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 14,
+          "external_id": "prod_14",
+          "handle": "fixture-product-14",
+          "title": "Fixture Product 14",
+          "url": "https://example.myshopify.com/products/fixture-14",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 15,
+          "external_id": "prod_15",
+          "handle": "fixture-product-15",
+          "title": "Fixture Product 15",
+          "url": "https://example.myshopify.com/products/fixture-15",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 16,
+          "external_id": "prod_16",
+          "handle": "fixture-product-16",
+          "title": "Fixture Product 16",
+          "url": "https://example.myshopify.com/products/fixture-16",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 17,
+          "external_id": "prod_17",
+          "handle": "fixture-product-17",
+          "title": "Fixture Product 17",
+          "url": "https://example.myshopify.com/products/fixture-17",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 18,
+          "external_id": "prod_18",
+          "handle": "fixture-product-18",
+          "title": "Fixture Product 18",
+          "url": "https://example.myshopify.com/products/fixture-18",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 19,
+          "external_id": "prod_19",
+          "handle": "fixture-product-19",
+          "title": "Fixture Product 19",
+          "url": "https://example.myshopify.com/products/fixture-19",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 20,
+          "external_id": "prod_20",
+          "handle": "fixture-product-20",
+          "title": "Fixture Product 20",
+          "url": "https://example.myshopify.com/products/fixture-20",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 21,
+          "external_id": "prod_21",
+          "handle": "fixture-product-21",
+          "title": "Fixture Product 21",
+          "url": "https://example.myshopify.com/products/fixture-21",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 22,
+          "external_id": "prod_22",
+          "handle": "fixture-product-22",
+          "title": "Fixture Product 22",
+          "url": "https://example.myshopify.com/products/fixture-22",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 23,
+          "external_id": "prod_23",
+          "handle": "fixture-product-23",
+          "title": "Fixture Product 23",
+          "url": "https://example.myshopify.com/products/fixture-23",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 24,
+          "external_id": "prod_24",
+          "handle": "fixture-product-24",
+          "title": "Fixture Product 24",
+          "url": "https://example.myshopify.com/products/fixture-24",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 25,
+          "external_id": "prod_25",
+          "handle": "fixture-product-25",
+          "title": "Fixture Product 25",
+          "url": "https://example.myshopify.com/products/fixture-25",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 26,
+          "external_id": "prod_26",
+          "handle": "fixture-product-26",
+          "title": "Fixture Product 26",
+          "url": "https://example.myshopify.com/products/fixture-26",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 27,
+          "external_id": "prod_27",
+          "handle": "fixture-product-27",
+          "title": "Fixture Product 27",
+          "url": "https://example.myshopify.com/products/fixture-27",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 28,
+          "external_id": "prod_28",
+          "handle": "fixture-product-28",
+          "title": "Fixture Product 28",
+          "url": "https://example.myshopify.com/products/fixture-28",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 29,
+          "external_id": "prod_29",
+          "handle": "fixture-product-29",
+          "title": "Fixture Product 29",
+          "url": "https://example.myshopify.com/products/fixture-29",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 30,
+          "external_id": "prod_30",
+          "handle": "fixture-product-30",
+          "title": "Fixture Product 30",
+          "url": "https://example.myshopify.com/products/fixture-30",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "external_id": "prod_31",
+          "handle": "fixture-product-31",
+          "title": "Fixture Product 31",
+          "url": "https://example.myshopify.com/products/fixture-31",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 32,
+          "external_id": "prod_32",
+          "handle": "fixture-product-32",
+          "title": "Fixture Product 32",
+          "url": "https://example.myshopify.com/products/fixture-32",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 33,
+          "external_id": "prod_33",
+          "handle": "fixture-product-33",
+          "title": "Fixture Product 33",
+          "url": "https://example.myshopify.com/products/fixture-33",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 34,
+          "external_id": "prod_34",
+          "handle": "fixture-product-34",
+          "title": "Fixture Product 34",
+          "url": "https://example.myshopify.com/products/fixture-34",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 35,
+          "external_id": "prod_35",
+          "handle": "fixture-product-35",
+          "title": "Fixture Product 35",
+          "url": "https://example.myshopify.com/products/fixture-35",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 36,
+          "external_id": "prod_36",
+          "handle": "fixture-product-36",
+          "title": "Fixture Product 36",
+          "url": "https://example.myshopify.com/products/fixture-36",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 37,
+          "external_id": "prod_37",
+          "handle": "fixture-product-37",
+          "title": "Fixture Product 37",
+          "url": "https://example.myshopify.com/products/fixture-37",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 38,
+          "external_id": "prod_38",
+          "handle": "fixture-product-38",
+          "title": "Fixture Product 38",
+          "url": "https://example.myshopify.com/products/fixture-38",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 39,
+          "external_id": "prod_39",
+          "handle": "fixture-product-39",
+          "title": "Fixture Product 39",
+          "url": "https://example.myshopify.com/products/fixture-39",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 40,
+          "external_id": "prod_40",
+          "handle": "fixture-product-40",
+          "title": "Fixture Product 40",
+          "url": "https://example.myshopify.com/products/fixture-40",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 41,
+          "external_id": "prod_41",
+          "handle": "fixture-product-41",
+          "title": "Fixture Product 41",
+          "url": "https://example.myshopify.com/products/fixture-41",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 42,
+          "external_id": "prod_42",
+          "handle": "fixture-product-42",
+          "title": "Fixture Product 42",
+          "url": "https://example.myshopify.com/products/fixture-42",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 43,
+          "external_id": "prod_43",
+          "handle": "fixture-product-43",
+          "title": "Fixture Product 43",
+          "url": "https://example.myshopify.com/products/fixture-43",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 44,
+          "external_id": "prod_44",
+          "handle": "fixture-product-44",
+          "title": "Fixture Product 44",
+          "url": "https://example.myshopify.com/products/fixture-44",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 45,
+          "external_id": "prod_45",
+          "handle": "fixture-product-45",
+          "title": "Fixture Product 45",
+          "url": "https://example.myshopify.com/products/fixture-45",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 46,
+          "external_id": "prod_46",
+          "handle": "fixture-product-46",
+          "title": "Fixture Product 46",
+          "url": "https://example.myshopify.com/products/fixture-46",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 47,
+          "external_id": "prod_47",
+          "handle": "fixture-product-47",
+          "title": "Fixture Product 47",
+          "url": "https://example.myshopify.com/products/fixture-47",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 48,
+          "external_id": "prod_48",
+          "handle": "fixture-product-48",
+          "title": "Fixture Product 48",
+          "url": "https://example.myshopify.com/products/fixture-48",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 49,
+          "external_id": "prod_49",
+          "handle": "fixture-product-49",
+          "title": "Fixture Product 49",
+          "url": "https://example.myshopify.com/products/fixture-49",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 50,
+          "external_id": "prod_50",
+          "handle": "fixture-product-50",
+          "title": "Fixture Product 50",
+          "url": "https://example.myshopify.com/products/fixture-50",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 51,
+          "external_id": "prod_51",
+          "handle": "fixture-product-51",
+          "title": "Fixture Product 51",
+          "url": "https://example.myshopify.com/products/fixture-51",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 52,
+          "external_id": "prod_52",
+          "handle": "fixture-product-52",
+          "title": "Fixture Product 52",
+          "url": "https://example.myshopify.com/products/fixture-52",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 53,
+          "external_id": "prod_53",
+          "handle": "fixture-product-53",
+          "title": "Fixture Product 53",
+          "url": "https://example.myshopify.com/products/fixture-53",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 54,
+          "external_id": "prod_54",
+          "handle": "fixture-product-54",
+          "title": "Fixture Product 54",
+          "url": "https://example.myshopify.com/products/fixture-54",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 55,
+          "external_id": "prod_55",
+          "handle": "fixture-product-55",
+          "title": "Fixture Product 55",
+          "url": "https://example.myshopify.com/products/fixture-55",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 56,
+          "external_id": "prod_56",
+          "handle": "fixture-product-56",
+          "title": "Fixture Product 56",
+          "url": "https://example.myshopify.com/products/fixture-56",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 57,
+          "external_id": "prod_57",
+          "handle": "fixture-product-57",
+          "title": "Fixture Product 57",
+          "url": "https://example.myshopify.com/products/fixture-57",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 58,
+          "external_id": "prod_58",
+          "handle": "fixture-product-58",
+          "title": "Fixture Product 58",
+          "url": "https://example.myshopify.com/products/fixture-58",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 59,
+          "external_id": "prod_59",
+          "handle": "fixture-product-59",
+          "title": "Fixture Product 59",
+          "url": "https://example.myshopify.com/products/fixture-59",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 60,
+          "external_id": "prod_60",
+          "handle": "fixture-product-60",
+          "title": "Fixture Product 60",
+          "url": "https://example.myshopify.com/products/fixture-60",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 61,
+          "external_id": "prod_61",
+          "handle": "fixture-product-61",
+          "title": "Fixture Product 61",
+          "url": "https://example.myshopify.com/products/fixture-61",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 62,
+          "external_id": "prod_62",
+          "handle": "fixture-product-62",
+          "title": "Fixture Product 62",
+          "url": "https://example.myshopify.com/products/fixture-62",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 63,
+          "external_id": "prod_63",
+          "handle": "fixture-product-63",
+          "title": "Fixture Product 63",
+          "url": "https://example.myshopify.com/products/fixture-63",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 64,
+          "external_id": "prod_64",
+          "handle": "fixture-product-64",
+          "title": "Fixture Product 64",
+          "url": "https://example.myshopify.com/products/fixture-64",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 65,
+          "external_id": "prod_65",
+          "handle": "fixture-product-65",
+          "title": "Fixture Product 65",
+          "url": "https://example.myshopify.com/products/fixture-65",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 66,
+          "external_id": "prod_66",
+          "handle": "fixture-product-66",
+          "title": "Fixture Product 66",
+          "url": "https://example.myshopify.com/products/fixture-66",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 67,
+          "external_id": "prod_67",
+          "handle": "fixture-product-67",
+          "title": "Fixture Product 67",
+          "url": "https://example.myshopify.com/products/fixture-67",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 68,
+          "external_id": "prod_68",
+          "handle": "fixture-product-68",
+          "title": "Fixture Product 68",
+          "url": "https://example.myshopify.com/products/fixture-68",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 69,
+          "external_id": "prod_69",
+          "handle": "fixture-product-69",
+          "title": "Fixture Product 69",
+          "url": "https://example.myshopify.com/products/fixture-69",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 70,
+          "external_id": "prod_70",
+          "handle": "fixture-product-70",
+          "title": "Fixture Product 70",
+          "url": "https://example.myshopify.com/products/fixture-70",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 71,
+          "external_id": "prod_71",
+          "handle": "fixture-product-71",
+          "title": "Fixture Product 71",
+          "url": "https://example.myshopify.com/products/fixture-71",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 72,
+          "external_id": "prod_72",
+          "handle": "fixture-product-72",
+          "title": "Fixture Product 72",
+          "url": "https://example.myshopify.com/products/fixture-72",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 73,
+          "external_id": "prod_73",
+          "handle": "fixture-product-73",
+          "title": "Fixture Product 73",
+          "url": "https://example.myshopify.com/products/fixture-73",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 74,
+          "external_id": "prod_74",
+          "handle": "fixture-product-74",
+          "title": "Fixture Product 74",
+          "url": "https://example.myshopify.com/products/fixture-74",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 75,
+          "external_id": "prod_75",
+          "handle": "fixture-product-75",
+          "title": "Fixture Product 75",
+          "url": "https://example.myshopify.com/products/fixture-75",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 76,
+          "external_id": "prod_76",
+          "handle": "fixture-product-76",
+          "title": "Fixture Product 76",
+          "url": "https://example.myshopify.com/products/fixture-76",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 77,
+          "external_id": "prod_77",
+          "handle": "fixture-product-77",
+          "title": "Fixture Product 77",
+          "url": "https://example.myshopify.com/products/fixture-77",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 78,
+          "external_id": "prod_78",
+          "handle": "fixture-product-78",
+          "title": "Fixture Product 78",
+          "url": "https://example.myshopify.com/products/fixture-78",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 79,
+          "external_id": "prod_79",
+          "handle": "fixture-product-79",
+          "title": "Fixture Product 79",
+          "url": "https://example.myshopify.com/products/fixture-79",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 80,
+          "external_id": "prod_80",
+          "handle": "fixture-product-80",
+          "title": "Fixture Product 80",
+          "url": "https://example.myshopify.com/products/fixture-80",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 81,
+          "external_id": "prod_81",
+          "handle": "fixture-product-81",
+          "title": "Fixture Product 81",
+          "url": "https://example.myshopify.com/products/fixture-81",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 82,
+          "external_id": "prod_82",
+          "handle": "fixture-product-82",
+          "title": "Fixture Product 82",
+          "url": "https://example.myshopify.com/products/fixture-82",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 83,
+          "external_id": "prod_83",
+          "handle": "fixture-product-83",
+          "title": "Fixture Product 83",
+          "url": "https://example.myshopify.com/products/fixture-83",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 84,
+          "external_id": "prod_84",
+          "handle": "fixture-product-84",
+          "title": "Fixture Product 84",
+          "url": "https://example.myshopify.com/products/fixture-84",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 85,
+          "external_id": "prod_85",
+          "handle": "fixture-product-85",
+          "title": "Fixture Product 85",
+          "url": "https://example.myshopify.com/products/fixture-85",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 86,
+          "external_id": "prod_86",
+          "handle": "fixture-product-86",
+          "title": "Fixture Product 86",
+          "url": "https://example.myshopify.com/products/fixture-86",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 87,
+          "external_id": "prod_87",
+          "handle": "fixture-product-87",
+          "title": "Fixture Product 87",
+          "url": "https://example.myshopify.com/products/fixture-87",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 88,
+          "external_id": "prod_88",
+          "handle": "fixture-product-88",
+          "title": "Fixture Product 88",
+          "url": "https://example.myshopify.com/products/fixture-88",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 89,
+          "external_id": "prod_89",
+          "handle": "fixture-product-89",
+          "title": "Fixture Product 89",
+          "url": "https://example.myshopify.com/products/fixture-89",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 90,
+          "external_id": "prod_90",
+          "handle": "fixture-product-90",
+          "title": "Fixture Product 90",
+          "url": "https://example.myshopify.com/products/fixture-90",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 91,
+          "external_id": "prod_91",
+          "handle": "fixture-product-91",
+          "title": "Fixture Product 91",
+          "url": "https://example.myshopify.com/products/fixture-91",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 92,
+          "external_id": "prod_92",
+          "handle": "fixture-product-92",
+          "title": "Fixture Product 92",
+          "url": "https://example.myshopify.com/products/fixture-92",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 93,
+          "external_id": "prod_93",
+          "handle": "fixture-product-93",
+          "title": "Fixture Product 93",
+          "url": "https://example.myshopify.com/products/fixture-93",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 94,
+          "external_id": "prod_94",
+          "handle": "fixture-product-94",
+          "title": "Fixture Product 94",
+          "url": "https://example.myshopify.com/products/fixture-94",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 95,
+          "external_id": "prod_95",
+          "handle": "fixture-product-95",
+          "title": "Fixture Product 95",
+          "url": "https://example.myshopify.com/products/fixture-95",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 96,
+          "external_id": "prod_96",
+          "handle": "fixture-product-96",
+          "title": "Fixture Product 96",
+          "url": "https://example.myshopify.com/products/fixture-96",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 97,
+          "external_id": "prod_97",
+          "handle": "fixture-product-97",
+          "title": "Fixture Product 97",
+          "url": "https://example.myshopify.com/products/fixture-97",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 98,
+          "external_id": "prod_98",
+          "handle": "fixture-product-98",
+          "title": "Fixture Product 98",
+          "url": "https://example.myshopify.com/products/fixture-98",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 99,
+          "external_id": "prod_99",
+          "handle": "fixture-product-99",
+          "title": "Fixture Product 99",
+          "url": "https://example.myshopify.com/products/fixture-99",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 100,
+          "external_id": "prod_100",
+          "handle": "fixture-product-100",
+          "title": "Fixture Product 100",
+          "url": "https://example.myshopify.com/products/fixture-100",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/projects" },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "pageInfo": { "page": 1, "pageSize": 1, "totalRecords": 0 } }
+  }
+}

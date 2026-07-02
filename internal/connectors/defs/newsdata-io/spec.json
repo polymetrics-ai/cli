@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NewsData.io Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "NewsData.io API key, sent as the 'apikey' query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://newsdata.io/api/1",
+      "description": "NewsData.io API base URL override for tests or proxies."
+    },
+    "search_query": {
+      "type": "string",
+      "description": "Optional search keywords, sent as the 'q' query parameter on article streams."
+    },
+    "categories": {
+      "type": "string",
+      "description": "Optional comma-separated category filter, sent as the 'category' query parameter."
+    },
+    "countries": {
+      "type": "string",
+      "description": "Optional comma-separated country filter, sent as the 'country' query parameter."
+    },
+    "languages": {
+      "type": "string",
+      "description": "Optional comma-separated language filter, sent as the 'language' query parameter."
+    },
+    "domains": {
+      "type": "string",
+      "description": "Optional comma-separated domain filter, sent as the 'domain' query parameter."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional archive lower-bound date (YYYY-MM-DD), sent as 'from_date' on the archive stream."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Optional archive upper-bound date (YYYY-MM-DD), sent as 'to_date' on the archive stream."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "10",
+      "description": "Records per page (1-50), sent as the 'size' query parameter on article streams."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "10",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

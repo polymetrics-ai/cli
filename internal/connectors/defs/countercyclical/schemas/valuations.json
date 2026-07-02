@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "valuations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "delineation": { "type": ["string", "null"] },
+    "discountRate": { "type": ["number", "null"] },
+    "growthMetric": { "type": ["string", "null"] },
+    "growthRate": { "type": ["number", "null"] },
+    "terminalRate": { "type": ["number", "null"] },
+    "terminalPeriod": { "type": ["string", "null"] },
+    "startingQuarter": { "type": ["integer", "null"] },
+    "startingYear": { "type": ["integer", "null"] },
+    "endingQuarter": { "type": ["integer", "null"] },
+    "endingYear": { "type": ["integer", "null"] },
+    "shareToken": { "type": ["string", "null"] },
+    "isFavorite": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

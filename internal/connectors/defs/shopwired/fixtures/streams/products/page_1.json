@@ -1,0 +1,615 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture Product 1",
+        "sku": "SKU-1",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 2,
+        "name": "Fixture Product 2",
+        "sku": "SKU-2",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 3,
+        "name": "Fixture Product 3",
+        "sku": "SKU-3",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 4,
+        "name": "Fixture Product 4",
+        "sku": "SKU-4",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 5,
+        "name": "Fixture Product 5",
+        "sku": "SKU-5",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 6,
+        "name": "Fixture Product 6",
+        "sku": "SKU-6",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 7,
+        "name": "Fixture Product 7",
+        "sku": "SKU-7",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 8,
+        "name": "Fixture Product 8",
+        "sku": "SKU-8",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 9,
+        "name": "Fixture Product 9",
+        "sku": "SKU-9",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 10,
+        "name": "Fixture Product 10",
+        "sku": "SKU-10",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 11,
+        "name": "Fixture Product 11",
+        "sku": "SKU-11",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 12,
+        "name": "Fixture Product 12",
+        "sku": "SKU-12",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 13,
+        "name": "Fixture Product 13",
+        "sku": "SKU-13",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 14,
+        "name": "Fixture Product 14",
+        "sku": "SKU-14",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 15,
+        "name": "Fixture Product 15",
+        "sku": "SKU-15",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 16,
+        "name": "Fixture Product 16",
+        "sku": "SKU-16",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 17,
+        "name": "Fixture Product 17",
+        "sku": "SKU-17",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 18,
+        "name": "Fixture Product 18",
+        "sku": "SKU-18",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 19,
+        "name": "Fixture Product 19",
+        "sku": "SKU-19",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 20,
+        "name": "Fixture Product 20",
+        "sku": "SKU-20",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 21,
+        "name": "Fixture Product 21",
+        "sku": "SKU-21",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 22,
+        "name": "Fixture Product 22",
+        "sku": "SKU-22",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 23,
+        "name": "Fixture Product 23",
+        "sku": "SKU-23",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 24,
+        "name": "Fixture Product 24",
+        "sku": "SKU-24",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 25,
+        "name": "Fixture Product 25",
+        "sku": "SKU-25",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 26,
+        "name": "Fixture Product 26",
+        "sku": "SKU-26",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 27,
+        "name": "Fixture Product 27",
+        "sku": "SKU-27",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 28,
+        "name": "Fixture Product 28",
+        "sku": "SKU-28",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 29,
+        "name": "Fixture Product 29",
+        "sku": "SKU-29",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 30,
+        "name": "Fixture Product 30",
+        "sku": "SKU-30",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 31,
+        "name": "Fixture Product 31",
+        "sku": "SKU-31",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 32,
+        "name": "Fixture Product 32",
+        "sku": "SKU-32",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 33,
+        "name": "Fixture Product 33",
+        "sku": "SKU-33",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 34,
+        "name": "Fixture Product 34",
+        "sku": "SKU-34",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 35,
+        "name": "Fixture Product 35",
+        "sku": "SKU-35",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 36,
+        "name": "Fixture Product 36",
+        "sku": "SKU-36",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 37,
+        "name": "Fixture Product 37",
+        "sku": "SKU-37",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 38,
+        "name": "Fixture Product 38",
+        "sku": "SKU-38",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 39,
+        "name": "Fixture Product 39",
+        "sku": "SKU-39",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 40,
+        "name": "Fixture Product 40",
+        "sku": "SKU-40",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 41,
+        "name": "Fixture Product 41",
+        "sku": "SKU-41",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 42,
+        "name": "Fixture Product 42",
+        "sku": "SKU-42",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 43,
+        "name": "Fixture Product 43",
+        "sku": "SKU-43",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 44,
+        "name": "Fixture Product 44",
+        "sku": "SKU-44",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 45,
+        "name": "Fixture Product 45",
+        "sku": "SKU-45",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 46,
+        "name": "Fixture Product 46",
+        "sku": "SKU-46",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 47,
+        "name": "Fixture Product 47",
+        "sku": "SKU-47",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 48,
+        "name": "Fixture Product 48",
+        "sku": "SKU-48",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 49,
+        "name": "Fixture Product 49",
+        "sku": "SKU-49",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 50,
+        "name": "Fixture Product 50",
+        "sku": "SKU-50",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 51,
+        "name": "Fixture Product 51",
+        "sku": "SKU-51",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 52,
+        "name": "Fixture Product 52",
+        "sku": "SKU-52",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 53,
+        "name": "Fixture Product 53",
+        "sku": "SKU-53",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 54,
+        "name": "Fixture Product 54",
+        "sku": "SKU-54",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 55,
+        "name": "Fixture Product 55",
+        "sku": "SKU-55",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 56,
+        "name": "Fixture Product 56",
+        "sku": "SKU-56",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 57,
+        "name": "Fixture Product 57",
+        "sku": "SKU-57",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 58,
+        "name": "Fixture Product 58",
+        "sku": "SKU-58",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 59,
+        "name": "Fixture Product 59",
+        "sku": "SKU-59",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 60,
+        "name": "Fixture Product 60",
+        "sku": "SKU-60",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 61,
+        "name": "Fixture Product 61",
+        "sku": "SKU-61",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 62,
+        "name": "Fixture Product 62",
+        "sku": "SKU-62",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 63,
+        "name": "Fixture Product 63",
+        "sku": "SKU-63",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 64,
+        "name": "Fixture Product 64",
+        "sku": "SKU-64",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 65,
+        "name": "Fixture Product 65",
+        "sku": "SKU-65",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 66,
+        "name": "Fixture Product 66",
+        "sku": "SKU-66",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 67,
+        "name": "Fixture Product 67",
+        "sku": "SKU-67",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 68,
+        "name": "Fixture Product 68",
+        "sku": "SKU-68",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 69,
+        "name": "Fixture Product 69",
+        "sku": "SKU-69",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 70,
+        "name": "Fixture Product 70",
+        "sku": "SKU-70",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 71,
+        "name": "Fixture Product 71",
+        "sku": "SKU-71",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 72,
+        "name": "Fixture Product 72",
+        "sku": "SKU-72",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 73,
+        "name": "Fixture Product 73",
+        "sku": "SKU-73",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 74,
+        "name": "Fixture Product 74",
+        "sku": "SKU-74",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 75,
+        "name": "Fixture Product 75",
+        "sku": "SKU-75",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 76,
+        "name": "Fixture Product 76",
+        "sku": "SKU-76",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 77,
+        "name": "Fixture Product 77",
+        "sku": "SKU-77",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 78,
+        "name": "Fixture Product 78",
+        "sku": "SKU-78",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 79,
+        "name": "Fixture Product 79",
+        "sku": "SKU-79",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 80,
+        "name": "Fixture Product 80",
+        "sku": "SKU-80",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 81,
+        "name": "Fixture Product 81",
+        "sku": "SKU-81",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 82,
+        "name": "Fixture Product 82",
+        "sku": "SKU-82",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 83,
+        "name": "Fixture Product 83",
+        "sku": "SKU-83",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 84,
+        "name": "Fixture Product 84",
+        "sku": "SKU-84",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 85,
+        "name": "Fixture Product 85",
+        "sku": "SKU-85",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 86,
+        "name": "Fixture Product 86",
+        "sku": "SKU-86",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 87,
+        "name": "Fixture Product 87",
+        "sku": "SKU-87",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 88,
+        "name": "Fixture Product 88",
+        "sku": "SKU-88",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 89,
+        "name": "Fixture Product 89",
+        "sku": "SKU-89",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 90,
+        "name": "Fixture Product 90",
+        "sku": "SKU-90",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 91,
+        "name": "Fixture Product 91",
+        "sku": "SKU-91",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 92,
+        "name": "Fixture Product 92",
+        "sku": "SKU-92",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 93,
+        "name": "Fixture Product 93",
+        "sku": "SKU-93",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 94,
+        "name": "Fixture Product 94",
+        "sku": "SKU-94",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 95,
+        "name": "Fixture Product 95",
+        "sku": "SKU-95",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 96,
+        "name": "Fixture Product 96",
+        "sku": "SKU-96",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 97,
+        "name": "Fixture Product 97",
+        "sku": "SKU-97",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 98,
+        "name": "Fixture Product 98",
+        "sku": "SKU-98",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 99,
+        "name": "Fixture Product 99",
+        "sku": "SKU-99",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 100,
+        "name": "Fixture Product 100",
+        "sku": "SKU-100",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

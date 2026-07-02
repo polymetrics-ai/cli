@@ -1,0 +1,19 @@
+{
+  "api": "inFlow Inventory cloud REST API (https://cloudapi.inflowinventory.com)",
+  "docs": "https://developer.inflowinventory.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full inFlow surface (purchase orders, stock adjustments, locations, taxes, teams, webhooks, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/{companyId}/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/{companyId}/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/{companyId}/vendors", "covered_by": { "stream": "vendors" } },
+    { "method": "GET", "path": "/{companyId}/sales-orders", "covered_by": { "stream": "sales_orders" } },
+    { "method": "GET", "path": "/{companyId}/categories", "covered_by": { "stream": "categories" } },
+    { "method": "GET", "path": "/{companyId}/purchase-orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/{companyId}/stock-adjustments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/{companyId}/locations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/{companyId}/taxes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/{companyId}/teams", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/{companyId}/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

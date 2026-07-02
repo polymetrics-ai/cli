@@ -1,0 +1,23 @@
+{
+  "name": "buildkite",
+  "display_name": "Buildkite",
+  "description": "Reads Buildkite organizations, pipelines, builds, and agents through the Buildkite REST API v2.",
+  "integration_type": "api",
+  "docs_url": "https://buildkite.com/docs/apis/rest-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Buildkite API read of organization, pipeline, build, and agent data",
+    "approval": "none; read-only, no reverse-ETL writes shipped"
+  }
+}

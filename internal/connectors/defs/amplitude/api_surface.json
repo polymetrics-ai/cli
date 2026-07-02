@@ -1,0 +1,15 @@
+{
+  "api": "Amplitude Analytics REST API (https://amplitude.com, https://analytics.eu.amplitude.com)",
+  "docs": "https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Amplitude surface (behavioral cohort membership export, chart data, dashboards, taxonomy management, releases) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/3/cohorts", "covered_by": { "stream": "cohorts" } },
+    { "method": "GET", "path": "/api/3/annotations", "covered_by": { "stream": "annotations" } },
+    { "method": "GET", "path": "/api/2/events/list", "covered_by": { "stream": "events_list" } },
+    { "method": "GET", "path": "/api/5/cohorts/request/{cohort_id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/2/export", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/2/taxonomy/event", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/2/httpapi", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; event-ingestion write, not a reverse-ETL record mutation" } }
+  ]
+}

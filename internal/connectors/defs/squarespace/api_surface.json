@@ -1,0 +1,15 @@
+{
+  "api": "Squarespace Commerce API v1 (https://api.squarespace.com/1.0)",
+  "docs": "https://developers.squarespace.com/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (orders, products, inventory, profiles); legacy ships no writes (capabilities.write is false), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/1.0/commerce/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/1.0/commerce/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/1.0/commerce/inventory", "covered_by": { "stream": "inventory" } },
+    { "method": "GET", "path": "/1.0/profiles", "covered_by": { "stream": "profiles" } },
+    { "method": "POST", "path": "/1.0/commerce/orders/{id}/fulfillments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/1.0/commerce/transactions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/1.0/commerce/store_pages", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

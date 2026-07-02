@@ -1,0 +1,22 @@
+{
+  "name": "dbt",
+  "display_name": "dbt Cloud",
+  "description": "Reads dbt Cloud projects, runs, repositories, users, and environments through the dbt Cloud Administrative API v2.",
+  "integration_type": "api",
+  "docs_url": "https://docs.getdbt.com/dbt-cloud/api-v2",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external dbt Cloud API read of account projects, runs, repositories, users, and environments"
+  }
+}

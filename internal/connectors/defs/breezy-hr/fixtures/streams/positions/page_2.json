@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/positions", "query": { "page": "2", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "pos_fixture_101",
+        "name": "Fixture Position 101",
+        "type": { "name": "Contract" },
+        "state": "published",
+        "department": "Sales",
+        "org_type": "company",
+        "pipeline_id": "pipe_fixture_1",
+        "location": { "country": { "id": "US", "name": "United States" } },
+        "creation_date": "2026-01-01T00:00:00Z",
+        "updated_date": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

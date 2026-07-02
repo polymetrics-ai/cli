@@ -1,0 +1,23 @@
+{
+  "name": "teamtailor",
+  "display_name": "Teamtailor",
+  "description": "Reads Teamtailor jobs through the Teamtailor API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://docs.teamtailor.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Teamtailor API read of job data",
+    "approval": "none; read-only"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "google-webfonts",
+  "display_name": "Google Webfonts",
+  "description": "Reads Google Web Fonts families (default, popular, trending, newest, and alphabetical views) through the Google Fonts Developer API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.google.com/fonts/docs/developer_api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Google Fonts Developer API read of public font metadata",
+    "approval": "none; read-only public font catalog API"
+  }
+}

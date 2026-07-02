@@ -1,0 +1,23 @@
+{
+  "name": "luma",
+  "display_name": "lu.ma",
+  "description": "Reads lu.ma events, event guests, and event hosts through the Luma public REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.lu.ma/reference/getting-started",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external lu.ma API read of calendar events, guests, and hosts",
+    "approval": "none; read-only"
+  }
+}

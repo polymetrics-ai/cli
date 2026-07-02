@@ -1,0 +1,96 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 30
+    },
+    "check": { "method": "GET", "path": "/api/v1/products", "query": { "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "aha api key is missing or invalid; re-run pm credentials add aha" },
+      { "status": 403, "hint": "aha account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "aha rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "features",
+      "path": "/api/v1/features",
+      "records": { "path": "features" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "resource": "feature"
+      },
+      "schema": "schemas/features.json"
+    },
+    {
+      "name": "products",
+      "path": "/api/v1/products",
+      "records": { "path": "products" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "resource": "product"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "ideas",
+      "path": "/api/v1/ideas",
+      "records": { "path": "ideas" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "resource": "idea"
+      },
+      "schema": "schemas/ideas.json"
+    },
+    {
+      "name": "releases",
+      "path": "/api/v1/releases",
+      "records": { "path": "releases" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "resource": "release"
+      },
+      "schema": "schemas/releases.json"
+    },
+    {
+      "name": "initiatives",
+      "path": "/api/v1/initiatives",
+      "records": { "path": "initiatives" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "resource": "initiative"
+      },
+      "schema": "schemas/initiatives.json"
+    },
+    {
+      "name": "goals",
+      "path": "/api/v1/goals",
+      "records": { "path": "goals" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "resource": "goal"
+      },
+      "schema": "schemas/goals.json"
+    }
+  ]
+}

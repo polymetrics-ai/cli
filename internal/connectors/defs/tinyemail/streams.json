@@ -1,0 +1,42 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/subscribers", "query": { "page": "1", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "tinyemail api_key is missing or invalid; re-run pm credentials add tinyemail" },
+      { "status": 403, "hint": "tinyemail account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "tinyemail rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "subscribers",
+      "path": "/subscribers",
+      "records": { "path": "data" },
+      "schema": "schemas/subscribers.json"
+    },
+    {
+      "name": "lists",
+      "path": "/lists",
+      "records": { "path": "data" },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "records": { "path": "data" },
+      "schema": "schemas/campaigns.json"
+    }
+  ]
+}

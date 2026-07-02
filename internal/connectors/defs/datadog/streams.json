@@ -1,0 +1,31 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "DD-API-KEY": "{{ secrets.api_key }}",
+      "DD-APPLICATION-KEY": "{{ secrets.application_key }}"
+    },
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/api/v1/dashboard" },
+    "error_map": [
+      { "status": 401, "hint": "datadog api_key/application_key are missing or invalid; re-run pm credentials add datadog" },
+      { "status": 403, "hint": "datadog credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "datadog rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "dashboards",
+      "path": "/api/v1/dashboard",
+      "records": { "path": "dashboards" },
+      "schema": "schemas/dashboards.json"
+    },
+    {
+      "name": "downtimes",
+      "path": "/api/v1/downtime",
+      "records": { "path": "." },
+      "schema": "schemas/downtimes.json"
+    }
+  ]
+}

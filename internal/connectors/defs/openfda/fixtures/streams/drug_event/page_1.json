@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/drug/event.json", "query": { "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "results": { "skip": 0, "limit": 2, "total": 3 } },
+      "results": [
+        { "safetyreportid": "drug_event_fixture_1", "safetyreportversion": "1", "receivedate": "20260101", "receiptdate": "20260101", "serious": "1", "seriousnessdeath": "0", "transmissiondate": "20260101", "primarysourcecountry": "US", "occurcountry": "US", "fulfillexpeditecriteria": "0" },
+        { "safetyreportid": "drug_event_fixture_2", "safetyreportversion": "1", "receivedate": "20260102", "receiptdate": "20260102", "serious": "0", "seriousnessdeath": "0", "transmissiondate": "20260102", "primarysourcecountry": "US", "occurcountry": "US", "fulfillexpeditecriteria": "0" }
+      ]
+    }
+  }
+}

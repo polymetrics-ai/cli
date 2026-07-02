@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickers",
+  "type": "object",
+  "x-primary-key": ["ticker"],
+  "required": ["ticker"],
+  "properties": {
+    "ticker": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "market": { "type": ["string", "null"] },
+    "locale": { "type": ["string", "null"] },
+    "primary_exchange": { "type": ["string", "null"] },
+    "currency_name": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] }
+  }
+}

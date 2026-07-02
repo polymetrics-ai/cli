@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Chargify Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Chargify API key. Sent as the HTTP Basic username with the literal password \"x\" (Chargify's documented API-key auth convention). Used only when username/password are not both supplied."
+    },
+    "username": {
+      "type": "string",
+      "description": "Explicit HTTP Basic username; overrides api_key when set together with the password secret."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Explicit HTTP Basic password; overrides the api_key/\"x\" default when set together with username."
+    },
+    "domain": {
+      "type": "string",
+      "description": "Chargify domain (e.g. yoursubdomain.chargify.com). Used to derive base_url when base_url is not set."
+    },
+    "subdomain": {
+      "type": "string",
+      "description": "Chargify subdomain; combined with \".chargify.com\" to derive base_url when both domain and base_url are unset."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Chargify API base URL, e.g. https://yoursubdomain.chargify.com. Required: legacy derives this from domain/subdomain, but that cross-key derivation has no engine mechanism today (see docs.md Known limits), so this bundle requires the fully-formed URL instead."
+    }
+  }
+}

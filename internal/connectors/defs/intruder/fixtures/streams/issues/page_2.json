@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/issues", "query": { "limit": "100", "offset": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 3,
+          "title": "Fixture issue 3",
+          "description": "Fixture description",
+          "severity": "low",
+          "remediation": "Fixture remediation",
+          "occurrences": "1",
+          "snoozed": true,
+          "snooze_reason": "acknowledged",
+          "snooze_until": "2026-02-01T00:00:00Z"
+        }
+      ],
+      "count": 3
+    }
+  }
+}

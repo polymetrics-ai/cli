@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/v2/transactions/card/primary", "query": { "limit": "100", "cursor": "cur_fixture_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "trx_fixture_3",
+          "card_id": "card_fixture_1",
+          "description": "Fixture Travel Booking",
+          "amount": { "amount": 15000, "currency": "USD" },
+          "initiated_at_date": "2026-01-03",
+          "posted_at_date": "2026-01-03",
+          "type": "CARD"
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

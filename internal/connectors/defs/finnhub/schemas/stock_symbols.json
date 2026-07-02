@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stock_symbols",
+  "type": "object",
+  "x-primary-key": ["symbol"],
+  "required": ["symbol"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "displaySymbol": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "figi": { "type": ["string", "null"] },
+    "mic": { "type": ["string", "null"] }
+  }
+}

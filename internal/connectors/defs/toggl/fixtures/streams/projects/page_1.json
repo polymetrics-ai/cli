@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/synthetic-conformance-value/projects" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 100, "workspace_id": 9, "client_id": 200, "name": "Fixture Project One", "active": true },
+      { "id": 101, "workspace_id": 9, "client_id": 200, "name": "Fixture Project Two", "active": false }
+    ]
+  }
+}

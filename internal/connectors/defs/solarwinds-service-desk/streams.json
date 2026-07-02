@@ -1,0 +1,83 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/vnd.samanage.v1.1+json"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key_2 }}", "when": "{{ secrets.api_key_2 }}" },
+      { "mode": "bearer", "token": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/incidents.json" },
+    "error_map": [
+      { "status": 401, "hint": "solarwinds-service-desk api_key_2/api_key is missing or invalid; re-run pm credentials add solarwinds-service-desk" },
+      { "status": 403, "hint": "solarwinds-service-desk account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "solarwinds-service-desk rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "incidents",
+      "path": "/incidents.json",
+      "query": {
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "schema": "schemas/incidents.json"
+    },
+    {
+      "name": "users",
+      "path": "/users.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "departments",
+      "path": "/departments.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "categories",
+      "path": "/categories.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "problems",
+      "path": "/problems.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "schema": "schemas/problems.json"
+    },
+    {
+      "name": "changes",
+      "path": "/changes.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "schema": "schemas/changes.json"
+    }
+  ]
+}

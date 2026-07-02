@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/wp-json/wp/v2/users", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture User One", "slug": "fixture-user-one" },
+      { "id": 2, "name": "Fixture User Two", "slug": "fixture-user-two" }
+    ]
+  }
+}

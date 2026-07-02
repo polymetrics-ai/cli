@@ -1,0 +1,61 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "api_key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 25
+    },
+    "check": { "method": "GET", "path": "/gifs/trending", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "giphy api_key is missing or invalid; re-run pm credentials add giphy" },
+      { "status": 429, "class": "rate_limited", "hint": "giphy rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "gif_search",
+      "path": "/gifs/search",
+      "query": {
+        "q": "{{ config.query_for_gif }}",
+        "rating": { "template": "{{ config.rating }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/gif_search.json"
+    },
+    {
+      "name": "sticker_search",
+      "path": "/stickers/search",
+      "query": {
+        "q": "{{ config.query_for_stickers }}",
+        "rating": { "template": "{{ config.rating }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/sticker_search.json"
+    },
+    {
+      "name": "clip_search",
+      "path": "/clips/search",
+      "query": {
+        "q": "{{ config.query_for_clips }}",
+        "rating": { "template": "{{ config.rating }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/clip_search.json"
+    },
+    {
+      "name": "trending_gifs",
+      "path": "/gifs/trending",
+      "query": {
+        "rating": { "template": "{{ config.rating }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/trending_gifs.json"
+    }
+  ]
+}

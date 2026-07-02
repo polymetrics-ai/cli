@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/rest_v1/metrics/pageviews/per-article/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/daily/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "project": "en.wikipedia.org",
+          "article": "Fixture_Article",
+          "granularity": "daily",
+          "timestamp": "2026010100",
+          "access": "all-access",
+          "agent": "user",
+          "views": 100
+        },
+        {
+          "project": "en.wikipedia.org",
+          "article": "Fixture_Article",
+          "granularity": "daily",
+          "timestamp": "2026010200",
+          "access": "all-access",
+          "agent": "user",
+          "views": 142
+        }
+      ]
+    }
+  }
+}

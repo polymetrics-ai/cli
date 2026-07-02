@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/2.0/outlets", "query": { "page_size": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "outlet_fixture_1", "version": 1000, "name": "Fixture Outlet" }
+      ],
+      "version": { "min": 1000, "max": null }
+    }
+  }
+}

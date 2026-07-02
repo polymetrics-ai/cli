@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "airlines",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "airline_name": { "type": ["string", "null"] },
+    "iata_code": { "type": ["string", "null"] },
+    "icao_code": { "type": ["string", "null"] },
+    "callsign": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "fleet_size": { "type": ["string", "null"] },
+    "country_name": { "type": ["string", "null"] },
+    "country_iso2": { "type": ["string", "null"] },
+    "date_founded": { "type": ["string", "null"] }
+  }
+}

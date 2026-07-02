@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "page_size": "100", "next_page_token": "fixture_token_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        { "id": "user_fixture_3", "email": "fixture3@example.com", "first_name": "Fixture", "last_name": "Three", "updated_at": "2026-01-03T00:00:00Z" }
+      ],
+      "next_page_token": ""
+    }
+  }
+}

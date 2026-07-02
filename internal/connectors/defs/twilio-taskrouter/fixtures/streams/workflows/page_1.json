@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/Workspaces/synthetic-conformance-value/Workflows", "query": { "PageSize": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "workflows": [
+        { "sid": "WW_fixture_1", "friendly_name": "Fixture Workflow 1" },
+        { "sid": "WW_fixture_2", "friendly_name": "Fixture Workflow 2" }
+      ]
+    }
+  }
+}

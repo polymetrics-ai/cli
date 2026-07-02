@@ -1,0 +1,23 @@
+{
+  "name": "giphy",
+  "display_name": "Giphy",
+  "description": "Reads GIFs, stickers, and clips from the Giphy search and trending REST endpoints. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.giphy.com/docs/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external Giphy API read of public media search/trending results",
+    "approval": "none; read-only public media source connector"
+  }
+}

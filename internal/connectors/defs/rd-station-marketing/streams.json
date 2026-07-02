@@ -1,0 +1,85 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 125
+    },
+    "check": { "method": "GET", "path": "/contacts", "query": { "page": "1", "page_size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "rd-station-marketing access_token is missing or invalid; re-run pm credentials add rd-station-marketing" },
+      { "status": 403, "hint": "rd-station-marketing account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "rd-station-marketing rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "contacts" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "page_size",
+        "start_page": 1,
+        "page_size": 2
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "id": "{{ record.uuid }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "segmentations",
+      "path": "/segmentations",
+      "records": { "path": "segmentations" },
+      "computed_fields": {
+        "id": "{{ record.uuid }}"
+      },
+      "schema": "schemas/segmentations.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "records": { "path": "events" },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "computed_fields": {
+        "id": "{{ record.uuid }}",
+        "event_type": "{{ record.event_type }}"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "landing_pages",
+      "path": "/landing_pages",
+      "records": { "path": "landing_pages" },
+      "computed_fields": {
+        "id": "{{ record.uuid }}",
+        "name": "{{ record.name }}"
+      },
+      "schema": "schemas/landing_pages.json"
+    },
+    {
+      "name": "email_templates",
+      "path": "/email_templates",
+      "records": { "path": "email_templates" },
+      "computed_fields": {
+        "id": "{{ record.uuid }}",
+        "name": "{{ record.name }}"
+      },
+      "schema": "schemas/email_templates.json"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/timeoff/leaves", "query": { "page": "1", "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 500,
+          "employee_id": 1,
+          "leave_type_id": 1,
+          "start_on": "2026-01-10",
+          "finish_on": "2026-01-12",
+          "half_day": null,
+          "description": "Fixture vacation",
+          "approved": true,
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-05T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

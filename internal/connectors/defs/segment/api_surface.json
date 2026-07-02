@@ -1,0 +1,14 @@
+{
+  "api": "Segment Public API (https://docs.segmentapis.com/tag/Getting-Started)",
+  "docs": "https://docs.segmentapis.com/tag/Getting-Started",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (workspaces, sources, destinations); Segment's tracking-plan, warehouse, and function-endpoint surfaces are out of scope for this migration (legacy itself never implemented them; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/workspaces", "covered_by": { "stream": "workspaces" } },
+    { "method": "GET", "path": "/sources", "covered_by": { "stream": "sources" } },
+    { "method": "GET", "path": "/destinations", "covered_by": { "stream": "destinations" } },
+    { "method": "GET", "path": "/tracking-plans", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented tracking-plan reads; Pass B capability expansion" } },
+    { "method": "GET", "path": "/warehouses", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented warehouse reads; Pass B capability expansion" } },
+    { "method": "POST", "path": "/sources", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented source creation; Pass B capability expansion" } }
+  ]
+}

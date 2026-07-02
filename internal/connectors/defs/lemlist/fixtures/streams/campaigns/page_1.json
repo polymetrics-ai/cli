@@ -1,0 +1,715 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "cmp_fixture_1",
+        "name": "Fixture Campaign 1",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_2",
+        "name": "Fixture Campaign 2",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_3",
+        "name": "Fixture Campaign 3",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_4",
+        "name": "Fixture Campaign 4",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_5",
+        "name": "Fixture Campaign 5",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_6",
+        "name": "Fixture Campaign 6",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_7",
+        "name": "Fixture Campaign 7",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_8",
+        "name": "Fixture Campaign 8",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_9",
+        "name": "Fixture Campaign 9",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_10",
+        "name": "Fixture Campaign 10",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_11",
+        "name": "Fixture Campaign 11",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_12",
+        "name": "Fixture Campaign 12",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_13",
+        "name": "Fixture Campaign 13",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_14",
+        "name": "Fixture Campaign 14",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_15",
+        "name": "Fixture Campaign 15",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_16",
+        "name": "Fixture Campaign 16",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_17",
+        "name": "Fixture Campaign 17",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_18",
+        "name": "Fixture Campaign 18",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_19",
+        "name": "Fixture Campaign 19",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_20",
+        "name": "Fixture Campaign 20",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_21",
+        "name": "Fixture Campaign 21",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_22",
+        "name": "Fixture Campaign 22",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_23",
+        "name": "Fixture Campaign 23",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_24",
+        "name": "Fixture Campaign 24",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_25",
+        "name": "Fixture Campaign 25",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_26",
+        "name": "Fixture Campaign 26",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_27",
+        "name": "Fixture Campaign 27",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_28",
+        "name": "Fixture Campaign 28",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_29",
+        "name": "Fixture Campaign 29",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_30",
+        "name": "Fixture Campaign 30",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_31",
+        "name": "Fixture Campaign 31",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_32",
+        "name": "Fixture Campaign 32",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_33",
+        "name": "Fixture Campaign 33",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_34",
+        "name": "Fixture Campaign 34",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_35",
+        "name": "Fixture Campaign 35",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_36",
+        "name": "Fixture Campaign 36",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_37",
+        "name": "Fixture Campaign 37",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_38",
+        "name": "Fixture Campaign 38",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_39",
+        "name": "Fixture Campaign 39",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_40",
+        "name": "Fixture Campaign 40",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_41",
+        "name": "Fixture Campaign 41",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_42",
+        "name": "Fixture Campaign 42",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_43",
+        "name": "Fixture Campaign 43",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_44",
+        "name": "Fixture Campaign 44",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_45",
+        "name": "Fixture Campaign 45",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_46",
+        "name": "Fixture Campaign 46",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_47",
+        "name": "Fixture Campaign 47",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_48",
+        "name": "Fixture Campaign 48",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_49",
+        "name": "Fixture Campaign 49",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_50",
+        "name": "Fixture Campaign 50",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_51",
+        "name": "Fixture Campaign 51",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_52",
+        "name": "Fixture Campaign 52",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_53",
+        "name": "Fixture Campaign 53",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_54",
+        "name": "Fixture Campaign 54",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_55",
+        "name": "Fixture Campaign 55",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_56",
+        "name": "Fixture Campaign 56",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_57",
+        "name": "Fixture Campaign 57",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_58",
+        "name": "Fixture Campaign 58",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_59",
+        "name": "Fixture Campaign 59",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_60",
+        "name": "Fixture Campaign 60",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_61",
+        "name": "Fixture Campaign 61",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_62",
+        "name": "Fixture Campaign 62",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_63",
+        "name": "Fixture Campaign 63",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_64",
+        "name": "Fixture Campaign 64",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_65",
+        "name": "Fixture Campaign 65",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_66",
+        "name": "Fixture Campaign 66",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_67",
+        "name": "Fixture Campaign 67",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_68",
+        "name": "Fixture Campaign 68",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_69",
+        "name": "Fixture Campaign 69",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_70",
+        "name": "Fixture Campaign 70",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_71",
+        "name": "Fixture Campaign 71",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_72",
+        "name": "Fixture Campaign 72",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_73",
+        "name": "Fixture Campaign 73",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_74",
+        "name": "Fixture Campaign 74",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_75",
+        "name": "Fixture Campaign 75",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_76",
+        "name": "Fixture Campaign 76",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_77",
+        "name": "Fixture Campaign 77",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_78",
+        "name": "Fixture Campaign 78",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_79",
+        "name": "Fixture Campaign 79",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_80",
+        "name": "Fixture Campaign 80",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_81",
+        "name": "Fixture Campaign 81",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_82",
+        "name": "Fixture Campaign 82",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_83",
+        "name": "Fixture Campaign 83",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_84",
+        "name": "Fixture Campaign 84",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_85",
+        "name": "Fixture Campaign 85",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_86",
+        "name": "Fixture Campaign 86",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_87",
+        "name": "Fixture Campaign 87",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_88",
+        "name": "Fixture Campaign 88",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_89",
+        "name": "Fixture Campaign 89",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_90",
+        "name": "Fixture Campaign 90",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_91",
+        "name": "Fixture Campaign 91",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_92",
+        "name": "Fixture Campaign 92",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_93",
+        "name": "Fixture Campaign 93",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_94",
+        "name": "Fixture Campaign 94",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_95",
+        "name": "Fixture Campaign 95",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_96",
+        "name": "Fixture Campaign 96",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_97",
+        "name": "Fixture Campaign 97",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_98",
+        "name": "Fixture Campaign 98",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_99",
+        "name": "Fixture Campaign 99",
+        "labels": [
+          "fixture"
+        ]
+      },
+      {
+        "_id": "cmp_fixture_100",
+        "name": "Fixture Campaign 100",
+        "labels": [
+          "fixture"
+        ]
+      }
+    ]
+  }
+}

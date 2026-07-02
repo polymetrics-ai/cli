@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zendesk Sunshine Connection Specification",
+  "type": "object",
+  "required": ["base_url", "email", "api_token"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Zendesk Sunshine API base URL (e.g. https://yoursubdomain.zendesk.com/api/sunshine). No derived default: must be provided explicitly (see docs.md Known limits)."
+    },
+    "email": {
+      "type": "string",
+      "description": "Zendesk agent email address, combined with api_token for HTTP Basic auth as '{email}/token'."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zendesk API token, used as the Basic auth password alongside '{email}/token' as the username."
+    }
+  }
+}

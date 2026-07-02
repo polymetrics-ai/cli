@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "channels",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "fname": { "type": ["string", "null"] },
+    "msgs": { "type": ["integer", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "stream": { "type": "string" }
+  }
+}

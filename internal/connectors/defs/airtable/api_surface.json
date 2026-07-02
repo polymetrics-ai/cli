@@ -1,0 +1,16 @@
+{
+  "api": "Airtable Web API (https://api.airtable.com/v0)",
+  "docs": "https://support.airtable.com/docs/airtable-api-deprecation-guidelines",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; Airtable record writes and webhook/comment/attachment sub-resources are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v0/meta/bases", "covered_by": { "stream": "bases" } },
+    { "method": "GET", "path": "/v0/meta/bases/{baseId}/tables", "covered_by": { "stream": "tables" } },
+    { "method": "GET", "path": "/v0/{baseId}/{tableId}", "covered_by": { "stream": "records" } },
+    { "method": "POST", "path": "/v0/{baseId}/{tableId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PATCH", "path": "/v0/{baseId}/{tableId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/v0/{baseId}/{tableId}/{recordId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v0/{baseId}/{tableId}/{recordId}/comments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

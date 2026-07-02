@@ -1,0 +1,18 @@
+{
+  "api": "WooCommerce REST API v3 (wc/v3)",
+  "docs": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams (orders, products, customers, coupons) only; the broader WooCommerce surface (refunds, shipping, taxes, reports, webhooks, order notes) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/wp-json/wc/v3/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/wp-json/wc/v3/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/wp-json/wc/v3/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/wp-json/wc/v3/coupons", "covered_by": { "stream": "coupons" } },
+    { "method": "POST", "path": "/wp-json/wc/v3/orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/wp-json/wc/v3/orders/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/wp-json/wc/v3/orders/{id}", "excluded": { "category": "destructive_admin", "reason": "reverse ETL delete not enabled for this connector" } },
+    { "method": "GET", "path": "/wp-json/wc/v3/refunds", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/wp-json/wc/v3/reports/sales", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/wp-json/wc/v3/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

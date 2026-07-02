@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "/agents" },
+    "error_map": [
+      { "status": 401, "hint": "zendesk-chat access_token is missing or invalid; re-run pm credentials add zendesk-chat" },
+      { "status": 429, "class": "rate_limited", "hint": "zendesk-chat rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "agents",
+      "path": "/agents",
+      "records": { "path": "." },
+      "schema": "schemas/agents.json"
+    },
+    {
+      "name": "chats",
+      "path": "/chats",
+      "records": { "path": "chats" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_url"
+      },
+      "incremental": {
+        "cursor_field": "timestamp",
+        "request_param": "start_time",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/chats.json"
+    },
+    {
+      "name": "departments",
+      "path": "/departments",
+      "records": { "path": "." },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "shortcuts",
+      "path": "/shortcuts",
+      "records": { "path": "." },
+      "schema": "schemas/shortcuts.json"
+    },
+    {
+      "name": "triggers",
+      "path": "/triggers",
+      "records": { "path": "." },
+      "schema": "schemas/triggers.json"
+    }
+  ]
+}

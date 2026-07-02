@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": { "page": "1", "pageSize": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "total": 0, "page": 1, "pageSize": 1, "events": [] }
+  }
+}

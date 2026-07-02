@@ -1,0 +1,61 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Revolut-Api-Version": "2023-09-01"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "query": {
+      "from_created_date": { "template": "{{ config.from_created_date }}", "omit_when_absent": true },
+      "to_created_date": { "template": "{{ config.to_created_date }}", "omit_when_absent": true },
+      "customer_id": { "template": "{{ config.customer_id }}", "omit_when_absent": true },
+      "state": { "template": "{{ config.state }}", "omit_when_absent": true }
+    },
+    "check": { "method": "GET", "path": "/orders", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "revolut-merchant api_key is missing or invalid; re-run pm credentials add revolut-merchant" },
+      { "status": 403, "hint": "revolut-merchant api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "revolut-merchant rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "orders",
+      "path": "/orders",
+      "records": { "path": "" },
+      "computed_fields": { "stream": "orders" },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": { "path": "" },
+      "computed_fields": { "stream": "customers" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "settlements",
+      "path": "/settlements",
+      "records": { "path": "" },
+      "computed_fields": { "stream": "settlements" },
+      "schema": "schemas/settlements.json"
+    },
+    {
+      "name": "payment_links",
+      "path": "/payment-links",
+      "records": { "path": "" },
+      "computed_fields": { "stream": "payment_links" },
+      "schema": "schemas/payment_links.json"
+    }
+  ]
+}

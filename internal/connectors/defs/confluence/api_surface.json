@@ -1,0 +1,21 @@
+{
+  "api": "Confluence Cloud REST API v2 (https://developer.atlassian.com/cloud/confluence/rest/v2/intro/)",
+  "docs": "https://developer.atlassian.com/cloud/confluence/rest/v2/intro/",
+  "reviewed_at": "2026-07-03",
+  "scope": "legacy-parity migration: the 5 legacy read streams only (spaces, pages, blogposts, labels, attachments); the full Confluence v2 surface (comments, content properties, custom content, folders, whiteboards, spaces permissions, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/wiki/api/v2/spaces", "covered_by": { "stream": "spaces" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages", "covered_by": { "stream": "pages" } },
+    { "method": "GET", "path": "/wiki/api/v2/blogposts", "covered_by": { "stream": "blogposts" } },
+    { "method": "GET", "path": "/wiki/api/v2/labels", "covered_by": { "stream": "labels" } },
+    { "method": "GET", "path": "/wiki/api/v2/attachments", "covered_by": { "stream": "attachments" } },
+    { "method": "GET", "path": "/wiki/api/v2/comments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/wiki/api/v2/content-properties", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/wiki/api/v2/custom-content", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/wiki/api/v2/folders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/wiki/api/v2/whiteboards", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/wiki/api/v2/pages", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/wiki/api/v2/pages/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/pages/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive write, no reverse-ETL use case for this port" } }
+  ]
+}

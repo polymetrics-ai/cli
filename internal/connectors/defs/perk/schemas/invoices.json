@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices",
+  "type": "object",
+  "x-primary-key": ["serial_number"],
+  "x-cursor-field": "issuing_date",
+  "required": ["serial_number"],
+  "properties": {
+    "serial_number": { "type": "string" },
+    "status": { "type": ["string", "null"] },
+    "issuing_date": { "type": ["string", "null"] },
+    "total": { "type": ["string", "null"] }
+  }
+}

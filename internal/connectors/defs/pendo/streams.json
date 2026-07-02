@@ -1,0 +1,50 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "x-pendo-integration-key", "value": "{{ secrets.integration_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "next"
+    },
+    "check": { "method": "GET", "path": "/visitor", "query": { "limit": "1", "page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "pendo integration_key is missing or invalid; re-run pm credentials add pendo" },
+      { "status": 403, "hint": "pendo account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "pendo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "visitors",
+      "path": "/visitor",
+      "query": { "limit": "{{ config.limit }}", "page": "1" },
+      "records": { "path": "data" },
+      "schema": "schemas/visitors.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/account",
+      "query": { "limit": "{{ config.limit }}", "page": "1" },
+      "records": { "path": "data" },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "pages",
+      "path": "/page",
+      "query": { "limit": "{{ config.limit }}", "page": "1" },
+      "records": { "path": "data" },
+      "schema": "schemas/pages.json"
+    },
+    {
+      "name": "features",
+      "path": "/feature",
+      "query": { "limit": "{{ config.limit }}", "page": "1" },
+      "records": { "path": "data" },
+      "schema": "schemas/features.json"
+    }
+  ]
+}

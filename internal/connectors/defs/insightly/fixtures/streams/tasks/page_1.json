@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/Tasks", "query": { "top": "100", "skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "TASK_ID": 501,
+        "TITLE": "Fixture Task 1",
+        "STATUS": "IN PROGRESS",
+        "PRIORITY": 2,
+        "COMPLETED": false,
+        "DUE_DATE": "2026-02-01 00:00:00",
+        "OWNER_USER_ID": 1,
+        "DATE_CREATED_UTC": "2026-01-01 00:00:00",
+        "DATE_UPDATED_UTC": "2026-01-01 00:00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "api": "ActiveCampaign API v3 (https://<account>.api-us1.com/api/3)",
+  "docs": "https://developers.activecampaign.com/reference/overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; ActiveCampaign is read-only here (no reverse-ETL writes), matching legacy. The full ActiveCampaign v3 surface (automations, tags, custom fields, tasks, deal notes, etc.) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/3/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/api/3/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/api/3/deals", "covered_by": { "stream": "deals" } },
+    { "method": "GET", "path": "/api/3/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "POST", "path": "/api/3/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/api/3/contacts/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/3/automations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/3/tags", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/3/fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/3/dealTasks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

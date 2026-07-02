@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/plans", "query": { "limit": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        { "id": "plan_fixture_1", "code": "fixture-plan-1", "name": "Fixture Plan 1", "state": "active", "updated_at": "2026-01-02T00:00:00Z" },
+        { "id": "plan_fixture_2", "code": "fixture-plan-2", "name": "Fixture Plan 2", "state": "active", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

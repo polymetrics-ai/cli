@@ -1,0 +1,15 @@
+{
+  "api": "Sigma Computing REST API v2 (https://help.sigmacomputing.com/reference/api-overview)",
+  "docs": "https://help.sigmacomputing.com/reference/api-overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (workbooks, datasets, teams, members). Sigma's write endpoints (workbook/dataset create/update, member invite) are out of scope for this wave (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/workbooks", "covered_by": { "stream": "workbooks" } },
+    { "method": "GET", "path": "/v2/datasets", "covered_by": { "stream": "datasets" } },
+    { "method": "GET", "path": "/v2/teams", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/v2/members", "covered_by": { "stream": "members" } },
+    { "method": "POST", "path": "/v2/members", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented member invitation; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/workbooks/{workbookId}/versions", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/connections", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

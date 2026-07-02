@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apikey", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/ssls" },
+    "error_map": [
+      { "status": 401, "hint": "open-data-dc api key is missing or invalid; re-run pm credentials add open-data-dc" },
+      { "status": 429, "class": "rate_limited", "hint": "open-data-dc rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "locations",
+      "path": "/locations/{{ config.location }}",
+      "records": { "path": "Result.addresses" },
+      "computed_fields": {
+        "MarId": "{{ record.address.properties.MarId }}",
+        "FullAddress": "{{ record.address.properties.FullAddress }}",
+        "SSL": "{{ record.address.properties.SSL }}",
+        "StName": "{{ record.address.properties.StName }}",
+        "AddrNum": "{{ record.address.properties.AddrNum }}",
+        "Quadrant": "{{ record.address.properties.Quadrant }}",
+        "Ward": "{{ record.address.properties.Ward }}",
+        "Anc": "{{ record.address.properties.Anc }}",
+        "Zipcode": "{{ record.address.properties.Zipcode }}",
+        "Status": "{{ record.address.properties.Status }}",
+        "ResidenceType": "{{ record.address.properties.ResidenceType }}",
+        "CensusTract": "{{ record.address.properties.CensusTract }}",
+        "Latitude": "{{ record.address.properties.Latitude }}",
+        "Longitude": "{{ record.address.properties.Longitude }}",
+        "Xcoord": "{{ record.address.properties.Xcoord }}",
+        "Ycoord": "{{ record.address.properties.Ycoord }}",
+        "distance": "{{ record.distance }}"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "units",
+      "path": "/units/{{ config.marid }}",
+      "records": { "path": "Result.units" },
+      "schema": "schemas/units.json"
+    },
+    {
+      "name": "ssls",
+      "path": "/ssls",
+      "query": {
+        "marid": { "template": "{{ config.marid }}", "omit_when_absent": true }
+      },
+      "records": { "path": "Result.ssls" },
+      "schema": "schemas/ssls.json"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "sendowl",
+  "display_name": "SendOwl",
+  "description": "Reads SendOwl orders, products, and subscriptions through the SendOwl API.",
+  "integration_type": "api",
+  "docs_url": "https://www.sendowl.com/developers/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external SendOwl API read of order, product, and subscription data"
+  }
+}

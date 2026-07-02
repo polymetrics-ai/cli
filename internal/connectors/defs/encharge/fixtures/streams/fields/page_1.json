@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/fields" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "name": "email", "title": "Email", "type": "string", "format": "text" },
+        { "name": "signup_count", "title": "Signup Count", "type": "number", "format": "number" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/shipments", "query": { "page_size": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "shipments": [
+        { "id": "shp_fixture_1", "object": "Shipment", "mode": "test", "created_at": "2026-01-01T00:00:00Z", "status": "delivered" }
+      ],
+      "has_more": false
+    }
+  }
+}

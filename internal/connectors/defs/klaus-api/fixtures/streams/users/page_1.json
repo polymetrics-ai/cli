@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/account/synthetic-conformance-value/users" },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        { "id": "u_fixture_1", "name": "Fixture User 1", "email": "fixture1@example.com" },
+        { "id": "u_fixture_2", "name": "Fixture User 2", "email": "fixture2@example.com" }
+      ]
+    }
+  }
+}

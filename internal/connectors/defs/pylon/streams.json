@@ -1,0 +1,84 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "pagination.next_cursor"
+    },
+    "check": { "method": "GET", "path": "/issues", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "pylon api_token is missing or invalid; re-run pm credentials add pylon" },
+      { "status": 403, "hint": "pylon account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "pylon rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "issues",
+      "path": "/issues",
+      "query": {
+        "limit": "100",
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/issues.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "query": {
+        "limit": "100",
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "query": {
+        "limit": "100",
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": {
+        "limit": "100",
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "messages",
+      "path": "/messages",
+      "query": {
+        "limit": "100",
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/messages.json"
+    }
+  ]
+}

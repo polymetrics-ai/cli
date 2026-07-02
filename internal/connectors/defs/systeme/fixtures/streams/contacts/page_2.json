@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "contact_fixture_101",
+          "email": "fixture101@example.com",
+          "createdAt": "2026-01-05T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

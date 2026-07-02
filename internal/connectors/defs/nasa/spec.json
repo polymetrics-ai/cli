@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NASA Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "NASA Open API key, sent as the api_key query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.nasa.gov",
+      "description": "NASA API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Start date (YYYY-MM-DD) filter for apod and neo_feed."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "End date (YYYY-MM-DD) filter for apod and neo_feed."
+    },
+    "count": {
+      "type": "string",
+      "description": "Number of random apod entries to return (apod only)."
+    },
+    "thumbs": {
+      "type": "string",
+      "description": "Set to true to include video thumbnail URLs (apod only)."
+    },
+    "sol": {
+      "type": "string",
+      "default": "1000",
+      "description": "Martian sol (day) to filter mars_photos by."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "5",
+      "description": "Maximum pages for neo_browse pagination; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

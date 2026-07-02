@@ -1,0 +1,17 @@
+{
+  "api": "Mailchimp Marketing API v3 (https://<dc>.api.mailchimp.com/3.0)",
+  "docs": "https://mailchimp.com/developer/release-notes/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Mailchimp Marketing API surface (audience members, automations workflow-emails sub-resource, templates, e-commerce stores, webhooks, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/reports", "covered_by": { "stream": "reports" } },
+    { "method": "GET", "path": "/automations", "covered_by": { "stream": "automations" } },
+    { "method": "GET", "path": "/lists/{list_id}/members", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/lists/{list_id}/members", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/templates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/ecommerce/stores", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

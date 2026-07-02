@@ -1,0 +1,108 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page_token",
+      "token_path": "next_page_token"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/air-quality/v2/current-conditions",
+      "query": { "features": "local_aqi" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "breezometer api_key is missing or invalid; re-run pm credentials add breezometer" },
+      { "status": 403, "hint": "breezometer api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "breezometer rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "air_quality_current",
+      "path": "/air-quality/v2/current-conditions",
+      "query": {
+        "lat": "{{ config.latitude }}",
+        "lon": "{{ config.longitude }}",
+        "features": "local_aqi"
+      },
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "datetime" },
+      "computed_fields": {
+        "latitude": "{{ config.latitude }}",
+        "longitude": "{{ config.longitude }}"
+      },
+      "schema": "schemas/air_quality_current.json"
+    },
+    {
+      "name": "air_quality_forecast",
+      "path": "/air-quality/v2/forecast/hourly",
+      "query": {
+        "lat": "{{ config.latitude }}",
+        "lon": "{{ config.longitude }}",
+        "features": "local_aqi",
+        "hours": { "template": "{{ config.hours_to_forecast }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "datetime" },
+      "computed_fields": {
+        "latitude": "{{ config.latitude }}",
+        "longitude": "{{ config.longitude }}"
+      },
+      "schema": "schemas/air_quality_forecast.json"
+    },
+    {
+      "name": "air_quality_history",
+      "path": "/air-quality/v2/historical/hourly",
+      "query": {
+        "lat": "{{ config.latitude }}",
+        "lon": "{{ config.longitude }}",
+        "features": "local_aqi",
+        "hours": { "template": "{{ config.historic_hours }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "datetime" },
+      "computed_fields": {
+        "latitude": "{{ config.latitude }}",
+        "longitude": "{{ config.longitude }}"
+      },
+      "schema": "schemas/air_quality_history.json"
+    },
+    {
+      "name": "pollen_forecast",
+      "path": "/pollen/v2/forecast/daily",
+      "query": {
+        "lat": "{{ config.latitude }}",
+        "lon": "{{ config.longitude }}",
+        "days": { "template": "{{ config.days_to_forecast }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "datetime" },
+      "computed_fields": {
+        "datetime": "{{ record.date }}",
+        "latitude": "{{ config.latitude }}",
+        "longitude": "{{ config.longitude }}"
+      },
+      "schema": "schemas/pollen_forecast.json"
+    },
+    {
+      "name": "weather_current",
+      "path": "/weather/v1/current-conditions",
+      "query": {
+        "lat": "{{ config.latitude }}",
+        "lon": "{{ config.longitude }}"
+      },
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "datetime" },
+      "computed_fields": {
+        "latitude": "{{ config.latitude }}",
+        "longitude": "{{ config.longitude }}"
+      },
+      "schema": "schemas/weather_current.json"
+    }
+  ]
+}

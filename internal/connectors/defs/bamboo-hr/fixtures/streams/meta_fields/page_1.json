@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/meta/fields" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "First Name", "type": "text", "alias": "firstName", "deprecated": false },
+      { "id": 2, "name": "Last Name", "type": "text", "alias": "lastName", "deprecated": false }
+    ]
+  }
+}

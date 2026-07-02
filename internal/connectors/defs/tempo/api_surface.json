@@ -1,0 +1,18 @@
+{
+  "api": "Tempo Cloud REST API v4 (https://api.tempo.io/4)",
+  "docs": "https://apidocs.tempo.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (accounts, customers, worklogs, workload-schemes); Tempo is read-only in legacy and the full Tempo surface (teams, plans, approvals, schedules, roles, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/4/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/4/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/4/worklogs", "covered_by": { "stream": "worklogs" } },
+    { "method": "GET", "path": "/4/workload-schemes", "covered_by": { "stream": "workload_schemes" } },
+    { "method": "GET", "path": "/4/teams", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/4/plans", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/4/approvals", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/4/schedules", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/4/roles", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/4/worklogs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy connector is read-only" } }
+  ]
+}

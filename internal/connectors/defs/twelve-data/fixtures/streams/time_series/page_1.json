@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/time_series" },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "symbol": "synthetic-conformance-value", "interval": "synthetic-conformance-value" },
+      "values": [
+        { "datetime": "2026-01-02", "open": "100.00", "high": "112.00", "low": "99.00", "close": "110.00", "volume": "1200" },
+        { "datetime": "2026-01-01", "open": "98.00", "high": "101.00", "low": "97.00", "close": "100.00", "volume": "1100" }
+      ],
+      "status": "ok"
+    }
+  }
+}

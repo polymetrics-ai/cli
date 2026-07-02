@@ -1,0 +1,23 @@
+{
+  "name": "zoho-invoice",
+  "display_name": "Zoho Invoice",
+  "description": "Reads Zoho Invoice customers, invoices, and payments through the Zoho Invoice REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.zoho.com/invoice/api/v3/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Zoho Invoice API read of customer/invoice/payment data",
+    "approval": "none; read-only"
+  }
+}

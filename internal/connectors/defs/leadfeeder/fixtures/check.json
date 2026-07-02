@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "page[size]": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [{ "id": "acct_fixture_1", "type": "account", "attributes": { "name": "Fixture Co" } }], "links": { "next": null } }
+  }
+}

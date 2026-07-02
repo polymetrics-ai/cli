@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "account_me",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "language": { "type": ["string", "null"] },
+    "timezone": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "permission": { "type": ["string", "null"] }
+  }
+}

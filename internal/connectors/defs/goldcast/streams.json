@@ -1,0 +1,63 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.access_key }}", "prefix": "Token " }
+    ],
+    "check": { "method": "GET", "path": "/event/" },
+    "error_map": [
+      { "status": 401, "hint": "goldcast access key is missing or invalid; re-run pm credentials add goldcast" },
+      { "status": 403, "hint": "goldcast account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "goldcast rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "organizations",
+      "path": "/core/organization/",
+      "records": { "path": "." },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "events",
+      "path": "/event/",
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "agenda_items",
+      "path": "/event/agenda-item/",
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "schema": "schemas/agenda_items.json"
+    },
+    {
+      "name": "discussion_groups",
+      "path": "/event/discussion-groups/",
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "schema": "schemas/discussion_groups.json"
+    },
+    {
+      "name": "tracks",
+      "path": "/event/tracks/",
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "schema": "schemas/tracks.json"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SurveySparrow Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SurveySparrow access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.surveysparrow.com/v3",
+      "description": "SurveySparrow API base URL override for tests or proxies."
+    },
+    "survey_id": {
+      "type": "string",
+      "description": "SurveySparrow survey ID that the 'questions' stream is scoped to (required for that stream; substituted into the survey-scoped path). Not required for the other 3 streams."
+    }
+  }
+}

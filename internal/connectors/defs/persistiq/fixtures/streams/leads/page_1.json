@@ -1,0 +1,617 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/leads",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "leads": [
+        {
+          "id": "lead_fixture_1",
+          "name": "Fixture Lead 1",
+          "email": "fixture1@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_2",
+          "name": "Fixture Lead 2",
+          "email": "fixture2@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_3",
+          "name": "Fixture Lead 3",
+          "email": "fixture3@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_4",
+          "name": "Fixture Lead 4",
+          "email": "fixture4@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_5",
+          "name": "Fixture Lead 5",
+          "email": "fixture5@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_6",
+          "name": "Fixture Lead 6",
+          "email": "fixture6@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_7",
+          "name": "Fixture Lead 7",
+          "email": "fixture7@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_8",
+          "name": "Fixture Lead 8",
+          "email": "fixture8@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_9",
+          "name": "Fixture Lead 9",
+          "email": "fixture9@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_10",
+          "name": "Fixture Lead 10",
+          "email": "fixture10@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_11",
+          "name": "Fixture Lead 11",
+          "email": "fixture11@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_12",
+          "name": "Fixture Lead 12",
+          "email": "fixture12@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_13",
+          "name": "Fixture Lead 13",
+          "email": "fixture13@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_14",
+          "name": "Fixture Lead 14",
+          "email": "fixture14@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_15",
+          "name": "Fixture Lead 15",
+          "email": "fixture15@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_16",
+          "name": "Fixture Lead 16",
+          "email": "fixture16@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_17",
+          "name": "Fixture Lead 17",
+          "email": "fixture17@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_18",
+          "name": "Fixture Lead 18",
+          "email": "fixture18@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_19",
+          "name": "Fixture Lead 19",
+          "email": "fixture19@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_20",
+          "name": "Fixture Lead 20",
+          "email": "fixture20@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_21",
+          "name": "Fixture Lead 21",
+          "email": "fixture21@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_22",
+          "name": "Fixture Lead 22",
+          "email": "fixture22@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_23",
+          "name": "Fixture Lead 23",
+          "email": "fixture23@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_24",
+          "name": "Fixture Lead 24",
+          "email": "fixture24@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_25",
+          "name": "Fixture Lead 25",
+          "email": "fixture25@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_26",
+          "name": "Fixture Lead 26",
+          "email": "fixture26@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_27",
+          "name": "Fixture Lead 27",
+          "email": "fixture27@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_28",
+          "name": "Fixture Lead 28",
+          "email": "fixture28@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_29",
+          "name": "Fixture Lead 29",
+          "email": "fixture29@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_30",
+          "name": "Fixture Lead 30",
+          "email": "fixture30@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_31",
+          "name": "Fixture Lead 31",
+          "email": "fixture31@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_32",
+          "name": "Fixture Lead 32",
+          "email": "fixture32@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_33",
+          "name": "Fixture Lead 33",
+          "email": "fixture33@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_34",
+          "name": "Fixture Lead 34",
+          "email": "fixture34@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_35",
+          "name": "Fixture Lead 35",
+          "email": "fixture35@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_36",
+          "name": "Fixture Lead 36",
+          "email": "fixture36@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_37",
+          "name": "Fixture Lead 37",
+          "email": "fixture37@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_38",
+          "name": "Fixture Lead 38",
+          "email": "fixture38@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_39",
+          "name": "Fixture Lead 39",
+          "email": "fixture39@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_40",
+          "name": "Fixture Lead 40",
+          "email": "fixture40@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_41",
+          "name": "Fixture Lead 41",
+          "email": "fixture41@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_42",
+          "name": "Fixture Lead 42",
+          "email": "fixture42@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_43",
+          "name": "Fixture Lead 43",
+          "email": "fixture43@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_44",
+          "name": "Fixture Lead 44",
+          "email": "fixture44@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_45",
+          "name": "Fixture Lead 45",
+          "email": "fixture45@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_46",
+          "name": "Fixture Lead 46",
+          "email": "fixture46@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_47",
+          "name": "Fixture Lead 47",
+          "email": "fixture47@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_48",
+          "name": "Fixture Lead 48",
+          "email": "fixture48@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_49",
+          "name": "Fixture Lead 49",
+          "email": "fixture49@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_50",
+          "name": "Fixture Lead 50",
+          "email": "fixture50@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_51",
+          "name": "Fixture Lead 51",
+          "email": "fixture51@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_52",
+          "name": "Fixture Lead 52",
+          "email": "fixture52@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_53",
+          "name": "Fixture Lead 53",
+          "email": "fixture53@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_54",
+          "name": "Fixture Lead 54",
+          "email": "fixture54@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_55",
+          "name": "Fixture Lead 55",
+          "email": "fixture55@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_56",
+          "name": "Fixture Lead 56",
+          "email": "fixture56@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_57",
+          "name": "Fixture Lead 57",
+          "email": "fixture57@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_58",
+          "name": "Fixture Lead 58",
+          "email": "fixture58@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_59",
+          "name": "Fixture Lead 59",
+          "email": "fixture59@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_60",
+          "name": "Fixture Lead 60",
+          "email": "fixture60@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_61",
+          "name": "Fixture Lead 61",
+          "email": "fixture61@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_62",
+          "name": "Fixture Lead 62",
+          "email": "fixture62@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_63",
+          "name": "Fixture Lead 63",
+          "email": "fixture63@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_64",
+          "name": "Fixture Lead 64",
+          "email": "fixture64@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_65",
+          "name": "Fixture Lead 65",
+          "email": "fixture65@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_66",
+          "name": "Fixture Lead 66",
+          "email": "fixture66@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_67",
+          "name": "Fixture Lead 67",
+          "email": "fixture67@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_68",
+          "name": "Fixture Lead 68",
+          "email": "fixture68@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_69",
+          "name": "Fixture Lead 69",
+          "email": "fixture69@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_70",
+          "name": "Fixture Lead 70",
+          "email": "fixture70@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_71",
+          "name": "Fixture Lead 71",
+          "email": "fixture71@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_72",
+          "name": "Fixture Lead 72",
+          "email": "fixture72@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_73",
+          "name": "Fixture Lead 73",
+          "email": "fixture73@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_74",
+          "name": "Fixture Lead 74",
+          "email": "fixture74@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_75",
+          "name": "Fixture Lead 75",
+          "email": "fixture75@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_76",
+          "name": "Fixture Lead 76",
+          "email": "fixture76@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_77",
+          "name": "Fixture Lead 77",
+          "email": "fixture77@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_78",
+          "name": "Fixture Lead 78",
+          "email": "fixture78@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_79",
+          "name": "Fixture Lead 79",
+          "email": "fixture79@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_80",
+          "name": "Fixture Lead 80",
+          "email": "fixture80@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_81",
+          "name": "Fixture Lead 81",
+          "email": "fixture81@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_82",
+          "name": "Fixture Lead 82",
+          "email": "fixture82@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_83",
+          "name": "Fixture Lead 83",
+          "email": "fixture83@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_84",
+          "name": "Fixture Lead 84",
+          "email": "fixture84@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_85",
+          "name": "Fixture Lead 85",
+          "email": "fixture85@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_86",
+          "name": "Fixture Lead 86",
+          "email": "fixture86@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_87",
+          "name": "Fixture Lead 87",
+          "email": "fixture87@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_88",
+          "name": "Fixture Lead 88",
+          "email": "fixture88@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_89",
+          "name": "Fixture Lead 89",
+          "email": "fixture89@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_90",
+          "name": "Fixture Lead 90",
+          "email": "fixture90@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_91",
+          "name": "Fixture Lead 91",
+          "email": "fixture91@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_92",
+          "name": "Fixture Lead 92",
+          "email": "fixture92@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_93",
+          "name": "Fixture Lead 93",
+          "email": "fixture93@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_94",
+          "name": "Fixture Lead 94",
+          "email": "fixture94@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_95",
+          "name": "Fixture Lead 95",
+          "email": "fixture95@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_96",
+          "name": "Fixture Lead 96",
+          "email": "fixture96@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_97",
+          "name": "Fixture Lead 97",
+          "email": "fixture97@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_98",
+          "name": "Fixture Lead 98",
+          "email": "fixture98@example.com",
+          "status": "active"
+        },
+        {
+          "id": "lead_fixture_99",
+          "name": "Fixture Lead 99",
+          "email": "fixture99@example.com",
+          "status": "paused"
+        },
+        {
+          "id": "lead_fixture_100",
+          "name": "Fixture Lead 100",
+          "email": "fixture100@example.com",
+          "status": "active"
+        }
+      ]
+    }
+  }
+}

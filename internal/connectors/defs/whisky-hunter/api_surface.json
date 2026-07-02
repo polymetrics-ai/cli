@@ -1,0 +1,10 @@
+{
+  "api": "Whisky Hunter public API (https://whiskyhunter.net/api/)",
+  "docs": "https://whiskyhunter.net/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (auctions, distilleries); legacy exposes no other endpoints and ships no writes.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/auctions_data/", "covered_by": { "stream": "auctions" } },
+    { "method": "GET", "path": "/api/distilleries_info/", "covered_by": { "stream": "distilleries" } }
+  ]
+}

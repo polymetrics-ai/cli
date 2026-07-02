@@ -1,0 +1,23 @@
+{
+  "name": "mailjet-sms",
+  "display_name": "Mailjet SMS",
+  "description": "Reads outbound SMS messages and SMS counts from the Mailjet SMS API (full refresh, read-only).",
+  "integration_type": "api",
+  "docs_url": "https://dev.mailjet.com/sms/reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Mailjet SMS API read of outbound SMS message data",
+    "approval": "none; read-only source connector"
+  }
+}

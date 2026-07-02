@@ -1,0 +1,55 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "pagination.nextPageCursor"
+    },
+    "check": { "method": "GET", "path": "/commerce/orders", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "squarespace api_key is missing or invalid; re-run pm credentials add squarespace" },
+      { "status": 429, "class": "rate_limited", "hint": "squarespace rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "orders",
+      "path": "/commerce/orders",
+      "query": { "limit": "100" },
+      "records": { "path": "result" },
+      "incremental": {
+        "cursor_field": "modifiedOn"
+      },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "products",
+      "path": "/commerce/products",
+      "query": { "limit": "100" },
+      "records": { "path": "result" },
+      "incremental": {
+        "cursor_field": "modifiedOn"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "inventory",
+      "path": "/commerce/inventory",
+      "query": { "limit": "100" },
+      "records": { "path": "result" },
+      "schema": "schemas/inventory.json"
+    },
+    {
+      "name": "profiles",
+      "path": "/profiles",
+      "query": { "limit": "100" },
+      "records": { "path": "profiles" },
+      "schema": "schemas/profiles.json"
+    }
+  ]
+}

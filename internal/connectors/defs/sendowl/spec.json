@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SendOwl Connection Specification",
+  "type": "object",
+  "required": ["username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "SendOwl API key, sent as the HTTP Basic username."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SendOwl API secret, sent as the HTTP Basic password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.sendowl.com/api/v1",
+      "description": "SendOwl API base URL. Defaults to https://www.sendowl.com/api/v1, matching legacy's in-code default. Also usable as a base URL override for tests/proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

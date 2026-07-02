@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "domains",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "is_disabled": { "type": ["boolean", "null"] },
+    "smtp_login": { "type": ["string", "null"] },
+    "spam_action": { "type": ["string", "null"] },
+    "wildcard": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

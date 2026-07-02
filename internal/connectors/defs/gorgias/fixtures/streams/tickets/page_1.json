@@ -1,0 +1,43 @@
+{
+  "request": { "method": "GET", "path": "/tickets", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "subject": "Fixture ticket 1",
+          "status": "open",
+          "channel": "email",
+          "via": "email",
+          "priority": "normal",
+          "language": "en",
+          "is_unread": false,
+          "spam": false,
+          "trashed_datetime": null,
+          "created_datetime": "2026-01-01T00:00:01Z",
+          "updated_datetime": "2026-01-02T00:00:01Z",
+          "opened_datetime": "2026-01-01T00:05:00Z",
+          "closed_datetime": null
+        },
+        {
+          "id": 2,
+          "subject": "Fixture ticket 2",
+          "status": "closed",
+          "channel": "email",
+          "via": "email",
+          "priority": "low",
+          "language": "en",
+          "is_unread": false,
+          "spam": false,
+          "trashed_datetime": null,
+          "created_datetime": "2026-01-01T00:00:02Z",
+          "updated_datetime": "2026-01-02T00:00:02Z",
+          "opened_datetime": "2026-01-01T00:06:00Z",
+          "closed_datetime": "2026-01-03T00:00:00Z"
+        }
+      ],
+      "meta": { "next_cursor": "fixture_cursor_2" }
+    }
+  }
+}

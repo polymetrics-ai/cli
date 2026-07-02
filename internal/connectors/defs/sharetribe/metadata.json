@@ -1,0 +1,23 @@
+{
+  "name": "sharetribe",
+  "display_name": "Sharetribe",
+  "description": "Reads Sharetribe listings, users, transactions, and events through the Sharetribe Integration API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://www.sharetribe.com/api-reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Sharetribe Integration API read of listing, user, transaction, and event data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

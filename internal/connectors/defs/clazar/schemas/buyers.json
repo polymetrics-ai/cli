@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "buyers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_modified_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "cloud": { "type": ["string", "null"] },
+    "domain": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "listing_id": { "type": ["string", "null"] },
+    "cloud_account_id": { "type": ["string", "null"] },
+    "latest_contract_id": { "type": ["string", "null"] },
+    "last_modified_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

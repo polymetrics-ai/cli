@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RingCentral Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "RingCentral OAuth2 access token, sent as an Authorization: Bearer <access_token> header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://platform.ringcentral.com/restapi/v1.0",
+      "description": "RingCentral API base URL override for tests or proxies."
+    },
+    "dateFrom": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return call-log/message records at or after this value."
+    },
+    "dateTo": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return call-log/message records at or before this value."
+    },
+    "type": {
+      "type": "string",
+      "description": "Optional passthrough filter: scope the call-log stream to a single call type."
+    },
+    "messageType": {
+      "type": "string",
+      "description": "Optional passthrough filter: scope the messages stream to a single message type."
+    },
+    "direction": {
+      "type": "string",
+      "description": "Optional passthrough filter: scope the call-log/messages streams to a single direction (Inbound/Outbound)."
+    }
+  }
+}

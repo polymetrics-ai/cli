@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/auth/test" },
+  "response": {
+    "status": 200,
+    "body": { "success": true }
+  }
+}

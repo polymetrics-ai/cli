@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/greeting_categories", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "greeting_categories": [
+        { "id": 1, "name": "Fixture Category" }
+      ],
+      "next_page": null
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "api": "Track PMS API (https://www.trackhs.com/api)",
+  "docs": "https://www.trackhs.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (reservations, guests, units, owners). Track PMS write endpoints (create/update reservation, guest, unit) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/reservations", "covered_by": { "stream": "reservations" } },
+    { "method": "GET", "path": "/guests", "covered_by": { "stream": "guests" } },
+    { "method": "GET", "path": "/units", "covered_by": { "stream": "units" } },
+    { "method": "GET", "path": "/owners", "covered_by": { "stream": "owners" } },
+    { "method": "POST", "path": "/reservations", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented reservation creation; Pass B capability expansion" } },
+    { "method": "PUT", "path": "/reservations/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented reservation mutation; Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/reservations/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive delete not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

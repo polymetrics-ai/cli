@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "members",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "fullName": { "type": ["string", "null"] },
+    "givenName": { "type": ["string", "null"] },
+    "familyName": { "type": ["string", "null"] },
+    "isActive": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["number", "null"] },
+    "lastSeenAt": { "type": ["number", "null"] },
+    "boardIds": { "type": ["array", "null"] }
+  }
+}

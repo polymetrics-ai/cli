@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/users/synthetic-conformance-value/projects",
+    "query": {
+      "Limit": "100",
+      "Offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Items": [
+          {
+            "Id": "project_fixture_101",
+            "Name": "Fixture Project 101",
+            "Href": "v1pre3/projects/project_fixture_101",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 101000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          }
+        ],
+        "Offset": 100,
+        "Limit": 100,
+        "TotalCount": 101
+      }
+    }
+  }
+}

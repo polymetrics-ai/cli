@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/admins"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "list",
+      "data": [
+        {
+          "id": "admin_fixture_1",
+          "type": "admin",
+          "name": "Fixture Admin",
+          "email": "admin@example.com",
+          "job_title": "Support",
+          "away_mode_enabled": false,
+          "away_mode_reassign": false,
+          "has_inbox_seat": true
+        }
+      ]
+    }
+  }
+}

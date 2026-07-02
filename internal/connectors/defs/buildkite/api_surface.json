@@ -1,0 +1,17 @@
+{
+  "api": "Buildkite REST API v2 (https://api.buildkite.com/v2)",
+  "docs": "https://buildkite.com/docs/apis/rest-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Buildkite surface (artifacts, annotations, jobs, teams, webhooks, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/organizations", "covered_by": { "stream": "organizations" } },
+    { "method": "GET", "path": "/v2/organizations/{org.slug}/pipelines", "covered_by": { "stream": "pipelines" } },
+    { "method": "GET", "path": "/v2/organizations/{org.slug}/builds", "covered_by": { "stream": "builds" } },
+    { "method": "GET", "path": "/v2/organizations/{org.slug}/agents", "covered_by": { "stream": "agents" } },
+    { "method": "GET", "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/artifacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/jobs/{job.id}/log", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/organizations/{org.slug}/teams", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

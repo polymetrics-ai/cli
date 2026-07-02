@@ -1,0 +1,10 @@
+{
+  "api": "CIMIS Web API (https://et.water.ca.gov/api)",
+  "docs": "https://cimis.water.ca.gov/WSNReportCriteria.aspx",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: only the stations stream is Tier-1 expressible; daily/hourly are a nested-array-of-arrays-plus-dynamic-key-flatten shape the engine's declarative record extraction cannot express (see docs.md Known limits) and remain on the legacy connector.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/station", "covered_by": { "stream": "stations" } },
+    { "method": "GET", "path": "/api/data", "excluded": { "category": "out_of_scope", "reason": "records live nested at Data.Providers[].Records[] (an array within an array; the engine's RecordsAt only descends object keys via a dotted path, and cannot flatten across a dynamic number of provider entries), and each record's data-item fields (e.g. DayAirTmpAvg) are a DYNAMIC set of nested {Value,Qc,Unit} objects (driven by the requested dataItems config) each of which legacy flattens into 3 synthetic sibling fields (<Item>_Value/_Qc/_Unit) per key present -- there is no dotted-path wildcard or per-key dynamic-flatten primitive in computed_fields. Genuine ENGINE_GAP, tracked for a follow-up wave; covers both the daily and hourly legacy streams." } }
+  ]
+}

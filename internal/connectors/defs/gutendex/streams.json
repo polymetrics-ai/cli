@@ -1,0 +1,100 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "next"
+    },
+    "check": { "method": "GET", "path": "/books/" },
+    "error_map": [
+      { "status": 429, "class": "rate_limited", "hint": "gutendex rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "books",
+      "path": "/books/",
+      "query": {
+        "search": { "template": "{{ config.search }}", "omit_when_absent": true },
+        "languages": { "template": "{{ config.languages }}", "omit_when_absent": true },
+        "topic": { "template": "{{ config.topic }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true },
+        "copyright": { "template": "{{ config.copyright }}", "omit_when_absent": true },
+        "author_year_start": { "template": "{{ config.author_year_start }}", "omit_when_absent": true },
+        "author_year_end": { "template": "{{ config.author_year_end }}", "omit_when_absent": true },
+        "ids": { "template": "{{ config.ids }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "languages": "{{ record.languages | join:, }}",
+        "subjects": "{{ record.subjects | join:, }}",
+        "bookshelves": "{{ record.bookshelves | join:, }}"
+      },
+      "schema": "schemas/books.json"
+    },
+    {
+      "name": "popular_books",
+      "path": "/books/",
+      "query": {
+        "sort": "popular",
+        "search": { "template": "{{ config.search }}", "omit_when_absent": true },
+        "languages": { "template": "{{ config.languages }}", "omit_when_absent": true },
+        "topic": { "template": "{{ config.topic }}", "omit_when_absent": true },
+        "copyright": { "template": "{{ config.copyright }}", "omit_when_absent": true },
+        "author_year_start": { "template": "{{ config.author_year_start }}", "omit_when_absent": true },
+        "author_year_end": { "template": "{{ config.author_year_end }}", "omit_when_absent": true },
+        "ids": { "template": "{{ config.ids }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "languages": "{{ record.languages | join:, }}",
+        "subjects": "{{ record.subjects | join:, }}",
+        "bookshelves": "{{ record.bookshelves | join:, }}"
+      },
+      "schema": "schemas/popular_books.json"
+    },
+    {
+      "name": "latest_books",
+      "path": "/books/",
+      "query": {
+        "sort": "descending",
+        "search": { "template": "{{ config.search }}", "omit_when_absent": true },
+        "languages": { "template": "{{ config.languages }}", "omit_when_absent": true },
+        "topic": { "template": "{{ config.topic }}", "omit_when_absent": true },
+        "copyright": { "template": "{{ config.copyright }}", "omit_when_absent": true },
+        "author_year_start": { "template": "{{ config.author_year_start }}", "omit_when_absent": true },
+        "author_year_end": { "template": "{{ config.author_year_end }}", "omit_when_absent": true },
+        "ids": { "template": "{{ config.ids }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "languages": "{{ record.languages | join:, }}",
+        "subjects": "{{ record.subjects | join:, }}",
+        "bookshelves": "{{ record.bookshelves | join:, }}"
+      },
+      "schema": "schemas/latest_books.json"
+    },
+    {
+      "name": "english_books",
+      "path": "/books/",
+      "query": {
+        "languages": "en",
+        "search": { "template": "{{ config.search }}", "omit_when_absent": true },
+        "topic": { "template": "{{ config.topic }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true },
+        "copyright": { "template": "{{ config.copyright }}", "omit_when_absent": true },
+        "author_year_start": { "template": "{{ config.author_year_start }}", "omit_when_absent": true },
+        "author_year_end": { "template": "{{ config.author_year_end }}", "omit_when_absent": true },
+        "ids": { "template": "{{ config.ids }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "languages": "{{ record.languages | join:, }}",
+        "subjects": "{{ record.subjects | join:, }}",
+        "bookshelves": "{{ record.bookshelves | join:, }}"
+      },
+      "schema": "schemas/english_books.json"
+    }
+  ]
+}

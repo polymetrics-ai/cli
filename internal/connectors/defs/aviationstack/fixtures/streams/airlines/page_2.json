@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/airlines", "query": { "limit": "2", "offset": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "limit": 2, "offset": 2, "count": 1, "total": 3 },
+      "data": [
+        {
+          "id": "fixture_airline_3",
+          "airline_name": "Fixture Air Three",
+          "iata_code": "F3",
+          "icao_code": "FX3",
+          "callsign": "FIXAIRTHREE",
+          "type": "scheduled",
+          "status": "active",
+          "fleet_size": "2",
+          "country_name": "Fixtureland",
+          "country_iso2": "FX",
+          "date_founded": "2000"
+        }
+      ]
+    }
+  }
+}

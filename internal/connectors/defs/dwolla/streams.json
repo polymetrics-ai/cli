@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/vnd.dwolla.v1.hal+json"
+    },
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.base_url }}/token",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}"
+      }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "_links.next.href"
+    },
+    "check": { "method": "GET", "path": "/customers" },
+    "error_map": [
+      { "status": 401, "hint": "dwolla client_id/client_secret are missing or invalid; re-run pm credentials add dwolla" },
+      { "status": 403, "hint": "dwolla account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "dwolla rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": { "limit": "25" },
+      "records": { "path": "_embedded.customers" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "query": { "limit": "25" },
+      "records": { "path": "_embedded.events" },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "exchange_partners",
+      "path": "/exchange-partners",
+      "query": { "limit": "25" },
+      "records": { "path": "_embedded.exchange-partners" },
+      "schema": "schemas/exchange_partners.json"
+    },
+    {
+      "name": "business_classifications",
+      "path": "/business-classifications",
+      "query": { "limit": "25" },
+      "records": { "path": "_embedded.business-classifications" },
+      "schema": "schemas/business_classifications.json"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Smartwaiver Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Smartwaiver API key, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.smartwaiver.com",
+      "description": "Smartwaiver API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (limit query param), 1-100."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional fromDts query filter passed through verbatim."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Optional toDts query filter passed through verbatim."
+    }
+  }
+}

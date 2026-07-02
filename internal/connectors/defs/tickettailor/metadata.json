@@ -1,0 +1,23 @@
+{
+  "name": "tickettailor",
+  "display_name": "Ticket Tailor",
+  "description": "Reads events, orders, and issued tickets from the Ticket Tailor API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.tickettailor.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Ticket Tailor API read of event, order, and issued ticket data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

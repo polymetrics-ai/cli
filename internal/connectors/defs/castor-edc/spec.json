@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Castor EDC Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Castor EDC OAuth2 client-credentials client ID. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Castor EDC OAuth2 client-credentials client secret. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://data.castoredc.com/api",
+      "description": "Castor EDC API base URL override for a regional host, tests, or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://data.castoredc.com/oauth/token",
+      "description": "OAuth2 token endpoint override; defaults to the same host as the default base_url (legacy derives this from whichever base_url resolves to at runtime, but the engine's default materialization is a fixed literal, not a base_url-derived one - see docs.md Known limits)."
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v4/info",
+    "query": { "limit": "synthetic-conformance-value", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "username": "fixture-user",
+      "email": "fixture1@example.com",
+      "signupDate": "2026-01-01T00:00:00Z",
+      "ipAddress": "203.0.113.10"
+    }
+  }
+}

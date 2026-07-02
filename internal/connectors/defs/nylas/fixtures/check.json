@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v3/grants/synthetic-conformance-value/calendars", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request_id": "req_fixture_1",
+      "data": [
+        { "id": "cal_fixture_1", "grant_id": "me", "name": "Fixture Calendar", "object": "calendar", "is_primary": true, "read_only": false }
+      ]
+    }
+  }
+}

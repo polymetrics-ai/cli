@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/advertiser/info/",
+    "query": { "page": "1", "page_size": "100", "advertiser_ids": "[\"synthetic-conformance-value\"]" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "OK",
+      "data": {
+        "list": [
+          {
+            "advertiser_id": "adv_fixture_1",
+            "advertiser_name": "Fixture Advertiser 1",
+            "company": "Fixture Co 1",
+            "status": "STATUS_ENABLE",
+            "currency": "USD",
+            "timezone": "Etc/UTC",
+            "country": "US",
+            "role": "ROLE_ADVERTISER"
+          },
+          {
+            "advertiser_id": "adv_fixture_2",
+            "advertiser_name": "Fixture Advertiser 2",
+            "company": "Fixture Co 2",
+            "status": "STATUS_ENABLE",
+            "currency": "USD",
+            "timezone": "Etc/UTC",
+            "country": "US",
+            "role": "ROLE_ADVERTISER"
+          }
+        ],
+        "page_info": { "page": 1, "page_size": 100, "total_number": 2, "total_page": 1 }
+      }
+    }
+  }
+}

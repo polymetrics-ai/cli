@@ -1,0 +1,23 @@
+{
+  "name": "split-io",
+  "display_name": "Split.io",
+  "description": "Reads Split.io workspaces, environments, feature flags, and segments through the Split Admin API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.split.io/reference/api-overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Split.io API read of workspace, environment, feature-flag, and segment data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

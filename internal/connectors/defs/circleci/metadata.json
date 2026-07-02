@@ -1,0 +1,22 @@
+{
+  "name": "circleci",
+  "display_name": "CircleCI",
+  "description": "Reads CircleCI projects, pipelines, workflows, and jobs through the CircleCI v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://circleci.com/docs/api/v2/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external CircleCI API read of CI project, pipeline, workflow, and job metadata"
+  }
+}

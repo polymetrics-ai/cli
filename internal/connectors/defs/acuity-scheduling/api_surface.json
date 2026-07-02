@@ -1,0 +1,19 @@
+{
+  "api": "Acuity Scheduling API v1 (https://acuityscheduling.com/api/v1)",
+  "docs": "https://developers.acuityscheduling.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; Acuity Scheduling is read-only here (no reverse-ETL writes), matching legacy exactly. The full Acuity API surface (appointment creation/reschedule/cancel, blocks, availability, orders, products) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/appointments", "covered_by": { "stream": "appointments" } },
+    { "method": "GET", "path": "/api/v1/clients", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/api/v1/appointment-types", "covered_by": { "stream": "appointment_types" } },
+    { "method": "GET", "path": "/api/v1/calendars", "covered_by": { "stream": "calendars" } },
+    { "method": "GET", "path": "/api/v1/forms", "covered_by": { "stream": "forms" } },
+    { "method": "POST", "path": "/api/v1/appointments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/api/v1/appointments/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/api/v1/appointments/{id}/cancel", "excluded": { "category": "destructive_admin", "reason": "cancels a live scheduled appointment; out of scope until Pass B write review" } },
+    { "method": "GET", "path": "/api/v1/availability/times", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/blocks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

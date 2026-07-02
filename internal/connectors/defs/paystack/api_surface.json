@@ -1,0 +1,18 @@
+{
+  "api": "Paystack API (https://api.paystack.co)",
+  "docs": "https://paystack.com/docs/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Paystack surface (transfers, refunds, plans, products, settlements) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/customer", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/transaction", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/subscription", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/paymentrequest", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/dispute", "covered_by": { "stream": "disputes" } },
+    { "method": "GET", "path": "/transfer", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/refund", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/plan", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/product", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/balance", "excluded": { "category": "non_data_endpoint", "reason": "account balance snapshot, not a syncable object stream" } }
+  ]
+}

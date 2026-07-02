@@ -1,0 +1,12 @@
+{
+  "api": "VWO API v2 (https://app.vwo.com/api/v2)",
+  "docs": "https://developers.vwo.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the single legacy-parity campaigns read stream only; the full VWO surface (goals, insights, campaign reports, account settings, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/campaigns/{id}/report", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/goals", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/account", "excluded": { "category": "non_data_endpoint", "reason": "account settings introspection, not a syncable object stream" } }
+  ]
+}

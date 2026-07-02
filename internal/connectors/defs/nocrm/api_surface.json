@@ -1,0 +1,17 @@
+{
+  "api": "noCRM API v2 (https://api.nocrm.io/api/v2)",
+  "docs": "https://api.nocrm.io/api/v2/documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full noCRM surface (activities, calls, custom fields, webhooks, tags) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2/leads", "covered_by": { "stream": "leads" } },
+    { "method": "GET", "path": "/api/v2/pipelines", "covered_by": { "stream": "pipelines" } },
+    { "method": "GET", "path": "/api/v2/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/api/v2/teams", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/api/v2/prospecting_lists", "covered_by": { "stream": "prospecting_lists" } },
+    { "method": "POST", "path": "/api/v2/leads", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/activities", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/calls", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/custom_fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/api/V1/GetProducts", "query": { "Skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Items": [
+        {
+          "SkuCode": "SKU1",
+          "ProviderCode": "PROV1",
+          "RegionCode": "CA",
+          "DefaultDisplayText": "Fixture Product 1",
+          "LocalizationKey": "product.fixture.1",
+          "ProcessingMode": "Immediate",
+          "RedemptionMechanism": "Immediate",
+          "CommissionRate": 0.05,
+          "Minimum": { "amount": 5, "currencyIso": "USD" },
+          "Maximum": { "amount": 100, "currencyIso": "USD" },
+          "Benefits": ["Fixture benefit"],
+          "PaymentTypes": ["CreditCard"],
+          "ValidityPeriodIso": "P30D"
+        }
+      ]
+    }
+  }
+}

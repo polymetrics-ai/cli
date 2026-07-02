@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/opportunity/", "query": { "_limit": "100", "_skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "oppo_fixture_1",
+          "lead_id": "lead_1",
+          "lead_name": "Fixture Lead 1",
+          "status_id": "stat_1",
+          "status_label": "Potential",
+          "status_type": "active",
+          "pipeline_id": "pipe_1",
+          "value": 1000,
+          "value_currency": "USD",
+          "value_formatted": "$10.00",
+          "confidence": 50,
+          "organization_id": "orga_fixture",
+          "user_id": "user_fixture_1",
+          "date_won": null,
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_updated": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

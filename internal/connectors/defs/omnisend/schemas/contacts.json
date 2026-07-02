@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["contactID"],
+  "x-cursor-field": "createdAt",
+  "required": ["contactID"],
+  "properties": {
+    "contactID": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "firstName": { "type": ["string", "null"] },
+    "lastName": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "countryCode": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "segments": { "type": ["array", "null"] },
+    "tags": { "type": ["array", "null"] }
+  }
+}

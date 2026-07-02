@@ -1,0 +1,47 @@
+{
+  "request": { "method": "GET", "path": "/tasks", "query": { "usePagination": "true" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "id": "task_fixture_1",
+          "model": "task",
+          "index": 1,
+          "name": "Fixture task 1",
+          "description": "fixture task one",
+          "status": "backlog",
+          "completed": false,
+          "completedAt": null,
+          "deleted": false,
+          "url": "https://height.app/fixture/task_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "createdUserId": "user_fixture_1",
+          "lastActivityAt": "2026-01-01T00:00:00.000Z",
+          "listIds": ["list_fixture_1"],
+          "assigneesIds": ["user_fixture_1"],
+          "parentTaskId": null
+        },
+        {
+          "id": "task_fixture_2",
+          "model": "task",
+          "index": 2,
+          "name": "Fixture task 2",
+          "description": "fixture task two",
+          "status": "inProgress",
+          "completed": false,
+          "completedAt": null,
+          "deleted": false,
+          "url": "https://height.app/fixture/task_fixture_2",
+          "createdAt": "2026-01-02T00:00:00.000Z",
+          "createdUserId": "user_fixture_1",
+          "lastActivityAt": "2026-01-02T00:00:00.000Z",
+          "listIds": ["list_fixture_1"],
+          "assigneesIds": [],
+          "parentTaskId": null
+        }
+      ],
+      "nextPageToken": "task_fixture_2"
+    }
+  }
+}

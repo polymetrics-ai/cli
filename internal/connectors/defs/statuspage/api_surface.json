@@ -1,0 +1,15 @@
+{
+  "api": "Statuspage API v1 (https://api.statuspage.io/v1)",
+  "docs": "https://developer.statuspage.io/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (pages, components, incidents, subscribers); legacy ships no writes (capabilities.write is false), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/pages", "covered_by": { "stream": "pages" } },
+    { "method": "GET", "path": "/v1/pages/{page_id}/components", "covered_by": { "stream": "components" } },
+    { "method": "GET", "path": "/v1/pages/{page_id}/incidents", "covered_by": { "stream": "incidents" } },
+    { "method": "GET", "path": "/v1/pages/{page_id}/subscribers", "covered_by": { "stream": "subscribers" } },
+    { "method": "POST", "path": "/v1/pages/{page_id}/incidents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/pages/{page_id}/metrics", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/pages/{page_id}/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

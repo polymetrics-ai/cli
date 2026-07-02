@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/v1/private/business-units/synthetic-conformance-value/invitations", "query": { "perPage": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "invitations": [
+        {
+          "id": "invitation_fixture_1",
+          "status": "sent",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "invitation_fixture_2",
+          "status": "delivered",
+          "createdAt": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

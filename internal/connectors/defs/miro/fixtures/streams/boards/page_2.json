@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/v2/boards", "query": { "limit": "2", "offset": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "board_fixture_3",
+          "type": "board",
+          "name": "Fixture Board Three",
+          "description": "Fixture board description",
+          "viewLink": "https://miro.com/app/board/board_fixture_3/",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "modifiedAt": "2026-01-02T00:00:00Z",
+          "owner": { "id": "owner_fixture_1" },
+          "team": { "id": "team_fixture_1" }
+        }
+      ],
+      "total": 3,
+      "size": 1,
+      "offset": 2,
+      "limit": 2
+    }
+  }
+}

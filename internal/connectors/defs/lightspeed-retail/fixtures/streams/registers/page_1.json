@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/api/2.0/registers", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "register_fixture_1",
+          "version": 5000,
+          "name": "Fixture Register",
+          "outlet_id": "outlet_fixture_1",
+          "invoice_prefix": "INV",
+          "invoice_sequence": 1,
+          "is_open": true,
+          "email_receipt": true,
+          "print_receipt": false
+        }
+      ],
+      "version": { "min": 5000, "max": null }
+    }
+  }
+}

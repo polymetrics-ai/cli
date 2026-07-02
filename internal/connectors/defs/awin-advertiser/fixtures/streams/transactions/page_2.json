@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/advertisers/synthetic-conformance-value/transactions/",
+    "query": {
+      "page": "2",
+      "pageSize": "2",
+      "startDate": "2020-01-01T00:00:00Z",
+      "endDate": "2099-12-31T23:59:59",
+      "dateType": "transaction",
+      "timezone": "UTC"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1003,
+        "url": "https://example.com/tx/1003",
+        "advertiserId": 42,
+        "publisherId": 9,
+        "commissionSharingPublisherId": null,
+        "siteName": "fixture-site-3.example.com",
+        "transactionDate": "2026-01-03T00:00:00",
+        "validationDate": "2026-02-03T00:00:00",
+        "type": "Commission group transaction",
+        "transactionStatus": "approved",
+        "saleAmount": { "amount": 30.0, "currency": "GBP" },
+        "commissionAmount": { "amount": 3.0, "currency": "GBP" },
+        "clickDate": "2026-01-02T23:00:00",
+        "clickRefs": {},
+        "customParameters": {}
+      }
+    ]
+  }
+}

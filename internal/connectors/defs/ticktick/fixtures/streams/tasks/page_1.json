@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/project/synthetic-conformance-value/data" },
+  "response": {
+    "status": 200,
+    "body": {
+      "tasks": [
+        {
+          "id": "task_fixture_1",
+          "projectId": "proj_fixture_1",
+          "title": "Fixture Task 1",
+          "content": "Fixture task content one",
+          "status": "0",
+          "modifiedTime": "2026-01-01T00:00:00.000+0000"
+        },
+        {
+          "id": "task_fixture_2",
+          "projectId": "proj_fixture_1",
+          "title": "Fixture Task 2",
+          "content": "Fixture task content two",
+          "status": "2",
+          "modifiedTime": "2026-01-02T00:00:00.000+0000"
+        }
+      ]
+    }
+  }
+}

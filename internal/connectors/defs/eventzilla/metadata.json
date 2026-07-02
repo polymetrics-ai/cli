@@ -1,0 +1,23 @@
+{
+  "name": "eventzilla",
+  "display_name": "Eventzilla",
+  "description": "Reads Eventzilla events, categories, and users through the Eventzilla v2 REST API (read-only; full refresh).",
+  "integration_type": "api",
+  "docs_url": "https://www.eventzilla.net/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Eventzilla API read of event, category, and user data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

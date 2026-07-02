@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/Workspaces/synthetic-conformance-value/TaskQueues", "query": { "PageSize": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "task_queues": [
+        { "sid": "WQ_fixture_1", "friendly_name": "Fixture Queue 1" },
+        { "sid": "WQ_fixture_2", "friendly_name": "Fixture Queue 2" }
+      ]
+    }
+  }
+}

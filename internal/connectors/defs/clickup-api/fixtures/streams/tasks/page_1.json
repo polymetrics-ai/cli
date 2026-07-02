@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/team/synthetic-conformance-value/task", "query": { "page": "1", "archived": "synthetic-conformance-value", "include_closed": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tasks": [
+        {
+          "id": "task_fixture_1",
+          "name": "Fixture Task 1",
+          "status": { "status": "open" },
+          "date_created": "1767225600000",
+          "date_updated": "1767225601000",
+          "date_closed": null,
+          "creator": { "id": 100001 },
+          "list": { "id": "list_fixture_1" },
+          "folder": { "id": "folder_fixture_1" },
+          "space": { "id": "space_fixture_1" },
+          "url": "https://app.clickup.com/t/task_fixture_1"
+        },
+        {
+          "id": "task_fixture_2",
+          "name": "Fixture Task 2",
+          "status": { "status": "in progress" },
+          "date_created": "1767225600000",
+          "date_updated": "1767225602000",
+          "date_closed": null,
+          "creator": { "id": 100002 },
+          "list": { "id": "list_fixture_1" },
+          "folder": { "id": "folder_fixture_1" },
+          "space": { "id": "space_fixture_1" },
+          "url": "https://app.clickup.com/t/task_fixture_2"
+        }
+      ],
+      "last_page": false
+    }
+  }
+}

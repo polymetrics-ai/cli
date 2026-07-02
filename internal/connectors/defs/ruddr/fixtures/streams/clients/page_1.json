@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/api/workspaces/synthetic-conformance-value/clients", "query": { "page": "1", "page_size": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "id": "client_fixture_1", "name": "Fixture Client One", "active": true },
+        { "id": "client_fixture_2", "name": "Fixture Client Two", "active": true }
+      ],
+      "next": null,
+      "previous": null
+    }
+  }
+}

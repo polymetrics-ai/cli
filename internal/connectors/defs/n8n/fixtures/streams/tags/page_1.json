@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/tags" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "tag_fixture_1",
+          "name": "Fixture Tag One",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "tag_fixture_2",
+          "name": "Fixture Tag Two",
+          "createdAt": "2026-01-02T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z"
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "100ms",
+  "display_name": "100ms",
+  "description": "Reads 100ms rooms, sessions, recordings, and templates through the 100ms server-side REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.100ms.live/docs/api-reference/javascript/v2/home/content",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external 100ms API read of rooms, sessions, recordings, and templates"
+  }
+}

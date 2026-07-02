@@ -1,0 +1,16 @@
+{
+  "api": "Elastic Email API v4",
+  "docs": "https://elasticemail.com/developers/api-documentation/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only, matching internal/connectors/elasticemail's exact endpoint set; the full Elastic Email v4 surface (contact/campaign/template mutation, statistics, events) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/segments", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "/templates", "covered_by": { "stream": "templates" } },
+    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/statistics/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

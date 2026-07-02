@@ -1,0 +1,19 @@
+{
+  "api": "openFDA API (https://api.fda.gov)",
+  "docs": "https://open.fda.gov/apis/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full openFDA surface (device recall/510k/PMA/UDI, food recall alternates, animal/veterinary, tobacco) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/drug/event.json", "covered_by": { "stream": "drug_event" } },
+    { "method": "GET", "path": "/drug/label.json", "covered_by": { "stream": "drug_label" } },
+    { "method": "GET", "path": "/drug/enforcement.json", "covered_by": { "stream": "drug_enforcement" } },
+    { "method": "GET", "path": "/device/event.json", "covered_by": { "stream": "device_event" } },
+    { "method": "GET", "path": "/food/enforcement.json", "covered_by": { "stream": "food_enforcement" } },
+    { "method": "GET", "path": "/device/510k.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/device/pma.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/device/udi.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/device/enforcement.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/animalandveterinary/event.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/tobacco/problem.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

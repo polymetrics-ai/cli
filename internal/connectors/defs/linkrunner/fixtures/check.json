@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "campaigns": [
+          { "display_id": "camp_fixture_check", "name": "Fixture Check Campaign" }
+        ]
+      }
+    }
+  }
+}

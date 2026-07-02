@@ -1,0 +1,55 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "link_header"
+    },
+    "check": { "method": "GET", "path": "/organizations", "query": { "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "buildkite api_key is missing or invalid; re-run pm credentials add buildkite" },
+      { "status": 403, "hint": "buildkite account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "buildkite rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "organizations",
+      "path": "/organizations",
+      "query": { "per_page": "100" },
+      "records": { "path": "" },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "pipelines",
+      "path": "/organizations/{{ config.organization }}/pipelines",
+      "query": { "per_page": "100" },
+      "records": { "path": "" },
+      "schema": "schemas/pipelines.json"
+    },
+    {
+      "name": "builds",
+      "path": "/organizations/{{ config.organization }}/builds",
+      "query": {
+        "per_page": "100",
+        "created_from": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/builds.json"
+    },
+    {
+      "name": "agents",
+      "path": "/organizations/{{ config.organization }}/agents",
+      "query": { "per_page": "100" },
+      "records": { "path": "" },
+      "schema": "schemas/agents.json"
+    }
+  ]
+}

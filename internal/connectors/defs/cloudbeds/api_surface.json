@@ -1,0 +1,15 @@
+{
+  "api": "Cloudbeds API v1.2 (https://api.cloudbeds.com/api/v1.2)",
+  "docs": "https://hotels.cloudbeds.com/api/docs/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Cloudbeds surface (rate plans, rooms CRUD, payments, webhooks, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/getGuestList", "covered_by": { "stream": "guests" } },
+    { "method": "GET", "path": "/getHotels", "covered_by": { "stream": "hotels" } },
+    { "method": "GET", "path": "/getRoomBlocks", "covered_by": { "stream": "rooms" } },
+    { "method": "GET", "path": "/getReservations", "covered_by": { "stream": "reservations" } },
+    { "method": "GET", "path": "/getTransactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/getRatePlans", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/postReservation", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

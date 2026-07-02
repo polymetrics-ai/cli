@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/vendors",
+    "query": {
+      "after": "vend_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

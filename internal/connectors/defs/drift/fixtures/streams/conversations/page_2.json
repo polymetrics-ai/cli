@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/conversations/list", "query": { "limit": "50", "next": "cursor_fixture_page_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 103,
+          "orgId": 42,
+          "status": "pending",
+          "contactId": 203,
+          "inboxId": 7,
+          "participants": [],
+          "conversationTags": [],
+          "relatedPlaybookId": null,
+          "createdAt": 1767225603,
+          "updatedAt": 1767225603
+        }
+      ],
+      "pagination": { "more": false }
+    }
+  }
+}

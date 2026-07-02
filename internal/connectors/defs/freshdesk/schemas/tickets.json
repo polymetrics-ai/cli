@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "subject": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["integer", "null"] },
+    "priority": { "type": ["integer", "null"] },
+    "source": { "type": ["integer", "null"] },
+    "requester_id": { "type": ["integer", "null"] },
+    "responder_id": { "type": ["integer", "null"] },
+    "group_id": { "type": ["integer", "null"] },
+    "company_id": { "type": ["integer", "null"] },
+    "spam": { "type": ["boolean", "null"] },
+    "due_by": { "type": ["string", "null"], "format": "date-time" },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

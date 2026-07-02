@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["ID"],
+  "properties": {
+    "ID": { "type": ["integer", "null"] },
+    "Subject": { "type": ["string", "null"] },
+    "FromEmail": { "type": ["string", "null"] },
+    "FromName": { "type": ["string", "null"] },
+    "CreatedAt": { "type": ["string", "null"] },
+    "SendStartAt": { "type": ["string", "null"] },
+    "Status": { "type": ["integer", "null"] },
+    "IsDeleted": { "type": ["boolean", "null"] },
+    "IsStarred": { "type": ["boolean", "null"] }
+  }
+}

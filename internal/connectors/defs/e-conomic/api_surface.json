@@ -1,0 +1,16 @@
+{
+  "api": "e-conomic REST API (https://restdocs.e-conomic.com/)",
+  "docs": "https://restdocs.e-conomic.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (customers, products, suppliers, accounts, invoices). e-conomic is read-only in legacy (no reverse-ETL writes); capabilities.write is false.",
+  "endpoints": [
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/suppliers", "covered_by": { "stream": "suppliers" } },
+    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/invoices/booked", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/invoices/drafts", "excluded": { "category": "out_of_scope", "reason": "legacy connector only implements booked invoices; Pass B capability expansion" } },
+    { "method": "GET", "path": "/journals", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/self", "excluded": { "category": "non_data_endpoint", "reason": "agreement/self introspection, not a syncable object stream" } }
+  ]
+}

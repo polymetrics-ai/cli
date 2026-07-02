@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks",
+  "type": "object",
+  "x-primary-key": ["jnid"],
+  "x-cursor-field": "date_updated",
+  "required": ["jnid"],
+  "properties": {
+    "jnid": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "number": { "type": ["string", "null"] },
+    "record_type_name": { "type": ["string", "null"] },
+    "priority": { "type": ["integer", "null"] },
+    "customer": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "is_archived": { "type": ["boolean", "null"] },
+    "is_completed": { "type": ["boolean", "null"] },
+    "date_start": { "type": ["integer", "null"] },
+    "date_end": { "type": ["integer", "null"] },
+    "date_created": { "type": ["integer", "null"] },
+    "date_updated": { "type": ["integer", "null"] }
+  }
+}

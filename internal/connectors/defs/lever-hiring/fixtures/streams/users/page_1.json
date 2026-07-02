@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "user_fixture_1",
+          "name": "Fixture User",
+          "username": "fixtureuser",
+          "email": "fixture1@example.com",
+          "accessRole": "team member",
+          "deactivatedAt": null,
+          "createdAt": 1767225601
+        }
+      ],
+      "hasNext": false,
+      "next": null
+    }
+  }
+}

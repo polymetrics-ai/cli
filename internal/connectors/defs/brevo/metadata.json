@@ -1,0 +1,23 @@
+{
+  "name": "brevo",
+  "display_name": "Brevo",
+  "description": "Reads Brevo (formerly Sendinblue) contacts, email campaigns, contact lists, and senders through the Brevo REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.brevo.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Brevo API read of contact and campaign data",
+    "approval": "none; read-only, no reverse-ETL writes shipped"
+  }
+}

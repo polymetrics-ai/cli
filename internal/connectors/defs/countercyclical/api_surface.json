@@ -1,0 +1,11 @@
+{
+  "api": "Countercyclical API v1 (https://api.countercyclical.io/v1)",
+  "docs": "https://countercyclical.io/docs/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "legacy-parity migration: the 3 legacy read streams only (investments, valuations, memos), matching the upstream manifest-only source-countercyclical connector's exact stream set; no other endpoints are documented as part of that source",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/investments", "covered_by": { "stream": "investments" } },
+    { "method": "GET", "path": "/v1/valuations", "covered_by": { "stream": "valuations" } },
+    { "method": "GET", "path": "/v1/memos", "covered_by": { "stream": "memos" } }
+  ]
+}

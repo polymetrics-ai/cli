@@ -1,0 +1,16 @@
+{
+  "api": "Smartwaiver API v4 (https://api.smartwaiver.com/)",
+  "docs": "https://api.smartwaiver.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (waivers, checkins, templates, published_keys, user_info); legacy is read-only, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/v4/waivers", "covered_by": { "stream": "waivers" } },
+    { "method": "GET", "path": "/v4/checkins", "covered_by": { "stream": "checkins" } },
+    { "method": "GET", "path": "/v4/templates", "covered_by": { "stream": "templates" } },
+    { "method": "GET", "path": "/v4/keys/published", "covered_by": { "stream": "published_keys" } },
+    { "method": "GET", "path": "/v4/info", "covered_by": { "stream": "user_info" } },
+    { "method": "GET", "path": "/v4/me", "excluded": { "category": "non_data_endpoint", "reason": "account identity probe used only by Check, not a syncable object stream" } },
+    { "method": "GET", "path": "/v4/waivers/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v4/waivers/search", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

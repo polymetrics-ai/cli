@@ -1,0 +1,18 @@
+{
+  "api": "RepairShopr API v1 (https://<subdomain>.repairshopr.com/api/v1)",
+  "docs": "https://api-docs.repairshopr.com/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (customers, tickets, invoices, estimates, assets); legacy ships no writes (capabilities.write is false) and the full RepairShopr surface (line items, payments, appointments, users, etc.) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/api/v1/tickets", "covered_by": { "stream": "tickets" } },
+    { "method": "GET", "path": "/api/v1/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/api/v1/estimates", "covered_by": { "stream": "estimates" } },
+    { "method": "GET", "path": "/api/v1/customer_assets", "covered_by": { "stream": "assets" } },
+    { "method": "GET", "path": "/api/v1/line_items", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/payments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/appointments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v1/customers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } }
+  ]
+}

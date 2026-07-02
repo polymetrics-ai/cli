@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/v2/projects", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "paging": { "items_per_page": 50, "current_page": 1, "count_pages": 1, "count_items": 1 },
+      "projects": [
+        {
+          "id": 1,
+          "customers_id": 1,
+          "name": "Fixture Project One",
+          "number": "2001",
+          "active": true,
+          "billable_default": true,
+          "note": "conformance fixture project",
+          "budget_money": 1000.5,
+          "budget_is_hours": false,
+          "completed": false,
+          "deadline": null
+        }
+      ]
+    }
+  }
+}

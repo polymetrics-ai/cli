@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/segments", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "segment_fixture_1", "name": "Fixture Segment One", "description": "fixture record", "status": "active", "isEnabled": true }
+      ]
+    }
+  }
+}

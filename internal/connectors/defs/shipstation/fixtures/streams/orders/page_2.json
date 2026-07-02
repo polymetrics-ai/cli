@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/orders", "query": { "page": "2", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "orders": [
+        { "orderId": 101, "orderNumber": "ORD-101", "orderStatus": "awaiting_shipment", "modifyDate": "2026-01-02T00:00:00.0000000" }
+      ],
+      "total": 101,
+      "page": 2,
+      "pages": 2
+    }
+  }
+}

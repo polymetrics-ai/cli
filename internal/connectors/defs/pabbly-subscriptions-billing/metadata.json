@@ -1,0 +1,23 @@
+{
+  "name": "pabbly-subscriptions-billing",
+  "display_name": "Pabbly Subscriptions Billing",
+  "description": "Reads Pabbly customers, subscriptions, plans, and invoices through the Pabbly Subscriptions Billing REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.pabbly.com/subscriptions/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Pabbly Subscriptions Billing API read of customer and billing data",
+    "approval": "none; read-only"
+  }
+}

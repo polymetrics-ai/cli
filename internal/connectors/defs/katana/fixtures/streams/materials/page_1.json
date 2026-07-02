@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/materials", "query": { "page": "1", "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "Fixture Material 1", "uom": "kg", "category_name": "Raw", "default_supplier_id": 5, "is_sellable": false, "additional_info": "fixture", "created_at": "2026-01-01T00:00:00.000Z", "updated_at": "2026-01-02T00:00:00.000Z" }
+      ]
+    }
+  }
+}

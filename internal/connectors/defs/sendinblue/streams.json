@@ -1,0 +1,46 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "api-key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/account" },
+    "error_map": [
+      { "status": 401, "hint": "sendinblue (brevo) api key is missing or invalid; re-run pm credentials add sendinblue" },
+      { "status": 429, "class": "rate_limited", "hint": "sendinblue (brevo) rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "contacts" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "email_campaigns",
+      "path": "/emailCampaigns",
+      "records": { "path": "campaigns" },
+      "schema": "schemas/email_campaigns.json"
+    },
+    {
+      "name": "contacts_lists",
+      "path": "/contacts/lists",
+      "records": { "path": "lists" },
+      "schema": "schemas/contacts_lists.json"
+    },
+    {
+      "name": "senders",
+      "path": "/senders",
+      "records": { "path": "senders" },
+      "schema": "schemas/senders.json"
+    }
+  ]
+}

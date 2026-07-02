@@ -1,0 +1,14 @@
+{
+  "api": "Shutterstock REST API (https://api-reference.shutterstock.com/)",
+  "docs": "https://api-reference.shutterstock.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (images, videos, audio search). Shutterstock's write/licensing endpoints are out of scope for this wave (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/images/search", "covered_by": { "stream": "images" } },
+    { "method": "GET", "path": "/v2/videos/search", "covered_by": { "stream": "videos" } },
+    { "method": "GET", "path": "/v2/audio/search", "covered_by": { "stream": "audio" } },
+    { "method": "POST", "path": "/v2/images/licenses", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented licensing writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/images/{id}", "excluded": { "category": "out_of_scope", "reason": "single-asset retrieval not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/user", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream" } }
+  ]
+}

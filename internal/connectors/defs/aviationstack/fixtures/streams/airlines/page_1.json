@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/airlines", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "limit": 2, "offset": 0, "count": 2, "total": 3 },
+      "data": [
+        {
+          "id": "fixture_airline_1",
+          "airline_name": "Fixture Air One",
+          "iata_code": "F1",
+          "icao_code": "FX1",
+          "callsign": "FIXAIR",
+          "type": "scheduled",
+          "status": "active",
+          "fleet_size": "10",
+          "country_name": "Fixtureland",
+          "country_iso2": "FX",
+          "date_founded": "1990"
+        },
+        {
+          "id": "fixture_airline_2",
+          "airline_name": "Fixture Air Two",
+          "iata_code": "F2",
+          "icao_code": "FX2",
+          "callsign": "FIXAIRTWO",
+          "type": "scheduled",
+          "status": "active",
+          "fleet_size": "5",
+          "country_name": "Fixtureland",
+          "country_iso2": "FX",
+          "date_founded": "1995"
+        }
+      ]
+    }
+  }
+}

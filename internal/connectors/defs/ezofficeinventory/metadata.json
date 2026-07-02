@@ -1,0 +1,23 @@
+{
+  "name": "ezofficeinventory",
+  "display_name": "EZOfficeInventory",
+  "description": "Reads EZOfficeInventory assets, inventory items, stock assets, members, and locations through the EZOfficeInventory REST API.",
+  "integration_type": "api",
+  "docs_url": "https://ezofficeinventory.com/developers",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external EZOfficeInventory API read of asset, inventory, member, and location data",
+    "approval": "none; read-only"
+  }
+}

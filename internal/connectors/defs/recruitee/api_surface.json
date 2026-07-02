@@ -1,0 +1,19 @@
+{
+  "api": "Recruitee REST API (https://api.recruitee.com)",
+  "docs": "https://apidocs.recruitee.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (offers, candidates, departments, sources, tags); legacy itself ships no writes (capabilities.write is false) and no other Recruitee resource is modeled.",
+  "endpoints": [
+    { "method": "GET", "path": "/c/{company_id}/offers", "covered_by": { "stream": "offers" } },
+    { "method": "GET", "path": "/c/{company_id}/candidates", "covered_by": { "stream": "candidates" } },
+    { "method": "GET", "path": "/c/{company_id}/departments", "covered_by": { "stream": "departments" } },
+    { "method": "GET", "path": "/c/{company_id}/sources", "covered_by": { "stream": "sources" } },
+    { "method": "GET", "path": "/c/{company_id}/tags", "covered_by": { "stream": "tags" } },
+    { "method": "POST", "path": "/c/{company_id}/candidates", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented candidate creation; Pass B capability expansion" } },
+    { "method": "PUT", "path": "/c/{company_id}/candidates/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented candidate updates; Pass B capability expansion" } },
+    { "method": "GET", "path": "/c/{company_id}/offers/{offer_id}/candidates", "excluded": { "category": "out_of_scope", "reason": "offer-scoped candidate sub-resource fan-out not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/c/{company_id}/admins", "excluded": { "category": "out_of_scope", "reason": "admin users not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/c/{company_id}/webhooks", "excluded": { "category": "out_of_scope", "reason": "webhook configuration not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/c/{company_id}", "excluded": { "category": "non_data_endpoint", "reason": "company/account profile introspection, not a syncable object stream" } }
+  ]
+}

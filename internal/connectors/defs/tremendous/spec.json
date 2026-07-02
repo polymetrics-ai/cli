@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tremendous Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Tremendous API key, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://testflight.tremendous.com",
+      "description": "Tremendous API base URL override for tests or proxies. Defaults to Tremendous's own sandbox/testflight host, matching legacy's default."
+    }
+  }
+}

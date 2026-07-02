@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "limit": "synthetic-conformance-value", "page_token": "acct_fixture_2" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

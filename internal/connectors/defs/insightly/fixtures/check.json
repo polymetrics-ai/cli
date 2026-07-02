@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/Contacts", "query": { "top": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "CONTACT_ID": 1, "FIRST_NAME": "Fixture", "LAST_NAME": "Example", "EMAIL_ADDRESS": "fixture1@example.com" }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ad_accounts/synthetic-conformance-value/ads",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ads": [
+        { "id": "ad_fixture_1", "name": "Fixture Ad", "status": "ACTIVE", "objective": "AWARENESS" }
+      ]
+    }
+  }
+}

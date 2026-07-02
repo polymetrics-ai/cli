@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/delisted-companies", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "FIXD1",
+        "companyName": "Fixture Delisted 1",
+        "exchange": "NASDAQ",
+        "ipoDate": "2001-01-01",
+        "delistedDate": "2020-01-01"
+      },
+      {
+        "symbol": "FIXD2",
+        "companyName": "Fixture Delisted 2",
+        "exchange": "NASDAQ",
+        "ipoDate": "2002-01-01",
+        "delistedDate": "2021-01-01"
+      }
+    ]
+  }
+}

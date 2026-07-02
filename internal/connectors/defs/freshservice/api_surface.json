@@ -1,0 +1,17 @@
+{
+  "api": "Freshservice REST API v2",
+  "docs": "https://api.freshservice.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (tickets, agents, requesters, assets, problems); Freshservice's write endpoints and other resources (changes, releases, solutions) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2/tickets", "covered_by": { "stream": "tickets" } },
+    { "method": "GET", "path": "/api/v2/agents", "covered_by": { "stream": "agents" } },
+    { "method": "GET", "path": "/api/v2/requesters", "covered_by": { "stream": "requesters" } },
+    { "method": "GET", "path": "/api/v2/assets", "covered_by": { "stream": "assets" } },
+    { "method": "GET", "path": "/api/v2/problems", "covered_by": { "stream": "problems" } },
+    { "method": "POST", "path": "/api/v2/tickets", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/changes", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/releases", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/solutions/categories", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

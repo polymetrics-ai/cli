@@ -1,0 +1,16 @@
+{
+  "api": "Drip API v2 (https://api.getdrip.com/v2)",
+  "docs": "https://developer.drip.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 4 legacy-parity read streams only; the full Drip surface (events, workflows, forms, tags mutation, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/{account_id}/subscribers", "covered_by": { "stream": "subscribers" } },
+    { "method": "GET", "path": "/{account_id}/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/{account_id}/broadcasts", "covered_by": { "stream": "broadcasts" } },
+    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "POST", "path": "/{account_id}/subscribers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/{account_id}/events", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/{account_id}/forms", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/{account_id}/workflows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

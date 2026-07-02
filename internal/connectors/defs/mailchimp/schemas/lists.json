@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date_created",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "web_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "date_created": { "type": ["string", "null"] },
+    "list_rating": { "type": ["integer", "null"] },
+    "email_type_option": { "type": ["boolean", "null"] },
+    "visibility": { "type": ["string", "null"] },
+    "subscribe_url_short": { "type": ["string", "null"] }
+  }
+}

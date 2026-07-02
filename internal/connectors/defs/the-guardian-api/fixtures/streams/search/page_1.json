@@ -1,0 +1,320 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/search",
+    "query": {
+      "page": "1",
+      "page-size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "status": "ok",
+        "results": [
+          {
+            "id": "world/fixture-1",
+            "type": "article",
+            "webTitle": "Fixture Article 1",
+            "webPublicationDate": "2026-01-02T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-2",
+            "type": "article",
+            "webTitle": "Fixture Article 2",
+            "webPublicationDate": "2026-01-03T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-3",
+            "type": "article",
+            "webTitle": "Fixture Article 3",
+            "webPublicationDate": "2026-01-04T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-4",
+            "type": "article",
+            "webTitle": "Fixture Article 4",
+            "webPublicationDate": "2026-01-05T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-5",
+            "type": "article",
+            "webTitle": "Fixture Article 5",
+            "webPublicationDate": "2026-01-06T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-6",
+            "type": "article",
+            "webTitle": "Fixture Article 6",
+            "webPublicationDate": "2026-01-07T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-7",
+            "type": "article",
+            "webTitle": "Fixture Article 7",
+            "webPublicationDate": "2026-01-08T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-8",
+            "type": "article",
+            "webTitle": "Fixture Article 8",
+            "webPublicationDate": "2026-01-09T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-9",
+            "type": "article",
+            "webTitle": "Fixture Article 9",
+            "webPublicationDate": "2026-01-10T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-10",
+            "type": "article",
+            "webTitle": "Fixture Article 10",
+            "webPublicationDate": "2026-01-11T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-11",
+            "type": "article",
+            "webTitle": "Fixture Article 11",
+            "webPublicationDate": "2026-01-12T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-12",
+            "type": "article",
+            "webTitle": "Fixture Article 12",
+            "webPublicationDate": "2026-01-13T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-13",
+            "type": "article",
+            "webTitle": "Fixture Article 13",
+            "webPublicationDate": "2026-01-14T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-14",
+            "type": "article",
+            "webTitle": "Fixture Article 14",
+            "webPublicationDate": "2026-01-15T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-15",
+            "type": "article",
+            "webTitle": "Fixture Article 15",
+            "webPublicationDate": "2026-01-16T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-16",
+            "type": "article",
+            "webTitle": "Fixture Article 16",
+            "webPublicationDate": "2026-01-17T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-17",
+            "type": "article",
+            "webTitle": "Fixture Article 17",
+            "webPublicationDate": "2026-01-18T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-18",
+            "type": "article",
+            "webTitle": "Fixture Article 18",
+            "webPublicationDate": "2026-01-19T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-19",
+            "type": "article",
+            "webTitle": "Fixture Article 19",
+            "webPublicationDate": "2026-01-20T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-20",
+            "type": "article",
+            "webTitle": "Fixture Article 20",
+            "webPublicationDate": "2026-01-21T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-21",
+            "type": "article",
+            "webTitle": "Fixture Article 21",
+            "webPublicationDate": "2026-01-22T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-22",
+            "type": "article",
+            "webTitle": "Fixture Article 22",
+            "webPublicationDate": "2026-01-23T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-23",
+            "type": "article",
+            "webTitle": "Fixture Article 23",
+            "webPublicationDate": "2026-01-24T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-24",
+            "type": "article",
+            "webTitle": "Fixture Article 24",
+            "webPublicationDate": "2026-01-25T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-25",
+            "type": "article",
+            "webTitle": "Fixture Article 25",
+            "webPublicationDate": "2026-01-26T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-26",
+            "type": "article",
+            "webTitle": "Fixture Article 26",
+            "webPublicationDate": "2026-01-27T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-27",
+            "type": "article",
+            "webTitle": "Fixture Article 27",
+            "webPublicationDate": "2026-01-28T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-28",
+            "type": "article",
+            "webTitle": "Fixture Article 28",
+            "webPublicationDate": "2026-01-01T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-29",
+            "type": "article",
+            "webTitle": "Fixture Article 29",
+            "webPublicationDate": "2026-01-02T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-30",
+            "type": "article",
+            "webTitle": "Fixture Article 30",
+            "webPublicationDate": "2026-01-03T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-31",
+            "type": "article",
+            "webTitle": "Fixture Article 31",
+            "webPublicationDate": "2026-01-04T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-32",
+            "type": "article",
+            "webTitle": "Fixture Article 32",
+            "webPublicationDate": "2026-01-05T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-33",
+            "type": "article",
+            "webTitle": "Fixture Article 33",
+            "webPublicationDate": "2026-01-06T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-34",
+            "type": "article",
+            "webTitle": "Fixture Article 34",
+            "webPublicationDate": "2026-01-07T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-35",
+            "type": "article",
+            "webTitle": "Fixture Article 35",
+            "webPublicationDate": "2026-01-08T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-36",
+            "type": "article",
+            "webTitle": "Fixture Article 36",
+            "webPublicationDate": "2026-01-09T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-37",
+            "type": "article",
+            "webTitle": "Fixture Article 37",
+            "webPublicationDate": "2026-01-10T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-38",
+            "type": "article",
+            "webTitle": "Fixture Article 38",
+            "webPublicationDate": "2026-01-11T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-39",
+            "type": "article",
+            "webTitle": "Fixture Article 39",
+            "webPublicationDate": "2026-01-12T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-40",
+            "type": "article",
+            "webTitle": "Fixture Article 40",
+            "webPublicationDate": "2026-01-13T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-41",
+            "type": "article",
+            "webTitle": "Fixture Article 41",
+            "webPublicationDate": "2026-01-14T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-42",
+            "type": "article",
+            "webTitle": "Fixture Article 42",
+            "webPublicationDate": "2026-01-15T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-43",
+            "type": "article",
+            "webTitle": "Fixture Article 43",
+            "webPublicationDate": "2026-01-16T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-44",
+            "type": "article",
+            "webTitle": "Fixture Article 44",
+            "webPublicationDate": "2026-01-17T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-45",
+            "type": "article",
+            "webTitle": "Fixture Article 45",
+            "webPublicationDate": "2026-01-18T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-46",
+            "type": "article",
+            "webTitle": "Fixture Article 46",
+            "webPublicationDate": "2026-01-19T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-47",
+            "type": "article",
+            "webTitle": "Fixture Article 47",
+            "webPublicationDate": "2026-01-20T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-48",
+            "type": "article",
+            "webTitle": "Fixture Article 48",
+            "webPublicationDate": "2026-01-21T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-49",
+            "type": "article",
+            "webTitle": "Fixture Article 49",
+            "webPublicationDate": "2026-01-22T00:00:00Z"
+          },
+          {
+            "id": "world/fixture-50",
+            "type": "article",
+            "webTitle": "Fixture Article 50",
+            "webPublicationDate": "2026-01-23T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "rd-station-marketing",
+  "display_name": "RD Station Marketing",
+  "description": "Reads RD Station Marketing contacts, segmentations, events, landing pages, and email templates. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.rdstation.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 125
+  },
+  "risk": {
+    "read": "external RD Station Marketing API read of contact and campaign data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

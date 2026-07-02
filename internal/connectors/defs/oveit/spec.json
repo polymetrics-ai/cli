@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Oveit Connection Specification",
+  "type": "object",
+  "required": ["email", "password"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Oveit API root. Defaults to https://oveit.com/api when unset.",
+      "default": "https://oveit.com/api"
+    },
+    "email": {
+      "type": "string",
+      "description": "Oveit account email, paired with password for HTTP Basic auth."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Oveit account password. Sent via HTTP Basic auth as email:password."
+    },
+    "page_size": {
+      "type": "integer",
+      "description": "Records requested per page (per_page query param). Legacy default 100, max 500.",
+      "default": 100
+    }
+  }
+}

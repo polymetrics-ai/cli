@@ -1,0 +1,11 @@
+{
+  "api": "Senseforce Public API",
+  "docs": "https://manual.senseforce.io/manual/sf-platform/public-api/endpoints",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only; Senseforce's broader dataset/metadata management surface is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/datasets/{dataset_id}/records", "covered_by": { "stream": "records" } },
+    { "method": "GET", "path": "/api/v1/datasets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v1/datasets/{dataset_id}/records", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

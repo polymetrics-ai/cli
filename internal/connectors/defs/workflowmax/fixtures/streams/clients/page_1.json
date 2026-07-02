@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/clients", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "client_fixture_1", "name": "Fixture Client 1", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "client_fixture_2", "name": "Fixture Client 2", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

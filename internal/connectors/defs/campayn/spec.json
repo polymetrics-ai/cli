@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Campayn Connection Specification",
+  "type": "object",
+  "required": ["api_key", "base_url"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Campayn API key. Sent as \"Authorization: TRUEREST apikey=<api_key>\"; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Campayn account API base URL, e.g. https://<sub_domain>.campayn.com/api/v1. No default: the real base is account-subdomain-specific, and the engine's spec-default mechanism only materializes a fixed literal, not a derived-from-another-key URL (see docs.md's Known limits)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

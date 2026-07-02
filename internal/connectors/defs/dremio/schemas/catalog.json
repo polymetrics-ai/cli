@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "catalog",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "containerType": { "type": ["string", "null"] },
+    "datasetType": { "type": ["string", "null"] },
+    "path": { "type": ["array", "null"] },
+    "tag": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] }
+  }
+}

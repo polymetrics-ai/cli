@@ -1,0 +1,13 @@
+{
+  "api": "EZOfficeInventory API",
+  "docs": "https://ezofficeinventory.com/developers",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: all 5 legacy-parity read streams, full capability parity",
+  "endpoints": [
+    { "method": "GET", "path": "/assets.api", "covered_by": { "stream": "assets" } },
+    { "method": "GET", "path": "/inventory.api", "covered_by": { "stream": "inventories" } },
+    { "method": "GET", "path": "/stock_assets.api", "covered_by": { "stream": "asset_stocks" } },
+    { "method": "GET", "path": "/members.api", "covered_by": { "stream": "members" } },
+    { "method": "GET", "path": "/locations/get_line_item_locations.api", "covered_by": { "stream": "locations" } }
+  ]
+}

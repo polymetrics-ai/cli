@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        { "id": "contact_fixture_1", "first_name": "Fixture1", "last_name": "Example", "modified_at": 1767225601 },
+        { "id": "contact_fixture_2", "first_name": "Fixture2", "last_name": "Example", "modified_at": 1767225602 }
+      ]
+    }
+  }
+}

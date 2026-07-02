@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/api/workspaces/synthetic-conformance-value/projects", "query": { "page": "1", "page_size": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "id": "project_fixture_1", "name": "Fixture Project One", "client_id": "client_fixture_1", "active": true }
+      ],
+      "next": null,
+      "previous": null
+    }
+  }
+}

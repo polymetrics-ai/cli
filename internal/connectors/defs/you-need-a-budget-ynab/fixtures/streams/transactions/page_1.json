@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/budgets/synthetic-conformance-value/transactions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "transactions": [
+          {
+            "id": "txn_fixture_1",
+            "date": "2026-01-01",
+            "amount": -25000,
+            "memo": "fixture memo one",
+            "cleared": "cleared",
+            "approved": true,
+            "account_id": "account_fixture_1",
+            "payee_id": "payee_fixture_1",
+            "payee_name": "Fixture Grocery Store",
+            "category_id": "category_fixture_1",
+            "category_name": "Groceries",
+            "deleted": false
+          },
+          {
+            "id": "txn_fixture_2",
+            "date": "2026-01-02",
+            "amount": -5000,
+            "memo": "fixture memo two",
+            "cleared": "uncleared",
+            "approved": false,
+            "account_id": "account_fixture_1",
+            "payee_id": null,
+            "payee_name": null,
+            "category_id": "category_fixture_2",
+            "category_name": "Dining Out",
+            "deleted": false
+          }
+        ]
+      }
+    }
+  }
+}

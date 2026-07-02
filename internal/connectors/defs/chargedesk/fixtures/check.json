@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/charges" },
+  "response": {
+    "status": 200,
+    "body": { "object": "list", "count": 0, "offset": 0, "data": [] }
+  }
+}

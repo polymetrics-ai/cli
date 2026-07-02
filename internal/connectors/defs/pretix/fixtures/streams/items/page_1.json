@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/organizers/synthetic-conformance-value/events/synthetic-conformance-value/items/", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 1,
+          "name": { "en": "Standard ticket" },
+          "internal_name": null,
+          "default_price": "23.00",
+          "category": null,
+          "active": true,
+          "description": null,
+          "free_price": false,
+          "tax_rate": "0.00",
+          "admission": false,
+          "position": 0,
+          "has_variations": false,
+          "variations": []
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,320 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/trips",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "trips": [
+        {
+          "id": "trip_fixture_1",
+          "trip_name": "Fixture Trip 1",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:01:00Z"
+        },
+        {
+          "id": "trip_fixture_2",
+          "trip_name": "Fixture Trip 2",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:02:00Z"
+        },
+        {
+          "id": "trip_fixture_3",
+          "trip_name": "Fixture Trip 3",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:03:00Z"
+        },
+        {
+          "id": "trip_fixture_4",
+          "trip_name": "Fixture Trip 4",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:04:00Z"
+        },
+        {
+          "id": "trip_fixture_5",
+          "trip_name": "Fixture Trip 5",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:05:00Z"
+        },
+        {
+          "id": "trip_fixture_6",
+          "trip_name": "Fixture Trip 6",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:06:00Z"
+        },
+        {
+          "id": "trip_fixture_7",
+          "trip_name": "Fixture Trip 7",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:07:00Z"
+        },
+        {
+          "id": "trip_fixture_8",
+          "trip_name": "Fixture Trip 8",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:08:00Z"
+        },
+        {
+          "id": "trip_fixture_9",
+          "trip_name": "Fixture Trip 9",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:09:00Z"
+        },
+        {
+          "id": "trip_fixture_10",
+          "trip_name": "Fixture Trip 10",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:10:00Z"
+        },
+        {
+          "id": "trip_fixture_11",
+          "trip_name": "Fixture Trip 11",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:11:00Z"
+        },
+        {
+          "id": "trip_fixture_12",
+          "trip_name": "Fixture Trip 12",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:12:00Z"
+        },
+        {
+          "id": "trip_fixture_13",
+          "trip_name": "Fixture Trip 13",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:13:00Z"
+        },
+        {
+          "id": "trip_fixture_14",
+          "trip_name": "Fixture Trip 14",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:14:00Z"
+        },
+        {
+          "id": "trip_fixture_15",
+          "trip_name": "Fixture Trip 15",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:15:00Z"
+        },
+        {
+          "id": "trip_fixture_16",
+          "trip_name": "Fixture Trip 16",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:16:00Z"
+        },
+        {
+          "id": "trip_fixture_17",
+          "trip_name": "Fixture Trip 17",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:17:00Z"
+        },
+        {
+          "id": "trip_fixture_18",
+          "trip_name": "Fixture Trip 18",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:18:00Z"
+        },
+        {
+          "id": "trip_fixture_19",
+          "trip_name": "Fixture Trip 19",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:19:00Z"
+        },
+        {
+          "id": "trip_fixture_20",
+          "trip_name": "Fixture Trip 20",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:20:00Z"
+        },
+        {
+          "id": "trip_fixture_21",
+          "trip_name": "Fixture Trip 21",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:21:00Z"
+        },
+        {
+          "id": "trip_fixture_22",
+          "trip_name": "Fixture Trip 22",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:22:00Z"
+        },
+        {
+          "id": "trip_fixture_23",
+          "trip_name": "Fixture Trip 23",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:23:00Z"
+        },
+        {
+          "id": "trip_fixture_24",
+          "trip_name": "Fixture Trip 24",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:24:00Z"
+        },
+        {
+          "id": "trip_fixture_25",
+          "trip_name": "Fixture Trip 25",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:25:00Z"
+        },
+        {
+          "id": "trip_fixture_26",
+          "trip_name": "Fixture Trip 26",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:26:00Z"
+        },
+        {
+          "id": "trip_fixture_27",
+          "trip_name": "Fixture Trip 27",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:27:00Z"
+        },
+        {
+          "id": "trip_fixture_28",
+          "trip_name": "Fixture Trip 28",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:28:00Z"
+        },
+        {
+          "id": "trip_fixture_29",
+          "trip_name": "Fixture Trip 29",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:29:00Z"
+        },
+        {
+          "id": "trip_fixture_30",
+          "trip_name": "Fixture Trip 30",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:30:00Z"
+        },
+        {
+          "id": "trip_fixture_31",
+          "trip_name": "Fixture Trip 31",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:31:00Z"
+        },
+        {
+          "id": "trip_fixture_32",
+          "trip_name": "Fixture Trip 32",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:32:00Z"
+        },
+        {
+          "id": "trip_fixture_33",
+          "trip_name": "Fixture Trip 33",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:33:00Z"
+        },
+        {
+          "id": "trip_fixture_34",
+          "trip_name": "Fixture Trip 34",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:34:00Z"
+        },
+        {
+          "id": "trip_fixture_35",
+          "trip_name": "Fixture Trip 35",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:35:00Z"
+        },
+        {
+          "id": "trip_fixture_36",
+          "trip_name": "Fixture Trip 36",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:36:00Z"
+        },
+        {
+          "id": "trip_fixture_37",
+          "trip_name": "Fixture Trip 37",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:37:00Z"
+        },
+        {
+          "id": "trip_fixture_38",
+          "trip_name": "Fixture Trip 38",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:38:00Z"
+        },
+        {
+          "id": "trip_fixture_39",
+          "trip_name": "Fixture Trip 39",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:39:00Z"
+        },
+        {
+          "id": "trip_fixture_40",
+          "trip_name": "Fixture Trip 40",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:40:00Z"
+        },
+        {
+          "id": "trip_fixture_41",
+          "trip_name": "Fixture Trip 41",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:41:00Z"
+        },
+        {
+          "id": "trip_fixture_42",
+          "trip_name": "Fixture Trip 42",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:42:00Z"
+        },
+        {
+          "id": "trip_fixture_43",
+          "trip_name": "Fixture Trip 43",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:43:00Z"
+        },
+        {
+          "id": "trip_fixture_44",
+          "trip_name": "Fixture Trip 44",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:44:00Z"
+        },
+        {
+          "id": "trip_fixture_45",
+          "trip_name": "Fixture Trip 45",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:45:00Z"
+        },
+        {
+          "id": "trip_fixture_46",
+          "trip_name": "Fixture Trip 46",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:46:00Z"
+        },
+        {
+          "id": "trip_fixture_47",
+          "trip_name": "Fixture Trip 47",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:47:00Z"
+        },
+        {
+          "id": "trip_fixture_48",
+          "trip_name": "Fixture Trip 48",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:48:00Z"
+        },
+        {
+          "id": "trip_fixture_49",
+          "trip_name": "Fixture Trip 49",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:49:00Z"
+        },
+        {
+          "id": "trip_fixture_50",
+          "trip_name": "Fixture Trip 50",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:50:00Z"
+        }
+      ],
+      "limit": 50,
+      "offset": 0,
+      "total": 51
+    }
+  }
+}

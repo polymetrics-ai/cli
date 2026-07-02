@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/statcounters" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Count": 1,
+      "Total": 1,
+      "Data": [
+        {
+          "ID": 5001,
+          "MessageSentCount": 1000,
+          "MessageOpenedCount": 500,
+          "MessageClickedCount": 200,
+          "MessageDeliveredCount": 950,
+          "MessageBouncedCount": 50,
+          "MessageSpamCount": 1,
+          "MessageUnsubscribedCount": 2
+        }
+      ]
+    }
+  }
+}

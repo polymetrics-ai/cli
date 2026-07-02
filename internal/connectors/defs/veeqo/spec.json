@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Veeqo Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.veeqo.com",
+      "description": "Veeqo API base URL override for tests or proxies."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Veeqo API key, sent as the x-api-key header. Never logged."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional RFC3339 lower-bound value sent verbatim as the start_date query param when set; omitted entirely when unset (legacy: veeqo.go:85-87 only calls query.Set when trimmed non-empty). Not a stateful incremental cursor - legacy never persists or advances this value across reads."
+    }
+  }
+}

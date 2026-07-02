@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/2/locations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "locations": [
+        { "id": 10, "name": "Downtown Store", "address": "1 Fixture St" },
+        { "id": 11, "name": "Uptown Store", "address": "2 Fixture Ave" }
+      ]
+    }
+  }
+}

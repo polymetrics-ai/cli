@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/rockets" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "rocket_fixture_1", "name": "Falcon 9", "type": "rocket", "active": true, "stages": 2, "boosters": 0, "cost_per_launch": 50000000, "success_rate_pct": 98, "first_flight": "2010-06-04", "country": "United States", "company": "SpaceX", "description": "Fixture rocket record." }
+    ]
+  }
+}

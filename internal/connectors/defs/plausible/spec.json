@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plausible Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Plausible Analytics API token, sent as a Bearer token. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://plausible.io/api/v1",
+      "description": "Plausible API base URL override for self-hosted instances, tests, or proxies."
+    },
+    "site_id": {
+      "type": "string",
+      "description": "Plausible site domain (site id); required for the aggregate, timeseries, and breakdown stats streams."
+    },
+    "period": {
+      "type": "string",
+      "default": "30d",
+      "description": "Plausible reporting period (e.g. 30d, 7d, month, custom) for the stats streams."
+    },
+    "date": {
+      "type": "string",
+      "description": "Optional date (or date range, for period=custom) for the stats streams."
+    },
+    "property": {
+      "type": "string",
+      "default": "event:page",
+      "description": "Breakdown dimension for the breakdown stream (e.g. event:page, visit:source, visit:country). Only event:page (the default) is supported by this bundle's property_value projection; see docs.md's Known limits."
+    },
+    "metrics": {
+      "type": "string",
+      "description": "Optional comma-separated metrics override for the stats streams (e.g. visitors,pageviews)."
+    },
+    "filters": {
+      "type": "string",
+      "description": "Optional Plausible filter expression for the stats streams."
+    },
+    "compare": {
+      "type": "string",
+      "description": "Optional Plausible comparison period for the stats streams."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

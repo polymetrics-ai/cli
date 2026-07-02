@@ -1,0 +1,15 @@
+{
+  "api": "Dropbox Sign API v3 (https://api.hellosign.com/v3)",
+  "docs": "https://developers.hellosign.com/api/reference/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 4 legacy-parity read streams only; the full Dropbox Sign surface (sending signature requests, template creation, embedded signing, bulk send) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/signature_request/list", "covered_by": { "stream": "signature_requests" } },
+    { "method": "GET", "path": "/template/list", "covered_by": { "stream": "templates" } },
+    { "method": "GET", "path": "/team/members", "covered_by": { "stream": "team_members" } },
+    { "method": "GET", "path": "/account", "covered_by": { "stream": "account" } },
+    { "method": "POST", "path": "/signature_request/send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/template/create_embedded_draft", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/signature_request/files/{id}", "excluded": { "category": "binary_payload", "reason": "PDF/document binary download, not a syncable record stream" } }
+  ]
+}

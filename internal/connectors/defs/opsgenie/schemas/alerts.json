@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "alerts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "tiny_id": { "type": ["string", "null"] },
+    "alias": { "type": ["string", "null"] },
+    "message": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "priority": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "last_occurred_at": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "owner": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "responders": { "type": ["array", "null"] },
+    "details": { "type": ["object", "null"] }
+  }
+}

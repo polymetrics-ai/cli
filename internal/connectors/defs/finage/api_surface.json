@@ -1,0 +1,16 @@
+{
+  "api": "Finage REST API (https://api.finage.co.uk)",
+  "docs": "https://finage.co.uk/docs/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 non-partitioned legacy-parity read streams; the symbol-partitioned market_news stream is blocked (ENGINE_GAP: no fan-out/partition mechanism in the declarative dialect); the full Finage surface (real-time quotes, forex, crypto, per-symbol fundamentals) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/fnd/market-information/us/most-actives", "covered_by": { "stream": "most_active_us_stocks" } },
+    { "method": "GET", "path": "/fnd/market-information/us/most-gainers", "covered_by": { "stream": "most_gainers" } },
+    { "method": "GET", "path": "/fnd/market-information/us/most-losers", "covered_by": { "stream": "most_losers" } },
+    { "method": "GET", "path": "/fnd/market-information/us/sector-performance", "covered_by": { "stream": "sector_performance" } },
+    { "method": "GET", "path": "/fnd/delisted-companies/", "covered_by": { "stream": "delisted_companies" } },
+    { "method": "GET", "path": "/news/market/{symbol}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: legacy fans this stream out across the configured symbols config list (one request per symbol), which the declarative dialect's stream.path/query has no mechanism to express (a stream resolves exactly one request path per pagination page, not N independent requests driven by a runtime config list); see docs.md Known limits and this bundle's reported blocker" } },
+    { "method": "GET", "path": "/last/stock/{symbol}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/agg/stock/{symbol}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

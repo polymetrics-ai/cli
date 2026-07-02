@@ -1,0 +1,59 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "size": "2", "from": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 3,
+      "results": [
+        {
+          "jnid": "contacts_fixture_1",
+          "type": "contact",
+          "display_name": "Fixture 1",
+          "first_name": "Fixture",
+          "last_name": "1",
+          "company": "Example Co",
+          "email": "fixture1@example.com",
+          "mobile_phone": "+15550101",
+          "home_phone": "",
+          "work_phone": "",
+          "address_line1": "1 Example St",
+          "city": "Minneapolis",
+          "state_text": "MN",
+          "zip": "55401",
+          "country_name": "United States",
+          "status_name": "Active",
+          "record_type_name": "contacts",
+          "sales_rep_name": "Fixture Rep",
+          "is_active": true,
+          "is_archived": false,
+          "date_created": 1767225601,
+          "date_updated": 1767225601
+        },
+        {
+          "jnid": "contacts_fixture_2",
+          "type": "contact",
+          "display_name": "Fixture 2",
+          "first_name": "Fixture",
+          "last_name": "2",
+          "company": "Example Co",
+          "email": "fixture2@example.com",
+          "mobile_phone": "+15550102",
+          "home_phone": "",
+          "work_phone": "",
+          "address_line1": "2 Example St",
+          "city": "Minneapolis",
+          "state_text": "MN",
+          "zip": "55401",
+          "country_name": "United States",
+          "status_name": "Active",
+          "record_type_name": "contacts",
+          "sales_rep_name": "Fixture Rep",
+          "is_active": true,
+          "is_archived": false,
+          "date_created": 1767225602,
+          "date_updated": 1767225602
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/synthetic-conformance-value/users" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture User One", "email": "fixture1@example.com", "active": true },
+      { "id": 2, "name": "Fixture User Two", "email": "fixture2@example.com", "active": true }
+    ]
+  }
+}

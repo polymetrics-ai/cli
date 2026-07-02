@@ -1,0 +1,32 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "x-api-key", "value": "{{ secrets.api_key }}", "prefix": "" }
+    ],
+    "check": { "method": "GET", "path": "/orders" },
+    "error_map": [
+      { "status": 401, "hint": "veeqo api_key is missing or invalid; re-run pm credentials add veeqo" },
+      { "status": 403, "hint": "veeqo account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "veeqo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "orders",
+      "path": "/orders",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.id | last_path_segment }}",
+        "number": "{{ record.number }}",
+        "status": "{{ record.status }}",
+        "created_at": "{{ record.created_at }}"
+      },
+      "schema": "schemas/orders.json"
+    }
+  ]
+}

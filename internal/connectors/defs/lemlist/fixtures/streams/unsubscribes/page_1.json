@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/unsubscribes", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "_id": "unsub_fixture_1", "email": "fixture1@example.com" },
+      { "_id": "unsub_fixture_2", "email": "fixture2@example.com" }
+    ]
+  }
+}

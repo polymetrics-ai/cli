@@ -1,0 +1,924 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stats/breakdown",
+    "query": {
+      "site_id": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "property": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "metrics": "synthetic-conformance-value",
+      "filters": "synthetic-conformance-value",
+      "compare": "synthetic-conformance-value",
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "page": "/fixture-1",
+          "visitors": 1,
+          "visits": 2,
+          "pageviews": 3,
+          "events": 4,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-2",
+          "visitors": 2,
+          "visits": 3,
+          "pageviews": 4,
+          "events": 5,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-3",
+          "visitors": 3,
+          "visits": 4,
+          "pageviews": 5,
+          "events": 6,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-4",
+          "visitors": 4,
+          "visits": 5,
+          "pageviews": 6,
+          "events": 7,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-5",
+          "visitors": 5,
+          "visits": 6,
+          "pageviews": 7,
+          "events": 8,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-6",
+          "visitors": 6,
+          "visits": 7,
+          "pageviews": 8,
+          "events": 9,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-7",
+          "visitors": 7,
+          "visits": 8,
+          "pageviews": 9,
+          "events": 10,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-8",
+          "visitors": 8,
+          "visits": 9,
+          "pageviews": 10,
+          "events": 11,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-9",
+          "visitors": 9,
+          "visits": 10,
+          "pageviews": 11,
+          "events": 12,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-10",
+          "visitors": 10,
+          "visits": 11,
+          "pageviews": 12,
+          "events": 13,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-11",
+          "visitors": 11,
+          "visits": 12,
+          "pageviews": 13,
+          "events": 14,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-12",
+          "visitors": 12,
+          "visits": 13,
+          "pageviews": 14,
+          "events": 15,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-13",
+          "visitors": 13,
+          "visits": 14,
+          "pageviews": 15,
+          "events": 16,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-14",
+          "visitors": 14,
+          "visits": 15,
+          "pageviews": 16,
+          "events": 17,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-15",
+          "visitors": 15,
+          "visits": 16,
+          "pageviews": 17,
+          "events": 18,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-16",
+          "visitors": 16,
+          "visits": 17,
+          "pageviews": 18,
+          "events": 19,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-17",
+          "visitors": 17,
+          "visits": 18,
+          "pageviews": 19,
+          "events": 20,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-18",
+          "visitors": 18,
+          "visits": 19,
+          "pageviews": 20,
+          "events": 21,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-19",
+          "visitors": 19,
+          "visits": 20,
+          "pageviews": 21,
+          "events": 22,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-20",
+          "visitors": 20,
+          "visits": 21,
+          "pageviews": 22,
+          "events": 23,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-21",
+          "visitors": 21,
+          "visits": 22,
+          "pageviews": 23,
+          "events": 24,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-22",
+          "visitors": 22,
+          "visits": 23,
+          "pageviews": 24,
+          "events": 25,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-23",
+          "visitors": 23,
+          "visits": 24,
+          "pageviews": 25,
+          "events": 26,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-24",
+          "visitors": 24,
+          "visits": 25,
+          "pageviews": 26,
+          "events": 27,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-25",
+          "visitors": 25,
+          "visits": 26,
+          "pageviews": 27,
+          "events": 28,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-26",
+          "visitors": 26,
+          "visits": 27,
+          "pageviews": 28,
+          "events": 29,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-27",
+          "visitors": 27,
+          "visits": 28,
+          "pageviews": 29,
+          "events": 30,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-28",
+          "visitors": 28,
+          "visits": 29,
+          "pageviews": 30,
+          "events": 31,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-29",
+          "visitors": 29,
+          "visits": 30,
+          "pageviews": 31,
+          "events": 32,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-30",
+          "visitors": 30,
+          "visits": 31,
+          "pageviews": 32,
+          "events": 33,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-31",
+          "visitors": 31,
+          "visits": 32,
+          "pageviews": 33,
+          "events": 34,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-32",
+          "visitors": 32,
+          "visits": 33,
+          "pageviews": 34,
+          "events": 35,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-33",
+          "visitors": 33,
+          "visits": 34,
+          "pageviews": 35,
+          "events": 36,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-34",
+          "visitors": 34,
+          "visits": 35,
+          "pageviews": 36,
+          "events": 37,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-35",
+          "visitors": 35,
+          "visits": 36,
+          "pageviews": 37,
+          "events": 38,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-36",
+          "visitors": 36,
+          "visits": 37,
+          "pageviews": 38,
+          "events": 39,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-37",
+          "visitors": 37,
+          "visits": 38,
+          "pageviews": 39,
+          "events": 40,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-38",
+          "visitors": 38,
+          "visits": 39,
+          "pageviews": 40,
+          "events": 41,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-39",
+          "visitors": 39,
+          "visits": 40,
+          "pageviews": 41,
+          "events": 42,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-40",
+          "visitors": 40,
+          "visits": 41,
+          "pageviews": 42,
+          "events": 43,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-41",
+          "visitors": 41,
+          "visits": 42,
+          "pageviews": 43,
+          "events": 44,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-42",
+          "visitors": 42,
+          "visits": 43,
+          "pageviews": 44,
+          "events": 45,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-43",
+          "visitors": 43,
+          "visits": 44,
+          "pageviews": 45,
+          "events": 46,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-44",
+          "visitors": 44,
+          "visits": 45,
+          "pageviews": 46,
+          "events": 47,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-45",
+          "visitors": 45,
+          "visits": 46,
+          "pageviews": 47,
+          "events": 48,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-46",
+          "visitors": 46,
+          "visits": 47,
+          "pageviews": 48,
+          "events": 49,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-47",
+          "visitors": 47,
+          "visits": 48,
+          "pageviews": 49,
+          "events": 50,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-48",
+          "visitors": 48,
+          "visits": 49,
+          "pageviews": 50,
+          "events": 51,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-49",
+          "visitors": 49,
+          "visits": 50,
+          "pageviews": 51,
+          "events": 52,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-50",
+          "visitors": 50,
+          "visits": 51,
+          "pageviews": 52,
+          "events": 53,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-51",
+          "visitors": 51,
+          "visits": 52,
+          "pageviews": 53,
+          "events": 54,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-52",
+          "visitors": 52,
+          "visits": 53,
+          "pageviews": 54,
+          "events": 55,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-53",
+          "visitors": 53,
+          "visits": 54,
+          "pageviews": 55,
+          "events": 56,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-54",
+          "visitors": 54,
+          "visits": 55,
+          "pageviews": 56,
+          "events": 57,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-55",
+          "visitors": 55,
+          "visits": 56,
+          "pageviews": 57,
+          "events": 58,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-56",
+          "visitors": 56,
+          "visits": 57,
+          "pageviews": 58,
+          "events": 59,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-57",
+          "visitors": 57,
+          "visits": 58,
+          "pageviews": 59,
+          "events": 60,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-58",
+          "visitors": 58,
+          "visits": 59,
+          "pageviews": 60,
+          "events": 61,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-59",
+          "visitors": 59,
+          "visits": 60,
+          "pageviews": 61,
+          "events": 62,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-60",
+          "visitors": 60,
+          "visits": 61,
+          "pageviews": 62,
+          "events": 63,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-61",
+          "visitors": 61,
+          "visits": 62,
+          "pageviews": 63,
+          "events": 64,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-62",
+          "visitors": 62,
+          "visits": 63,
+          "pageviews": 64,
+          "events": 65,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-63",
+          "visitors": 63,
+          "visits": 64,
+          "pageviews": 65,
+          "events": 66,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-64",
+          "visitors": 64,
+          "visits": 65,
+          "pageviews": 66,
+          "events": 67,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-65",
+          "visitors": 65,
+          "visits": 66,
+          "pageviews": 67,
+          "events": 68,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-66",
+          "visitors": 66,
+          "visits": 67,
+          "pageviews": 68,
+          "events": 69,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-67",
+          "visitors": 67,
+          "visits": 68,
+          "pageviews": 69,
+          "events": 70,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-68",
+          "visitors": 68,
+          "visits": 69,
+          "pageviews": 70,
+          "events": 71,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-69",
+          "visitors": 69,
+          "visits": 70,
+          "pageviews": 71,
+          "events": 72,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-70",
+          "visitors": 70,
+          "visits": 71,
+          "pageviews": 72,
+          "events": 73,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-71",
+          "visitors": 71,
+          "visits": 72,
+          "pageviews": 73,
+          "events": 74,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-72",
+          "visitors": 72,
+          "visits": 73,
+          "pageviews": 74,
+          "events": 75,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-73",
+          "visitors": 73,
+          "visits": 74,
+          "pageviews": 75,
+          "events": 76,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-74",
+          "visitors": 74,
+          "visits": 75,
+          "pageviews": 76,
+          "events": 77,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-75",
+          "visitors": 75,
+          "visits": 76,
+          "pageviews": 77,
+          "events": 78,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-76",
+          "visitors": 76,
+          "visits": 77,
+          "pageviews": 78,
+          "events": 79,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-77",
+          "visitors": 77,
+          "visits": 78,
+          "pageviews": 79,
+          "events": 80,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-78",
+          "visitors": 78,
+          "visits": 79,
+          "pageviews": 80,
+          "events": 81,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-79",
+          "visitors": 79,
+          "visits": 80,
+          "pageviews": 81,
+          "events": 82,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-80",
+          "visitors": 80,
+          "visits": 81,
+          "pageviews": 82,
+          "events": 83,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-81",
+          "visitors": 81,
+          "visits": 82,
+          "pageviews": 83,
+          "events": 84,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-82",
+          "visitors": 82,
+          "visits": 83,
+          "pageviews": 84,
+          "events": 85,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-83",
+          "visitors": 83,
+          "visits": 84,
+          "pageviews": 85,
+          "events": 86,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-84",
+          "visitors": 84,
+          "visits": 85,
+          "pageviews": 86,
+          "events": 87,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-85",
+          "visitors": 85,
+          "visits": 86,
+          "pageviews": 87,
+          "events": 88,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-86",
+          "visitors": 86,
+          "visits": 87,
+          "pageviews": 88,
+          "events": 89,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-87",
+          "visitors": 87,
+          "visits": 88,
+          "pageviews": 89,
+          "events": 90,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-88",
+          "visitors": 88,
+          "visits": 89,
+          "pageviews": 90,
+          "events": 91,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-89",
+          "visitors": 89,
+          "visits": 90,
+          "pageviews": 91,
+          "events": 92,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-90",
+          "visitors": 90,
+          "visits": 91,
+          "pageviews": 92,
+          "events": 93,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-91",
+          "visitors": 91,
+          "visits": 92,
+          "pageviews": 93,
+          "events": 94,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-92",
+          "visitors": 92,
+          "visits": 93,
+          "pageviews": 94,
+          "events": 95,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-93",
+          "visitors": 93,
+          "visits": 94,
+          "pageviews": 95,
+          "events": 96,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-94",
+          "visitors": 94,
+          "visits": 95,
+          "pageviews": 96,
+          "events": 97,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-95",
+          "visitors": 95,
+          "visits": 96,
+          "pageviews": 97,
+          "events": 98,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-96",
+          "visitors": 96,
+          "visits": 97,
+          "pageviews": 98,
+          "events": 99,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-97",
+          "visitors": 97,
+          "visits": 98,
+          "pageviews": 99,
+          "events": 100,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-98",
+          "visitors": 98,
+          "visits": 99,
+          "pageviews": 100,
+          "events": 101,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-99",
+          "visitors": 99,
+          "visits": 100,
+          "pageviews": 101,
+          "events": 102,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        },
+        {
+          "page": "/fixture-100",
+          "visitors": 100,
+          "visits": 101,
+          "pageviews": 102,
+          "events": 103,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        }
+      ]
+    }
+  }
+}

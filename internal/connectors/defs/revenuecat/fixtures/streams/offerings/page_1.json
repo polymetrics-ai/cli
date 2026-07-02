@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/offerings",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "offering_fixture_1",
+          "object": "offering",
+          "identifier": "default",
+          "description": "Fixture default offering",
+          "created_at": 1735689600000
+        },
+        {
+          "id": "offering_fixture_2",
+          "object": "offering",
+          "identifier": "promo",
+          "description": "Fixture promo offering",
+          "created_at": 1735776000000
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

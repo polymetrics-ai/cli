@@ -1,0 +1,23 @@
+{
+  "name": "shutterstock",
+  "display_name": "Shutterstock",
+  "description": "Reads Shutterstock image, video, and audio search metadata through the Shutterstock REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api-reference.shutterstock.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Shutterstock API read of image, video, and audio search metadata",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

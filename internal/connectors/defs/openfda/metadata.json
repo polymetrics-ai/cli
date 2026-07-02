@@ -1,0 +1,23 @@
+{
+  "name": "openfda",
+  "display_name": "OpenFDA",
+  "description": "Reads FDA drug, device, and food datasets (adverse events, labels, and recall enforcement reports) from the public openFDA REST API.",
+  "integration_type": "api",
+  "docs_url": "https://open.fda.gov/apis/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external openFDA API read of public FDA regulatory datasets",
+    "approval": "none; read-only public reference API"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "request": { "method": "GET", "path": "/projects", "query": { "per_page": "50" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "project-fixture-1",
+        "path": "project-fixture-1",
+        "path_with_namespace": "acme/project-fixture-1",
+        "description": "fixture record",
+        "default_branch": "main",
+        "visibility": "private",
+        "web_url": "https://gitlab.com/acme/project-fixture-1",
+        "created_at": "2026-01-01T00:00:00Z",
+        "last_activity_at": "2026-01-01T02:00:00Z",
+        "archived": false,
+        "star_count": 1,
+        "forks_count": 0,
+        "open_issues_count": 1
+      },
+      {
+        "id": 2,
+        "name": "project-fixture-2",
+        "path": "project-fixture-2",
+        "path_with_namespace": "acme/project-fixture-2",
+        "description": "fixture record",
+        "default_branch": "main",
+        "visibility": "private",
+        "web_url": "https://gitlab.com/acme/project-fixture-2",
+        "created_at": "2026-01-02T00:00:00Z",
+        "last_activity_at": "2026-01-02T02:00:00Z",
+        "archived": false,
+        "star_count": 2,
+        "forks_count": 0,
+        "open_issues_count": 2
+      }
+    ]
+  }
+}

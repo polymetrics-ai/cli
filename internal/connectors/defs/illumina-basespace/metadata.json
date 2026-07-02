@@ -1,0 +1,23 @@
+{
+  "name": "illumina-basespace",
+  "display_name": "Illumina BaseSpace",
+  "description": "Reads Illumina BaseSpace projects, runs, samples, app sessions, and datasets through the BaseSpace v1pre3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Illumina BaseSpace API read of project, run, sample, app session, and dataset data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

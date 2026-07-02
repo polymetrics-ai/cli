@@ -1,0 +1,17 @@
+{
+  "api": "Klaviyo REST (JSON:API) API (https://a.klaviyo.com/api)",
+  "docs": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: all 6 legacy-parity read streams (profiles, events, campaigns, lists, metrics, segments); every other Klaviyo JSON:API resource (flows, templates, catalogs, coupons, images, reviews, forms, tags, ACL/webhook management, and all write/mutation endpoints) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/profiles", "covered_by": { "stream": "profiles" } },
+    { "method": "GET", "path": "/api/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/api/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/api/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/api/metrics", "covered_by": { "stream": "metrics" } },
+    { "method": "GET", "path": "/api/segments", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "/api/accounts", "excluded": { "category": "non_data_endpoint", "reason": "used only by check.json's connectivity probe, not a data stream" } },
+    { "method": "*", "path": "/api/flows, /api/templates, /api/catalogs, /api/coupons, /api/images, /api/reviews, /api/forms, /api/tags", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST/PATCH/DELETE", "path": "all Klaviyo mutation endpoints", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy itself is read-only (capabilities.write: false)" } }
+  ]
+}

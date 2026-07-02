@@ -1,0 +1,71 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-TrackerToken", "value": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/projects", "query": { "limit": "1", "offset": "0" } },
+    "error_map": [
+      { "status": 401, "hint": "pivotal-tracker api_token is missing or invalid; re-run pm credentials add pivotal-tracker" },
+      { "status": 403, "hint": "pivotal-tracker account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "pivotal-tracker rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "state": "{{ record.kind }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "stories",
+      "path": "/projects/{{ config.project_id }}/stories",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "state": "{{ record.current_state }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/stories.json"
+    },
+    {
+      "name": "iterations",
+      "path": "/projects/{{ config.project_id }}/iterations",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.number }}",
+        "name": "{{ record.kind }}",
+        "state": "{{ record.team_strength }}",
+        "updated_at": "{{ record.finish }}"
+      },
+      "schema": "schemas/iterations.json"
+    },
+    {
+      "name": "epics",
+      "path": "/projects/{{ config.project_id }}/epics",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "state": "{{ record.label }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/epics.json"
+    }
+  ]
+}

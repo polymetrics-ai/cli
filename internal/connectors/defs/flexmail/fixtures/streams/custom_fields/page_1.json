@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/custom-fields" },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "item": [
+          { "id": "cf_fixture_1", "name": "Loyalty", "type": "text", "placeholder": "value" },
+          { "id": "cf_fixture_2", "name": "Tier", "type": "text", "placeholder": "value" }
+        ]
+      }
+    }
+  }
+}

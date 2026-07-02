@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "servers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "users": { "type": ["array", "null"] },
+    "messages": { "type": ["integer", "null"] }
+  }
+}

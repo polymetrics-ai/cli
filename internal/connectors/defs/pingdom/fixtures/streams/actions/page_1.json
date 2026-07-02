@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/actions", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "actions": [
+        { "id": 500001, "checkid": 100001, "checkname": "Fixture Homepage", "contactname": "Fixture Oncall", "status": "sent", "via": 1, "time": 1767225601 },
+        { "id": 500002, "checkid": 100002, "checkname": "Fixture API", "contactname": "Fixture Oncall", "status": "delivered", "via": 2, "time": 1767225700 }
+      ]
+    }
+  }
+}

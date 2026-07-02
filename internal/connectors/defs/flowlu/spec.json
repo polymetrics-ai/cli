@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Flowlu Connection Specification",
+  "type": "object",
+  "required": ["company"],
+  "properties": {
+    "company": {
+      "type": "string",
+      "description": "Your Flowlu account subdomain (the <company> in https://<company>.flowlu.com). Used to derive base_url as https://{company}.flowlu.com/api/v1/module."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Flowlu API key, sent as the api_key query parameter on every request."
+    }
+  }
+}

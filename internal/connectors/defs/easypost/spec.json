@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EasyPost Connection Specification",
+  "type": "object",
+  "required": ["username"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "x-secret": true,
+      "description": "EasyPost API key, sent as the HTTP Basic username with an empty password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.easypost.com/v2",
+      "description": "EasyPost API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only objects created at or after this time are read on a fresh sync (a persisted cursor takes precedence on repeat syncs)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "YouTube Data Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.googleapis.com/youtube/v3",
+      "description": "YouTube Data API root. Also usable as a base URL override for tests/proxies."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "YouTube Data API key, sent as the 'key' query parameter on every request. Never logged."
+    },
+    "channel_ids": {
+      "type": "string",
+      "description": "Comma-separated channel IDs, sent as the 'id' query parameter for the 'channels' stream. Omitted entirely when unset."
+    },
+    "ids": {
+      "type": "string",
+      "description": "Comma-separated video/playlist IDs, sent as the 'id' query parameter for the 'videos' and 'playlists' streams. Omitted entirely when unset."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

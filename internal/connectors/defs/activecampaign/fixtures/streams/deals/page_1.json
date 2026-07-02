@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/deals", "query": { "limit": "20", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "deals": [
+        {
+          "id": "1",
+          "title": "Fixture Deal",
+          "contact": "1",
+          "value": "1000",
+          "currency": "usd",
+          "status": "0",
+          "stage": "1",
+          "owner": "1",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "mdate": "2026-01-01T00:00:00-05:00"
+        }
+      ],
+      "meta": { "total": "1" }
+    }
+  }
+}

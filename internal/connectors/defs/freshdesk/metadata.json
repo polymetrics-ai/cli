@@ -1,0 +1,22 @@
+{
+  "name": "freshdesk",
+  "display_name": "Freshdesk",
+  "description": "Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2.",
+  "integration_type": "api",
+  "docs_url": "https://developers.freshdesk.com/api/#change_log",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Freshdesk API read of support tickets, contacts, companies, agents, and groups"
+  }
+}

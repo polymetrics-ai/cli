@@ -1,0 +1,50 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_token }}", "password": "api_token" }
+    ],
+    "check": { "method": "GET", "path": "/me" },
+    "error_map": [
+      { "status": 401, "hint": "toggl api_token is missing or invalid; re-run pm credentials add toggl" },
+      { "status": 429, "class": "rate_limited", "hint": "toggl rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "time_entries",
+      "path": "/me/time_entries",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/time_entries.json"
+    },
+    {
+      "name": "projects",
+      "path": "/workspaces/{{ config.workspace_id }}/projects",
+      "records": { "path": "." },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "clients",
+      "path": "/workspaces/{{ config.workspace_id }}/clients",
+      "records": { "path": "." },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "workspace_users",
+      "path": "/workspaces/{{ config.workspace_id }}/users",
+      "records": { "path": "." },
+      "schema": "schemas/workspace_users.json"
+    },
+    {
+      "name": "organization_users",
+      "path": "/organizations/{{ config.organization_id }}/users",
+      "records": { "path": "." },
+      "schema": "schemas/organization_users.json"
+    }
+  ]
+}

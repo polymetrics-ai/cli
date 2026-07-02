@@ -1,0 +1,22 @@
+{
+  "name": "onepagecrm",
+  "display_name": "OnePageCRM",
+  "description": "Reads OnePageCRM contacts, deals, actions, companies, and users through the OnePageCRM REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.onepagecrm.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external OnePageCRM API read of CRM contact, deal, and task data"
+  }
+}

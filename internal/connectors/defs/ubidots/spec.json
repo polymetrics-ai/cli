@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ubidots Connection Specification",
+  "type": "object",
+  "required": ["token"],
+  "properties": {
+    "token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Ubidots API token, sent as the X-Auth-Token header on every request."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://industrial.api.ubidots.com",
+      "description": "Ubidots API base URL override for tests or proxies."
+    }
+  }
+}

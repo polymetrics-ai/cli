@@ -1,0 +1,23 @@
+{
+  "name": "convertkit",
+  "display_name": "ConvertKit",
+  "description": "Reads ConvertKit (Kit) subscribers, forms, sequences, tags, and broadcasts through the ConvertKit v3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.convertkit.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external ConvertKit API read of subscriber and campaign data",
+    "approval": "none; read-only source"
+  }
+}

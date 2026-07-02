@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/transactions", "query": { "page": "1", "per_page": "1", "iban": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "transactions": [
+        { "transaction_id": "txn_fixture_1", "amount": "10.00", "side": "credit", "settled_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "meta": { "current_page": 1, "next_page": null }
+    }
+  }
+}

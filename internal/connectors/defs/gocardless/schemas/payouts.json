@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payouts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "created_at": { "type": "string" },
+    "amount": { "type": ["integer", "null"] },
+    "deducted_fees": { "type": ["integer", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "payout_type": { "type": ["string", "null"] },
+    "reference": { "type": ["string", "null"] },
+    "arrival_date": { "type": ["string", "null"] },
+    "creditor": { "type": ["string", "null"] },
+    "creditor_bank_account": { "type": ["string", "null"] }
+  }
+}

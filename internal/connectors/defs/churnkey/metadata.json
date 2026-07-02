@@ -1,0 +1,22 @@
+{
+  "name": "churnkey",
+  "display_name": "Churnkey",
+  "description": "Reads Churnkey cancel-flow sessions and aggregated session counts through the read-only Churnkey Data API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.churnkey.co/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Churnkey API read of cancel-flow session and customer data"
+  }
+}

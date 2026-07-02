@@ -1,0 +1,17 @@
+{
+  "api": "Toggl Track API v9 (https://developers.track.toggl.com/docs/)",
+  "docs": "https://developers.track.toggl.com/docs/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (time_entries, projects, clients, workspace_users, organization_users). Toggl's write endpoints (create/update/delete time entry, project, client) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v9/me/time_entries", "covered_by": { "stream": "time_entries" } },
+    { "method": "GET", "path": "/api/v9/workspaces/{workspace_id}/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/api/v9/workspaces/{workspace_id}/clients", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/api/v9/workspaces/{workspace_id}/users", "covered_by": { "stream": "workspace_users" } },
+    { "method": "GET", "path": "/api/v9/organizations/{organization_id}/users", "covered_by": { "stream": "organization_users" } },
+    { "method": "GET", "path": "/api/v9/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, used only by check, not a syncable object stream" } },
+    { "method": "POST", "path": "/api/v9/workspaces/{workspace_id}/time_entries", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented time entry creation; Pass B capability expansion" } },
+    { "method": "PUT", "path": "/api/v9/workspaces/{workspace_id}/time_entries/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented time entry mutation; Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/api/v9/workspaces/{workspace_id}/time_entries/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive delete not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

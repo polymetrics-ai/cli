@@ -1,0 +1,69 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Correlation-Id": "{{ config.x_correlation_id }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "api_key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "offset_param": "Skip",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/api/V1/GetCurrencies" },
+    "error_map": [
+      { "status": 401, "hint": "ding-connect api_key is missing or invalid; re-run pm credentials add ding-connect" },
+      { "status": 429, "class": "rate_limited", "hint": "ding-connect rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "countries",
+      "path": "/api/V1/GetCountries",
+      "records": { "path": "Items" },
+      "computed_fields": {
+        "uuid": "{{ record.CountryIso }}"
+      },
+      "schema": "schemas/countries.json"
+    },
+    {
+      "name": "currencies",
+      "path": "/api/V1/GetCurrencies",
+      "records": { "path": "Items" },
+      "computed_fields": {
+        "uuid": "{{ record.CurrencyIso }}"
+      },
+      "schema": "schemas/currencies.json"
+    },
+    {
+      "name": "regions",
+      "path": "/api/V1/GetRegions",
+      "records": { "path": "Items" },
+      "computed_fields": {
+        "uuid": "{{ record.CountryIso }}:{{ record.RegionCode }}"
+      },
+      "schema": "schemas/regions.json"
+    },
+    {
+      "name": "providers",
+      "path": "/api/V1/GetProviders",
+      "records": { "path": "Items" },
+      "computed_fields": {
+        "uuid": "{{ record.ProviderCode }}"
+      },
+      "schema": "schemas/providers.json"
+    },
+    {
+      "name": "products",
+      "path": "/api/V1/GetProducts",
+      "records": { "path": "Items" },
+      "computed_fields": {
+        "uuid": "{{ record.SkuCode }}"
+      },
+      "schema": "schemas/products.json"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Exchange Rates API Connection Specification",
+  "type": "object",
+  "required": ["access_key"],
+  "properties": {
+    "access_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "exchangeratesapi.io access key, sent as the access_key query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.exchangeratesapi.io/v1",
+      "description": "Exchange Rates API base URL override for tests or proxies."
+    },
+    "base": {
+      "type": "string",
+      "description": "Optional base currency code applied to the latest and symbols requests (the API's optional 'base' query parameter)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

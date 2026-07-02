@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/campsites", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "RECDATA": [
+        { "CampsiteID": "1", "CampsiteName": "Fixture Campsite 1", "CampsiteType": "STANDARD NONELECTRIC", "LastUpdatedDate": "2026-01-01" },
+        { "CampsiteID": "2", "CampsiteName": "Fixture Campsite 2", "CampsiteType": "STANDARD ELECTRIC", "LastUpdatedDate": "2026-01-01" }
+      ],
+      "METADATA": { "RESULTS": { "TOTAL_COUNT": "2" } }
+    }
+  }
+}

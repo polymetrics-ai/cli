@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/qualitygates/list",
+    "query": {
+      "p": "1",
+      "ps": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "qualitygates": [
+        {
+          "id": "1",
+          "name": "Sonar way",
+          "isDefault": true,
+          "isBuiltIn": true
+        },
+        {
+          "id": "2",
+          "name": "fixture-org custom gate",
+          "isDefault": false,
+          "isBuiltIn": false
+        }
+      ]
+    }
+  }
+}

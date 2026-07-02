@@ -1,0 +1,17 @@
+{
+  "api": "MailerLite v2 API (https://connect.mailerlite.com/api)",
+  "docs": "https://developers.mailerlite.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full MailerLite API surface (single-subscriber CRUD, webhooks, forms, fields, campaign content) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/subscribers", "covered_by": { "stream": "subscribers" } },
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/groups", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/segments", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "/automations", "covered_by": { "stream": "automations" } },
+    { "method": "POST", "path": "/subscribers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/forms/{type}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

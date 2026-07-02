@@ -1,0 +1,22 @@
+{
+  "name": "gitbook",
+  "display_name": "GitBook",
+  "description": "Reads GitBook users, organizations, organization members, and space content (pages) through the GitBook REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.gitbook.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external GitBook API read of documentation content, users, and organizations"
+  }
+}

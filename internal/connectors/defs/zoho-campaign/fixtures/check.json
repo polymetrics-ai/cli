@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/lists", "query": { "page": "1", "per_page": "200" } },
+  "response": {
+    "status": 200,
+    "body": { "lists": [], "status": "success" }
+  }
+}

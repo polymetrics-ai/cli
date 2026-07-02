@@ -1,0 +1,117 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/card/v3",
+    "query": {
+      "limit": "10",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "key": "tok_fixture_1",
+          "cardType": "visa",
+          "lastFour": "4242",
+          "expirationMonth": "01",
+          "expirationYear": "2030",
+          "cardHolderName": "Fixture Holder 1",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "key": "tok_fixture_2",
+          "cardType": "visa",
+          "lastFour": "4242",
+          "expirationMonth": "01",
+          "expirationYear": "2030",
+          "cardHolderName": "Fixture Holder 2",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "key": "tok_fixture_3",
+          "cardType": "visa",
+          "lastFour": "4242",
+          "expirationMonth": "01",
+          "expirationYear": "2030",
+          "cardHolderName": "Fixture Holder 3",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "key": "tok_fixture_4",
+          "cardType": "visa",
+          "lastFour": "4242",
+          "expirationMonth": "01",
+          "expirationYear": "2030",
+          "cardHolderName": "Fixture Holder 4",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "key": "tok_fixture_5",
+          "cardType": "visa",
+          "lastFour": "4242",
+          "expirationMonth": "01",
+          "expirationYear": "2030",
+          "cardHolderName": "Fixture Holder 5",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "key": "tok_fixture_6",
+          "cardType": "visa",
+          "lastFour": "4242",
+          "expirationMonth": "01",
+          "expirationYear": "2030",
+          "cardHolderName": "Fixture Holder 6",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "key": "tok_fixture_7",
+          "cardType": "visa",
+          "lastFour": "4242",
+          "expirationMonth": "01",
+          "expirationYear": "2030",
+          "cardHolderName": "Fixture Holder 7",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "key": "tok_fixture_8",
+          "cardType": "visa",
+          "lastFour": "4242",
+          "expirationMonth": "01",
+          "expirationYear": "2030",
+          "cardHolderName": "Fixture Holder 8",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "key": "tok_fixture_9",
+          "cardType": "visa",
+          "lastFour": "4242",
+          "expirationMonth": "01",
+          "expirationYear": "2030",
+          "cardHolderName": "Fixture Holder 9",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "key": "tok_fixture_10",
+          "cardType": "visa",
+          "lastFour": "4242",
+          "expirationMonth": "01",
+          "expirationYear": "2030",
+          "cardHolderName": "Fixture Holder 10",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

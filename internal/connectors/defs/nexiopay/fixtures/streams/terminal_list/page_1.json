@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/pay/v3/getTerminalList" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "terminalId": "t_fixture_1", "name": "front", "merchantId": "merch_fixture_1", "status": "active" },
+      { "terminalId": "t_fixture_2", "name": "back", "merchantId": "merch_fixture_1", "status": "active" }
+    ]
+  }
+}

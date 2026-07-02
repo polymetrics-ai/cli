@@ -1,0 +1,23 @@
+{
+  "name": "apptivo",
+  "display_name": "Apptivo",
+  "description": "Reads Apptivo CRM customers, contacts, leads, and opportunities through the Apptivo REST DAO API (full refresh, read-only).",
+  "integration_type": "api",
+  "docs_url": "https://www.apptivo.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Apptivo API read of CRM customer, contact, lead, and opportunity data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "api": "JustCall API (v2.1 + v1) (https://api.justcall.io)",
+  "docs": "https://developer.justcall.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: 3 of legacy's 5 read streams (users, calls, sms) are ported at Tier 1. contacts and phone_numbers keep their legacy Go implementation for now (see docs.md's Known limits — a validator/dialect coverage-bookkeeping gap, not a read-behavior gap); any other JustCall surface (SMS send, call actions, webhooks) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2.1/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/v2.1/calls", "covered_by": { "stream": "calls" } },
+    { "method": "GET", "path": "/v2.1/texts", "covered_by": { "stream": "sms" } },
+    { "method": "POST", "path": "/v1/contacts/list", "excluded": { "category": "out_of_scope", "reason": "legacy reads this via POST with an empty-object body; api_surface.json's capabilities.write fail-first-run rule treats any non-excluded POST/PUT/PATCH/DELETE endpoint as implying reverse-ETL write support, which this read-only connector must not falsely claim (internal/app/app.go gates real reverse-ETL execution on capabilities.write). Kept on the legacy Go implementation pending a dialect/tooling extension (e.g. a covered_by.read_via_post marker) that can represent a POST-shaped read without implying write capability; see docs.md" } },
+    { "method": "POST", "path": "/v1/numbers/list", "excluded": { "category": "out_of_scope", "reason": "same POST-read-vs-write-capability tooling conflict as /v1/contacts/list above; kept on the legacy Go implementation; see docs.md" } },
+    { "method": "POST", "path": "/v1/calls/send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy connector is read-only" } },
+    { "method": "POST", "path": "/v1/texts/new", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy connector is read-only" } }
+  ]
+}

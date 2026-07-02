@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Deputy Connection Specification",
+  "type": "object",
+  "required": ["api_key", "base_url"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Deputy bearer access token, sent as the Authorization header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Deputy install-specific API base URL, e.g. https://{installname}.{geo}.deputy.com. Required; there is no shared default host (matches legacy, which has no in-code fallback)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

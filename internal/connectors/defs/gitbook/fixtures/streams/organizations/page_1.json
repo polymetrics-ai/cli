@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/orgs", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "org_fixture_1",
+          "title": "Fixture Org One",
+          "type": "organization",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "urls": { "location": "https://app.gitbook.com/o/org_fixture_1" }
+        },
+        {
+          "id": "org_fixture_2",
+          "title": "Fixture Org Two",
+          "type": "organization",
+          "createdAt": "2026-01-02T00:00:00Z",
+          "urls": { "location": "https://app.gitbook.com/o/org_fixture_2" }
+        }
+      ],
+      "next": { "page": "cursor_fixture_2" }
+    }
+  }
+}

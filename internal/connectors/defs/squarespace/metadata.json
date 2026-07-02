@@ -1,0 +1,23 @@
+{
+  "name": "squarespace",
+  "display_name": "Squarespace",
+  "description": "Reads Squarespace orders, products, inventory items, and profiles through the Squarespace Commerce API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.squarespace.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Squarespace API read of commerce orders, products, inventory, and profiles",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

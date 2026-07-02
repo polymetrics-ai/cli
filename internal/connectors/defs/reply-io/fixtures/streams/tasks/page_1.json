@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tasks",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "task_fixture_1",
+        "type": "call",
+        "status": "open",
+        "due_date": "2026-01-05",
+        "updated_at": "2026-01-02T00:00:00Z"
+      },
+      {
+        "id": "task_fixture_2",
+        "type": "email",
+        "status": "completed",
+        "due_date": "2026-01-04",
+        "updated_at": "2026-01-03T00:00:00Z"
+      }
+    ]
+  }
+}

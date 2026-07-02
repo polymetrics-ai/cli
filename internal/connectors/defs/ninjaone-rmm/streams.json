@@ -1,0 +1,93 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "after",
+      "last_record_field": "id"
+    },
+    "check": { "method": "GET", "path": "/v2/organizations", "query": { "pageSize": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "ninjaone-rmm api_key is missing or invalid; re-run pm credentials add ninjaone-rmm" },
+      { "status": 429, "class": "rate_limited", "hint": "ninjaone-rmm rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "organizations",
+      "path": "/v2/organizations",
+      "query": { "pageSize": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "description": "{{ record.description }}",
+        "node_approval_mode": "{{ record.nodeApprovalMode }}"
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "devices",
+      "path": "/v2/devices",
+      "query": { "pageSize": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "organization_id": "{{ record.organizationId }}",
+        "location_id": "{{ record.locationId }}",
+        "system_name": "{{ record.systemName }}",
+        "dns_name": "{{ record.dnsName }}",
+        "node_class": "{{ record.nodeClass }}",
+        "offline": "{{ record.offline }}",
+        "approval_status": "{{ record.approvalStatus }}"
+      },
+      "schema": "schemas/devices.json"
+    },
+    {
+      "name": "locations",
+      "path": "/v2/locations",
+      "query": { "pageSize": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "organization_id": "{{ record.organizationId }}",
+        "name": "{{ record.name }}",
+        "address": "{{ record.address }}",
+        "description": "{{ record.description }}"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "activities",
+      "path": "/v2/activities",
+      "query": { "pageSize": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "activityTime": "{{ record.activityTime }}",
+        "device_id": "{{ record.deviceId }}",
+        "activity_type": "{{ record.activityType }}",
+        "status": "{{ record.status }}",
+        "message": "{{ record.message }}"
+      },
+      "schema": "schemas/activities.json"
+    },
+    {
+      "name": "policies",
+      "path": "/v2/policies",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "node_class": "{{ record.nodeClass }}",
+        "description": "{{ record.description }}"
+      },
+      "schema": "schemas/policies.json"
+    }
+  ]
+}

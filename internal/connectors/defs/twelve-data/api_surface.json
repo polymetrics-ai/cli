@@ -1,0 +1,16 @@
+{
+  "api": "Twelve Data API (https://api.twelvedata.com)",
+  "docs": "https://twelvedata.com/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read-only streams (time_series, quote, stocks, forex_pairs) only, matching internal/connectors/twelve-data's exact endpoint set; the full Twelve Data surface (technical indicators, fundamentals, ETFs, indices, cryptocurrencies, websocket feeds) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/time_series", "covered_by": { "stream": "time_series" } },
+    { "method": "GET", "path": "/quote", "covered_by": { "stream": "quote" } },
+    { "method": "GET", "path": "/stocks", "covered_by": { "stream": "stocks" } },
+    { "method": "GET", "path": "/forex_pairs", "covered_by": { "stream": "forex_pairs" } },
+    { "method": "GET", "path": "/cryptocurrencies", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/indices", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/etf", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/rsi", "excluded": { "category": "out_of_scope", "reason": "technical indicator endpoints not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "request": { "method": "GET", "path": "/alerts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "alert_fixture_1",
+          "tinyId": "1",
+          "alias": "fixture-alert-1",
+          "message": "Fixture disk full",
+          "status": "open",
+          "priority": "P1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T01:00:00Z",
+          "lastOccurredAt": "2026-01-01T02:00:00Z",
+          "source": "fixture-source",
+          "owner": "fixture-owner",
+          "tags": ["fixture"],
+          "responders": [],
+          "details": {}
+        },
+        {
+          "id": "alert_fixture_2",
+          "tinyId": "2",
+          "alias": "fixture-alert-2",
+          "message": "Fixture cpu high",
+          "status": "closed",
+          "priority": "P2",
+          "createdAt": "2026-01-02T00:00:00Z",
+          "updatedAt": "2026-01-02T01:00:00Z",
+          "lastOccurredAt": "2026-01-02T02:00:00Z",
+          "source": "fixture-source",
+          "owner": "fixture-owner",
+          "tags": ["fixture"],
+          "responders": [],
+          "details": {}
+        }
+      ],
+      "paging": {},
+      "totalCount": 2
+    }
+  }
+}

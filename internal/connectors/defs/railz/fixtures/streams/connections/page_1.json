@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/connections", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "connectionUuid": "conn_fixture_1",
+          "businessUuid": "biz_fixture_1",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "connectionUuid": "conn_fixture_2",
+          "businessUuid": "biz_fixture_2",
+          "status": "active",
+          "createdAt": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

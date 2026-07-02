@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stats",
+  "type": "object",
+  "x-primary-key": ["ID"],
+  "properties": {
+    "ID": { "type": ["integer", "null"] },
+    "MessageSentCount": { "type": ["integer", "null"] },
+    "MessageOpenedCount": { "type": ["integer", "null"] },
+    "MessageClickedCount": { "type": ["integer", "null"] },
+    "MessageDeliveredCount": { "type": ["integer", "null"] },
+    "MessageBouncedCount": { "type": ["integer", "null"] },
+    "MessageSpamCount": { "type": ["integer", "null"] },
+    "MessageUnsubscribedCount": { "type": ["integer", "null"] }
+  }
+}

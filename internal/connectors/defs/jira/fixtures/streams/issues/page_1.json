@@ -1,0 +1,45 @@
+{
+  "request": { "method": "GET", "path": "/rest/api/3/search", "query": { "maxResults": "2", "startAt": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "startAt": 0,
+      "maxResults": 2,
+      "total": 3,
+      "issues": [
+        {
+          "id": "10001",
+          "key": "FIX-1",
+          "self": "https://fixture.atlassian.net/rest/api/3/issue/10001",
+          "fields": {
+            "summary": "Fixture issue 1",
+            "created": "2026-01-01T00:00:00.000+0000",
+            "updated": "2026-01-01T00:00:00.000+0000",
+            "status": { "name": "Open" },
+            "issuetype": { "name": "Task" },
+            "priority": { "name": "Medium" },
+            "assignee": { "displayName": "Fixture User 1" },
+            "reporter": { "displayName": "Fixture Reporter" },
+            "project": { "key": "FIX" }
+          }
+        },
+        {
+          "id": "10002",
+          "key": "FIX-2",
+          "self": "https://fixture.atlassian.net/rest/api/3/issue/10002",
+          "fields": {
+            "summary": "Fixture issue 2",
+            "created": "2026-01-02T00:00:00.000+0000",
+            "updated": "2026-01-02T00:00:00.000+0000",
+            "status": { "name": "In Progress" },
+            "issuetype": { "name": "Bug" },
+            "priority": { "name": "High" },
+            "assignee": null,
+            "reporter": { "displayName": "Fixture Reporter" },
+            "project": { "key": "FIX" }
+          }
+        }
+      ]
+    }
+  }
+}

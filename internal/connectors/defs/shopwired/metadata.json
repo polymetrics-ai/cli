@@ -1,0 +1,22 @@
+{
+  "name": "shopwired",
+  "display_name": "ShopWired",
+  "description": "Reads ShopWired products, orders, customers, and categories through the ShopWired REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.shopwired.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external ShopWired API read of product, order, customer, and category data"
+  }
+}

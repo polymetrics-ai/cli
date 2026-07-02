@@ -1,0 +1,22 @@
+{
+  "name": "ninjaone-rmm",
+  "display_name": "NinjaOne RMM",
+  "description": "Reads NinjaOne RMM organizations, devices, locations, activities, and policies through the NinjaOne v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.ninjarmm.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external NinjaOne RMM API read of managed device and organization data"
+  }
+}

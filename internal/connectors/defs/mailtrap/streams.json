@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/accounts" },
+    "error_map": [
+      { "status": 401, "hint": "mailtrap api token is missing or invalid; re-run pm credentials add mailtrap" },
+      { "status": 403, "hint": "mailtrap account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "mailtrap rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "records": { "path": "." },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "inboxes",
+      "path": "/accounts/{{ config.account_id }}/inboxes",
+      "records": { "path": "." },
+      "computed_fields": {
+        "account_id": "{{ config.account_id }}"
+      },
+      "schema": "schemas/inboxes.json"
+    },
+    {
+      "name": "projects",
+      "path": "/accounts/{{ config.account_id }}/projects",
+      "records": { "path": "." },
+      "computed_fields": {
+        "account_id": "{{ config.account_id }}"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "sending_domains",
+      "path": "/accounts/{{ config.account_id }}/sending_domains",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "account_id": "{{ config.account_id }}"
+      },
+      "schema": "schemas/sending_domains.json"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sequences/list/"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "sequences-1",
+        "avatar_id": "avatar-1",
+        "name": "Fixture sequences 1"
+      },
+      {
+        "id": "sequences-2",
+        "avatar_id": "avatar-2",
+        "name": "Fixture sequences 2"
+      }
+    ]
+  }
+}

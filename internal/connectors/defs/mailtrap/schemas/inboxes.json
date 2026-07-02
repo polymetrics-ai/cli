@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "inboxes",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "account_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "domain": { "type": ["string", "null"] },
+    "email_username": { "type": ["string", "null"] },
+    "emails_count": { "type": ["integer", "null"] },
+    "status": { "type": ["string", "null"] },
+    "max_size": { "type": ["integer", "null"] },
+    "used_size": { "type": ["integer", "null"] }
+  }
+}

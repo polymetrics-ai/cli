@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subscribers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "time_zone": { "type": ["string", "null"] },
+    "utc_offset": { "type": ["integer", "null"] },
+    "lifetime_value": { "type": ["integer", "null"] },
+    "ip_address": { "type": ["string", "null"] },
+    "user_agent": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "custom_fields": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "api": "GoLogin API (https://api.gologin.com)",
+  "docs": "https://api.gologin.com/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (profiles, folders, user, tags); GoLogin is read-only in pm and no writes are implemented",
+  "endpoints": [
+    { "method": "GET", "path": "/browser/v2", "covered_by": { "stream": "profiles" } },
+    { "method": "GET", "path": "/folders", "covered_by": { "stream": "folders" } },
+    { "method": "GET", "path": "/user", "covered_by": { "stream": "user" } },
+    { "method": "GET", "path": "/tags/all", "covered_by": { "stream": "tags" } },
+    { "method": "POST", "path": "/browser", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/browser/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/browser/{id}", "excluded": { "category": "destructive_admin", "reason": "profile deletion is a destructive mutation, not a syncable read" } },
+    { "method": "GET", "path": "/browser/{id}/proxy", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/plan", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

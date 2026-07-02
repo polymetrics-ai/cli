@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orders",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date_modified_gmt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "number": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "total": { "type": ["string", "null"] },
+    "total_tax": { "type": ["string", "null"] },
+    "customer_id": { "type": ["integer", "null"] },
+    "payment_method": { "type": ["string", "null"] },
+    "date_created": { "type": ["string", "null"] },
+    "date_created_gmt": { "type": ["string", "null"] },
+    "date_modified": { "type": ["string", "null"] },
+    "date_modified_gmt": { "type": ["string", "null"] },
+    "date_paid": { "type": ["string", "null"] }
+  }
+}

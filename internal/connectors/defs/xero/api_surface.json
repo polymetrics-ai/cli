@@ -1,0 +1,21 @@
+{
+  "api": "Xero Accounting API 2.0 (https://api.xero.com/api.xro/2.0)",
+  "docs": "https://developer.xero.com/documentation/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams (invoices, contacts, accounts, bank_transactions, items, payments) only; the broader Xero Accounting/Payroll/Assets/Files API surface (credit notes, purchase orders, quotes, tracking categories, reports, attachments, journals) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api.xro/2.0/Invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/api.xro/2.0/Contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/api.xro/2.0/Accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/api.xro/2.0/BankTransactions", "covered_by": { "stream": "bank_transactions" } },
+    { "method": "GET", "path": "/api.xro/2.0/Items", "covered_by": { "stream": "items" } },
+    { "method": "GET", "path": "/api.xro/2.0/Payments", "covered_by": { "stream": "payments" } },
+    { "method": "GET", "path": "/api.xro/2.0/Organisation", "excluded": { "category": "non_data_endpoint", "reason": "single organisation metadata object, used only by check; not a syncable object stream" } },
+    { "method": "GET", "path": "/api.xro/2.0/CreditNotes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api.xro/2.0/PurchaseOrders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api.xro/2.0/Quotes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api.xro/2.0/TrackingCategories", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api.xro/2.0/Reports/{reportID}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api.xro/2.0/Invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

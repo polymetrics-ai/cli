@@ -1,0 +1,23 @@
+{
+  "name": "miro",
+  "display_name": "Miro",
+  "description": "Reads Miro boards, board members, items, tags, and connectors through the Miro REST API v2.",
+  "integration_type": "api",
+  "docs_url": "https://developers.miro.com/reference/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Miro API read of board, member, item, tag, and connector data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

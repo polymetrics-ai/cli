@@ -1,0 +1,23 @@
+{
+  "name": "zapier-supported-storage",
+  "display_name": "Zapier Supported Storage",
+  "description": "Reads Zapier Storage records.",
+  "integration_type": "api",
+  "docs_url": "https://help.zapier.com/hc/en-us/articles/8496293271053-Save-and-retrieve-data-from-Zaps",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Zapier Storage API read of stored key/value records",
+    "approval": "none; read-only"
+  }
+}

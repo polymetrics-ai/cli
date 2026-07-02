@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/notes", "query": { "limit": "30", "cursor": "fixture_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "notes": [
+        {
+          "id": "not_fixture_3",
+          "title": "Fixture meeting 3",
+          "object": "note",
+          "created_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T01:00:00Z",
+          "owner": { "name": "Fixture Owner 3", "email": "owner3@example.com" }
+        }
+      ],
+      "hasMore": false,
+      "cursor": ""
+    }
+  }
+}

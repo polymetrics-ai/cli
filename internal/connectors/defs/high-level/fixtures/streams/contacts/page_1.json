@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/upstream/contacts", "query": { "locationId": "synthetic-conformance-value", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "id": "ct_fixture_1",
+          "locationId": "synthetic-conformance-value",
+          "contactName": "Fixture Contact 1",
+          "firstName": "Fixture1",
+          "lastName": "Example",
+          "email": "fixture1@example.com",
+          "phone": "+15550100",
+          "type": "lead",
+          "source": "fixture",
+          "dateAdded": "2026-01-01T00:00:00Z",
+          "dateUpdated": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ct_fixture_2",
+          "locationId": "synthetic-conformance-value",
+          "contactName": "Fixture Contact 2",
+          "firstName": "Fixture2",
+          "lastName": "Example",
+          "email": "fixture2@example.com",
+          "phone": "+15550101",
+          "type": "lead",
+          "source": "fixture",
+          "dateAdded": "2026-01-02T00:00:00Z",
+          "dateUpdated": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "meta": { "nextPageUrl": null }
+    }
+  }
+}

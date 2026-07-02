@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/investments",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "inv_fixture_101",
+        "name": "Fixture Investment 101",
+        "editedName": "Fixture Investment 101",
+        "description": "Fixture record for conformance.",
+        "tickerSymbol": "FIX",
+        "exchange": "NASDAQ",
+        "country": "US",
+        "sector": "Technology",
+        "industry": "Software",
+        "marketType": "public",
+        "financingType": "equity",
+        "employees": 100,
+        "website": "https://example.com",
+        "isArchived": false,
+        "isFavorite": true,
+        "isLocked": false,
+        "visibility": "private",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

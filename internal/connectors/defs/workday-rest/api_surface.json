@@ -1,0 +1,12 @@
+{
+  "api": "Workday REST (HCM v1) API (conservative endpoint subset)",
+  "docs": "manual intervention needed",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (workers, organizations, jobs); legacy is a deliberately conservative read-only Workday REST client and ships no writes. The connector's assigned documentation_url is unreachable ('manual intervention needed'); this bundle is authored entirely from the legacy Go package per docs/migration/conventions.md ('legacy is ground truth over any doc').",
+  "endpoints": [
+    { "method": "GET", "path": "/ccx/api/hcm/v1/{tenant}/workers", "covered_by": { "stream": "workers" } },
+    { "method": "GET", "path": "/ccx/api/hcm/v1/{tenant}/organizations", "covered_by": { "stream": "organizations" } },
+    { "method": "GET", "path": "/ccx/api/hcm/v1/{tenant}/jobs", "covered_by": { "stream": "jobs" } },
+    { "method": "POST", "path": "/ccx/api/hcm/v1/{tenant}/workers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented worker mutation; Pass B capability expansion" } }
+  ]
+}

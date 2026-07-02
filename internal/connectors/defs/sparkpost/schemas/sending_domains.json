@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sending_domains",
+  "type": "object",
+  "x-primary-key": ["domain"],
+  "required": ["domain"],
+  "properties": {
+    "domain": { "type": "string" },
+    "tracking_domain": { "type": ["string", "null"] },
+    "status": { "type": ["object", "null"] },
+    "shared_with_subaccounts": { "type": ["boolean", "null"] },
+    "is_default_bounce_domain": { "type": ["boolean", "null"] }
+  }
+}

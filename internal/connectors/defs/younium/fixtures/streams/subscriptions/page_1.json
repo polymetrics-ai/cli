@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/Subscriptions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sub_fixture_1",
+          "name": "Fixture Subscription One",
+          "accountId": "acc_fixture_1",
+          "updated": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "sub_fixture_2",
+          "name": "Fixture Subscription Two",
+          "accountId": "acc_fixture_2",
+          "updated": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

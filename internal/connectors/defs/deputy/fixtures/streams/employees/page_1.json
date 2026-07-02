@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/supervise/employee"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "Id": 1,
+        "DisplayName": "Fixture Employee 1",
+        "FirstName": "Fixture",
+        "LastName": "One",
+        "Active": true,
+        "Company": 1,
+        "Role": 2,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      },
+      {
+        "Id": 2,
+        "DisplayName": "Fixture Employee 2",
+        "FirstName": "Fixture",
+        "LastName": "Two",
+        "Active": true,
+        "Company": 1,
+        "Role": 2,
+        "Created": "2026-01-01T01:00:00",
+        "Modified": "2026-01-01T01:05:00"
+      }
+    ]
+  }
+}

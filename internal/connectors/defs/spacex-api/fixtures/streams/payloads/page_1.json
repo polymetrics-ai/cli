@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/payloads" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "payload_fixture_1", "name": "Fixture Sat 1", "type": "Satellite", "reused": false, "launch": "launch_fixture_1", "customers": ["NASA"], "nationalities": ["United States"], "manufacturers": ["SpaceX"], "mass_kg": 20.0, "orbit": "LEO" }
+    ]
+  }
+}

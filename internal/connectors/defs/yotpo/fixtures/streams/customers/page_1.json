@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/core/v3/stores/synthetic-conformance-value/customers",
+    "query": { "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "customers": [
+        { "id": "customer_fixture_1", "email": "fixture1@example.com", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "customer_fixture_2", "email": "fixture2@example.com", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

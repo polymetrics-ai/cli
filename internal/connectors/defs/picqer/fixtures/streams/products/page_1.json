@@ -1,0 +1,1014 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": {
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idproduct": 101,
+        "name": "Fixture Product 1",
+        "productcode": "FIX-1",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 102,
+        "name": "Fixture Product 2",
+        "productcode": "FIX-2",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 103,
+        "name": "Fixture Product 3",
+        "productcode": "FIX-3",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 104,
+        "name": "Fixture Product 4",
+        "productcode": "FIX-4",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 105,
+        "name": "Fixture Product 5",
+        "productcode": "FIX-5",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 106,
+        "name": "Fixture Product 6",
+        "productcode": "FIX-6",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 107,
+        "name": "Fixture Product 7",
+        "productcode": "FIX-7",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 108,
+        "name": "Fixture Product 8",
+        "productcode": "FIX-8",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 109,
+        "name": "Fixture Product 9",
+        "productcode": "FIX-9",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 110,
+        "name": "Fixture Product 10",
+        "productcode": "FIX-10",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 111,
+        "name": "Fixture Product 11",
+        "productcode": "FIX-11",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 112,
+        "name": "Fixture Product 12",
+        "productcode": "FIX-12",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 113,
+        "name": "Fixture Product 13",
+        "productcode": "FIX-13",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 114,
+        "name": "Fixture Product 14",
+        "productcode": "FIX-14",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 115,
+        "name": "Fixture Product 15",
+        "productcode": "FIX-15",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 116,
+        "name": "Fixture Product 16",
+        "productcode": "FIX-16",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 117,
+        "name": "Fixture Product 17",
+        "productcode": "FIX-17",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 118,
+        "name": "Fixture Product 18",
+        "productcode": "FIX-18",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 119,
+        "name": "Fixture Product 19",
+        "productcode": "FIX-19",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 120,
+        "name": "Fixture Product 20",
+        "productcode": "FIX-20",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 121,
+        "name": "Fixture Product 21",
+        "productcode": "FIX-21",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 122,
+        "name": "Fixture Product 22",
+        "productcode": "FIX-22",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 123,
+        "name": "Fixture Product 23",
+        "productcode": "FIX-23",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 124,
+        "name": "Fixture Product 24",
+        "productcode": "FIX-24",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 125,
+        "name": "Fixture Product 25",
+        "productcode": "FIX-25",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 126,
+        "name": "Fixture Product 26",
+        "productcode": "FIX-26",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 127,
+        "name": "Fixture Product 27",
+        "productcode": "FIX-27",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 128,
+        "name": "Fixture Product 28",
+        "productcode": "FIX-28",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 129,
+        "name": "Fixture Product 29",
+        "productcode": "FIX-29",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 130,
+        "name": "Fixture Product 30",
+        "productcode": "FIX-30",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 131,
+        "name": "Fixture Product 31",
+        "productcode": "FIX-31",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 132,
+        "name": "Fixture Product 32",
+        "productcode": "FIX-32",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 133,
+        "name": "Fixture Product 33",
+        "productcode": "FIX-33",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 134,
+        "name": "Fixture Product 34",
+        "productcode": "FIX-34",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 135,
+        "name": "Fixture Product 35",
+        "productcode": "FIX-35",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 136,
+        "name": "Fixture Product 36",
+        "productcode": "FIX-36",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 137,
+        "name": "Fixture Product 37",
+        "productcode": "FIX-37",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 138,
+        "name": "Fixture Product 38",
+        "productcode": "FIX-38",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 139,
+        "name": "Fixture Product 39",
+        "productcode": "FIX-39",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 140,
+        "name": "Fixture Product 40",
+        "productcode": "FIX-40",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 141,
+        "name": "Fixture Product 41",
+        "productcode": "FIX-41",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 142,
+        "name": "Fixture Product 42",
+        "productcode": "FIX-42",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 143,
+        "name": "Fixture Product 43",
+        "productcode": "FIX-43",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 144,
+        "name": "Fixture Product 44",
+        "productcode": "FIX-44",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 145,
+        "name": "Fixture Product 45",
+        "productcode": "FIX-45",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 146,
+        "name": "Fixture Product 46",
+        "productcode": "FIX-46",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 147,
+        "name": "Fixture Product 47",
+        "productcode": "FIX-47",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 148,
+        "name": "Fixture Product 48",
+        "productcode": "FIX-48",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 149,
+        "name": "Fixture Product 49",
+        "productcode": "FIX-49",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 150,
+        "name": "Fixture Product 50",
+        "productcode": "FIX-50",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 151,
+        "name": "Fixture Product 51",
+        "productcode": "FIX-51",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 152,
+        "name": "Fixture Product 52",
+        "productcode": "FIX-52",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 153,
+        "name": "Fixture Product 53",
+        "productcode": "FIX-53",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 154,
+        "name": "Fixture Product 54",
+        "productcode": "FIX-54",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 155,
+        "name": "Fixture Product 55",
+        "productcode": "FIX-55",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 156,
+        "name": "Fixture Product 56",
+        "productcode": "FIX-56",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 157,
+        "name": "Fixture Product 57",
+        "productcode": "FIX-57",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 158,
+        "name": "Fixture Product 58",
+        "productcode": "FIX-58",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 159,
+        "name": "Fixture Product 59",
+        "productcode": "FIX-59",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 160,
+        "name": "Fixture Product 60",
+        "productcode": "FIX-60",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 161,
+        "name": "Fixture Product 61",
+        "productcode": "FIX-61",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 162,
+        "name": "Fixture Product 62",
+        "productcode": "FIX-62",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 163,
+        "name": "Fixture Product 63",
+        "productcode": "FIX-63",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 164,
+        "name": "Fixture Product 64",
+        "productcode": "FIX-64",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 165,
+        "name": "Fixture Product 65",
+        "productcode": "FIX-65",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 166,
+        "name": "Fixture Product 66",
+        "productcode": "FIX-66",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 167,
+        "name": "Fixture Product 67",
+        "productcode": "FIX-67",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 168,
+        "name": "Fixture Product 68",
+        "productcode": "FIX-68",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 169,
+        "name": "Fixture Product 69",
+        "productcode": "FIX-69",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 170,
+        "name": "Fixture Product 70",
+        "productcode": "FIX-70",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 171,
+        "name": "Fixture Product 71",
+        "productcode": "FIX-71",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 172,
+        "name": "Fixture Product 72",
+        "productcode": "FIX-72",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 173,
+        "name": "Fixture Product 73",
+        "productcode": "FIX-73",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 174,
+        "name": "Fixture Product 74",
+        "productcode": "FIX-74",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 175,
+        "name": "Fixture Product 75",
+        "productcode": "FIX-75",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 176,
+        "name": "Fixture Product 76",
+        "productcode": "FIX-76",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 177,
+        "name": "Fixture Product 77",
+        "productcode": "FIX-77",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 178,
+        "name": "Fixture Product 78",
+        "productcode": "FIX-78",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 179,
+        "name": "Fixture Product 79",
+        "productcode": "FIX-79",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 180,
+        "name": "Fixture Product 80",
+        "productcode": "FIX-80",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 181,
+        "name": "Fixture Product 81",
+        "productcode": "FIX-81",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 182,
+        "name": "Fixture Product 82",
+        "productcode": "FIX-82",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 183,
+        "name": "Fixture Product 83",
+        "productcode": "FIX-83",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 184,
+        "name": "Fixture Product 84",
+        "productcode": "FIX-84",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 185,
+        "name": "Fixture Product 85",
+        "productcode": "FIX-85",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 186,
+        "name": "Fixture Product 86",
+        "productcode": "FIX-86",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 187,
+        "name": "Fixture Product 87",
+        "productcode": "FIX-87",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 188,
+        "name": "Fixture Product 88",
+        "productcode": "FIX-88",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 189,
+        "name": "Fixture Product 89",
+        "productcode": "FIX-89",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 190,
+        "name": "Fixture Product 90",
+        "productcode": "FIX-90",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 191,
+        "name": "Fixture Product 91",
+        "productcode": "FIX-91",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 192,
+        "name": "Fixture Product 92",
+        "productcode": "FIX-92",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 193,
+        "name": "Fixture Product 93",
+        "productcode": "FIX-93",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 194,
+        "name": "Fixture Product 94",
+        "productcode": "FIX-94",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 195,
+        "name": "Fixture Product 95",
+        "productcode": "FIX-95",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 196,
+        "name": "Fixture Product 96",
+        "productcode": "FIX-96",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 197,
+        "name": "Fixture Product 97",
+        "productcode": "FIX-97",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 198,
+        "name": "Fixture Product 98",
+        "productcode": "FIX-98",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 199,
+        "name": "Fixture Product 99",
+        "productcode": "FIX-99",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      },
+      {
+        "idproduct": 200,
+        "name": "Fixture Product 100",
+        "productcode": "FIX-100",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      }
+    ]
+  }
+}

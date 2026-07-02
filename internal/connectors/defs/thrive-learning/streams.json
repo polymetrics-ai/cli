@@ -1,0 +1,50 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/users" },
+    "error_map": [
+      { "status": 401, "hint": "thrive-learning username/password is missing or invalid; re-run pm credentials add thrive-learning" },
+      { "status": 429, "class": "rate_limited", "hint": "thrive-learning rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/users",
+      "query": {
+        "updated_since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "content",
+      "path": "/content",
+      "query": {
+        "updated_since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/content.json"
+    },
+    {
+      "name": "completions",
+      "path": "/completions",
+      "query": {
+        "updated_since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/completions.json"
+    }
+  ]
+}

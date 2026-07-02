@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/session-aggregation" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "month": "2026-01",
+        "offerType": "DISCOUNT",
+        "billingInterval": "month",
+        "canceled": false,
+        "count": 10
+      },
+      {
+        "month": "2026-02",
+        "offerType": "PAUSE",
+        "billingInterval": "year",
+        "canceled": true,
+        "count": 20
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "api": "Teamwork API (https://api.teamwork.com)",
+  "docs": "https://apidocs.teamwork.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the single legacy-parity read stream (projects) only; the full Teamwork surface (tasks, task lists, time entries, milestones, people) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/projects.json", "covered_by": { "stream": "projects" } },
+    { "method": "POST", "path": "/projects.json", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/tasks.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/tasklists.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/time_entries.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/people.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

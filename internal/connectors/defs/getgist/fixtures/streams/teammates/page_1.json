@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/teammates", "query": { "page": "1", "per_page": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "teammates": [
+        { "id": 50, "type": "teammate", "name": "Fixture Teammate", "email": "teammate@example.com" }
+      ],
+      "pages": { "next": null }
+    }
+  }
+}

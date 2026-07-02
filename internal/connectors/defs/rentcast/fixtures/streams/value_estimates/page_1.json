@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/avm/value",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "value_fixture_1",
+        "formattedAddress": "1 Fixture Blvd, Fixture City, CA 90000",
+        "price": 400000
+      }
+    ]
+  }
+}

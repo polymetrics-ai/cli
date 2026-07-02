@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/employees" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "first_name": "Fixture", "last_name": "One" },
+      { "id": 2, "first_name": "Fixture", "last_name": "Two" }
+    ]
+  }
+}

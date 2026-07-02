@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/stories",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture Story One", "current_state": "started", "updated_at": "2026-01-01T00:00:00Z" },
+      { "id": 2, "name": "Fixture Story Two", "current_state": "finished", "updated_at": "2026-01-02T00:00:00Z" }
+    ]
+  }
+}

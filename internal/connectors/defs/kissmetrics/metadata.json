@@ -1,0 +1,23 @@
+{
+  "name": "kissmetrics",
+  "display_name": "Kissmetrics",
+  "description": "Reads Kissmetrics products, reports, events, and properties through the Kissmetrics query API using HTTP Basic authentication.",
+  "integration_type": "api",
+  "docs_url": "https://support.kissmetrics.io/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Kissmetrics query API read of product analytics metadata",
+    "approval": "none; read-only source"
+  }
+}

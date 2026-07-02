@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/resource/Company", "query": { "max": "1" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

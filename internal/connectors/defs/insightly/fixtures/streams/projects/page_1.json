@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/Projects", "query": { "top": "100", "skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "PROJECT_ID": 401,
+        "PROJECT_NAME": "Fixture Project 1",
+        "STATUS": "IN PROGRESS",
+        "PIPELINE_ID": 1,
+        "STAGE_ID": 1,
+        "OWNER_USER_ID": 1,
+        "DATE_CREATED_UTC": "2026-01-01 00:00:00",
+        "DATE_UPDATED_UTC": "2026-01-01 00:00:00"
+      }
+    ]
+  }
+}

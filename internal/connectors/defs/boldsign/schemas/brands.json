@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "brands",
+  "type": "object",
+  "x-primary-key": ["brand_id"],
+  "required": ["brand_id"],
+  "properties": {
+    "brand_id": { "type": "string" },
+    "brand_name": { "type": ["string", "null"] },
+    "is_default": { "type": ["boolean", "null"] },
+    "background_color": { "type": ["string", "null"] },
+    "button_color": { "type": ["string", "null"] }
+  }
+}

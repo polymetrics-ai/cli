@@ -1,0 +1,60 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Account-Token": "{{ secrets.account_token }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "Token " }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "start_cursor",
+      "token_path": "next_cursor"
+    },
+    "check": { "method": "GET", "path": "/vehicles" },
+    "error_map": [
+      { "status": 401, "hint": "fleetio api_key/account_token is missing or invalid; re-run pm credentials add fleetio" },
+      { "status": 403, "hint": "fleetio account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "fleetio rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "vehicles",
+      "path": "/vehicles",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "records" },
+      "schema": "schemas/vehicles.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "records" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "fuel_entries",
+      "path": "/fuel_entries",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "records" },
+      "schema": "schemas/fuel_entries.json"
+    },
+    {
+      "name": "issues",
+      "path": "/issues",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "records" },
+      "schema": "schemas/issues.json"
+    },
+    {
+      "name": "service_entries",
+      "path": "/service_entries",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "records" },
+      "schema": "schemas/service_entries.json"
+    }
+  ]
+}

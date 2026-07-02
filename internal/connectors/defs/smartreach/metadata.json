@@ -1,0 +1,20 @@
+{
+  "name": "smartreach",
+  "display_name": "SmartReach",
+  "description": "Reads SmartReach teams, campaigns, prospects, email settings, and do-not-contact records.",
+  "integration_type": "api",
+  "docs_url": "https://api.smartreach.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "read-only team/campaign/prospect/email-setting/do-not-contact data from a connected SmartReach account",
+    "approval": "none; read-only"
+  }
+}

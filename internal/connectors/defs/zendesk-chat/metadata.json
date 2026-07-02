@@ -1,0 +1,22 @@
+{
+  "name": "zendesk-chat",
+  "display_name": "Zendesk Chat",
+  "description": "Reads Zendesk Chat agents, chats, departments, shortcuts, and triggers through the Zendesk Chat REST API v2.",
+  "integration_type": "api",
+  "docs_url": "https://developer.zendesk.com/api-reference/live-chat/chat-api/introduction/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Zendesk Chat API read of agent, chat, and configuration data"
+  }
+}

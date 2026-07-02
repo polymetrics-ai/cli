@@ -1,0 +1,58 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "api_key=", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "query": {
+      "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+      "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+      "email": { "template": "{{ config.email }}", "omit_when_absent": true },
+      "campaign_id": { "template": "{{ config.campaign_id }}", "omit_when_absent": true }
+    },
+    "check": { "method": "GET", "path": "/customers", "query": { "page": "1", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "retently api_key is missing or invalid; re-run pm credentials add retently" },
+      { "status": 403, "hint": "retently account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "retently rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": { "path": "data" },
+      "computed_fields": { "stream": "customers" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "responses",
+      "path": "/responses",
+      "records": { "path": "data" },
+      "computed_fields": { "stream": "responses" },
+      "schema": "schemas/responses.json"
+    },
+    {
+      "name": "surveys",
+      "path": "/surveys",
+      "records": { "path": "data" },
+      "computed_fields": { "stream": "surveys" },
+      "schema": "schemas/surveys.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "records": { "path": "data" },
+      "computed_fields": { "stream": "campaigns" },
+      "schema": "schemas/campaigns.json"
+    }
+  ]
+}

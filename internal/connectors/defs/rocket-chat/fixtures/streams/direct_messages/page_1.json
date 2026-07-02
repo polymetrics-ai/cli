@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/im.list", "query": { "count": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "ims": [
+        { "_id": "dm_fixture_1", "usernames": ["fixture.one", "fixture.two"], "msgs": 3, "_updatedAt": "2026-01-01T00:00:00.000Z" }
+      ],
+      "count": 1,
+      "offset": 0,
+      "total": 1,
+      "success": true
+    }
+  }
+}

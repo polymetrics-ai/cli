@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Help Scout Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Help Scout OAuth2 application client id, used for the client-credentials token exchange. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Help Scout OAuth2 application client secret, used for the client-credentials token exchange. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.helpscout.net/v2",
+      "description": "Help Scout Mailbox API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.helpscout.net/v2/oauth2/token",
+      "description": "Help Scout OAuth2 token endpoint override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; sent as modifiedSince to scope conversations/customers to records changed at or after this time."
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounting/account/fixture_acct/payments/payments",
+    "query": { "page": "1", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "result": {
+          "payments": [
+            {
+              "id": 1,
+              "invoiceid": 1,
+              "amount": { "amount": "100.00", "code": "USD" },
+              "type": "Check",
+              "note": "fixture payment 1",
+              "date": "2026-01-01",
+              "updated": "2026-01-01 00:00:00"
+            }
+          ],
+          "page": 1,
+          "pages": 1,
+          "per_page": 100,
+          "total": 1
+        }
+      }
+    }
+  }
+}

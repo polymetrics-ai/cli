@@ -1,0 +1,42 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.merchant_id }}", "password": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/projects" },
+    "error_map": [
+      { "status": 401, "hint": "xsolla merchant_id/api_key are missing or invalid; re-run pm credentials add xsolla" },
+      { "status": 403, "hint": "xsolla merchant account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "xsolla rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": { "path": "items" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "orders",
+      "path": "/projects/{{ config.project_id }}/orders",
+      "records": { "path": "items" },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/projects/{{ config.project_id }}/transactions",
+      "records": { "path": "items" },
+      "schema": "schemas/transactions.json"
+    }
+  ]
+}

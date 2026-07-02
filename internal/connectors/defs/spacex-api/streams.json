@@ -1,0 +1,81 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "/company" },
+    "error_map": [
+      { "status": 429, "class": "rate_limited", "hint": "spacex-api rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "launches",
+      "path": "/launches",
+      "records": { "path": "." },
+      "schema": "schemas/launches.json"
+    },
+    {
+      "name": "rockets",
+      "path": "/rockets",
+      "records": { "path": "." },
+      "schema": "schemas/rockets.json"
+    },
+    {
+      "name": "capsules",
+      "path": "/capsules",
+      "records": { "path": "." },
+      "schema": "schemas/capsules.json"
+    },
+    {
+      "name": "crew",
+      "path": "/crew",
+      "records": { "path": "." },
+      "schema": "schemas/crew.json"
+    },
+    {
+      "name": "payloads",
+      "path": "/payloads",
+      "records": { "path": "." },
+      "schema": "schemas/payloads.json"
+    },
+    {
+      "name": "starlink",
+      "path": "/starlink",
+      "records": { "path": "." },
+      "schema": "schemas/starlink.json"
+    },
+    {
+      "name": "launchpads",
+      "path": "/launchpads",
+      "records": { "path": "." },
+      "schema": "schemas/launchpads.json"
+    },
+    {
+      "name": "landpads",
+      "path": "/landpads",
+      "records": { "path": "." },
+      "schema": "schemas/landpads.json"
+    },
+    {
+      "name": "ships",
+      "path": "/ships",
+      "records": { "path": "." },
+      "schema": "schemas/ships.json"
+    },
+    {
+      "name": "roadster",
+      "path": "/roadster",
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/roadster.json"
+    },
+    {
+      "name": "company",
+      "path": "/company",
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/company.json"
+    }
+  ]
+}

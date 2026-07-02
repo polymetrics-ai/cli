@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updatedAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "orgId": { "type": ["integer", "null"] },
+    "status": { "type": ["string", "null"] },
+    "contactId": { "type": ["integer", "null"] },
+    "inboxId": { "type": ["integer", "null"] },
+    "participants": { "type": ["array", "null"] },
+    "conversationTags": { "type": ["array", "null"] },
+    "relatedPlaybookId": { "type": ["integer", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "updatedAt": { "type": ["integer", "null"] }
+  }
+}

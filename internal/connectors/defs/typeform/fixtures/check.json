@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/forms", "query": { "page_size": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "total_items": 0, "page_count": 0, "items": [] }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "widgets": [
+        {
+          "id": 101,
+          "name": "Fixture Widget 101",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

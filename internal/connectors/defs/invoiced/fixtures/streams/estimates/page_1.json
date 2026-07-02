@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/estimates", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 5001,
+        "object": "estimate",
+        "customer": 1001,
+        "number": "EST-0001",
+        "currency": "usd",
+        "status": "draft",
+        "total": 500,
+        "approved": false,
+        "closed": false,
+        "expiration_date": 1769817600,
+        "created_at": 1767225600,
+        "updated_at": 1767225601
+      }
+    ]
+  }
+}

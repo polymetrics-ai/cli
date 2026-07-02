@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Intercom Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Intercom access token. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.intercom.io",
+      "description": "Intercom API base URL override for tests or proxies."
+    },
+    "api_version": {
+      "type": "string",
+      "description": "Optional Intercom-Version header value; when unset, the header is omitted and Intercom uses the account's default API version."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per page (1-150)."
+    }
+  }
+}

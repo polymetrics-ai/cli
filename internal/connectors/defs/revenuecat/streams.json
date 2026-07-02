@@ -1,0 +1,64 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "query": {
+      "starting_after": { "template": "{{ config.starting_after }}", "omit_when_absent": true },
+      "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+      "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true }
+    },
+    "check": { "method": "GET", "path": "/projects", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "revenuecat api_key is missing or invalid; re-run pm credentials add revenuecat" },
+      { "status": 403, "hint": "revenuecat api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "revenuecat rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": { "path": "items" },
+      "computed_fields": { "stream": "projects" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "apps",
+      "path": "/projects/{{ config.project_id }}/apps",
+      "records": { "path": "items" },
+      "computed_fields": { "stream": "apps" },
+      "schema": "schemas/apps.json"
+    },
+    {
+      "name": "products",
+      "path": "/projects/{{ config.project_id }}/products",
+      "records": { "path": "items" },
+      "computed_fields": { "stream": "products" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "offerings",
+      "path": "/projects/{{ config.project_id }}/offerings",
+      "records": { "path": "items" },
+      "computed_fields": { "stream": "offerings" },
+      "schema": "schemas/offerings.json"
+    },
+    {
+      "name": "customers",
+      "path": "/projects/{{ config.project_id }}/customers",
+      "records": { "path": "items" },
+      "computed_fields": { "stream": "customers" },
+      "schema": "schemas/customers.json"
+    }
+  ]
+}

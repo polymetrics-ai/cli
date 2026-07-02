@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/EPIC/api/natural" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "identifier": "20260101000000",
+        "caption": "Fixture Earth view one",
+        "image": "epic_1b_20260101000000",
+        "version": "03",
+        "date": "2026-01-01 00:00:00"
+      },
+      {
+        "identifier": "20260102000000",
+        "caption": "Fixture Earth view two",
+        "image": "epic_1b_20260102000000",
+        "version": "03",
+        "date": "2026-01-02 00:00:00"
+      }
+    ]
+  }
+}

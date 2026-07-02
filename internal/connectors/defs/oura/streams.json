@@ -1,0 +1,67 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/personal_info" },
+    "error_map": [
+      { "status": 401, "hint": "oura api_key is missing or invalid; re-run pm credentials add oura" },
+      { "status": 429, "class": "rate_limited", "hint": "oura rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "personal_info",
+      "path": "/personal_info",
+      "records": { "path": "." },
+      "schema": "schemas/personal_info.json"
+    },
+    {
+      "name": "daily_sleep",
+      "path": "/daily_sleep",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/daily_sleep.json"
+    },
+    {
+      "name": "daily_activity",
+      "path": "/daily_activity",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/daily_activity.json"
+    },
+    {
+      "name": "daily_readiness",
+      "path": "/daily_readiness",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/daily_readiness.json"
+    }
+  ]
+}

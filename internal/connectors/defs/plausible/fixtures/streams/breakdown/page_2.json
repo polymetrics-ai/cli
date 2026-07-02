@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stats/breakdown",
+    "query": {
+      "site_id": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "property": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "metrics": "synthetic-conformance-value",
+      "filters": "synthetic-conformance-value",
+      "compare": "synthetic-conformance-value",
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "page": "/fixture-101",
+          "visitors": 101,
+          "visits": 102,
+          "pageviews": 103,
+          "events": 104,
+          "bounce_rate": 40.0,
+          "visit_duration": 60.0
+        }
+      ]
+    }
+  }
+}

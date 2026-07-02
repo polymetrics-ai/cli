@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/projects", "query": { "page": "1", "pageSize": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "proj_fixture_1", "name": "Fixture Onboarding", "status": "IN_PROGRESS", "customer_id": "cust_fixture_1", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "proj_fixture_2", "name": "Fixture Migration", "status": "PLANNED", "customer_id": "cust_fixture_2", "updated_at": "2026-01-01T00:05:00Z" }
+      ],
+      "pageInfo": { "page": 1, "pageSize": 2, "totalRecords": 3 }
+    }
+  }
+}

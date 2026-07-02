@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/conversations", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_results": [
+        {
+          "id": "conversations_fixture_1",
+          "subject": "Fixture conversation 1",
+          "status": "open",
+          "is_private": false,
+          "created_at": 1767225601,
+          "last_message_at": 1767225601,
+          "waiting_since": 1767225601
+        }
+      ],
+      "_pagination": { "next": null }
+    }
+  }
+}

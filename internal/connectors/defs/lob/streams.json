@@ -1,0 +1,71 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "next_url"
+    },
+    "check": { "method": "GET", "path": "/addresses", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "lob api_key is missing or invalid; re-run pm credentials add lob" },
+      { "status": 403, "hint": "lob api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "lob rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "addresses",
+      "path": "/addresses",
+      "query": { "limit": "2" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "date_created"
+      },
+      "schema": "schemas/addresses.json"
+    },
+    {
+      "name": "postcards",
+      "path": "/postcards",
+      "query": { "limit": "2" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "date_created"
+      },
+      "schema": "schemas/postcards.json"
+    },
+    {
+      "name": "letters",
+      "path": "/letters",
+      "query": { "limit": "2" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "date_created"
+      },
+      "schema": "schemas/letters.json"
+    },
+    {
+      "name": "checks",
+      "path": "/checks",
+      "query": { "limit": "2" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "date_created"
+      },
+      "schema": "schemas/checks.json"
+    },
+    {
+      "name": "bank_accounts",
+      "path": "/bank_accounts",
+      "query": { "limit": "2" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "date_created"
+      },
+      "schema": "schemas/bank_accounts.json"
+    }
+  ]
+}

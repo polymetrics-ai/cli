@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/schemas" },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        { "name": "person", "title": "Person", "type": "object" },
+        { "name": "company", "title": "Company", "type": "object" }
+      ]
+    }
+  }
+}

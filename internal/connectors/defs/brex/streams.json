@@ -1,0 +1,69 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.user_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "next_cursor"
+    },
+    "check": { "method": "GET", "path": "/v2/users", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "brex user_token is missing or invalid; re-run pm credentials add brex" },
+      { "status": 403, "hint": "brex account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "brex rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "transactions",
+      "path": "/v2/transactions/card/primary",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "posted_at_date",
+        "request_param": "posted_at_start",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "users",
+      "path": "/v2/users",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "expenses",
+      "path": "/v1/expenses/card",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "purchased_at",
+        "request_param": "purchased_at_start",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/expenses.json"
+    },
+    {
+      "name": "vendors",
+      "path": "/v1/vendors",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/vendors.json"
+    },
+    {
+      "name": "budgets",
+      "path": "/v2/budgets",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/budgets.json"
+    }
+  ]
+}

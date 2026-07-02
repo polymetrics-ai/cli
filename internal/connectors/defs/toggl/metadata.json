@@ -1,0 +1,20 @@
+{
+  "name": "toggl",
+  "display_name": "Toggl",
+  "description": "Reads time entries, projects, clients, and users from the Toggl Track API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.track.toggl.com/docs/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Toggl Track API read of time-tracking and workspace data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

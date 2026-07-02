@@ -1,0 +1,18 @@
+{
+  "api": "SolarWinds Service Desk (Samanage) REST API v1.1 (https://api.samanage.com)",
+  "docs": "https://documentation.solarwinds.com/en/success_center/swsd/content/api/swsd-api.htm",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (incidents, users, departments, categories, problems, changes); legacy is read-only, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/incidents.json", "covered_by": { "stream": "incidents" } },
+    { "method": "GET", "path": "/users.json", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/departments.json", "covered_by": { "stream": "departments" } },
+    { "method": "GET", "path": "/categories.json", "covered_by": { "stream": "categories" } },
+    { "method": "GET", "path": "/problems.json", "covered_by": { "stream": "problems" } },
+    { "method": "GET", "path": "/changes.json", "covered_by": { "stream": "changes" } },
+    { "method": "GET", "path": "/incidents/{id}.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; single-record fetch not implemented by legacy" } },
+    { "method": "POST", "path": "/incidents.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only" } },
+    { "method": "GET", "path": "/hardwares.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy" } },
+    { "method": "GET", "path": "/solutions.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy" } }
+  ]
+}

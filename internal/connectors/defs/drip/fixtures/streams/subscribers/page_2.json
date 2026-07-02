@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/subscribers",
+    "query": {
+      "page": "2",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "subscribers": [
+        {
+          "id": "sub_fixture_101",
+          "email": "fixture101@example.com",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "time_zone": "Etc/UTC",
+          "utc_offset": 0,
+          "lifetime_value": 1000,
+          "ip_address": "203.0.113.10",
+          "user_agent": "fixture-agent/1.0",
+          "tags": [
+            "vip"
+          ],
+          "custom_fields": {
+            "plan": "pro"
+          }
+        },
+        {
+          "id": "sub_fixture_102",
+          "email": "fixture102@example.com",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "time_zone": "Etc/UTC",
+          "utc_offset": 0,
+          "lifetime_value": 1000,
+          "ip_address": "203.0.113.10",
+          "user_agent": "fixture-agent/1.0",
+          "tags": [
+            "vip"
+          ],
+          "custom_fields": {
+            "plan": "pro"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/projects", "query": { "page": "1", "per_page": "2" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 20, "name": "Fixture Project A" }
+    ]
+  }
+}

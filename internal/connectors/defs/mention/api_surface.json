@@ -1,0 +1,16 @@
+{
+  "api": "Mention REST API (https://api.mention.net/api)",
+  "docs": "https://dev.mention.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; write actions and the broader Mention surface (webhooks, users, memberships) are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/accounts/me", "covered_by": { "stream": "account_me" } },
+    { "method": "GET", "path": "/accounts/{account_id}", "covered_by": { "stream": "account" } },
+    { "method": "GET", "path": "/accounts/{account_id}/alerts", "covered_by": { "stream": "alert" } },
+    { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}/mentions", "covered_by": { "stream": "mention" } },
+    { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}/tags", "covered_by": { "stream": "alert_tag" } },
+    { "method": "POST", "path": "/accounts/{account_id}/alerts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PATCH", "path": "/accounts/{account_id}/alerts/{alert_id}/mentions/{mention_id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/me", "excluded": { "category": "duplicate_of", "reason": "superseded by /accounts/me (account_me stream)" } }
+  ]
+}

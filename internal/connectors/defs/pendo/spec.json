@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pendo Connection Specification",
+  "type": "object",
+  "required": ["integration_key"],
+  "properties": {
+    "integration_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pendo integration key, sent as the x-pendo-integration-key header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.pendo.io/api/v1",
+      "description": "Pendo API base URL override for tests or proxies."
+    },
+    "limit": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-500)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

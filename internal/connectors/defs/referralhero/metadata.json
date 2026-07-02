@@ -1,0 +1,22 @@
+{
+  "name": "referralhero",
+  "display_name": "ReferralHero",
+  "description": "Reads ReferralHero lists, subscribers, referrals, and rewards through the ReferralHero API v2 list endpoints. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://support.referralhero.com/integrate/rest-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external ReferralHero API read of referral program list, subscriber, referral, and reward data"
+  }
+}

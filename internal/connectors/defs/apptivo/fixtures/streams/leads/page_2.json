@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/app/dao/v6/leads",
+    "query": {
+      "a": "getAll",
+      "numRecords": "100",
+      "startIndex": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "lead_fixture_101",
+          "leadId": "lead_fixture_101",
+          "firstName": "Fixture101",
+          "lastName": "Example",
+          "companyName": "Fixture Co",
+          "emailAddress": "fixture101@example.com",
+          "phoneNumber": "555-0101",
+          "leadSource": "Web",
+          "statusName": "Active",
+          "creationDate": "2026-01-01"
+        }
+      ]
+    }
+  }
+}

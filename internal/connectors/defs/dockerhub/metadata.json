@@ -1,0 +1,23 @@
+{
+  "name": "dockerhub",
+  "display_name": "Docker Hub",
+  "description": "Reads public Docker Hub repositories, image tags, and namespace profiles for a configured username or organization via the Docker Hub registry API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.docker.com/docker-hub/api/latest/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Docker Hub API read of public repository, tag, and namespace data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

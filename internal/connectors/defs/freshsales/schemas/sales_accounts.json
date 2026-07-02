@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sales_accounts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "website": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "industry_type_id": { "type": ["integer", "null"] },
+    "number_of_employees": { "type": ["integer", "null"] },
+    "annual_revenue": { "type": ["number", "null"] },
+    "city": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "owner_id": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

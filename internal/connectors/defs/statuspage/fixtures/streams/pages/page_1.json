@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/pages", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "page_fixture_1", "name": "Fixture Status Page One", "url": "https://status.example" },
+      { "id": "page_fixture_2", "name": "Fixture Status Page Two", "url": "https://status2.example" }
+    ]
+  }
+}

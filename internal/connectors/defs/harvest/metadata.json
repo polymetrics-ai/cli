@@ -1,0 +1,23 @@
+{
+  "name": "harvest",
+  "display_name": "Harvest",
+  "description": "Reads Harvest clients, projects, tasks, users, and time entries through the Harvest v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.harveststatus.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Harvest API read of clients, projects, tasks, users, and time entries",
+    "approval": "none; read-only source connector"
+  }
+}

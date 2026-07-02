@@ -1,0 +1,23 @@
+{
+  "name": "vwo",
+  "display_name": "VWO",
+  "description": "Reads VWO (Visual Website Optimizer) A/B testing campaigns.",
+  "integration_type": "api",
+  "docs_url": "https://developers.vwo.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external VWO API read of experiment/campaign metadata",
+    "approval": "none; read-only campaign directory sync"
+  }
+}

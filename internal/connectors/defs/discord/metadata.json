@@ -1,0 +1,23 @@
+{
+  "name": "discord",
+  "display_name": "Discord",
+  "description": "Reads Discord guild, channel, and role data through the Discord REST API using a bot token. The members stream is out of scope for this migration (see docs.md's Known limits).",
+  "integration_type": "api",
+  "docs_url": "https://discord.com/developers/docs/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Discord API read of guild, channel, and role data",
+    "approval": "none; read-only source connector"
+  }
+}

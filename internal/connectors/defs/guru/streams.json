@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "link_header",
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/collections" },
+    "error_map": [
+      { "status": 401, "hint": "guru email/API token is missing or invalid; re-run pm credentials add guru" },
+      { "status": 429, "class": "rate_limited", "hint": "guru rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "collections",
+      "path": "/collections",
+      "query": { "pageSize": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "schema": "schemas/collections.json"
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "query": { "pageSize": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "members",
+      "path": "/members",
+      "query": { "pageSize": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.user.id }}",
+        "email": "{{ record.user.email }}",
+        "firstName": "{{ record.user.firstName }}",
+        "lastName": "{{ record.user.lastName }}"
+      },
+      "schema": "schemas/members.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "query": { "pageSize": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "schema": "schemas/teams.json"
+    }
+  ]
+}

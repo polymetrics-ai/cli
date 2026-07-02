@@ -1,0 +1,22 @@
+{
+  "name": "auth0",
+  "display_name": "Auth0",
+  "description": "Reads Auth0 users, clients, connections, roles, and organizations from the Auth0 Management API v2.",
+  "integration_type": "api",
+  "docs_url": "https://auth0.com/docs/api/management/v2",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Auth0 Management API read of user, client, and tenant configuration data"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/air-quality/v2/forecast/hourly",
+    "query": {
+      "lat": "synthetic-conformance-value",
+      "lon": "synthetic-conformance-value",
+      "features": "local_aqi",
+      "hours": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "datetime": "2026-01-01T00:00:00Z",
+          "indexes": { "baqi": { "aqi": 41, "category": "Good air quality" } },
+          "pollutants": { "co": { "concentration": { "value": 101 } } },
+          "data_available": true
+        },
+        {
+          "datetime": "2026-01-01T01:00:00Z",
+          "indexes": { "baqi": { "aqi": 42, "category": "Good air quality" } },
+          "pollutants": { "co": { "concentration": { "value": 102 } } },
+          "data_available": true
+        }
+      ],
+      "next_page_token": "fixture_token_1"
+    }
+  }
+}

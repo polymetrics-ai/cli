@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/adAccounts",
+    "query": { "q": "search", "count": "2", "start": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "elements": [
+        {
+          "id": 510001,
+          "name": "Fixture Account One",
+          "type": "BUSINESS",
+          "status": "ACTIVE",
+          "currency": "USD",
+          "reference": "urn:li:organization:900001",
+          "test": false,
+          "version": { "versionTag": "1" },
+          "changeAuditStamps": {
+            "created": { "time": 1767225600000 },
+            "lastModified": { "time": 1767225660000 }
+          }
+        },
+        {
+          "id": 510002,
+          "name": "Fixture Account Two",
+          "type": "BUSINESS",
+          "status": "ACTIVE",
+          "currency": "USD",
+          "reference": "urn:li:organization:900002",
+          "test": false,
+          "version": { "versionTag": "1" },
+          "changeAuditStamps": {
+            "created": { "time": 1767225700000 },
+            "lastModified": { "time": 1767225760000 }
+          }
+        }
+      ]
+    }
+  }
+}

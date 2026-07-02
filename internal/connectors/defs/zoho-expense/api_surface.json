@@ -1,0 +1,17 @@
+{
+  "api": "Zoho Expense API v1 (https://www.zohoapis.com/expense/v1)",
+  "docs": "https://www.zoho.com/expense/api/v1/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (reports, expenses, users); legacy is read-only, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/expensereports", "covered_by": { "stream": "reports" } },
+    { "method": "GET", "path": "/expenses", "covered_by": { "stream": "expenses" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/categories", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/policies", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/expenses", "excluded": { "category": "out_of_scope", "reason": "legacy zoho-expense connector is read-only; write support is Pass B capability expansion" } },
+    { "method": "POST", "path": "/expensereports", "excluded": { "category": "out_of_scope", "reason": "legacy zoho-expense connector is read-only; write support is Pass B capability expansion" } },
+    { "method": "GET", "path": "/organizations", "excluded": { "category": "non_data_endpoint", "reason": "organization metadata listing, not a syncable object stream" } }
+  ]
+}

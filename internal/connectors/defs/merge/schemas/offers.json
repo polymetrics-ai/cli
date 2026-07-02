@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "offers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modified_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "remote_id": { "type": ["string", "null"] },
+    "application": { "type": ["string", "null"] },
+    "creator": { "type": ["string", "null"] },
+    "remote_created_at": { "type": ["string", "null"] },
+    "closed_at": { "type": ["string", "null"] },
+    "sent_at": { "type": ["string", "null"] },
+    "start_date": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "modified_at": { "type": "string" },
+    "remote_was_deleted": { "type": ["boolean", "null"] }
+  }
+}

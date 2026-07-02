@@ -1,0 +1,6 @@
+{
+  "response": {
+    "status": 200,
+    "body": { "data": [{ "id": "cus_fixture_1", "email": "fixture1@example.com", "status": "active", "created_at": "2026-01-01T00:00:00Z", "amount": 1000, "currency": "USD", "plan_id": "plan_fixture", "customer_id": "cus_fixture_1" }] }
+  }
+}

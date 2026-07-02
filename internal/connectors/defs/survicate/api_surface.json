@@ -1,0 +1,11 @@
+{
+  "api": "Survicate Data API v1 (https://data-api.survicate.com/v1)",
+  "docs": "https://developers.survicate.com/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only (surveys); legacy ships no writes (capabilities.write is false), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/surveys", "covered_by": { "stream": "surveys" } },
+    { "method": "GET", "path": "/v1/responses", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/respondents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

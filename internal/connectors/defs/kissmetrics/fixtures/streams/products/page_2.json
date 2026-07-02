@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": {
+      "limit": "50",
+      "offset": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "prod_fixture_51",
+          "name": "Fixture Product 51",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

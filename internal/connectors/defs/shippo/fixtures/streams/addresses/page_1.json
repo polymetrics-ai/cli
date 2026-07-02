@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/addresses",
+    "query": {
+      "results": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "object_id": "addr_fixture_1",
+          "name": "Fixture Address 1",
+          "email": "fixture1@example.com",
+          "object_owner": "fixture-owner@example.com",
+          "object_updated": "2026-01-01T00:00:00Z",
+          "object_created": "2026-01-01T00:00:00Z"
+        },
+        {
+          "object_id": "addr_fixture_2",
+          "name": "Fixture Address 2",
+          "email": "fixture2@example.com",
+          "object_owner": "fixture-owner@example.com",
+          "object_updated": "2026-01-02T00:00:00Z",
+          "object_created": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "next": null,
+      "previous": null
+    }
+  }
+}

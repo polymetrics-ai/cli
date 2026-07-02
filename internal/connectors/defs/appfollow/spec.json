@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AppFollow Connection Specification",
+  "type": "object",
+  "required": ["api_secret"],
+  "properties": {
+    "api_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "AppFollow API token, sent as the X-AppFollow-API-Token header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.appfollow.io/api/v2",
+      "description": "AppFollow API base URL override for tests or proxies."
+    }
+  }
+}

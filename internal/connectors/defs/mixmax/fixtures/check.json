@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/codesnippets" },
+  "response": {
+    "status": 200,
+    "body": { "results": [], "next": null, "hasNext": false }
+  }
+}

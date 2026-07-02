@@ -1,0 +1,18 @@
+{
+  "api": "Rocketlane API v1.0",
+  "docs": "https://apidocs.rocketlane.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Rocketlane surface (fields, forms, spaces, activities, task-lists, invoices, custom-field write endpoints, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/time-entries", "covered_by": { "stream": "time_entries" } },
+    { "method": "POST", "path": "/projects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/tasks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/spaces", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

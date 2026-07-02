@@ -1,0 +1,23 @@
+{
+  "name": "mailersend",
+  "display_name": "MailerSend",
+  "description": "Reads MailerSend email activity, domains, messages, and recipients through the MailerSend REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.mailersend.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external MailerSend API read of email activity, domain, message, and recipient data",
+    "approval": "none; read-only"
+  }
+}

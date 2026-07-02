@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Instagram Connection Specification",
+  "type": "object",
+  "required": ["access_token", "ig_user_id"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Instagram long-lived access token. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://graph.facebook.com/v23.0",
+      "description": "Facebook Graph API base URL override for tests or proxies."
+    },
+    "ig_user_id": {
+      "type": "string",
+      "description": "Instagram Business/Creator Account node id; the path root for every Graph API edge this bundle reads."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    }
+  }
+}

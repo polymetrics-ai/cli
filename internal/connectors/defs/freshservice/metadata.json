@@ -1,0 +1,23 @@
+{
+  "name": "freshservice",
+  "display_name": "Freshservice",
+  "description": "Reads Freshservice tickets, agents, requesters, assets, and problems through the Freshservice REST API v2.",
+  "integration_type": "api",
+  "docs_url": "https://api.freshservice.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Freshservice API read of service desk ticket, agent, requester, asset, and problem data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

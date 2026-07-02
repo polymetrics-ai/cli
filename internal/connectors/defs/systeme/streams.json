@@ -1,0 +1,32 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/contacts" },
+    "error_map": [
+      { "status": 401, "hint": "systeme api_key is missing or invalid; re-run pm credentials add systeme" },
+      { "status": 429, "class": "rate_limited", "hint": "systeme rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "items" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}"
+      },
+      "schema": "schemas/contacts.json"
+    }
+  ]
+}

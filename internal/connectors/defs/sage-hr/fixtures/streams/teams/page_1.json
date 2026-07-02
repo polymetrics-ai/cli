@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/teams" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture Team One" },
+      { "id": 2, "name": "Fixture Team Two" }
+    ]
+  }
+}

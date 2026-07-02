@@ -1,0 +1,11 @@
+{
+  "api": "Sage HR API v1 (https://developers.sage.hr/)",
+  "docs": "https://developers.sage.hr/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2-fan-out migration: the 3 legacy-parity read streams only (employees, teams, timeoff_requests); Sage HR's write endpoints (employee/timeoff creation and approval actions) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/employees", "covered_by": { "stream": "employees" } },
+    { "method": "GET", "path": "/v1/teams", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/v1/timeoff/requests", "covered_by": { "stream": "timeoff_requests" } }
+  ]
+}

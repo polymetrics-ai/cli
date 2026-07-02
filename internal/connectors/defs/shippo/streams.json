@@ -1,0 +1,67 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "ShippoToken ", "value": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "next"
+    },
+    "check": { "method": "GET", "path": "/addresses", "query": { "results": "1", "page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "shippo api_token is missing or invalid; re-run pm credentials add shippo" },
+      { "status": 403, "hint": "shippo api_token lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "shippo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "addresses",
+      "path": "/addresses",
+      "query": { "results": "100" },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "id": "{{ record.object_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.object_updated }}"
+      },
+      "schema": "schemas/addresses.json"
+    },
+    {
+      "name": "parcels",
+      "path": "/parcels",
+      "query": { "results": "100" },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "id": "{{ record.object_id }}",
+        "name": "{{ record.object_owner }}",
+        "updated_at": "{{ record.object_updated }}"
+      },
+      "schema": "schemas/parcels.json"
+    },
+    {
+      "name": "shipments",
+      "path": "/shipments",
+      "query": { "results": "100" },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "id": "{{ record.object_id }}",
+        "updated_at": "{{ record.object_updated }}"
+      },
+      "schema": "schemas/shipments.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/transactions",
+      "query": { "results": "100" },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "id": "{{ record.object_id }}",
+        "updated_at": "{{ record.object_updated }}"
+      },
+      "schema": "schemas/transactions.json"
+    }
+  ]
+}

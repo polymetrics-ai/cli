@@ -1,0 +1,36 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Rollbar-Access-Token", "value": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/api/1/items/", "query": { "page": "1", "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "rollbar access_token is missing or invalid; re-run pm credentials add rollbar" },
+      { "status": 403, "hint": "rollbar account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "rollbar rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "items",
+      "path": "/api/1/items/",
+      "records": { "path": "result.items" },
+      "schema": "schemas/items.json"
+    },
+    {
+      "name": "projects",
+      "path": "/api/1/projects",
+      "records": { "path": "result" },
+      "schema": "schemas/projects.json"
+    }
+  ]
+}

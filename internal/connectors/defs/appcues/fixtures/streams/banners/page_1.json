@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/banners", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "ban_fixture_1",
+        "name": "Fixture Banner One",
+        "state": "PUBLISHED",
+        "published": true,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": "ban_fixture_2",
+        "name": "Fixture Banner Two",
+        "state": "PUBLISHED",
+        "published": true,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Square-Version": "2024-01-18"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "cursor"
+    },
+    "check": { "method": "GET", "path": "/locations" },
+    "error_map": [
+      { "status": 401, "hint": "square access token is missing or invalid; re-run pm credentials add square" },
+      { "status": 403, "hint": "square account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "square rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "payments",
+      "path": "/payments",
+      "query": {
+        "limit": "100",
+        "begin_time": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "records": { "path": "payments" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/payments.json"
+    },
+    {
+      "name": "refunds",
+      "path": "/refunds",
+      "query": {
+        "limit": "100",
+        "begin_time": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "records": { "path": "refunds" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/refunds.json"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": {
+        "limit": "100"
+      },
+      "records": { "path": "customers" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "locations",
+      "path": "/locations",
+      "query": {
+        "limit": "100"
+      },
+      "records": { "path": "locations" },
+      "schema": "schemas/locations.json"
+    }
+  ]
+}

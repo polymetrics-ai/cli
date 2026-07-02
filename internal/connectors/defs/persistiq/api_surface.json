@@ -1,0 +1,16 @@
+{
+  "api": "PersistIQ API v1 (https://persistiq.com/api-docs/index.html)",
+  "docs": "https://persistiq.com/api-docs/index.html",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (leads, users, campaigns, mailboxes, activities, accounts); legacy ships no writes.",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/leads", "covered_by": { "stream": "leads" } },
+    { "method": "GET", "path": "/v1/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/v1/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/v1/mailboxes", "covered_by": { "stream": "mailboxes" } },
+    { "method": "GET", "path": "/v1/activities", "covered_by": { "stream": "activities" } },
+    { "method": "GET", "path": "/v1/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "POST", "path": "/v1/leads", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented lead creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/campaigns/{id}/add_leads", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

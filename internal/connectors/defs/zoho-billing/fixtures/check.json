@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/customers" },
+  "response": {
+    "status": 200,
+    "body": {
+      "customers": [
+        { "customer_id": "cust_fixture_1", "display_name": "Fixture Customer 1", "status": "active", "updated_time": "2026-01-01T00:00:00+0000" }
+      ]
+    }
+  }
+}

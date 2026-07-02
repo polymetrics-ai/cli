@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "profiles",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "displayName": { "type": ["string", "null"] },
+    "firstName": { "type": ["string", "null"] },
+    "surname": { "type": ["string", "null"] },
+    "fullName": { "type": ["string", "null"] },
+    "personal_pronouns": { "type": ["string", "null"] },
+    "work_title": { "type": ["string", "null"] },
+    "work_department": { "type": ["string", "null"] },
+    "work_site": { "type": ["string", "null"] },
+    "work_startDate": { "type": ["string", "null"] },
+    "work_isManager": { "type": ["boolean", "null"] }
+  }
+}

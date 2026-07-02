@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/appointments",
+    "query": {
+      "max": "100",
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1101,
+        "firstName": "Fixture101",
+        "lastName": "Example",
+        "email": "fixture101@example.com",
+        "phone": "555-0100",
+        "datetime": "2026-01-02T09:00:00-0800",
+        "endTime": "2026-01-02T09:30:00-0800",
+        "date": "January 2, 2026",
+        "time": "9:00am",
+        "type": "Intro Session",
+        "appointmentTypeID": 42,
+        "calendar": "Main Calendar",
+        "calendarID": 7,
+        "duration": "30",
+        "price": "0.00",
+        "paid": "no",
+        "amountPaid": "0.00",
+        "canceled": false,
+        "datetimeCreated": "2026-01-01T00:00:00-0800"
+      }
+    ]
+  }
+}

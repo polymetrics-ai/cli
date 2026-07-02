@@ -1,0 +1,18 @@
+{
+  "api": "Aviationstack API v1 (https://api.aviationstack.com/v1)",
+  "docs": "https://aviationstack.com/documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full aviationstack surface (real-time flight tracking premium tiers, future flight schedules, historical flight status by route) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/flights", "covered_by": { "stream": "flights" } },
+    { "method": "GET", "path": "/v1/airlines", "covered_by": { "stream": "airlines" } },
+    { "method": "GET", "path": "/v1/airports", "covered_by": { "stream": "airports" } },
+    { "method": "GET", "path": "/v1/airplanes", "covered_by": { "stream": "airplanes" } },
+    { "method": "GET", "path": "/v1/countries", "covered_by": { "stream": "countries" } },
+    { "method": "GET", "path": "/v1/routes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/cities", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/taxes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/timetable", "excluded": { "category": "requires_elevated_scope", "reason": "requires a premium aviationstack plan not assumed available for this migration" } },
+    { "method": "GET", "path": "/v1/historical", "excluded": { "category": "requires_elevated_scope", "reason": "requires a premium aviationstack plan not assumed available for this migration" } }
+  ]
+}

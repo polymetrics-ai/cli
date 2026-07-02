@@ -1,0 +1,19 @@
+{
+  "api": "RingCentral REST API v1.0 (https://platform.ringcentral.com/restapi/v1.0)",
+  "docs": "https://developers.ringcentral.com/api-reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (extensions, call_log, messages, contacts, devices); legacy ships no writes (capabilities.write is false) and the full RingCentral surface (SMS/fax send, call control, meeting/webinar management, presence, subscriptions/webhooks) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/restapi/v1.0/account/~/extension", "covered_by": { "stream": "extensions" } },
+    { "method": "GET", "path": "/restapi/v1.0/account/~/extension/~/call-log", "covered_by": { "stream": "call_log" } },
+    { "method": "GET", "path": "/restapi/v1.0/account/~/extension/~/message-store", "covered_by": { "stream": "messages" } },
+    { "method": "GET", "path": "/restapi/v1.0/account/~/extension/~/address-book/contact", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/restapi/v1.0/account/~/device", "covered_by": { "stream": "devices" } },
+    { "method": "POST", "path": "/restapi/v1.0/account/~/extension/~/sms", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented SMS sending; Pass B capability expansion" } },
+    { "method": "POST", "path": "/restapi/v1.0/account/~/extension/~/fax", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented fax sending; Pass B capability expansion" } },
+    { "method": "POST", "path": "/restapi/v1.0/account/~/telephony/call-out", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented call control; Pass B capability expansion" } },
+    { "method": "POST", "path": "/restapi/v1.0/subscription", "excluded": { "category": "out_of_scope", "reason": "webhook/event subscription management not modeled by legacy; Pass B capability expansion" } },
+    { "method": "PUT", "path": "/restapi/v1.0/account/~/extension/~/presence", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented presence updates; Pass B capability expansion" } },
+    { "method": "GET", "path": "/restapi/v1.0/account/~/extension/~", "excluded": { "category": "non_data_endpoint", "reason": "single-extension self-profile introspection, not a syncable object stream" } }
+  ]
+}

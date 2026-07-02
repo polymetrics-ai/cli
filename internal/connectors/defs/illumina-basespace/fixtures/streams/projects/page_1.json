@@ -1,0 +1,1222 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/users/synthetic-conformance-value/projects",
+    "query": {
+      "Limit": "100",
+      "Offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Items": [
+          {
+            "Id": "project_fixture_1",
+            "Name": "Fixture Project 1",
+            "Href": "v1pre3/projects/project_fixture_1",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 1000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_2",
+            "Name": "Fixture Project 2",
+            "Href": "v1pre3/projects/project_fixture_2",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 2000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_3",
+            "Name": "Fixture Project 3",
+            "Href": "v1pre3/projects/project_fixture_3",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 3000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_4",
+            "Name": "Fixture Project 4",
+            "Href": "v1pre3/projects/project_fixture_4",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 4000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_5",
+            "Name": "Fixture Project 5",
+            "Href": "v1pre3/projects/project_fixture_5",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 5000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_6",
+            "Name": "Fixture Project 6",
+            "Href": "v1pre3/projects/project_fixture_6",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 6000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_7",
+            "Name": "Fixture Project 7",
+            "Href": "v1pre3/projects/project_fixture_7",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 7000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_8",
+            "Name": "Fixture Project 8",
+            "Href": "v1pre3/projects/project_fixture_8",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 8000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_9",
+            "Name": "Fixture Project 9",
+            "Href": "v1pre3/projects/project_fixture_9",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 9000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_10",
+            "Name": "Fixture Project 10",
+            "Href": "v1pre3/projects/project_fixture_10",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 10000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_11",
+            "Name": "Fixture Project 11",
+            "Href": "v1pre3/projects/project_fixture_11",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 11000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_12",
+            "Name": "Fixture Project 12",
+            "Href": "v1pre3/projects/project_fixture_12",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 12000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_13",
+            "Name": "Fixture Project 13",
+            "Href": "v1pre3/projects/project_fixture_13",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 13000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_14",
+            "Name": "Fixture Project 14",
+            "Href": "v1pre3/projects/project_fixture_14",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 14000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_15",
+            "Name": "Fixture Project 15",
+            "Href": "v1pre3/projects/project_fixture_15",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 15000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_16",
+            "Name": "Fixture Project 16",
+            "Href": "v1pre3/projects/project_fixture_16",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 16000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_17",
+            "Name": "Fixture Project 17",
+            "Href": "v1pre3/projects/project_fixture_17",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 17000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_18",
+            "Name": "Fixture Project 18",
+            "Href": "v1pre3/projects/project_fixture_18",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 18000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_19",
+            "Name": "Fixture Project 19",
+            "Href": "v1pre3/projects/project_fixture_19",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 19000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_20",
+            "Name": "Fixture Project 20",
+            "Href": "v1pre3/projects/project_fixture_20",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 20000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_21",
+            "Name": "Fixture Project 21",
+            "Href": "v1pre3/projects/project_fixture_21",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 21000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_22",
+            "Name": "Fixture Project 22",
+            "Href": "v1pre3/projects/project_fixture_22",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 22000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_23",
+            "Name": "Fixture Project 23",
+            "Href": "v1pre3/projects/project_fixture_23",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 23000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_24",
+            "Name": "Fixture Project 24",
+            "Href": "v1pre3/projects/project_fixture_24",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 24000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_25",
+            "Name": "Fixture Project 25",
+            "Href": "v1pre3/projects/project_fixture_25",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 25000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_26",
+            "Name": "Fixture Project 26",
+            "Href": "v1pre3/projects/project_fixture_26",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 26000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_27",
+            "Name": "Fixture Project 27",
+            "Href": "v1pre3/projects/project_fixture_27",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 27000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_28",
+            "Name": "Fixture Project 28",
+            "Href": "v1pre3/projects/project_fixture_28",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 28000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_29",
+            "Name": "Fixture Project 29",
+            "Href": "v1pre3/projects/project_fixture_29",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 29000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_30",
+            "Name": "Fixture Project 30",
+            "Href": "v1pre3/projects/project_fixture_30",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 30000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_31",
+            "Name": "Fixture Project 31",
+            "Href": "v1pre3/projects/project_fixture_31",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 31000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_32",
+            "Name": "Fixture Project 32",
+            "Href": "v1pre3/projects/project_fixture_32",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 32000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_33",
+            "Name": "Fixture Project 33",
+            "Href": "v1pre3/projects/project_fixture_33",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 33000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_34",
+            "Name": "Fixture Project 34",
+            "Href": "v1pre3/projects/project_fixture_34",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 34000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_35",
+            "Name": "Fixture Project 35",
+            "Href": "v1pre3/projects/project_fixture_35",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 35000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_36",
+            "Name": "Fixture Project 36",
+            "Href": "v1pre3/projects/project_fixture_36",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 36000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_37",
+            "Name": "Fixture Project 37",
+            "Href": "v1pre3/projects/project_fixture_37",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 37000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_38",
+            "Name": "Fixture Project 38",
+            "Href": "v1pre3/projects/project_fixture_38",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 38000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_39",
+            "Name": "Fixture Project 39",
+            "Href": "v1pre3/projects/project_fixture_39",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 39000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_40",
+            "Name": "Fixture Project 40",
+            "Href": "v1pre3/projects/project_fixture_40",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 40000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_41",
+            "Name": "Fixture Project 41",
+            "Href": "v1pre3/projects/project_fixture_41",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 41000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_42",
+            "Name": "Fixture Project 42",
+            "Href": "v1pre3/projects/project_fixture_42",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 42000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_43",
+            "Name": "Fixture Project 43",
+            "Href": "v1pre3/projects/project_fixture_43",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 43000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_44",
+            "Name": "Fixture Project 44",
+            "Href": "v1pre3/projects/project_fixture_44",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 44000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_45",
+            "Name": "Fixture Project 45",
+            "Href": "v1pre3/projects/project_fixture_45",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 45000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_46",
+            "Name": "Fixture Project 46",
+            "Href": "v1pre3/projects/project_fixture_46",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 46000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_47",
+            "Name": "Fixture Project 47",
+            "Href": "v1pre3/projects/project_fixture_47",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 47000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_48",
+            "Name": "Fixture Project 48",
+            "Href": "v1pre3/projects/project_fixture_48",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 48000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_49",
+            "Name": "Fixture Project 49",
+            "Href": "v1pre3/projects/project_fixture_49",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 49000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_50",
+            "Name": "Fixture Project 50",
+            "Href": "v1pre3/projects/project_fixture_50",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 50000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_51",
+            "Name": "Fixture Project 51",
+            "Href": "v1pre3/projects/project_fixture_51",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 51000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_52",
+            "Name": "Fixture Project 52",
+            "Href": "v1pre3/projects/project_fixture_52",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 52000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_53",
+            "Name": "Fixture Project 53",
+            "Href": "v1pre3/projects/project_fixture_53",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 53000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_54",
+            "Name": "Fixture Project 54",
+            "Href": "v1pre3/projects/project_fixture_54",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 54000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_55",
+            "Name": "Fixture Project 55",
+            "Href": "v1pre3/projects/project_fixture_55",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 55000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_56",
+            "Name": "Fixture Project 56",
+            "Href": "v1pre3/projects/project_fixture_56",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 56000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_57",
+            "Name": "Fixture Project 57",
+            "Href": "v1pre3/projects/project_fixture_57",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 57000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_58",
+            "Name": "Fixture Project 58",
+            "Href": "v1pre3/projects/project_fixture_58",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 58000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_59",
+            "Name": "Fixture Project 59",
+            "Href": "v1pre3/projects/project_fixture_59",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 59000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_60",
+            "Name": "Fixture Project 60",
+            "Href": "v1pre3/projects/project_fixture_60",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 60000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_61",
+            "Name": "Fixture Project 61",
+            "Href": "v1pre3/projects/project_fixture_61",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 61000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_62",
+            "Name": "Fixture Project 62",
+            "Href": "v1pre3/projects/project_fixture_62",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 62000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_63",
+            "Name": "Fixture Project 63",
+            "Href": "v1pre3/projects/project_fixture_63",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 63000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_64",
+            "Name": "Fixture Project 64",
+            "Href": "v1pre3/projects/project_fixture_64",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 64000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_65",
+            "Name": "Fixture Project 65",
+            "Href": "v1pre3/projects/project_fixture_65",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 65000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_66",
+            "Name": "Fixture Project 66",
+            "Href": "v1pre3/projects/project_fixture_66",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 66000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_67",
+            "Name": "Fixture Project 67",
+            "Href": "v1pre3/projects/project_fixture_67",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 67000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_68",
+            "Name": "Fixture Project 68",
+            "Href": "v1pre3/projects/project_fixture_68",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 68000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_69",
+            "Name": "Fixture Project 69",
+            "Href": "v1pre3/projects/project_fixture_69",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 69000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_70",
+            "Name": "Fixture Project 70",
+            "Href": "v1pre3/projects/project_fixture_70",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 70000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_71",
+            "Name": "Fixture Project 71",
+            "Href": "v1pre3/projects/project_fixture_71",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 71000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_72",
+            "Name": "Fixture Project 72",
+            "Href": "v1pre3/projects/project_fixture_72",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 72000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_73",
+            "Name": "Fixture Project 73",
+            "Href": "v1pre3/projects/project_fixture_73",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 73000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_74",
+            "Name": "Fixture Project 74",
+            "Href": "v1pre3/projects/project_fixture_74",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 74000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_75",
+            "Name": "Fixture Project 75",
+            "Href": "v1pre3/projects/project_fixture_75",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 75000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_76",
+            "Name": "Fixture Project 76",
+            "Href": "v1pre3/projects/project_fixture_76",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 76000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_77",
+            "Name": "Fixture Project 77",
+            "Href": "v1pre3/projects/project_fixture_77",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 77000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_78",
+            "Name": "Fixture Project 78",
+            "Href": "v1pre3/projects/project_fixture_78",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 78000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_79",
+            "Name": "Fixture Project 79",
+            "Href": "v1pre3/projects/project_fixture_79",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 79000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_80",
+            "Name": "Fixture Project 80",
+            "Href": "v1pre3/projects/project_fixture_80",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 80000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_81",
+            "Name": "Fixture Project 81",
+            "Href": "v1pre3/projects/project_fixture_81",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 81000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_82",
+            "Name": "Fixture Project 82",
+            "Href": "v1pre3/projects/project_fixture_82",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 82000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_83",
+            "Name": "Fixture Project 83",
+            "Href": "v1pre3/projects/project_fixture_83",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 83000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_84",
+            "Name": "Fixture Project 84",
+            "Href": "v1pre3/projects/project_fixture_84",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 84000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_85",
+            "Name": "Fixture Project 85",
+            "Href": "v1pre3/projects/project_fixture_85",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 85000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_86",
+            "Name": "Fixture Project 86",
+            "Href": "v1pre3/projects/project_fixture_86",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 86000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_87",
+            "Name": "Fixture Project 87",
+            "Href": "v1pre3/projects/project_fixture_87",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 87000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_88",
+            "Name": "Fixture Project 88",
+            "Href": "v1pre3/projects/project_fixture_88",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 88000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_89",
+            "Name": "Fixture Project 89",
+            "Href": "v1pre3/projects/project_fixture_89",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 89000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_90",
+            "Name": "Fixture Project 90",
+            "Href": "v1pre3/projects/project_fixture_90",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 90000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_91",
+            "Name": "Fixture Project 91",
+            "Href": "v1pre3/projects/project_fixture_91",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 91000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_92",
+            "Name": "Fixture Project 92",
+            "Href": "v1pre3/projects/project_fixture_92",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 92000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_93",
+            "Name": "Fixture Project 93",
+            "Href": "v1pre3/projects/project_fixture_93",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 93000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_94",
+            "Name": "Fixture Project 94",
+            "Href": "v1pre3/projects/project_fixture_94",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 94000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_95",
+            "Name": "Fixture Project 95",
+            "Href": "v1pre3/projects/project_fixture_95",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 95000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_96",
+            "Name": "Fixture Project 96",
+            "Href": "v1pre3/projects/project_fixture_96",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 96000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_97",
+            "Name": "Fixture Project 97",
+            "Href": "v1pre3/projects/project_fixture_97",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 97000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_98",
+            "Name": "Fixture Project 98",
+            "Href": "v1pre3/projects/project_fixture_98",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 98000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_99",
+            "Name": "Fixture Project 99",
+            "Href": "v1pre3/projects/project_fixture_99",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 99000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          },
+          {
+            "Id": "project_fixture_100",
+            "Name": "Fixture Project 100",
+            "Href": "v1pre3/projects/project_fixture_100",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 100000,
+            "UserOwnedBy": {
+              "Id": "user_fixture_1",
+              "Name": "Fixture User"
+            }
+          }
+        ],
+        "Offset": 0,
+        "Limit": 100,
+        "TotalCount": 101
+      }
+    }
+  }
+}

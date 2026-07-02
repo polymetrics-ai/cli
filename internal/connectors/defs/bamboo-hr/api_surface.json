@@ -1,0 +1,18 @@
+{
+  "api": "BambooHR REST API v1 (https://<subdomain>.bamboohr.com/api/v1)",
+  "docs": "https://documentation.bamboohr.com/reference/getting-started",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full BambooHR surface (custom reports, files, benefits, training, time tracking, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/employees/directory", "covered_by": { "stream": "employees" } },
+    { "method": "GET", "path": "/v1/meta/fields", "covered_by": { "stream": "meta_fields" } },
+    { "method": "GET", "path": "/v1/meta/lists", "covered_by": { "stream": "meta_lists" } },
+    { "method": "GET", "path": "/v1/meta/time_off/types", "covered_by": { "stream": "time_off_types" } },
+    { "method": "GET", "path": "/v1/employees/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/employees/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/reports/custom", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/time_off/requests", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/files/view", "excluded": { "category": "binary_payload", "reason": "returns binary file content, not a syncable object stream" } },
+    { "method": "GET", "path": "/v1/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

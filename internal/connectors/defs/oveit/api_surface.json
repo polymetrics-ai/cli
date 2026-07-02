@@ -1,0 +1,11 @@
+{
+  "api": "Oveit API (https://oveit.com/api)",
+  "docs": "https://oveit.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read-only streams (events, orders, attendees) only; the full Oveit surface (create/update endpoints, check-in/scanning, single-resource fetches) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/attendees", "covered_by": { "stream": "attendees" } }
+  ]
+}

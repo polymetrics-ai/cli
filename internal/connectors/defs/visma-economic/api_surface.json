@@ -1,0 +1,13 @@
+{
+  "api": "Visma e-conomic REST API (https://restapi.e-conomic.com)",
+  "docs": "https://restdocs.e-conomic.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the single legacy-parity customers read stream only; the full e-conomic surface (invoices, products, orders, ledger, accounting years, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

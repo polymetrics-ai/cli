@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "k6 Cloud Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "k6 Cloud API token. Used only for Bearer auth (Authorization: Bearer <api_token>); never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.k6.io",
+      "description": "k6 Cloud API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "32",
+      "description": "Records per page (1-100)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "opportunities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date_updated_utc",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "opportunity_id": { "type": "integer" },
+    "opportunity_name": { "type": ["string", "null"] },
+    "opportunity_state": { "type": ["string", "null"] },
+    "opportunity_value": { "type": ["number", "null"] },
+    "probability": { "type": ["integer", "null"] },
+    "bid_currency": { "type": ["string", "null"] },
+    "pipeline_id": { "type": ["integer", "null"] },
+    "stage_id": { "type": ["integer", "null"] },
+    "date_created_utc": { "type": ["string", "null"] },
+    "date_updated_utc": { "type": ["string", "null"] }
+  }
+}

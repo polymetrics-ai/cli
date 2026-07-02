@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/weather/v1/current-conditions",
+    "query": {
+      "lat": "synthetic-conformance-value",
+      "lon": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "datetime": "2026-01-01T00:00:00Z",
+        "temperature": { "value": 21, "units": "celsius" },
+        "feels_like_temperature": { "value": 20, "units": "celsius" },
+        "relative_humidity": 51,
+        "wind": { "speed": { "value": 3 } },
+        "precipitation": {},
+        "weather_condition": { "text": "Clear" },
+        "data_available": true
+      }
+    }
+  }
+}

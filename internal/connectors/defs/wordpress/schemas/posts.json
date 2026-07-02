@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "posts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "date": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] }
+  }
+}

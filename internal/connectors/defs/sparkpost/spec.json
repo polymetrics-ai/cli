@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SparkPost Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SparkPost API key, sent verbatim as the Authorization header value (no Bearer prefix). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.sparkpost.com/api/v1",
+      "description": "SparkPost API base URL. Defaults to the US endpoint; set explicitly to https://api.eu.sparkpost.com/api/v1 for the EU region."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Lower bound sent as the 'from' query parameter."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Upper bound sent as the 'to' query parameter."
+    }
+  }
+}

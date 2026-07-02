@@ -1,0 +1,33 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 11,
+          "name": "Fixture Account 1",
+          "email": "fixture1@example.com",
+          "domain": "fixture1.example.com",
+          "phone_number": "+15550100",
+          "city": "Antwerp",
+          "country": "BE",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "name": "Fixture Account 2",
+          "email": "fixture2@example.com",
+          "domain": "fixture2.example.com",
+          "phone_number": "+15550101",
+          "city": "Ghent",
+          "country": "BE",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": { "next_page": 2 }
+    }
+  }
+}

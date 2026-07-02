@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/management/responses", "query": { "limit": "2", "skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "res_fixture_1",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_1",
+          "finished": true,
+          "data": { "q1": "answer one" },
+          "meta": { "source": "fixture" },
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_2",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_2",
+          "finished": false,
+          "data": { "q1": "answer two" },
+          "meta": { "source": "fixture" },
+          "createdAt": "2026-01-02T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

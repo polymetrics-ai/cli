@@ -1,0 +1,23 @@
+{
+  "name": "invoiced",
+  "display_name": "Invoiced",
+  "description": "Reads Invoiced customers, invoices, payments, subscriptions, and estimates through the Invoiced REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.invoiced.com/docs/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Invoiced API read of customer and billing data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

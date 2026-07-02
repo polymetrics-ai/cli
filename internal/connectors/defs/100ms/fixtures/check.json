@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/rooms" },
+  "response": {
+    "status": 200,
+    "body": { "data": [{ "id": "room_fixture_1", "name": "Fixture Room", "enabled": true }], "last": "" }
+  }
+}

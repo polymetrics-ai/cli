@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Acuity Scheduling Appointment Type",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "description": { "type": ["string", "null"] },
+    "duration": { "type": ["integer", "null"] },
+    "price": { "type": ["string", "null"] },
+    "category": { "type": ["string", "null"] },
+    "color": { "type": ["string", "null"] },
+    "private": { "type": ["boolean", "null"] },
+    "type": { "type": ["string", "null"] }
+  }
+}

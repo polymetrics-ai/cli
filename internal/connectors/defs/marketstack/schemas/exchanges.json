@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "exchanges",
+  "type": "object",
+  "x-primary-key": ["mic"],
+  "required": ["mic"],
+  "properties": {
+    "mic": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "acronym": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "country_code": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "website": { "type": ["string", "null"] },
+    "currency_code": { "type": ["string", "null"] },
+    "currency_name": { "type": ["string", "null"] },
+    "currency_symbol": { "type": ["string", "null"] },
+    "timezone": { "type": ["string", "null"] },
+    "timezone_abbr": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "api": "Financial Modeling Prep API v3 (https://financialmodelingprep.com/api/v3)",
+  "docs": "https://site.financialmodelingprep.com/developer/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full FMP surface (company profile, historical prices, financial statements, indexes, forex, crypto, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/stock/list", "covered_by": { "stream": "stocks" } },
+    { "method": "GET", "path": "/v3/etf/list", "covered_by": { "stream": "etfs" } },
+    { "method": "GET", "path": "/v3/stock-screener", "covered_by": { "stream": "stock_screener" } },
+    { "method": "GET", "path": "/v3/delisted-companies", "covered_by": { "stream": "delisted_companies" } },
+    { "method": "GET", "path": "/v3/profile/{symbol}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/historical-price-full/{symbol}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/income-statement/{symbol}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/quote/{symbol}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

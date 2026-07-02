@@ -1,0 +1,16 @@
+{
+  "api": "Plausible Analytics Stats API v1",
+  "docs": "https://plausible.io/docs/stats-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Plausible API surface (goals API, funnels, realtime visitors, custom events breakdown for every property dimension, CSV exports, site provisioning/management) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/sites", "covered_by": { "stream": "sites" } },
+    { "method": "GET", "path": "/v1/stats/aggregate", "covered_by": { "stream": "aggregate" } },
+    { "method": "GET", "path": "/v1/stats/timeseries", "covered_by": { "stream": "timeseries" } },
+    { "method": "GET", "path": "/v1/stats/breakdown", "covered_by": { "stream": "breakdown" } },
+    { "method": "GET", "path": "/v1/stats/realtime/visitors", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/stats/goal/breakdown", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/sites", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/v1/sites", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } }
+  ]
+}

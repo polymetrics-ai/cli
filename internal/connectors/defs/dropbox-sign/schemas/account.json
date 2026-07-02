@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "account",
+  "type": "object",
+  "x-primary-key": ["account_id"],
+  "required": ["account_id"],
+  "properties": {
+    "account_id": { "type": "string" },
+    "email_address": { "type": ["string", "null"] },
+    "is_paid_hs": { "type": ["boolean", "null"] },
+    "is_paid_hf": { "type": ["boolean", "null"] },
+    "role_code": { "type": ["string", "null"] },
+    "locale": { "type": ["string", "null"] }
+  }
+}

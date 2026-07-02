@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/refunds",
+    "query": { "limit": "50", "created_at[gt]": "2020-01-01T00:00:00Z" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "refunds": [
+        {
+          "id": "RF_fixture_1",
+          "created_at": "2026-01-01T00:00:00Z",
+          "amount": 250,
+          "currency": "GBP",
+          "reference": "REF-RF-1",
+          "links": {
+            "payment": "PM_fixture_1",
+            "mandate": "MD_fixture_1"
+          }
+        }
+      ],
+      "meta": { "cursors": { "before": null, "after": null } }
+    }
+  }
+}

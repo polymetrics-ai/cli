@@ -1,0 +1,17 @@
+{
+  "api": "Chameleon API v3 (https://api.chameleon.io/v3)",
+  "docs": "https://developers.chameleon.io/reference/introduction",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; Chameleon's much larger surface (users, events, microsurvey responses, mutations of experiences) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/edit/surveys", "covered_by": { "stream": "surveys" } },
+    { "method": "GET", "path": "/edit/tours", "covered_by": { "stream": "tours" } },
+    { "method": "GET", "path": "/edit/launchers", "covered_by": { "stream": "launchers" } },
+    { "method": "GET", "path": "/edit/tooltips", "covered_by": { "stream": "tooltips" } },
+    { "method": "GET", "path": "/edit/segments", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/events", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/edit/surveys", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/edit/surveys/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive experience deletion; out of scope" } }
+  ]
+}

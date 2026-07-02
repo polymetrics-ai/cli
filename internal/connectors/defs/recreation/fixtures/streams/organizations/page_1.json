@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/organizations", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "RECDATA": [
+        { "OrgID": "1", "OrgName": "Fixture Org 1" },
+        { "OrgID": "2", "OrgName": "Fixture Org 2" }
+      ],
+      "METADATA": { "RESULTS": { "TOTAL_COUNT": "2" } }
+    }
+  }
+}

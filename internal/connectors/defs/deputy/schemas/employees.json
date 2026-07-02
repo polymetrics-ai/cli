@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employees",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "display_name": { "type": ["string", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "company": { "type": ["integer", "null"] },
+    "role": { "type": ["integer", "null"] },
+    "created": { "type": ["string", "null"] },
+    "modified": { "type": ["string", "null"] }
+  }
+}

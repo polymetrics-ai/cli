@@ -1,0 +1,22 @@
+{
+  "name": "payfit",
+  "display_name": "PayFit",
+  "description": "Reads PayFit employees, contracts, and companies through documented REST endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://developers.payfit.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external PayFit API read of employee, contract, and company HR data"
+  }
+}

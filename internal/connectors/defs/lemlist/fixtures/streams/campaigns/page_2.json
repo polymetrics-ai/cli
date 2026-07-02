@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "cmp_fixture_101",
+        "name": "Fixture Campaign 101",
+        "labels": [
+          "fixture"
+        ]
+      }
+    ]
+  }
+}

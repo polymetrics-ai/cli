@@ -1,0 +1,15 @@
+{
+  "api": "Web Scraper Cloud API v1 (https://webscraper.io/documentation/api)",
+  "docs": "https://webscraper.io/documentation/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (sitemaps, jobs); Web Scraper Cloud's write endpoints (sitemap create/update, job create/delete) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/sitemap", "covered_by": { "stream": "sitemaps" } },
+    { "method": "GET", "path": "/scraping-job", "covered_by": { "stream": "jobs" } },
+    { "method": "GET", "path": "/sitemap/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented single-sitemap lookup; Pass B capability expansion" } },
+    { "method": "GET", "path": "/scraping-job/{id}/json", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented per-job scraped-data download; Pass B capability expansion" } },
+    { "method": "POST", "path": "/sitemap", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented sitemap creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/scraping-job", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented scraping-job creation; Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/scraping-job/{id}", "excluded": { "category": "destructive_admin", "reason": "job deletion not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

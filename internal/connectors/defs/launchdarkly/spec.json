@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LaunchDarkly Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "LaunchDarkly access token. Sent verbatim (no \"Bearer\" prefix) as the Authorization header; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.launchdarkly.com/api/v2",
+      "description": "LaunchDarkly API base URL override for tests or proxies."
+    },
+    "project_key": {
+      "type": "string",
+      "description": "LaunchDarkly project key. Required only for the flags and environments streams, which are scoped to a single project."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/accounts/{{ config.account_id }}/flows" }
+  },
+  "streams": [
+    {
+      "name": "flows",
+      "path": "/accounts/{{ config.account_id }}/flows",
+      "records": { "path": "" },
+      "schema": "schemas/flows.json"
+    },
+    {
+      "name": "segments",
+      "path": "/accounts/{{ config.account_id }}/segments",
+      "records": { "path": "" },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "tags",
+      "path": "/accounts/{{ config.account_id }}/tags",
+      "records": { "path": "" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "checklists",
+      "path": "/accounts/{{ config.account_id }}/checklists",
+      "records": { "path": "" },
+      "schema": "schemas/checklists.json"
+    },
+    {
+      "name": "banners",
+      "path": "/accounts/{{ config.account_id }}/banners",
+      "records": { "path": "" },
+      "schema": "schemas/banners.json"
+    }
+  ]
+}

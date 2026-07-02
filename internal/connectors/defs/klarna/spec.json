@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Klarna Connection Specification",
+  "type": "object",
+  "required": ["base_url", "username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Klarna merchant UID (username), sent via HTTP Basic auth. Not itself a secret credential value, but modeled as x-secret alongside password to match legacy's Secrets-sourced lookup precedence."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Klarna API shared secret (password), sent via HTTP Basic auth. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Klarna Settlements API base URL, e.g. https://api.klarna.com (EU production), https://api-na.klarna.com (NA), https://api-oc.klarna.com (OC), or the matching *.playground.klarna.com host for test merchants. Required: this bundle does not derive a base URL from a region/playground config pair (see docs.md Known limits)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-500)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

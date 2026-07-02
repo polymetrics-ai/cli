@@ -1,0 +1,16 @@
+{
+  "api": "Persona API v1 (https://docs.withpersona.com/reference)",
+  "docs": "https://docs.withpersona.com/reference",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (inquiries, accounts, reports, transactions, cases); legacy ships no writes.",
+  "endpoints": [
+    { "method": "GET", "path": "/inquiries", "covered_by": { "stream": "inquiries" } },
+    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/reports", "covered_by": { "stream": "reports" } },
+    { "method": "GET", "path": "/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/cases", "covered_by": { "stream": "cases" } },
+    { "method": "POST", "path": "/inquiries", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented inquiry creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/inquiries/{id}/resume", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/verifications", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

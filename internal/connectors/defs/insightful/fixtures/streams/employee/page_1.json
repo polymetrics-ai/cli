@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/employee" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "emp_fixture_1", "name": "Fixture Employee 1", "email": "fixture1@example.com", "modelName": "Employee", "createdAt": 1767225600000, "updatedAt": 1767225601000 },
+        { "id": "emp_fixture_2", "name": "Fixture Employee 2", "email": "fixture2@example.com", "modelName": "Employee", "createdAt": 1767225600000, "updatedAt": 1767225602000 }
+      ],
+      "next": "fixture_cursor_2"
+    }
+  }
+}

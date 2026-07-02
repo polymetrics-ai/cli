@@ -1,0 +1,22 @@
+{
+  "name": "xero",
+  "display_name": "Xero",
+  "description": "Reads Xero accounting data (invoices, contacts, accounts, bank transactions, items, and payments) from the Xero Accounting API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.xero.com/documentation/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Xero Accounting API read of financial and contact data"
+  }
+}

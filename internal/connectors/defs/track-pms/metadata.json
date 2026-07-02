@@ -1,0 +1,23 @@
+{
+  "name": "track-pms",
+  "display_name": "Track PMS",
+  "description": "Reads Track PMS reservations, guests, units, and owners through API list endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://www.trackhs.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Track PMS API read of reservation, guest, unit, and owner data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

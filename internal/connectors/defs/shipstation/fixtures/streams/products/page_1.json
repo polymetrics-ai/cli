@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/products", "query": { "page": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "products": [
+        { "productId": 1, "sku": "SKU-1", "name": "Fixture Product 1", "modifyDate": "2026-01-01T00:00:00.0000000" }
+      ],
+      "total": 1,
+      "page": 1,
+      "pages": 1
+    }
+  }
+}

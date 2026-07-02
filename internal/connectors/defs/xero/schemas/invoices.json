@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices",
+  "type": "object",
+  "x-primary-key": ["InvoiceID"],
+  "x-cursor-field": "UpdatedDateUTC",
+  "required": ["InvoiceID"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "InvoiceID": { "type": "string" },
+    "InvoiceNumber": { "type": ["string", "null"] },
+    "Type": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "Status": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "LineAmountTypes": { "type": ["string", "null"] },
+    "SubTotal": { "type": ["number", "null"] },
+    "TotalTax": { "type": ["number", "null"] },
+    "Total": { "type": ["number", "null"] },
+    "AmountDue": { "type": ["number", "null"] },
+    "AmountPaid": { "type": ["number", "null"] },
+    "CurrencyCode": { "type": ["string", "null"] },
+    "Date": { "type": ["string", "null"] },
+    "DueDate": { "type": ["string", "null"] },
+    "ContactID": { "type": ["string", "null"] },
+    "UpdatedDateUTC": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

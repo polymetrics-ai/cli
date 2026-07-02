@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/project" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "project_fixture_1", "name": "Fixture Project 1", "archived": false, "billable": true, "creatorId": "emp_fixture_1", "organizationId": "org_fixture_1", "employees": ["emp_fixture_1"], "modelName": "Project", "createdAt": 1767225600000, "updatedAt": 1767225601000 }
+      ]
+    }
+  }
+}

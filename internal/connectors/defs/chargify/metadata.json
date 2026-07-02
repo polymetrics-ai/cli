@@ -1,0 +1,22 @@
+{
+  "name": "chargify",
+  "display_name": "Chargify",
+  "description": "Reads Chargify (Maxio Advanced Billing) customers, subscriptions, products, coupons, and transactions through the Chargify REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Chargify API read of customer and billing data"
+  }
+}

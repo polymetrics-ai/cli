@@ -1,0 +1,12 @@
+{
+  "api": "Klarna Settlements API",
+  "docs": "https://docs.klarna.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out: the 3 legacy-parity read streams only (payouts, transactions, payout_summary); the Klarna Settlements API is read-only for pm reverse-ETL purposes, no writes implemented",
+  "endpoints": [
+    { "method": "GET", "path": "/settlements/v1/payouts", "covered_by": { "stream": "payouts" } },
+    { "method": "GET", "path": "/settlements/v1/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/settlements/v1/payouts", "covered_by": { "stream": "payout_summary" } },
+    { "method": "GET", "path": "/settlements/v1/payouts/{payout_reference}/transactions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; per-payout transaction drill-down, not implemented by legacy internal/connectors/klarna" } }
+  ]
+}

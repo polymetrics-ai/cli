@@ -1,0 +1,23 @@
+{
+  "name": "interzoid",
+  "display_name": "Interzoid",
+  "description": "Reads Interzoid data-matching lookups: company-name, individual-name, and street-address similarity keys, plus organization-name standardization, via the Interzoid REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.interzoid.com/entries/interzoid-core-apis",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1
+  },
+  "risk": {
+    "read": "external Interzoid API single-lookup read; each read spends an API credit",
+    "approval": "none; read-only data-matching lookup API"
+  }
+}

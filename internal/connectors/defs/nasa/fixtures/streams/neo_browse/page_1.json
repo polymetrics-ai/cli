@@ -1,0 +1,202 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/neo/rest/v1/neo/browse",
+    "query": {
+      "page": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": {
+        "size": 20,
+        "total_elements": 21,
+        "total_pages": 2,
+        "number": 0
+      },
+      "near_earth_objects": [
+        {
+          "id": "2000431",
+          "neo_reference_id": "2000431",
+          "name": "1 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 11.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "2000432",
+          "neo_reference_id": "2000432",
+          "name": "2 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 12.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "2000433",
+          "neo_reference_id": "2000433",
+          "name": "3 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 13.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "2000434",
+          "neo_reference_id": "2000434",
+          "name": "4 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 14.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "2000435",
+          "neo_reference_id": "2000435",
+          "name": "5 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 15.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "2000436",
+          "neo_reference_id": "2000436",
+          "name": "6 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 16.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "2000437",
+          "neo_reference_id": "2000437",
+          "name": "7 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 17.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "2000438",
+          "neo_reference_id": "2000438",
+          "name": "8 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 18.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "2000439",
+          "neo_reference_id": "2000439",
+          "name": "9 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 19.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004310",
+          "neo_reference_id": "20004310",
+          "name": "10 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 20.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004311",
+          "neo_reference_id": "20004311",
+          "name": "11 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 21.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004312",
+          "neo_reference_id": "20004312",
+          "name": "12 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 22.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004313",
+          "neo_reference_id": "20004313",
+          "name": "13 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 23.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004314",
+          "neo_reference_id": "20004314",
+          "name": "14 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 24.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004315",
+          "neo_reference_id": "20004315",
+          "name": "15 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 25.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004316",
+          "neo_reference_id": "20004316",
+          "name": "16 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 26.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004317",
+          "neo_reference_id": "20004317",
+          "name": "17 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 27.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004318",
+          "neo_reference_id": "20004318",
+          "name": "18 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 28.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004319",
+          "neo_reference_id": "20004319",
+          "name": "19 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 29.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        },
+        {
+          "id": "20004320",
+          "neo_reference_id": "20004320",
+          "name": "20 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 30.0,
+          "is_potentially_hazardous_asteroid": false,
+          "is_sentry_object": false
+        }
+      ]
+    }
+  }
+}

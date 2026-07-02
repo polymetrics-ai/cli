@@ -1,0 +1,52 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Encharge-Token", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/people/all", "query": { "limit": "1", "offset": "0" } },
+    "error_map": [
+      { "status": 401, "hint": "encharge api_key is missing or invalid; re-run pm credentials add encharge" },
+      { "status": 429, "class": "rate_limited", "hint": "encharge rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "peoples",
+      "path": "/people/all",
+      "records": { "path": "people" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 100
+      },
+      "schema": "schemas/peoples.json"
+    },
+    {
+      "name": "segments",
+      "path": "/segments",
+      "records": { "path": "segments" },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "fields",
+      "path": "/fields",
+      "records": { "path": "items" },
+      "schema": "schemas/fields.json"
+    },
+    {
+      "name": "account_tags",
+      "path": "/tags-management",
+      "records": { "path": "tags" },
+      "schema": "schemas/account_tags.json"
+    },
+    {
+      "name": "schemas",
+      "path": "/schemas",
+      "records": { "path": "objects" },
+      "schema": "schemas/schemas.json"
+    }
+  ]
+}

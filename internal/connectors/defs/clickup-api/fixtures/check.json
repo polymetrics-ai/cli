@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/team" },
+  "response": {
+    "status": 200,
+    "body": { "teams": [] }
+  }
+}

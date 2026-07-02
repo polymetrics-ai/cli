@@ -1,0 +1,16 @@
+{
+  "api": "BreezoMeter (Google Environment) REST API (https://api.breezometer.com)",
+  "docs": "https://docs.breezometer.com/api-documentation/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: all 5 legacy-parity read streams (air_quality_current, air_quality_forecast, air_quality_history, pollen_forecast, weather_current) are implemented at capability parity; the full BreezoMeter/Google Environment API surface (e.g. wildfire, pollen v3-plants-only endpoints, road-segment air quality) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/air-quality/v2/current-conditions", "covered_by": { "stream": "air_quality_current" } },
+    { "method": "GET", "path": "/air-quality/v2/forecast/hourly", "covered_by": { "stream": "air_quality_forecast" } },
+    { "method": "GET", "path": "/air-quality/v2/historical/hourly", "covered_by": { "stream": "air_quality_history" } },
+    { "method": "GET", "path": "/pollen/v2/forecast/daily", "covered_by": { "stream": "pollen_forecast" } },
+    { "method": "GET", "path": "/weather/v1/current-conditions", "covered_by": { "stream": "weather_current" } },
+    { "method": "GET", "path": "/air-quality/v2/historical/daily", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/weather/v1/forecast/daily", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/air-quality/v2/road-segments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

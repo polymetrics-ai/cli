@@ -1,0 +1,11 @@
+{
+  "api": "Churnkey Data API (https://api.churnkey.co/v1/data)",
+  "docs": "https://docs.churnkey.co/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only. Churnkey's Data API is read-only for reverse-ETL purposes in both legacy and this bundle (its only mutating endpoints are GDPR deletes, which are destructive-admin operations out of scope for a source connector).",
+  "endpoints": [
+    { "method": "GET", "path": "/sessions", "covered_by": { "stream": "sessions" } },
+    { "method": "GET", "path": "/session-aggregation", "covered_by": { "stream": "session_aggregation" } },
+    { "method": "DELETE", "path": "/customers/{id}", "excluded": { "category": "destructive_admin", "reason": "GDPR customer-data deletion; not a reverse-ETL read/write surface" } }
+  ]
+}

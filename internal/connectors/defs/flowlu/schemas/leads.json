@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "leads",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "stage_id": { "type": ["integer", "null"] },
+    "pipeline_id": { "type": ["integer", "null"] },
+    "budget": { "type": ["string", "null"] },
+    "owner_id": { "type": ["integer", "null"] },
+    "active": { "type": ["integer", "null"] },
+    "created_date": { "type": ["string", "null"] },
+    "updated_date": { "type": ["string", "null"] }
+  }
+}

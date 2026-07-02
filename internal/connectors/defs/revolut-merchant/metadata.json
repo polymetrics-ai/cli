@@ -1,0 +1,22 @@
+{
+  "name": "revolut-merchant",
+  "display_name": "Revolut Merchant",
+  "description": "Reads Revolut Merchant orders, customers, settlements, and payment links through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.revolut.com/docs/guides/merchant/reference/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Revolut Merchant API read of order, customer, settlement, and payment-link data"
+  }
+}

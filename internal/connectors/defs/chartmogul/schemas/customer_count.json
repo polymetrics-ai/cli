@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customer_count",
+  "type": "object",
+  "x-primary-key": ["date"],
+  "x-cursor-field": "date",
+  "required": ["date"],
+  "properties": {
+    "date": { "type": "string" },
+    "customers": { "type": ["integer", "null"] },
+    "percentage-change": { "type": ["number", "null"] }
+  }
+}

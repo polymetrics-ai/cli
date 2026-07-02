@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EZOfficeInventory Connection Specification",
+  "type": "object",
+  "required": ["subdomain", "api_key"],
+  "properties": {
+    "subdomain": {
+      "type": "string",
+      "description": "Your EZOfficeInventory account subdomain (the <subdomain> in https://<subdomain>.ezofficeinventory.com). Used to derive base_url as https://{subdomain}.ezofficeinventory.com."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "EZOfficeInventory API access token, sent as the token header. Never logged."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

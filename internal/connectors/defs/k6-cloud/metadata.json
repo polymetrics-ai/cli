@@ -1,0 +1,22 @@
+{
+  "name": "k6-cloud",
+  "display_name": "k6 Cloud",
+  "description": "Reads k6 Cloud organizations and load tests through the k6 Cloud REST API.",
+  "integration_type": "api",
+  "docs_url": "https://k6.io/docs/cloud/cloud-reference/cloud-rest-api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 32
+  },
+  "risk": {
+    "read": "external k6 Cloud API read of organizations and load tests"
+  }
+}

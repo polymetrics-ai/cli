@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/activities", "query": { "per_page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "uuid": "act_fixture_1",
+          "type": "new_biz",
+          "date": "2026-01-01T00:00:00Z",
+          "currency": "USD",
+          "activity-mrr": 1000,
+          "activity-mrr-movement": 1000,
+          "activity-arr": 12000,
+          "description": "purchased subscription",
+          "customer-uuid": "cus_fixture_1",
+          "customer-name": "Fixture One Inc",
+          "customer-external-id": "ext_1",
+          "subscription-external-id": "sub_fixture_1",
+          "plan-external-id": "plan_fixture_1"
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

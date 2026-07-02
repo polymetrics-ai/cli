@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/suppression/bounces",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "email": "fixture101@example.com",
+        "created": 1767225701,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      }
+    ]
+  }
+}

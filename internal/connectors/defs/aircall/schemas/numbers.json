@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aircall Number",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": "string" },
+    "digits": { "type": "string" },
+    "country": { "type": ["string", "null"] },
+    "time_zone": { "type": ["string", "null"] },
+    "open": { "type": "boolean" },
+    "is_ivr": { "type": "boolean" },
+    "live_recording_activated": { "type": "boolean" },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

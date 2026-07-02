@@ -1,0 +1,23 @@
+{
+  "name": "survey-sparrow",
+  "display_name": "SurveySparrow",
+  "description": "Reads SurveySparrow surveys, contacts, responses, and questions through the SurveySparrow API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.surveysparrow.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external SurveySparrow API read of survey, contact, response, and question data",
+    "approval": "none; read-only"
+  }
+}

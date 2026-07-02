@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "namespace",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "uuid": { "type": ["string", "null"] },
+    "orgname": { "type": ["string", "null"] },
+    "full_name": { "type": ["string", "null"] },
+    "company": { "type": ["string", "null"] },
+    "location": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "badge": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "date_joined": { "type": ["string", "null"] }
+  }
+}

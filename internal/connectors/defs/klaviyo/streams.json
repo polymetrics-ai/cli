@@ -1,0 +1,108 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "revision": "{{ config.revision }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "Klaviyo-API-Key " }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "links.next"
+    },
+    "check": { "method": "GET", "path": "/accounts" },
+    "error_map": [
+      { "status": 401, "hint": "klaviyo api_key is missing or invalid; re-run pm credentials add klaviyo" },
+      { "status": 429, "class": "rate_limited", "hint": "klaviyo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "profiles",
+      "path": "/profiles",
+      "query": { "page[size]": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "email": "{{ record.attributes.email }}",
+        "phone_number": "{{ record.attributes.phone_number }}",
+        "external_id": "{{ record.attributes.external_id }}",
+        "first_name": "{{ record.attributes.first_name }}",
+        "last_name": "{{ record.attributes.last_name }}",
+        "organization": "{{ record.attributes.organization }}",
+        "created": "{{ record.attributes.created }}",
+        "updated": "{{ record.attributes.updated }}"
+      },
+      "schema": "schemas/profiles.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "query": { "page[size]": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "timestamp": "{{ record.attributes.timestamp }}",
+        "datetime": "{{ record.attributes.datetime }}",
+        "uuid": "{{ record.attributes.uuid }}"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "query": { "page[size]": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "status": "{{ record.attributes.status }}",
+        "archived": "{{ record.attributes.archived }}",
+        "channel": "{{ record.attributes.channel }}",
+        "created_at": "{{ record.attributes.created_at }}",
+        "updated_at": "{{ record.attributes.updated_at }}",
+        "scheduled_at": "{{ record.attributes.scheduled_at }}",
+        "send_time": "{{ record.attributes.send_time }}"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "lists",
+      "path": "/lists",
+      "query": { "page[size]": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "created": "{{ record.attributes.created }}",
+        "updated": "{{ record.attributes.updated }}"
+      },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "metrics",
+      "path": "/metrics",
+      "query": { "page[size]": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "integration_name": "{{ record.attributes.integration.name }}",
+        "created": "{{ record.attributes.created }}",
+        "updated": "{{ record.attributes.updated }}"
+      },
+      "schema": "schemas/metrics.json"
+    },
+    {
+      "name": "segments",
+      "path": "/segments",
+      "query": { "page[size]": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "is_active": "{{ record.attributes.is_active }}",
+        "is_processing": "{{ record.attributes.is_processing }}",
+        "created": "{{ record.attributes.created }}",
+        "updated": "{{ record.attributes.updated }}"
+      },
+      "schema": "schemas/segments.json"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/paymentrequest" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": true,
+      "message": "ok",
+      "data": [
+        { "id": 20, "request_code": "PRQ_fixture_1", "amount": 15000, "currency": "NGN", "status": "pending", "paid": false, "domain": "test", "due_date": "2026-02-15T00:00:00.000Z", "createdAt": "2026-01-01T00:00:00.000Z", "updatedAt": "2026-01-01T00:00:00.000Z" }
+      ],
+      "meta": { "total": 1, "perPage": 100, "page": 1, "pageCount": 1, "next": null, "previous": null }
+    }
+  }
+}

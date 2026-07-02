@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "coupons",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date_modified_gmt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "code": { "type": ["string", "null"] },
+    "discount_type": { "type": ["string", "null"] },
+    "amount": { "type": ["string", "null"] },
+    "usage_count": { "type": ["integer", "null"] },
+    "usage_limit": { "type": ["integer", "null"] },
+    "date_expires": { "type": ["string", "null"] },
+    "date_created": { "type": ["string", "null"] },
+    "date_created_gmt": { "type": ["string", "null"] },
+    "date_modified": { "type": ["string", "null"] },
+    "date_modified_gmt": { "type": ["string", "null"] }
+  }
+}

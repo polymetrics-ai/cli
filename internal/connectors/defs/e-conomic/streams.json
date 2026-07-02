@@ -1,0 +1,127 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-AppSecretToken": "{{ secrets.app_secret_token }}",
+      "X-AgreementGrantToken": "{{ secrets.agreement_grant_token }}",
+      "Content-Type": "application/json"
+    },
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "pagination.nextPage"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/customers",
+      "query": { "skippages": "0", "pagesize": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "e-conomic app_secret_token/agreement_grant_token is missing or invalid; re-run pm credentials add e-conomic" },
+      { "status": 403, "hint": "e-conomic agreement lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "e-conomic rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "customer_number": "{{ record.customerNumber }}",
+        "name": "{{ record.name }}",
+        "currency": "{{ record.currency }}",
+        "email": "{{ record.email }}",
+        "city": "{{ record.city }}",
+        "zip": "{{ record.zip }}",
+        "country": "{{ record.country }}",
+        "address": "{{ record.address }}",
+        "balance": "{{ record.balance }}",
+        "barred": "{{ record.barred }}",
+        "credit_limit": "{{ record.creditLimit }}",
+        "vat_zone_number": "{{ record.vatZone.vatZoneNumber }}",
+        "customer_group_number": "{{ record.customerGroup.customerGroupNumber }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "product_number": "{{ record.productNumber }}",
+        "name": "{{ record.name }}",
+        "description": "{{ record.description }}",
+        "sales_price": "{{ record.salesPrice }}",
+        "cost_price": "{{ record.costPrice }}",
+        "recommended_price": "{{ record.recommendedPrice }}",
+        "barred": "{{ record.barred }}",
+        "unit_number": "{{ record.unit.unitNumber }}",
+        "product_group_number": "{{ record.productGroup.productGroupNumber }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "suppliers",
+      "path": "/suppliers",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "supplier_number": "{{ record.supplierNumber }}",
+        "name": "{{ record.name }}",
+        "currency": "{{ record.currency }}",
+        "email": "{{ record.email }}",
+        "city": "{{ record.city }}",
+        "zip": "{{ record.zip }}",
+        "country": "{{ record.country }}",
+        "address": "{{ record.address }}",
+        "barred": "{{ record.barred }}",
+        "supplier_group_number": "{{ record.supplierGroup.supplierGroupNumber }}",
+        "vat_zone_number": "{{ record.vatZone.vatZoneNumber }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/suppliers.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "account_number": "{{ record.accountNumber }}",
+        "name": "{{ record.name }}",
+        "account_type": "{{ record.accountType }}",
+        "balance": "{{ record.balance }}",
+        "block_direct_entries": "{{ record.blockDirectEntries }}",
+        "debit_credit": "{{ record.debitCredit }}",
+        "vat_code": "{{ record.vatCode }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices/booked",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "booked_invoice_number": "{{ record.bookedInvoiceNumber }}",
+        "date": "{{ record.date }}",
+        "currency": "{{ record.currency }}",
+        "net_amount": "{{ record.netAmount }}",
+        "gross_amount": "{{ record.grossAmount }}",
+        "vat_amount": "{{ record.vatAmount }}",
+        "remainder": "{{ record.remainder }}",
+        "due_date": "{{ record.dueDate }}",
+        "customer_number": "{{ record.customer.customerNumber }}",
+        "payment_terms_number": "{{ record.paymentTerms.paymentTermsNumber }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/invoices.json"
+    }
+  ]
+}

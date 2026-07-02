@@ -1,0 +1,47 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/v2/pages" },
+    "error_map": [
+      { "status": 401, "hint": "instatus api_key is missing or invalid; re-run pm credentials add instatus" },
+      { "status": 429, "class": "rate_limited", "hint": "instatus rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "pages",
+      "path": "/v2/pages",
+      "records": { "path": "" },
+      "schema": "schemas/pages.json"
+    },
+    {
+      "name": "components",
+      "path": "/v2/{{ config.page_id }}/components",
+      "records": { "path": "" },
+      "schema": "schemas/components.json"
+    },
+    {
+      "name": "incidents",
+      "path": "/v1/{{ config.page_id }}/incidents",
+      "records": { "path": "" },
+      "schema": "schemas/incidents.json"
+    },
+    {
+      "name": "maintenances",
+      "path": "/v2/{{ config.page_id }}/maintenances",
+      "records": { "path": "" },
+      "schema": "schemas/maintenances.json"
+    }
+  ]
+}

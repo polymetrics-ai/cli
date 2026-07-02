@@ -1,0 +1,20 @@
+{
+  "api": "Fulcrum REST API v2 (https://api.fulcrumapp.com/api/v2)",
+  "docs": "https://docs.fulcrumapp.com/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Fulcrum surface (photos, videos, signatures, memberships, roles, webhooks, memberships) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2/forms.json", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/api/v2/records.json", "covered_by": { "stream": "records" } },
+    { "method": "GET", "path": "/api/v2/projects.json", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/api/v2/choice_lists.json", "covered_by": { "stream": "choice_lists" } },
+    { "method": "GET", "path": "/api/v2/classification_sets.json", "covered_by": { "stream": "classification_sets" } },
+    { "method": "GET", "path": "/api/v2/photos.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/videos.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/signatures.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/memberships.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/roles.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/webhooks.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v2/records.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

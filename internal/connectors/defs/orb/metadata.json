@@ -1,0 +1,23 @@
+{
+  "name": "orb",
+  "display_name": "Orb",
+  "description": "Reads Orb customers, subscriptions, plans, and invoices.",
+  "integration_type": "api",
+  "docs_url": "https://docs.withorb.com/reference/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Orb API read of customer and billing data",
+    "approval": "none; read-only"
+  }
+}

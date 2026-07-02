@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/overview/dexs",
+    "query": { "excludeTotalDataChart": "true", "excludeTotalDataChartBreakdown": "true" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "protocols": [
+        {
+          "defillamaId": "1",
+          "name": "Fixture DEX",
+          "displayName": "Fixture DEX",
+          "category": "Dexes",
+          "chains": ["Ethereum"],
+          "total24h": 1000000.0,
+          "total7d": 7000000.0,
+          "total30d": 30000000.0,
+          "totalAllTime": 999999999.0,
+          "change_1d": 1.5
+        },
+        {
+          "defillamaId": "2",
+          "name": "Fixture DEX Two",
+          "displayName": "Fixture DEX Two",
+          "category": "Dexes",
+          "chains": ["Polygon"],
+          "total24h": 500000.0,
+          "total7d": 3500000.0,
+          "total30d": 15000000.0,
+          "totalAllTime": 499999999.0,
+          "change_1d": -2.3
+        }
+      ]
+    }
+  }
+}

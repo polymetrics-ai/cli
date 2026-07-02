@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/rooms", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "room_fixture_1",
+          "name": "Fixture Room 1",
+          "enabled": true,
+          "description": "fixture record",
+          "customer_id": "cust_fixture",
+          "template_id": "tmpl_fixture",
+          "region": "us",
+          "large_room": false,
+          "max_duration_seconds": 3600,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "room_fixture_2",
+          "name": "Fixture Room 2",
+          "enabled": true,
+          "description": "fixture record",
+          "customer_id": "cust_fixture",
+          "template_id": "tmpl_fixture",
+          "region": "us",
+          "large_room": false,
+          "max_duration_seconds": 3600,
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "last": "room_fixture_2"
+    }
+  }
+}

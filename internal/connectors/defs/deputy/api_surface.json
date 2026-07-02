@@ -1,0 +1,17 @@
+{
+  "api": "Deputy REST API v1 (install-specific base URL)",
+  "docs": "https://www.deputy.com/api-doc/API/Getting_Started",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Deputy resource/API surface (rosters, leave, journals, resource CRUD/mutations) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/resource/Company", "covered_by": { "stream": "locations" } },
+    { "method": "GET", "path": "/api/v1/supervise/employee", "covered_by": { "stream": "employees" } },
+    { "method": "GET", "path": "/api/v1/resource/OperationalUnit", "covered_by": { "stream": "departments" } },
+    { "method": "GET", "path": "/api/v1/my/timesheets", "covered_by": { "stream": "timesheets" } },
+    { "method": "GET", "path": "/api/v1/my/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/api/v1/resource/Roster", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/resource/Leave", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v1/resource/{resource}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/api/v1/resource/{resource}/{id}", "excluded": { "category": "destructive_admin", "reason": "resource deletion is out of scope for a read-only reverse-ETL-free source connector" } }
+  ]
+}

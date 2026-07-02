@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PyPI Project",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "version": { "type": ["string", "null"] },
+    "summary": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "author": { "type": ["string", "null"] },
+    "author_email": { "type": ["string", "null"] },
+    "license": { "type": ["string", "null"] },
+    "home_page": { "type": ["string", "null"] },
+    "project_url": { "type": ["string", "null"] },
+    "requires_python": { "type": ["string", "null"] },
+    "classifiers": { "type": ["array", "null"] },
+    "keywords": { "type": ["string", "null"] },
+    "project_urls": { "type": ["object", "null"] },
+    "yanked": { "type": ["boolean", "null"] }
+  }
+}

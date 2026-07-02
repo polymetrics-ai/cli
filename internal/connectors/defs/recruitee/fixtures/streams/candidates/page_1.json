@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/c/synthetic-conformance-value/candidates", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "candidates": [
+        { "id": 1, "name": "Fixture Candidate 1", "email": "fixture1@example.com", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" },
+        { "id": 2, "name": "Fixture Candidate 2", "email": "fixture2@example.com", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

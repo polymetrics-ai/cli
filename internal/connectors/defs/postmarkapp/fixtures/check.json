@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/messages/outbound", "query": { "count": "1", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": { "TotalCount": 0, "Messages": [] }
+  }
+}

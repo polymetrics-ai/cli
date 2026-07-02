@@ -1,0 +1,13 @@
+{
+  "api": "Railz REST API v1 (https://api.railz.ai/v1)",
+  "docs": "https://docs.railz.ai/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (businesses, connections, customers, invoices, bills); legacy itself ships no writes and no other endpoints (OAuth token exchange is explicitly left to callers, not implemented in-package), so the full Railz surface is out of scope for Pass B capability expansion.",
+  "endpoints": [
+    { "method": "GET", "path": "/businesses", "covered_by": { "stream": "businesses" } },
+    { "method": "GET", "path": "/connections", "covered_by": { "stream": "connections" } },
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/bills", "covered_by": { "stream": "bills" } }
+  ]
+}

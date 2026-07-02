@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reviews"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reviews": [
+        {
+          "id": 101,
+          "title": "Fixture review 101",
+          "body": "Fixture review body",
+          "rating": 5,
+          "product_external_id": "prod_101",
+          "source": "web",
+          "curated": "ok",
+          "published": true,
+          "hidden": false,
+          "verified": "buyer",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "reviewer": {
+            "id": 1101,
+            "name": "Fixture Reviewer 101",
+            "email": "reviewer101@example.com"
+          }
+        }
+      ]
+    }
+  }
+}

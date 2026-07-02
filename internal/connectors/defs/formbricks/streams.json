@@ -1,0 +1,78 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "management/surveys" },
+    "error_map": [
+      { "status": 401, "hint": "formbricks api_key is missing or invalid; re-run pm credentials add formbricks" },
+      { "status": 429, "class": "rate_limited", "hint": "formbricks rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "surveys",
+      "path": "management/surveys",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "environment_id": "{{ record.environmentId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/surveys.json"
+    },
+    {
+      "name": "responses",
+      "path": "management/responses",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "skip",
+        "page_size": 2
+      },
+      "computed_fields": {
+        "survey_id": "{{ record.surveyId }}",
+        "contact_id": "{{ record.contactId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/responses.json"
+    },
+    {
+      "name": "action_classes",
+      "path": "management/action-classes",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "environment_id": "{{ record.environmentId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/action_classes.json"
+    },
+    {
+      "name": "attribute_classes",
+      "path": "management/attribute-classes",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "environment_id": "{{ record.environmentId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/attribute_classes.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "webhooks",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "environment_id": "{{ record.environmentId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/webhooks.json"
+    }
+  ]
+}

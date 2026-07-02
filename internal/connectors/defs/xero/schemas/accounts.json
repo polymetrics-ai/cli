@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "accounts",
+  "type": "object",
+  "x-primary-key": ["AccountID"],
+  "x-cursor-field": "UpdatedDateUTC",
+  "required": ["AccountID"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "AccountID": { "type": "string" },
+    "Code": { "type": ["string", "null"] },
+    "Name": { "type": ["string", "null"] },
+    "Type": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "Status": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "Class": { "type": ["string", "null"] },
+    "TaxType": { "type": ["string", "null"] },
+    "EnablePaymentsToAccount": { "type": ["boolean", "null"] },
+    "UpdatedDateUTC": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

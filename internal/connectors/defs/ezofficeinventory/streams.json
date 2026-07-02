@@ -1,0 +1,72 @@
+{
+  "base": {
+    "url": "https://{{ config.subdomain }}.ezofficeinventory.com",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "token", "prefix": "", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/members.api" },
+    "error_map": [
+      { "status": 401, "hint": "ezofficeinventory api_key is missing or invalid; re-run pm credentials add ezofficeinventory" },
+      { "status": 403, "hint": "ezofficeinventory account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "ezofficeinventory rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "assets",
+      "path": "/assets.api",
+      "query": {
+        "show_image_urls": "true",
+        "show_document_urls": "true",
+        "include_custom_fields": "true",
+        "show_document_details": "true"
+      },
+      "records": { "path": "assets" },
+      "schema": "schemas/assets.json"
+    },
+    {
+      "name": "inventories",
+      "path": "/inventory.api",
+      "query": {
+        "show_image_urls": "true",
+        "show_document_urls": "true",
+        "include_custom_fields": "true",
+        "show_document_details": "true"
+      },
+      "records": { "path": "assets" },
+      "schema": "schemas/inventories.json"
+    },
+    {
+      "name": "asset_stocks",
+      "path": "/stock_assets.api",
+      "query": {
+        "show_image_urls": "true",
+        "show_document_urls": "true",
+        "include_custom_fields": "true",
+        "show_document_details": "true"
+      },
+      "records": { "path": "assets" },
+      "schema": "schemas/asset_stocks.json"
+    },
+    {
+      "name": "members",
+      "path": "/members.api",
+      "records": { "path": "members" },
+      "schema": "schemas/members.json"
+    },
+    {
+      "name": "locations",
+      "path": "/locations/get_line_item_locations.api",
+      "records": { "path": "locations" },
+      "schema": "schemas/locations.json"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/account/~/extension/~/call-log",
+    "query": {
+      "page": "1",
+      "perPage": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "records": [
+        {
+          "id": "call_fixture_1",
+          "direction": "Inbound",
+          "type": "Voice",
+          "result": "Call connected",
+          "startTime": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "call_fixture_2",
+          "direction": "Outbound",
+          "type": "Voice",
+          "result": "Call connected",
+          "startTime": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

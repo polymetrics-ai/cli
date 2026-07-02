@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/backstage/api/1.0/synthetic-conformance-value/campaigns", "query": { "page": "2", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": []
+    }
+  }
+}

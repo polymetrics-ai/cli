@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/reservations", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "reservations": [
+        { "id": "res_fixture_1", "confirmation_number": "CN-1", "status": "booked", "arrival_date": "2026-01-02" },
+        { "id": "res_fixture_2", "confirmation_number": "CN-2", "status": "cancelled", "arrival_date": "2026-01-05" }
+      ]
+    }
+  }
+}

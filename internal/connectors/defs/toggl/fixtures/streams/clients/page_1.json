@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/synthetic-conformance-value/clients" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 200, "workspace_id": 9, "name": "Fixture Client One", "active": true },
+      { "id": 201, "workspace_id": 9, "name": "Fixture Client Two", "active": true }
+    ]
+  }
+}

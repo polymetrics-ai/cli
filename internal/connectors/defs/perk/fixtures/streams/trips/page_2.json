@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/trips", "query": { "limit": "50", "offset": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "trips": [
+        { "id": "trip_fixture_51", "trip_name": "Fixture Onsite Trip", "status": "completed", "modified": "2026-01-03T00:00:00Z" }
+      ],
+      "limit": 50,
+      "offset": 50,
+      "total": 51
+    }
+  }
+}

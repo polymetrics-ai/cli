@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/wp-json/wp/v2/comments", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "date": "2026-01-01T00:00:00", "post": 1, "status": "approved" },
+      { "id": 2, "date": "2026-01-01T00:01:00", "post": 1, "status": "approved" }
+    ]
+  }
+}

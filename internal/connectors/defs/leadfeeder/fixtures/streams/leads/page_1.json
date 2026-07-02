@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/leads",
+    "query": { "page[size]": "100", "start_date": "2020-01-01T00:00:00Z", "end_date": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "lead_fixture_1",
+          "type": "leads",
+          "attributes": {
+            "name": "Fixture Lead Co 1",
+            "industry": "Software",
+            "website": "https://example-1.test",
+            "city": "Helsinki",
+            "country": "FI",
+            "employee_count": "11-50",
+            "quality": 3,
+            "visits": 10,
+            "first_visit_date": "2026-01-01",
+            "last_visit_date": "2026-01-02"
+          }
+        },
+        {
+          "id": "lead_fixture_2",
+          "type": "leads",
+          "attributes": {
+            "name": "Fixture Lead Co 2",
+            "industry": "Retail",
+            "website": "https://example-2.test",
+            "city": "Tampere",
+            "country": "FI",
+            "employee_count": "1-10",
+            "quality": 2,
+            "visits": 4,
+            "first_visit_date": "2026-01-03",
+            "last_visit_date": "2026-01-04"
+          }
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

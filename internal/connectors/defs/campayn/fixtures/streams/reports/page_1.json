@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/reports/calendar.json" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "report_fixture_1",
+        "name": "Fixture Campaign 1",
+        "status": "sent",
+        "scheduled_date": "2026-01-01",
+        "preview_url": "https://example.com/preview/1"
+      }
+    ]
+  }
+}

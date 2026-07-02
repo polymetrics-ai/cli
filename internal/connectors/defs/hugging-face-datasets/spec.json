@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hugging Face Datasets Connection Specification",
+  "type": "object",
+  "required": ["dataset_name"],
+  "properties": {
+    "dataset_name": {
+      "type": "string",
+      "description": "Hugging Face dataset identifier (e.g. 'ibm/duorc'); sent as the dataset query param on every request."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional Hugging Face user access token, sent as a Bearer token (Authorization: Bearer <api_token>). Public datasets do not need one; gated/private datasets do. Never logged."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Alternate access-token secret name legacy also accepts (checked after api_token); sent the same way. Never logged."
+    },
+    "token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Alternate access-token secret name legacy also accepts (checked last, after api_token and access_token); sent the same way. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://datasets-server.huggingface.co",
+      "description": "Hugging Face dataset-viewer API base URL override for tests or proxies."
+    }
+  }
+}

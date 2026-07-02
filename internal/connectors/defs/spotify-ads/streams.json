@@ -1,0 +1,65 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/ad_accounts", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "spotify-ads access token is missing or invalid; re-run pm credentials add spotify-ads" },
+      { "status": 403, "hint": "spotify-ads account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "spotify-ads rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "ad_accounts",
+      "path": "/ad_accounts",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 100
+      },
+      "records": { "path": "ad_accounts" },
+      "schema": "schemas/ad_accounts.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/ad_accounts/{{ config.ad_account_id }}/campaigns",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 100
+      },
+      "records": { "path": "campaigns" },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "ad_sets",
+      "path": "/ad_accounts/{{ config.ad_account_id }}/ad_sets",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 100
+      },
+      "records": { "path": "ad_sets" },
+      "schema": "schemas/ad_sets.json"
+    },
+    {
+      "name": "ads",
+      "path": "/ad_accounts/{{ config.ad_account_id }}/ads",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 100
+      },
+      "records": { "path": "ads" },
+      "schema": "schemas/ads.json"
+    }
+  ]
+}

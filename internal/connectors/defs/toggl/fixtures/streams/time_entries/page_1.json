@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/me/time_entries" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "workspace_id": 9, "project_id": 100, "description": "Build feature", "start": "2026-01-01T09:00:00Z", "stop": "2026-01-01T10:00:00Z", "duration": 3600 },
+      { "id": 2, "workspace_id": 9, "project_id": 100, "description": "Write tests", "start": "2026-01-01T10:00:00Z", "stop": "2026-01-01T11:30:00Z", "duration": 5400 }
+    ]
+  }
+}

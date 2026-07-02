@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/organisations/synthetic-conformance-value/leave_requests", "query": { "page_index": "1", "items_per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "leave_fixture_1",
+            "employee_id": "emp_fixture_1",
+            "leave_category_name": "Annual Leave",
+            "status": "approved",
+            "start_date": "2026-01-01",
+            "end_date": "2026-01-05",
+            "total_hours": 40,
+            "leave_balance_amount": 80,
+            "comment": "fixture leave request"
+          }
+        ],
+        "page_index": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

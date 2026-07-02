@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/sites/fixture-site/lists", "query": { "$top": "2", "$skip": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "list_3", "name": "Opportunities", "displayName": "Opportunities", "lastModifiedDateTime": "2026-01-03T00:00:00Z" }
+      ]
+    }
+  }
+}

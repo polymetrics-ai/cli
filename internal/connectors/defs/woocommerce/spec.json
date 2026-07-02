@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WooCommerce Connection Specification",
+  "type": "object",
+  "required": ["base_url", "api_key", "api_secret"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "WooCommerce store REST API base URL, e.g. https://example.com/wp-json/wc/v3. See Known limits: legacy's shop-derived base URL is not modeled; pass the full wc/v3 base URL directly."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "WooCommerce REST API consumer key. Sent as the HTTP Basic auth username; never logged."
+    },
+    "api_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "WooCommerce REST API consumer secret. Sent as the HTTP Basic auth password; never logged."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "ISO8601 or YYYY-MM-DD lower bound; only objects modified at or after this time are read (modified_after)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "10",
+      "description": "Records per page (1-100), sent as per_page."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    }
+  }
+}

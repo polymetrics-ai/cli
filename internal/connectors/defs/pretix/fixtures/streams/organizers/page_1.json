@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/organizers/", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "name": { "en": "Fixture Events LLC" },
+          "slug": "fixture-events",
+          "public_url": "https://pretix.eu/fixture-events/",
+          "plugins": ["pretix.plugins.stripe"]
+        }
+      ]
+    }
+  }
+}

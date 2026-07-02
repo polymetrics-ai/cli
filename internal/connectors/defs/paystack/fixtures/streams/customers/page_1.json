@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/customer" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": true,
+      "message": "ok",
+      "data": [
+        { "id": 1, "customer_code": "CUS_fixture_1", "email": "fixture1@example.com", "first_name": "Fixture", "last_name": "One", "phone": "+10000000001", "domain": "test", "risk_action": "default", "createdAt": "2026-01-01T00:00:00.000Z", "updatedAt": "2026-01-01T00:00:00.000Z" },
+        { "id": 2, "customer_code": "CUS_fixture_2", "email": "fixture2@example.com", "first_name": "Fixture", "last_name": "Two", "phone": "+10000000002", "domain": "test", "risk_action": "default", "createdAt": "2026-01-02T00:00:00.000Z", "updatedAt": "2026-01-02T00:00:00.000Z" }
+      ],
+      "meta": { "total": 3, "perPage": 2, "page": 1, "pageCount": 2, "next": 2, "previous": null }
+    }
+  }
+}

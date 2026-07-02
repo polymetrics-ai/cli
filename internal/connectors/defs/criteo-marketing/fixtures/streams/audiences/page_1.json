@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/2024-01/marketing-solutions/audiences", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "aud_fixture_1",
+          "type": "audience",
+          "attributes": {
+            "name": "Fixture Audience 1",
+            "advertiserId": "adv_fixture_1",
+            "description": "Fixture audience 1",
+            "nbActiveUsers": 500
+          }
+        }
+      ]
+    }
+  }
+}

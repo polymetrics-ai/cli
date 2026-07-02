@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/notes", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "notes": [
+        { "id": "not_fixture_check", "title": "Fixture check note", "created_at": "2026-01-01T00:00:00Z" }
+      ],
+      "hasMore": false,
+      "cursor": ""
+    }
+  }
+}

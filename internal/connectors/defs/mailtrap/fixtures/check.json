@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/accounts" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture Account", "access_levels": [1000] }
+    ]
+  }
+}

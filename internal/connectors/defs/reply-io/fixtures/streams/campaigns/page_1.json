@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "campaign_fixture_1",
+        "name": "Fixture Campaign 1",
+        "status": "active",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-02T00:00:00Z"
+      },
+      {
+        "id": "campaign_fixture_2",
+        "name": "Fixture Campaign 2",
+        "status": "paused",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-03T00:00:00Z"
+      }
+    ]
+  }
+}

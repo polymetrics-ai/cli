@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaign/get/",
+    "query": { "page": "2", "page_size": "100", "advertiser_id": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "OK",
+      "data": {
+        "list": [
+          {
+            "campaign_id": "campaign_fixture_101",
+            "campaign_name": "Fixture Campaign 101",
+            "advertiser_id": "synthetic-conformance-value",
+            "objective_type": "TRAFFIC",
+            "budget": 100.0,
+            "budget_mode": "BUDGET_MODE_DAY",
+            "operation_status": "ENABLE",
+            "create_time": "2026-01-01T00:00:00Z",
+            "modify_time": "2026-01-02T00:00:00Z"
+          }
+        ],
+        "page_info": { "page": 2, "page_size": 100, "total_number": 101, "total_page": 2 }
+      }
+    }
+  }
+}

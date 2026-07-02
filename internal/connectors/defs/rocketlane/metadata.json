@@ -1,0 +1,22 @@
+{
+  "name": "rocketlane",
+  "display_name": "Rocketlane",
+  "description": "Reads Rocketlane projects, tasks, customers, users, and time entries through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.rocketlane.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Rocketlane API read of project, task, customer, and time-entry data"
+  }
+}

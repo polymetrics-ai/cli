@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/shops/synthetic-conformance-value/products.json", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "p1", "title": "Fixture Shirt", "visible": true, "sales_channel": "api", "status": "active", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "current_page": 1,
+      "last_page": 1,
+      "next_page_url": null
+    }
+  }
+}

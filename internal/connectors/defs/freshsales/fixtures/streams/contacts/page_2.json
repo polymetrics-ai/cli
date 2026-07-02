@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/contacts/view/synthetic-conformance-value", "query": { "page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "id": 3,
+          "first_name": "Fixture3",
+          "last_name": "User",
+          "display_name": "Fixture3 User",
+          "email": "fixture3@example.com",
+          "mobile_number": "+15550104",
+          "work_number": "+15550105",
+          "job_title": "Engineer",
+          "city": "Springfield",
+          "country": "US",
+          "owner_id": 1000,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": { "total": 3, "total_pages": 2 }
+    }
+  }
+}

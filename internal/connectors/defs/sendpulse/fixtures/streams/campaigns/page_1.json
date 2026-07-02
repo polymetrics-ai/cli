@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/campaigns", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 11, "name": "Fixture Campaign 1", "status": "sent" },
+      { "id": 12, "name": "Fixture Campaign 2", "status": "draft" }
+    ]
+  }
+}

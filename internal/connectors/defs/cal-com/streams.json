@@ -1,0 +1,45 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "cal-api-version": "{{ config.api_version }}"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "take",
+      "offset_param": "skip",
+      "page_size": 1
+    },
+    "check": { "method": "GET", "path": "/v2/me" },
+    "error_map": [
+      { "status": 401, "hint": "cal-com api_key is missing or invalid; re-run pm credentials add cal-com" },
+      { "status": 403, "hint": "cal-com account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "cal-com rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "bookings",
+      "path": "/v2/bookings",
+      "records": { "path": "data" },
+      "schema": "schemas/bookings.json"
+    },
+    {
+      "name": "schedules",
+      "path": "/v2/schedules",
+      "records": { "path": "data" },
+      "schema": "schemas/schedules.json"
+    },
+    {
+      "name": "my_profile",
+      "path": "/v2/me",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/my_profile.json"
+    }
+  ]
+}

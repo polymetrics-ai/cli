@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/products", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "Fixture Product 1", "uom": "pcs", "category_name": "Fixtures", "is_sellable": true, "is_producible": true, "is_purchasable": false, "default_supplier_id": null, "additional_info": "fixture", "created_at": "2026-01-01T00:00:00.000Z", "updated_at": "2026-01-01T00:00:00.000Z" }
+      ]
+    }
+  }
+}

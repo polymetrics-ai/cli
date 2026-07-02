@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Teamwork Connection Specification",
+  "type": "object",
+  "required": ["username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "Teamwork username (email), sent as the Basic auth username."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Teamwork API token/password, sent as the Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.teamwork.com",
+      "description": "Teamwork API base URL override for tests or proxies."
+    }
+  }
+}

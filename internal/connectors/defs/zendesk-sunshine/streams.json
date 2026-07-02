@@ -1,0 +1,38 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.email }}/token", "password": "{{ secrets.api_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/objects/types" },
+    "error_map": [
+      { "status": 401, "hint": "zendesk-sunshine credentials are missing or invalid; re-run pm credentials add zendesk-sunshine" },
+      { "status": 403, "hint": "zendesk-sunshine account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "zendesk-sunshine rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "object_types",
+      "path": "/objects/types",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.key }}"
+      },
+      "schema": "schemas/object_types.json"
+    },
+    {
+      "name": "objects",
+      "path": "/objects/records",
+      "records": { "path": "data" },
+      "schema": "schemas/objects.json"
+    },
+    {
+      "name": "relationships",
+      "path": "/relationships/records",
+      "records": { "path": "data" },
+      "schema": "schemas/relationships.json"
+    }
+  ]
+}

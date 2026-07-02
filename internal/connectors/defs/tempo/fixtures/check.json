@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "results": [], "metadata": { "count": 0, "offset": 0, "limit": 1 } }
+  }
+}

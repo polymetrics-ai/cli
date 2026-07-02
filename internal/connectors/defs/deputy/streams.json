@@ -1,0 +1,109 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "max",
+      "offset_param": "start",
+      "page_size": 5
+    },
+    "check": { "method": "GET", "path": "/api/v1/resource/Company", "query": { "max": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "deputy api_key is missing or invalid; re-run pm credentials add deputy" },
+      { "status": 403, "hint": "deputy api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "deputy rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "locations",
+      "path": "/api/v1/resource/Company",
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "company_name": "{{ record.CompanyName }}",
+        "code": "{{ record.Code }}",
+        "active": "{{ record.Active }}",
+        "address": "{{ record.Address }}",
+        "country": "{{ record.Country }}",
+        "creator": "{{ record.Creator }}",
+        "created": "{{ record.Created }}",
+        "modified": "{{ record.Modified }}"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "employees",
+      "path": "/api/v1/supervise/employee",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "display_name": "{{ record.DisplayName }}",
+        "first_name": "{{ record.FirstName }}",
+        "last_name": "{{ record.LastName }}",
+        "active": "{{ record.Active }}",
+        "company": "{{ record.Company }}",
+        "role": "{{ record.Role }}",
+        "created": "{{ record.Created }}",
+        "modified": "{{ record.Modified }}"
+      },
+      "schema": "schemas/employees.json"
+    },
+    {
+      "name": "departments",
+      "path": "/api/v1/resource/OperationalUnit",
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "operational_unit_name": "{{ record.OperationalUnitName }}",
+        "company": "{{ record.Company }}",
+        "active": "{{ record.Active }}",
+        "creator": "{{ record.Creator }}",
+        "created": "{{ record.Created }}",
+        "modified": "{{ record.Modified }}"
+      },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "timesheets",
+      "path": "/api/v1/my/timesheets",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "employee": "{{ record.Employee }}",
+        "operational_unit": "{{ record.OperationalUnit }}",
+        "date": "{{ record.Date }}",
+        "start_time": "{{ record.StartTime }}",
+        "end_time": "{{ record.EndTime }}",
+        "total_time": "{{ record.TotalTime }}",
+        "is_in_progress": "{{ record.IsInProgress }}",
+        "created": "{{ record.Created }}",
+        "modified": "{{ record.Modified }}"
+      },
+      "schema": "schemas/timesheets.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/api/v1/my/tasks",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "title": "{{ record.Title }}",
+        "due_time": "{{ record.DueTime }}",
+        "completed": "{{ record.Completed }}",
+        "priority": "{{ record.Priority }}",
+        "creator": "{{ record.Creator }}",
+        "created": "{{ record.Created }}",
+        "modified": "{{ record.Modified }}"
+      },
+      "schema": "schemas/tasks.json"
+    }
+  ]
+}

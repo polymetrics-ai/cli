@@ -1,0 +1,23 @@
+{
+  "name": "chameleon",
+  "display_name": "Chameleon",
+  "description": "Reads Chameleon surveys, tours, launchers, tooltips, and segments through the Chameleon v3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.chameleon.io/reference/introduction",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Chameleon API read of in-product experience and segment data",
+    "approval": "none; read-only"
+  }
+}

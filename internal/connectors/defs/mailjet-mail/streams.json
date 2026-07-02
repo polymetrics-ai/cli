@@ -1,0 +1,53 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.api_key }}", "password": "{{ secrets.api_key_secret }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "Limit",
+      "offset_param": "Offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/contact" },
+    "error_map": [
+      { "status": 401, "hint": "mailjet-mail api_key/api_key_secret is missing or invalid; re-run pm credentials add mailjet-mail" },
+      { "status": 403, "hint": "mailjet-mail account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "mailjet-mail rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contact",
+      "records": { "path": "Data" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "contactslists",
+      "path": "/contactslist",
+      "records": { "path": "Data" },
+      "schema": "schemas/contactslists.json"
+    },
+    {
+      "name": "messages",
+      "path": "/message",
+      "records": { "path": "Data" },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaign",
+      "records": { "path": "Data" },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "stats",
+      "path": "/statcounters",
+      "records": { "path": "Data" },
+      "schema": "schemas/stats.json"
+    }
+  ]
+}

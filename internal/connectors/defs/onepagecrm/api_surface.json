@@ -1,0 +1,18 @@
+{
+  "api": "OnePageCRM API v3 (https://app.onepagecrm.com/api/v3)",
+  "docs": "https://developer.onepagecrm.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, deals, actions, companies, users); OnePageCRM is read-only in legacy (no write allow-list), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/deals", "covered_by": { "stream": "deals" } },
+    { "method": "GET", "path": "/actions", "covered_by": { "stream": "actions" } },
+    { "method": "GET", "path": "/companies", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/contacts/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/contacts/{id}", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/deals", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/actions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "api": "PayFit Partner API v1 (https://partner-api.payfit.com/v1)",
+  "docs": "https://developers.payfit.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full PayFit surface (payslips, absences, collective agreements) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/employees", "covered_by": { "stream": "employees" } },
+    { "method": "GET", "path": "/contracts", "covered_by": { "stream": "contracts" } },
+    { "method": "GET", "path": "/companies", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/payslips", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/absences", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

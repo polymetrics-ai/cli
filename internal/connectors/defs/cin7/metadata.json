@@ -1,0 +1,22 @@
+{
+  "name": "cin7",
+  "display_name": "Cin7",
+  "description": "Reads Cin7 Core (DEAR Inventory) products, customers, suppliers, sales, and purchases through the Cin7 Core REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api.cin7.com/api/v1",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Cin7 Core API read of inventory, customer, and order data"
+  }
+}

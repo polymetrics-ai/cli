@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Criteo Marketing Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Criteo Marketing Solutions API client ID (OAuth2 client-credentials). Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Criteo Marketing Solutions API client secret (OAuth2 client-credentials). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.criteo.com",
+      "description": "Criteo API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.criteo.com/oauth2/token",
+      "description": "OAuth2 token endpoint override; defaults to <base_url>/oauth2/token (legacy derives this from base_url at runtime, but the engine's default materialization is a fixed literal, not a base_url-derived one - see docs.md Known limits)."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Statistics report lower-bound date (YYYY-MM-DD), sent as the report's startDate filter."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Statistics report upper-bound date (YYYY-MM-DD), sent as the report's endDate filter."
+    },
+    "currency": {
+      "type": "string",
+      "description": "Statistics report currency filter (e.g. USD, EUR); also used to stamp the fixture-mode Currency field on other streams."
+    }
+  }
+}

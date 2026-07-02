@@ -1,0 +1,23 @@
+{
+  "name": "callrail",
+  "display_name": "CallRail",
+  "description": "Reads CallRail calls, companies, users, and text messages through the CallRail v3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.callrail.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external CallRail API read of call tracking analytics data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Freshchat Connection Specification",
+  "type": "object",
+  "required": ["api_key", "base_url"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Freshchat API key. Sent as Authorization: Bearer <api_key>; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Freshchat API base URL, e.g. https://<account_name>.freshchat.com/v2. This bundle requires the full base URL directly: legacy derives it from an account_name config value (https://<account_name>.freshchat.com/v2), but that cross-key derivation has no engine mechanism today (see docs.md Known limits) — spec.json's default materialization only supports a fixed literal, never one derived from another config value."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

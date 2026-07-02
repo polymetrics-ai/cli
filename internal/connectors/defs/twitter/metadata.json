@@ -1,0 +1,23 @@
+{
+  "name": "twitter",
+  "display_name": "Twitter",
+  "description": "Reads tweets and their authors matching a search query from the Twitter (X) API v2 recent search endpoint using an App-only Bearer token.",
+  "integration_type": "api",
+  "docs_url": "https://developer.twitter.com/en/docs/twitter-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Twitter (X) API read of tweets and author profiles matching a search query",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

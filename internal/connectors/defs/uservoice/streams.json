@@ -1,0 +1,32 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/api/v2/suggestions" },
+    "error_map": [
+      { "status": 401, "hint": "uservoice api_key is missing or invalid; re-run pm credentials add uservoice" },
+      { "status": 403, "hint": "uservoice account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "uservoice rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "suggestions",
+      "path": "/api/v2/suggestions",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "suggestions" },
+      "computed_fields": {
+        "id": "{{ record.id | last_path_segment }}",
+        "title": "{{ record.title }}",
+        "state": "{{ record.state }}",
+        "created_at": "{{ record.created_at }}"
+      },
+      "schema": "schemas/suggestions.json"
+    }
+  ]
+}

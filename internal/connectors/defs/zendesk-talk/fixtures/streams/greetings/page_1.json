@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/greetings", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "greetings": [
+        {
+          "id": 1,
+          "name": "Fixture Greeting 1",
+          "category_id": 1,
+          "default": true,
+          "active": true,
+          "audio_name": "greeting-1.mp3",
+          "audio_url": "https://example.com/audio/1",
+          "has_sub_settings": false
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

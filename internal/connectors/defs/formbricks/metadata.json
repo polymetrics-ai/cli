@@ -1,0 +1,23 @@
+{
+  "name": "formbricks",
+  "display_name": "Formbricks",
+  "description": "Reads Formbricks surveys, responses, action classes, attribute classes, and webhooks through the Formbricks management API.",
+  "integration_type": "api",
+  "docs_url": "https://formbricks.com/docs/api/overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Formbricks read of surveys/responses/action classes/attribute classes/webhooks",
+    "approval": "none; read-only API-key access"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/protocols",
+    "query": {
+      "limit": "5",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "fixture-protocol-1",
+        "name": "Fixture Protocol 1",
+        "slug": "fixture-protocol-1",
+        "symbol": "FIX",
+        "category": "Dexes",
+        "chain": "Ethereum",
+        "chains": [
+          "Ethereum"
+        ],
+        "tvl": 1000.0,
+        "mcap": 2000.0,
+        "change_1d": 1.0,
+        "change_7d": 2.0,
+        "url": "https://example.com"
+      },
+      {
+        "id": "fixture-protocol-2",
+        "name": "Fixture Protocol 2",
+        "slug": "fixture-protocol-2",
+        "symbol": "FIX",
+        "category": "Dexes",
+        "chain": "Ethereum",
+        "chains": [
+          "Ethereum"
+        ],
+        "tvl": 2000.0,
+        "mcap": 4000.0,
+        "change_1d": 2.0,
+        "change_7d": 4.0,
+        "url": "https://example.com"
+      },
+      {
+        "id": "fixture-protocol-3",
+        "name": "Fixture Protocol 3",
+        "slug": "fixture-protocol-3",
+        "symbol": "FIX",
+        "category": "Dexes",
+        "chain": "Ethereum",
+        "chains": [
+          "Ethereum"
+        ],
+        "tvl": 3000.0,
+        "mcap": 6000.0,
+        "change_1d": 3.0,
+        "change_7d": 6.0,
+        "url": "https://example.com"
+      },
+      {
+        "id": "fixture-protocol-4",
+        "name": "Fixture Protocol 4",
+        "slug": "fixture-protocol-4",
+        "symbol": "FIX",
+        "category": "Dexes",
+        "chain": "Ethereum",
+        "chains": [
+          "Ethereum"
+        ],
+        "tvl": 4000.0,
+        "mcap": 8000.0,
+        "change_1d": 4.0,
+        "change_7d": 8.0,
+        "url": "https://example.com"
+      },
+      {
+        "id": "fixture-protocol-5",
+        "name": "Fixture Protocol 5",
+        "slug": "fixture-protocol-5",
+        "symbol": "FIX",
+        "category": "Dexes",
+        "chain": "Ethereum",
+        "chains": [
+          "Ethereum"
+        ],
+        "tvl": 5000.0,
+        "mcap": 10000.0,
+        "change_1d": 5.0,
+        "change_7d": 10.0,
+        "url": "https://example.com"
+      }
+    ]
+  }
+}

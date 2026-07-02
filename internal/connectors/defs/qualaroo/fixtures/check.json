@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/nudges", "query": { "per_page": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "nudges": [] }
+  }
+}

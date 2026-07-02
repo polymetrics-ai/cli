@@ -1,0 +1,1918 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Invoices",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-1",
+      "Status": "OK",
+      "Invoices": [
+        {
+          "InvoiceID": "inv_fixture_1",
+          "InvoiceNumber": "INV-0001",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_2",
+          "InvoiceNumber": "INV-0002",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_3",
+          "InvoiceNumber": "INV-0003",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_4",
+          "InvoiceNumber": "INV-0004",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_5",
+          "InvoiceNumber": "INV-0005",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_6",
+          "InvoiceNumber": "INV-0006",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_7",
+          "InvoiceNumber": "INV-0007",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_8",
+          "InvoiceNumber": "INV-0008",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_9",
+          "InvoiceNumber": "INV-0009",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_10",
+          "InvoiceNumber": "INV-0010",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_11",
+          "InvoiceNumber": "INV-0011",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_12",
+          "InvoiceNumber": "INV-0012",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_13",
+          "InvoiceNumber": "INV-0013",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_14",
+          "InvoiceNumber": "INV-0014",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_15",
+          "InvoiceNumber": "INV-0015",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_16",
+          "InvoiceNumber": "INV-0016",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_17",
+          "InvoiceNumber": "INV-0017",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_18",
+          "InvoiceNumber": "INV-0018",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_19",
+          "InvoiceNumber": "INV-0019",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_20",
+          "InvoiceNumber": "INV-0020",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_21",
+          "InvoiceNumber": "INV-0021",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_22",
+          "InvoiceNumber": "INV-0022",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_23",
+          "InvoiceNumber": "INV-0023",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_24",
+          "InvoiceNumber": "INV-0024",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_25",
+          "InvoiceNumber": "INV-0025",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_26",
+          "InvoiceNumber": "INV-0026",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_27",
+          "InvoiceNumber": "INV-0027",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_28",
+          "InvoiceNumber": "INV-0028",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_29",
+          "InvoiceNumber": "INV-0029",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_30",
+          "InvoiceNumber": "INV-0030",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_31",
+          "InvoiceNumber": "INV-0031",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_32",
+          "InvoiceNumber": "INV-0032",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_33",
+          "InvoiceNumber": "INV-0033",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_34",
+          "InvoiceNumber": "INV-0034",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_35",
+          "InvoiceNumber": "INV-0035",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_36",
+          "InvoiceNumber": "INV-0036",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_37",
+          "InvoiceNumber": "INV-0037",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_38",
+          "InvoiceNumber": "INV-0038",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_39",
+          "InvoiceNumber": "INV-0039",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_40",
+          "InvoiceNumber": "INV-0040",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_41",
+          "InvoiceNumber": "INV-0041",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_42",
+          "InvoiceNumber": "INV-0042",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_43",
+          "InvoiceNumber": "INV-0043",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_44",
+          "InvoiceNumber": "INV-0044",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_45",
+          "InvoiceNumber": "INV-0045",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_46",
+          "InvoiceNumber": "INV-0046",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_47",
+          "InvoiceNumber": "INV-0047",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_48",
+          "InvoiceNumber": "INV-0048",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_49",
+          "InvoiceNumber": "INV-0049",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_50",
+          "InvoiceNumber": "INV-0050",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_51",
+          "InvoiceNumber": "INV-0051",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_52",
+          "InvoiceNumber": "INV-0052",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_53",
+          "InvoiceNumber": "INV-0053",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_54",
+          "InvoiceNumber": "INV-0054",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_55",
+          "InvoiceNumber": "INV-0055",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_56",
+          "InvoiceNumber": "INV-0056",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_57",
+          "InvoiceNumber": "INV-0057",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_58",
+          "InvoiceNumber": "INV-0058",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_59",
+          "InvoiceNumber": "INV-0059",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_60",
+          "InvoiceNumber": "INV-0060",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_61",
+          "InvoiceNumber": "INV-0061",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_62",
+          "InvoiceNumber": "INV-0062",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_63",
+          "InvoiceNumber": "INV-0063",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_64",
+          "InvoiceNumber": "INV-0064",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_65",
+          "InvoiceNumber": "INV-0065",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_66",
+          "InvoiceNumber": "INV-0066",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_67",
+          "InvoiceNumber": "INV-0067",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_68",
+          "InvoiceNumber": "INV-0068",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_69",
+          "InvoiceNumber": "INV-0069",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_70",
+          "InvoiceNumber": "INV-0070",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_71",
+          "InvoiceNumber": "INV-0071",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_72",
+          "InvoiceNumber": "INV-0072",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_73",
+          "InvoiceNumber": "INV-0073",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_74",
+          "InvoiceNumber": "INV-0074",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_75",
+          "InvoiceNumber": "INV-0075",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_76",
+          "InvoiceNumber": "INV-0076",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_77",
+          "InvoiceNumber": "INV-0077",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_78",
+          "InvoiceNumber": "INV-0078",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_79",
+          "InvoiceNumber": "INV-0079",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_80",
+          "InvoiceNumber": "INV-0080",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_81",
+          "InvoiceNumber": "INV-0081",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_82",
+          "InvoiceNumber": "INV-0082",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_83",
+          "InvoiceNumber": "INV-0083",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_84",
+          "InvoiceNumber": "INV-0084",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_85",
+          "InvoiceNumber": "INV-0085",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_86",
+          "InvoiceNumber": "INV-0086",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_87",
+          "InvoiceNumber": "INV-0087",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_88",
+          "InvoiceNumber": "INV-0088",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_89",
+          "InvoiceNumber": "INV-0089",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_90",
+          "InvoiceNumber": "INV-0090",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_91",
+          "InvoiceNumber": "INV-0091",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_92",
+          "InvoiceNumber": "INV-0092",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_93",
+          "InvoiceNumber": "INV-0093",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_94",
+          "InvoiceNumber": "INV-0094",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_95",
+          "InvoiceNumber": "INV-0095",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_96",
+          "InvoiceNumber": "INV-0096",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_97",
+          "InvoiceNumber": "INV-0097",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_98",
+          "InvoiceNumber": "INV-0098",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_99",
+          "InvoiceNumber": "INV-0099",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        },
+        {
+          "InvoiceID": "inv_fixture_100",
+          "InvoiceNumber": "INV-0100",
+          "Type": "ACCREC",
+          "Status": "DRAFT",
+          "LineAmountTypes": "Exclusive",
+          "SubTotal": 90.0,
+          "TotalTax": 10.0,
+          "Total": 100.0,
+          "AmountDue": 100.0,
+          "AmountPaid": 0.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "DueDate": "2026-02-01T00:00:00",
+          "Contact": {
+            "ContactID": "contact_fixture_1"
+          },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

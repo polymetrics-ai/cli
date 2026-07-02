@@ -1,0 +1,19 @@
+{
+  "api": "n8n public REST API v1 ({instance}/api/v1)",
+  "docs": "https://docs.n8n.io/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "legacy-parity read streams only (workflows, executions, tags, users); the full n8n surface (workflow activation/deactivation, credentials, executions retry, variables, source control, audit logs) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/workflows", "covered_by": { "stream": "workflows" } },
+    { "method": "GET", "path": "/api/v1/executions", "covered_by": { "stream": "executions" } },
+    { "method": "GET", "path": "/api/v1/tags", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "/api/v1/users", "covered_by": { "stream": "users" } },
+    { "method": "POST", "path": "/api/v1/workflows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v1/workflows/{id}/activate", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/api/v1/workflows/{id}", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v1/executions/{id}/retry", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/credentials", "excluded": { "category": "requires_elevated_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/variables", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/audit", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "api": "NASA Open APIs (https://api.nasa.gov)",
+  "docs": "https://api.nasa.gov/",
+  "reviewed_at": "2026-07-03",
+  "scope": "legacy-parity read streams only (apod, neo_feed, neo_browse, epic, mars_photos); the full NASA Open API surface (DONKI space weather, Earth Landsat imagery, exoplanet archive, other rover cameras, techport, sounds) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/planetary/apod", "covered_by": { "stream": "apod" } },
+    { "method": "GET", "path": "/neo/rest/v1/feed", "covered_by": { "stream": "neo_feed" } },
+    { "method": "GET", "path": "/neo/rest/v1/neo/browse", "covered_by": { "stream": "neo_browse" } },
+    { "method": "GET", "path": "/EPIC/api/natural", "covered_by": { "stream": "epic" } },
+    { "method": "GET", "path": "/mars-photos/api/v1/rovers/curiosity/photos", "covered_by": { "stream": "mars_photos" } },
+    { "method": "GET", "path": "/mars-photos/api/v1/rovers/opportunity/photos", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/mars-photos/api/v1/rovers/spirit/photos", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/mars-photos/api/v1/rovers/perseverance/photos", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/DONKI/notifications", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/neo/rest/v1/neo/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/EPIC/api/enhanced", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

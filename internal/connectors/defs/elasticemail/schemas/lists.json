@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists",
+  "type": "object",
+  "x-primary-key": ["ListName"],
+  "required": ["ListName"],
+  "properties": {
+    "ListName": { "type": "string" },
+    "PublicListID": { "type": ["string", "null"] },
+    "DateAdded": { "type": ["string", "null"] },
+    "AllowUnsubscribe": { "type": ["boolean", "null"] }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/country" },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "countries": [
+          { "id": 1, "country_id": "NL", "country_name": "Netherlands", "country_tld": "nl", "country_cca2": "NL", "country_cca3": "NLD" },
+          { "id": 2, "country_id": "GB", "country_name": "United Kingdom", "country_tld": "uk", "country_cca2": "GB", "country_cca3": "GBR" }
+        ]
+      },
+      "page": 1,
+      "page_count": 1
+    }
+  }
+}

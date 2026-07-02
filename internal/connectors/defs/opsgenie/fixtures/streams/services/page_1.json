@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/services" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "service_fixture_1",
+          "name": "Fixture Service",
+          "description": "Deterministic fixture service.",
+          "teamId": "team_fixture_1",
+          "visibility": "internal",
+          "tags": ["fixture"],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T01:00:00Z"
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

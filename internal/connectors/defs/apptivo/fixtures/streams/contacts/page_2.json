@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/app/dao/v6/contacts",
+    "query": {
+      "a": "getAll",
+      "numRecords": "100",
+      "startIndex": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "contactId": "contact_fixture_101",
+          "firstName": "Fixture101",
+          "lastName": "Example",
+          "fullName": "Fixture101 Example",
+          "emailAddress": "fixture101@example.com",
+          "phoneNumber": "555-0101",
+          "companyName": "Fixture Co",
+          "creationDate": "2026-01-01",
+          "lastUpdateDate": "2026-01-02"
+        }
+      ]
+    }
+  }
+}

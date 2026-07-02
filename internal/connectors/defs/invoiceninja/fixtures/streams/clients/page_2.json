@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/clients", "query": { "page": "2", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "clients_fixture_3",
+          "name": "Fixture 3",
+          "display_name": "Fixture 3",
+          "number": "0003",
+          "balance": 30,
+          "paid_to_date": 0,
+          "currency_id": "1",
+          "vat_number": "",
+          "phone": "",
+          "website": "",
+          "is_deleted": false,
+          "created_at": 1767225603,
+          "updated_at": 1767225603,
+          "archived_at": 0
+        }
+      ],
+      "meta": { "pagination": { "total": 3 } }
+    }
+  }
+}

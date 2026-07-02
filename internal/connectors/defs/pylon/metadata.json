@@ -1,0 +1,22 @@
+{
+  "name": "pylon",
+  "display_name": "Pylon",
+  "description": "Reads Pylon issues, accounts, contacts, users, and messages through the Pylon REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://docs.usepylon.com/pylon-docs/developer/api/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Pylon API read of support issues, accounts, contacts, users, and messages"
+  }
+}

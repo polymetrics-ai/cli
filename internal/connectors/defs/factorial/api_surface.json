@@ -1,0 +1,14 @@
+{
+  "api": "Factorial API v2 (https://api.factorialhr.com/api/v2/resources)",
+  "docs": "https://apidoc.factorialhr.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: all 5 legacy-parity read streams, full capability parity",
+  "endpoints": [
+    { "method": "GET", "path": "/employees/employees", "covered_by": { "stream": "employees" } },
+    { "method": "GET", "path": "/teams/teams", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/timeoff/leaves", "covered_by": { "stream": "leaves" } },
+    { "method": "GET", "path": "/timeoff/leave_types", "covered_by": { "stream": "leave_types" } },
+    { "method": "GET", "path": "/locations/locations", "covered_by": { "stream": "locations" } },
+    { "method": "GET", "path": "/api_public/credentials", "excluded": { "category": "non_data_endpoint", "reason": "used only as the check request; not a syncable object stream" } }
+  ]
+}

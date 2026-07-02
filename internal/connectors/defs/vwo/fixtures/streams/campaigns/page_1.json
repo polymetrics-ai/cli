@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/campaigns" },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        {
+          "id": 501,
+          "name": "Fixture Homepage Test",
+          "status": "RUNNING",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 502,
+          "name": "Fixture Checkout Test",
+          "status": "PAUSED",
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

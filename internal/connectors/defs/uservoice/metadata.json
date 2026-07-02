@@ -1,0 +1,20 @@
+{
+  "name": "uservoice",
+  "display_name": "UserVoice",
+  "description": "Reads suggestions from the UserVoice API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developer.uservoice.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external UserVoice API read of customer suggestion data",
+    "approval": "none; read-only suggestions API"
+  }
+}

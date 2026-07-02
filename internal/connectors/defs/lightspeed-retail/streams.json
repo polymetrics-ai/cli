@@ -1,0 +1,58 @@
+{
+  "base": {
+    "url": "https://{{ config.subdomain }}.retail.lightspeed.app",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "after",
+      "token_path": "version.max",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/api/2.0/outlets", "query": { "page_size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "lightspeed-retail api_key is missing or invalid; re-run pm credentials add lightspeed-retail" },
+      { "status": 403, "hint": "lightspeed-retail account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "lightspeed-retail rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/api/2.0/products",
+      "query": { "page_size": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "customers",
+      "path": "/api/2.0/customers",
+      "query": { "page_size": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "sales",
+      "path": "/api/2.0/sales",
+      "query": { "page_size": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/sales.json"
+    },
+    {
+      "name": "outlets",
+      "path": "/api/2.0/outlets",
+      "query": { "page_size": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/outlets.json"
+    },
+    {
+      "name": "registers",
+      "path": "/api/2.0/registers",
+      "query": { "page_size": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/registers.json"
+    }
+  ]
+}

@@ -1,0 +1,966 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/messages",
+    "query": {
+      "page": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "msg_fixture_1",
+          "received": "2026-01-01T00:01:00Z",
+          "type": "Email",
+          "subject": "Fixture message 1",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_2",
+          "received": "2026-01-01T00:02:00Z",
+          "type": "Email",
+          "subject": "Fixture message 2",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_3",
+          "received": "2026-01-01T00:03:00Z",
+          "type": "Email",
+          "subject": "Fixture message 3",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_4",
+          "received": "2026-01-01T00:04:00Z",
+          "type": "Email",
+          "subject": "Fixture message 4",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_5",
+          "received": "2026-01-01T00:05:00Z",
+          "type": "Email",
+          "subject": "Fixture message 5",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_6",
+          "received": "2026-01-01T00:06:00Z",
+          "type": "Email",
+          "subject": "Fixture message 6",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_7",
+          "received": "2026-01-01T00:07:00Z",
+          "type": "Email",
+          "subject": "Fixture message 7",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_8",
+          "received": "2026-01-01T00:08:00Z",
+          "type": "Email",
+          "subject": "Fixture message 8",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_9",
+          "received": "2026-01-01T00:09:00Z",
+          "type": "Email",
+          "subject": "Fixture message 9",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_10",
+          "received": "2026-01-01T00:10:00Z",
+          "type": "Email",
+          "subject": "Fixture message 10",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_11",
+          "received": "2026-01-01T00:11:00Z",
+          "type": "Email",
+          "subject": "Fixture message 11",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_12",
+          "received": "2026-01-01T00:12:00Z",
+          "type": "Email",
+          "subject": "Fixture message 12",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_13",
+          "received": "2026-01-01T00:13:00Z",
+          "type": "Email",
+          "subject": "Fixture message 13",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_14",
+          "received": "2026-01-01T00:14:00Z",
+          "type": "Email",
+          "subject": "Fixture message 14",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_15",
+          "received": "2026-01-01T00:15:00Z",
+          "type": "Email",
+          "subject": "Fixture message 15",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_16",
+          "received": "2026-01-01T00:16:00Z",
+          "type": "Email",
+          "subject": "Fixture message 16",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_17",
+          "received": "2026-01-01T00:17:00Z",
+          "type": "Email",
+          "subject": "Fixture message 17",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_18",
+          "received": "2026-01-01T00:18:00Z",
+          "type": "Email",
+          "subject": "Fixture message 18",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_19",
+          "received": "2026-01-01T00:19:00Z",
+          "type": "Email",
+          "subject": "Fixture message 19",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_20",
+          "received": "2026-01-01T00:20:00Z",
+          "type": "Email",
+          "subject": "Fixture message 20",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_21",
+          "received": "2026-01-01T00:21:00Z",
+          "type": "Email",
+          "subject": "Fixture message 21",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_22",
+          "received": "2026-01-01T00:22:00Z",
+          "type": "Email",
+          "subject": "Fixture message 22",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_23",
+          "received": "2026-01-01T00:23:00Z",
+          "type": "Email",
+          "subject": "Fixture message 23",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_24",
+          "received": "2026-01-01T00:24:00Z",
+          "type": "Email",
+          "subject": "Fixture message 24",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_25",
+          "received": "2026-01-01T00:25:00Z",
+          "type": "Email",
+          "subject": "Fixture message 25",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_26",
+          "received": "2026-01-01T00:26:00Z",
+          "type": "Email",
+          "subject": "Fixture message 26",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_27",
+          "received": "2026-01-01T00:27:00Z",
+          "type": "Email",
+          "subject": "Fixture message 27",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_28",
+          "received": "2026-01-01T00:28:00Z",
+          "type": "Email",
+          "subject": "Fixture message 28",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_29",
+          "received": "2026-01-01T00:29:00Z",
+          "type": "Email",
+          "subject": "Fixture message 29",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_30",
+          "received": "2026-01-01T00:30:00Z",
+          "type": "Email",
+          "subject": "Fixture message 30",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_31",
+          "received": "2026-01-01T00:31:00Z",
+          "type": "Email",
+          "subject": "Fixture message 31",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_32",
+          "received": "2026-01-01T00:32:00Z",
+          "type": "Email",
+          "subject": "Fixture message 32",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_33",
+          "received": "2026-01-01T00:33:00Z",
+          "type": "Email",
+          "subject": "Fixture message 33",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_34",
+          "received": "2026-01-01T00:34:00Z",
+          "type": "Email",
+          "subject": "Fixture message 34",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_35",
+          "received": "2026-01-01T00:35:00Z",
+          "type": "Email",
+          "subject": "Fixture message 35",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_36",
+          "received": "2026-01-01T00:36:00Z",
+          "type": "Email",
+          "subject": "Fixture message 36",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_37",
+          "received": "2026-01-01T00:37:00Z",
+          "type": "Email",
+          "subject": "Fixture message 37",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_38",
+          "received": "2026-01-01T00:38:00Z",
+          "type": "Email",
+          "subject": "Fixture message 38",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_39",
+          "received": "2026-01-01T00:39:00Z",
+          "type": "Email",
+          "subject": "Fixture message 39",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_40",
+          "received": "2026-01-01T00:40:00Z",
+          "type": "Email",
+          "subject": "Fixture message 40",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_41",
+          "received": "2026-01-01T00:41:00Z",
+          "type": "Email",
+          "subject": "Fixture message 41",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_42",
+          "received": "2026-01-01T00:42:00Z",
+          "type": "Email",
+          "subject": "Fixture message 42",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_43",
+          "received": "2026-01-01T00:43:00Z",
+          "type": "Email",
+          "subject": "Fixture message 43",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_44",
+          "received": "2026-01-01T00:44:00Z",
+          "type": "Email",
+          "subject": "Fixture message 44",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_45",
+          "received": "2026-01-01T00:45:00Z",
+          "type": "Email",
+          "subject": "Fixture message 45",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_46",
+          "received": "2026-01-01T00:46:00Z",
+          "type": "Email",
+          "subject": "Fixture message 46",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_47",
+          "received": "2026-01-01T00:47:00Z",
+          "type": "Email",
+          "subject": "Fixture message 47",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_48",
+          "received": "2026-01-01T00:48:00Z",
+          "type": "Email",
+          "subject": "Fixture message 48",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_49",
+          "received": "2026-01-01T00:49:00Z",
+          "type": "Email",
+          "subject": "Fixture message 49",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        },
+        {
+          "id": "msg_fixture_50",
+          "received": "2026-01-01T00:50:00Z",
+          "type": "Email",
+          "subject": "Fixture message 50",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        }
+      ]
+    }
+  }
+}

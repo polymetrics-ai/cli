@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Marketstack Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Marketstack API access key, sent as the access_key query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.marketstack.com/v1",
+      "description": "Marketstack API base URL override for tests or proxies."
+    },
+    "symbols": {
+      "type": "string",
+      "description": "Comma-separated ticker symbols; sent as the symbols query param on eod/splits/dividends streams. No default: when unset, those endpoints are queried without a symbol filter (matches legacy, which sends no symbols param when config symbols is unset)."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound truncated to YYYY-MM-DD; sent as date_from on eod/splits/dividends streams."
+    }
+  }
+}

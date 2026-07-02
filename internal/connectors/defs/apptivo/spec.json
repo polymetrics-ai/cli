@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Apptivo Connection Specification",
+  "type": "object",
+  "required": ["api_key", "access_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Apptivo apiKey, sent as the apiKey query parameter on every request. Never logged."
+    },
+    "access_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Apptivo accessKey, sent as the accessKey query parameter on every request. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.apptivo.com",
+      "description": "Apptivo API base URL override for tests or proxies."
+    }
+  }
+}

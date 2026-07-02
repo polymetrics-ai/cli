@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/buyers", "query": { "response_format": "common", "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "buyer_fixture_1",
+          "name": "Fixture Buyer 1",
+          "cloud": "aws",
+          "domain": "fixture1.example.com",
+          "status": "active",
+          "listing_id": "listing_fixture_1",
+          "cloud_account_id": "111111111111",
+          "latest_contract_id": "contract_fixture_1",
+          "last_modified_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "buyer_fixture_2",
+          "name": "Fixture Buyer 2",
+          "cloud": "azure",
+          "domain": "fixture2.example.com",
+          "status": "active",
+          "listing_id": "listing_fixture_1",
+          "cloud_account_id": "222222222222",
+          "latest_contract_id": "contract_fixture_2",
+          "last_modified_at": "2026-01-01T00:00:01.000000Z"
+        }
+      ],
+      "next": "https://api.clazar.io/buyers?page=2&page_size=100",
+      "count": 3
+    }
+  }
+}

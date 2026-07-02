@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stores",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "store_fixture_1",
+          "name": "Fixture Store 1",
+          "code": "FX1",
+          "status": "active"
+        },
+        {
+          "id": "store_fixture_2",
+          "name": "Fixture Store 2",
+          "code": "FX2",
+          "status": "active"
+        }
+      ]
+    }
+  }
+}

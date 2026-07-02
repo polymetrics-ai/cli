@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/documents" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "doc_fixture_1",
+          "name": "Fixture Document One",
+          "filename": "fixture-one.pdf",
+          "status": "signed",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "doc_fixture_2",
+          "name": "Fixture Document Two",
+          "filename": "fixture-two.pdf",
+          "status": "draft",
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

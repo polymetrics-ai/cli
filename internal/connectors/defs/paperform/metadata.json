@@ -1,0 +1,23 @@
+{
+  "name": "paperform",
+  "display_name": "Paperform",
+  "description": "Reads Paperform forms and form submissions through the Paperform REST API.",
+  "integration_type": "api",
+  "docs_url": "https://paperform.co/help/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Paperform API read of form and submission data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

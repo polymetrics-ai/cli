@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ZapSign Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "ZapSign API base URL.",
+      "default": "https://api.zapsign.com.br/api/v1"
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "ZapSign API token, sent as an 'Authorization: Token <api_token>' header."
+    }
+  }
+}

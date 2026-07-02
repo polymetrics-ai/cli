@@ -1,0 +1,23 @@
+{
+  "name": "ubidots",
+  "display_name": "Ubidots",
+  "description": "Reads Ubidots devices, variables, dashboards, and events through API list endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://docs.ubidots.com/reference/welcome",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Ubidots API read of device, variable, dashboard, and event data",
+    "approval": "none; read-only"
+  }
+}

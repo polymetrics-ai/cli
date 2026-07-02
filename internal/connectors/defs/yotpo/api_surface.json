@@ -1,0 +1,13 @@
+{
+  "api": "Yotpo Core API v3 (https://api.yotpo.com)",
+  "docs": "https://apidocs.yotpo.com/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Yotpo surface (reviews, loyalty, SMS marketing, subscriptions administration, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/core/v3/stores/{store_id}/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/core/v3/stores/{store_id}/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/core/v3/stores/{store_id}/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/core/v3/stores/{store_id}/reviews", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/core/v3/stores/{store_id}/products/{product_id}/reviews", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

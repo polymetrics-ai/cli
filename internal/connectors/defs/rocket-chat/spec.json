@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Rocket.Chat Connection Specification",
+  "type": "object",
+  "required": ["base_url", "auth_token", "user_id"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Rocket.Chat server base URL (e.g. https://chat.example.com). The /api/v1 suffix is appended automatically if not already present."
+    },
+    "auth_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Rocket.Chat personal access token, sent as the X-Auth-Token header. Never logged."
+    },
+    "user_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Rocket.Chat user id paired with auth_token, sent as the X-User-Id header. Never logged."
+    },
+    "query": {
+      "type": "string",
+      "description": "Optional raw Rocket.Chat query-string filter passed through to list endpoints as the 'query' parameter."
+    },
+    "fields": {
+      "type": "string",
+      "description": "Optional Rocket.Chat field-projection filter passed through as the 'fields' parameter."
+    },
+    "room_id": {
+      "type": "string",
+      "description": "Optional room id filter passed through as the 'roomId' parameter (used by the rooms stream)."
+    },
+    "updated_since": {
+      "type": "string",
+      "description": "Optional RFC3339 timestamp passed through as the 'updatedSince' parameter (used by the rooms stream)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

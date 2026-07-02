@@ -1,0 +1,40 @@
+{
+  "request": { "method": "GET", "path": "/stock-screener", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "FIX1",
+        "companyName": "Fixture Company 1",
+        "marketCap": 1000000000,
+        "sector": "Technology",
+        "industry": "Software",
+        "beta": 1.1,
+        "price": 101.0,
+        "lastAnnualDividend": 0.5,
+        "volume": 1000000,
+        "exchange": "NASDAQ Global Select",
+        "exchangeShortName": "NASDAQ",
+        "country": "US",
+        "isEtf": false,
+        "isActivelyTrading": true
+      },
+      {
+        "symbol": "FIX2",
+        "companyName": "Fixture Company 2",
+        "marketCap": 2000000000,
+        "sector": "Technology",
+        "industry": "Software",
+        "beta": 1.2,
+        "price": 102.0,
+        "lastAnnualDividend": 0.6,
+        "volume": 2000000,
+        "exchange": "NASDAQ Global Select",
+        "exchangeShortName": "NASDAQ",
+        "country": "US",
+        "isEtf": false,
+        "isActivelyTrading": true
+      }
+    ]
+  }
+}

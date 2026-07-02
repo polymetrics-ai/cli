@@ -1,0 +1,23 @@
+{
+  "name": "dremio",
+  "display_name": "Dremio",
+  "description": "Reads Dremio catalog entries, reflections, sources, and users through the Dremio REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.dremio.com/software/rest-api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Dremio API read of catalog, reflection, source, and user data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

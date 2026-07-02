@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "accounts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "account_number": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "crypto_status": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "account_type": { "type": ["string", "null"] },
+    "enabled_assets": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "kyc_results": { "type": ["string", "null"] },
+    "last_equity": { "type": ["string", "null"] }
+  }
+}

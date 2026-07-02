@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "clients",
+  "type": "object",
+  "x-primary-key": ["ClientID"],
+  "required": ["ClientID"],
+  "properties": {
+    "ClientID": { "type": "string" },
+    "Name": { "type": ["string", "null"] }
+  }
+}

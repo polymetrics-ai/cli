@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "airports",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "airport_name": { "type": ["string", "null"] },
+    "iata_code": { "type": ["string", "null"] },
+    "icao_code": { "type": ["string", "null"] },
+    "latitude": { "type": ["string", "null"] },
+    "longitude": { "type": ["string", "null"] },
+    "timezone": { "type": ["string", "null"] },
+    "gmt": { "type": ["string", "null"] },
+    "country_name": { "type": ["string", "null"] },
+    "country_iso2": { "type": ["string", "null"] },
+    "city_iata_code": { "type": ["string", "null"] }
+  }
+}

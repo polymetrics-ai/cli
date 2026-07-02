@@ -1,0 +1,55 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.account_sid }}", "password": "{{ secrets.auth_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "",
+      "size_param": "PageSize",
+      "start_page": 1,
+      "page_size": 50,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/v1/Workspaces/{{ config.workspace_sid }}/Workers", "query": { "PageSize": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "twilio-taskrouter account_sid/auth_token is missing or invalid; re-run pm credentials add twilio-taskrouter" },
+      { "status": 403, "hint": "twilio-taskrouter account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "twilio-taskrouter rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "workers",
+      "path": "/v1/Workspaces/{{ config.workspace_sid }}/Workers",
+      "records": { "path": "workers" },
+      "schema": "schemas/workers.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/v1/Workspaces/{{ config.workspace_sid }}/Tasks",
+      "records": { "path": "tasks" },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "activities",
+      "path": "/v1/Workspaces/{{ config.workspace_sid }}/Activities",
+      "records": { "path": "activities" },
+      "schema": "schemas/activities.json"
+    },
+    {
+      "name": "task_queues",
+      "path": "/v1/Workspaces/{{ config.workspace_sid }}/TaskQueues",
+      "records": { "path": "task_queues" },
+      "schema": "schemas/task_queues.json"
+    },
+    {
+      "name": "workflows",
+      "path": "/v1/Workspaces/{{ config.workspace_sid }}/Workflows",
+      "records": { "path": "workflows" },
+      "schema": "schemas/workflows.json"
+    }
+  ]
+}

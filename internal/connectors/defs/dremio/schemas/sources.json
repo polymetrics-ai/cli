@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sources",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "path": { "type": ["array", "null"] },
+    "tag": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] }
+  }
+}

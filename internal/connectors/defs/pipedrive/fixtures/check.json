@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "start": "0", "limit": "1" } },
+  "response": { "status": 200, "body": { "success": true, "data": [] } }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "clockodo",
+  "display_name": "Clockodo",
+  "description": "Reads Clockodo customers, projects, services, and users through the Clockodo REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.clockodo.com/en/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Clockodo API read of customer, project, service, and user data",
+    "approval": "none; read-only source connector"
+  }
+}

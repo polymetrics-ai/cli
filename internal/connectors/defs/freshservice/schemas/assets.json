@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "assets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "display_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "asset_type_id": { "type": ["integer", "null"] },
+    "asset_tag": { "type": ["string", "null"] },
+    "impact": { "type": ["string", "null"] },
+    "user_id": { "type": ["integer", "null"] },
+    "department_id": { "type": ["integer", "null"] },
+    "agent_id": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

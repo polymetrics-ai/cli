@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/station" },
+  "response": {
+    "status": 200,
+    "body": { "Stations": [] }
+  }
+}

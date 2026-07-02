@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Breezy HR Connection Specification",
+  "type": "object",
+  "required": ["api_key", "company_id"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.breezy.hr/v3",
+      "description": "Breezy API root override for tests or proxies. The per-company base URL is base_url + /company/<company_id>."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Breezy HR raw API key, sent verbatim as the Authorization header value; never logged."
+    },
+    "company_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Breezy company id. Not a credential by nature (it is a path segment, not a secret value used for auth), but marked x-secret to match the legacy catalog's field classification."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

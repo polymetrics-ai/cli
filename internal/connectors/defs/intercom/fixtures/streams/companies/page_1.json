@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies",
+    "query": { "per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "list",
+      "data": [
+        {
+          "id": "company_fixture_1",
+          "type": "company",
+          "company_id": "comp_1",
+          "name": "Fixture Co",
+          "created_at": 1767225601,
+          "updated_at": 1767225701,
+          "last_request_at": 1767225801,
+          "monthly_spend": 199.5,
+          "session_count": 12,
+          "user_count": 4,
+          "size": 50,
+          "website": "https://fixtureco.example.com",
+          "industry": "Software"
+        }
+      ],
+      "pages": { "type": "pages" },
+      "total_count": 1
+    }
+  }
+}

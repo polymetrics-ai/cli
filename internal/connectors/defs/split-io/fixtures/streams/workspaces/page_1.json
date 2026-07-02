@@ -1,0 +1,520 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/internal/api/v2/workspaces",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        {
+          "id": "ws_fixture_1",
+          "name": "Fixture Workspace 1",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_2",
+          "name": "Fixture Workspace 2",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_3",
+          "name": "Fixture Workspace 3",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_4",
+          "name": "Fixture Workspace 4",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_5",
+          "name": "Fixture Workspace 5",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_6",
+          "name": "Fixture Workspace 6",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_7",
+          "name": "Fixture Workspace 7",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_8",
+          "name": "Fixture Workspace 8",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_9",
+          "name": "Fixture Workspace 9",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_10",
+          "name": "Fixture Workspace 10",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_11",
+          "name": "Fixture Workspace 11",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_12",
+          "name": "Fixture Workspace 12",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_13",
+          "name": "Fixture Workspace 13",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_14",
+          "name": "Fixture Workspace 14",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_15",
+          "name": "Fixture Workspace 15",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_16",
+          "name": "Fixture Workspace 16",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_17",
+          "name": "Fixture Workspace 17",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_18",
+          "name": "Fixture Workspace 18",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_19",
+          "name": "Fixture Workspace 19",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_20",
+          "name": "Fixture Workspace 20",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_21",
+          "name": "Fixture Workspace 21",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_22",
+          "name": "Fixture Workspace 22",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_23",
+          "name": "Fixture Workspace 23",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_24",
+          "name": "Fixture Workspace 24",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_25",
+          "name": "Fixture Workspace 25",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_26",
+          "name": "Fixture Workspace 26",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_27",
+          "name": "Fixture Workspace 27",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_28",
+          "name": "Fixture Workspace 28",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_29",
+          "name": "Fixture Workspace 29",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_30",
+          "name": "Fixture Workspace 30",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_31",
+          "name": "Fixture Workspace 31",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_32",
+          "name": "Fixture Workspace 32",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_33",
+          "name": "Fixture Workspace 33",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_34",
+          "name": "Fixture Workspace 34",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_35",
+          "name": "Fixture Workspace 35",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_36",
+          "name": "Fixture Workspace 36",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_37",
+          "name": "Fixture Workspace 37",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_38",
+          "name": "Fixture Workspace 38",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_39",
+          "name": "Fixture Workspace 39",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_40",
+          "name": "Fixture Workspace 40",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_41",
+          "name": "Fixture Workspace 41",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_42",
+          "name": "Fixture Workspace 42",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_43",
+          "name": "Fixture Workspace 43",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_44",
+          "name": "Fixture Workspace 44",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_45",
+          "name": "Fixture Workspace 45",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_46",
+          "name": "Fixture Workspace 46",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_47",
+          "name": "Fixture Workspace 47",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_48",
+          "name": "Fixture Workspace 48",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_49",
+          "name": "Fixture Workspace 49",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_50",
+          "name": "Fixture Workspace 50",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_51",
+          "name": "Fixture Workspace 51",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_52",
+          "name": "Fixture Workspace 52",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_53",
+          "name": "Fixture Workspace 53",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_54",
+          "name": "Fixture Workspace 54",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_55",
+          "name": "Fixture Workspace 55",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_56",
+          "name": "Fixture Workspace 56",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_57",
+          "name": "Fixture Workspace 57",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_58",
+          "name": "Fixture Workspace 58",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_59",
+          "name": "Fixture Workspace 59",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_60",
+          "name": "Fixture Workspace 60",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_61",
+          "name": "Fixture Workspace 61",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_62",
+          "name": "Fixture Workspace 62",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_63",
+          "name": "Fixture Workspace 63",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_64",
+          "name": "Fixture Workspace 64",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_65",
+          "name": "Fixture Workspace 65",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_66",
+          "name": "Fixture Workspace 66",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_67",
+          "name": "Fixture Workspace 67",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_68",
+          "name": "Fixture Workspace 68",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_69",
+          "name": "Fixture Workspace 69",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_70",
+          "name": "Fixture Workspace 70",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_71",
+          "name": "Fixture Workspace 71",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_72",
+          "name": "Fixture Workspace 72",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_73",
+          "name": "Fixture Workspace 73",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_74",
+          "name": "Fixture Workspace 74",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_75",
+          "name": "Fixture Workspace 75",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_76",
+          "name": "Fixture Workspace 76",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_77",
+          "name": "Fixture Workspace 77",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_78",
+          "name": "Fixture Workspace 78",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_79",
+          "name": "Fixture Workspace 79",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_80",
+          "name": "Fixture Workspace 80",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_81",
+          "name": "Fixture Workspace 81",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_82",
+          "name": "Fixture Workspace 82",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_83",
+          "name": "Fixture Workspace 83",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_84",
+          "name": "Fixture Workspace 84",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_85",
+          "name": "Fixture Workspace 85",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_86",
+          "name": "Fixture Workspace 86",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_87",
+          "name": "Fixture Workspace 87",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_88",
+          "name": "Fixture Workspace 88",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_89",
+          "name": "Fixture Workspace 89",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_90",
+          "name": "Fixture Workspace 90",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_91",
+          "name": "Fixture Workspace 91",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_92",
+          "name": "Fixture Workspace 92",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_93",
+          "name": "Fixture Workspace 93",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_94",
+          "name": "Fixture Workspace 94",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_95",
+          "name": "Fixture Workspace 95",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_96",
+          "name": "Fixture Workspace 96",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_97",
+          "name": "Fixture Workspace 97",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_98",
+          "name": "Fixture Workspace 98",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_99",
+          "name": "Fixture Workspace 99",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "ws_fixture_100",
+          "name": "Fixture Workspace 100",
+          "status": "ACTIVE"
+        }
+      ],
+      "offset": 0,
+      "limit": 100,
+      "totalCount": 101
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "api": "Brevo (Sendinblue) API v3 (https://developers.brevo.com/reference)",
+  "docs": "https://developers.brevo.com/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (contacts, emailCampaigns, contacts_lists, senders); Brevo's transactional-email, SMS, and marketing-automation write surfaces are out of scope (legacy itself never implemented them; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/v3/emailCampaigns", "covered_by": { "stream": "email_campaigns" } },
+    { "method": "GET", "path": "/v3/contacts/lists", "covered_by": { "stream": "contacts_lists" } },
+    { "method": "GET", "path": "/v3/senders", "covered_by": { "stream": "senders" } },
+    { "method": "POST", "path": "/v3/contacts", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented contact creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v3/smtp/email", "excluded": { "category": "out_of_scope", "reason": "transactional email sending not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/account", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-account introspection, used only by check, not a syncable object stream" } }
+  ]
+}

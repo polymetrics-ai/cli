@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "groups",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "active_count": { "type": ["integer", "null"] },
+    "sent_count": { "type": ["integer", "null"] },
+    "opens_count": { "type": ["integer", "null"] },
+    "clicks_count": { "type": ["integer", "null"] },
+    "unsubscribed_count": { "type": ["integer", "null"] },
+    "open_rate": { "type": ["object", "null"] },
+    "click_rate": { "type": ["object", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/executions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "exec_fixture_1",
+          "workflowId": "wf_fixture_1",
+          "finished": true,
+          "mode": "trigger",
+          "status": "success",
+          "retryOf": null,
+          "startedAt": "2026-01-01T00:00:00.000Z",
+          "stoppedAt": "2026-01-01T00:00:05.000Z"
+        },
+        {
+          "id": "exec_fixture_2",
+          "workflowId": "wf_fixture_1",
+          "finished": true,
+          "mode": "webhook",
+          "status": "error",
+          "retryOf": "exec_fixture_1",
+          "startedAt": "2026-01-02T00:00:00.000Z",
+          "stoppedAt": "2026-01-02T00:00:03.000Z"
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

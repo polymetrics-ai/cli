@@ -1,0 +1,22 @@
+{
+  "name": "retently",
+  "display_name": "Retently",
+  "description": "Reads Retently customers, survey responses, surveys, and campaigns through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.retently.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Retently API read of customer and NPS/CSAT survey response data"
+  }
+}

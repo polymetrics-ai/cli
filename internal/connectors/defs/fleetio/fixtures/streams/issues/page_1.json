@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/issues", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "records": [
+        {
+          "id": 30,
+          "number": 101,
+          "vehicle_id": 1,
+          "vehicle_name": "Truck 1",
+          "summary": "Check engine light",
+          "description": "Check engine light on dashboard",
+          "state": "open",
+          "due_date": "2026-02-01T00:00:00Z",
+          "resolved_at": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

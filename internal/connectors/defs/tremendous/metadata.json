@@ -1,0 +1,23 @@
+{
+  "name": "tremendous",
+  "display_name": "Tremendous",
+  "description": "Reads Tremendous campaigns, orders, rewards, and funding sources through API list endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://developers.tremendous.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Tremendous API read of campaign, order, reward, and funding source data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

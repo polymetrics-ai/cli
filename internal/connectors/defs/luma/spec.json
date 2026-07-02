@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lu.ma Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "lu.ma API key, sent as the x-luma-api-key header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.lu.ma/public/v1",
+      "description": "lu.ma API base URL override for tests or proxies."
+    },
+    "event_api_id": {
+      "type": "string",
+      "description": "lu.ma event api_id; required by the event_guests and event_hosts streams."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

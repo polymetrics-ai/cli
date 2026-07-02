@@ -1,0 +1,13 @@
+{
+  "api": "Judge.me API v1 (https://judge.me/api/v1)",
+  "docs": "https://judge.me/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; write endpoints and any other Judge.me surface are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/reviews", "covered_by": { "stream": "reviews" } },
+    { "method": "GET", "path": "/v1/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/v1/widgets", "covered_by": { "stream": "widgets" } },
+    { "method": "PUT", "path": "/v1/reviews/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy connector is read-only" } },
+    { "method": "POST", "path": "/v1/reviews", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy connector is read-only" } }
+  ]
+}

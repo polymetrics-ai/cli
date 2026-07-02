@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "customers": [
+          {
+            "id": "cus_fixture_1",
+            "firstName": "Fixture1",
+            "lastName": "Example",
+            "email": "fixture1@example.com",
+            "type": "personal",
+            "status": "verified",
+            "businessName": "",
+            "created": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "id": "cus_fixture_2",
+            "firstName": "Fixture2",
+            "lastName": "Example",
+            "email": "fixture2@example.com",
+            "type": "personal",
+            "status": "unverified",
+            "businessName": "",
+            "created": "2026-01-02T00:00:00.000Z"
+          }
+        ]
+      }
+    }
+  }
+}

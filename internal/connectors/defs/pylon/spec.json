@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pylon Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pylon API token, sent as an OAuth-style Bearer token. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.usepylon.com",
+      "description": "Pylon API base URL. Defaults to https://api.usepylon.com."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "RFC3339 lower bound sent as the updated_after query parameter on every request, when set. Matches legacy's optional start_date passthrough."
+    }
+  }
+}

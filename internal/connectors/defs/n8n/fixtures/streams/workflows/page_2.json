@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/workflows", "query": { "cursor": "cursor_fixture_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "wf_fixture_101",
+          "name": "Fixture Workflow 101",
+          "active": true,
+          "isArchived": false,
+          "createdAt": "2026-01-02T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z",
+          "triggerCount": 101,
+          "versionId": "v_101"
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "api": "Veeqo API (https://api.veeqo.com)",
+  "docs": "https://developers.veeqo.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only (orders); minimal-honest api_surface per docs/migration/conventions.md section 2 / DECISIONS.md #4 - full Veeqo API-surface research (every documented endpoint) is Pass B (wave5), not this fan-out.",
+  "endpoints": [
+    { "method": "GET", "path": "/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a products stream" } },
+    { "method": "GET", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a customers stream" } },
+    { "method": "GET", "path": "/warehouses", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a warehouses stream" } },
+    { "method": "PUT", "path": "/orders/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy implements no write path (Write returns ErrUnsupportedOperation)" } }
+  ]
+}

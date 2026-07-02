@@ -1,0 +1,23 @@
+{
+  "name": "zoho-books",
+  "display_name": "Zoho Books",
+  "description": "Reads Zoho Books contacts, invoices, and items through the Zoho Books REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.zoho.com/books/api/v3/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Zoho Books API read of accounting/contact data",
+    "approval": "none; read-only"
+  }
+}

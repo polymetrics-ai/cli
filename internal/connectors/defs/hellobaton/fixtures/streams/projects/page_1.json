@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/projects", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 1,
+          "name": "Fixture Project",
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-02T00:00:00Z",
+          "archived": false,
+          "completed_datetime": null,
+          "cost": 1000,
+          "annual_contract_value": "10000",
+          "creator": "fixture@example.com",
+          "_self": "/api/projects/1"
+        }
+      ]
+    }
+  }
+}

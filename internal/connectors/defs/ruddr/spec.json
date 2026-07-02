@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ruddr Connection Specification",
+  "type": "object",
+  "required": ["api_key", "workspace_id"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Ruddr API token, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Ruddr workspace id, substituted into every stream's workspace-scoped path."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.ruddr.io",
+      "description": "Ruddr API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

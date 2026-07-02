@@ -1,0 +1,68 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "x-ck-app": "{{ config.app_id }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "x-ck-api-key", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/sessions" },
+    "error_map": [
+      { "status": 401, "hint": "churnkey api_key is missing or invalid; re-run pm credentials add churnkey" },
+      { "status": 403, "hint": "churnkey credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "churnkey rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "sessions",
+      "path": "/sessions",
+      "records": { "path": "." },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "skip",
+        "page_size": 2
+      },
+      "computed_fields": {
+        "blueprint_id": "{{ record.blueprintId }}",
+        "segment_id": "{{ record.segmentId }}",
+        "survey_id": "{{ record.surveyId }}",
+        "survey_choice_id": "{{ record.surveyChoiceId }}",
+        "survey_choice_value": "{{ record.surveyChoiceValue }}",
+        "discount_cooldown_applied": "{{ record.discountCooldownApplied }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "accepted_offer": "{{ record.acceptedOffer }}",
+        "customer_id": "{{ record.customer.id }}",
+        "customer_email": "{{ record.customer.email }}",
+        "customer_plan_id": "{{ record.customer.planId }}",
+        "customer_billing_interval": "{{ record.customer.billingInterval }}",
+        "offer_type": "{{ record.acceptedOffer.offerType }}"
+      },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/sessions.json"
+    },
+    {
+      "name": "session_aggregation",
+      "path": "/session-aggregation",
+      "records": { "path": "." },
+      "computed_fields": {
+        "count": "{{ record.count }}",
+        "month": "{{ record.month }}",
+        "trial": "{{ record.trial }}",
+        "billing_interval": "{{ record.billingInterval }}",
+        "plan_id": "{{ record.planId }}",
+        "aborted": "{{ record.aborted }}",
+        "canceled": "{{ record.canceled }}",
+        "offer_type": "{{ record.offerType }}",
+        "save_type": "{{ record.saveType }}"
+      },
+      "schema": "schemas/session_aggregation.json"
+    }
+  ]
+}

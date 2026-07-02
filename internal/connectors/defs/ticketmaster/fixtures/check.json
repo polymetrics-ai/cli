@@ -1,0 +1,10 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/classifications.json"
+  },
+  "response": {
+    "status": 200,
+    "body": { "_embedded": { "classifications": [] } }
+  }
+}

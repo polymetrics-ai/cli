@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "opportunities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "value": { "type": ["number", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "account_id": { "type": ["integer", "null"] },
+    "stage_id": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

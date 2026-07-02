@@ -1,0 +1,23 @@
+{
+  "name": "statuspage",
+  "display_name": "Statuspage",
+  "description": "Reads Statuspage pages, components, incidents, and subscribers through the Statuspage API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.statuspage.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Statuspage API read of page, component, incident, and subscriber data",
+    "approval": "none; read-only"
+  }
+}

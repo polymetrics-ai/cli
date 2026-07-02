@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "leads",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date_updated_utc",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "lead_id": { "type": "integer" },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "organisation_name": { "type": ["string", "null"] },
+    "lead_status_id": { "type": ["integer", "null"] },
+    "lead_source_id": { "type": ["integer", "null"] },
+    "converted": { "type": ["boolean", "null"] },
+    "date_created_utc": { "type": ["string", "null"] },
+    "date_updated_utc": { "type": ["string", "null"] }
+  }
+}

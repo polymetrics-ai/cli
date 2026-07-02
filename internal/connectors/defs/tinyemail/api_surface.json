@@ -1,0 +1,14 @@
+{
+  "api": "tinyEmail REST API v1",
+  "docs": "https://tinyemail.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (subscribers, lists, campaigns); tinyEmail's write/mutation endpoints and other resources (automations, templates) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/subscribers", "covered_by": { "stream": "subscribers" } },
+    { "method": "GET", "path": "/v1/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/v1/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "POST", "path": "/v1/subscribers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/automations", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/templates", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

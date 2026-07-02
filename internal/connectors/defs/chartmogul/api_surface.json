@@ -1,0 +1,19 @@
+{
+  "api": "ChartMogul API v1",
+  "docs": "https://dev.chartmogul.com/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full ChartMogul surface (invoices, plans, subscriptions, tasks, tags, custom attributes, write endpoints, etc.) is out of scope until Pass B. ChartMogul is a read-only connector in both legacy and this bundle.",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/v1/activities", "covered_by": { "stream": "activities" } },
+    { "method": "GET", "path": "/v1/metrics/customer-count", "covered_by": { "stream": "customer_count" } },
+    { "method": "GET", "path": "/v1/account", "covered_by": { "stream": "account" } },
+    { "method": "GET", "path": "/v1/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/plans", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/import/customers/{uuid}/subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/tasks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/metrics/all", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/import/customers/{uuid}/subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

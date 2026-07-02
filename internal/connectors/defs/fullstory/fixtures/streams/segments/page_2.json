@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/segments/v2", "query": { "limit": "200", "pageToken": "PAGE2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "seg_fixture_3",
+          "name": "Web Sessions",
+          "description": "conformance fixture segment",
+          "creator": "fixture@example.com",
+          "created": "2026-01-02T00:00:00Z",
+          "is_public": false,
+          "type": "custom"
+        }
+      ],
+      "next_page_token": ""
+    }
+  }
+}

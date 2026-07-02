@@ -1,0 +1,16 @@
+{
+  "api": "Campaign Monitor API v3.3 (https://api.createsend.com/api/v3.3)",
+  "docs": "https://www.campaignmonitor.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; Campaign Monitor's full surface (subscribers, transactional email, templates, segments) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/clients.json", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/clients/{client_id}/campaigns.json", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/clients/{client_id}/lists.json", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/clients/{client_id}/suppressionlist.json", "covered_by": { "stream": "suppressionlist" } },
+    { "method": "GET", "path": "/lists/{list_id}/subscribers.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/campaigns/{client_id}.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/lists/{list_id}/subscribers.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/subscribers/{list_id}.json", "excluded": { "category": "destructive_admin", "reason": "destructive delete; legacy connector never implemented writes" } }
+  ]
+}

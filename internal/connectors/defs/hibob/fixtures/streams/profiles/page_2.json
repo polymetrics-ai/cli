@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/profiles", "query": { "limit": "50", "offset": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "employees": [
+        {
+          "id": "51",
+          "email": "fixture51@example.com",
+          "displayName": "Fixture 51",
+          "firstName": "Fixture",
+          "surname": "51",
+          "fullName": "Fixture 51",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": true
+          },
+          "personal": { "pronouns": "she/her" }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": { "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "events": [
+          {
+            "id": "evt_fixture_1",
+            "topic": "customer_created",
+            "resourceId": "res_1",
+            "created": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "id": "evt_fixture_2",
+            "topic": "customer_verified",
+            "resourceId": "res_2",
+            "created": "2026-01-02T00:00:00.000Z"
+          }
+        ]
+      }
+    }
+  }
+}

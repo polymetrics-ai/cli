@@ -1,0 +1,46 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/orders" },
+    "error_map": [
+      { "status": 401, "hint": "sendowl username/password is missing or invalid; re-run pm credentials add sendowl" },
+      { "status": 403, "hint": "sendowl account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "sendowl rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "orders",
+      "path": "/orders",
+      "records": { "path": "." },
+      "schema": "schemas/orders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "records": { "path": "." },
+      "schema": "schemas/products.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "records": { "path": "." },
+      "schema": "schemas/subscriptions.json",
+      "projection": "passthrough"
+    }
+  ]
+}

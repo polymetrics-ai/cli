@@ -1,0 +1,20 @@
+{
+  "api": "RevenueCat REST API v2 (https://api.revenuecat.com/v2)",
+  "docs": "https://www.revenuecat.com/docs/api-v1",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (projects, apps, products, offerings, customers); legacy ships no writes (capabilities.write is false) and the full RevenueCat surface (receipts, subscriber attributes/attribution, entitlement grants, purchase/refund/cancel/defer/extend transaction mutations) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/v2/projects/{project_id}/apps", "covered_by": { "stream": "apps" } },
+    { "method": "GET", "path": "/v2/projects/{project_id}/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/v2/projects/{project_id}/offerings", "covered_by": { "stream": "offerings" } },
+    { "method": "GET", "path": "/v2/projects/{project_id}/customers", "covered_by": { "stream": "customers" } },
+    { "method": "POST", "path": "/v1/receipts", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented purchase receipt recording; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/subscribers/{app_user_id}/subscriptions/{product_identifier}/revoke", "excluded": { "category": "destructive_admin", "reason": "subscription revoke/refund mutation; legacy never implemented writes" } },
+    { "method": "POST", "path": "/v1/subscribers/{app_user_id}/subscriptions/{product_identifier}/defer", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented subscription deferral; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/subscribers/{app_user_id}/transactions/{store_transaction_identifier}/refund", "excluded": { "category": "destructive_admin", "reason": "transaction refund mutation; legacy never implemented writes" } },
+    { "method": "DELETE", "path": "/v1/subscribers/{app_user_id}", "excluded": { "category": "destructive_admin", "reason": "subscriber deletion; legacy never implemented writes" } },
+    { "method": "POST", "path": "/v1/subscribers/{app_user_id}/attributes", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented attribute updates; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/subscribers/{app_user_id}/entitlements/{entitlement_identifier}/promotional", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented promotional entitlement grants; Pass B capability expansion" } }
+  ]
+}

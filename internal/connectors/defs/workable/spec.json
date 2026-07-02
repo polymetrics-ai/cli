@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workable Connection Specification",
+  "type": "object",
+  "required": ["base_url", "api_key"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Workable SPI v3 base URL, e.g. https://example.workable.com/spi/v3. See Known limits: legacy's account_subdomain-derived base URL is not modeled; pass the full base URL directly."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Workable API access token. Sent as a Bearer token; never logged."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "created_after lower bound, sent verbatim as the created_after query param on every stream. See Known limits: page_size/max_pages are not modeled as runtime config (no templating mechanism on pagination fields in this dialect)."
+    }
+  }
+}

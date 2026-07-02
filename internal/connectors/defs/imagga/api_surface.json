@@ -1,0 +1,13 @@
+{
+  "api": "Imagga REST API v2 (https://docs.imagga.com/)",
+  "docs": "https://docs.imagga.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration, PARTIAL: only the account-scoped 'usage' stream is ported at Tier 1. Legacy's 4 per-image detection streams (tags, categories, colors, faces_detections) require a per-configured-image multi-request fan-out the declarative engine dialect cannot express (ENGINE_GAP; see docs.md Known limits) and are NOT ported here — legacy stays authoritative for those 4 streams until a Tier-2 StreamHook closes the gap in a follow-up wave.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/usage", "covered_by": { "stream": "usage" } },
+    { "method": "GET", "path": "/v2/tags", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: per-image multi-request fan-out (one request per configured image_url) is not expressible in the declarative dialect; needs a StreamHook (Tier 2), out of scope for this wave's Tier-1-only fan-out" } },
+    { "method": "GET", "path": "/v2/categories/personal_photos", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same per-image fan-out limitation as tags" } },
+    { "method": "GET", "path": "/v2/colors", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same per-image fan-out limitation as tags" } },
+    { "method": "GET", "path": "/v2/faces/detections", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same per-image fan-out limitation as tags" } }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/reports.json", "query": { "page": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Reports": [
+        { "Hash": "report_fixture_1", "Name": "Fixture Report 1", "DateUpdated": "2026-01-01 00:00:00" },
+        { "Hash": "report_fixture_2", "Name": "Fixture Report 2", "DateUpdated": "2026-01-02 00:00:00" }
+      ]
+    }
+  }
+}

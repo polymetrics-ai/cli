@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/themes", "query": { "page": "1", "page_size": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 1,
+      "page_count": 1,
+      "items": [
+        { "id": "theme_fixture_1", "name": "Fixture Theme", "visibility": "public", "background": { "href": "https://images.typeform.com/images/fixture_bg" }, "colors": { "answer": "#4FB0AE", "background": "#FFFFFF", "button": "#4FB0AE", "question": "#000000" }, "font": "Helvetica Neue" }
+      ]
+    }
+  }
+}

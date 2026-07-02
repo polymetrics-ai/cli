@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/segments", "query": { "page": "1", "per_page": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "segments": [
+        {
+          "id": 20,
+          "type": "segment",
+          "name": "Active Users",
+          "created_at": 1767225601,
+          "updated_at": 1767225601,
+          "person_type": "user",
+          "count": 42
+        }
+      ],
+      "pages": { "next": null }
+    }
+  }
+}

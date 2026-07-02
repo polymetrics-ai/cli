@@ -1,0 +1,43 @@
+{
+  "request": { "method": "GET", "path": "/employees/directory", "query": { "page": "1", "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "fields": [{ "id": "firstName" }],
+      "employees": [
+        {
+          "id": "fixture_1",
+          "displayName": "Fixture One",
+          "firstName": "Fixture",
+          "lastName": "One",
+          "preferredName": "Fix1",
+          "jobTitle": "Engineer",
+          "department": "Engineering",
+          "division": "Product",
+          "location": "Remote",
+          "workEmail": "fixture1@example.com",
+          "workPhone": "555-0100",
+          "mobilePhone": "555-0200",
+          "supervisor": "Fixture Manager",
+          "photoUrl": "https://example.com/photo1.png"
+        },
+        {
+          "id": "fixture_2",
+          "displayName": "Fixture Two",
+          "firstName": "Fixture",
+          "lastName": "Two",
+          "preferredName": "Fix2",
+          "jobTitle": "Engineer",
+          "department": "Engineering",
+          "division": "Product",
+          "location": "Remote",
+          "workEmail": "fixture2@example.com",
+          "workPhone": "555-0101",
+          "mobilePhone": "555-0201",
+          "supervisor": "Fixture Manager",
+          "photoUrl": "https://example.com/photo2.png"
+        }
+      ]
+    }
+  }
+}

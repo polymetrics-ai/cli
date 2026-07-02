@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Xero Connection Specification",
+  "type": "object",
+  "required": ["access_token", "tenant_id"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Xero OAuth2 access token. Sent as a Bearer token; never logged."
+    },
+    "tenant_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Xero tenant (organisation) id. Sent as the Xero-tenant-id header; never logged. See Known limits: legacy's config-fallback convenience for this value is not modeled."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.xero.com/api.xro/2.0",
+      "description": "Xero Accounting API base URL override for tests or proxies."
+    }
+  }
+}

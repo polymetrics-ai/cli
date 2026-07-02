@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "payment_term": { "type": ["string", "null"] },
+    "tax_rule": { "type": ["string", "null"] },
+    "last_modified": { "type": ["string", "null"] }
+  }
+}

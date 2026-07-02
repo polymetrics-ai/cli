@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "user_fixture_1",
+          "email": "fixture1@example.com",
+          "name": "Fixture User 1",
+          "role": "admin",
+          "created": 1767225601
+        },
+        {
+          "id": "user_fixture_2",
+          "email": "fixture2@example.com",
+          "name": "Fixture User 2",
+          "role": "member",
+          "created": 1767225602
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/agents" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "display_name": "Fixture Agent 1", "first_name": "Fixture", "last_name": "Agent 1", "email": "fixture1@example.com", "role_id": 1, "enabled": true, "create_date": "2026-01-01T00:00:00Z", "last_login": "2026-01-02T00:00:00Z" }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/delisted-companies", "query": { "limit": "2", "offset": "2" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "FIXD3",
+        "companyName": "Fixture Delisted 3",
+        "exchange": "NASDAQ",
+        "ipoDate": "2003-01-01",
+        "delistedDate": "2022-01-01"
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "schedule",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "airdate",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "airdate": { "type": ["string", "null"] },
+    "airtime": { "type": ["string", "null"] },
+    "show_id": { "type": ["integer", "null"] },
+    "show_name": { "type": ["string", "null"] }
+  }
+}

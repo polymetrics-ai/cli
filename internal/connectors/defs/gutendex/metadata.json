@@ -1,0 +1,23 @@
+{
+  "name": "gutendex",
+  "display_name": "Gutendex",
+  "description": "Reads Project Gutenberg books from the free, public Gutendex JSON API (books, popular, latest, and English-language views). Read-only; no credentials required.",
+  "integration_type": "api",
+  "docs_url": "https://gutendex.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 32
+  },
+  "risk": {
+    "read": "external read of the public, unauthenticated Gutendex book catalog",
+    "approval": "none; read-only public API, no credentials"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "api": "Vercel REST API v6+ (https://api.vercel.com)",
+  "docs": "https://vercel.com/docs/rest-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only (deployments); minimal-honest api_surface per docs/migration/conventions.md section 2 / DECISIONS.md #4 - full Vercel API-surface research (every documented endpoint) is Pass B (wave5), not this fan-out.",
+  "endpoints": [
+    { "method": "GET", "path": "/v6/deployments", "covered_by": { "stream": "deployments" } },
+    { "method": "GET", "path": "/v9/projects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a projects stream" } },
+    { "method": "GET", "path": "/v5/domains", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a domains stream" } },
+    { "method": "GET", "path": "/v2/teams", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a teams stream" } },
+    { "method": "POST", "path": "/v13/deployments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy implements no write path (Write returns ErrUnsupportedOperation)" } }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "api": "AgileCRM REST API (https://github.com/agilecrm/rest-api)",
+  "docs": "https://github.com/agilecrm/rest-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full AgileCRM surface (campaigns, forms, custom fields, webhooks, etc.) is out of scope until Pass B. AgileCRM is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "endpoints": [
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/opportunity", "covered_by": { "stream": "deals" } },
+    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/milestone/pipelines", "covered_by": { "stream": "milestone" } },
+    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/contacts/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; AgileCRM connector is read-only" } }
+  ]
+}

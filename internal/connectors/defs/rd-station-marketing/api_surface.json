@@ -1,0 +1,13 @@
+{
+  "api": "RD Station Marketing Platform API (https://api.rd.services/platform)",
+  "docs": "https://developers.rdstation.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, segmentations, events, landing_pages, email_templates); legacy itself ships no writes and no other endpoints, so the full RD Station Marketing surface is out of scope for Pass B capability expansion.",
+  "endpoints": [
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/segmentations", "covered_by": { "stream": "segmentations" } },
+    { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/landing_pages", "covered_by": { "stream": "landing_pages" } },
+    { "method": "GET", "path": "/email_templates", "covered_by": { "stream": "email_templates" } }
+  ]
+}

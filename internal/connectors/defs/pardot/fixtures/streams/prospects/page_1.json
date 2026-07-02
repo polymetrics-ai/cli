@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/api/v5/objects/prospects", "query": { "limit": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 1,
+          "email": "fixture1@example.com",
+          "firstName": "First1",
+          "lastName": "Fixture",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "email": "fixture2@example.com",
+          "firstName": "First2",
+          "lastName": "Fixture",
+          "createdAt": "2026-01-02T00:00:00Z",
+          "updatedAt": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

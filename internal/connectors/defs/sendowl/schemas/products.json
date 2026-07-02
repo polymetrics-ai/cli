@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "price": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "product_type": { "type": ["string", "null"] }
+  }
+}

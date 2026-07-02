@@ -1,0 +1,23 @@
+{
+  "name": "ding-connect",
+  "display_name": "Ding Connect",
+  "description": "Reads DingConnect reference catalogs (countries, currencies, regions, providers, and products) through the DingConnect REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.ding.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external DingConnect API read of reference/catalog data",
+    "approval": "none; read-only reference-data source connector"
+  }
+}

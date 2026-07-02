@@ -1,0 +1,17 @@
+{
+  "api": "ClickUp API v2 (https://api.clickup.com/api/v2)",
+  "docs": "https://clickup.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (teams, spaces, folders, lists, tasks); ClickUp's write endpoints (creating tasks, comments, etc.) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/team", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/v2/team/{team_id}/space", "covered_by": { "stream": "spaces" } },
+    { "method": "GET", "path": "/v2/space/{space_id}/folder", "covered_by": { "stream": "folders" } },
+    { "method": "GET", "path": "/v2/space/{space_id}/list", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/v2/team/{team_id}/task", "covered_by": { "stream": "tasks" } },
+    { "method": "POST", "path": "/v2/team/{team_id}/task", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented task creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/task/{task_id}/comment", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented comment creation; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/list/{list_id}/task", "excluded": { "category": "out_of_scope", "reason": "list-scoped task retrieval not modeled by legacy (legacy only reads team-scoped tasks); Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/user", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream" } }
+  ]
+}

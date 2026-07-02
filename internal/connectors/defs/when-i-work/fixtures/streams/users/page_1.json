@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/2/users" },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        { "id": 1, "first_name": "Ada", "last_name": "Lovelace", "email": "fixture1@example.com" },
+        { "id": 2, "first_name": "Grace", "last_name": "Hopper", "email": "fixture2@example.com" }
+      ]
+    }
+  }
+}

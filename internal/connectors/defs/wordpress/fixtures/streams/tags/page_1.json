@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/wp-json/wp/v2/tags", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture Tag One", "slug": "fixture-tag-one" },
+      { "id": 2, "name": "Fixture Tag Two", "slug": "fixture-tag-two" }
+    ]
+  }
+}

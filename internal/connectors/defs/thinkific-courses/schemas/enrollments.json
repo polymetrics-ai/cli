@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Thinkific Enrollment",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "course_id": { "type": "integer" },
+    "user_id": { "type": "integer" },
+    "percentage_completed": { "type": "number" },
+    "activated_at": { "type": ["string", "null"] },
+    "completed_at": { "type": ["string", "null"] },
+    "updated_at": { "type": "string" }
+  }
+}

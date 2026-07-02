@@ -1,0 +1,22 @@
+{
+  "name": "freshchat",
+  "display_name": "Freshchat",
+  "description": "Reads Freshchat agents, users, groups, channels, and roles through the Freshchat v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.freshchat.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Freshchat API read of agents, users, groups, channels, and roles"
+  }
+}

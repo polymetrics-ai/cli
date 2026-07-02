@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/parties", "query": { "page": "2", "perPage": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "parties": [
+        {
+          "id": 3,
+          "type": "person",
+          "firstName": "Fixture3",
+          "lastName": "Example",
+          "organisationName": null,
+          "title": "Mx",
+          "jobTitle": "Manager",
+          "about": "conformance fixture party",
+          "owner": "fixture-owner",
+          "createdAt": "2026-01-03T00:00:00Z",
+          "updatedAt": "2026-01-03T00:00:00Z",
+          "lastContactedAt": "2026-01-03T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

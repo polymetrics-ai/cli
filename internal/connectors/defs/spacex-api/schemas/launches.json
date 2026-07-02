@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "launches",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "flight_number": { "type": ["integer", "null"] },
+    "date_utc": { "type": ["string", "null"] },
+    "date_unix": { "type": ["integer", "null"] },
+    "date_local": { "type": ["string", "null"] },
+    "date_precision": { "type": ["string", "null"] },
+    "upcoming": { "type": ["boolean", "null"] },
+    "success": { "type": ["boolean", "null"] },
+    "details": { "type": ["string", "null"] },
+    "rocket": { "type": ["string", "null"] },
+    "launchpad": { "type": ["string", "null"] },
+    "payloads": { "type": ["array", "null"], "items": { "type": "string" } },
+    "crew": { "type": ["array", "null"] },
+    "ships": { "type": ["array", "null"], "items": { "type": "string" } },
+    "capsules": { "type": ["array", "null"], "items": { "type": "string" } },
+    "links": { "type": ["object", "null"] }
+  }
+}

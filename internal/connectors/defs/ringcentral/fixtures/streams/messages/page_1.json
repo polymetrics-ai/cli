@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/account/~/extension/~/message-store",
+    "query": {
+      "page": "1",
+      "perPage": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "records": [
+        {
+          "id": "msg_fixture_1",
+          "type": "SMS",
+          "direction": "Inbound",
+          "subject": "Fixture message 1",
+          "creationTime": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "msg_fixture_2",
+          "type": "SMS",
+          "direction": "Outbound",
+          "subject": "Fixture message 2",
+          "creationTime": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

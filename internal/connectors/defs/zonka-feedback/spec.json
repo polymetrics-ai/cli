@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zonka Feedback Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "auth_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zonka Feedback API token, sent as a Bearer token (Authorization: Bearer <auth_token>). Takes precedence over access_token when both are set. Never logged."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Fallback Zonka Feedback API token, used only when auth_token is unset. Sent as a Bearer token. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.zonkafeedback.com",
+      "description": "Zonka Feedback API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-200); sent as the 'per_page' query param."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

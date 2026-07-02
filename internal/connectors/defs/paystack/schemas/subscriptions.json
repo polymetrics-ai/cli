@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subscriptions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "subscription_code": { "type": ["string", "null"] },
+    "email_token": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "amount": { "type": ["integer", "null"] },
+    "domain": { "type": ["string", "null"] },
+    "next_payment_date": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

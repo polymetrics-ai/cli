@@ -1,0 +1,76 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 1000
+    },
+    "check": {
+      "method": "GET",
+      "path": "/api/org"
+    },
+    "error_map": [
+      { "status": 401, "hint": "grafana api_key is missing or invalid; re-run pm credentials add grafana" },
+      { "status": 403, "hint": "grafana token lacks access for this resource" },
+      { "status": 429, "class": "rate_limited", "hint": "grafana rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "dashboards",
+      "path": "/api/search",
+      "query": { "type": "dash-db" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "" },
+      "schema": "schemas/dashboards.json"
+    },
+    {
+      "name": "folders",
+      "path": "/api/search",
+      "query": { "type": "dash-folder" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "" },
+      "schema": "schemas/folders.json"
+    },
+    {
+      "name": "datasources",
+      "path": "/api/datasources",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/datasources.json"
+    },
+    {
+      "name": "org_users",
+      "path": "/api/org/users",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/org_users.json"
+    },
+    {
+      "name": "alert_rules",
+      "path": "/api/v1/provisioning/alert-rules",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/alert_rules.json"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/podcasts", "query": { "limit": "1", "page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "simplecast access token is missing or invalid; re-run pm credentials add simplecast" },
+      { "status": 403, "hint": "simplecast account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "simplecast rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "podcasts",
+      "path": "/podcasts",
+      "query": { "page": "1", "limit": "100" },
+      "records": { "path": "collection" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "pages.next.href"
+      },
+      "schema": "schemas/podcasts.json"
+    },
+    {
+      "name": "episodes",
+      "path": "/episodes",
+      "query": { "page": "1", "limit": "100" },
+      "records": { "path": "collection" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "pages.next.href"
+      },
+      "schema": "schemas/episodes.json"
+    }
+  ]
+}

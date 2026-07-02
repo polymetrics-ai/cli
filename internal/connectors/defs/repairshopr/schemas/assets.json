@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "assets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "customer_id": { "type": ["string", "integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "serial_number": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "stream": { "type": "string" }
+  }
+}

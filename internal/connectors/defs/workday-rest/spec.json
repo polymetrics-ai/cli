@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workday REST Connection Specification",
+  "type": "object",
+  "required": ["tenant", "access_token"],
+  "properties": {
+    "tenant": {
+      "type": "string",
+      "description": "Workday tenant name, substituted as a path segment into every stream's resource URL (e.g. ccx/api/hcm/v1/<tenant>/workers)."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Workday REST API bearer access token (Authorization: Bearer <access_token>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://wd2-impl-services1.workday.com",
+      "description": "Workday API base URL override for a tenant's actual Workday instance, tests, or proxies."
+    }
+  }
+}

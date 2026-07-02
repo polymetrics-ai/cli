@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/spaces", "query": { "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "spaces_fixture_1",
+          "key": "FIX1",
+          "name": "Fixture Space 1",
+          "type": "global",
+          "status": "current",
+          "authorId": "author_fixture_1",
+          "homepageId": "pages_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "spaces_fixture_2",
+          "key": "FIX2",
+          "name": "Fixture Space 2",
+          "type": "global",
+          "status": "current",
+          "authorId": "author_fixture_1",
+          "homepageId": "pages_fixture_2",
+          "createdAt": "2026-01-01T00:00:00.000Z"
+        }
+      ],
+      "_links": {}
+    }
+  }
+}

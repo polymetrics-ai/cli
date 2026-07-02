@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/seller_funds_summary" },
+  "response": {
+    "status": 200,
+    "body": {
+      "totalFunds": { "value": "119.00", "currency": "USD" },
+      "availableFunds": { "value": "99.00", "currency": "USD" },
+      "fundsOnHold": { "value": "20.00", "currency": "USD" },
+      "processingFunds": { "value": "0.00", "currency": "USD" }
+    }
+  }
+}

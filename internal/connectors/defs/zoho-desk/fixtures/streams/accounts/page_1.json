@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "from": "0", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "account_fixture_1",
+          "accountName": "Fixture Account",
+          "website": "https://fixture.example.com",
+          "phone": "+15550100",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "modifiedTime": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

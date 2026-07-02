@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Paperform Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Paperform API key, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.paperform.co/v1",
+      "description": "Paperform API base URL override for tests or proxies."
+    },
+    "form_id": {
+      "type": "string",
+      "description": "Paperform form id the 'submissions' stream is scoped to (required for that stream; substituted into the form-scoped submissions path)."
+    }
+  }
+}

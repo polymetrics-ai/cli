@@ -1,0 +1,75 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "api", "password": "{{ secrets.private_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/v3/domains" },
+    "error_map": [
+      { "status": 401, "hint": "mailgun private_key is missing or invalid; re-run pm credentials add mailgun" },
+      { "status": 403, "hint": "mailgun account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "mailgun rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "domains",
+      "path": "/v3/domains",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "skip",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.name }}"
+      },
+      "schema": "schemas/domains.json"
+    },
+    {
+      "name": "events",
+      "path": "/v3/{{ config.domain_name }}/events",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "paging.next"
+      },
+      "computed_fields": {
+        "message_id": "{{ record.message-id }}",
+        "log_level": "{{ record.log-level }}"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "mailing_lists",
+      "path": "/v3/lists/pages",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "paging.next"
+      },
+      "schema": "schemas/mailing_lists.json"
+    },
+    {
+      "name": "tags",
+      "path": "/v3/{{ config.domain_name }}/tags",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "paging.next"
+      },
+      "computed_fields": {
+        "tag": "{{ record.tag }}",
+        "first_seen": "{{ record.first-seen }}",
+        "last_seen": "{{ record.last-seen }}"
+      },
+      "schema": "schemas/tags.json"
+    }
+  ]
+}

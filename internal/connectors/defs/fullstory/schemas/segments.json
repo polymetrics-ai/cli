@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "creator": { "type": ["string", "null"] },
+    "created": { "type": ["string", "null"] },
+    "is_public": { "type": ["boolean", "null"] },
+    "type": { "type": ["string", "null"] }
+  }
+}

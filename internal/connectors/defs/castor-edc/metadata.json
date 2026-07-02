@@ -1,0 +1,27 @@
+{
+  "name": "castor-edc",
+  "display_name": "Castor EDC",
+  "description": "Reads Castor EDC studies, users, countries, and audit-trail events through the Castor EDC OAuth2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://data.castoredc.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Castor EDC API read of clinical-trial study/user/audit-trail data",
+    "approval": "none; read-only"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "oauth2_client_credentials auth requires a real token_url; conformance's synthetic non-secret config value (\"synthetic-conformance-value\") is not a resolvable URL, so the token exchange fails before any declarative stream/check request is ever issued, and every auth-resolving dynamic check (check_fixture, read_fixture_nonempty:*, pagination_terminates, records_match_schema, cursor_advances) would otherwise fail identically and uninformatively for a reason unrelated to this bundle's actual read/pagination/schema shape. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass; parity for the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/castor-edc (this bundle has no Tier-2 hook, so there is no paritytest package for this wave)."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "pexels-api",
+  "display_name": "Pexels API",
+  "description": "Reads Pexels photo and video search results through the Pexels REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.pexels.com/api/documentation/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 40
+  },
+  "risk": {
+    "read": "external Pexels API read of photo and video search results",
+    "approval": "none; read-only, no writes"
+  }
+}

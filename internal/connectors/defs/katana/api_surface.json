@@ -1,0 +1,17 @@
+{
+  "api": "Katana MRP (Cloud Inventory) REST API v1",
+  "docs": "https://docs.katanamrp.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out: the 5 legacy-parity read streams only (products, materials, variants, sales_orders, customers); Katana is read-only for pm (no reverse-ETL writes implemented)",
+  "endpoints": [
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/materials", "covered_by": { "stream": "materials" } },
+    { "method": "GET", "path": "/variants", "covered_by": { "stream": "variants" } },
+    { "method": "GET", "path": "/sales_orders", "covered_by": { "stream": "sales_orders" } },
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "POST", "path": "/sales_orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy internal/connectors/katana" } },
+    { "method": "GET", "path": "/purchase_orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy internal/connectors/katana" } },
+    { "method": "GET", "path": "/stocktakes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy internal/connectors/katana" } },
+    { "method": "GET", "path": "/webhooks", "excluded": { "category": "non_data_endpoint", "reason": "webhook subscription management, not a syncable object stream" } }
+  ]
+}

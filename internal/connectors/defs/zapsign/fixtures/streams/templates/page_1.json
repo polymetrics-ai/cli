@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/templates/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "token": "template_fixture_1",
+          "name": "Fixture NDA Template",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

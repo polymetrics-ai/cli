@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "account_tags",
+  "type": "object",
+  "x-primary-key": ["tag"],
+  "required": ["tag"],
+  "properties": {
+    "tag": { "type": "string" },
+    "id": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "base": {
+    "url": "https://{{ config.subdomain }}.bamboohr.com/api/v1",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "x" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "meta/fields" },
+    "error_map": [
+      { "status": 401, "hint": "bamboo-hr api_key is missing or invalid; re-run pm credentials add bamboo-hr" },
+      { "status": 403, "hint": "bamboo-hr account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "bamboo-hr rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "employees",
+      "path": "employees/directory",
+      "records": { "path": "employees" },
+      "computed_fields": {
+        "id": "{{ record.id | last_path_segment }}"
+      },
+      "schema": "schemas/employees.json"
+    },
+    {
+      "name": "meta_fields",
+      "path": "meta/fields",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.id | last_path_segment }}"
+      },
+      "schema": "schemas/meta_fields.json"
+    },
+    {
+      "name": "meta_lists",
+      "path": "meta/lists",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "field_id": "{{ record.fieldId | last_path_segment }}"
+      },
+      "schema": "schemas/meta_lists.json"
+    },
+    {
+      "name": "time_off_types",
+      "path": "meta/time_off/types",
+      "records": { "path": "timeOffTypes" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.id | last_path_segment }}"
+      },
+      "schema": "schemas/time_off_types.json"
+    }
+  ]
+}

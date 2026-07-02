@@ -1,0 +1,23 @@
+{
+  "name": "yotpo",
+  "display_name": "Yotpo",
+  "description": "Reads Yotpo store products, customers, and orders through REST API endpoints. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.yotpo.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Yotpo API read of store product, customer, and order data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

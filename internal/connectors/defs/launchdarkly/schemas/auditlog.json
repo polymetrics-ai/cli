@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "auditlog",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "x-cursor-field": "date",
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "date": { "type": ["integer", "null"] },
+    "kind": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "shortDescription": { "type": ["string", "null"] }
+  }
+}

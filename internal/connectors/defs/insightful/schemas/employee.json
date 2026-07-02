@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employee",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updatedAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "modelName": { "type": ["string", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "updatedAt": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,615 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/suppression/bounces",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "email": "fixture1@example.com",
+        "created": 1767225601,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture2@example.com",
+        "created": 1767225602,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture3@example.com",
+        "created": 1767225603,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture4@example.com",
+        "created": 1767225604,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture5@example.com",
+        "created": 1767225605,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture6@example.com",
+        "created": 1767225606,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture7@example.com",
+        "created": 1767225607,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture8@example.com",
+        "created": 1767225608,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture9@example.com",
+        "created": 1767225609,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture10@example.com",
+        "created": 1767225610,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture11@example.com",
+        "created": 1767225611,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture12@example.com",
+        "created": 1767225612,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture13@example.com",
+        "created": 1767225613,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture14@example.com",
+        "created": 1767225614,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture15@example.com",
+        "created": 1767225615,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture16@example.com",
+        "created": 1767225616,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture17@example.com",
+        "created": 1767225617,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture18@example.com",
+        "created": 1767225618,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture19@example.com",
+        "created": 1767225619,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture20@example.com",
+        "created": 1767225620,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture21@example.com",
+        "created": 1767225621,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture22@example.com",
+        "created": 1767225622,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture23@example.com",
+        "created": 1767225623,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture24@example.com",
+        "created": 1767225624,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture25@example.com",
+        "created": 1767225625,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture26@example.com",
+        "created": 1767225626,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture27@example.com",
+        "created": 1767225627,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture28@example.com",
+        "created": 1767225628,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture29@example.com",
+        "created": 1767225629,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture30@example.com",
+        "created": 1767225630,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture31@example.com",
+        "created": 1767225631,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture32@example.com",
+        "created": 1767225632,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture33@example.com",
+        "created": 1767225633,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture34@example.com",
+        "created": 1767225634,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture35@example.com",
+        "created": 1767225635,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture36@example.com",
+        "created": 1767225636,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture37@example.com",
+        "created": 1767225637,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture38@example.com",
+        "created": 1767225638,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture39@example.com",
+        "created": 1767225639,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture40@example.com",
+        "created": 1767225640,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture41@example.com",
+        "created": 1767225641,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture42@example.com",
+        "created": 1767225642,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture43@example.com",
+        "created": 1767225643,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture44@example.com",
+        "created": 1767225644,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture45@example.com",
+        "created": 1767225645,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture46@example.com",
+        "created": 1767225646,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture47@example.com",
+        "created": 1767225647,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture48@example.com",
+        "created": 1767225648,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture49@example.com",
+        "created": 1767225649,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture50@example.com",
+        "created": 1767225650,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture51@example.com",
+        "created": 1767225651,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture52@example.com",
+        "created": 1767225652,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture53@example.com",
+        "created": 1767225653,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture54@example.com",
+        "created": 1767225654,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture55@example.com",
+        "created": 1767225655,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture56@example.com",
+        "created": 1767225656,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture57@example.com",
+        "created": 1767225657,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture58@example.com",
+        "created": 1767225658,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture59@example.com",
+        "created": 1767225659,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture60@example.com",
+        "created": 1767225660,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture61@example.com",
+        "created": 1767225661,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture62@example.com",
+        "created": 1767225662,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture63@example.com",
+        "created": 1767225663,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture64@example.com",
+        "created": 1767225664,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture65@example.com",
+        "created": 1767225665,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture66@example.com",
+        "created": 1767225666,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture67@example.com",
+        "created": 1767225667,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture68@example.com",
+        "created": 1767225668,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture69@example.com",
+        "created": 1767225669,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture70@example.com",
+        "created": 1767225670,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture71@example.com",
+        "created": 1767225671,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture72@example.com",
+        "created": 1767225672,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture73@example.com",
+        "created": 1767225673,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture74@example.com",
+        "created": 1767225674,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture75@example.com",
+        "created": 1767225675,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture76@example.com",
+        "created": 1767225676,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture77@example.com",
+        "created": 1767225677,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture78@example.com",
+        "created": 1767225678,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture79@example.com",
+        "created": 1767225679,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture80@example.com",
+        "created": 1767225680,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture81@example.com",
+        "created": 1767225681,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture82@example.com",
+        "created": 1767225682,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture83@example.com",
+        "created": 1767225683,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture84@example.com",
+        "created": 1767225684,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture85@example.com",
+        "created": 1767225685,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture86@example.com",
+        "created": 1767225686,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture87@example.com",
+        "created": 1767225687,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture88@example.com",
+        "created": 1767225688,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture89@example.com",
+        "created": 1767225689,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture90@example.com",
+        "created": 1767225690,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture91@example.com",
+        "created": 1767225691,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture92@example.com",
+        "created": 1767225692,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture93@example.com",
+        "created": 1767225693,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture94@example.com",
+        "created": 1767225694,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture95@example.com",
+        "created": 1767225695,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture96@example.com",
+        "created": 1767225696,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture97@example.com",
+        "created": 1767225697,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture98@example.com",
+        "created": 1767225698,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture99@example.com",
+        "created": 1767225699,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      },
+      {
+        "email": "fixture100@example.com",
+        "created": 1767225700,
+        "reason": "550 5.1.1 user unknown",
+        "status": "5.1.1"
+      }
+    ]
+  }
+}

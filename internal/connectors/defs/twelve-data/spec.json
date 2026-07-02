@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Twelve Data Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Twelve Data API key, sent as the apikey query parameter on every request. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.twelvedata.com",
+      "description": "Twelve Data API base URL override for tests or proxies."
+    },
+    "symbol": {
+      "type": "string",
+      "default": "AAPL",
+      "description": "Ticker symbol the time_series/quote streams are scoped to."
+    },
+    "interval": {
+      "type": "string",
+      "default": "1day",
+      "description": "Time series bar interval (e.g. 1min, 1day) for the time_series stream."
+    },
+    "output_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Number of time series bars to request per read (1-5000)."
+    }
+  }
+}

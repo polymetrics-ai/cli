@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/calls", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "requestId": "req_fixture_1",
+      "records": { "totalRecords": 1, "currentPageSize": 1, "currentPageNumber": 0, "cursor": null },
+      "calls": [
+        { "id": "c_fixture_1", "title": "Demo call", "started": "2026-01-01T00:00:00Z", "scheduled": "2026-01-01T00:00:00Z", "duration": 600, "direction": "Inbound", "system": "Zoom", "scope": "Internal", "media": "Video", "language": "eng", "url": "https://app.gong.io/call?id=1", "isPrivate": false }
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/phone_numbers", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "phone_numbers": [
+        {
+          "id": 1,
+          "number": "+15550001",
+          "display_number": "+1 (555) 000-1",
+          "nickname": "fixture-1",
+          "country_code": "US",
+          "toll_free": false,
+          "voice_enabled": true,
+          "sms_enabled": false,
+          "recorded": true,
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "number": "+15550002",
+          "display_number": "+1 (555) 000-2",
+          "nickname": "fixture-2",
+          "country_code": "US",
+          "toll_free": true,
+          "voice_enabled": true,
+          "sms_enabled": true,
+          "recorded": false,
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

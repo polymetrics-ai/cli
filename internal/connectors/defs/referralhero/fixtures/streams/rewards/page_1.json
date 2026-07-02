@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rewards",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "reward_fixture_1",
+          "name": "Fixture Reward 1",
+          "status": "issued",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "reward_fixture_2",
+          "name": "Fixture Reward 2",
+          "status": "pending",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "pagination": {
+        "next_page": "",
+        "current_page": "1"
+      }
+    }
+  }
+}

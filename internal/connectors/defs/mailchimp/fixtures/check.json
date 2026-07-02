@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/lists", "query": { "count": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "lists": [], "total_items": 0 }
+  }
+}

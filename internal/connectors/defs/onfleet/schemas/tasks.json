@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "timeLastModified",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "shortId": { "type": ["string", "null"] },
+    "state": { "type": ["integer", "null"] },
+    "completed": { "type": ["boolean", "null"] },
+    "trackingURL": { "type": ["string", "null"] },
+    "worker": { "type": ["string", "null"] },
+    "merchant": { "type": ["string", "null"] },
+    "executor": { "type": ["string", "null"] },
+    "creator": { "type": ["string", "null"] },
+    "timeCreated": { "type": ["integer", "null"] },
+    "timeLastModified": { "type": ["integer", "null"] }
+  }
+}

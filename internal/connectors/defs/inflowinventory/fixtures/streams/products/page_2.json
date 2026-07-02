@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/products",
+    "query": {
+      "after": "prod_fixture_2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

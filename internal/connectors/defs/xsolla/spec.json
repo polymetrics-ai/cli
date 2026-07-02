@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Xsolla Connection Specification",
+  "type": "object",
+  "required": ["merchant_id", "api_key"],
+  "properties": {
+    "merchant_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Xsolla merchant ID, used as the Basic auth username. Never logged."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Xsolla merchant API key, used as the Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.xsolla.com/merchant/v2",
+      "description": "Xsolla merchant API base URL override for tests or proxies."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Xsolla project ID; required for the 'orders' and 'transactions' streams (substituted into their project-scoped paths)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

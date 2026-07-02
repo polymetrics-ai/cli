@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/users" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "user_fixture_1",
+          "username": "fixture1@example.com",
+          "fullName": "Fixture User 1",
+          "role": { "name": "User" },
+          "timeZone": "America/New_York",
+          "locale": "en_US",
+          "blocked": false,
+          "verified": true
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

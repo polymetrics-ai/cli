@@ -1,0 +1,14 @@
+{
+  "api": "Pendo Engage API v1 (https://app.pendo.io/api/v1)",
+  "docs": "https://engageapi.pendo.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Pendo surface (events, reports, guides, polls, aggregation endpoints) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/visitor", "covered_by": { "stream": "visitors" } },
+    { "method": "GET", "path": "/account", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/page", "covered_by": { "stream": "pages" } },
+    { "method": "GET", "path": "/feature", "covered_by": { "stream": "features" } },
+    { "method": "GET", "path": "/guide", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/aggregation", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

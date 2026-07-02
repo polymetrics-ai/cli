@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/1/keys" },
+  "response": {
+    "status": 200,
+    "body": {
+      "keys": [
+        {
+          "value": "fixture_key_1",
+          "createdAt": 1767225600,
+          "description": "Fixture key 1",
+          "acl": ["search"],
+          "indexes": ["fixture_index_1"],
+          "validity": 0,
+          "maxHitsPerQuery": 0,
+          "maxQueriesPerIPPerHour": 0,
+          "referers": []
+        }
+      ]
+    }
+  }
+}

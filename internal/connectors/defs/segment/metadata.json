@@ -1,0 +1,23 @@
+{
+  "name": "segment",
+  "display_name": "Segment",
+  "description": "Reads Segment workspace, source, and destination metadata through the Segment Public API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.segmentapis.com/tag/Getting-Started",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Segment Public API read of workspace, source, and destination metadata",
+    "approval": "none; read-only, no reverse-ETL writes implemented by legacy"
+  }
+}

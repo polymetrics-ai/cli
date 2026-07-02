@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/forex_pairs" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "symbol": "EUR/USD_FIXTURE", "name": "Fixture Euro/US Dollar", "currency": "USD" },
+        { "symbol": "GBP/USD_FIXTURE", "name": "Fixture British Pound/US Dollar", "currency": "USD" }
+      ],
+      "status": "ok"
+    }
+  }
+}

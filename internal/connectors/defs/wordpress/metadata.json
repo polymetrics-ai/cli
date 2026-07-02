@@ -1,0 +1,23 @@
+{
+  "name": "wordpress",
+  "display_name": "WordPress",
+  "description": "Reads public WordPress REST API resources such as posts, pages, comments, media, users, categories, and tags.",
+  "integration_type": "api",
+  "docs_url": "https://developer.wordpress.org/rest-api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external WordPress site read of posts, pages, comments, media, users, categories, and tags",
+    "approval": "none; read-only, optionally with Basic auth for private sites"
+  }
+}

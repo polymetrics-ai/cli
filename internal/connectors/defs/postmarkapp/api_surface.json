@@ -1,0 +1,18 @@
+{
+  "api": "Postmark HTTP API (https://api.postmarkapp.com)",
+  "docs": "https://postmarkapp.com/developer",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: 2 of the 3 legacy-parity read streams (outbound_messages, inbound_messages); the 'servers' stream is blocked (see Known limits) and the full Postmark surface (templates, bounces, stats, suppressions) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/messages/outbound", "covered_by": { "stream": "outbound_messages" } },
+    { "method": "GET", "path": "/messages/inbound", "covered_by": { "stream": "inbound_messages" } },
+    { "method": "GET", "path": "/servers", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: this stream needs a different auth header (X-Postmark-Account-Token) than the two migrated message streams (X-Postmark-Server-Token); the engine's auth/headers are resolved once per bundle at Runtime construction with no per-stream override, so a single bundle cannot select a different credential header by stream name. See docs.md Known limits and this migration's reported blocker." } },
+    { "method": "GET", "path": "/messages/outbound/{id}/details", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/messages/inbound/{id}/details", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/deliverystats", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/bounces", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/templates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/email", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/suppressions/dump", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

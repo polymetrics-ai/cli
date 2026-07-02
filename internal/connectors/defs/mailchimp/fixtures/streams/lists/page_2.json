@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/lists", "query": { "count": "100", "offset": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "lists": [
+        {
+          "id": "list_fixture_3",
+          "web_id": 1003,
+          "name": "Fixture List Three",
+          "date_created": "2026-01-03T00:00:00+00:00",
+          "list_rating": 2,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture3"
+        }
+      ],
+      "total_items": 3
+    }
+  }
+}

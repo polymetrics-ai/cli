@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Nylas Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Nylas v3 API key. Sent only as a Bearer token; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.us.nylas.com",
+      "description": "Nylas API base URL. Defaults to the US region host; set to https://api.eu.nylas.com for the EU region. Legacy instead derived this from an api_server ('eu'/other) config key — that cross-key derivation has no engine mechanism today (spec-default materialization only fills a literal per-key default), so this bundle requires the fully-formed base_url for the EU region instead of an api_server switch; see docs.md Known limits."
+    },
+    "grant_id": {
+      "type": "string",
+      "default": "me",
+      "description": "Nylas grant id to read. Defaults to 'me' (the connected grant)."
+    },
+    "calendar_id": {
+      "type": "string",
+      "description": "Calendar id required by the events stream."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per page (1-200)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

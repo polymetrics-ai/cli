@@ -1,0 +1,23 @@
+{
+  "name": "hibob",
+  "display_name": "HiBob",
+  "description": "Reads HiBob HR data: employee profiles, company named lists, and people field definitions via the HiBob REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.hibob.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external HiBob API read of employee profile and HR metadata",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

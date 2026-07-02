@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/teams/teams", "query": { "page": "1", "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 10,
+          "company_id": 1,
+          "name": "Engineering",
+          "description": "Fixture engineering team",
+          "avatar": null,
+          "employee_ids": [1, 2],
+          "lead_ids": [2]
+        }
+      ]
+    }
+  }
+}

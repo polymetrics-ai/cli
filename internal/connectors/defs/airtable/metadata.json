@@ -1,0 +1,22 @@
+{
+  "name": "airtable",
+  "display_name": "Airtable",
+  "description": "Reads Airtable bases, tables, and records through the Airtable Web API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://support.airtable.com/docs/airtable-api-deprecation-guidelines",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Airtable API read of base/table/record metadata"
+  }
+}

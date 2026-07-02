@@ -1,0 +1,517 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ad_accounts",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ad_accounts": [
+        {
+          "id": "aa_fixture_1",
+          "name": "Fixture Ad Account 1",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_2",
+          "name": "Fixture Ad Account 2",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_3",
+          "name": "Fixture Ad Account 3",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_4",
+          "name": "Fixture Ad Account 4",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_5",
+          "name": "Fixture Ad Account 5",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_6",
+          "name": "Fixture Ad Account 6",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_7",
+          "name": "Fixture Ad Account 7",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_8",
+          "name": "Fixture Ad Account 8",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_9",
+          "name": "Fixture Ad Account 9",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_10",
+          "name": "Fixture Ad Account 10",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_11",
+          "name": "Fixture Ad Account 11",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_12",
+          "name": "Fixture Ad Account 12",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_13",
+          "name": "Fixture Ad Account 13",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_14",
+          "name": "Fixture Ad Account 14",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_15",
+          "name": "Fixture Ad Account 15",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_16",
+          "name": "Fixture Ad Account 16",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_17",
+          "name": "Fixture Ad Account 17",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_18",
+          "name": "Fixture Ad Account 18",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_19",
+          "name": "Fixture Ad Account 19",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_20",
+          "name": "Fixture Ad Account 20",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_21",
+          "name": "Fixture Ad Account 21",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_22",
+          "name": "Fixture Ad Account 22",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_23",
+          "name": "Fixture Ad Account 23",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_24",
+          "name": "Fixture Ad Account 24",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_25",
+          "name": "Fixture Ad Account 25",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_26",
+          "name": "Fixture Ad Account 26",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_27",
+          "name": "Fixture Ad Account 27",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_28",
+          "name": "Fixture Ad Account 28",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_29",
+          "name": "Fixture Ad Account 29",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_30",
+          "name": "Fixture Ad Account 30",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_31",
+          "name": "Fixture Ad Account 31",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_32",
+          "name": "Fixture Ad Account 32",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_33",
+          "name": "Fixture Ad Account 33",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_34",
+          "name": "Fixture Ad Account 34",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_35",
+          "name": "Fixture Ad Account 35",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_36",
+          "name": "Fixture Ad Account 36",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_37",
+          "name": "Fixture Ad Account 37",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_38",
+          "name": "Fixture Ad Account 38",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_39",
+          "name": "Fixture Ad Account 39",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_40",
+          "name": "Fixture Ad Account 40",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_41",
+          "name": "Fixture Ad Account 41",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_42",
+          "name": "Fixture Ad Account 42",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_43",
+          "name": "Fixture Ad Account 43",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_44",
+          "name": "Fixture Ad Account 44",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_45",
+          "name": "Fixture Ad Account 45",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_46",
+          "name": "Fixture Ad Account 46",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_47",
+          "name": "Fixture Ad Account 47",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_48",
+          "name": "Fixture Ad Account 48",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_49",
+          "name": "Fixture Ad Account 49",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_50",
+          "name": "Fixture Ad Account 50",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_51",
+          "name": "Fixture Ad Account 51",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_52",
+          "name": "Fixture Ad Account 52",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_53",
+          "name": "Fixture Ad Account 53",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_54",
+          "name": "Fixture Ad Account 54",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_55",
+          "name": "Fixture Ad Account 55",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_56",
+          "name": "Fixture Ad Account 56",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_57",
+          "name": "Fixture Ad Account 57",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_58",
+          "name": "Fixture Ad Account 58",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_59",
+          "name": "Fixture Ad Account 59",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_60",
+          "name": "Fixture Ad Account 60",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_61",
+          "name": "Fixture Ad Account 61",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_62",
+          "name": "Fixture Ad Account 62",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_63",
+          "name": "Fixture Ad Account 63",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_64",
+          "name": "Fixture Ad Account 64",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_65",
+          "name": "Fixture Ad Account 65",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_66",
+          "name": "Fixture Ad Account 66",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_67",
+          "name": "Fixture Ad Account 67",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_68",
+          "name": "Fixture Ad Account 68",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_69",
+          "name": "Fixture Ad Account 69",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_70",
+          "name": "Fixture Ad Account 70",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_71",
+          "name": "Fixture Ad Account 71",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_72",
+          "name": "Fixture Ad Account 72",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_73",
+          "name": "Fixture Ad Account 73",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_74",
+          "name": "Fixture Ad Account 74",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_75",
+          "name": "Fixture Ad Account 75",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_76",
+          "name": "Fixture Ad Account 76",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_77",
+          "name": "Fixture Ad Account 77",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_78",
+          "name": "Fixture Ad Account 78",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_79",
+          "name": "Fixture Ad Account 79",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_80",
+          "name": "Fixture Ad Account 80",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_81",
+          "name": "Fixture Ad Account 81",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_82",
+          "name": "Fixture Ad Account 82",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_83",
+          "name": "Fixture Ad Account 83",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_84",
+          "name": "Fixture Ad Account 84",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_85",
+          "name": "Fixture Ad Account 85",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_86",
+          "name": "Fixture Ad Account 86",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_87",
+          "name": "Fixture Ad Account 87",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_88",
+          "name": "Fixture Ad Account 88",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_89",
+          "name": "Fixture Ad Account 89",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_90",
+          "name": "Fixture Ad Account 90",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_91",
+          "name": "Fixture Ad Account 91",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_92",
+          "name": "Fixture Ad Account 92",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_93",
+          "name": "Fixture Ad Account 93",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_94",
+          "name": "Fixture Ad Account 94",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_95",
+          "name": "Fixture Ad Account 95",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_96",
+          "name": "Fixture Ad Account 96",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_97",
+          "name": "Fixture Ad Account 97",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_98",
+          "name": "Fixture Ad Account 98",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_99",
+          "name": "Fixture Ad Account 99",
+          "country": "US"
+        },
+        {
+          "id": "aa_fixture_100",
+          "name": "Fixture Ad Account 100",
+          "country": "US"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/v1/users", "query": { "limit": "50", "offset": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": []
+    }
+  }
+}

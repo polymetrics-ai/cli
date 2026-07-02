@@ -1,0 +1,23 @@
+{
+  "name": "easypromos",
+  "display_name": "Easypromos",
+  "description": "Reads Easypromos promotions, organizing brands, stages, users, participations, and prizes through the Easypromos REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.easypromos.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Easypromos API read of promotion, user, participation, and prize data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

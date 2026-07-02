@@ -1,0 +1,22 @@
+{
+  "name": "greenhouse",
+  "display_name": "Greenhouse",
+  "description": "Reads Greenhouse candidates, applications, jobs, offers, and users through the Greenhouse Harvest REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://developers.greenhouse.io/harvest.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Greenhouse Harvest API read of candidates, applications, jobs, offers, and users"
+  }
+}

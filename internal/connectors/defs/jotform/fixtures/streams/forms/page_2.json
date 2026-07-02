@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/user/forms", "query": { "limit": "2", "offset": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "responseCode": 200,
+      "content": [
+        {
+          "id": "form_fixture_3",
+          "username": "fixture_user",
+          "title": "Fixture Form 3",
+          "status": "DISABLED",
+          "created_at": "2026-01-03 00:00:00",
+          "updated_at": "2026-01-03 12:00:00",
+          "last_submission": "",
+          "new": "0",
+          "count": "0",
+          "type": "LEGACY",
+          "url": "https://www.jotform.com/form_fixture_3"
+        }
+      ],
+      "resultSet": { "offset": 2, "limit": 2, "count": 3 }
+    }
+  }
+}

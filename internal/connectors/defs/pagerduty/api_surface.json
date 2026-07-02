@@ -1,0 +1,18 @@
+{
+  "api": "PagerDuty REST API v2 (https://api.pagerduty.com)",
+  "docs": "https://developer.pagerduty.com/api-reference/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (incidents, users, services, teams); legacy itself ships no writes (capabilities.write is false) and no other resource is modeled.",
+  "endpoints": [
+    { "method": "GET", "path": "/incidents", "covered_by": { "stream": "incidents" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/services", "covered_by": { "stream": "services" } },
+    { "method": "GET", "path": "/teams", "covered_by": { "stream": "teams" } },
+    { "method": "POST", "path": "/incidents/{id}/merge", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented incident merges; Pass B capability expansion" } },
+    { "method": "PUT", "path": "/incidents/{id}", "excluded": { "category": "destructive_admin", "reason": "incident status mutation not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/escalation_policies", "excluded": { "category": "out_of_scope", "reason": "escalation policies not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/schedules", "excluded": { "category": "out_of_scope", "reason": "on-call schedules not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/log_entries", "excluded": { "category": "out_of_scope", "reason": "incident log entries not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/abilities", "excluded": { "category": "non_data_endpoint", "reason": "account feature/ability introspection, not a syncable object stream" } }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/sending-domains" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "domain": "fixture.example.com",
+          "tracking_domain": "track.fixture.example.com",
+          "status": { "ownership_verified": true, "spf_status": "valid", "dkim_status": "valid" },
+          "shared_with_subaccounts": false,
+          "is_default_bounce_domain": true
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/offers", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 401,
+        "application_id": 201,
+        "candidate_id": 1,
+        "status": "accepted",
+        "version": 1,
+        "starts_at": "2026-02-01T00:00:00Z",
+        "sent_at": "2026-01-10T00:00:00Z",
+        "created_at": "2026-01-09T00:00:00Z",
+        "updated_at": "2026-01-11T00:00:00Z"
+      },
+      {
+        "id": 402,
+        "application_id": 202,
+        "candidate_id": 2,
+        "status": "sent",
+        "version": 1,
+        "starts_at": "2026-02-15T00:00:00Z",
+        "sent_at": "2026-01-12T00:00:00Z",
+        "created_at": "2026-01-11T00:00:00Z",
+        "updated_at": "2026-01-12T00:00:00Z"
+      }
+    ]
+  }
+}

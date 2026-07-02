@@ -1,0 +1,84 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json;version=2024-03-12"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "after"
+    },
+    "check": { "method": "GET", "path": "/{{ config.companyid }}/categories", "query": { "count": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "inflowinventory credentials are missing or invalid; re-run pm credentials add inflowinventory" },
+      { "status": 403, "hint": "inflowinventory account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "inflowinventory rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/{{ config.companyid }}/products",
+      "query": { "count": "{{ config.page_size }}" },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "productId"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "customers",
+      "path": "/{{ config.companyid }}/customers",
+      "query": { "count": "{{ config.page_size }}" },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "customerId"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "vendors",
+      "path": "/{{ config.companyid }}/vendors",
+      "query": { "count": "{{ config.page_size }}" },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "vendorId"
+      },
+      "schema": "schemas/vendors.json"
+    },
+    {
+      "name": "sales_orders",
+      "path": "/{{ config.companyid }}/sales-orders",
+      "query": { "count": "{{ config.page_size }}" },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "salesOrderId"
+      },
+      "schema": "schemas/sales_orders.json"
+    },
+    {
+      "name": "categories",
+      "path": "/{{ config.companyid }}/categories",
+      "query": { "count": "{{ config.page_size }}" },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "categoryId"
+      },
+      "schema": "schemas/categories.json"
+    }
+  ]
+}

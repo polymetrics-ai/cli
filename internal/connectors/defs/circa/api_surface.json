@@ -1,0 +1,15 @@
+{
+  "api": "Circa REST API v1 (https://app.circa.co/api/v1)",
+  "docs": "https://docs.circa.co/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Circa surface (registrations, sessions, custom fields) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/companies", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/teams", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/events/{id}/registrations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/events/{id}/sessions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only" } }
+  ]
+}

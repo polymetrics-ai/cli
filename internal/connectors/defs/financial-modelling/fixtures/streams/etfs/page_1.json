@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/etf/list" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "FIXE1",
+        "name": "Fixture ETF 1",
+        "price": 50.0,
+        "exchange": "NYSE Arca",
+        "exchangeShortName": "AMEX",
+        "type": "etf"
+      }
+    ]
+  }
+}

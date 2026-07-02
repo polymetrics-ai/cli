@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/v2/users", "query": { "limit": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "user_fixture_1",
+          "uid": "uid_fixture_1",
+          "display_name": "Fixture User 1",
+          "email": "fixture1@example.com",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-01T00:00:00Z",
+          "is_being_processed": false
+        },
+        {
+          "id": "user_fixture_2",
+          "uid": "uid_fixture_2",
+          "display_name": "Fixture User 2",
+          "email": "fixture2@example.com",
+          "created": "2026-01-02T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z",
+          "is_being_processed": true
+        }
+      ],
+      "next_page_token": ""
+    }
+  }
+}

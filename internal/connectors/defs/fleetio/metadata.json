@@ -1,0 +1,22 @@
+{
+  "name": "fleetio",
+  "display_name": "Fleetio",
+  "description": "Reads Fleetio fleet management data: vehicles, contacts, fuel entries, issues, and service entries through the Fleetio REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.fleetio.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Fleetio API read of vehicle, contact, fuel entry, issue, and service entry data"
+  }
+}

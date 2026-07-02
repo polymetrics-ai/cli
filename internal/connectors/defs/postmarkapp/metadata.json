@@ -1,0 +1,23 @@
+{
+  "name": "postmarkapp",
+  "display_name": "Postmark App",
+  "description": "Reads Postmark outbound and inbound message activity through the Postmark HTTP API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://postmarkapp.com/developer",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Postmark API read of message activity data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

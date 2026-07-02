@@ -1,0 +1,22 @@
+{
+  "name": "delighted",
+  "display_name": "Delighted",
+  "description": "Reads Delighted survey responses, people, bounces, unsubscribes, and aggregate metrics through the Delighted REST API.",
+  "integration_type": "api",
+  "docs_url": "https://delighted.com/docs/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Delighted API read of survey responses, people, and aggregate NPS metrics"
+  }
+}

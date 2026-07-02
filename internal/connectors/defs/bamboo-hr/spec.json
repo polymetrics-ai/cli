@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BambooHR Connection Specification",
+  "type": "object",
+  "required": ["subdomain", "api_key"],
+  "properties": {
+    "subdomain": {
+      "type": "string",
+      "description": "Your BambooHR account subdomain (the <subdomain> in https://<subdomain>.bamboohr.com). Used to derive base_url as https://{subdomain}.bamboohr.com/api/v1."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "BambooHR API key. Sent as the HTTP Basic username with a literal 'x' password (BambooHR's documented API-key auth convention); never logged."
+    }
+  }
+}

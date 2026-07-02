@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "folders",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "orderindex": { "type": ["integer", "null"] },
+    "hidden": { "type": ["boolean", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "task_count": { "type": ["string", "null"] },
+    "space_id": { "type": ["string", "null"] }
+  }
+}

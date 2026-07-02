@@ -1,0 +1,22 @@
+{
+  "name": "retailexpress-by-maropost",
+  "display_name": "Retail Express by Maropost",
+  "description": "Reads Retail Express products, customers, orders, stock levels, and stores through the Maropost API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://retailexpress.atlassian.net/wiki/spaces/APIDOC/overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Retail Express by Maropost API read of product, customer, order, and stock data"
+  }
+}

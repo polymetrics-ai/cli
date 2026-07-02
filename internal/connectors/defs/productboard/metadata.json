@@ -1,0 +1,23 @@
+{
+  "name": "productboard",
+  "display_name": "Productboard",
+  "description": "Reads Productboard features, notes, components, and products through the public API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.productboard.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Productboard API read of feature, note, component, and product data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

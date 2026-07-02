@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Statuspage Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Statuspage API key, sent as the Authorization header with an 'OAuth ' prefix (Authorization: OAuth <api_key>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.statuspage.io/v1",
+      "description": "Statuspage API base URL override for tests or proxies."
+    },
+    "page_id": {
+      "type": "string",
+      "description": "Statuspage page ID that the 'components', 'incidents', and 'subscribers' streams are scoped to (required for those streams; substituted into the page-scoped path). Not required for the 'pages' stream."
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "countercyclical",
+  "display_name": "Countercyclical",
+  "description": "Reads Countercyclical investments, valuations, and research memos through the Countercyclical REST API.",
+  "integration_type": "api",
+  "docs_url": "https://countercyclical.io/docs/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Countercyclical API read of investment and valuation data",
+    "approval": "none; read-only source"
+  }
+}

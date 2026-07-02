@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/locations", "query": { "limit": "2", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "page": 1, "limit": 100, "found": 1 },
+      "results": [
+        {
+          "id": 101,
+          "name": "Fixture Station 1",
+          "locality": "Fixture City",
+          "timezone": "America/Chicago",
+          "country": { "id": 1, "code": "US", "name": "United States" },
+          "owner": { "id": 5, "name": "Fixture Owner" },
+          "provider": { "id": 9, "name": "Fixture Provider" },
+          "coordinates": { "latitude": 33.44, "longitude": -94.04 },
+          "sensors": [{ "id": 501, "parameter": { "id": 2, "name": "pm25" } }],
+          "isMobile": false,
+          "isMonitor": true,
+          "datetimeFirst": { "utc": "2020-01-01T00:00:00Z", "local": "2019-12-31T18:00:00-06:00" },
+          "datetimeLast": { "utc": "2026-01-01T00:00:00Z", "local": "2025-12-31T18:00:00-06:00" }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/activities", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "act_fixture_1",
+          "title": "Fixture activity",
+          "activityCategory": "TASK",
+          "completed": false,
+          "completedAt": null,
+          "createdAt": 1767225601,
+          "startAt": 1767225601
+        }
+      ],
+      "next": null
+    }
+  }
+}

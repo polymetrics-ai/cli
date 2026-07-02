@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/opportunities", "query": { "page": "2", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 33,
+          "name": "Fixture Opportunity 3",
+          "email": "opp3@example.com",
+          "value": 3200,
+          "currency": "USD",
+          "account_id": 13,
+          "stage_id": 3,
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "pagination": { "next_page": null }
+    }
+  }
+}

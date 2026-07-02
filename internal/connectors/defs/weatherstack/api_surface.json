@@ -1,0 +1,14 @@
+{
+  "api": "Weatherstack REST API (https://weatherstack.com/documentation)",
+  "docs": "https://weatherstack.com/documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (current, historical, forecast); Weatherstack's write endpoints do not exist for this connector (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/current", "covered_by": { "stream": "current" } },
+    { "method": "GET", "path": "/historical", "covered_by": { "stream": "historical" } },
+    { "method": "GET", "path": "/forecast", "covered_by": { "stream": "forecast" } },
+    { "method": "GET", "path": "/marine", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented the marine-weather endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/autocomplete", "excluded": { "category": "non_data_endpoint", "reason": "location-name autocomplete helper, not a syncable object stream" } },
+    { "method": "GET", "path": "/tsa", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented the time-series-aggregate endpoint; Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/media",
+    "query": {
+      "fields": "id,caption,media_type,media_product_type,media_url,permalink,thumbnail_url,timestamp,username,like_count,comments_count",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "media_fixture_1",
+          "caption": "Fixture post 1",
+          "media_type": "IMAGE",
+          "media_product_type": "FEED",
+          "media_url": "https://fixture.example.com/media1.jpg",
+          "permalink": "https://instagram.com/p/fixture_1",
+          "thumbnail_url": "https://fixture.example.com/thumb1.jpg",
+          "timestamp": "2026-01-01T00:00:00+0000",
+          "username": "fixture_account",
+          "like_count": 10,
+          "comments_count": 1
+        },
+        {
+          "id": "media_fixture_2",
+          "caption": "Fixture post 2",
+          "media_type": "VIDEO",
+          "media_product_type": "FEED",
+          "media_url": "https://fixture.example.com/media2.mp4",
+          "permalink": "https://instagram.com/p/fixture_2",
+          "thumbnail_url": "https://fixture.example.com/thumb2.jpg",
+          "timestamp": "2026-01-02T00:00:00+0000",
+          "username": "fixture_account",
+          "like_count": 20,
+          "comments_count": 2
+        }
+      ],
+      "paging": { "cursors": { "after": "CURSOR_FIXTURE_END" } }
+    }
+  }
+}

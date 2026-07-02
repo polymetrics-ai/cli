@@ -1,0 +1,20 @@
+{
+  "api": "ConvertKit (Kit) v3 REST API (https://api.convertkit.com/v3)",
+  "docs": "https://developers.convertkit.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "legacy-parity migration: the 5 legacy read streams only (subscribers, forms, sequences, tags, broadcasts); the full ConvertKit v3/v4 surface (custom fields, purchases, webhooks, segments, courses, account) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/subscribers", "covered_by": { "stream": "subscribers" } },
+    { "method": "GET", "path": "/v3/forms", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/v3/sequences", "covered_by": { "stream": "sequences" } },
+    { "method": "GET", "path": "/v3/tags", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "/v3/broadcasts", "covered_by": { "stream": "broadcasts" } },
+    { "method": "GET", "path": "/v3/account", "excluded": { "category": "non_data_endpoint", "reason": "account metadata snapshot, not a syncable object stream" } },
+    { "method": "GET", "path": "/v3/custom_fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/tags/{id}/subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v3/forms/{id}/subscribe", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v3/tags/{id}/subscribe", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/v3/subscribers/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/v3/subscribers/{id}/unsubscribe", "excluded": { "category": "destructive_admin", "reason": "destructive write, no reverse-ETL use case for this port" } }
+  ]
+}

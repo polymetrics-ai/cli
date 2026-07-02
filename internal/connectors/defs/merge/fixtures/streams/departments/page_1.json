@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/departments", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": "department_fixture_1",
+          "remote_id": "remote_1",
+          "name": "Engineering",
+          "modified_at": "2026-01-01T00:00:00Z",
+          "remote_was_deleted": false
+        }
+      ]
+    }
+  }
+}

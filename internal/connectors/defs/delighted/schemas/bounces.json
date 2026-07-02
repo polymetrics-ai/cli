@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "bounces",
+  "type": "object",
+  "x-primary-key": ["person_id"],
+  "required": ["person_id"],
+  "properties": {
+    "person_id": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "bounced_at": { "type": ["integer", "null"], "description": "Unix seconds." }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "next.page",
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/user" },
+    "error_map": [
+      { "status": 401, "hint": "gitbook access_token is missing or invalid; re-run pm credentials add gitbook" },
+      { "status": 403, "hint": "gitbook token lacks access for this organization/space" },
+      { "status": 429, "class": "rate_limited", "hint": "gitbook rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/user",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "display_name": "{{ record.displayName }}",
+        "photo_url": "{{ record.photoURL }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "organizations",
+      "path": "/orgs",
+      "query": { "limit": "50" },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "url": "{{ record.urls }}"
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "org_members",
+      "path": "/orgs/{{ config.organization_id }}/members",
+      "query": { "limit": "50" },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "id": "{{ record.user.id }}",
+        "display_name": "{{ record.user.displayName }}",
+        "email": "{{ record.user.email }}"
+      },
+      "schema": "schemas/org_members.json"
+    },
+    {
+      "name": "content",
+      "path": "/spaces/{{ config.space_id }}/content/pages",
+      "query": { "limit": "50" },
+      "records": { "path": "pages" },
+      "schema": "schemas/content.json"
+    }
+  ]
+}

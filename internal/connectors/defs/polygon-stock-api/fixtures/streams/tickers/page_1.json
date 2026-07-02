@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/reference/tickers",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "ticker": "synthetic-conformance-value",
+      "market": "synthetic-conformance-value",
+      "locale": "synthetic-conformance-value",
+      "type": "synthetic-conformance-value",
+      "active": "synthetic-conformance-value",
+      "sort": "synthetic-conformance-value",
+      "order": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "ticker": "FIX1",
+          "name": "Fixture One Inc.",
+          "market": "stocks",
+          "locale": "us",
+          "primary_exchange": "XNAS",
+          "currency_name": "usd",
+          "active": true
+        },
+        {
+          "ticker": "FIX2",
+          "name": "Fixture Two Inc.",
+          "market": "stocks",
+          "locale": "us",
+          "primary_exchange": "XNYS",
+          "currency_name": "usd",
+          "active": true
+        }
+      ],
+      "status": "OK",
+      "count": 2
+    }
+  }
+}

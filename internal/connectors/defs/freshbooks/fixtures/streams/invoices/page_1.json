@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounting/account/fixture_acct/invoices/invoices",
+    "query": { "page": "1", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "result": {
+          "invoices": [
+            {
+              "id": 1,
+              "invoiceid": 1,
+              "invoice_number": "INV-0001",
+              "customerid": 1,
+              "status": 2,
+              "amount": { "amount": "100.00", "code": "USD" },
+              "outstanding": { "amount": "100.00", "code": "USD" },
+              "currency_code": "USD",
+              "create_date": "2026-01-01",
+              "updated": "2026-01-01 00:00:00"
+            }
+          ],
+          "page": 1,
+          "pages": 1,
+          "per_page": 100,
+          "total": 1
+        }
+      }
+    }
+  }
+}

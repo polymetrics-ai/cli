@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/v3/grants/synthetic-conformance-value/messages", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request_id": "req_fixture_1",
+      "data": [
+        {
+          "id": "msg_fixture_1",
+          "grant_id": "me",
+          "object": "message",
+          "thread_id": "thread_fixture_1",
+          "subject": "Fixture message 1",
+          "snippet": "fixture body",
+          "from": [{ "name": "Fixture Sender", "email": "sender@example.com" }],
+          "to": [{ "name": "Fixture Recipient", "email": "recipient@example.com" }],
+          "date": 1767225601,
+          "unread": true,
+          "starred": false,
+          "folders": ["INBOX"]
+        }
+      ],
+      "next_cursor": ""
+    }
+  }
+}

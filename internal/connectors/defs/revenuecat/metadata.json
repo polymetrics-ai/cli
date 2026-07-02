@@ -1,0 +1,22 @@
+{
+  "name": "revenuecat",
+  "display_name": "RevenueCat",
+  "description": "Reads RevenueCat projects, apps, products, offerings, and customers through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.revenuecat.com/docs/api-v1",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external RevenueCat API read of project, app, product, offering, and customer subscription data"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "api": "Flexport REST API (https://api.flexport.com)",
+  "docs": "https://developers.flexport.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (companies, locations, products, invoices, shipments); Flexport is read-only in legacy, no writes are modeled.",
+  "endpoints": [
+    { "method": "GET", "path": "/companies", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/locations", "covered_by": { "stream": "locations" } },
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/shipments", "covered_by": { "stream": "shipments" } },
+    { "method": "POST", "path": "/shipments", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented shipment creation; Pass B capability expansion" } },
+    { "method": "GET", "path": "/purchase_orders", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/documents", "excluded": { "category": "binary_payload", "reason": "binary document retrieval not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

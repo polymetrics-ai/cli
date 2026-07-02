@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "features",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "project": { "type": ["string", "null"] },
+    "enabled": { "type": ["boolean", "null"] },
+    "type": { "type": ["string", "null"] }
+  }
+}

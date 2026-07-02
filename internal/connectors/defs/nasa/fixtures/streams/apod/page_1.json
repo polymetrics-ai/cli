@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/planetary/apod" },
+  "response": {
+    "status": 200,
+    "body": {
+      "date": "2026-01-01",
+      "title": "Fixture Sky One",
+      "explanation": "Deterministic fixture record; no network call.",
+      "media_type": "image",
+      "url": "https://apod.example/1.jpg",
+      "hdurl": "https://apod.example/1_hd.jpg",
+      "thumbnail_url": null,
+      "copyright": null,
+      "service_version": "v1"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "api": "NYTimes Developer APIs (https://api.nytimes.com/svc)",
+  "docs": "https://developer.nytimes.com/apis",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 Most Popular read streams only; the Archive API stream is blocked (ENGINE_GAP — month-window fan-out has no declarative primitive) and stays on the legacy implementation; the full NYTimes surface (Books, Top Stories, Article Search, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/mostpopular/v2/viewed/{period}.json", "covered_by": { "stream": "most_popular_viewed" } },
+    { "method": "GET", "path": "/mostpopular/v2/emailed/{period}.json", "covered_by": { "stream": "most_popular_emailed" } },
+    { "method": "GET", "path": "/mostpopular/v2/shared/{period}.json", "covered_by": { "stream": "most_popular_shared" } },
+    { "method": "GET", "path": "/mostpopular/v2/shared/{period}/{share_type}.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/archive/v1/{year}/{month}.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/search/v2/articlesearch.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/topstories/v2/{section}.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/books/v3/lists/current/{list}.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

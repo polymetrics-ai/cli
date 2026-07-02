@@ -1,0 +1,16 @@
+{
+  "api": "Todoist REST API v2 (https://developer.todoist.com/rest/v2/)",
+  "docs": "https://developer.todoist.com/rest/v2/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (projects, sections, tasks, comments). Todoist's write endpoints (create/update/close/reopen/delete project, section, task, comment) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/rest/v2/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/rest/v2/sections", "covered_by": { "stream": "sections" } },
+    { "method": "GET", "path": "/rest/v2/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/rest/v2/comments", "covered_by": { "stream": "comments" } },
+    { "method": "POST", "path": "/rest/v2/projects", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented project creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/rest/v2/tasks", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented task creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/rest/v2/tasks/{id}/close", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented task mutation; Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/rest/v2/tasks/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive delete not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

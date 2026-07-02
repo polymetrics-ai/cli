@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/courses", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "course_fixture_1",
+          "type": "courses",
+          "attributes": {
+            "name": "Fixture Course",
+            "slug": "fixture-course",
+            "status": "active",
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-02T00:00:00Z"
+          }
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/connections", "query": { "page": "1", "per_page": "2", "include_totals": "true" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "start": 0,
+      "limit": 2,
+      "length": 1,
+      "total": 1,
+      "connections": [
+        {
+          "id": "con_fixture_1",
+          "name": "Username-Password-Authentication",
+          "display_name": "Fixture Connection",
+          "strategy": "auth0",
+          "is_domain_connection": false
+        }
+      ]
+    }
+  }
+}

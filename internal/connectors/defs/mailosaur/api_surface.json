@@ -1,0 +1,17 @@
+{
+  "api": "Mailosaur REST API (https://mailosaur.com/api)",
+  "docs": "https://mailosaur.com/docs/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Mailosaur surface (message content/attachments, SMS content, server creation/deletion, rules) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/servers", "covered_by": { "stream": "servers" } },
+    { "method": "GET", "path": "/messages", "covered_by": { "stream": "messages" } },
+    { "method": "GET", "path": "/usage/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/messages/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/messages/{id}", "excluded": { "category": "destructive_admin", "reason": "message deletion is a destructive mutation, not a read stream" } },
+    { "method": "POST", "path": "/servers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/servers/{id}", "excluded": { "category": "destructive_admin", "reason": "server deletion is a destructive mutation, not a read stream" } },
+    { "method": "GET", "path": "/analysis/spam/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/usage/limits", "excluded": { "category": "non_data_endpoint", "reason": "account plan/limit snapshot, not a syncable object stream" } }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "cal-com",
+  "display_name": "Cal.com",
+  "description": "Reads Cal.com bookings, schedules, and profile through the Cal.com v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://cal.com/docs/api-reference/introduction",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Cal.com API read of bookings, schedules, and profile data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

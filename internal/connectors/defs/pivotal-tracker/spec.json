@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pivotal Tracker Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pivotal Tracker API token. Sent as the X-TrackerToken header on every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.pivotaltracker.com/services/v5",
+      "description": "Pivotal Tracker API base URL override for tests or proxies."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Pivotal Tracker project id. Required by the stories, iterations, and epics streams, which read from projects/{project_id}/{resource}; not used by the projects stream itself."
+    }
+  }
+}

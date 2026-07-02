@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sessions",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "x-cursor-field": "created_at",
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "org": { "type": ["string", "null"] },
+    "blueprint_id": { "type": ["string", "null"] },
+    "segment_id": { "type": ["string", "null"] },
+    "abtest": { "type": ["string", "null"] },
+    "customer_id": { "type": ["string", "null"] },
+    "customer_email": { "type": ["string", "null"] },
+    "customer_plan_id": { "type": ["string", "null"] },
+    "customer_billing_interval": { "type": ["string", "null"] },
+    "offer_type": { "type": ["string", "null"] },
+    "provider": { "type": ["string", "null"] },
+    "mode": { "type": ["string", "null"] },
+    "aborted": { "type": ["boolean", "null"] },
+    "canceled": { "type": ["boolean", "null"] },
+    "survey_id": { "type": ["string", "null"] },
+    "survey_choice_id": { "type": ["string", "null"] },
+    "survey_choice_value": { "type": ["string", "null"] },
+    "feedback": { "type": ["string", "null"] },
+    "discount_cooldown_applied": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "customer": { "type": ["object", "null"] },
+    "accepted_offer": { "type": ["object", "null"] }
+  }
+}

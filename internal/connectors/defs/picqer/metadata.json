@@ -1,0 +1,23 @@
+{
+  "name": "picqer",
+  "display_name": "Picqer",
+  "description": "Reads Picqer products, customers, orders, picklists, warehouses, and suppliers through the Picqer REST API.",
+  "integration_type": "api",
+  "docs_url": "https://picqer.com/en/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Picqer API read of warehouse management data",
+    "approval": "none; read-only WMS API"
+  }
+}

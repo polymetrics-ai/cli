@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "automations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "enabled": { "type": ["boolean", "null"] },
+    "status": { "type": ["string", "null"] },
+    "trigger_data": { "type": ["object", "null"] },
+    "steps": { "type": ["object", "null"] },
+    "stats": { "type": ["object", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

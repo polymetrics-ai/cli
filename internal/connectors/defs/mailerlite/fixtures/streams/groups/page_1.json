@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/groups", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "group_fixture_1",
+          "name": "Fixture Group One",
+          "active_count": 10,
+          "sent_count": 8,
+          "opens_count": 5,
+          "clicks_count": 2,
+          "unsubscribed_count": 1,
+          "open_rate": { "float": 0.5, "string": "50%" },
+          "click_rate": { "float": 0.2, "string": "20%" },
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": { "next_cursor": null }
+    }
+  }
+}

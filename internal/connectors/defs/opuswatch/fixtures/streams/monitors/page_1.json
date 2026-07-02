@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/monitors",
+    "query": {
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "mon_fixture_1",
+          "name": "Checkout Monitor",
+          "status": "up",
+          "message": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "mon_fixture_2",
+          "name": "API Monitor",
+          "status": "up",
+          "message": null,
+          "created_at": "2026-01-01T00:00:01Z",
+          "updated_at": "2026-01-01T00:00:01Z"
+        }
+      ],
+      "next_page": "2"
+    }
+  }
+}

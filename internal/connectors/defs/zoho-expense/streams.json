@@ -1,0 +1,69 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "Zoho-oauthtoken ", "value": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 200
+    },
+    "check": { "method": "GET", "path": "/expensereports" },
+    "error_map": [
+      { "status": 401, "hint": "zoho-expense access_token is missing, expired, or invalid; re-run pm credentials add zoho-expense" },
+      { "status": 403, "hint": "zoho-expense account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "zoho-expense rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "reports",
+      "path": "/expensereports",
+      "query": {
+        "organization_id": { "template": "{{ config.organization_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "expense_reports" },
+      "computed_fields": {
+        "id": "{{ record.report_id }}",
+        "name": "{{ record.report_name }}",
+        "updated_at": "{{ record.modified_time }}"
+      },
+      "schema": "schemas/reports.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "expenses",
+      "path": "/expenses",
+      "query": {
+        "organization_id": { "template": "{{ config.organization_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "expenses" },
+      "computed_fields": {
+        "id": "{{ record.expense_id }}",
+        "name": "{{ record.merchant_name }}",
+        "updated_at": "{{ record.modified_time }}"
+      },
+      "schema": "schemas/expenses.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": {
+        "organization_id": { "template": "{{ config.organization_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "users" },
+      "computed_fields": {
+        "id": "{{ record.user_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.modified_time }}"
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    }
+  ]
+}

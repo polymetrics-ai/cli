@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/v6/deployments" },
+  "response": {
+    "status": 200,
+    "body": {
+      "deployments": [
+        {
+          "uid": "dpl_fixture_1",
+          "name": "fixture-site",
+          "state": "READY",
+          "created": 1767225600000
+        },
+        {
+          "uid": "dpl_fixture_2",
+          "name": "fixture-site",
+          "state": "BUILDING",
+          "created": 1767312000000
+        }
+      ]
+    }
+  }
+}

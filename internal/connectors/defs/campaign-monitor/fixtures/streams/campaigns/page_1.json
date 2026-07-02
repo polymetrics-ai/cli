@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/clients/synthetic-conformance-value/campaigns.json",
+    "query": {
+      "page": "1",
+      "pagesize": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Results": [
+        {
+          "CampaignID": "camp_fixture_1",
+          "Name": "Fixture Campaign 1",
+          "Subject": "Fixture subject 1",
+          "FromName": "Fixture Sender",
+          "FromEmail": "sender@example.com",
+          "ReplyTo": "reply@example.com",
+          "WebVersionURL": "https://example.com/view/1",
+          "WebVersionTextURL": "https://example.com/view/1.txt",
+          "SentDate": "2026-01-01 10:00:00",
+          "TotalRecipients": 100
+        }
+      ],
+      "PageNumber": 1,
+      "PageSize": 1,
+      "RecordsOnThisPage": 1,
+      "TotalNumberOfRecords": 2,
+      "NumberOfPages": 2
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "api": "DingConnect REST API (https://docs.ding.com/)",
+  "docs": "https://docs.ding.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 5 legacy-parity read streams only (countries, currencies, regions, providers, products); DingConnect's read-only reference/catalog surface is modeled by legacy with no reverse-ETL write endpoint (Capabilities.Write is false), so there are no write endpoints in or out of scope.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/V1/GetCountries", "covered_by": { "stream": "countries" } },
+    { "method": "GET", "path": "/api/V1/GetCurrencies", "covered_by": { "stream": "currencies" } },
+    { "method": "GET", "path": "/api/V1/GetRegions", "covered_by": { "stream": "regions" } },
+    { "method": "GET", "path": "/api/V1/GetProviders", "covered_by": { "stream": "providers" } },
+    { "method": "GET", "path": "/api/V1/GetProducts", "covered_by": { "stream": "products" } },
+    { "method": "POST", "path": "/api/V1/SendTransfer", "excluded": { "category": "destructive_admin", "reason": "a real-money top-up mutation; out of scope for a read-only reference-data source connector" } },
+    { "method": "GET", "path": "/api/V1/GetAccountBalance", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not modeled by legacy ding-connect connector" } }
+  ]
+}

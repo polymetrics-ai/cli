@@ -1,0 +1,17 @@
+{
+  "api": "Aircall REST API (https://developer.aircall.io/api-references/)",
+  "docs": "https://developer.aircall.io/api-references/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Aircall surface (call comments/tags, webhooks, IVR configuration, tags, etc.) is out of scope until Pass B. Aircall is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/calls", "covered_by": { "stream": "calls" } },
+    { "method": "GET", "path": "/v1/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/v1/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/v1/numbers", "covered_by": { "stream": "numbers" } },
+    { "method": "GET", "path": "/v1/teams", "covered_by": { "stream": "teams" } },
+    { "method": "POST", "path": "/v1/calls/{id}/comments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/tags", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/v1/contacts/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; Aircall connector is read-only" } }
+  ]
+}

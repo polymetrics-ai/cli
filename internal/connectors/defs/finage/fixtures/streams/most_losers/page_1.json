@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/fnd/market-information/us/most-losers" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "symbol": "XYZ", "company_name": "Fixture Decliner Inc.", "change": -3.1, "change_percentage": "-2.5%", "price": "45.0" }
+    ]
+  }
+}

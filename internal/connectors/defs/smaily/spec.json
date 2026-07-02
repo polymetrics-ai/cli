@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Smaily Connection Specification",
+  "type": "object",
+  "required": ["base_url", "api_username", "api_password"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Smaily account's API base URL (e.g. https://<subdomain>.sendsmaily.net). No default: legacy derives this from api_subdomain in Go code, a derivation this dialect cannot express (see docs.md Known limits) — base_url must be supplied directly."
+    },
+    "api_username": {
+      "type": "string",
+      "description": "Smaily API username, sent as the HTTP Basic auth username."
+    },
+    "api_password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Smaily API password, sent as the HTTP Basic auth password. Never logged."
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "vercel",
+  "display_name": "Vercel",
+  "description": "Reads Vercel deployments. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://vercel.com/docs/rest-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Vercel API read of deployment data",
+    "approval": "none; read-only deployments API"
+  }
+}

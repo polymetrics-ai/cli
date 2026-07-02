@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/team/members", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "team_members": [
+        {
+          "account_id": "acct_fixture_1",
+          "email_address": "fixture1@example.com",
+          "role": "Admin"
+        },
+        {
+          "account_id": "acct_fixture_2",
+          "email_address": "fixture2@example.com",
+          "role": "Member"
+        }
+      ],
+      "list_info": { "page": 1, "num_pages": 1, "num_results": 2, "page_size": 100 }
+    }
+  }
+}

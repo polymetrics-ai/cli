@@ -1,0 +1,23 @@
+{
+  "name": "sigma-computing",
+  "display_name": "Sigma Computing",
+  "description": "Reads Sigma workbooks, datasets, teams, and members through the Sigma REST API.",
+  "integration_type": "api",
+  "docs_url": "https://help.sigmacomputing.com/reference/api-overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Sigma Computing API read of workbook, dataset, team, and member data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

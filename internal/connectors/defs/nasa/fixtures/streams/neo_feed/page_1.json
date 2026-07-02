@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/neo/rest/v1/feed" },
+  "response": {
+    "status": 200,
+    "body": {
+      "element_count": 2,
+      "near_earth_objects": {
+        "2026-01-01": [
+          {
+            "id": "2000433",
+            "neo_reference_id": "2000433",
+            "name": "433 Eros (A898 PA)",
+            "nasa_jpl_url": "https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html#/?sstr=2000433",
+            "absolute_magnitude_h": 10.31,
+            "is_potentially_hazardous_asteroid": false,
+            "is_sentry_object": false
+          },
+          {
+            "id": "2000719",
+            "neo_reference_id": "2000719",
+            "name": "719 Albert (A911 TB)",
+            "nasa_jpl_url": "https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html#/?sstr=2000719",
+            "absolute_magnitude_h": 15.59,
+            "is_potentially_hazardous_asteroid": false,
+            "is_sentry_object": false
+          }
+        ]
+      }
+    }
+  }
+}

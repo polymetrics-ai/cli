@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/tasks", "query": { "size": "2", "from": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "results": [
+        {
+          "jnid": "tasks_fixture_1",
+          "type": "task",
+          "title": "Fixture Task 1",
+          "description": "fixture task description",
+          "number": "1001",
+          "record_type_name": "tasks",
+          "priority": 1,
+          "customer": "cust_fixture_1",
+          "is_active": true,
+          "is_archived": false,
+          "is_completed": false,
+          "date_start": 1767225601,
+          "date_end": 1767229201,
+          "date_created": 1767225601,
+          "date_updated": 1767225601
+        }
+      ]
+    }
+  }
+}

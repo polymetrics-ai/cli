@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "forms",
+  "type": "object",
+  "x-primary-key": ["Hash"],
+  "x-cursor-field": "DateUpdated",
+  "required": ["Hash"],
+  "properties": {
+    "Hash": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "DateUpdated": { "type": ["string", "null"] }
+  }
+}

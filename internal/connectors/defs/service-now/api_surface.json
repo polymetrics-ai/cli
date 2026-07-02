@@ -1,0 +1,14 @@
+{
+  "api": "ServiceNow Table API",
+  "docs": "manual intervention needed",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full ServiceNow Table API surface (arbitrary tables, attachments, sys_user_grmember, single-record GET by sys_id, aggregate API, import sets, etc.) is out of scope until Pass B; this connector is read-only, matching legacy",
+  "endpoints": [
+    { "method": "GET", "path": "/api/now/table/incident", "covered_by": { "stream": "incidents" } },
+    { "method": "GET", "path": "/api/now/table/sys_user", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/api/now/table/sys_user_group", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/api/now/table/incident/{sys_id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; single-record fetch not implemented by legacy" } },
+    { "method": "GET", "path": "/api/now/table/sys_user_grmember", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy" } },
+    { "method": "POST", "path": "/api/now/table/incident", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only" } }
+  ]
+}

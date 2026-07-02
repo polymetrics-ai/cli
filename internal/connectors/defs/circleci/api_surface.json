@@ -1,0 +1,17 @@
+{
+  "api": "CircleCI API v2 (https://circleci.com/api/v2)",
+  "docs": "https://circleci.com/docs/api/v2/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full CircleCI v2 surface (contexts, insights, schedules, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/project/{project-slug}", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/project/{project-slug}/pipeline", "covered_by": { "stream": "pipelines" } },
+    { "method": "GET", "path": "/pipeline/{pipeline-id}/workflow", "covered_by": { "stream": "workflows" } },
+    { "method": "GET", "path": "/workflow/{id}/job", "covered_by": { "stream": "jobs" } },
+    { "method": "GET", "path": "/me", "excluded": { "category": "non_data_endpoint", "reason": "current-user identity check used only by the check request, not a syncable object stream" } },
+    { "method": "POST", "path": "/project/{project-slug}/pipeline", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only (triggering a pipeline mutates live CI state)" } },
+    { "method": "GET", "path": "/context", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/insights/{project-slug}/workflows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/workflow/{id}/approve/{approval_request_id}", "excluded": { "category": "destructive_admin", "reason": "approves a held CI workflow step; mutates live CI state, not a safe reverse-ETL target" } }
+  ]
+}

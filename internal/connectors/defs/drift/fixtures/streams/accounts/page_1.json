@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "size": "65", "index": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "accounts": [
+          {
+            "accountId": "acct_fixture_1",
+            "ownerId": 42,
+            "name": "Fixture Acme",
+            "domain": "fixture-acme.example.com",
+            "deleted": false,
+            "targeted": true,
+            "createDateTime": 1767225601,
+            "updateDateTime": 1767225601,
+            "customProperties": []
+          },
+          {
+            "accountId": "acct_fixture_2",
+            "ownerId": 42,
+            "name": "Fixture Globex",
+            "domain": "fixture-globex.example.com",
+            "deleted": false,
+            "targeted": false,
+            "createDateTime": 1767225602,
+            "updateDateTime": 1767225602,
+            "customProperties": []
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "api": "Perk/TravelPerk REST API (https://api.travelperk.com)",
+  "docs": "https://api.travelperk.com",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (trips, invoices); legacy conservatively reads only these documented TravelPerk list endpoints (the public Perk/TravelPerk docs span two hosts and are not fully machine-reachable, per legacy's own package doc) and ships no writes.",
+  "endpoints": [
+    { "method": "GET", "path": "/trips", "covered_by": { "stream": "trips" } },
+    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "POST", "path": "/trips", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented trip creation; Pass B capability expansion" } },
+    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/expenses", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

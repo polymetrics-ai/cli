@@ -1,0 +1,23 @@
+{
+  "name": "pagerduty",
+  "display_name": "PagerDuty",
+  "description": "Reads PagerDuty incidents, users, services, and teams through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.pagerduty.com/api-reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external PagerDuty API read of incident, user, service, and team data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

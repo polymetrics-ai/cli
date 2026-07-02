@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/Items", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-1",
+      "Status": "OK",
+      "Items": [
+        {
+          "ItemID": "item_fixture_1",
+          "Code": "FIX-1",
+          "Name": "Fixture Item",
+          "Description": "A fixture inventory item",
+          "IsSold": true,
+          "IsPurchased": true,
+          "IsTrackedAsInventory": false,
+          "QuantityOnHand": 10.0,
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

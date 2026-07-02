@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/user" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "users_fixture_1",
+          "name": "fixture-users-1",
+          "firstName": "Fixture",
+          "lastName": "1",
+          "email": "fixture+1@example.com",
+          "active": true
+        }
+      ],
+      "nextPageToken": ""
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "messages",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "creation_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "type": { "type": ["string", "null"] },
+    "direction": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "creation_time": { "type": ["string", "null"] },
+    "stream": { "type": "string" }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/daily_sleep", "query": { "next_token": "fixture-cursor-token-2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "sleep_fixture_3", "day": "2026-01-03", "score": 85, "timestamp": "2026-01-03T00:00:00+00:00" }
+      ],
+      "next_token": null
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "jotform",
+  "display_name": "Jotform",
+  "description": "Reads Jotform forms, submissions, reports, folders, and the account profile through the Jotform REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api.jotform.com/docs/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Jotform API read of form, submission, report, and folder data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

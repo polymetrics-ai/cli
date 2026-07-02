@@ -1,0 +1,22 @@
+{
+  "name": "rollbar",
+  "display_name": "Rollbar",
+  "description": "Reads Rollbar projects and error items through the Rollbar API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://docs.rollbar.com/reference/getting-started",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Rollbar API read of error-tracking data"
+  }
+}

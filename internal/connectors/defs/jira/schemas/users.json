@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "x-primary-key": ["accountId"],
+  "required": ["accountId"],
+  "properties": {
+    "accountId": { "type": "string" },
+    "accountType": { "type": ["string", "null"] },
+    "self": { "type": ["string", "null"] },
+    "displayName": { "type": ["string", "null"] },
+    "emailAddress": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] }
+  }
+}

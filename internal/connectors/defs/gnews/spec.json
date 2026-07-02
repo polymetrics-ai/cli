@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GNews Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "GNews API key. Sent as the 'apikey' query parameter on every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://gnews.io/api/v4",
+      "description": "GNews API base URL override for tests or proxies."
+    },
+    "query": {
+      "type": "string",
+      "description": "Keyword search query for the 'search' stream (required by GNews search; defaults to 'news' when unset, matching legacy's harmless-default fallback). Also used as the 'top_headlines' stream's query when top_headlines_query is unset."
+    },
+    "top_headlines_topic": {
+      "type": "string",
+      "description": "Optional GNews topic filter (e.g. 'technology', 'business') for the 'top_headlines' stream."
+    },
+    "top_headlines_query": {
+      "type": "string",
+      "description": "Optional keyword query for the 'top_headlines' stream, overriding the shared 'query' value for that stream only."
+    },
+    "language": {
+      "type": "string",
+      "description": "Optional GNews 'lang' filter (e.g. 'en')."
+    },
+    "country": {
+      "type": "string",
+      "description": "Optional GNews 'country' filter (e.g. 'us')."
+    },
+    "in": {
+      "type": "string",
+      "description": "Optional GNews 'in' filter restricting which article fields are searched (e.g. 'title,description')."
+    },
+    "nullable": {
+      "type": "string",
+      "description": "Optional GNews 'nullable' filter naming fields allowed to be null in the response."
+    },
+    "sortby": {
+      "type": "string",
+      "description": "Optional GNews 'sortby' filter ('publishedAt' or 'relevance')."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound for the 'from' filter; only articles published at or after this time are read on a fresh sync."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 upper bound sent as the 'to' filter."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "10",
+      "description": "Records per page (1-100), sent as GNews's 'max' parameter."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

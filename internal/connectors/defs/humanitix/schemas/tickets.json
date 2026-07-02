@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickets",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "x-cursor-field": "updatedAt",
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "eventId": { "type": ["string", "null"] },
+    "eventDateId": { "type": ["string", "null"] },
+    "orderId": { "type": ["string", "null"] },
+    "orderName": { "type": ["string", "null"] },
+    "ticketTypeId": { "type": ["string", "null"] },
+    "ticketTypeName": { "type": ["string", "null"] },
+    "firstName": { "type": ["string", "null"] },
+    "lastName": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "price": { "type": ["number", "null"] },
+    "total": { "type": ["number", "null"] },
+    "number": { "type": ["number", "null"] },
+    "isDonation": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

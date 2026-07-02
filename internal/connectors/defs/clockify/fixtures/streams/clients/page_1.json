@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/v1/workspaces/synthetic-conformance-value/clients", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "cl_fixture_1",
+        "name": "Fixture Client One",
+        "workspaceId": "ws_fixture_1",
+        "email": "fixture1@example.com",
+        "address": "123 Fixture St",
+        "note": "conformance fixture client",
+        "archived": false
+      }
+    ]
+  }
+}

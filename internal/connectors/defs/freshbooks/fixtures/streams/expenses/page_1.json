@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounting/account/fixture_acct/expenses/expenses",
+    "query": { "page": "1", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "result": {
+          "expenses": [
+            {
+              "id": 1,
+              "expenseid": 1,
+              "categoryid": 1,
+              "staffid": 1,
+              "amount": { "amount": "50.00", "code": "USD" },
+              "vendor": "Fixture Vendor",
+              "notes": "fixture note 1",
+              "date": "2026-01-01",
+              "updated": "2026-01-01 00:00:00"
+            }
+          ],
+          "page": 1,
+          "pages": 1,
+          "per_page": 100,
+          "total": 1
+        }
+      }
+    }
+  }
+}

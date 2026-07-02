@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/templates", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "template_fixture_1",
+          "name": "Fixture Template",
+          "customer_id": "cust_fixture",
+          "default": true,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "last": ""
+    }
+  }
+}

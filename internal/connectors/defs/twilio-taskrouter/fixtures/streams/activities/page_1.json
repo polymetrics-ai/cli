@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/Workspaces/synthetic-conformance-value/Activities", "query": { "PageSize": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "activities": [
+        { "sid": "WA_fixture_1", "friendly_name": "Available" },
+        { "sid": "WA_fixture_2", "friendly_name": "Offline" }
+      ]
+    }
+  }
+}

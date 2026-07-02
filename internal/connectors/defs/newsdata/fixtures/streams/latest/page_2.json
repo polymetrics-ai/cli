@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/latest", "query": { "page": "TOKEN2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "totalResults": 3,
+      "results": [
+        {
+          "article_id": "fixture-latest-3",
+          "title": "Fixture Article 3",
+          "link": "https://example.com/latest/3",
+          "description": "conformance fixture article 3",
+          "content": "Deterministic fixture content 3.",
+          "pubDate": "2026-01-03 00:00:00",
+          "image_url": null,
+          "source_id": "fixture-source",
+          "source_priority": 1,
+          "language": "english",
+          "creator": ["Fixture Author"],
+          "keywords": ["fixture"],
+          "category": ["top"],
+          "country": ["united states"]
+        }
+      ],
+      "nextPage": null
+    }
+  }
+}

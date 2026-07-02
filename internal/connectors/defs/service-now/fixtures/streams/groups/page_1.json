@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/api/now/table/sys_user_group", "query": { "sysparm_limit": "100", "sysparm_offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": [
+        { "sys_id": "group_1", "number": null, "name": "Fixture Group 1", "description": "fixture record", "active": "true", "updated_on": "2026-01-01 00:00:00" }
+      ]
+    }
+  }
+}

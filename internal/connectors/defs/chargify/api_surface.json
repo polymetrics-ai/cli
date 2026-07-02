@@ -1,0 +1,20 @@
+{
+  "api": "Chargify (Maxio Advanced Billing) API",
+  "docs": "https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Chargify surface (invoices, credit notes, payment profiles, components, webhooks, write endpoints, etc.) is out of scope until Pass B. Chargify is a read-only connector in both legacy and this bundle.",
+  "endpoints": [
+    { "method": "GET", "path": "/customers.json", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/subscriptions.json", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/products.json", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/coupons.json", "covered_by": { "stream": "coupons" } },
+    { "method": "GET", "path": "/transactions.json", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/invoices.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/payment_profiles.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/components.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/events.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/customers.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/subscriptions.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/webhooks_endpoints.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/adAccounts",
+    "query": { "q": "search", "count": "2", "start": "2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "elements": [
+        {
+          "id": 510003,
+          "name": "Fixture Account Three",
+          "type": "BUSINESS",
+          "status": "DRAFT",
+          "currency": "USD",
+          "reference": "urn:li:organization:900003",
+          "test": false,
+          "version": { "versionTag": "1" },
+          "changeAuditStamps": {
+            "created": { "time": 1767225800000 },
+            "lastModified": { "time": 1767225860000 }
+          }
+        }
+      ]
+    }
+  }
+}

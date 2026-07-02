@@ -1,0 +1,23 @@
+{
+  "name": "zonka-feedback",
+  "display_name": "Zonka Feedback",
+  "description": "Reads Zonka Feedback responses, surveys, and contacts through the Zonka Feedback REST API.",
+  "integration_type": "api",
+  "docs_url": "https://help.zonkafeedback.com/en/articles/6273783-api-documentation",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Zonka Feedback API read of response, survey, and contact data",
+    "approval": "none; read-only"
+  }
+}

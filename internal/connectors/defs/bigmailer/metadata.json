@@ -1,0 +1,23 @@
+{
+  "name": "bigmailer",
+  "display_name": "BigMailer",
+  "description": "Reads BigMailer brands and account users through the BigMailer REST API. Brand-scoped substreams (contacts, lists, custom fields) are not yet migrated (see docs.md Known limits).",
+  "integration_type": "api",
+  "docs_url": "https://www.bigmailer.io/api",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external BigMailer API read of brands and account users",
+    "approval": "none; read-only API"
+  }
+}

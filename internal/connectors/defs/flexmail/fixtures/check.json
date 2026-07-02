@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "limit": "1", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": { "_embedded": { "item": [] } }
+  }
+}

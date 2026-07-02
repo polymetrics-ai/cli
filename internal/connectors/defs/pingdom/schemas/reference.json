@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reference",
+  "description": "Pingdom's /reference endpoint returns a single lookup bundle (check types, regions, probe metadata) rather than a collection of individually-keyed records; this stream emits the whole response body as one record, matching legacy's empty recordsPath (RecordsAt(body, \"\") wraps the root object as a single record) and its unfiltered mapRecord passthrough.",
+  "type": "object",
+  "properties": {
+    "checktypes": { "type": ["object", "null"] },
+    "regions": { "type": ["object", "null"] },
+    "probes": { "type": ["object", "null"] }
+  }
+}

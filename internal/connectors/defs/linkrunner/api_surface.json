@@ -1,0 +1,13 @@
+{
+  "api": "Linkrunner Data API (https://api.linkrunner.io/api/v1)",
+  "docs": "https://docs.linkrunner.io/sdk-less/api-reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only; the full Linkrunner surface (client SDK attribution-data/init/trigger endpoints, event tracking) is out of scope until Pass B and is not applicable to a reverse-ETL read connector",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/api/v1/attributed-users", "covered_by": { "stream": "attributed_users" } },
+    { "method": "POST", "path": "/api/v1/init", "excluded": { "category": "out_of_scope", "reason": "client SDK attribution endpoint, not a syncable data stream" } },
+    { "method": "POST", "path": "/api/v1/trigger", "excluded": { "category": "out_of_scope", "reason": "client SDK attribution endpoint, not a syncable data stream" } },
+    { "method": "GET", "path": "/api/v1/attribution-data", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

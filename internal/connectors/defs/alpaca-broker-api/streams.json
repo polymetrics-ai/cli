@@ -1,0 +1,56 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "check": { "method": "GET", "path": "/clock" },
+    "error_map": [
+      { "status": 401, "hint": "alpaca-broker-api username/password is missing or invalid; re-run pm credentials add alpaca-broker-api" },
+      { "status": 403, "hint": "alpaca-broker-api credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "alpaca-broker-api rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "query": { "limit": "{{ config.limit }}" },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page_token",
+        "last_record_field": "id"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "assets",
+      "path": "/assets",
+      "query": { "limit": "{{ config.limit }}" },
+      "records": { "path": "." },
+      "schema": "schemas/assets.json"
+    },
+    {
+      "name": "calendar",
+      "path": "/calendar",
+      "query": { "limit": "{{ config.limit }}" },
+      "records": { "path": "." },
+      "schema": "schemas/calendar.json"
+    },
+    {
+      "name": "clock",
+      "path": "/clock",
+      "records": { "path": "." },
+      "schema": "schemas/clock.json"
+    },
+    {
+      "name": "country_info",
+      "path": "/country_info",
+      "query": { "limit": "{{ config.limit }}" },
+      "records": { "path": "." },
+      "schema": "schemas/country_info.json"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "base": {
+    "url": "https://{{ config.organization_name }}.picqer.com/api/v1",
+    "user_agent": "polymetrics-go-cli (polymetrics.ai)",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "{{ secrets.password }}", "when": "{{ secrets.api_key }}" },
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/products", "query": { "offset": "0" } },
+    "error_map": [
+      { "status": 401, "hint": "picqer api_key/username is missing or invalid; re-run pm credentials add picqer" },
+      { "status": 429, "class": "rate_limited", "hint": "picqer rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/products",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idproduct }}" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idcustomer }}" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "orders",
+      "path": "/orders",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idorder }}" },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "picklists",
+      "path": "/picklists",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idpicklist }}" },
+      "schema": "schemas/picklists.json"
+    },
+    {
+      "name": "warehouses",
+      "path": "/warehouses",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idwarehouse }}" },
+      "schema": "schemas/warehouses.json"
+    },
+    {
+      "name": "suppliers",
+      "path": "/suppliers",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idsupplier }}" },
+      "schema": "schemas/suppliers.json"
+    }
+  ]
+}

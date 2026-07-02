@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/management/surveys" },
+  "response": {
+    "status": 200,
+    "body": { "data": [] }
+  }
+}

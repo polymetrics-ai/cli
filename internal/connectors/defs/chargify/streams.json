@@ -1,0 +1,138 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ config.username }}",
+        "password": "{{ secrets.password }}",
+        "when": "{{ config.username }}"
+      },
+      {
+        "mode": "basic",
+        "username": "{{ secrets.api_key }}",
+        "password": "x",
+        "when": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/customers.json" },
+    "error_map": [
+      { "status": 401, "hint": "chargify API key or username/password is missing or invalid; re-run pm credentials add chargify" },
+      { "status": 403, "hint": "chargify credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "chargify rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.customer.id }}",
+        "first_name": "{{ record.customer.first_name }}",
+        "last_name": "{{ record.customer.last_name }}",
+        "email": "{{ record.customer.email }}",
+        "organization": "{{ record.customer.organization }}",
+        "reference": "{{ record.customer.reference }}",
+        "phone": "{{ record.customer.phone }}",
+        "country": "{{ record.customer.country }}",
+        "created_at": "{{ record.customer.created_at }}",
+        "updated_at": "{{ record.customer.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.subscription.id }}",
+        "state": "{{ record.subscription.state }}",
+        "customer_id": "{{ record.subscription.customer_id }}",
+        "product_id": "{{ record.subscription.product_id }}",
+        "balance_in_cents": "{{ record.subscription.balance_in_cents }}",
+        "total_revenue_in_cents": "{{ record.subscription.total_revenue_in_cents }}",
+        "current_period_started_at": "{{ record.subscription.current_period_started_at }}",
+        "current_period_ends_at": "{{ record.subscription.current_period_ends_at }}",
+        "created_at": "{{ record.subscription.created_at }}",
+        "updated_at": "{{ record.subscription.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "products",
+      "path": "/products.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.product.id }}",
+        "name": "{{ record.product.name }}",
+        "handle": "{{ record.product.handle }}",
+        "description": "{{ record.product.description }}",
+        "price_in_cents": "{{ record.product.price_in_cents }}",
+        "interval": "{{ record.product.interval }}",
+        "interval_unit": "{{ record.product.interval_unit }}",
+        "product_family_id": "{{ record.product.product_family_id }}",
+        "created_at": "{{ record.product.created_at }}",
+        "updated_at": "{{ record.product.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "coupons",
+      "path": "/coupons.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.coupon.id }}",
+        "name": "{{ record.coupon.name }}",
+        "code": "{{ record.coupon.code }}",
+        "description": "{{ record.coupon.description }}",
+        "percentage": "{{ record.coupon.percentage }}",
+        "amount_in_cents": "{{ record.coupon.amount_in_cents }}",
+        "product_family_id": "{{ record.coupon.product_family_id }}",
+        "created_at": "{{ record.coupon.created_at }}",
+        "updated_at": "{{ record.coupon.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/coupons.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/transactions.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.transaction.id }}",
+        "transaction_type": "{{ record.transaction.transaction_type }}",
+        "amount_in_cents": "{{ record.transaction.amount_in_cents }}",
+        "subscription_id": "{{ record.transaction.subscription_id }}",
+        "customer_id": "{{ record.transaction.customer_id }}",
+        "product_id": "{{ record.transaction.product_id }}",
+        "success": "{{ record.transaction.success }}",
+        "kind": "{{ record.transaction.kind }}",
+        "created_at": "{{ record.transaction.created_at }}"
+      },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/transactions.json"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "k6_tests",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "project_id": { "type": ["integer", "null"] },
+    "user_id": { "type": ["integer", "null"] },
+    "last_test_run_id": { "type": ["string", "null"] },
+    "test_run_ids": { "type": ["array", "null"] },
+    "script": { "type": ["string", "null"] },
+    "created": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] }
+  }
+}

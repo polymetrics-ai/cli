@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/docs/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "token": "doc_fixture_1",
+          "name": "Fixture Services Agreement",
+          "status": "signed",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

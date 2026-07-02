@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 25
+    },
+    "check": { "method": "GET", "path": "/domains", "query": { "limit": "10" } },
+    "error_map": [
+      { "status": 401, "hint": "mailersend api_token is missing or invalid; re-run pm credentials add mailersend" },
+      { "status": 429, "class": "rate_limited", "hint": "mailersend rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "activity",
+      "path": "/activity/{{ config.domain_id }}",
+      "query": {
+        "date_from": "{{ config.date_from }}",
+        "date_to": "{{ config.date_to }}"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/activity.json"
+    },
+    {
+      "name": "domains",
+      "path": "/domains",
+      "records": { "path": "data" },
+      "schema": "schemas/domains.json"
+    },
+    {
+      "name": "messages",
+      "path": "/messages",
+      "query": {
+        "domain_id": { "template": "{{ config.domain_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "recipients",
+      "path": "/recipients",
+      "records": { "path": "data" },
+      "schema": "schemas/recipients.json"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/submissions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "slug": "submissions_fixture_1",
+          "name": "Fixture submission 1",
+          "source": "api",
+          "status": "completed",
+          "audit_log_url": "",
+          "combined_document_url": "",
+          "expire_at": null,
+          "completed_at": "2026-01-02T00:00:00Z",
+          "archived_at": null,
+          "template": { "id": 99, "name": "Fixture Template" },
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "pagination": { "count": 1, "next": null, "prev": null }
+    }
+  }
+}

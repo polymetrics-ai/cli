@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/clients", "query": { "page": "1", "per_page": "2", "include_totals": "true" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "start": 0,
+      "limit": 2,
+      "length": 1,
+      "total": 1,
+      "clients": [
+        {
+          "client_id": "fixture_client_1",
+          "name": "Fixture App",
+          "description": "conformance fixture client",
+          "app_type": "spa",
+          "is_first_party": true,
+          "oidc_conformant": true,
+          "global": false
+        }
+      ]
+    }
+  }
+}

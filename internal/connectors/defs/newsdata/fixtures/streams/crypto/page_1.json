@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/crypto", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "totalResults": 1,
+      "results": [
+        {
+          "article_id": "fixture-crypto-1",
+          "title": "Fixture Crypto Article 1",
+          "link": "https://example.com/crypto/1",
+          "description": "conformance fixture crypto article",
+          "content": "Deterministic fixture crypto content.",
+          "pubDate": "2026-01-01 00:00:00",
+          "image_url": null,
+          "source_id": "fixture-source",
+          "source_priority": 1,
+          "language": "english",
+          "creator": ["Fixture Author"],
+          "keywords": ["fixture"],
+          "category": ["top"],
+          "country": ["united states"]
+        }
+      ],
+      "nextPage": null
+    }
+  }
+}

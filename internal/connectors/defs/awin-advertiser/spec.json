@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Awin Advertiser Connection Specification",
+  "type": "object",
+  "required": ["api_key", "advertiserId"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Awin API OAuth2 bearer token. Used only for Bearer auth; never logged."
+    },
+    "advertiserId": {
+      "type": "string",
+      "description": "Numeric Awin advertiser account ID; substituted into every stream's path."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.awin.com",
+      "description": "Awin API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Lower bound for the transactions stream's date window, in Awin's exact 'YYYY-MM-DDTHH:MM:SS' wire format (no timezone suffix). Unlike legacy, this bundle does not normalize an RFC3339 or YYYY-MM-DD value for you — see docs.md's Known limits."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

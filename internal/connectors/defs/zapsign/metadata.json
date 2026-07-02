@@ -1,0 +1,20 @@
+{
+  "name": "zapsign",
+  "display_name": "ZapSign",
+  "description": "Reads ZapSign documents, signers, and templates.",
+  "integration_type": "api",
+  "docs_url": "https://docs.zapsign.com.br/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external ZapSign account read of documents, signers, and templates",
+    "approval": "none; read-only API token access"
+  }
+}

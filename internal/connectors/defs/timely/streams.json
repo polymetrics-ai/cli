@@ -1,0 +1,44 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.bearer_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/{{ config.account_id }}/users" },
+    "error_map": [
+      { "status": 401, "hint": "timely bearer_token is missing or invalid; re-run pm credentials add timely" },
+      { "status": 403, "hint": "timely account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "timely rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/{{ config.account_id }}/users",
+      "records": { "path": "." },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "projects",
+      "path": "/{{ config.account_id }}/projects",
+      "records": { "path": "." },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "clients",
+      "path": "/{{ config.account_id }}/clients",
+      "records": { "path": "." },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "events",
+      "path": "/{{ config.account_id }}/events",
+      "query": {
+        "since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/events.json"
+    }
+  ]
+}

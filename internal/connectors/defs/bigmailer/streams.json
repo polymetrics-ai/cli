@@ -1,0 +1,36 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "cursor",
+      "stop_path": "has_more"
+    },
+    "check": { "method": "GET", "path": "/brands", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "bigmailer api_key is missing or invalid; re-run pm credentials add bigmailer" },
+      { "status": 429, "class": "rate_limited", "hint": "bigmailer rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "brands",
+      "path": "/brands",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/brands.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/users.json"
+    }
+  ]
+}

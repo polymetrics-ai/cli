@@ -1,0 +1,14 @@
+{
+  "api": "SavvyCal API v1 (https://api.savvycal.com)",
+  "docs": "https://savvycal.com/api",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2-fan-out migration: the 3 legacy-parity read streams only (events, links, contacts); SavvyCal's write endpoints (link/event creation, availability) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/v1/links", "covered_by": { "stream": "links" } },
+    { "method": "GET", "path": "/v1/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "POST", "path": "/v1/links", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented link creation; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/links/{id}/availability", "excluded": { "category": "out_of_scope", "reason": "availability lookup not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream" } }
+  ]
+}

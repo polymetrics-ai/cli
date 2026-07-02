@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fields/person"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "field_fixture_1",
+          "type": "text",
+          "displayName": "Fixture Field 1",
+          "objectKey": "fixtureField1",
+          "filterable": true,
+          "searchable": true
+        }
+      ],
+      "links": {
+        "next": "abc123cursor"
+      }
+    }
+  }
+}

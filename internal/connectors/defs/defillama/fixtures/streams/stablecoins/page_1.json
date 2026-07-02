@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stablecoins",
+    "query": { "includePrices": "true" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "peggedAssets": [
+        {
+          "id": "1",
+          "name": "Fixture USD",
+          "symbol": "fUSD",
+          "gecko_id": "fixture-usd",
+          "pegType": "peggedUSD",
+          "pegMechanism": "fiat-backed",
+          "price": 1.0,
+          "circulating": { "peggedUSD": 1000000.0 }
+        },
+        {
+          "id": "2",
+          "name": "Fixture EUR",
+          "symbol": "fEUR",
+          "gecko_id": "fixture-eur",
+          "pegType": "peggedEUR",
+          "pegMechanism": "fiat-backed",
+          "price": 1.08,
+          "circulating": { "peggedEUR": 500000.0 }
+        }
+      ]
+    }
+  }
+}

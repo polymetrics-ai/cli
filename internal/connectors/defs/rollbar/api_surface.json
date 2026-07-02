@@ -1,0 +1,14 @@
+{
+  "api": "Rollbar API v1 (https://api.rollbar.com/api/1)",
+  "docs": "https://docs.rollbar.com/reference/getting-started",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (items, projects); legacy ships no writes (capabilities.write is false) and the full Rollbar surface (deploys, teams, users, RQL queries, occurrences) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/1/items/", "covered_by": { "stream": "items" } },
+    { "method": "GET", "path": "/api/1/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/api/1/deploys", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/1/item/{counter}", "excluded": { "category": "out_of_scope", "reason": "single-item lookup, not a syncable list stream; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/1/instances", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/1/item/{counter}/status", "excluded": { "category": "destructive_admin", "reason": "mutates item status; legacy connector never implemented writes" } }
+  ]
+}

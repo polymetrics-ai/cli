@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/products", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "p_fixture_1",
+          "name": "Fixture Product",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

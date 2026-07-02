@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "email_campaigns",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modifiedAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "modifiedAt": { "type": ["string", "null"] }
+  }
+}

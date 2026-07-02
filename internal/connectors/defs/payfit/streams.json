@@ -1,0 +1,43 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "offset",
+      "token_path": "meta.next_offset"
+    },
+    "check": { "method": "GET", "path": "/employees", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "payfit api_key is missing or invalid; re-run pm credentials add payfit" },
+      { "status": 403, "hint": "payfit account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "payfit rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "employees",
+      "path": "/employees",
+      "query": { "limit": "{{ config.limit }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/employees.json"
+    },
+    {
+      "name": "contracts",
+      "path": "/contracts",
+      "query": { "limit": "{{ config.limit }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/contracts.json"
+    },
+    {
+      "name": "companies",
+      "path": "/companies",
+      "query": { "limit": "{{ config.limit }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/companies.json"
+    }
+  ]
+}

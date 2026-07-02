@@ -1,0 +1,77 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "x-luma-api-key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "pagination_cursor",
+      "token_path": "next_cursor",
+      "stop_path": "has_more"
+    },
+    "check": { "method": "GET", "path": "/calendar/list-events" },
+    "error_map": [
+      { "status": 401, "hint": "lu.ma api_key is missing or invalid; re-run pm credentials add luma" },
+      { "status": 429, "class": "rate_limited", "hint": "lu.ma rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "events",
+      "path": "/calendar/list-events",
+      "records": { "path": "entries" },
+      "computed_fields": {
+        "api_id": "{{ record.event.api_id }}",
+        "name": "{{ record.event.name }}",
+        "description": "{{ record.event.description }}",
+        "start_at": "{{ record.event.start_at }}",
+        "end_at": "{{ record.event.end_at }}",
+        "timezone": "{{ record.event.timezone }}",
+        "url": "{{ record.event.url }}",
+        "cover_url": "{{ record.event.cover_url }}",
+        "visibility": "{{ record.event.visibility }}",
+        "created_at": "{{ record.event.created_at }}",
+        "calendar_api_id": "{{ record.event.calendar_api_id }}"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "event_guests",
+      "path": "/event/get-guests",
+      "query": {
+        "event_api_id": "{{ config.event_api_id }}"
+      },
+      "records": { "path": "entries" },
+      "computed_fields": {
+        "api_id": "{{ record.guest.api_id }}",
+        "event_api_id": "{{ record.guest.event_api_id }}",
+        "name": "{{ record.guest.name }}",
+        "email": "{{ record.guest.email }}",
+        "approval_status": "{{ record.guest.approval_status }}",
+        "registered_at": "{{ record.guest.registered_at }}",
+        "checked_in_at": "{{ record.guest.checked_in_at }}",
+        "user_api_id": "{{ record.guest.user_api_id }}",
+        "user_name": "{{ record.guest.user_name }}"
+      },
+      "schema": "schemas/event_guests.json"
+    },
+    {
+      "name": "event_hosts",
+      "path": "/event/get-hosts",
+      "query": {
+        "event_api_id": "{{ config.event_api_id }}"
+      },
+      "records": { "path": "entries" },
+      "computed_fields": {
+        "api_id": "{{ record.host.api_id }}",
+        "name": "{{ record.host.name }}",
+        "email": "{{ record.host.email }}",
+        "avatar_url": "{{ record.host.avatar_url }}",
+        "access_level": "{{ record.host.access_level }}"
+      },
+      "schema": "schemas/event_hosts.json"
+    }
+  ]
+}

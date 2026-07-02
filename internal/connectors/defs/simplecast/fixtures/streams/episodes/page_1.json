@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/episodes", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        { "id": "ep_fixture_1", "title": "Fixture Episode One", "status": "published", "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "pages": { "next": null }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/getorgstandard",
+    "query": { "org": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "Code": "Success", "Standard": "FIXTURE STANDARD", "Credits": "9996" }
+  }
+}

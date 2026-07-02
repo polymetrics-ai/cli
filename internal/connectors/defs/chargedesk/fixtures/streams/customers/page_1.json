@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "count": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "count": 100,
+      "offset": 0,
+      "data": [
+        {
+          "customer_id": "cus_fixture_1",
+          "object": "customer",
+          "occurred": 1767225600,
+          "email": "fixture1@example.com",
+          "name": "Fixture One",
+          "country": "US",
+          "phone": "+15550100",
+          "currency": "usd",
+          "delinquent": false,
+          "tax_number": null
+        }
+      ]
+    }
+  }
+}

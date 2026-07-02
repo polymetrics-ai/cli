@@ -1,0 +1,55 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "scopes": "https://graph.microsoft.com/.default",
+        "when": "{{ config.token_url }}"
+      },
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.login_base_url }}/{{ config.tenant_id }}/oauth2/v2.0/token",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "scopes": "https://graph.microsoft.com/.default"
+      }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "$top",
+      "offset_param": "$skip",
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/sites/{{ config.site_id }}/lists" },
+    "error_map": [
+      { "status": 401, "hint": "sharepoint-lists-enterprise client credentials are missing or invalid; re-run pm credentials add sharepoint-lists-enterprise" },
+      { "status": 403, "hint": "sharepoint-lists-enterprise application lacks Graph API permissions for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "sharepoint-lists-enterprise rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "lists",
+      "path": "/sites/{{ config.site_id }}/lists",
+      "records": { "path": "value" },
+      "incremental": {
+        "cursor_field": "lastModifiedDateTime"
+      },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "list_items",
+      "path": "/sites/{{ config.site_id }}/lists/{{ config.list_id }}/items",
+      "records": { "path": "value" },
+      "incremental": {
+        "cursor_field": "lastModifiedDateTime"
+      },
+      "schema": "schemas/list_items.json"
+    }
+  ]
+}

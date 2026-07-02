@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/account/apps" },
+  "response": {
+    "status": 200,
+    "body": {
+      "apps": [
+        { "id": 11, "title": "Fixture Collection A", "title_normalized": "fixture collection a", "count_apps": 3, "countries": "US", "languages": "en", "created": "2026-01-01T00:00:00Z" },
+        { "id": 22, "title": "Fixture Collection B", "title_normalized": "fixture collection b", "count_apps": 1, "countries": "GB", "languages": "en", "created": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

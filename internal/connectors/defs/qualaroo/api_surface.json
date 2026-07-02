@@ -1,0 +1,10 @@
+{
+  "api": "Qualaroo API v1 (https://api.qualaroo.com/api/v1)",
+  "docs": "https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (nudges, responses); legacy itself ships no writes and no other endpoints, so the full Qualaroo surface beyond these two list endpoints is out of scope for Pass B capability expansion.",
+  "endpoints": [
+    { "method": "GET", "path": "/nudges", "covered_by": { "stream": "nudges" } },
+    { "method": "GET", "path": "/responses", "covered_by": { "stream": "responses" } }
+  ]
+}

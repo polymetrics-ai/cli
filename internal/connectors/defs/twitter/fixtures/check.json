@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/tweets/search/recent", "query": { "query": "synthetic-conformance-value", "max_results": "10" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "meta": { "result_count": 0 } }
+  }
+}

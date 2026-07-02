@@ -1,0 +1,13 @@
+{
+  "api": "Appfigures REST API v2 (https://api.appfigures.com/v2)",
+  "docs": "https://docs.appfigures.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: only the reviews stream is Tier-1 expressible; products/sales/ratings/categories are keyed-JSON-object endpoints the engine's declarative record extraction cannot flatten (see docs.md Known limits) and remain on the legacy connector.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/reviews", "covered_by": { "stream": "reviews" } },
+    { "method": "GET", "path": "/v2/products/mine", "excluded": { "category": "out_of_scope", "reason": "keyed-by-id JSON object response (not an array); the engine's RecordsAt extraction has no primitive to flatten a map-of-objects into N records the way legacy's flattenKeyedObject does — ENGINE_GAP, tracked for a follow-up wave" } },
+    { "method": "GET", "path": "/v2/reports/sales", "excluded": { "category": "out_of_scope", "reason": "keyed-by-id JSON object response; same ENGINE_GAP as products/mine" } },
+    { "method": "GET", "path": "/v2/reports/ratings", "excluded": { "category": "out_of_scope", "reason": "keyed-by-id JSON object response; same ENGINE_GAP as products/mine" } },
+    { "method": "GET", "path": "/v2/data/categories", "excluded": { "category": "out_of_scope", "reason": "keyed-by-id JSON object response; same ENGINE_GAP as products/mine" } }
+  ]
+}

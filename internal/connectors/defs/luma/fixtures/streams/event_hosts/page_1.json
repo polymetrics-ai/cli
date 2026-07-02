@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/event/get-hosts", "query": { "event_api_id": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "host": {
+            "api_id": "hst_fixture_1",
+            "name": "Fixture Host One",
+            "email": "host1@example.com",
+            "avatar_url": null,
+            "access_level": "admin"
+          }
+        }
+      ],
+      "has_more": false,
+      "next_cursor": null
+    }
+  }
+}

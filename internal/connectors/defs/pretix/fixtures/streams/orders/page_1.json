@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/organizers/synthetic-conformance-value/events/synthetic-conformance-value/orders/", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "code": "FIX123",
+          "event": "fixture-conf",
+          "status": "p",
+          "testmode": false,
+          "secret": "fixturesec1",
+          "email": "fixture1@example.com",
+          "locale": "en",
+          "datetime": "2026-01-01T00:00:00Z",
+          "total": "23.00",
+          "last_modified": "2026-01-02T00:00:00Z",
+          "positions": [],
+          "payments": [],
+          "refunds": []
+        }
+      ]
+    }
+  }
+}

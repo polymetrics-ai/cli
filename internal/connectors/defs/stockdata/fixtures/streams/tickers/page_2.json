@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/data/tickers", "query": { "page": "2", "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "symbol": "GOOG", "name": "Alphabet Inc.", "exchange": "NASDAQ" }
+      ]
+    }
+  }
+}

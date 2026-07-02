@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "per_page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        { "id": 1, "type": "user", "email": "fixture1@example.com" }
+      ],
+      "pages": { "next": null }
+    }
+  }
+}

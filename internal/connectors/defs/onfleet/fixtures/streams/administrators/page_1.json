@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/admins" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "admin_fixture_1",
+        "name": "Fixture Admin",
+        "email": "fixture1@example.com",
+        "type": "super",
+        "isActive": true,
+        "timeCreated": 1767225600000,
+        "timeLastModified": 1767225600000
+      }
+    ]
+  }
+}

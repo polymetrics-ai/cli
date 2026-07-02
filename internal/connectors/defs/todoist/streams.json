@@ -1,0 +1,45 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.token }}", "when": "{{ secrets.token }}" },
+      { "mode": "bearer", "token": "{{ secrets.bearer_token }}", "when": "{{ secrets.bearer_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/projects" },
+    "error_map": [
+      { "status": 401, "hint": "todoist token is missing or invalid; re-run pm credentials add todoist" },
+      { "status": 429, "class": "rate_limited", "hint": "todoist rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": { "path": "." },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "sections",
+      "path": "/sections",
+      "records": { "path": "." },
+      "schema": "schemas/sections.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": { "path": "." },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "comments",
+      "path": "/comments",
+      "query": {
+        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
+        "task_id": { "template": "{{ config.task_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/comments.json"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "height",
+  "display_name": "Height",
+  "description": "Reads Height tasks, lists, field templates, users, and workspace through the Height REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.height.app/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1000
+  },
+  "risk": {
+    "read": "external Height API read of task, list, field-template, user, and workspace data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

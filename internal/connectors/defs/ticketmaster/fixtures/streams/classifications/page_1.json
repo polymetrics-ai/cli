@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/classifications.json",
+    "query": { "page": "0", "size": "200" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "classifications": [
+          {
+            "id": "classification_fixture_1",
+            "name": "Music",
+            "segment": { "id": "seg_1", "name": "Music" },
+            "genre": { "id": "gen_1", "name": "Rock" },
+            "subGenre": { "id": "sub_1", "name": "Alternative Rock" }
+          },
+          {
+            "id": "classification_fixture_2",
+            "name": "Sports",
+            "segment": { "id": "seg_2", "name": "Sports" },
+            "genre": { "id": "gen_2", "name": "Baseball" },
+            "subGenre": { "id": "sub_2", "name": "MLB" }
+          }
+        ]
+      }
+    }
+  }
+}

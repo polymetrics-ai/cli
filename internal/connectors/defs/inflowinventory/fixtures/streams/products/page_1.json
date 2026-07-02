@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/products"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "productId": "prod_fixture_1",
+        "name": "Fixture Product 1",
+        "sku": "SKU-1",
+        "description": "fixture record",
+        "categoryId": "cat_fixture_1",
+        "itemType": "StockedProduct",
+        "isActive": true,
+        "isManufacturable": false,
+        "trackSerials": false,
+        "lastModifiedDateTime": "2026-01-01T00:00:00Z",
+        "timestamp": "AAAAAAAAB1k="
+      },
+      {
+        "productId": "prod_fixture_2",
+        "name": "Fixture Product 2",
+        "sku": "SKU-2",
+        "description": "fixture record",
+        "categoryId": "cat_fixture_1",
+        "itemType": "StockedProduct",
+        "isActive": true,
+        "isManufacturable": false,
+        "trackSerials": false,
+        "lastModifiedDateTime": "2026-01-02T00:00:00Z",
+        "timestamp": "AAAAAAAAB2k="
+      }
+    ]
+  }
+}

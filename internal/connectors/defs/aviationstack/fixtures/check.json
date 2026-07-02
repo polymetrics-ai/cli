@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/countries" },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "limit": 1, "offset": 0, "count": 1, "total": 1 },
+      "data": [
+        { "id": "1", "country_name": "Fixtureland", "country_iso2": "FX" }
+      ]
+    }
+  }
+}

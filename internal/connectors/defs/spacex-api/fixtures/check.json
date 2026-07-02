@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/company" },
+  "response": {
+    "status": 200,
+    "body": { "name": "SpaceX", "founder": "Elon Musk", "founded": 2002, "employees": 12000, "ceo": "Elon Musk", "cto": "Elon Musk", "valuation": 74000000000, "summary": "SpaceX designs, manufactures and launches rockets and spacecraft." }
+  }
+}

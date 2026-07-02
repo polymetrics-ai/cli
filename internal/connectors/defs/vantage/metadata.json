@@ -1,0 +1,20 @@
+{
+  "name": "vantage",
+  "display_name": "Vantage",
+  "description": "Reads costs from the Vantage API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://docs.vantage.sh/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Vantage API read of cloud cost data",
+    "approval": "none; read-only costs API"
+  }
+}

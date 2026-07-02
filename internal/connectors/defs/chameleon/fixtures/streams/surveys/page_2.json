@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/edit/surveys", "query": { "limit": "50", "offset": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "surveys": [
+        {
+          "id": "s_fixture_51",
+          "title": "Fixture Survey 51",
+          "type": "survey",
+          "state": "draft",
+          "is_live": false,
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-10T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

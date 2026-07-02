@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/account" },
+  "response": {
+    "status": 200,
+    "body": {
+      "uuid": "acc_fixture_1",
+      "name": "Fixture Organization",
+      "currency": "USD",
+      "time_zone": "UTC",
+      "week_start_on": "monday"
+    }
+  }
+}

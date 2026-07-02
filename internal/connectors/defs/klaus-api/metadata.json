@@ -1,0 +1,22 @@
+{
+  "name": "klaus-api",
+  "display_name": "Klaus API",
+  "description": "Reads Klaus (Zendesk QA) users and rating categories through the Klaus public REST API. The reviews stream is not yet migrated (ENGINE_GAP, see docs.md).",
+  "integration_type": "api",
+  "docs_url": "https://help.klausapp.com/en/articles/2911907-klaus-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Klaus API read of user and quality-review configuration data"
+  }
+}

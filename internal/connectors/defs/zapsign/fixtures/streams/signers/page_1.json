@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/signers/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "token": "signer_fixture_1",
+          "name": "Fixture Signer",
+          "email": "fixture1@example.com"
+        }
+      ]
+    }
+  }
+}

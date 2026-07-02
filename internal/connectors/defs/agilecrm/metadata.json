@@ -1,0 +1,22 @@
+{
+  "name": "agilecrm",
+  "display_name": "AgileCRM",
+  "description": "Reads AgileCRM contacts, deals, tasks, and milestone pipelines through the AgileCRM REST API.",
+  "integration_type": "api",
+  "docs_url": "https://github.com/agilecrm/rest-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external AgileCRM API read of contacts, deals, tasks, and pipeline data"
+  }
+}

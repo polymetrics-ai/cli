@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "calendar",
+  "type": "object",
+  "x-primary-key": ["date"],
+  "required": ["date"],
+  "properties": {
+    "date": { "type": "string" },
+    "open": { "type": ["string", "null"] },
+    "close": { "type": ["string", "null"] },
+    "session_open": { "type": ["string", "null"] },
+    "session_close": { "type": ["string", "null"] }
+  }
+}

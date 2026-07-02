@@ -1,0 +1,76 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "next_cursor"
+    },
+    "check": { "method": "GET", "path": "/customers" },
+    "error_map": [
+      { "status": 401, "hint": "pennylane api_key is missing or invalid; re-run pm credentials add pennylane" },
+      { "status": 429, "class": "rate_limited", "hint": "pennylane rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "50" },
+        "filter": { "template": "{{ config.filter }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "customer_invoices",
+      "path": "/customer_invoices",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "50" },
+        "filter": { "template": "{{ config.filter }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/customer_invoices.json"
+    },
+    {
+      "name": "suppliers",
+      "path": "/suppliers",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "50" },
+        "filter": { "template": "{{ config.filter }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/suppliers.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "50" },
+        "filter": { "template": "{{ config.filter }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "categories",
+      "path": "/categories",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "50" },
+        "filter": { "template": "{{ config.filter }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/categories.json"
+    }
+  ]
+}

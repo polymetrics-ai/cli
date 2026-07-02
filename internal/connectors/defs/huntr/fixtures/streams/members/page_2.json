@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/members", "query": { "limit": "100", "next": "cursor_fixture_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "mem_fixture_3",
+          "email": "fixture3@example.com",
+          "fullName": "Fixture Three",
+          "givenName": "Fixture",
+          "familyName": "Three",
+          "isActive": false,
+          "createdAt": 1767225605,
+          "lastSeenAt": 1767225606,
+          "boardIds": []
+        }
+      ],
+      "next": null
+    }
+  }
+}

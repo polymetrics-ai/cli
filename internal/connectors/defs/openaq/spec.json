@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenAQ Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "OpenAQ v3 API key, sent as the X-API-Key header; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.openaq.org/v3",
+      "description": "OpenAQ API base URL override for tests or proxies."
+    },
+    "countries_id": {
+      "type": "string",
+      "description": "Optional comma-separated OpenAQ country id filter, applied to every stream via the countries_id query parameter. Absent when unset (no filter)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

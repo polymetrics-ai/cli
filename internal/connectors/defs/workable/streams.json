@@ -1,0 +1,51 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "paging.next"
+    },
+    "check": { "method": "GET", "path": "jobs" },
+    "error_map": [
+      { "status": 401, "hint": "workable api_key is missing or invalid; re-run pm credentials add workable" },
+      { "status": 403, "hint": "workable API user lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "workable rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "jobs",
+      "path": "jobs",
+      "query": {
+        "limit": "100",
+        "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "jobs" },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "candidates",
+      "path": "candidates",
+      "query": {
+        "limit": "100",
+        "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "candidates" },
+      "schema": "schemas/candidates.json"
+    },
+    {
+      "name": "members",
+      "path": "members",
+      "query": {
+        "limit": "100",
+        "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "members" },
+      "schema": "schemas/members.json"
+    }
+  ]
+}

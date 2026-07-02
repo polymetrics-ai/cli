@@ -1,0 +1,36 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "cursor",
+      "stop_path": "hasNextPage"
+    },
+    "check": { "method": "GET", "path": "/v1/customers" },
+    "error_map": [
+      { "status": 401, "hint": "mantle api key is missing or invalid; re-run pm credentials add mantle" },
+      { "status": 429, "class": "rate_limited", "hint": "mantle rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/v1/customers",
+      "query": { "take": "500" },
+      "records": { "path": "customers" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/v1/subscriptions",
+      "query": { "take": "500" },
+      "records": { "path": "subscriptions" },
+      "schema": "schemas/subscriptions.json"
+    }
+  ]
+}

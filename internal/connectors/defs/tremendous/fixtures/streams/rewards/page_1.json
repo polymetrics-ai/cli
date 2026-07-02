@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/rewards", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "rewards": [
+        { "id": "rwd_fixture_1", "order_id": "ord_fixture_1", "status": "delivered", "created_at": "2026-01-01T00:00:00Z" },
+        { "id": "rwd_fixture_2", "order_id": "ord_fixture_1", "status": "redeemed", "created_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

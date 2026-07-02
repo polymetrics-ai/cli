@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "apikey", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "sms/v1/messages" },
+    "error_map": [
+      { "status": 401, "hint": "tyntec-sms api_key is missing or invalid; re-run pm credentials add tyntec-sms" },
+      { "status": 429, "class": "rate_limited", "hint": "tyntec rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "messages",
+      "path": "sms/v1/messages",
+      "records": { "path": "messages" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}"
+      },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "templates",
+      "path": "sms/v1/templates",
+      "records": { "path": "templates" },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "sender_ids",
+      "path": "sms/v1/sender-ids",
+      "records": { "path": "sender_ids" },
+      "schema": "schemas/sender_ids.json"
+    },
+    {
+      "name": "delivery_reports",
+      "path": "sms/v1/reports",
+      "records": { "path": "reports" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}"
+      },
+      "schema": "schemas/delivery_reports.json"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects",
+    "query": { "page": "2", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "project_fixture_101", "name": "Fixture Project 101", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "providers",
+  "type": "object",
+  "x-primary-key": ["uuid"],
+  "required": ["uuid"],
+  "properties": {
+    "uuid": { "type": "string" },
+    "ProviderCode": { "type": ["string", "null"] },
+    "Name": { "type": ["string", "null"] },
+    "CountryIso": { "type": ["string", "null"] },
+    "RegionCodes": { "type": ["array", "null"] },
+    "PaymentTypes": { "type": ["array", "null"] },
+    "CustomerCareNumber": { "type": ["string", "null"] },
+    "LogoUrl": { "type": ["string", "null"] },
+    "ValidationRegex": { "type": ["string", "null"] }
+  }
+}

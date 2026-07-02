@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/daily_readiness" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "readiness_fixture_1", "day": "2026-01-01", "score": 82, "timestamp": "2026-01-01T00:00:00+00:00" }
+      ],
+      "next_token": null
+    }
+  }
+}

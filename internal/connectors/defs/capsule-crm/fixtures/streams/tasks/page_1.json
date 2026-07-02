@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/tasks", "query": { "page": "1", "perPage": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tasks": [
+        {
+          "id": 30,
+          "description": "Fixture Task 1",
+          "detail": "conformance fixture task",
+          "status": "OPEN",
+          "dueOn": "2026-02-01",
+          "category": { "id": 5 },
+          "party": { "id": 1 },
+          "opportunity": { "id": 10 },
+          "kase": { "id": 20 },
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

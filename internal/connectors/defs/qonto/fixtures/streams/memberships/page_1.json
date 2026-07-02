@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/memberships", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "memberships": [
+        { "id": "mem_fixture_1", "amount": null, "side": null, "settled_at": null, "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "meta": { "current_page": 1, "next_page": null }
+    }
+  }
+}

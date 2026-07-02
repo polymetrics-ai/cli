@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/v1/expenses/card", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "exp_fixture_1",
+          "memo": "Fixture client dinner",
+          "location_id": "loc_fixture_1",
+          "department_id": "dept_fixture_1",
+          "user_id": "usr_fixture_1",
+          "merchant_id": "mer_fixture_1",
+          "status": "CLEARED",
+          "category": "MEALS",
+          "purchased_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "original_amount": { "amount": 8000, "currency": "USD" }
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

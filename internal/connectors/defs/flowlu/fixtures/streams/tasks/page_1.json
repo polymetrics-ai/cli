@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/task/tasks/list", "query": { "page": "1", "count": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "total_result": 1,
+        "page": 1,
+        "count": 2,
+        "items": [
+          {
+            "id": 1,
+            "name": "Fixture Task One",
+            "description": "conformance fixture task",
+            "priority": 2,
+            "workflow_stage_id": 1,
+            "responsible_id": 5,
+            "owner_id": 10,
+            "deadline": "2026-01-15 00:00:00",
+            "created_date": "2026-01-01 00:00:00",
+            "updated_date": "2026-01-01 00:00:00"
+          }
+        ]
+      }
+    }
+  }
+}

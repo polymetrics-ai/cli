@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v1/users" },
+  "response": {
+    "status": 200,
+    "body": { "data": [] }
+  }
+}

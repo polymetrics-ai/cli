@@ -1,0 +1,22 @@
+{
+  "name": "aircall",
+  "display_name": "Aircall",
+  "description": "Reads Aircall calls, users, contacts, numbers, and teams through the Aircall REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.aircall.io/api-references/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Aircall API read of call, contact, and directory data"
+  }
+}

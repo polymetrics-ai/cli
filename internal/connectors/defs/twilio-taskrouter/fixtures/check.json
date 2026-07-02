@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v1/Workspaces/synthetic-conformance-value/Workers", "query": { "PageSize": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "workers": [] }
+  }
+}

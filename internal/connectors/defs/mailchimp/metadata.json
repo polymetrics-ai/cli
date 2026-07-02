@@ -1,0 +1,23 @@
+{
+  "name": "mailchimp",
+  "display_name": "Mailchimp",
+  "description": "Reads Mailchimp Marketing API audiences (lists), campaigns, reports, and automations through the datacenter-scoped REST API.",
+  "integration_type": "api",
+  "docs_url": "https://mailchimp.com/developer/release-notes/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Mailchimp API read of audience, campaign, report, and automation data",
+    "approval": "none; read-only"
+  }
+}

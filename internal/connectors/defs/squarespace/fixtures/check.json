@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/commerce/orders", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "result": [], "pagination": { "nextPageCursor": null, "hasNextPage": false } }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CircleCI Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "CircleCI personal API token, sent as the Circle-Token header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://circleci.com/api/v2",
+      "description": "CircleCI API base URL override for tests or proxies."
+    },
+    "vcs_type": {
+      "type": "string",
+      "description": "CircleCI VCS type segment of the project slug (e.g. gh, bb). Required for the projects and pipelines streams."
+    },
+    "org": {
+      "type": "string",
+      "description": "CircleCI organization/account segment of the project slug (e.g. acme). Required for the projects and pipelines streams."
+    },
+    "repo": {
+      "type": "string",
+      "description": "CircleCI repository segment of the project slug (e.g. widgets). Required for the projects and pipelines streams."
+    },
+    "pipeline_id": {
+      "type": "string",
+      "description": "CircleCI pipeline ID. Required for the workflows stream."
+    },
+    "workflow_id": {
+      "type": "string",
+      "description": "CircleCI workflow ID. Required for the jobs stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

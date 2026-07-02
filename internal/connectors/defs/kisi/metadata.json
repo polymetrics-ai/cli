@@ -1,0 +1,23 @@
+{
+  "name": "kisi",
+  "display_name": "Kisi",
+  "description": "Reads Kisi physical access-control data: members, locks, groups, users, and logins via the Kisi REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api.kisi.io/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Kisi API read of physical access-control data",
+    "approval": "none; read-only source"
+  }
+}

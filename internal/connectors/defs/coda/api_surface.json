@@ -1,0 +1,15 @@
+{
+  "api": "Coda REST API v1 (https://coda.io/apis/v1)",
+  "docs": "https://coda.io/developers/apis/v1",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; Coda is read-only in legacy and no writes are added here",
+  "endpoints": [
+    { "method": "GET", "path": "/docs", "covered_by": { "stream": "docs" } },
+    { "method": "GET", "path": "/docs/{docId}/tables", "covered_by": { "stream": "tables" } },
+    { "method": "GET", "path": "/docs/{docId}/pages", "covered_by": { "stream": "pages" } },
+    { "method": "GET", "path": "/docs/{docId}/formulas", "covered_by": { "stream": "formulas" } },
+    { "method": "GET", "path": "/docs/{docId}/controls", "covered_by": { "stream": "controls" } },
+    { "method": "POST", "path": "/docs/{docId}/tables/{tableIdOrName}/rows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/docs/{docId}/tables/{tableIdOrName}/rows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/courses",
+    "query": { "page": "2", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "name": "Fixture Course 101",
+          "slug": "fixture-course-101",
+          "description": "A deterministic fixture course.",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

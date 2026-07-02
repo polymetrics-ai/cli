@@ -1,0 +1,18 @@
+{
+  "api": "Gong API v2 (https://api.gong.io/v2)",
+  "docs": "https://us-66463.app.gong.io/settings/api/documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Gong surface (interaction stats, trackers, workspaces, library folders, webhooks, transcript detail) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/v2/calls", "covered_by": { "stream": "calls" } },
+    { "method": "GET", "path": "/v2/settings/scorecards", "covered_by": { "stream": "scorecards" } },
+    { "method": "GET", "path": "/v2/calls/extensive", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/calls/transcript", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/stats/interaction", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/stats/activity/trackers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/workspaces", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/library/folders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/settings/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

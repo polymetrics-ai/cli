@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/contacts/lists", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "lists": [
+        {
+          "id": 1,
+          "name": "Fixture Newsletter List",
+          "totalSubscribers": 120,
+          "totalBlacklisted": 3,
+          "uniqueSubscribers": 117,
+          "folderId": 1
+        },
+        {
+          "id": 2,
+          "name": "Fixture VIP List",
+          "totalSubscribers": 40,
+          "totalBlacklisted": 0,
+          "uniqueSubscribers": 40,
+          "folderId": 1
+        }
+      ]
+    }
+  }
+}

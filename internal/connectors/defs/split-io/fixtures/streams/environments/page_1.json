@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/internal/api/v2/environments/ws/synthetic-conformance-value",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        { "id": "env_fixture_1", "name": "Production", "status": "ACTIVE" },
+        { "id": "env_fixture_2", "name": "Staging", "status": "ACTIVE" }
+      ],
+      "offset": 0,
+      "limit": 100,
+      "totalCount": 2
+    }
+  }
+}

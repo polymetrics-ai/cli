@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/template", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "tpl_fixture_1", "template_name": "Fixture Template One", "updated": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

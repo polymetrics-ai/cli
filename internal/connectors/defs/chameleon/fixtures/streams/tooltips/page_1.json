@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/edit/tooltips", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tooltips": [
+        {
+          "id": "tt_fixture_1",
+          "title": "Fixture Feature Tooltip",
+          "type": "tooltip",
+          "state": "published",
+          "is_live": true,
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

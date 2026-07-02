@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/v2/services" },
+  "response": {
+    "status": 200,
+    "body": {
+      "services": [
+        {
+          "id": 1,
+          "name": "Fixture Service One",
+          "number": "3001",
+          "active": true,
+          "note": "conformance fixture service"
+        }
+      ]
+    }
+  }
+}

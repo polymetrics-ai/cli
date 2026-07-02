@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ActiveCampaign Connection Specification",
+  "type": "object",
+  "required": ["api_key", "base_url"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "ActiveCampaign API key, sent as the Api-Token request header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "ActiveCampaign API base URL, e.g. https://<account>.api-us1.com/api/3. Required; the engine has no mechanism to derive this from an account subdomain the way legacy did (see docs.md's Known limits)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

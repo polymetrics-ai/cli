@@ -1,0 +1,22 @@
+{
+  "name": "qonto",
+  "display_name": "Qonto",
+  "description": "Reads Qonto bank transactions, memberships, and accounts through the Qonto REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://api-doc.qonto.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Qonto API read of bank transaction and account data"
+  }
+}

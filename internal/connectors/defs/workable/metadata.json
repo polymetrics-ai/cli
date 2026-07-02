@@ -1,0 +1,22 @@
+{
+  "name": "workable",
+  "display_name": "Workable",
+  "description": "Reads Workable jobs, candidates, and members through the Workable API.",
+  "integration_type": "api",
+  "docs_url": "https://workable.readme.io/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Workable API read of jobs, candidates, and members"
+  }
+}

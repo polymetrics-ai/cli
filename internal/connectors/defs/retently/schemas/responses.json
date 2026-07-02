@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "responses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "customer_id": { "type": ["string", "integer", "null"] },
+    "score": { "type": ["string", "integer", "null"] },
+    "comment": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "stream": { "type": "string" }
+  }
+}

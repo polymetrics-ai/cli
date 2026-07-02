@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/activities", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "RECDATA": [
+        { "ActivityID": "1", "ActivityName": "Camping" },
+        { "ActivityID": "2", "ActivityName": "Hiking" }
+      ],
+      "METADATA": { "RESULTS": { "TOTAL_COUNT": "2" } }
+    }
+  }
+}

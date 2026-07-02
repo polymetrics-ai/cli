@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices",
+  "type": "object",
+  "x-primary-key": ["lago_id"],
+  "x-cursor-field": "created_at",
+  "required": ["lago_id"],
+  "properties": {
+    "lago_id": { "type": "string" },
+    "number": { "type": ["string", "null"] },
+    "issuing_date": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "payment_status": { "type": ["string", "null"] },
+    "invoice_type": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "fees_amount_cents": { "type": ["integer", "null"] },
+    "taxes_amount_cents": { "type": ["integer", "null"] },
+    "total_amount_cents": { "type": ["integer", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

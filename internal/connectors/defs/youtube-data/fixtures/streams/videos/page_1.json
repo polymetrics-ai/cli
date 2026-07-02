@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/videos", "query": { "part": "snippet,statistics" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "vid_fixture_1",
+          "snippet": { "title": "Fixture Video One", "publishedAt": "2026-01-01T00:00:00Z" },
+          "statistics": { "viewCount": "42" }
+        },
+        {
+          "id": "vid_fixture_2",
+          "snippet": { "title": "Fixture Video Two", "publishedAt": "2026-01-02T00:00:00Z" },
+          "statistics": { "viewCount": "84" }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/video/v1/uploads", "query": { "page": "1", "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "upload_fixture_1",
+          "status": "waiting",
+          "asset_id": null,
+          "url": "https://storage.example.com/upload/1",
+          "timeout": 3600,
+          "cors_origin": "*",
+          "test": true
+        },
+        {
+          "id": "upload_fixture_2",
+          "status": "asset_created",
+          "asset_id": "asset_fixture_2",
+          "url": "https://storage.example.com/upload/2",
+          "timeout": 3600,
+          "cors_origin": "*",
+          "test": true
+        }
+      ]
+    }
+  }
+}

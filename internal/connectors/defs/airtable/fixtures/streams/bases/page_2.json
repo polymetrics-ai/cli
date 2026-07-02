@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/meta/bases", "query": { "offset": "itr_fixture_1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "bases": [
+        { "id": "app_fixture_3", "name": "Fixture Base Three", "permissionLevel": "read" }
+      ]
+    }
+  }
+}

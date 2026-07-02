@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TMDb Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "TMDb API key (v3 auth), sent as the api_key query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.themoviedb.org/3",
+      "description": "TMDb API base URL override for tests or proxies."
+    },
+    "language": {
+      "type": "string",
+      "description": "Optional ISO 639-1 language code applied to every request (e.g. en-US)."
+    },
+    "query": {
+      "type": "string",
+      "description": "Search query text, required when reading the search_movies stream."
+    },
+    "movie_id": {
+      "type": "string",
+      "description": "TMDb movie id, required when reading the movie_details stream."
+    }
+  }
+}

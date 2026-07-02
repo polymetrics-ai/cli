@@ -1,0 +1,13 @@
+{
+  "api": "TestRail API v2",
+  "docs": "https://support.testrail.com/hc/en-us/articles/7077039051284-Introduction-to-the-TestRail-API",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the single legacy-parity read stream (projects) only; the full TestRail surface (test cases, test runs, test results, suites, milestones) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/index.php?/api/v2/get_projects", "covered_by": { "stream": "projects" } },
+    { "method": "POST", "path": "/index.php?/api/v2/add_project", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/index.php?/api/v2/get_cases", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/index.php?/api/v2/get_runs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/index.php?/api/v2/get_results", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

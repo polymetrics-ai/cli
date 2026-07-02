@@ -1,0 +1,20 @@
+{
+  "api": "Pipedrive API v1 (https://api.pipedrive.com/v1)",
+  "docs": "https://developers.pipedrive.com/docs/api/v1",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read-only streams (deals, persons, organizations, activities, products, users) only, matching internal/connectors/pipedrive's exact endpoint set; the full Pipedrive surface (pipelines, stages, notes, files, custom fields, mutation endpoints) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/deals", "covered_by": { "stream": "deals" } },
+    { "method": "GET", "path": "/persons", "covered_by": { "stream": "persons" } },
+    { "method": "GET", "path": "/organizations", "covered_by": { "stream": "organizations" } },
+    { "method": "GET", "path": "/activities", "covered_by": { "stream": "activities" } },
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/pipelines", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/stages", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/notes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/files", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/deals", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/deals/{id}", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } }
+  ]
+}

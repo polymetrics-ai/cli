@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/starlink" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "starlink_fixture_1", "version": "v1.0", "launch": "launch_fixture_2", "longitude": -95.0, "latitude": 29.5, "height_km": 550.0, "velocity_kms": 7.6, "spaceTrack": { "OBJECT_NAME": "STARLINK-FIXTURE-1" } }
+    ]
+  }
+}

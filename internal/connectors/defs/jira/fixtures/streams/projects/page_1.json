@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/rest/api/3/project/search", "query": { "maxResults": "2", "startAt": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "startAt": 0,
+      "maxResults": 2,
+      "total": 1,
+      "values": [
+        {
+          "id": "10000",
+          "key": "PROJ1",
+          "self": "https://fixture.atlassian.net/rest/api/3/project/10000",
+          "name": "Fixture Project 1",
+          "projectTypeKey": "software",
+          "simplified": false,
+          "style": "classic",
+          "isPrivate": false
+        }
+      ]
+    }
+  }
+}

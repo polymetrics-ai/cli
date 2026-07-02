@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/workflows/synthetic-conformance-value/jobs" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "uid": "job_fixture_1", "workflow_uid": "synthetic-conformance-value", "status": "success", "created_at": "2026-01-01T00:00:00Z", "ended_at": "2026-01-01T01:00:00Z" },
+      { "uid": "job_fixture_2", "workflow_uid": "synthetic-conformance-value", "status": "running", "created_at": "2026-01-02T00:00:00Z", "ended_at": null }
+    ]
+  }
+}

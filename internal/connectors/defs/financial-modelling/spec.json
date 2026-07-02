@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Financial Modelling Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Financial Modeling Prep API key. Sent only as the apikey query parameter; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://financialmodelingprep.com/api/v3",
+      "description": "Financial Modeling Prep API base URL override for tests or proxies."
+    },
+    "exchange": {
+      "type": "string",
+      "description": "Optional stock-screener filter: exchange name (e.g. NASDAQ)."
+    },
+    "marketcapmorethan": {
+      "type": "string",
+      "description": "Optional stock-screener filter: minimum market capitalization."
+    },
+    "marketcaplowerthan": {
+      "type": "string",
+      "description": "Optional stock-screener filter: maximum market capitalization."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

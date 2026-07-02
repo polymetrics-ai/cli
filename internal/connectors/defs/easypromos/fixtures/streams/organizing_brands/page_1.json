@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/organizing_brands" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "brand_fixture_1", "name": "Fixture Brand" }
+      ],
+      "paging": { "next_cursor": null }
+    }
+  }
+}

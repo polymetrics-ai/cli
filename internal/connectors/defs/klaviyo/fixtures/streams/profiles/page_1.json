@@ -1,0 +1,39 @@
+{
+  "request": { "method": "GET", "path": "/profiles", "query": { "page[size]": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "prof_fixture_1",
+          "type": "profile",
+          "attributes": {
+            "email": "fixture1@example.com",
+            "phone_number": "+15550100",
+            "external_id": "ext_1",
+            "first_name": "Fixture",
+            "last_name": "One",
+            "organization": "Example Co",
+            "created": "2026-01-01T00:00:00Z",
+            "updated": "2026-01-01T00:00:00Z"
+          }
+        },
+        {
+          "id": "prof_fixture_2",
+          "type": "profile",
+          "attributes": {
+            "email": "fixture2@example.com",
+            "phone_number": "+15550101",
+            "external_id": "ext_2",
+            "first_name": "Fixture",
+            "last_name": "Two",
+            "organization": "Example Co",
+            "created": "2026-01-02T00:00:00Z",
+            "updated": "2026-01-02T00:00:00Z"
+          }
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

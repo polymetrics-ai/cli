@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/event/get-guests", "query": { "event_api_id": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "guest": {
+            "api_id": "gst_fixture_1",
+            "event_api_id": "evt_fixture_1",
+            "name": "Fixture Guest One",
+            "email": "fixture1@example.com",
+            "approval_status": "approved",
+            "registered_at": "2026-01-01T00:00:00Z",
+            "checked_in_at": null,
+            "user_api_id": "usr_fixture_1",
+            "user_name": "Fixture User One"
+          }
+        },
+        {
+          "guest": {
+            "api_id": "gst_fixture_2",
+            "event_api_id": "evt_fixture_1",
+            "name": "Fixture Guest Two",
+            "email": "fixture2@example.com",
+            "approval_status": "approved",
+            "registered_at": "2026-01-02T00:00:00Z",
+            "checked_in_at": "2026-01-02T00:30:00Z",
+            "user_api_id": "usr_fixture_2",
+            "user_name": "Fixture User Two"
+          }
+        }
+      ],
+      "has_more": false,
+      "next_cursor": null
+    }
+  }
+}

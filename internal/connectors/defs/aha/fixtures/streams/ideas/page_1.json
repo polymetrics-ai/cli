@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/ideas", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "ideas": [
+        {
+          "id": "idea_fixture_1",
+          "reference_num": "FIX-I-1",
+          "name": "Fixture Idea One",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "score": 10,
+          "votes": 3,
+          "workflow_status": { "id": "1", "name": "Under Consideration" },
+          "url": "https://secure.aha.io/ideas/1"
+        }
+      ],
+      "pagination": { "total_records": 1, "total_pages": 1, "current_page": 1 }
+    }
+  }
+}

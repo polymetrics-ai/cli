@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Short.io Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Short.io API base URL.",
+      "default": "https://api.short.io"
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Short.io API key, sent verbatim as the Authorization header (no Bearer prefix, matching Short.io's own convention)."
+    },
+    "page_size": {
+      "type": "integer",
+      "description": "Records requested per page (legacy default 150, max 1000).",
+      "default": 150
+    }
+  }
+}

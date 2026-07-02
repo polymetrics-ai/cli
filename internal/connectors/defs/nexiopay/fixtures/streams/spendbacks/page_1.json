@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/payout/v3/spendback", "query": { "limit": "10", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "spb_fixture_1",
+          "recipientId": "rec_fixture_1",
+          "amount": 100,
+          "currency": "USD",
+          "status": "completed",
+          "createdDate": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/type", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 2,
+      "next": null,
+      "previous": null,
+      "results": [
+        { "name": "fire", "url": "https://pokeapi.co/api/v2/type/10/" },
+        { "name": "water", "url": "https://pokeapi.co/api/v2/type/11/" }
+      ]
+    }
+  }
+}

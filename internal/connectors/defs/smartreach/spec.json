@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SmartReach Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SmartReach API key, sent as the X-API-KEY header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.smartreach.io/api/v3",
+      "description": "SmartReach API base URL override for tests or proxies."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Optional team_id query filter, applied to campaigns/prospects/email_settings/do_not_contact streams (not teams). Legacy also accepts an alias config key `teamid`; this dialect can express only one config key per query param, so `teamid` is not modeled here (see docs.md Known limits) — use `team_id` directly."
+    },
+    "older_than": {
+      "type": "string",
+      "description": "Optional older_than query filter passed through verbatim."
+    },
+    "newer_than": {
+      "type": "string",
+      "description": "Optional newer_than query filter passed through verbatim."
+    }
+  }
+}

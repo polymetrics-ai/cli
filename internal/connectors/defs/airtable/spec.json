@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Airtable Connection Specification",
+  "type": "object",
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Airtable Personal Access Token, sent as a Bearer token. Preferred over access_token when both are set. Never logged."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Airtable OAuth2 access token, sent as a Bearer token when api_key is unset. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.airtable.com/v0",
+      "description": "Airtable API base URL override for tests or proxies."
+    },
+    "base_id": {
+      "type": "string",
+      "description": "Airtable base id (required for the 'tables' and 'records' streams)."
+    },
+    "table_id": {
+      "type": "string",
+      "description": "Airtable table id or name (required for the 'records' stream)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page for the 'records' stream (1-100)."
+    }
+  }
+}

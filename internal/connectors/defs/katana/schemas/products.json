@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "uom": { "type": ["string", "null"] },
+    "category_name": { "type": ["string", "null"] },
+    "is_sellable": { "type": ["boolean", "null"] },
+    "is_producible": { "type": ["boolean", "null"] },
+    "is_purchasable": { "type": ["boolean", "null"] },
+    "default_supplier_id": { "type": ["integer", "null"] },
+    "additional_info": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

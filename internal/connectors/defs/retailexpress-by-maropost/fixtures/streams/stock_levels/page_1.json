@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stock-levels",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "stock_fixture_1",
+          "product_id": "product_fixture_1",
+          "store_id": "store_fixture_1",
+          "quantity": 42,
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "stock_fixture_2",
+          "product_id": "product_fixture_2",
+          "store_id": "store_fixture_1",
+          "quantity": 7,
+          "updated_at": "2026-01-03T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

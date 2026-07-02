@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/people",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "person_fixture_101",
+        "email": "fixture101@example.com",
+        "first_name": "Fixture101",
+        "last_name": "Person",
+        "status": "active",
+        "updated_at": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/milestone/pipelines" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Default Pipeline",
+        "milestones": "Prospect,Won,Lost",
+        "pipeline_default": true
+      }
+    ]
+  }
+}

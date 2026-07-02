@@ -1,0 +1,23 @@
+{
+  "name": "invoiceninja",
+  "display_name": "Invoice Ninja",
+  "description": "Reads Invoice Ninja clients, invoices, products, payments, and quotes through the Invoice Ninja v5 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api-docs.invoicing.co/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Invoice Ninja API read of client and billing data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "activities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "activityTime",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "activityTime": { "type": ["number", "null"] },
+    "device_id": { "type": ["integer", "null"] },
+    "activity_type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "message": { "type": ["string", "null"] }
+  }
+}

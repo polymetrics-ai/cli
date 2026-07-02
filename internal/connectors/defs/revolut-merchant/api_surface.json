@@ -1,0 +1,19 @@
+{
+  "api": "Revolut Merchant API (https://merchant.revolut.com/api/1.0)",
+  "docs": "https://developer.revolut.com/docs/guides/merchant/reference/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (orders, customers, settlements, payment_links); legacy ships no writes (capabilities.write is false) and the full Revolut Merchant surface (order create/capture/cancel/refund, customer create/update, webhook management, payout endpoints) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/1.0/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/1.0/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/1.0/settlements", "covered_by": { "stream": "settlements" } },
+    { "method": "GET", "path": "/1.0/payment-links", "covered_by": { "stream": "payment_links" } },
+    { "method": "POST", "path": "/1.0/orders", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented order creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/1.0/orders/{order_id}/capture", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented order capture; Pass B capability expansion" } },
+    { "method": "POST", "path": "/1.0/orders/{order_id}/cancel", "excluded": { "category": "destructive_admin", "reason": "order cancellation mutation; legacy never implemented writes" } },
+    { "method": "POST", "path": "/1.0/orders/{order_id}/refund", "excluded": { "category": "destructive_admin", "reason": "order refund mutation; legacy never implemented writes" } },
+    { "method": "POST", "path": "/1.0/customers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented customer create/update; Pass B capability expansion" } },
+    { "method": "POST", "path": "/1.0/webhooks", "excluded": { "category": "out_of_scope", "reason": "webhook management not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/1.0/payouts", "excluded": { "category": "out_of_scope", "reason": "payout endpoints not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

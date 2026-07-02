@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/content" },
+  "response": {
+    "status": 200,
+    "body": {
+      "lectures": [
+        { "id": 1, "name": "Opening Keynote", "description": "Fixture lecture one.", "type": "lecture", "code": "lec_1", "event_id": 1, "event_day_id": 1, "hall_id": 10, "start": "2026-06-01T09:00:00Z", "end": "2026-06-01T10:00:00Z", "capacity": 100, "available": true, "booked": 42, "created_at": "2026-05-01T00:00:00Z", "updated_at": "2026-05-02T00:00:00Z" },
+        { "id": 2, "name": "Closing Panel", "description": "Fixture lecture two.", "type": "panel", "code": "lec_2", "event_id": 1, "event_day_id": 1, "hall_id": 11, "start": "2026-06-01T17:00:00Z", "end": "2026-06-01T18:00:00Z", "capacity": 80, "available": true, "booked": 30, "created_at": "2026-05-01T00:00:00Z", "updated_at": "2026-05-02T00:00:00Z" }
+      ],
+      "speakers": [],
+      "days": [],
+      "halls": [],
+      "tracks": [],
+      "workshops": []
+    }
+  }
+}

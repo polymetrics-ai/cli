@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/page", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "pge_fixture_1", "name": "Fixture Page One", "lastUpdated": "2026-01-01T00:00:00Z" },
+        { "id": "pge_fixture_2", "name": "Fixture Page Two", "lastUpdated": "2026-01-02T00:00:00Z" }
+      ],
+      "next": ""
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/admin/environments", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "environments": [
+        { "id": "development", "name": "development" },
+        { "id": "production", "name": "production" }
+      ]
+    }
+  }
+}

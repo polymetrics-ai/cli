@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v3/organizations" },
+  "response": {
+    "status": 200,
+    "body": { "organizations": [] }
+  }
+}

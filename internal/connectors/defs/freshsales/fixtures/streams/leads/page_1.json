@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/leads/view/synthetic-conformance-value", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "leads": [
+        {
+          "id": 30,
+          "first_name": "Fixture1",
+          "last_name": "Lead",
+          "display_name": "Fixture1 Lead",
+          "email": "fixture-lead1@example.com",
+          "company_name": "Fixture Co 1",
+          "job_title": "Engineer",
+          "city": "Springfield",
+          "country": "US",
+          "lead_stage_id": 1,
+          "owner_id": 1000,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": { "total": 1, "total_pages": 1 }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/crew" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "crew_fixture_1", "name": "Fixture Astronaut", "agency": "NASA", "image": null, "wikipedia": null, "status": "active", "launches": ["launch_fixture_2"] }
+    ]
+  }
+}

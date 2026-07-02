@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/users/",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "account_id": 1,
+          "email": "fixture1@example.com",
+          "first_name": "Fixture",
+          "last_name": "One",
+          "fullname": "Fixture One",
+          "is_active": true,
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "account_id": 1,
+          "email": "fixture2@example.com",
+          "first_name": "Fixture",
+          "last_name": "Two",
+          "fullname": "Fixture Two",
+          "is_active": true,
+          "created_at": "2026-01-01T01:00:00Z"
+        }
+      ],
+      "status": { "code": 200, "is_success": true },
+      "extra": { "filters": { "limit": 100, "offset": 0 }, "pagination": { "count": 2, "total_count": 2 } }
+    }
+  }
+}

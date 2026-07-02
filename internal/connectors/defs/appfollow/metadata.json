@@ -1,0 +1,20 @@
+{
+  "name": "appfollow",
+  "display_name": "Appfollow",
+  "description": "Reads AppFollow account users and app collections through the AppFollow REST API v2. Per-app-collection app lists and per-app rating breakdowns are not modeled by this bundle; see docs.md Known limits.",
+  "integration_type": "api",
+  "docs_url": "https://appfollow.docs.apiary.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external AppFollow API read of account user and app collection data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

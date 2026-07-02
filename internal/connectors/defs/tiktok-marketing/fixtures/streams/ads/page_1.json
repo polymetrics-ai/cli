@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ad/get/",
+    "query": { "page": "1", "page_size": "100", "advertiser_id": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "OK",
+      "data": {
+        "list": [
+          {
+            "ad_id": "ad_fixture_1",
+            "ad_name": "Fixture Ad 1",
+            "adgroup_id": "adgroup_fixture_1",
+            "campaign_id": "campaign_fixture_1",
+            "advertiser_id": "synthetic-conformance-value",
+            "operation_status": "ENABLE",
+            "call_to_action": "SHOP_NOW",
+            "create_time": "2026-01-01T00:00:00Z",
+            "modify_time": "2026-01-02T00:00:00Z"
+          },
+          {
+            "ad_id": "ad_fixture_2",
+            "ad_name": "Fixture Ad 2",
+            "adgroup_id": "adgroup_fixture_1",
+            "campaign_id": "campaign_fixture_1",
+            "advertiser_id": "synthetic-conformance-value",
+            "operation_status": "ENABLE",
+            "call_to_action": "LEARN_MORE",
+            "create_time": "2026-01-01T00:00:00Z",
+            "modify_time": "2026-01-03T00:00:00Z"
+          }
+        ],
+        "page_info": { "page": 1, "page_size": 100, "total_number": 2, "total_page": 1 }
+      }
+    }
+  }
+}

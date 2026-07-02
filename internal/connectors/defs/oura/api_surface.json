@@ -1,0 +1,19 @@
+{
+  "api": "Oura API v2 (https://cloud.ouraring.com/docs/)",
+  "docs": "https://cloud.ouraring.com/docs/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (personal_info, daily_sleep, daily_activity, daily_readiness). Oura's other user-collection endpoints (daily_spo2, heartrate, sessions, tags, workouts, etc.) are out of scope; legacy itself never implemented them. capabilities.write is false (read-only, no obviously-safe reverse-ETL writes).",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/usercollection/personal_info", "covered_by": { "stream": "personal_info" } },
+    { "method": "GET", "path": "/v2/usercollection/daily_sleep", "covered_by": { "stream": "daily_sleep" } },
+    { "method": "GET", "path": "/v2/usercollection/daily_activity", "covered_by": { "stream": "daily_activity" } },
+    { "method": "GET", "path": "/v2/usercollection/daily_readiness", "covered_by": { "stream": "daily_readiness" } },
+    { "method": "GET", "path": "/v2/usercollection/daily_spo2", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/usercollection/heartrate", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/usercollection/sleep_time", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/usercollection/session", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/usercollection/tag", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/usercollection/workout", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/usercollection/ring_configuration", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } }
+  ]
+}

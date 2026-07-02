@@ -1,0 +1,17 @@
+{
+  "api": "Datadog API v1/v2 (https://api.datadoghq.com)",
+  "docs": "https://docs.datadoghq.com/api/latest/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: only the 2 legacy-parity streams NOT blocked by ENGINE_GAP (dashboards, downtimes) are implemented this wave. monitors/users/slo are legacy-parity streams that are BLOCKED (not merely deferred) by an engine pagination gap — see docs.md Known limits — and are excluded here pending a follow-up engine-dialect increment, not Pass B scope narrowing. The full Datadog surface (metrics, logs, APM traces, incidents, security signals, synthetics) is separately out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/dashboard", "covered_by": { "stream": "dashboards" } },
+    { "method": "GET", "path": "/api/v1/downtime", "covered_by": { "stream": "downtimes" } },
+    { "method": "GET", "path": "/api/v1/monitor", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: legacy pages this 0-based (page=0 is the true first page); the engine's page_number PaginationSpec/connsdk.PageNumberPaginator unconditionally coerces start_page 0 to 1, silently skipping page 0's real records on every live read (identical gap class to this repo's algolia `indices` stream) - see docs.md Known limits" } },
+    { "method": "GET", "path": "/api/v2/users", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical 0-based page_number start blocker as monitors - see docs.md Known limits" } },
+    { "method": "GET", "path": "/api/v1/slo", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical 0-based page_number start blocker as monitors - see docs.md Known limits" } },
+    { "method": "GET", "path": "/api/v2/logs/events", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/series", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/incidents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v1/monitor", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

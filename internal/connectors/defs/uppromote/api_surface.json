@@ -1,0 +1,10 @@
+{
+  "api": "UpPromote API",
+  "docs": "https://uppromote.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the single legacy-parity affiliates read stream only; the full UpPromote API (referrals, commissions, payouts, campaign management) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/affiliates", "covered_by": { "stream": "affiliates" } },
+    { "method": "POST", "path": "/api/affiliates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only, no write support" } }
+  ]
+}

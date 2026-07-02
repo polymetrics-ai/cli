@@ -1,0 +1,18 @@
+{
+  "api": "Freshdesk REST API v2",
+  "docs": "https://developers.freshdesk.com/api/#change_log",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Freshdesk surface (conversations, time entries, solutions/articles, canned responses, business hours, webhooks, etc.) is out of scope until Pass B; this connector is read-only, matching legacy",
+  "endpoints": [
+    { "method": "GET", "path": "/tickets", "covered_by": { "stream": "tickets" } },
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/companies", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/agents", "covered_by": { "stream": "agents" } },
+    { "method": "GET", "path": "/groups", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/tickets/{id}/conversations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/tickets/{id}/time_entries", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/solutions/categories", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/canned-response-folders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/tickets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only" } }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "api": "Buzzsprout API (https://www.buzzsprout.com/api)",
+  "docs": "https://github.com/Buzzsprout/buzzsprout-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only; Buzzsprout also exposes write/update endpoints for episodes and podcasts which legacy never implemented (read-only connector) and remain out of scope.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/{podcast_id}/episodes.json", "covered_by": { "stream": "episodes" } },
+    { "method": "GET", "path": "/api/podcasts.json", "covered_by": { "stream": "podcasts" } },
+    { "method": "GET", "path": "/api/{podcast_id}/episodes/{episode_id}.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/{podcast_id}/episodes.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/api/{podcast_id}/episodes/{episode_id}.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/api/{podcast_id}/episodes/{episode_id}.json", "excluded": { "category": "destructive_admin", "reason": "destructive delete; legacy connector never implemented writes" } }
+  ]
+}

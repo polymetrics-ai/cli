@@ -1,0 +1,22 @@
+{
+  "name": "clickup-api",
+  "display_name": "ClickUp",
+  "description": "Reads ClickUp workspaces (teams), spaces, folders, lists, and tasks through the ClickUp v2 REST API using a personal API token.",
+  "integration_type": "api",
+  "docs_url": "https://clickup.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external ClickUp API read of workspace, space, folder, list, and task data"
+  }
+}

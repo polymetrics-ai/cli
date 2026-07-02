@@ -1,0 +1,23 @@
+{
+  "name": "buzzsprout",
+  "display_name": "Buzzsprout",
+  "description": "Reads Buzzsprout podcasts and episodes (titles, publish dates, durations, play counts) through the Buzzsprout REST API.",
+  "integration_type": "api",
+  "docs_url": "https://github.com/Buzzsprout/buzzsprout-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Buzzsprout API read of podcast and episode data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "api": "Alpaca Broker API v1 (https://broker-api.alpaca.markets/v1)",
+  "docs": "https://docs.alpaca.markets/docs/broker-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; trading/order/funding/journal endpoints are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/v1/assets", "covered_by": { "stream": "assets" } },
+    { "method": "GET", "path": "/v1/calendar", "covered_by": { "stream": "calendar" } },
+    { "method": "GET", "path": "/v1/clock", "covered_by": { "stream": "clock" } },
+    { "method": "GET", "path": "/v1/country_info", "covered_by": { "stream": "country_info" } },
+    { "method": "POST", "path": "/v1/accounts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/trading/accounts/{account_id}/orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/trading/accounts/{account_id}/orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/trading/accounts/{account_id}/positions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/accounts/{account_id}/transfers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/events/accounts/status", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

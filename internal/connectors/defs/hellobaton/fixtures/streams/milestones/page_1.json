@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/milestones", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 1,
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-02T00:00:00Z",
+          "description": "Fixture milestone",
+          "deadline_datetime": "2026-02-01T00:00:00Z",
+          "deadline_fixed": true,
+          "duration": 5,
+          "finish_datetime": "2026-02-02T00:00:00Z",
+          "project": "Fixture Project",
+          "_self": "/api/milestones/1"
+        }
+      ]
+    }
+  }
+}

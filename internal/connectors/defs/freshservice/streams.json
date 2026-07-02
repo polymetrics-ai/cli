@@ -1,0 +1,61 @@
+{
+  "base": {
+    "url": "https://{{ config.domain_name }}/api/v2",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "X" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/agents" },
+    "error_map": [
+      { "status": 401, "hint": "freshservice api key is missing or invalid; re-run pm credentials add freshservice" },
+      { "status": 403, "hint": "freshservice account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "freshservice rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "tickets",
+      "path": "/tickets",
+      "query": {
+        "updated_since": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "records": { "path": "tickets" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/tickets.json"
+    },
+    {
+      "name": "agents",
+      "path": "/agents",
+      "records": { "path": "agents" },
+      "schema": "schemas/agents.json"
+    },
+    {
+      "name": "requesters",
+      "path": "/requesters",
+      "records": { "path": "requesters" },
+      "schema": "schemas/requesters.json"
+    },
+    {
+      "name": "assets",
+      "path": "/assets",
+      "records": { "path": "assets" },
+      "schema": "schemas/assets.json"
+    },
+    {
+      "name": "problems",
+      "path": "/problems",
+      "records": { "path": "problems" },
+      "schema": "schemas/problems.json"
+    }
+  ]
+}

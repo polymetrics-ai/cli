@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/templates" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "template_fixture_1",
+          "name": "Fixture Welcome Email",
+          "published": true,
+          "has_draft": false,
+          "has_published": true,
+          "last_update_time": "2026-01-01T00:00:00+00:00",
+          "last_use": null
+        }
+      ]
+    }
+  }
+}

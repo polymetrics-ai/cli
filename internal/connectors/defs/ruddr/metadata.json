@@ -1,0 +1,22 @@
+{
+  "name": "ruddr",
+  "display_name": "Ruddr",
+  "description": "Reads Ruddr clients, projects, and time entries through the Ruddr API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://docs.ruddr.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Ruddr API read of client, project, and time-entry data"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/advertisers/synthetic-conformance-value/transactions/",
+    "query": {
+      "page": "1",
+      "pageSize": "2",
+      "startDate": "2020-01-01T00:00:00Z",
+      "endDate": "2099-12-31T23:59:59",
+      "dateType": "transaction",
+      "timezone": "UTC"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "url": "https://example.com/tx/1001",
+        "advertiserId": 42,
+        "publisherId": 7,
+        "commissionSharingPublisherId": null,
+        "siteName": "fixture-site-1.example.com",
+        "transactionDate": "2026-01-01T00:00:00",
+        "validationDate": "2026-02-01T00:00:00",
+        "type": "Commission group transaction",
+        "transactionStatus": "approved",
+        "saleAmount": { "amount": 100.0, "currency": "GBP" },
+        "commissionAmount": { "amount": 12.5, "currency": "GBP" },
+        "clickDate": "2025-12-31T23:00:00",
+        "clickRefs": {},
+        "customParameters": {}
+      },
+      {
+        "id": 1002,
+        "url": "https://example.com/tx/1002",
+        "advertiserId": 42,
+        "publisherId": 8,
+        "commissionSharingPublisherId": null,
+        "siteName": "fixture-site-2.example.com",
+        "transactionDate": "2026-01-02T00:00:00",
+        "validationDate": "2026-02-02T00:00:00",
+        "type": "Commission group transaction",
+        "transactionStatus": "pending",
+        "saleAmount": { "amount": 50.0, "currency": "GBP" },
+        "commissionAmount": { "amount": 7.0, "currency": "GBP" },
+        "clickDate": "2026-01-01T23:00:00",
+        "clickRefs": {},
+        "customParameters": {}
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stocks",
+  "type": "object",
+  "x-primary-key": ["symbol"],
+  "required": ["symbol"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "price": { "type": ["number", "null"] },
+    "exchange": { "type": ["string", "null"] },
+    "exchange_short_name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] }
+  }
+}

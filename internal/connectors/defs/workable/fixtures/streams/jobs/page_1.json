@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/jobs", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "jobs": [
+        { "id": "job_fixture_1", "shortcode": "FIX1", "title": "Fixture Engineer", "state": "published" },
+        { "id": "job_fixture_2", "shortcode": "FIX2", "title": "Fixture Designer", "state": "draft" }
+      ],
+      "paging": {}
+    }
+  }
+}

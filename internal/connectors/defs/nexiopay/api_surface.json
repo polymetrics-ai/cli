@@ -1,0 +1,14 @@
+{
+  "api": "Nexio Pay REST API (v3)",
+  "docs": "https://docs.nexiopay.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only; Nexio Pay's reporting/management endpoints have no safe reverse-ETL write surface, matching legacy's Write=false.",
+  "endpoints": [
+    { "method": "GET", "path": "/card/v3", "covered_by": { "stream": "card_tokens" } },
+    { "method": "GET", "path": "/payout/v3/recipient", "covered_by": { "stream": "recipients" } },
+    { "method": "GET", "path": "/payout/v3/spendback", "covered_by": { "stream": "spendbacks" } },
+    { "method": "GET", "path": "/transaction/v3/paymentTypes", "covered_by": { "stream": "payment_types" } },
+    { "method": "GET", "path": "/pay/v3/getTerminalList", "covered_by": { "stream": "terminal_list" } },
+    { "method": "GET", "path": "/user/v3/account/whoAmI", "covered_by": { "stream": "user" } }
+  ]
+}

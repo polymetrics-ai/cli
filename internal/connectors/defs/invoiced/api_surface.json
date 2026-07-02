@@ -1,0 +1,16 @@
+{
+  "api": "Invoiced API (https://api.invoiced.com)",
+  "docs": "https://www.invoiced.com/docs/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Invoiced surface (estimates approval actions, subscription mutations, payment plans, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/payments", "covered_by": { "stream": "payments" } },
+    { "method": "GET", "path": "/subscriptions", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/estimates", "covered_by": { "stream": "estimates" } },
+    { "method": "POST", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/invoices/{id}/send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/customers/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive delete, not part of a read-only source migration" } }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/workspaces", "query": { "page": "1", "page_size": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "page_count": 1,
+      "items": [
+        { "id": "ws_fixture_1", "name": "Fixture Workspace", "account_id": "acct_fixture", "shared": false, "default": true, "self": { "href": "https://api.typeform.com/workspaces/ws_fixture_1" } },
+        { "id": "ws_fixture_2", "name": "Second Workspace", "account_id": "acct_fixture", "shared": true, "default": false, "self": { "href": "https://api.typeform.com/workspaces/ws_fixture_2" } }
+      ]
+    }
+  }
+}

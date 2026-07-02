@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "limit": "500",
+      "offset": "500"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "item": [
+          {
+            "id": 501,
+            "email": "fixture501@example.com",
+            "name": "Fixture Contact 501",
+            "first_name": "Fixture501",
+            "language": "en",
+            "custom_fields": {
+              "tier": "gold"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "api": "Pingdom API 3.1 (https://api.pingdom.com/api/3.1)",
+  "docs": "https://docs.pingdom.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read-only streams (checks, probes, actions, maintenance, reference) only, matching internal/connectors/pingdom's exact endpoint set; the full Pingdom surface (single-check detail, check create/update/delete, teams, contacts, reports) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/checks", "covered_by": { "stream": "checks" } },
+    { "method": "GET", "path": "/probes", "covered_by": { "stream": "probes" } },
+    { "method": "GET", "path": "/actions", "covered_by": { "stream": "actions" } },
+    { "method": "GET", "path": "/maintenance", "covered_by": { "stream": "maintenance" } },
+    { "method": "GET", "path": "/reference", "covered_by": { "stream": "reference" } },
+    { "method": "GET", "path": "/checks/{checkid}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/checks/{checkid}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/checks/{checkid}", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/teams", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/reports.public", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

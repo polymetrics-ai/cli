@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Timely Connection Specification",
+  "type": "object",
+  "required": ["bearer_token", "account_id"],
+  "properties": {
+    "bearer_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Timely OAuth access token, sent as a Bearer token (Authorization: Bearer <token>). Never logged."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Timely account id every stream's path is prefixed with (<account_id>/<resource>)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.timelyapp.com/1.1",
+      "description": "Timely API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional lower bound sent as the 'since' query param on the 'events' stream only; omitted entirely (and every other stream unaffected) when unset."
+    }
+  }
+}

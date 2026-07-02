@@ -1,0 +1,56 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "APIKEY", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "offset_param": "offset",
+      "limit_param": "limit",
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/user" },
+    "error_map": [
+      { "status": 401, "hint": "jotform api_key is missing or invalid; re-run pm credentials add jotform" },
+      { "status": 403, "hint": "jotform account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "jotform rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "forms",
+      "path": "/user/forms",
+      "records": { "path": "content" },
+      "schema": "schemas/forms.json"
+    },
+    {
+      "name": "submissions",
+      "path": "/user/submissions",
+      "records": { "path": "content" },
+      "schema": "schemas/submissions.json"
+    },
+    {
+      "name": "reports",
+      "path": "/user/reports",
+      "pagination": { "type": "none" },
+      "records": { "path": "content" },
+      "schema": "schemas/reports.json"
+    },
+    {
+      "name": "folders",
+      "path": "/user/folders",
+      "pagination": { "type": "none" },
+      "records": { "path": "content" },
+      "schema": "schemas/folders.json"
+    },
+    {
+      "name": "user",
+      "path": "/user",
+      "pagination": { "type": "none" },
+      "records": { "path": "content" },
+      "schema": "schemas/user.json"
+    }
+  ]
+}

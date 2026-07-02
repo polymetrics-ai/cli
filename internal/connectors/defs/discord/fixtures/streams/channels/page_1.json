@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/guilds/synthetic-conformance-value/channels" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "channel_fixture_1", "guild_id": "guild_fixture_1", "name": "general", "type": 0, "position": 0, "parent_id": null, "topic": "General discussion", "nsfw": false },
+      { "id": "channel_fixture_2", "guild_id": "guild_fixture_1", "name": "random", "type": 0, "position": 1, "parent_id": null, "topic": null, "nsfw": false }
+    ]
+  }
+}

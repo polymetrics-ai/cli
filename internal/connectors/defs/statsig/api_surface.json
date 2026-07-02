@@ -1,0 +1,15 @@
+{
+  "api": "Statsig Console API v1 (https://statsigapi.net/console/v1)",
+  "docs": "https://docs.statsig.com/console-api",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (feature_gates, dynamic_configs, experiments, segments); legacy ships no writes (capabilities.write is false), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/console/v1/gates", "covered_by": { "stream": "feature_gates" } },
+    { "method": "GET", "path": "/console/v1/dynamic_configs", "covered_by": { "stream": "dynamic_configs" } },
+    { "method": "GET", "path": "/console/v1/experiments", "covered_by": { "stream": "experiments" } },
+    { "method": "GET", "path": "/console/v1/segments", "covered_by": { "stream": "segments" } },
+    { "method": "POST", "path": "/console/v1/gates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/console/v1/metrics", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/console/v1/target_apps", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

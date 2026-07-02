@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/stock-screener", "query": { "limit": "2", "offset": "2" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "FIX3",
+        "companyName": "Fixture Company 3",
+        "marketCap": 3000000000,
+        "sector": "Technology",
+        "industry": "Software",
+        "beta": 0.9,
+        "price": 103.0,
+        "lastAnnualDividend": 0.7,
+        "volume": 3000000,
+        "exchange": "NASDAQ Global Select",
+        "exchangeShortName": "NASDAQ",
+        "country": "US",
+        "isEtf": false,
+        "isActivelyTrading": true
+      }
+    ]
+  }
+}

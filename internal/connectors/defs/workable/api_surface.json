@@ -1,0 +1,14 @@
+{
+  "api": "Workable SPI v3 (https://<subdomain>.workable.com/spi/v3)",
+  "docs": "https://workable.readme.io/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams (jobs, candidates, members) only; the broader Workable surface (job stages, candidate activities, custom attributes, offers, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/spi/v3/jobs", "covered_by": { "stream": "jobs" } },
+    { "method": "GET", "path": "/spi/v3/candidates", "covered_by": { "stream": "candidates" } },
+    { "method": "GET", "path": "/spi/v3/members", "covered_by": { "stream": "members" } },
+    { "method": "GET", "path": "/spi/v3/jobs/{shortcode}/candidates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/spi/v3/candidates/{id}/activities", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/spi/v3/jobs/{shortcode}/candidates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

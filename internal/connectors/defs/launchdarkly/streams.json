@@ -1,0 +1,53 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/projects", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "launchdarkly access_token is missing or invalid; re-run pm credentials add launchdarkly" },
+      { "status": 403, "hint": "launchdarkly account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "launchdarkly rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": { "path": "items" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "members",
+      "path": "/members",
+      "records": { "path": "items" },
+      "schema": "schemas/members.json"
+    },
+    {
+      "name": "auditlog",
+      "path": "/auditlog",
+      "records": { "path": "items" },
+      "schema": "schemas/auditlog.json"
+    },
+    {
+      "name": "flags",
+      "path": "/flags/{{ config.project_key }}",
+      "records": { "path": "items" },
+      "schema": "schemas/flags.json"
+    },
+    {
+      "name": "environments",
+      "path": "/projects/{{ config.project_key }}/environments",
+      "records": { "path": "items" },
+      "schema": "schemas/environments.json"
+    }
+  ]
+}

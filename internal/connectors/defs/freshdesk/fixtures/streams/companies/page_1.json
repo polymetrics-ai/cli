@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/companies" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 4000,
+        "name": "Fixture Company",
+        "description": "fixture record",
+        "note": "",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    ]
+  }
+}

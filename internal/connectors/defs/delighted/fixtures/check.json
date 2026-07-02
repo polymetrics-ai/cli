@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/metrics.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "nps": 42,
+      "promoter_count": 10,
+      "promoter_percent": 50.0,
+      "passive_count": 6,
+      "passive_percent": 30.0,
+      "detractor_count": 4,
+      "detractor_percent": 20.0,
+      "response_count": 20
+    }
+  }
+}

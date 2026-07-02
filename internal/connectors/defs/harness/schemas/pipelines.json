@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pipelines",
+  "type": "object",
+  "x-primary-key": ["identifier"],
+  "required": ["identifier"],
+  "properties": {
+    "identifier": { "type": "string" },
+    "org_identifier": { "type": ["string", "null"] },
+    "project_identifier": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "stage_count": { "type": ["integer", "null"] }
+  }
+}

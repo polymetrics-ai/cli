@@ -1,0 +1,18 @@
+{
+  "api": "Gist REST API (https://api.getgist.com)",
+  "docs": "https://developers.getgist.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only; write endpoints (creating/updating contacts, tags, campaigns) are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/tags", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "/segments", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/forms", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/teammates", "covered_by": { "stream": "teammates" } },
+    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/contacts/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/events", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/conversations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

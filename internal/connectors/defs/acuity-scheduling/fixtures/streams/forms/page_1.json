@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/forms" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 99,
+        "name": "Fixture Intake Form",
+        "description": "Fixture form",
+        "hidden": false
+      }
+    ]
+  }
+}

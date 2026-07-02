@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/books/", "query": { "sort": "popular" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 84,
+          "title": "Frankenstein; Or, The Modern Prometheus",
+          "authors": [{ "name": "Shelley, Mary Wollstonecraft", "birth_year": 1797, "death_year": 1851 }],
+          "translators": [],
+          "subjects": ["Horror tales", "Science fiction"],
+          "bookshelves": ["Gothic Fiction", "Best Books Ever Listings"],
+          "languages": ["en"],
+          "copyright": false,
+          "media_type": "Text",
+          "download_count": 80000
+        }
+      ]
+    }
+  }
+}

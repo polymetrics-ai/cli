@@ -1,0 +1,39 @@
+{
+  "request": { "method": "GET", "path": "/promotions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "promo_fixture_1",
+          "title": "Spring Giveaway",
+          "description": "Deterministic fixture record.",
+          "promotion_type": "giveaway",
+          "status": "active",
+          "default_language": "en",
+          "timezone": "UTC",
+          "url": "https://example.com/promo/1",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-02-01T00:00:00Z",
+          "created": "2026-01-01T00:00:00Z",
+          "organizing_brand": { "id": "brand_fixture_1", "name": "Fixture Brand" }
+        },
+        {
+          "id": "promo_fixture_2",
+          "title": "Summer Contest",
+          "description": "Deterministic fixture record.",
+          "promotion_type": "contest",
+          "status": "active",
+          "default_language": "en",
+          "timezone": "UTC",
+          "url": "https://example.com/promo/2",
+          "start_date": "2026-02-01T00:00:00Z",
+          "end_date": "2026-03-01T00:00:00Z",
+          "created": "2026-01-02T00:00:00Z",
+          "organizing_brand": { "id": "brand_fixture_1", "name": "Fixture Brand" }
+        }
+      ],
+      "paging": { "next_cursor": "fixture_cursor_2" }
+    }
+  }
+}

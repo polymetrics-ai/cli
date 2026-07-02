@@ -1,0 +1,22 @@
+{
+  "name": "shippo",
+  "display_name": "Shippo",
+  "description": "Reads Shippo addresses, parcels, shipments, and transactions through the Shippo REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.goshippo.com/docs/intro",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Shippo API read of address, parcel, shipment, and transaction data"
+  }
+}

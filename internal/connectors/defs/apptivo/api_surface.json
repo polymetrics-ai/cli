@@ -1,0 +1,13 @@
+{
+  "api": "Apptivo REST DAO API v6 (https://app.apptivo.com/app/dao/v6/)",
+  "docs": "https://www.apptivo.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (customers, contacts, leads, opportunities); Apptivo's write/update DAO actions are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/app/dao/v6/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/app/dao/v6/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/app/dao/v6/leads", "covered_by": { "stream": "leads" } },
+    { "method": "GET", "path": "/app/dao/v6/opportunities", "covered_by": { "stream": "opportunities" } },
+    { "method": "POST", "path": "/app/dao/v6/customers/create", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented DAO create/update actions; Pass B capability expansion" } }
+  ]
+}

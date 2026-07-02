@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "Email": "fixture1@example.com", "FirstName": "Fixture1", "LastName": "User", "Status": "Active", "Source": "Fixture", "DateAdded": "2026-01-01T00:00:00Z", "DateUpdated": "2026-01-01T00:00:00Z", "StatusChangeDate": "2026-01-01T00:00:00Z" },
+      { "Email": "fixture2@example.com", "FirstName": "Fixture2", "LastName": "User", "Status": "Active", "Source": "Fixture", "DateAdded": "2026-01-02T00:00:00Z", "DateUpdated": "2026-01-02T00:00:00Z", "StatusChangeDate": "2026-01-02T00:00:00Z" }
+    ]
+  }
+}

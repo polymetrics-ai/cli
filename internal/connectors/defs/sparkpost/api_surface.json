@@ -1,0 +1,17 @@
+{
+  "api": "SparkPost API v1 (https://api.sparkpost.com/api/v1)",
+  "docs": "https://developers.sparkpost.com/api/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only, matching internal/connectors/sparkpost's exact endpoint set; the full SparkPost surface (transmissions send, webhooks, subaccounts, events) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/recipient-lists", "covered_by": { "stream": "recipient_lists" } },
+    { "method": "GET", "path": "/api/v1/templates", "covered_by": { "stream": "templates" } },
+    { "method": "GET", "path": "/api/v1/sending-domains", "covered_by": { "stream": "sending_domains" } },
+    { "method": "GET", "path": "/api/v1/transmissions", "covered_by": { "stream": "transmissions" } },
+    { "method": "GET", "path": "/api/v1/suppression-list", "covered_by": { "stream": "suppression_list" } },
+    { "method": "POST", "path": "/api/v1/transmissions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/subaccounts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/events/message", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

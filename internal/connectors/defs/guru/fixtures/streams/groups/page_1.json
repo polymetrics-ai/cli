@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/groups" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "grp_fixture_1",
+        "name": "Engineering Team",
+        "dateCreated": "2026-01-01T00:00:00.000Z",
+        "modifiable": true,
+        "groupType": "STANDARD",
+        "memberCount": 5
+      },
+      {
+        "id": "grp_fixture_2",
+        "name": "Sales Team",
+        "dateCreated": "2026-01-02T00:00:00.000Z",
+        "modifiable": true,
+        "groupType": "STANDARD",
+        "memberCount": 3
+      }
+    ]
+  }
+}

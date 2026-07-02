@@ -1,0 +1,42 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "next_page_token",
+      "token_path": "next_page_token"
+    },
+    "check": { "method": "GET", "path": "/users", "query": { "page_size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "zoom access_token is missing or invalid; re-run pm credentials add zoom" },
+      { "status": 429, "class": "rate_limited", "hint": "zoom rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "page_size": "{{ config.page_size }}" },
+      "records": { "path": "users" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "meetings",
+      "path": "/users/{{ config.user_id }}/meetings",
+      "query": { "page_size": "{{ config.page_size }}" },
+      "records": { "path": "meetings" },
+      "schema": "schemas/meetings.json"
+    },
+    {
+      "name": "webinars",
+      "path": "/users/{{ config.user_id }}/webinars",
+      "query": { "page_size": "{{ config.page_size }}" },
+      "records": { "path": "webinars" },
+      "schema": "schemas/webinars.json"
+    }
+  ]
+}

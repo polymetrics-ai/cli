@@ -1,0 +1,23 @@
+{
+  "name": "jobnimbus",
+  "display_name": "JobNimbus",
+  "description": "Reads JobNimbus CRM contacts, jobs, tasks, activities, and files through the JobNimbus REST API.",
+  "integration_type": "api",
+  "docs_url": "https://documenter.getpostman.com/view/3919598/S11PpG4x",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1000
+  },
+  "risk": {
+    "read": "external JobNimbus API read of CRM contact, job, task, activity, and file data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

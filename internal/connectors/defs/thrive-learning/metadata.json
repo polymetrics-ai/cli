@@ -1,0 +1,23 @@
+{
+  "name": "thrive-learning",
+  "display_name": "Thrive Learning",
+  "description": "Reads users, content, and learning completions from the Thrive Learning API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.thrivelearning.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Thrive Learning API read of user, content, and completion data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "api": "Adobe Commerce (Magento) REST API V1 (https://developer.adobe.com/commerce/webapi/rest/)",
+  "docs": "https://developer.adobe.com/commerce/webapi/rest/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Magento REST surface (carts, shipments, credit memos, CMS pages, inventory sources, etc.) is out of scope until Pass B. Magento is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "endpoints": [
+    { "method": "GET", "path": "/rest/V1/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/rest/V1/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/rest/V1/customers/search", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/rest/V1/categories/list", "covered_by": { "stream": "categories" } },
+    { "method": "GET", "path": "/rest/V1/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "POST", "path": "/rest/V1/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/rest/V1/carts/{cartId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/rest/V1/shipments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/rest/V1/creditmemos", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/rest/V1/cmsPage/search", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/rest/V1/inventory/sources", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/rest/V1/products/{sku}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; Magento connector is read-only" } }
+  ]
+}

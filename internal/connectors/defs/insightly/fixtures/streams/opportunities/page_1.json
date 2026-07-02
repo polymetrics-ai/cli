@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/Opportunities", "query": { "top": "100", "skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "OPPORTUNITY_ID": 201,
+        "OPPORTUNITY_NAME": "Fixture Opportunity 1",
+        "OPPORTUNITY_STATE": "OPEN",
+        "OPPORTUNITY_VALUE": 1000.0,
+        "PROBABILITY": 50,
+        "BID_CURRENCY": "USD",
+        "PIPELINE_ID": 1,
+        "STAGE_ID": 1,
+        "DATE_CREATED_UTC": "2026-01-01 00:00:00",
+        "DATE_UPDATED_UTC": "2026-01-01 00:00:00"
+      }
+    ]
+  }
+}

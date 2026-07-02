@@ -1,0 +1,17 @@
+{
+  "api": "Eventee public API v1 (https://api.eventee.co/public/v1)",
+  "docs": "https://eventee.co/api-documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 7 legacy-parity read streams only; the full Eventee surface (participants, feedback, polls, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/content (lectures)", "covered_by": { "stream": "lectures" } },
+    { "method": "GET", "path": "/content (speakers)", "covered_by": { "stream": "speakers" } },
+    { "method": "GET", "path": "/content (days)", "covered_by": { "stream": "days" } },
+    { "method": "GET", "path": "/content (halls)", "covered_by": { "stream": "halls" } },
+    { "method": "GET", "path": "/content (tracks)", "covered_by": { "stream": "tracks" } },
+    { "method": "GET", "path": "/content (workshops)", "covered_by": { "stream": "workshops" } },
+    { "method": "GET", "path": "/partners", "covered_by": { "stream": "partners" } },
+    { "method": "GET", "path": "/participants", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/content (pauses)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

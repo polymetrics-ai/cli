@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/messages" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "_id": "msg_fixture_1", "subject": "Fixture subject", "from": "fixture1@example.com", "to": "fixture2@example.com", "cc": "", "bcc": "", "sequence": "seq_fixture_1", "userId": "usr_fixture_1", "trackingEnabled": true, "linkTrackingEnabled": true, "fileTrackingEnabled": false, "created": "2026-01-01T00:00:00Z", "sent": "2026-01-01T00:05:00Z", "updatedAt": "2026-01-01T00:05:00Z" }
+      ],
+      "next": null,
+      "hasNext": false
+    }
+  }
+}

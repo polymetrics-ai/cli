@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "issues",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "severity": { "type": ["string", "null"] },
+    "remediation": { "type": ["string", "null"] },
+    "occurrences": { "type": ["string", "null"] },
+    "snoozed": { "type": ["boolean", "null"] },
+    "snooze_reason": { "type": ["string", "null"] },
+    "snooze_until": { "type": ["string", "null"] }
+  }
+}

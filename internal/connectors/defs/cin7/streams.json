@@ -1,0 +1,117 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "api-auth-accountid": "{{ config.accountid }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "api-auth-applicationkey", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/product", "query": { "page": "1", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "cin7 accountid/api_key is missing or invalid; re-run pm credentials add cin7" },
+      { "status": 403, "hint": "cin7 account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "cin7 rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/product",
+      "query": { "IncludeDeprecated": "true" },
+      "records": { "path": "Products" },
+      "computed_fields": {
+        "id": "{{ record.ID }}",
+        "sku": "{{ record.SKU }}",
+        "name": "{{ record.Name }}",
+        "category": "{{ record.Category }}",
+        "brand": "{{ record.Brand }}",
+        "type": "{{ record.Type }}",
+        "status": "{{ record.Status }}",
+        "uom": "{{ record.UOM }}",
+        "price_tier1": "{{ record.PriceTier1 }}",
+        "cost": "{{ record.AverageCost }}",
+        "last_modified": "{{ record.LastModifiedOn }}"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "customers",
+      "path": "/customer",
+      "query": { "IncludeDeprecated": "true" },
+      "records": { "path": "CustomerList" },
+      "computed_fields": {
+        "id": "{{ record.ID }}",
+        "name": "{{ record.Name }}",
+        "email": "{{ record.Email }}",
+        "phone": "{{ record.Phone }}",
+        "status": "{{ record.Status }}",
+        "currency": "{{ record.Currency }}",
+        "payment_term": "{{ record.PaymentTerm }}",
+        "tax_rule": "{{ record.TaxRule }}",
+        "last_modified": "{{ record.LastModifiedOn }}"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "suppliers",
+      "path": "/supplier",
+      "query": { "IncludeDeprecated": "true" },
+      "records": { "path": "SupplierList" },
+      "computed_fields": {
+        "id": "{{ record.ID }}",
+        "name": "{{ record.Name }}",
+        "email": "{{ record.Email }}",
+        "phone": "{{ record.Phone }}",
+        "status": "{{ record.Status }}",
+        "currency": "{{ record.Currency }}",
+        "payment_term": "{{ record.PaymentTerm }}",
+        "last_modified": "{{ record.LastModifiedOn }}"
+      },
+      "schema": "schemas/suppliers.json"
+    },
+    {
+      "name": "sale_list",
+      "path": "/saleList",
+      "records": { "path": "SaleList" },
+      "computed_fields": {
+        "id": "{{ record.SaleID }}",
+        "order_number": "{{ record.OrderNumber }}",
+        "customer": "{{ record.Customer }}",
+        "customer_id": "{{ record.CustomerID }}",
+        "status": "{{ record.Status }}",
+        "order_status": "{{ record.OrderStatus }}",
+        "invoice_status": "{{ record.InvoiceStatus }}",
+        "order_date": "{{ record.OrderDate }}",
+        "invoice_amount": "{{ record.InvoiceAmount }}",
+        "last_modified": "{{ record.LastModifiedOn }}"
+      },
+      "schema": "schemas/sale_list.json"
+    },
+    {
+      "name": "purchase_list",
+      "path": "/purchaseList",
+      "records": { "path": "PurchaseList" },
+      "computed_fields": {
+        "id": "{{ record.ID }}",
+        "order_number": "{{ record.OrderNumber }}",
+        "supplier": "{{ record.Supplier }}",
+        "supplier_id": "{{ record.SupplierID }}",
+        "status": "{{ record.Status }}",
+        "order_status": "{{ record.OrderStatus }}",
+        "invoice_amount": "{{ record.InvoiceAmount }}",
+        "order_date": "{{ record.OrderDate }}",
+        "last_modified": "{{ record.LastModifiedOn }}"
+      },
+      "schema": "schemas/purchase_list.json"
+    }
+  ]
+}

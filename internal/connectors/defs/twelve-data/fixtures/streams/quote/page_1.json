@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/quote" },
+  "response": {
+    "status": 200,
+    "body": {
+      "symbol": "synthetic-conformance-value",
+      "name": "Fixture Corp",
+      "currency": "USD",
+      "close": "150.25"
+    }
+  }
+}

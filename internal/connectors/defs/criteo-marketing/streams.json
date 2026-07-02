@@ -1,0 +1,92 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}"
+      }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/2024-01/marketing-solutions/advertisers" },
+    "error_map": [
+      { "status": 401, "hint": "criteo-marketing client_id/client_secret are missing or invalid; re-run pm credentials add criteo-marketing" },
+      { "status": 403, "hint": "criteo-marketing credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "criteo-marketing rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "ad_sets",
+      "path": "/2024-01/marketing-solutions/ad-sets/search",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "advertiserId": "{{ record.attributes.advertiserId }}",
+        "datasetId": "{{ record.attributes.datasetId }}",
+        "campaignId": "{{ record.attributes.campaignId }}",
+        "status": "{{ record.attributes.status }}",
+        "mediaType": "{{ record.attributes.mediaType }}",
+        "destinationEnvironment": "{{ record.attributes.destinationEnvironment }}",
+        "objective": "{{ record.attributes.objective }}"
+      },
+      "schema": "schemas/ad_sets.json"
+    },
+    {
+      "name": "advertisers",
+      "path": "/2024-01/marketing-solutions/advertisers",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "country": "{{ record.attributes.country }}",
+        "currency": "{{ record.attributes.currency }}",
+        "timezone": "{{ record.attributes.timezone }}"
+      },
+      "schema": "schemas/advertisers.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/2024-01/marketing-solutions/campaigns/search",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "advertiserId": "{{ record.attributes.advertiserId }}",
+        "objective": "{{ record.attributes.objective }}",
+        "spendLimit": "{{ record.attributes.spendLimit }}",
+        "goal": "{{ record.attributes.goal }}"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "audiences",
+      "path": "/2024-01/marketing-solutions/audiences",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "advertiserId": "{{ record.attributes.advertiserId }}",
+        "description": "{{ record.attributes.description }}",
+        "nbActiveUsers": "{{ record.attributes.nbActiveUsers }}"
+      },
+      "schema": "schemas/audiences.json"
+    },
+    {
+      "name": "statistics",
+      "path": "/2024-01/statistics/report",
+      "query": {
+        "startDate": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "endDate": { "template": "{{ config.end_date }}", "omit_when_absent": true },
+        "currency": { "template": "{{ config.currency }}", "omit_when_absent": true }
+      },
+      "records": { "path": "Rows" },
+      "schema": "schemas/statistics.json"
+    }
+  ]
+}

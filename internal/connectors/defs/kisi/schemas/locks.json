@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "locks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "place_id": { "type": ["integer", "null"] },
+    "geofence_restriction_enabled": { "type": ["boolean", "null"] },
+    "online": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

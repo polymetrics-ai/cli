@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/organizations/synthetic-conformance-value/sessions/messages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "message_id": "devin-message-fixture-1",
+          "session_id": "devin-session-fixture-1",
+          "role": "assistant",
+          "type": "message",
+          "content": "Fixture content 1",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "has_next_page": false,
+      "end_cursor": null
+    }
+  }
+}

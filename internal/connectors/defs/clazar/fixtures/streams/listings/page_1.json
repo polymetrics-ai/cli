@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/listings", "query": { "response_format": "common", "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "listing_fixture_1",
+          "cloud": "aws",
+          "title": "Fixture Listing 1",
+          "status": "published",
+          "cloud_id": "prod-fixture-1",
+          "cloud_url": "https://aws.amazon.com/marketplace/pp/fixture",
+          "eula_type": "standard",
+          "short_description": "A fixture listing.",
+          "long_description": "A longer fixture listing description.",
+          "last_modified_at": "2026-01-01T00:00:00.000000Z"
+        }
+      ],
+      "next": null,
+      "count": 1
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/country_info", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "country_code": "US1",
+        "country_name": "United States",
+        "phone_calling_code": "1"
+      }
+    ]
+  }
+}

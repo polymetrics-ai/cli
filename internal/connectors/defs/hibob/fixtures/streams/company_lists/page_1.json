@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/company/people/fields" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "field_fixture_1",
+        "name": "Pronouns",
+        "category": "about",
+        "type": "text",
+        "description": "fixture field"
+      }
+    ]
+  }
+}

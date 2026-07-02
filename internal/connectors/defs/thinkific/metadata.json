@@ -1,0 +1,23 @@
+{
+  "name": "thinkific",
+  "display_name": "Thinkific",
+  "description": "Reads Thinkific courses through the Thinkific public API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.thinkific.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Thinkific API read of course data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

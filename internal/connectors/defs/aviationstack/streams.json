@@ -1,0 +1,65 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "access_key", "value": "{{ secrets.access_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/countries" },
+    "error_map": [
+      { "status": 401, "hint": "aviationstack access_key is missing or invalid; re-run pm credentials add aviationstack" },
+      { "status": 429, "class": "rate_limited", "hint": "aviationstack rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "flights",
+      "path": "/flights",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "flight_iata": "{{ record.flight.iata }}",
+        "flight_icao": "{{ record.flight.icao }}",
+        "flight_number": "{{ record.flight.number }}",
+        "departure_airport": "{{ record.departure.airport }}",
+        "departure_iata": "{{ record.departure.iata }}",
+        "departure_scheduled": "{{ record.departure.scheduled }}",
+        "arrival_airport": "{{ record.arrival.airport }}",
+        "arrival_iata": "{{ record.arrival.iata }}",
+        "arrival_scheduled": "{{ record.arrival.scheduled }}",
+        "airline_name": "{{ record.airline.name }}",
+        "airline_iata": "{{ record.airline.iata }}"
+      },
+      "schema": "schemas/flights.json"
+    },
+    {
+      "name": "airlines",
+      "path": "/airlines",
+      "records": { "path": "data" },
+      "schema": "schemas/airlines.json"
+    },
+    {
+      "name": "airports",
+      "path": "/airports",
+      "records": { "path": "data" },
+      "schema": "schemas/airports.json"
+    },
+    {
+      "name": "airplanes",
+      "path": "/airplanes",
+      "records": { "path": "data" },
+      "schema": "schemas/airplanes.json"
+    },
+    {
+      "name": "countries",
+      "path": "/countries",
+      "records": { "path": "data" },
+      "schema": "schemas/countries.json"
+    }
+  ]
+}

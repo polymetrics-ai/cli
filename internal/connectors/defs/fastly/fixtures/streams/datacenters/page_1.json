@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/datacenters", "query": { "page": "1", "per_page": "2" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "code": "SEA",
+        "name": "Seattle",
+        "group": "US",
+        "shield": "sea-us",
+        "coordinates": { "x": -122, "y": 47 }
+      },
+      {
+        "code": "LHR",
+        "name": "London",
+        "group": "EU",
+        "shield": "lhr-uk",
+        "coordinates": { "x": 0, "y": 51 }
+      }
+    ]
+  }
+}

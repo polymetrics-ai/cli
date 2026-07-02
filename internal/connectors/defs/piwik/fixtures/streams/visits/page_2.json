@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Live.getLastVisitsDetails",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idVisit": "v101",
+        "visitorId": "visitor-101",
+        "lastActionDateTime": "2026-01-01 00:00:101"
+      }
+    ]
+  }
+}

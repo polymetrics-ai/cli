@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/symbols" },
+  "response": {
+    "status": 200,
+    "body": { "success": true, "symbols": { "USD": "United States Dollar", "EUR": "Euro" } }
+  }
+}

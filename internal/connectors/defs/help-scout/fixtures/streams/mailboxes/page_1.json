@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/mailboxes",
+    "query": { "sortField": "modifiedAt", "sortOrder": "asc", "page": "1", "size": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "mailboxes": [
+          {
+            "id": 1,
+            "name": "Fixture Mailbox",
+            "slug": "fixture-mailbox",
+            "email": "fixture@example.com",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      "page": { "number": 1, "size": 50, "totalElements": 1, "totalPages": 1 }
+    }
+  }
+}

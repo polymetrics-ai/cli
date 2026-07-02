@@ -1,0 +1,25 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "api/affiliates" },
+    "error_map": [
+      { "status": 401, "hint": "uppromote api_key is missing or invalid; re-run pm credentials add uppromote" },
+      { "status": 429, "class": "rate_limited", "hint": "uppromote rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "affiliates",
+      "path": "api/affiliates",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "affiliates" },
+      "schema": "schemas/affiliates.json"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "courses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "key": { "type": ["string", "null"] },
+    "image": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "private": { "type": ["boolean", "null"] },
+    "paid": { "type": ["boolean", "null"] },
+    "identified": { "type": ["boolean", "null"] },
+    "is_sharable": { "type": ["boolean", "null"] }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Retently Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Retently API v2 key, sent as an Authorization: api_key=<api_key> header (legacy's connsdk.APIKeyHeader convention). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.retently.com/api/v2",
+      "description": "Retently API base URL override for tests or proxies."
+    },
+    "updated_after": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return customers/surveys/campaigns updated at or after this value."
+    },
+    "created_after": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return responses created at or after this value."
+    },
+    "email": {
+      "type": "string",
+      "description": "Optional passthrough filter: scope the customers stream to a single customer email."
+    },
+    "campaign_id": {
+      "type": "string",
+      "description": "Optional passthrough filter: scope the responses stream to a single campaign id."
+    }
+  }
+}

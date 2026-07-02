@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/recordings", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "recording_fixture_1",
+          "room_id": "room_fixture_1",
+          "session_id": "session_fixture_1",
+          "status": "completed",
+          "size": 1024,
+          "duration": 60,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "last": ""
+    }
+  }
+}

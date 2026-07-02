@@ -1,0 +1,15 @@
+{
+  "api": "Thinkific Public API v1 (https://developers.thinkific.com/)",
+  "docs": "https://developers.thinkific.com/api/api-documentation/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Thinkific surface (products, orders, users, coupons, bundles, custom profile fields, etc.) is out of scope until Pass B. thinkific-courses is read-only in legacy (Capabilities.Write is false) so no writes.json.",
+  "endpoints": [
+    { "method": "GET", "path": "/courses", "covered_by": { "stream": "courses" } },
+    { "method": "GET", "path": "/chapters", "covered_by": { "stream": "chapters" } },
+    { "method": "GET", "path": "/lessons", "covered_by": { "stream": "lessons" } },
+    { "method": "GET", "path": "/enrollments", "covered_by": { "stream": "enrollments" } },
+    { "method": "GET", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/enrollments", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; thinkific-courses connector is read-only" } }
+  ]
+}

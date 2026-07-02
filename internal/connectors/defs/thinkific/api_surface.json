@@ -1,0 +1,14 @@
+{
+  "api": "Thinkific public API v1 (https://developers.thinkific.com/)",
+  "docs": "https://developers.thinkific.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the single legacy-parity read stream (courses) only; the full Thinkific surface (users, enrollments, categories, products, orders) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/public/v1/courses", "covered_by": { "stream": "courses" } },
+    { "method": "GET", "path": "/api/public/v1/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/public/v1/enrollments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/public/v1/categories", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/public/v1/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/public/v1/orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

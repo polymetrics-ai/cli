@@ -1,0 +1,22 @@
+{
+  "name": "pendo",
+  "display_name": "Pendo",
+  "description": "Reads Pendo visitors, accounts, pages, and features through REST list endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://engageapi.pendo.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Pendo API read of product-analytics visitor and account data"
+  }
+}

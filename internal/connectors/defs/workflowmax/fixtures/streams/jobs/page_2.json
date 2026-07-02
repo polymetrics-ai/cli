@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/jobs", "query": { "page": "2", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "job_fixture_3", "name": "Fixture Job 3", "updated_at": "2026-01-03T00:00:00Z" }
+      ]
+    }
+  }
+}

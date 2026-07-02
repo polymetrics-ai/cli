@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stations",
+  "type": "object",
+  "x-primary-key": ["StationNbr"],
+  "required": ["StationNbr"],
+  "properties": {
+    "StationNbr": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "City": { "type": ["string", "null"] },
+    "RegionalOffice": { "type": ["string", "null"] },
+    "County": { "type": ["string", "null"] },
+    "ConnectDate": { "type": ["string", "null"] },
+    "DisconnectDate": { "type": ["string", "null"] },
+    "IsActive": { "type": ["string", "null"] },
+    "IsEtoStation": { "type": ["string", "null"] },
+    "Elevation": { "type": ["string", "null"] },
+    "GroundCover": { "type": ["string", "null"] },
+    "HmsLatitude": { "type": ["string", "null"] },
+    "HmsLongitude": { "type": ["string", "null"] },
+    "ZipCodes": { "type": ["array", "null"] },
+    "SitingDesc": { "type": ["string", "null"] }
+  }
+}

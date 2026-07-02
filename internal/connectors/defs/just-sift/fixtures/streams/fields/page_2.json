@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fields/person"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "field_fixture_2",
+          "type": "text",
+          "displayName": "Fixture Field 2",
+          "objectKey": "fixtureField2",
+          "filterable": true,
+          "searchable": true
+        }
+      ],
+      "links": {}
+    }
+  }
+}

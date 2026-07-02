@@ -1,0 +1,36 @@
+{
+  "request": { "method": "GET", "path": "/saleList", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 2,
+      "Page": 1,
+      "SaleList": [
+        {
+          "SaleID": "sale_fixture_1",
+          "OrderNumber": "SO-1",
+          "Customer": "Fixture Customer One",
+          "CustomerID": "cust_fixture_1",
+          "Status": "Active",
+          "OrderStatus": "AUTHORISED",
+          "InvoiceStatus": "PAID",
+          "OrderDate": "2026-01-01T00:00:00Z",
+          "InvoiceAmount": 100,
+          "LastModifiedOn": "2026-01-01T00:00:00Z"
+        },
+        {
+          "SaleID": "sale_fixture_2",
+          "OrderNumber": "SO-2",
+          "Customer": "Fixture Customer Two",
+          "CustomerID": "cust_fixture_2",
+          "Status": "Active",
+          "OrderStatus": "AUTHORISED",
+          "InvoiceStatus": "PAID",
+          "OrderDate": "2026-01-02T00:00:00Z",
+          "InvoiceAmount": 200,
+          "LastModifiedOn": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

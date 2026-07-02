@@ -1,0 +1,23 @@
+{
+  "name": "datascope",
+  "display_name": "DataScope",
+  "description": "Reads DataScope locations, form answers, lists, and notifications from the DataScope external REST API (read-only, full-refresh).",
+  "integration_type": "api",
+  "docs_url": "https://app.mydatascope.com/api/external/docs/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external DataScope API read of field-data-collection form submissions and location data",
+    "approval": "none; read-only"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ad_accounts/synthetic-conformance-value/campaigns",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        { "id": "camp_fixture_1", "name": "Fixture Awareness Campaign", "status": "ACTIVE", "objective": "AWARENESS" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "recurly",
+  "display_name": "Recurly",
+  "description": "Reads Recurly accounts, subscriptions, invoices, transactions, and plans through the Recurly v3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.recurly.com/api/v2021-02-25/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Recurly API read of subscription billing data",
+    "approval": "none; read-only billing API"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "brex",
+  "display_name": "Brex",
+  "description": "Reads Brex transactions, users, expenses, vendors, and budgets through the Brex platform REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.brex.com/openapi/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Brex API read of card transaction, user, and expense data",
+    "approval": "none; read-only financial source, no reverse-ETL writes shipped"
+  }
+}

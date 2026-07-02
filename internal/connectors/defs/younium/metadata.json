@@ -1,0 +1,23 @@
+{
+  "name": "younium",
+  "display_name": "Younium",
+  "description": "Reads Younium accounts, subscriptions, and invoices through the Younium REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.younium.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Younium API read of account, subscription, and invoice data",
+    "approval": "none; read-only"
+  }
+}

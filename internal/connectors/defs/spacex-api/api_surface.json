@@ -1,0 +1,23 @@
+{
+  "api": "SpaceX API v4 (https://api.spacexdata.com/v4)",
+  "docs": "https://github.com/r-spacex/SpaceX-API/tree/master/docs",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 11 legacy-parity list/singleton read streams only, matching internal/connectors/spacex-api's exact endpoint set; query-based filtering (POST /v4/<resource>/query) and single-record-by-id lookups are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v4/launches", "covered_by": { "stream": "launches" } },
+    { "method": "GET", "path": "/v4/rockets", "covered_by": { "stream": "rockets" } },
+    { "method": "GET", "path": "/v4/capsules", "covered_by": { "stream": "capsules" } },
+    { "method": "GET", "path": "/v4/crew", "covered_by": { "stream": "crew" } },
+    { "method": "GET", "path": "/v4/payloads", "covered_by": { "stream": "payloads" } },
+    { "method": "GET", "path": "/v4/starlink", "covered_by": { "stream": "starlink" } },
+    { "method": "GET", "path": "/v4/launchpads", "covered_by": { "stream": "launchpads" } },
+    { "method": "GET", "path": "/v4/landpads", "covered_by": { "stream": "landpads" } },
+    { "method": "GET", "path": "/v4/ships", "covered_by": { "stream": "ships" } },
+    { "method": "GET", "path": "/v4/roadster", "covered_by": { "stream": "roadster" } },
+    { "method": "GET", "path": "/v4/company", "covered_by": { "stream": "company" } },
+    { "method": "GET", "path": "/v4/launches/{id}", "excluded": { "category": "duplicate_of", "reason": "single-record-by-id lookup covered by the 'launches' list stream's full result set" } },
+    { "method": "GET", "path": "/v4/launches/latest", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v4/launches/next", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v4/launches/query", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

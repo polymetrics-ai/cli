@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/campaigns", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        {
+          "id": "camp_fixture_1",
+          "name": "Fixture Onboarding",
+          "status": "active",
+          "from_name": "Fixture Sender",
+          "from_email": "sender@example.com",
+          "subscriber_count": 10,
+          "email_count": 3,
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "camp_fixture_2",
+          "name": "Fixture Winback",
+          "status": "draft",
+          "from_name": "Fixture Sender",
+          "from_email": "sender@example.com",
+          "subscriber_count": 20,
+          "email_count": 5,
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

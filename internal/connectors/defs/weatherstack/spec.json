@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Weatherstack Connection Specification",
+  "type": "object",
+  "required": ["access_key", "query"],
+  "properties": {
+    "access_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Weatherstack API access key. Sent as the access_key query parameter on every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.weatherstack.com",
+      "description": "Weatherstack API base URL override for tests or proxies."
+    },
+    "query": {
+      "type": "string",
+      "description": "Location query (city name, coordinates, IP, or zip) forwarded as the query parameter on every stream's request. Also used to derive the synthetic id field's suffix, matching legacy's fallback id."
+    },
+    "historical_date": {
+      "type": "string",
+      "description": "Date (YYYY-MM-DD) forwarded as the historical_date query parameter on the historical stream."
+    },
+    "forecast_days": {
+      "type": "string",
+      "description": "Number of days forwarded as the forecast_days query parameter on the forecast stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

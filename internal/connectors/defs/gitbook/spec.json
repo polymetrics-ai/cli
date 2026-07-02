@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GitBook Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "GitBook API access token. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.gitbook.com/v1",
+      "description": "GitBook API base URL override for tests or proxies."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Organization ID; required for the org_members stream."
+    },
+    "space_id": {
+      "type": "string",
+      "description": "Space ID; required for the content stream."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per page (1-100)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

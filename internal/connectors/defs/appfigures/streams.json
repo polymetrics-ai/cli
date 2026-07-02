@@ -1,0 +1,36 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "count",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/products/mine" },
+    "error_map": [
+      { "status": 401, "hint": "appfigures api_key is missing or invalid; re-run pm credentials add appfigures" },
+      { "status": 403, "hint": "appfigures api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "appfigures rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "reviews",
+      "path": "/reviews",
+      "query": {
+        "store": { "template": "{{ config.search_store }}", "omit_when_absent": true },
+        "group_by": { "template": "{{ config.group_by }}", "omit_when_absent": true },
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "reviews" },
+      "schema": "schemas/reviews.json"
+    }
+  ]
+}

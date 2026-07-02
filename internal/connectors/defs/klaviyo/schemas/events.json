@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "events",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "datetime",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": "string" },
+    "timestamp": { "type": ["integer", "null"] },
+    "datetime": { "type": ["string", "null"] },
+    "uuid": { "type": ["string", "null"] }
+  }
+}

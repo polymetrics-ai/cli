@@ -1,0 +1,62 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "api_key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "",
+      "start_page": 1,
+      "page_size": 20
+    },
+    "check": { "method": "GET", "path": "/movie/popular" },
+    "error_map": [
+      { "status": 401, "hint": "tmdb api_key is missing or invalid; re-run pm credentials add tmdb" },
+      { "status": 404, "hint": "tmdb resource not found" },
+      { "status": 429, "class": "rate_limited", "hint": "tmdb rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "popular_movies",
+      "path": "/movie/popular",
+      "query": {
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/popular_movies.json"
+    },
+    {
+      "name": "now_playing_movies",
+      "path": "/movie/now_playing",
+      "query": {
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/now_playing_movies.json"
+    },
+    {
+      "name": "search_movies",
+      "path": "/search/movie",
+      "query": {
+        "query": "{{ config.query }}",
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/search_movies.json"
+    },
+    {
+      "name": "movie_details",
+      "path": "/movie/{{ config.movie_id }}",
+      "query": {
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/movie_details.json"
+    }
+  ]
+}

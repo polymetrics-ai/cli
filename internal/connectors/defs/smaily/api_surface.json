@@ -1,0 +1,13 @@
+{
+  "api": "Smaily API (https://smaily.com/help/api/)",
+  "docs": "https://smaily.com/help/api/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (campaigns, segments, subscribers, templates, automations); legacy is read-only, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "api/campaign.php", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "api/segment.php", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "api/contact.php", "covered_by": { "stream": "subscribers" } },
+    { "method": "GET", "path": "api/template.php", "covered_by": { "stream": "templates" } },
+    { "method": "GET", "path": "api/autoresponder.php", "covered_by": { "stream": "automations" } }
+  ]
+}

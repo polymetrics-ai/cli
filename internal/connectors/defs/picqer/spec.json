@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Picqer Connection Specification",
+  "type": "object",
+  "required": ["organization_name"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Picqer API key, sent as the HTTP Basic auth username (password left blank). Never logged."
+    },
+    "username": {
+      "type": "string",
+      "description": "Fallback plain-config API key/username, used only when the api_key secret is unset (matches legacy's firstNonEmpty(secret, config.username) precedence)."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional HTTP Basic auth password. Picqer's own API convention leaves this blank."
+    },
+    "organization_name": {
+      "type": "string",
+      "description": "Picqer subdomain; the connector always derives https://<organization_name>.picqer.com/api/v1 from it. Legacy also accepted a raw base_url override for tests/proxies; this bundle narrows to organization_name-only since the engine's base-URL field is a single non-conditional template (see docs.md Known limits)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

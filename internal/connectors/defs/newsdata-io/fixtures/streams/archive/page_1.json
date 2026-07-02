@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/archive", "query": { "size": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "totalResults": 1,
+      "results": [
+        {
+          "article_id": "archive_fixture_1",
+          "title": "Fixture Archive Article 1",
+          "link": "https://example.com/archive/1",
+          "description": "Fixture archive article description.",
+          "content": "Fixture archive article content.",
+          "pubDate": "2025-06-01 00:00:00",
+          "image_url": "https://example.com/image.png",
+          "source_id": "fixture_source",
+          "source_name": "Fixture Source",
+          "source_url": "https://example.com",
+          "language": "english",
+          "creator": ["Fixture Author"],
+          "keywords": ["fixture", "history"],
+          "category": ["top"],
+          "country": ["united states of america"],
+          "duplicate": false
+        }
+      ],
+      "nextPage": null
+    }
+  }
+}

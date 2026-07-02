@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/members.api" },
+  "response": {
+    "status": 200,
+    "body": {
+      "members": [
+        { "id": 1, "first_name": "Fixture", "last_name": "User", "email": "fixture1@example.com" }
+      ],
+      "total_pages": 1,
+      "page": 1
+    }
+  }
+}

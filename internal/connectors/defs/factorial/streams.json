@@ -1,0 +1,62 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-KEY", "prefix": "", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/api_public/credentials" },
+    "error_map": [
+      { "status": 401, "hint": "factorial api_key is missing or invalid; re-run pm credentials add factorial" },
+      { "status": 403, "hint": "factorial account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "factorial rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "employees",
+      "path": "/employees/employees",
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      },
+      "schema": "schemas/employees.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams/teams",
+      "records": { "path": "data" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "leaves",
+      "path": "/timeoff/leaves",
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      },
+      "schema": "schemas/leaves.json"
+    },
+    {
+      "name": "leave_types",
+      "path": "/timeoff/leave_types",
+      "records": { "path": "data" },
+      "schema": "schemas/leave_types.json"
+    },
+    {
+      "name": "locations",
+      "path": "/locations/locations",
+      "records": { "path": "data" },
+      "schema": "schemas/locations.json"
+    }
+  ]
+}

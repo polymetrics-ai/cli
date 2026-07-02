@@ -1,0 +1,23 @@
+{
+  "name": "fastly",
+  "display_name": "Fastly",
+  "description": "Reads Fastly services, the current user, the current customer (account), and datacenters through the Fastly REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developer.fastly.com/reference/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Fastly API read of service/account configuration metadata",
+    "approval": "none; read-only"
+  }
+}

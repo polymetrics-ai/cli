@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/payments", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 3001,
+        "object": "payment",
+        "customer": 1001,
+        "invoice": 2001,
+        "amount": 1000,
+        "currency": "usd",
+        "method": "credit_card",
+        "status": "succeeded",
+        "date": 1767225600,
+        "created_at": 1767225600,
+        "updated_at": 1767225601
+      }
+    ]
+  }
+}

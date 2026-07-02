@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/participations/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "participation_fixture_1",
+          "user_id": "user_fixture_1",
+          "promotion_id": "promo_fixture_1",
+          "stage_id": "stage_fixture_1",
+          "ip": "203.0.113.1",
+          "user_agent": "polymetrics-fixture",
+          "created": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "paging": { "next_cursor": null }
+    }
+  }
+}

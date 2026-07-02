@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/admin/projects/synthetic-conformance-value/features", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "features": [] }
+  }
+}

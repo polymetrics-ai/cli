@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "postings",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "text": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "user": { "type": ["string", "null"] },
+    "owner": { "type": ["string", "null"] },
+    "hiringManager": { "type": ["string", "null"] },
+    "categories": { "type": ["object", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "updatedAt": { "type": ["integer", "null"] }
+  }
+}

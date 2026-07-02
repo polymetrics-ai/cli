@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/reference/splits",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "ticker": "synthetic-conformance-value",
+      "execution_date": "synthetic-conformance-value",
+      "sort": "synthetic-conformance-value",
+      "order": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "split_fixture_1",
+          "ticker": "FIX1",
+          "execution_date": "2026-03-01",
+          "split_from": 1,
+          "split_to": 4
+        },
+        {
+          "id": "split_fixture_2",
+          "ticker": "FIX2",
+          "execution_date": "2026-04-01",
+          "split_from": 1,
+          "split_to": 2
+        }
+      ],
+      "status": "OK",
+      "count": 2
+    }
+  }
+}

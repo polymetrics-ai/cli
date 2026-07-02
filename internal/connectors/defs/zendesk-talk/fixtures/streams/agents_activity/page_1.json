@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/stats/agents_activity", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "agents_activity": [
+        {
+          "agent_id": 1,
+          "name": "Fixture Agent 1",
+          "avatar_url": "https://example.com/avatar/1",
+          "agent_state": "available",
+          "call_status": "on_call",
+          "available_time": 100,
+          "away_time": 10,
+          "online_time": 110,
+          "calls_accepted": 5,
+          "calls_denied": 0,
+          "calls_missed": 1,
+          "forwarding_number": "",
+          "total_call_duration": 600,
+          "total_talk_time": 550,
+          "total_wrap_up_time": 50,
+          "via": "browser"
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

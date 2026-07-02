@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/current_user" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "usr_fixture_1",
+      "login": "fixture1@example.com",
+      "name": "Fixture User",
+      "email_hash": "fixture-hash-1",
+      "role": "engineer",
+      "customer_id": "cus_fixture_1",
+      "locked": false,
+      "two_factor_auth_enabled": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+}

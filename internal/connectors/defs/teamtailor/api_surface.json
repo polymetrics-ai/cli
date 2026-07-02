@@ -1,0 +1,13 @@
+{
+  "api": "Teamtailor API v1 (https://api.teamtailor.com/v1)",
+  "docs": "https://docs.teamtailor.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the single legacy-parity read stream (jobs) only; the full Teamtailor JSON:API surface (candidates, applications, departments, roles, stages) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/jobs", "covered_by": { "stream": "jobs" } },
+    { "method": "POST", "path": "/v1/jobs", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/candidates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/job-applications", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/departments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

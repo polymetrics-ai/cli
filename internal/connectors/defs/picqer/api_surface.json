@@ -1,0 +1,20 @@
+{
+  "api": "Picqer REST API v1 (https://<organization>.picqer.com/api/v1)",
+  "docs": "https://picqer.com/en/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (products, customers, orders, picklists, warehouses, suppliers); the full Picqer surface (purchase orders, returns, stock movements, batches, users) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/picklists", "covered_by": { "stream": "picklists" } },
+    { "method": "GET", "path": "/warehouses", "covered_by": { "stream": "warehouses" } },
+    { "method": "GET", "path": "/suppliers", "covered_by": { "stream": "suppliers" } },
+    { "method": "GET", "path": "/purchaseorders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/returns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/stockmovements", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/batches", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

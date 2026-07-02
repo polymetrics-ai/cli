@@ -1,0 +1,49 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/accounts" },
+    "error_map": [
+      { "status": 401, "hint": "drip API key is missing or invalid; re-run pm credentials add drip" },
+      { "status": 403, "hint": "drip account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "drip rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "subscribers",
+      "path": "/{{ config.account_id }}/subscribers",
+      "records": { "path": "subscribers" },
+      "schema": "schemas/subscribers.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/{{ config.account_id }}/campaigns",
+      "records": { "path": "campaigns" },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "broadcasts",
+      "path": "/{{ config.account_id }}/broadcasts",
+      "records": { "path": "broadcasts" },
+      "schema": "schemas/broadcasts.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "pagination": { "type": "none" },
+      "records": { "path": "accounts" },
+      "schema": "schemas/accounts.json"
+    }
+  ]
+}

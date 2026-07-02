@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/workflow/synthetic-conformance-value/job" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "job_fixture_1", "name": "build", "job_number": 1, "project_slug": "gh/fixture-org/fixture-repo", "type": "build", "status": "success", "started_at": "2026-01-01T00:00:00Z", "stopped_at": "2026-01-01T00:05:00Z" },
+        { "id": "job_fixture_2", "name": "test", "job_number": 2, "project_slug": "gh/fixture-org/fixture-repo", "type": "build", "status": "success", "started_at": "2026-01-01T00:06:00Z", "stopped_at": "2026-01-01T00:09:00Z" }
+      ],
+      "next_page_token": null
+    }
+  }
+}

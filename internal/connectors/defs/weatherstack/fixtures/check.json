@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/current", "query": { "query": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "location": { "name": "Fixture City", "country": "Fixture Country" },
+      "current": { "temperature": 20, "weather_descriptions": ["Sunny"] }
+    }
+  }
+}

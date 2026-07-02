@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Scryfall Connection Specification",
+  "type": "object",
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.scryfall.com",
+      "description": "Scryfall API base URL override for tests or proxies."
+    },
+    "q": {
+      "type": "string",
+      "default": "*",
+      "description": "Scryfall search query for the 'cards' stream (Scryfall search syntax). Defaults to '*' (match all), matching legacy's own fallback."
+    }
+  }
+}

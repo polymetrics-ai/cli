@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/exchanges" },
+  "response": {
+    "status": 200,
+    "body": { "pagination": { "limit": 2, "offset": 0, "count": 0, "total": 0 }, "data": [] }
+  }
+}

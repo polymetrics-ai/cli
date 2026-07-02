@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/tasks" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "tsk_fixture_1", "project_id": "prj_fixture_1", "section_id": "sec_fixture_1", "content": "Write tests", "description": "", "is_completed": false, "created_at": "2026-01-01T00:00:00Z", "due": null },
+      { "id": "tsk_fixture_2", "project_id": "prj_fixture_1", "section_id": "sec_fixture_1", "content": "Ship feature", "description": "Fixture task description", "is_completed": true, "created_at": "2026-01-02T00:00:00Z", "due": { "date": "2026-01-05" } }
+    ]
+  }
+}

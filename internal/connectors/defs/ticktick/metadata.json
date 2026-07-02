@@ -1,0 +1,23 @@
+{
+  "name": "ticktick",
+  "display_name": "TickTick",
+  "description": "Reads projects and project tasks from the TickTick Open API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.ticktick.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external TickTick API read of project and task data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

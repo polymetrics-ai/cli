@@ -1,0 +1,31 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.bearer_token }}", "when": "{{ secrets.bearer_token }}" },
+      { "mode": "bearer", "token": "{{ secrets.client_access_token }}", "when": "{{ secrets.client_access_token }}" },
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/project" },
+    "error_map": [
+      { "status": 401, "hint": "ticktick access token is missing or invalid; re-run pm credentials add ticktick" },
+      { "status": 403, "hint": "ticktick account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "ticktick rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/project",
+      "records": { "path": "." },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/project/{{ config.project_id }}/data",
+      "records": { "path": "tasks" },
+      "schema": "schemas/tasks.json"
+    }
+  ]
+}

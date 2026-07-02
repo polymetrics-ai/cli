@@ -1,0 +1,17 @@
+{
+  "api": "Aha! REST API v1 (https://www.aha.io/api)",
+  "docs": "https://www.aha.io/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only; the full Aha! surface (epics, comments, custom fields, integrations, webhooks, etc.) is out of scope until Pass B. Aha! is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/features", "covered_by": { "stream": "features" } },
+    { "method": "GET", "path": "/api/v1/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/api/v1/ideas", "covered_by": { "stream": "ideas" } },
+    { "method": "GET", "path": "/api/v1/releases", "covered_by": { "stream": "releases" } },
+    { "method": "GET", "path": "/api/v1/initiatives", "covered_by": { "stream": "initiatives" } },
+    { "method": "GET", "path": "/api/v1/goals", "covered_by": { "stream": "goals" } },
+    { "method": "POST", "path": "/api/v1/products/{id}/features", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/features/{id}/comments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/api/v1/features/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; Aha! connector is read-only" } }
+  ]
+}

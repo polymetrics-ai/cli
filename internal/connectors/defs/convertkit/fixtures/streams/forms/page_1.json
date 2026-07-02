@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/forms" },
+  "response": {
+    "status": 200,
+    "body": {
+      "forms": [
+        { "id": 10, "name": "Fixture Newsletter", "type": "embed", "format": "inline", "archived": false, "created_at": "2026-01-01T00:00:00Z" },
+        { "id": 11, "name": "Fixture Webinar", "type": "embed", "format": "inline", "archived": false, "created_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

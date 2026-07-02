@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dwolla Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Dwolla OAuth2 client-credentials client ID. Used only for the token exchange; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Dwolla OAuth2 client-credentials client secret. Used only for the token exchange; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.dwolla.com",
+      "description": "Dwolla API base URL override; defaults to production. Set to https://api-sandbox.dwolla.com for sandbox, or a test proxy URL."
+    }
+  }
+}

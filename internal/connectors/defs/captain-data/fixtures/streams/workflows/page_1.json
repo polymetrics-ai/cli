@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/workflows" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "uid": "workflow_fixture_1", "name": "Fixture Workflow 1", "status": "active", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" },
+      { "uid": "workflow_fixture_2", "name": "Fixture Workflow 2", "status": "paused", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-03T00:00:00Z" }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "api": "OPUSWatch API",
+  "docs": "https://opuswatch.com/api",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; legacy exposes no write actions and this bundle adds none",
+  "endpoints": [
+    { "method": "GET", "path": "/monitors", "covered_by": { "stream": "monitors" } },
+    { "method": "GET", "path": "/incidents", "covered_by": { "stream": "incidents" } },
+    { "method": "GET", "path": "/checks", "covered_by": { "stream": "checks" } }
+  ]
+}

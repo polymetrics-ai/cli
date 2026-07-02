@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/customers" },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "customerNumber": 1,
+          "name": "Fixture One ApS",
+          "currency": "DKK"
+        },
+        {
+          "customerNumber": 2,
+          "name": "Fixture Two A/S",
+          "currency": "EUR"
+        }
+      ]
+    }
+  }
+}

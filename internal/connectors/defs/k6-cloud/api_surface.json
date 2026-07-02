@@ -1,0 +1,11 @@
+{
+  "api": "k6 Cloud REST API v3 (https://api.k6.io)",
+  "docs": "https://k6.io/docs/cloud/cloud-reference/cloud-rest-api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: 2 of legacy's 3 read streams (organizations, k6-tests) are ported at Tier 1. projects is a sub-resource fan-out (read once per organization id) which the declarative dialect cannot express without a Tier-2 StreamHook (out of scope for this wave per docs/migration/conventions.md section 1's Tier-2 trigger list); it keeps its legacy Go implementation. Any other k6 Cloud surface is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/organizations", "covered_by": { "stream": "organizations" } },
+    { "method": "GET", "path": "/v3/organizations/{id}/projects", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out read (once per organization id) — needs a Tier-2 StreamHook per conventions.md section 1; not implementable in Tier 1 JSON alone. Kept on the legacy Go implementation; see docs.md Known limits" } },
+    { "method": "GET", "path": "loadtests/v2/tests", "covered_by": { "stream": "k6_tests" } }
+  ]
+}

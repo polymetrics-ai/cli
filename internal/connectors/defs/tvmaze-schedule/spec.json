@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TVmaze Schedule Connection Specification",
+  "type": "object",
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.tvmaze.com",
+      "description": "TVmaze API base URL override for tests or proxies."
+    },
+    "country": {
+      "type": "string",
+      "description": "ISO 3166-1 country code to scope the schedule to (e.g. US). Optional; omitted entirely when unset, matching TVmaze's own default-country behavior."
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date (YYYY-MM-DD) to scope the schedule to. Optional; omitted entirely when unset, defaulting to today per TVmaze's own API behavior."
+    }
+  }
+}

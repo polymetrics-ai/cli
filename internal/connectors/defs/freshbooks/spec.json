@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FreshBooks Connection Specification",
+  "type": "object",
+  "required": ["oauth_access_token", "account_id"],
+  "properties": {
+    "oauth_access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "FreshBooks OAuth2 access token. Sent as Authorization: Bearer <oauth_access_token>; never logged. The refresh token / client id / secret used for the OAuth dance itself are not consumed directly by this connector."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "FreshBooks account id; every accounting list endpoint is scoped under /accounting/account/{account_id}/."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.freshbooks.com",
+      "description": "FreshBooks API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

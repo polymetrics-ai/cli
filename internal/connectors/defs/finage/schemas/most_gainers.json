@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "most_gainers",
+  "type": "object",
+  "x-primary-key": ["symbol"],
+  "required": ["symbol"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "company_name": { "type": ["string", "null"] },
+    "change": { "type": ["number", "null"] },
+    "change_percentage": { "type": ["string", "null"] },
+    "price": { "type": ["string", "null"] }
+  }
+}

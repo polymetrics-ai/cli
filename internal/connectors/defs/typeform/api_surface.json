@@ -1,0 +1,15 @@
+{
+  "api": "Typeform REST API (https://api.typeform.com)",
+  "docs": "https://www.typeform.com/developers/changelog/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 Tier-1-expressible legacy-parity read streams (forms, workspaces, themes, images) only; the legacy responses stream needs a per-form_id sub-resource fan-out (StreamHook territory per docs/migration/conventions.md's Tier-2 table) and is out of scope for this pass; the full Typeform API surface (webhooks, workspace/form mutation, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/forms", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/workspaces", "covered_by": { "stream": "workspaces" } },
+    { "method": "GET", "path": "/themes", "covered_by": { "stream": "themes" } },
+    { "method": "GET", "path": "/images", "covered_by": { "stream": "images" } },
+    { "method": "GET", "path": "/forms/{form_id}/responses", "excluded": { "category": "out_of_scope", "reason": "legacy fans this stream out across a configured form_ids list (one request per form id) -- a sub-resource fan-out read requiring a Tier-2 StreamHook, not expressible in streams.json alone; deferred to a follow-up wave that adds internal/connectors/hooks/typeform" } },
+    { "method": "POST", "path": "/forms", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

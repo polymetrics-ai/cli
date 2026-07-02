@@ -1,0 +1,14 @@
+{
+  "api": "SurveySparrow API v3 (https://api.surveysparrow.com/v3)",
+  "docs": "https://developers.surveysparrow.com/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (surveys, contacts, responses, questions); legacy ships no writes (capabilities.write is false), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/surveys", "covered_by": { "stream": "surveys" } },
+    { "method": "GET", "path": "/v3/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/v3/responses", "covered_by": { "stream": "responses" } },
+    { "method": "GET", "path": "/v3/surveys/{survey_id}/questions", "covered_by": { "stream": "questions" } },
+    { "method": "POST", "path": "/v3/surveys", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "api": "Paddle REST API (https://api.paddle.com)",
+  "docs": "https://developer.paddle.com/api-reference/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (transactions, customers, subscriptions, products); legacy itself ships no writes (capabilities.write is false) and no other resource is modeled.",
+  "endpoints": [
+    { "method": "GET", "path": "/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/subscriptions", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "POST", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented customer creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/subscriptions/{subscription_id}/cancel", "excluded": { "category": "destructive_admin", "reason": "subscription cancellation not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/adjustments", "excluded": { "category": "out_of_scope", "reason": "refund/credit adjustments not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/reports", "excluded": { "category": "out_of_scope", "reason": "async report generation not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/event-types", "excluded": { "category": "non_data_endpoint", "reason": "webhook event-type catalog, not a syncable object stream" } }
+  ]
+}

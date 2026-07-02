@@ -1,0 +1,23 @@
+{
+  "name": "employment-hero",
+  "display_name": "Employment Hero",
+  "description": "Reads Employment Hero organisations, employees, leave requests, and teams through the Employment Hero REST API. Read-only (the API is full-refresh only).",
+  "integration_type": "api",
+  "docs_url": "https://developer.employmenthero.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Employment Hero API read of organisation, employee, leave, and team data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

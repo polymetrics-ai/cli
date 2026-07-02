@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/auditlog", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "_id": "audit_fixture_1", "date": 1767225601000, "kind": "flag", "name": "Fixture Flag Change", "description": "fixture audit entry", "shortDescription": "fixture" }
+      ],
+      "totalCount": 1
+    }
+  }
+}

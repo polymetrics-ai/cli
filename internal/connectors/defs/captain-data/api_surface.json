@@ -1,0 +1,13 @@
+{
+  "api": "Captain Data API v3 (https://api.captaindata.co/v3)",
+  "docs": "https://docs.captaindata.co/api-documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams (workspace, workflows, jobs, job_results) only; Captain Data has no reverse-ETL writes in legacy, so no write actions are in scope",
+  "endpoints": [
+    { "method": "GET", "path": "/workspace", "covered_by": { "stream": "workspace" } },
+    { "method": "GET", "path": "/workflows", "covered_by": { "stream": "workflows" } },
+    { "method": "GET", "path": "/workflows/{workflow_uid}/jobs", "covered_by": { "stream": "jobs" } },
+    { "method": "GET", "path": "/jobs/{job_uid}/results", "covered_by": { "stream": "job_results" } },
+    { "method": "POST", "path": "/workflows/{workflow_uid}/jobs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy exposes no reverse-ETL writes for Captain Data" } }
+  ]
+}

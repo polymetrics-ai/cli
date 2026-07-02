@@ -1,0 +1,19 @@
+{
+  "api": "AssemblyAI API v2 (https://api.assemblyai.com)",
+  "docs": "https://www.assemblyai.com/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (all backed by the single GET /v2/transcript list endpoint); the full AssemblyAI surface (submit transcript, poll status, LeMUR, real-time streaming, redaction, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript" } },
+    { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript_sentences" } },
+    { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript_paragraphs" } },
+    { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript_subtitle" } },
+    { "method": "GET", "path": "/v2/transcript/{id}/sentences", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/transcript/{id}/paragraphs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/transcript/{id}/subtitles/{format}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/transcript", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/transcript/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/v2/transcript/{id}", "excluded": { "category": "destructive_admin", "reason": "deletes source transcript data; not a syncable read" } },
+    { "method": "POST", "path": "/lemur/v3/generate/task", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

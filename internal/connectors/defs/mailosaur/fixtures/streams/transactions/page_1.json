@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/usage/transactions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "timestamp": "2026-01-01T00:00:00Z",
+          "email": 5,
+          "sms": 0,
+          "previews": 1
+        },
+        {
+          "timestamp": "2026-01-02T00:00:00Z",
+          "email": 8,
+          "sms": 1,
+          "previews": 0
+        }
+      ]
+    }
+  }
+}

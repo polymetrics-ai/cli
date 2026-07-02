@@ -1,0 +1,10 @@
+{
+  "api": "Poplar API v1 (https://docs.poplar.studio/)",
+  "docs": "https://docs.poplar.studio/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2-fan-out migration: the 2 legacy-parity read streams only (campaigns, orders); legacy's own package doc notes public docs vary by account features and the connector intentionally limits itself to these common list endpoints and never performs writes.",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/v1/orders", "covered_by": { "stream": "orders" } }
+  ]
+}

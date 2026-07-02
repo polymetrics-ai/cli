@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organisations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date_updated_utc",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "organisation_id": { "type": "integer" },
+    "organisation_name": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "website": { "type": ["string", "null"] },
+    "owner_user_id": { "type": ["integer", "null"] },
+    "date_created_utc": { "type": ["string", "null"] },
+    "date_updated_utc": { "type": ["string", "null"] }
+  }
+}

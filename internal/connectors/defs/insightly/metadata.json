@@ -1,0 +1,23 @@
+{
+  "name": "insightly",
+  "display_name": "Insightly",
+  "description": "Reads Insightly CRM contacts, organisations, opportunities, leads, projects, and tasks through the Insightly REST API v3.1.",
+  "integration_type": "api",
+  "docs_url": "https://api.na1.insightly.com/v3.1/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Insightly API read of contacts, organisations, opportunities, leads, projects, and tasks",
+    "approval": "none; read-only source"
+  }
+}

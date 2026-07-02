@@ -1,0 +1,20 @@
+{
+  "name": "veeqo",
+  "display_name": "Veeqo",
+  "description": "Reads orders from the Veeqo API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.veeqo.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Veeqo API read of order data",
+    "approval": "none; read-only orders API"
+  }
+}

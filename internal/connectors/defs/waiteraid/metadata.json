@@ -1,0 +1,23 @@
+{
+  "name": "waiteraid",
+  "display_name": "WaiterAid",
+  "description": "Reads WaiterAid restaurant reservations.",
+  "integration_type": "api",
+  "docs_url": "https://waiteraid.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external WaiterAid API read of restaurant reservation data",
+    "approval": "none; read-only reservations sync"
+  }
+}

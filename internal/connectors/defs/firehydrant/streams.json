@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "pagination.next"
+    },
+    "check": { "method": "GET", "path": "/environments" },
+    "error_map": [
+      { "status": 401, "hint": "firehydrant api_token is missing or invalid; re-run pm credentials add firehydrant" },
+      { "status": 403, "hint": "firehydrant account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "firehydrant rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "incidents",
+      "path": "/incidents",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "50" } },
+      "records": { "path": "data" },
+      "schema": "schemas/incidents.json"
+    },
+    {
+      "name": "services",
+      "path": "/services",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "50" } },
+      "records": { "path": "data" },
+      "schema": "schemas/services.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "50" } },
+      "records": { "path": "data" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "environments",
+      "path": "/environments",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "50" } },
+      "records": { "path": "data" },
+      "schema": "schemas/environments.json"
+    },
+    {
+      "name": "functionalities",
+      "path": "/functionalities",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "50" } },
+      "records": { "path": "data" },
+      "schema": "schemas/functionalities.json"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "assets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "class": { "type": ["string", "null"] },
+    "exchange": { "type": ["string", "null"] },
+    "symbol": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "tradable": { "type": ["boolean", "null"] },
+    "marginable": { "type": ["boolean", "null"] },
+    "shortable": { "type": ["boolean", "null"] },
+    "easy_to_borrow": { "type": ["boolean", "null"] },
+    "fractionable": { "type": ["boolean", "null"] }
+  }
+}

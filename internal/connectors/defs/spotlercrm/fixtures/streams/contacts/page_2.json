@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "page": "2", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "contact_fixture_101", "email": "fixture101@example.com", "firstName": "Fixture", "lastName": "101" }
+      ]
+    }
+  }
+}

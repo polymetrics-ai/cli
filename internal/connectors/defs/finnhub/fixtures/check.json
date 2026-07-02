@@ -1,0 +1,8 @@
+{
+  "response": {
+    "status": 200,
+    "body": [
+      { "symbol": "AAPL", "displaySymbol": "AAPL", "description": "APPLE INC", "type": "Common Stock", "currency": "USD", "mic": "XNAS" }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/account/synthetic-conformance-value/workspace/synthetic-conformance-value/categories" },
+  "response": {
+    "status": 200,
+    "body": {
+      "categories": [
+        {
+          "id": "cat_fixture_1",
+          "name": "Fixture Category 1",
+          "description": "fixture category",
+          "groupId": "grp_fixture",
+          "groupName": "Fixture Group",
+          "groupPosition": 1,
+          "position": 1,
+          "maxRating": 5,
+          "weight": 1.0,
+          "critical": false,
+          "archived": false,
+          "rootCauses": [],
+          "scorecards": []
+        }
+      ]
+    }
+  }
+}

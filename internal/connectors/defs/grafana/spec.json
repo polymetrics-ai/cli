@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Grafana Connection Specification",
+  "type": "object",
+  "required": ["base_url", "api_key"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Grafana instance's URL, e.g. https://your-grafana.grafana.net. No default: a Grafana instance must be named explicitly (per-tenant, matching legacy's config url/base_url)."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Grafana service account token or API key, sent as Authorization: Bearer <api_key>; never logged."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

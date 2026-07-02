@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/companies", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "co_fixture_1",
+          "name": "Fixture Co",
+          "email_opt_in": true,
+          "sync_status": { "status": "synced" },
+          "created_method": "api",
+          "updated_method": "api",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "co_fixture_2",
+          "name": "Fixture Co Two",
+          "email_opt_in": false,
+          "sync_status": { "status": "synced" },
+          "created_method": "api",
+          "updated_method": "api",
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

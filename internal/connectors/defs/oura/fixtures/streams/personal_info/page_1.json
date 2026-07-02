@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/personal_info" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture-user-1",
+      "email": "fixture1@example.com",
+      "age": 35,
+      "weight": 72.5,
+      "height": 178.0,
+      "biological_sex": "male"
+    }
+  }
+}

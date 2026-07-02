@@ -1,0 +1,22 @@
+{
+  "name": "dropbox-sign",
+  "display_name": "Dropbox Sign",
+  "description": "Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and account details through the Dropbox Sign REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.hellosign.com/api/reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Dropbox Sign API read of signature requests, templates, team members, and account data"
+  }
+}

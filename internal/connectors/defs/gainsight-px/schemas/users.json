@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "accountId": { "type": ["string", "null"] },
+    "aptrinsicId": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "firstName": { "type": ["string", "null"] },
+    "lastName": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "role": { "type": ["string", "null"] },
+    "score": { "type": ["number", "null"] },
+    "numberOfVisits": { "type": ["integer", "null"] },
+    "signUpDate": { "type": ["integer", "null"] },
+    "createDate": { "type": ["integer", "null"] },
+    "lastSeenDate": { "type": ["integer", "null"] },
+    "lastModifiedDate": { "type": ["integer", "null"] }
+  }
+}

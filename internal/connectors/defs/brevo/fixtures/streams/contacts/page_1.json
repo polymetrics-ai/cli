@@ -1,0 +1,1418 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "id": 1,
+          "email": "fixture1@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-02T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture1"
+          }
+        },
+        {
+          "id": 2,
+          "email": "fixture2@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-03T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture2"
+          }
+        },
+        {
+          "id": 3,
+          "email": "fixture3@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-04T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture3"
+          }
+        },
+        {
+          "id": 4,
+          "email": "fixture4@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-05T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture4"
+          }
+        },
+        {
+          "id": 5,
+          "email": "fixture5@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-06T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture5"
+          }
+        },
+        {
+          "id": 6,
+          "email": "fixture6@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-07T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture6"
+          }
+        },
+        {
+          "id": 7,
+          "email": "fixture7@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-08T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture7"
+          }
+        },
+        {
+          "id": 8,
+          "email": "fixture8@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-09T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture8"
+          }
+        },
+        {
+          "id": 9,
+          "email": "fixture9@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-10T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture9"
+          }
+        },
+        {
+          "id": 10,
+          "email": "fixture10@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-11T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture10"
+          }
+        },
+        {
+          "id": 11,
+          "email": "fixture11@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-12T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture11"
+          }
+        },
+        {
+          "id": 12,
+          "email": "fixture12@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-13T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture12"
+          }
+        },
+        {
+          "id": 13,
+          "email": "fixture13@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-14T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture13"
+          }
+        },
+        {
+          "id": 14,
+          "email": "fixture14@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-15T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture14"
+          }
+        },
+        {
+          "id": 15,
+          "email": "fixture15@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-16T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture15"
+          }
+        },
+        {
+          "id": 16,
+          "email": "fixture16@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-17T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture16"
+          }
+        },
+        {
+          "id": 17,
+          "email": "fixture17@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-18T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture17"
+          }
+        },
+        {
+          "id": 18,
+          "email": "fixture18@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-19T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture18"
+          }
+        },
+        {
+          "id": 19,
+          "email": "fixture19@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-20T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture19"
+          }
+        },
+        {
+          "id": 20,
+          "email": "fixture20@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-21T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture20"
+          }
+        },
+        {
+          "id": 21,
+          "email": "fixture21@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-22T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture21"
+          }
+        },
+        {
+          "id": 22,
+          "email": "fixture22@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-23T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture22"
+          }
+        },
+        {
+          "id": 23,
+          "email": "fixture23@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-24T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture23"
+          }
+        },
+        {
+          "id": 24,
+          "email": "fixture24@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-25T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture24"
+          }
+        },
+        {
+          "id": 25,
+          "email": "fixture25@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-26T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture25"
+          }
+        },
+        {
+          "id": 26,
+          "email": "fixture26@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-27T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture26"
+          }
+        },
+        {
+          "id": 27,
+          "email": "fixture27@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-28T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture27"
+          }
+        },
+        {
+          "id": 28,
+          "email": "fixture28@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-01T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture28"
+          }
+        },
+        {
+          "id": 29,
+          "email": "fixture29@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-02T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture29"
+          }
+        },
+        {
+          "id": 30,
+          "email": "fixture30@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-03T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture30"
+          }
+        },
+        {
+          "id": 31,
+          "email": "fixture31@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-04T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture31"
+          }
+        },
+        {
+          "id": 32,
+          "email": "fixture32@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-05T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture32"
+          }
+        },
+        {
+          "id": 33,
+          "email": "fixture33@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-06T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture33"
+          }
+        },
+        {
+          "id": 34,
+          "email": "fixture34@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-07T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture34"
+          }
+        },
+        {
+          "id": 35,
+          "email": "fixture35@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-08T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture35"
+          }
+        },
+        {
+          "id": 36,
+          "email": "fixture36@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-09T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture36"
+          }
+        },
+        {
+          "id": 37,
+          "email": "fixture37@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-10T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture37"
+          }
+        },
+        {
+          "id": 38,
+          "email": "fixture38@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-11T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture38"
+          }
+        },
+        {
+          "id": 39,
+          "email": "fixture39@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-12T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture39"
+          }
+        },
+        {
+          "id": 40,
+          "email": "fixture40@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-13T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture40"
+          }
+        },
+        {
+          "id": 41,
+          "email": "fixture41@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-14T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture41"
+          }
+        },
+        {
+          "id": 42,
+          "email": "fixture42@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-15T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture42"
+          }
+        },
+        {
+          "id": 43,
+          "email": "fixture43@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-16T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture43"
+          }
+        },
+        {
+          "id": 44,
+          "email": "fixture44@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-17T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture44"
+          }
+        },
+        {
+          "id": 45,
+          "email": "fixture45@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-18T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture45"
+          }
+        },
+        {
+          "id": 46,
+          "email": "fixture46@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-19T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture46"
+          }
+        },
+        {
+          "id": 47,
+          "email": "fixture47@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-20T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture47"
+          }
+        },
+        {
+          "id": 48,
+          "email": "fixture48@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-21T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture48"
+          }
+        },
+        {
+          "id": 49,
+          "email": "fixture49@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-22T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture49"
+          }
+        },
+        {
+          "id": 50,
+          "email": "fixture50@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-23T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture50"
+          }
+        },
+        {
+          "id": 51,
+          "email": "fixture51@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-24T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture51"
+          }
+        },
+        {
+          "id": 52,
+          "email": "fixture52@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-25T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture52"
+          }
+        },
+        {
+          "id": 53,
+          "email": "fixture53@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-26T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture53"
+          }
+        },
+        {
+          "id": 54,
+          "email": "fixture54@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-27T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture54"
+          }
+        },
+        {
+          "id": 55,
+          "email": "fixture55@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-28T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture55"
+          }
+        },
+        {
+          "id": 56,
+          "email": "fixture56@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-01T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture56"
+          }
+        },
+        {
+          "id": 57,
+          "email": "fixture57@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-02T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture57"
+          }
+        },
+        {
+          "id": 58,
+          "email": "fixture58@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-03T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture58"
+          }
+        },
+        {
+          "id": 59,
+          "email": "fixture59@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-04T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture59"
+          }
+        },
+        {
+          "id": 60,
+          "email": "fixture60@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-05T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture60"
+          }
+        },
+        {
+          "id": 61,
+          "email": "fixture61@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-06T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture61"
+          }
+        },
+        {
+          "id": 62,
+          "email": "fixture62@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-07T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture62"
+          }
+        },
+        {
+          "id": 63,
+          "email": "fixture63@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-08T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture63"
+          }
+        },
+        {
+          "id": 64,
+          "email": "fixture64@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-09T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture64"
+          }
+        },
+        {
+          "id": 65,
+          "email": "fixture65@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-10T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture65"
+          }
+        },
+        {
+          "id": 66,
+          "email": "fixture66@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-11T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture66"
+          }
+        },
+        {
+          "id": 67,
+          "email": "fixture67@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-12T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture67"
+          }
+        },
+        {
+          "id": 68,
+          "email": "fixture68@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-13T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture68"
+          }
+        },
+        {
+          "id": 69,
+          "email": "fixture69@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-14T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture69"
+          }
+        },
+        {
+          "id": 70,
+          "email": "fixture70@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-15T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture70"
+          }
+        },
+        {
+          "id": 71,
+          "email": "fixture71@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-16T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture71"
+          }
+        },
+        {
+          "id": 72,
+          "email": "fixture72@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-17T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture72"
+          }
+        },
+        {
+          "id": 73,
+          "email": "fixture73@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-18T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture73"
+          }
+        },
+        {
+          "id": 74,
+          "email": "fixture74@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-19T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture74"
+          }
+        },
+        {
+          "id": 75,
+          "email": "fixture75@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-20T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture75"
+          }
+        },
+        {
+          "id": 76,
+          "email": "fixture76@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-21T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture76"
+          }
+        },
+        {
+          "id": 77,
+          "email": "fixture77@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-22T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture77"
+          }
+        },
+        {
+          "id": 78,
+          "email": "fixture78@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-23T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture78"
+          }
+        },
+        {
+          "id": 79,
+          "email": "fixture79@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-24T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture79"
+          }
+        },
+        {
+          "id": 80,
+          "email": "fixture80@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-25T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture80"
+          }
+        },
+        {
+          "id": 81,
+          "email": "fixture81@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-26T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture81"
+          }
+        },
+        {
+          "id": 82,
+          "email": "fixture82@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-27T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture82"
+          }
+        },
+        {
+          "id": 83,
+          "email": "fixture83@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-28T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture83"
+          }
+        },
+        {
+          "id": 84,
+          "email": "fixture84@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-01T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture84"
+          }
+        },
+        {
+          "id": 85,
+          "email": "fixture85@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-02T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture85"
+          }
+        },
+        {
+          "id": 86,
+          "email": "fixture86@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-03T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture86"
+          }
+        },
+        {
+          "id": 87,
+          "email": "fixture87@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-04T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture87"
+          }
+        },
+        {
+          "id": 88,
+          "email": "fixture88@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-05T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture88"
+          }
+        },
+        {
+          "id": 89,
+          "email": "fixture89@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-06T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture89"
+          }
+        },
+        {
+          "id": 90,
+          "email": "fixture90@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-07T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture90"
+          }
+        },
+        {
+          "id": 91,
+          "email": "fixture91@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-08T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture91"
+          }
+        },
+        {
+          "id": 92,
+          "email": "fixture92@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-09T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture92"
+          }
+        },
+        {
+          "id": 93,
+          "email": "fixture93@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-10T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture93"
+          }
+        },
+        {
+          "id": 94,
+          "email": "fixture94@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-11T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture94"
+          }
+        },
+        {
+          "id": 95,
+          "email": "fixture95@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-12T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture95"
+          }
+        },
+        {
+          "id": 96,
+          "email": "fixture96@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-13T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture96"
+          }
+        },
+        {
+          "id": 97,
+          "email": "fixture97@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-14T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture97"
+          }
+        },
+        {
+          "id": 98,
+          "email": "fixture98@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-15T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture98"
+          }
+        },
+        {
+          "id": 99,
+          "email": "fixture99@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-16T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture99"
+          }
+        },
+        {
+          "id": 100,
+          "email": "fixture100@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-17T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture100"
+          }
+        }
+      ],
+      "count": 101
+    }
+  }
+}

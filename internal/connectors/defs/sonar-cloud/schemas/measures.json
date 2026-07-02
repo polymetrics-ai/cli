@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "measures",
+  "type": "object",
+  "x-primary-key": ["metric"],
+  "required": ["metric"],
+  "properties": {
+    "metric": { "type": "string" },
+    "value": { "type": ["string", "null"] },
+    "component": { "type": ["string", "null"] },
+    "bestValue": { "type": ["boolean", "null"] }
+  }
+}

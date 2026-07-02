@@ -1,0 +1,26 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "access_key", "value": "{{ secrets.access_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/symbols" },
+    "error_map": [
+      { "status": 401, "hint": "exchange-rates access_key is missing or invalid; re-run pm credentials add exchange-rates" },
+      { "status": 403, "hint": "exchange-rates account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "exchange-rates rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "latest",
+      "path": "/latest",
+      "query": {
+        "base": { "template": "{{ config.base }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/latest.json"
+    }
+  ]
+}

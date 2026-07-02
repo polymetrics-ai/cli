@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/v2/activities", "query": { "pageSize": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 30, "activityTime": 1767225601, "deviceId": 10, "activityType": "ACTION", "status": "COMPLETED", "message": "fixture activity 1" }
+    ]
+  }
+}

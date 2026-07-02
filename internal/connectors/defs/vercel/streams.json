@@ -1,0 +1,32 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/v6/deployments" },
+    "error_map": [
+      { "status": 401, "hint": "vercel access_token is missing or invalid; re-run pm credentials add vercel" },
+      { "status": 403, "hint": "vercel account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "vercel rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "deployments",
+      "path": "/v6/deployments",
+      "query": {
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "deployments" },
+      "computed_fields": {
+        "id": "{{ record.uid }}",
+        "name": "{{ record.name }}",
+        "state": "{{ record.state }}",
+        "created": "{{ record.created }}"
+      },
+      "schema": "schemas/deployments.json"
+    }
+  ]
+}

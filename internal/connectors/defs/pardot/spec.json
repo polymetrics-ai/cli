@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pardot Connection Specification",
+  "type": "object",
+  "required": ["access_token", "business_unit_id"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pre-issued Salesforce OAuth access token; sent as a Bearer token (Authorization: Bearer <access_token>). Never logged. Token acquisition/refresh is intentionally outside this connector."
+    },
+    "business_unit_id": {
+      "type": "string",
+      "description": "Pardot Business Unit Id, sent as the Pardot-Business-Unit-Id header on every request."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://pi.pardot.com",
+      "description": "Pardot API base URL override for tests or proxies."
+    }
+  }
+}

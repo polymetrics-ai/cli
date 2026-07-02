@@ -1,0 +1,14 @@
+{
+  "api": "Watchmode REST API (https://api.watchmode.com/)",
+  "docs": "https://api.watchmode.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (search, sources); Watchmode's write endpoints do not exist for this connector (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/search/", "covered_by": { "stream": "search" } },
+    { "method": "GET", "path": "/v1/sources/", "covered_by": { "stream": "sources" } },
+    { "method": "GET", "path": "/v1/title/{id}/details/", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented title-details lookups; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/title/{id}/sources/", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented per-title source lookups; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/list-titles/", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented bulk title listing; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/network-changes/", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented network-changes feed; Pass B capability expansion" } }
+  ]
+}

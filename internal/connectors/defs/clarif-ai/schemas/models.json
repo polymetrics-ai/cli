@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "models",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "user_id": { "type": ["string", "null"] },
+    "app_id": { "type": ["string", "null"] },
+    "model_type_id": { "type": ["string", "null"] },
+    "visibility": { "type": ["object", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "modified_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "api_secret", "value": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" },
+      { "mode": "api_key_query", "param": "api_secret", "value": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      { "mode": "api_key_query", "param": "api_secret", "value": "{{ secrets.api_secret }}", "when": "{{ secrets.api_secret }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/forms" },
+    "error_map": [
+      { "status": 401, "hint": "convertkit api secret is missing or invalid; re-run pm credentials add convertkit" },
+      { "status": 429, "class": "rate_limited", "hint": "convertkit rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "subscribers",
+      "path": "/subscribers",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "records": { "path": "subscribers" },
+      "schema": "schemas/subscribers.json"
+    },
+    {
+      "name": "forms",
+      "path": "/forms",
+      "records": { "path": "forms" },
+      "schema": "schemas/forms.json"
+    },
+    {
+      "name": "sequences",
+      "path": "/sequences",
+      "records": { "path": "sequences" },
+      "schema": "schemas/sequences.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": { "path": "tags" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "broadcasts",
+      "path": "/broadcasts",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "records": { "path": "broadcasts" },
+      "schema": "schemas/broadcasts.json"
+    }
+  ]
+}

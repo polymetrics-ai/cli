@@ -1,0 +1,20 @@
+{
+  "name": "sparkpost",
+  "display_name": "SparkPost",
+  "description": "Reads SparkPost recipient lists, templates, sending domains, transmissions, and suppression list records.",
+  "integration_type": "api",
+  "docs_url": "https://developers.sparkpost.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external SparkPost API read of recipient list, template, sending domain, transmission, and suppression list data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

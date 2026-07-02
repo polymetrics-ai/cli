@@ -1,0 +1,17 @@
+{
+  "api": "Zoho Desk API v1 (https://desk.zoho.com/api/v1)",
+  "docs": "https://desk.zoho.com/DeskAPIDocument",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (tickets, contacts, accounts); legacy is read-only, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/tickets", "covered_by": { "stream": "tickets" } },
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/agents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/departments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/tickets/{ticketId}/threads", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/tickets", "excluded": { "category": "out_of_scope", "reason": "legacy zoho-desk connector is read-only; write support is Pass B capability expansion" } },
+    { "method": "PATCH", "path": "/tickets/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy zoho-desk connector is read-only; write support is Pass B capability expansion" } },
+    { "method": "GET", "path": "/organization", "excluded": { "category": "non_data_endpoint", "reason": "organization metadata listing, not a syncable object stream" } }
+  ]
+}

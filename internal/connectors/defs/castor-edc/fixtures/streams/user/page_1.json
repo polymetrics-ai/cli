@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/user", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "user": [
+          {
+            "id": "user_fixture_1",
+            "user_id": "u_fixture_1",
+            "email_address": "fixture1@example.com",
+            "first_name": "Fixture",
+            "last_name": "One",
+            "full_name": "Fixture One",
+            "is_active": true,
+            "institute": "inst_fixture_1",
+            "last_login": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

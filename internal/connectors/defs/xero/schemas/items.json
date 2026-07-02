@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "items",
+  "type": "object",
+  "x-primary-key": ["ItemID"],
+  "x-cursor-field": "UpdatedDateUTC",
+  "required": ["ItemID"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "ItemID": { "type": "string" },
+    "Code": { "type": ["string", "null"] },
+    "Name": { "type": ["string", "null"] },
+    "Description": { "type": ["string", "null"] },
+    "IsSold": { "type": ["boolean", "null"] },
+    "IsPurchased": { "type": ["boolean", "null"] },
+    "IsTrackedAsInventory": { "type": ["boolean", "null"] },
+    "QuantityOnHand": { "type": ["number", "null"] },
+    "UpdatedDateUTC": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

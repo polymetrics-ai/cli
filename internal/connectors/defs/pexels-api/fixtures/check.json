@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v1/search", "query": { "query": "people", "per_page": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "page": 1, "per_page": 1, "photos": [], "total_results": 0 }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "pingdom",
+  "display_name": "Pingdom",
+  "description": "Reads Pingdom checks, probes, actions, maintenance windows, and reference data through API 3.1.",
+  "integration_type": "api",
+  "docs_url": "https://docs.pingdom.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Pingdom API read of uptime monitoring configuration and event data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

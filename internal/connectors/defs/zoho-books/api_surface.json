@@ -1,0 +1,20 @@
+{
+  "api": "Zoho Books API v3 (https://www.zohoapis.com/books/v3)",
+  "docs": "https://www.zoho.com/books/api/v3/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (contacts, invoices, items); legacy is read-only, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/items", "covered_by": { "stream": "items" } },
+    { "method": "GET", "path": "/estimates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/creditnotes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/customerpayments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/bills", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/expenses", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/chartofaccounts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "legacy zoho-books connector is read-only; write support is Pass B capability expansion" } },
+    { "method": "POST", "path": "/invoices", "excluded": { "category": "out_of_scope", "reason": "legacy zoho-books connector is read-only; write support is Pass B capability expansion" } },
+    { "method": "GET", "path": "/organizations", "excluded": { "category": "non_data_endpoint", "reason": "organization metadata listing, not a syncable object stream" } }
+  ]
+}

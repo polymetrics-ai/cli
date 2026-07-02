@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/courses", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "course_fixture_1", "title": "Fixture Course 1", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "course_fixture_2", "title": "Fixture Course 2", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

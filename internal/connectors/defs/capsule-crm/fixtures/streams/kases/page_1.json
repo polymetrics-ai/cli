@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/kases", "query": { "page": "1", "perPage": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "kases": [
+        {
+          "id": 20,
+          "name": "Fixture Case 1",
+          "description": "conformance fixture case",
+          "status": "OPEN",
+          "party": { "id": 1 },
+          "owner": "fixture-owner",
+          "closedOn": null,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/user/v3/account/whoAmI" },
+  "response": {
+    "status": 200,
+    "body": { "accountId": "acct_fixture_1", "username": "fixture_user", "email": "fixture@example.com", "merchantId": "merch_fixture_1", "role": "api" }
+  }
+}

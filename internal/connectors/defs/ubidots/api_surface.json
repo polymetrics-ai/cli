@@ -1,0 +1,13 @@
+{
+  "api": "Ubidots API v2.0 (https://industrial.api.ubidots.com/api/v2.0)",
+  "docs": "https://docs.ubidots.com/reference/welcome",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Ubidots API (variable values, device write, plots, notifications, users) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2.0/devices/", "covered_by": { "stream": "devices" } },
+    { "method": "GET", "path": "/api/v2.0/variables/", "covered_by": { "stream": "variables" } },
+    { "method": "GET", "path": "/api/v2.0/dashboards/", "covered_by": { "stream": "dashboards" } },
+    { "method": "GET", "path": "/api/v2.0/events/", "covered_by": { "stream": "events" } },
+    { "method": "POST", "path": "/api/v2.0/variables/{id}/values/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only, no write support" } }
+  ]
+}

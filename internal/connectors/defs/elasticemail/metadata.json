@@ -1,0 +1,23 @@
+{
+  "name": "elasticemail",
+  "display_name": "Elastic Email",
+  "description": "Reads Elastic Email contacts, campaigns, lists, segments, and templates through the Elastic Email v4 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://elasticemail.com/developers/api-documentation/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Elastic Email API read of contact, campaign, list, segment, and template data",
+    "approval": "none; read-only"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cus_fixture_1",
+          "name": "Acme Corp",
+          "email": "fixture1@example.com",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "customer_id": null,
+          "plan_id": null,
+          "amount": null,
+          "currency": "USD"
+        },
+        {
+          "id": "cus_fixture_2",
+          "name": "Globex Inc",
+          "email": "fixture2@example.com",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:01Z",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "customer_id": null,
+          "plan_id": null,
+          "amount": null,
+          "currency": "USD"
+        }
+      ],
+      "pagination_metadata": {
+        "has_more": true,
+        "next_cursor": "cur_fixture_2"
+      }
+    }
+  }
+}

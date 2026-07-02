@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/getcompanymatchadvanced",
+    "query": { "company": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "Code": "Success", "SimKey": "FIXTUREKEY0001", "Credits": "9999" }
+  }
+}

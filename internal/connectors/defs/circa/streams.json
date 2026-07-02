@@ -1,0 +1,63 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "",
+      "start_page": 1,
+      "page_size": 25
+    },
+    "check": { "method": "GET", "path": "/teams", "query": { "page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "circa api_key is missing or invalid; re-run pm credentials add circa" },
+      { "status": 403, "hint": "circa account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "circa rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "events",
+      "path": "/events",
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[min]",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[min]",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "companies",
+      "path": "/companies",
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[min]",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": { "path": "data" },
+      "schema": "schemas/teams.json"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/me" },
+  "response": {
+    "status": 200,
+    "body": { "_id": "user_fixture_1", "username": "fixture.user", "name": "Fixture User", "success": true }
+  }
+}

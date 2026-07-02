@@ -1,0 +1,15 @@
+{
+  "api": "SendOwl API v1",
+  "docs": "https://www.sendowl.com/developers/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full SendOwl surface (discounts, packages, license keys, affiliates, webhooks, etc.) is out of scope until Pass B; this connector is read-only, matching legacy",
+  "endpoints": [
+    { "method": "GET", "path": "/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/subscriptions", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/discounts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/packages", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/license_keys", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only" } }
+  ]
+}

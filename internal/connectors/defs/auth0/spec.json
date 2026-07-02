@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Auth0 Connection Specification",
+  "type": "object",
+  "required": ["base_url", "access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Auth0 Management API access token, used directly as a Bearer token; never logged. This is the only auth mode this bundle implements — see docs.md's Known limits for the M2M client-credentials gap."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Auth0 tenant domain, e.g. https://your-tenant.us.auth0.com. No default: legacy also requires this explicitly (the base is tenant-specific, never a fixed literal)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/segments" },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "item": [
+          { "id": "seg_fixture_1", "name": "Active subscribers", "number_of_contacts": 10 }
+        ]
+      }
+    }
+  }
+}

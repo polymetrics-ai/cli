@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/guests", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "guests": [
+        { "id": "gst_fixture_1", "name": "Fixture Guest One", "status": "active" },
+        { "id": "gst_fixture_2", "name": "Fixture Guest Two", "status": "active" }
+      ]
+    }
+  }
+}

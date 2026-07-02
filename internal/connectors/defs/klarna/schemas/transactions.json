@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["transaction_id"],
+  "required": ["transaction_id"],
+  "properties": {
+    "transaction_id": { "type": "string" },
+    "payout_reference": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "amount": { "type": ["integer", "null"] },
+    "currency_code": { "type": ["string", "null"] },
+    "capture_id": { "type": ["string", "null"] },
+    "order_id": { "type": ["string", "null"] },
+    "short_order_id": { "type": ["string", "null"] },
+    "merchant_reference1": { "type": ["string", "null"] },
+    "merchant_reference2": { "type": ["string", "null"] },
+    "sale_date": { "type": ["string", "null"] },
+    "capture_date": { "type": ["string", "null"] }
+  }
+}

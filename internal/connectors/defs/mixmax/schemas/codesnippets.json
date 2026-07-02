@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "codesnippets",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "x-cursor-field": "createdAt",
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "language": { "type": ["string", "null"] },
+    "theme": { "type": ["string", "null"] },
+    "html": { "type": ["string", "null"] },
+    "background": { "type": ["string", "null"] },
+    "userId": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] }
+  }
+}

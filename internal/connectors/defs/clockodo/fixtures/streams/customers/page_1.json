@@ -1,0 +1,472 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/customers",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "paging": {
+        "items_per_page": 50,
+        "current_page": 1,
+        "count_pages": 2,
+        "count_items": 51
+      },
+      "customers": [
+        {
+          "id": 1,
+          "name": "Fixture Customer 1",
+          "number": "1001",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 1
+        },
+        {
+          "id": 2,
+          "name": "Fixture Customer 2",
+          "number": "1002",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 2
+        },
+        {
+          "id": 3,
+          "name": "Fixture Customer 3",
+          "number": "1003",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 3
+        },
+        {
+          "id": 4,
+          "name": "Fixture Customer 4",
+          "number": "1004",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 4
+        },
+        {
+          "id": 5,
+          "name": "Fixture Customer 5",
+          "number": "1005",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 5
+        },
+        {
+          "id": 6,
+          "name": "Fixture Customer 6",
+          "number": "1006",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 6
+        },
+        {
+          "id": 7,
+          "name": "Fixture Customer 7",
+          "number": "1007",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 7
+        },
+        {
+          "id": 8,
+          "name": "Fixture Customer 8",
+          "number": "1008",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 8
+        },
+        {
+          "id": 9,
+          "name": "Fixture Customer 9",
+          "number": "1009",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 9
+        },
+        {
+          "id": 10,
+          "name": "Fixture Customer 10",
+          "number": "1010",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 10
+        },
+        {
+          "id": 11,
+          "name": "Fixture Customer 11",
+          "number": "1011",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 11
+        },
+        {
+          "id": 12,
+          "name": "Fixture Customer 12",
+          "number": "1012",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 12
+        },
+        {
+          "id": 13,
+          "name": "Fixture Customer 13",
+          "number": "1013",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 13
+        },
+        {
+          "id": 14,
+          "name": "Fixture Customer 14",
+          "number": "1014",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 14
+        },
+        {
+          "id": 15,
+          "name": "Fixture Customer 15",
+          "number": "1015",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 15
+        },
+        {
+          "id": 16,
+          "name": "Fixture Customer 16",
+          "number": "1016",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 16
+        },
+        {
+          "id": 17,
+          "name": "Fixture Customer 17",
+          "number": "1017",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 17
+        },
+        {
+          "id": 18,
+          "name": "Fixture Customer 18",
+          "number": "1018",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 18
+        },
+        {
+          "id": 19,
+          "name": "Fixture Customer 19",
+          "number": "1019",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 19
+        },
+        {
+          "id": 20,
+          "name": "Fixture Customer 20",
+          "number": "1020",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 20
+        },
+        {
+          "id": 21,
+          "name": "Fixture Customer 21",
+          "number": "1021",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 21
+        },
+        {
+          "id": 22,
+          "name": "Fixture Customer 22",
+          "number": "1022",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 22
+        },
+        {
+          "id": 23,
+          "name": "Fixture Customer 23",
+          "number": "1023",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 23
+        },
+        {
+          "id": 24,
+          "name": "Fixture Customer 24",
+          "number": "1024",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 24
+        },
+        {
+          "id": 25,
+          "name": "Fixture Customer 25",
+          "number": "1025",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 25
+        },
+        {
+          "id": 26,
+          "name": "Fixture Customer 26",
+          "number": "1026",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 26
+        },
+        {
+          "id": 27,
+          "name": "Fixture Customer 27",
+          "number": "1027",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 27
+        },
+        {
+          "id": 28,
+          "name": "Fixture Customer 28",
+          "number": "1028",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 28
+        },
+        {
+          "id": 29,
+          "name": "Fixture Customer 29",
+          "number": "1029",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 29
+        },
+        {
+          "id": 30,
+          "name": "Fixture Customer 30",
+          "number": "1030",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 30
+        },
+        {
+          "id": 31,
+          "name": "Fixture Customer 31",
+          "number": "1031",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 31
+        },
+        {
+          "id": 32,
+          "name": "Fixture Customer 32",
+          "number": "1032",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 32
+        },
+        {
+          "id": 33,
+          "name": "Fixture Customer 33",
+          "number": "1033",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 33
+        },
+        {
+          "id": 34,
+          "name": "Fixture Customer 34",
+          "number": "1034",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 34
+        },
+        {
+          "id": 35,
+          "name": "Fixture Customer 35",
+          "number": "1035",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 35
+        },
+        {
+          "id": 36,
+          "name": "Fixture Customer 36",
+          "number": "1036",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 36
+        },
+        {
+          "id": 37,
+          "name": "Fixture Customer 37",
+          "number": "1037",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 37
+        },
+        {
+          "id": 38,
+          "name": "Fixture Customer 38",
+          "number": "1038",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 38
+        },
+        {
+          "id": 39,
+          "name": "Fixture Customer 39",
+          "number": "1039",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 39
+        },
+        {
+          "id": 40,
+          "name": "Fixture Customer 40",
+          "number": "1040",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 40
+        },
+        {
+          "id": 41,
+          "name": "Fixture Customer 41",
+          "number": "1041",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 41
+        },
+        {
+          "id": 42,
+          "name": "Fixture Customer 42",
+          "number": "1042",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 42
+        },
+        {
+          "id": 43,
+          "name": "Fixture Customer 43",
+          "number": "1043",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 43
+        },
+        {
+          "id": 44,
+          "name": "Fixture Customer 44",
+          "number": "1044",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 44
+        },
+        {
+          "id": 45,
+          "name": "Fixture Customer 45",
+          "number": "1045",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 45
+        },
+        {
+          "id": 46,
+          "name": "Fixture Customer 46",
+          "number": "1046",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 46
+        },
+        {
+          "id": 47,
+          "name": "Fixture Customer 47",
+          "number": "1047",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 47
+        },
+        {
+          "id": 48,
+          "name": "Fixture Customer 48",
+          "number": "1048",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 48
+        },
+        {
+          "id": 49,
+          "name": "Fixture Customer 49",
+          "number": "1049",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 49
+        },
+        {
+          "id": 50,
+          "name": "Fixture Customer 50",
+          "number": "1050",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 50
+        }
+      ]
+    }
+  }
+}

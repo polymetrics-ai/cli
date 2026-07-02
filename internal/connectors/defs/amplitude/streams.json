@@ -1,0 +1,30 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "{{ secrets.secret_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/api/3/cohorts" }
+  },
+  "streams": [
+    {
+      "name": "cohorts",
+      "path": "/api/3/cohorts",
+      "records": { "path": "cohorts" },
+      "schema": "schemas/cohorts.json"
+    },
+    {
+      "name": "annotations",
+      "path": "/api/3/annotations",
+      "records": { "path": "data" },
+      "schema": "schemas/annotations.json"
+    },
+    {
+      "name": "events_list",
+      "path": "/api/2/events/list",
+      "records": { "path": "data" },
+      "schema": "schemas/events_list.json"
+    }
+  ]
+}

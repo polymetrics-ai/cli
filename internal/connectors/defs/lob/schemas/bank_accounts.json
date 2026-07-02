@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "bank_accounts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date_created",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "routing_number": { "type": ["string", "null"] },
+    "account_number": { "type": ["string", "null"] },
+    "account_type": { "type": ["string", "null"] },
+    "signatory": { "type": ["string", "null"] },
+    "bank_name": { "type": ["string", "null"] },
+    "verified": { "type": ["boolean", "null"] },
+    "date_created": { "type": "string" },
+    "date_modified": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] }
+  }
+}

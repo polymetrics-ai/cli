@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CIMIS Connection Specification",
+  "type": "object",
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "CIMIS appKey. Not required for the stations stream (CIMIS serves station metadata without an appKey); reserved for a future daily/hourly stream expansion. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://et.water.ca.gov",
+      "description": "CIMIS API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

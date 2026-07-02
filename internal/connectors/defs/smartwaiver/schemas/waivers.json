@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "waivers",
+  "type": "object",
+  "x-primary-key": ["waiverId"],
+  "x-cursor-field": "createdOn",
+  "required": ["waiverId"],
+  "properties": {
+    "waiverId": { "type": "string" },
+    "templateId": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "createdOn": { "type": ["string", "null"] },
+    "expirationDate": { "type": ["string", "null"] },
+    "expired": { "type": ["boolean", "null"] },
+    "verified": { "type": ["boolean", "null"] },
+    "firstName": { "type": ["string", "null"] },
+    "lastName": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] }
+  }
+}

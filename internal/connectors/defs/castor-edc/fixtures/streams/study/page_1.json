@@ -1,0 +1,45 @@
+{
+  "request": { "method": "GET", "path": "/study", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "study": [
+          {
+            "study_id": "study_fixture_1",
+            "crf_id": "crf_fixture_1",
+            "name": "Fixture Trial One",
+            "live": true,
+            "randomization_enabled": false,
+            "gcp_enabled": true,
+            "surveys_enabled": false,
+            "premium_support_enabled": false,
+            "main_contact": "fixture1@example.com",
+            "institute_id": "inst_fixture_1",
+            "created_on": "2026-01-01T00:00:00Z",
+            "updated_on": "2026-01-01T00:00:00Z",
+            "duration": 30
+          },
+          {
+            "study_id": "study_fixture_2",
+            "crf_id": "crf_fixture_2",
+            "name": "Fixture Trial Two",
+            "live": true,
+            "randomization_enabled": true,
+            "gcp_enabled": true,
+            "surveys_enabled": true,
+            "premium_support_enabled": false,
+            "main_contact": "fixture2@example.com",
+            "institute_id": "inst_fixture_2",
+            "created_on": "2026-01-02T00:00:00Z",
+            "updated_on": "2026-01-02T00:00:00Z",
+            "duration": 60
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 2,
+      "total_items": 3
+    }
+  }
+}

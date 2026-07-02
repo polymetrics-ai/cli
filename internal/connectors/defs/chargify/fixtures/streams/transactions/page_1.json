@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/transactions.json", "query": { "page": "1", "per_page": "2" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "transaction": {
+          "id": 1,
+          "transaction_type": "payment",
+          "amount_in_cents": 2000,
+          "subscription_id": 1,
+          "customer_id": 1,
+          "product_id": 1,
+          "success": true,
+          "kind": "charge",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      }
+    ]
+  }
+}

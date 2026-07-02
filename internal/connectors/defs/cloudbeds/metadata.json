@@ -1,0 +1,23 @@
+{
+  "name": "cloudbeds",
+  "display_name": "Cloudbeds",
+  "description": "Reads Cloudbeds guests, hotels, rooms, reservations, and transactions through the Cloudbeds v1.2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://hotels.cloudbeds.com/api/docs/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Cloudbeds API read of guest, hotel, room, reservation, and transaction data",
+    "approval": "none; read-only source connector"
+  }
+}

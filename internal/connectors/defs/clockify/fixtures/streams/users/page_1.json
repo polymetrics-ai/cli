@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/v1/workspaces/synthetic-conformance-value/users", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "user_fixture_1",
+        "name": "Fixture User One",
+        "email": "fixture1@example.com",
+        "activeWorkspace": "ws_fixture_1",
+        "defaultWorkspace": "ws_fixture_1",
+        "status": "ACTIVE",
+        "profilePicture": ""
+      }
+    ]
+  }
+}

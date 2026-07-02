@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/alerts", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "alerts": [
+        {
+          "id": "alert_fixture_1",
+          "name": "Fixture Alert One",
+          "description": "conformance fixture alert",
+          "query": { "type": "basic", "included_keywords": ["fixture"] },
+          "languages": ["en"],
+          "countries": ["US"],
+          "sources": ["web"],
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "alert_fixture_2",
+          "name": "Fixture Alert Two",
+          "description": "conformance fixture alert",
+          "query": { "type": "basic", "included_keywords": ["fixture2"] },
+          "languages": ["en"],
+          "countries": ["US"],
+          "sources": ["web"],
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "_links": {
+        "more": {
+          "href": "https://api.mention.net/api/accounts/synthetic-conformance-value/alerts?cursor=cursor_fixture_page2",
+          "params": { "cursor": "cursor_fixture_page2" }
+        }
+      }
+    }
+  }
+}

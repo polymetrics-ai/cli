@@ -1,0 +1,23 @@
+{
+  "name": "hugging-face-datasets",
+  "display_name": "Hugging Face - Datasets",
+  "description": "Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer REST API. Read-only; an optional user access token unlocks gated and private datasets.",
+  "integration_type": "api",
+  "docs_url": "https://huggingface.co/docs/datasets/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Hugging Face dataset-viewer API read of dataset split/size metadata; an optional access token unlocks gated/private dataset reads",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

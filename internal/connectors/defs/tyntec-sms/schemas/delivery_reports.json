@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "delivery_reports",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "from": { "type": ["string", "null"] },
+    "to": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"], "description": "Mapped from the raw API's createdAt field (falls back to a pre-existing created_at field if the source record already uses that key)." }
+  }
+}

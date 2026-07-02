@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/forecast", "query": { "query": "synthetic-conformance-value", "forecast_days": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request": { "type": "City", "query": "Fixture City, Fixture Country" },
+      "location": { "name": "Fixture City", "country": "Fixture Country", "region": "", "lat": "51.500", "lon": "-0.120", "timezone_id": "Europe/London", "localtime": "2026-01-01 00:00", "localtime_epoch": 1767225600, "utc_offset": "0.0" },
+      "current": { "observation_time": "12:00 AM", "temperature": 11, "weather_code": 113, "weather_descriptions": ["Clear"], "wind_speed": 7, "wind_degree": 200, "wind_dir": "SSW", "pressure": 1020, "precip": 0, "humidity": 82, "cloudcover": 0, "feelslike": 11, "uv_index": 1, "visibility": 10 },
+      "forecast": {
+        "2026-01-01": {
+          "date": "2026-01-01",
+          "date_epoch": 1767225600,
+          "astro": { "sunrise": "08:05 AM", "sunset": "04:02 PM" },
+          "mintemp": 6,
+          "maxtemp": 11,
+          "avgtemp": 9,
+          "totalsnow": 0,
+          "sunhour": 3.2,
+          "hourly": []
+        }
+      }
+    }
+  }
+}

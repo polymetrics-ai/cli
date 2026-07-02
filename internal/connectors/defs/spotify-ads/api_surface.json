@@ -1,0 +1,15 @@
+{
+  "api": "Spotify Ads API v2 (https://api-partner.spotify.com/ads/v2)",
+  "docs": "https://ads.spotify.com/en-US/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only, matching internal/connectors/spotify-ads's exact endpoint set; the full Spotify Ads API (creatives, targeting, reporting/insights, budgets) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/ad_accounts", "covered_by": { "stream": "ad_accounts" } },
+    { "method": "GET", "path": "/ad_accounts/{ad_account_id}/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/ad_accounts/{ad_account_id}/ad_sets", "covered_by": { "stream": "ad_sets" } },
+    { "method": "GET", "path": "/ad_accounts/{ad_account_id}/ads", "covered_by": { "stream": "ads" } },
+    { "method": "GET", "path": "/ad_accounts/{ad_account_id}/creatives", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/ad_accounts/{ad_account_id}/insights", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/ad_accounts/{ad_account_id}/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

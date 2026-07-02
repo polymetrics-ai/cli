@@ -1,0 +1,31 @@
+{
+  "base": {
+    "url": "{{ config.backend_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/api/v1/datasets/{{ config.dataset_id }}/records" },
+    "error_map": [
+      { "status": 401, "hint": "senseforce access_token is missing or invalid; re-run pm credentials add senseforce" },
+      { "status": 429, "class": "rate_limited", "hint": "senseforce rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "records",
+      "path": "/api/v1/datasets/{{ config.dataset_id }}/records",
+      "records": { "path": "data" },
+      "schema": "schemas/records.json",
+      "projection": "passthrough"
+    }
+  ]
+}

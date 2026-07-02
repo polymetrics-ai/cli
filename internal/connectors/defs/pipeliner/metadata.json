@@ -1,0 +1,23 @@
+{
+  "name": "pipeliner",
+  "display_name": "Pipeliner",
+  "description": "Reads Pipeliner CRM accounts, contacts, opportunities, and leads through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://workspace.pipelinersales.com/community/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Pipeliner CRM API read of account, contact, opportunity, and lead data",
+    "approval": "none; read-only CRM sync"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/surveys", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "Fixture Survey One", "survey_type": "ClassicForm" },
+        { "id": 2, "name": "Fixture Survey Two", "survey_type": "ClassicForm" }
+      ]
+    }
+  }
+}

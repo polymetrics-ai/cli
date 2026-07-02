@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/v1/contacts/list", "query": { "Page": "1", "PageSize": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": [
+        {
+          "id": "contact_fixture_1",
+          "name": "Fixture Contact 1",
+          "email": "contact1@example.com",
+          "phoneNumber": "+15555550100",
+          "companyName": "Fixture Co"
+        },
+        {
+          "id": "contact_fixture_2",
+          "name": "Fixture Contact 2",
+          "email": "contact2@example.com",
+          "phoneNumber": "+15555550101",
+          "companyName": "Fixture Co"
+        }
+      ],
+      "pageDetails": { "page": 1, "totalPages": 1 }
+    }
+  }
+}

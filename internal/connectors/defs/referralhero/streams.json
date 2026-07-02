@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/lists", "query": { "page": "1", "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "referralhero api key is missing or invalid; re-run pm credentials add referralhero" },
+      { "status": 403, "hint": "referralhero account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "referralhero rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "lists",
+      "path": "/lists",
+      "records": { "path": "data" },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "subscribers",
+      "path": "/subscribers",
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/subscribers.json"
+    },
+    {
+      "name": "referrals",
+      "path": "/referrals",
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/referrals.json"
+    },
+    {
+      "name": "rewards",
+      "path": "/rewards",
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/rewards.json"
+    }
+  ]
+}

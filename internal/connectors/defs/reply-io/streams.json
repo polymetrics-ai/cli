@@ -1,0 +1,78 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Api-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "query": {
+      "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+      "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+      "email": { "template": "{{ config.email }}", "omit_when_absent": true },
+      "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+    },
+    "check": { "method": "GET", "path": "/people", "query": { "limit": "1", "page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "reply.io api key is missing or invalid; re-run pm credentials add reply-io" },
+      { "status": 403, "hint": "reply.io account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "reply.io rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "people",
+      "path": "/people",
+      "records": { "path": "" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "stream": "people"
+      },
+      "schema": "schemas/people.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "records": { "path": "" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "stream": "campaigns"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": { "path": "" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "stream": "tasks"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "email_accounts",
+      "path": "/emailAccounts",
+      "records": { "path": "" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "stream": "email_accounts"
+      },
+      "schema": "schemas/email_accounts.json"
+    }
+  ]
+}

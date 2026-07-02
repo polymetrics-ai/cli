@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/agents",
+    "query": { "page": "2", "items_per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "agents": [
+        {
+          "id": "agents_fixture_3",
+          "email": "fixture3@example.com",
+          "first_name": "Fixture3",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": ["group_fixture_1"],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-03T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

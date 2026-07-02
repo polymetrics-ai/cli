@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/teammates", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_results": [
+        {
+          "id": "teammates_fixture_1",
+          "email": "fixture1@example.com",
+          "username": "fixture1",
+          "first_name": "Fixture",
+          "last_name": "1",
+          "is_admin": false,
+          "is_available": true,
+          "is_blocked": false
+        }
+      ],
+      "_pagination": { "next": null }
+    }
+  }
+}

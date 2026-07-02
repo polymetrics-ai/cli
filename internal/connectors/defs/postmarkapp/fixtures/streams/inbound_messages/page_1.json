@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/messages/inbound", "query": { "count": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "TotalCount": 1,
+      "InboundMessages": [
+        {
+          "From": "fixture-sender@example.com",
+          "FromName": "Fixture Sender",
+          "FromFull": { "Email": "fixture-sender@example.com", "Name": "Fixture Sender" },
+          "To": "fixturehash@inbound.postmarkapp.com",
+          "ToFull": [{ "Email": "fixturehash@inbound.postmarkapp.com", "Name": "" }],
+          "CcFull": [],
+          "Cc": "",
+          "ReplyTo": "",
+          "OriginalRecipient": "fixturehash@inbound.postmarkapp.com",
+          "Subject": "Fixture Inbound Subject",
+          "Date": "Thu, 01 Jan 2026 00:00:00 +0000",
+          "MailboxHash": "",
+          "Tag": "",
+          "Attachments": [],
+          "MessageID": "inbound-fixture-1",
+          "Status": "Processed"
+        }
+      ]
+    }
+  }
+}

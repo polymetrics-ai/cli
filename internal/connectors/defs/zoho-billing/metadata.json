@@ -1,0 +1,22 @@
+{
+  "name": "zoho-billing",
+  "display_name": "Zoho Billing",
+  "description": "Reads Zoho Billing customers, subscriptions, and invoices through the Zoho Billing REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.zoho.com/billing/api/v1/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Zoho Billing API read of customer and billing data"
+  }
+}

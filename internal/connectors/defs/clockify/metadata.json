@@ -1,0 +1,23 @@
+{
+  "name": "clockify",
+  "display_name": "Clockify",
+  "description": "Reads Clockify workspaces, clients, projects, tags, and users through the Clockify REST API v1.",
+  "integration_type": "api",
+  "docs_url": "https://docs.clockify.me/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Clockify API read of workspace, client, project, tag, and user data",
+    "approval": "none; read-only source connector"
+  }
+}

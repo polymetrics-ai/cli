@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/dynamic_configs", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "config_fixture_1", "name": "Fixture Config One", "description": "fixture record", "status": "active", "isEnabled": true }
+      ]
+    }
+  }
+}

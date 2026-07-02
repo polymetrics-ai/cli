@@ -1,0 +1,36 @@
+{
+  "request": { "method": "GET", "path": "/organisations/synthetic-conformance-value/employees", "query": { "page_index": "1", "items_per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "emp_fixture_1",
+            "first_name": "Ada",
+            "middle_name": "",
+            "last_name": "Lovelace",
+            "known_as": "Ada",
+            "title": "Ms",
+            "job_title": "Engineer",
+            "role": "employee",
+            "account_email": "ada@example.com",
+            "company_email": "ada@example.com",
+            "personal_email": "ada.personal@example.com",
+            "company_mobile": "+61000000000",
+            "personal_mobile_number": "+61000000001",
+            "gender": "female",
+            "date_of_birth": "1990-01-01",
+            "country": "AU",
+            "location": "Sydney",
+            "start_date": "2026-01-01",
+            "employing_entity": "Fixture Pty Ltd",
+            "primary_manager": "mgr_fixture_1"
+          }
+        ],
+        "page_index": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Easypromos Connection Specification",
+  "type": "object",
+  "required": ["bearer_token"],
+  "properties": {
+    "bearer_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Easypromos API bearer token, sent as Authorization: Bearer <bearer_token>. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.easypromosapp.com/v2",
+      "description": "Easypromos API base URL override for tests or proxies."
+    },
+    "promotion_id": {
+      "type": "string",
+      "description": "Promotion id the per-promotion streams (stages, users, participations, prizes) are scoped to. Required for those streams; substituted into their /{resource}/{promotion_id} path."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

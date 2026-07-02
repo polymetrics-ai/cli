@@ -1,0 +1,20 @@
+{
+  "name": "you-need-a-budget-ynab",
+  "display_name": "You Need A Budget (YNAB)",
+  "description": "Reads YNAB budgets, accounts, and transactions through the YNAB REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api.ynab.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external YNAB API read of budget, account, and transaction data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

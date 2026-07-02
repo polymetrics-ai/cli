@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": { "sortField": "modifiedAt", "sortOrder": "asc", "page": "1", "size": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "users": [
+          {
+            "id": 1,
+            "firstName": "Fixture",
+            "lastName": "Agent",
+            "email": "agent@example.com",
+            "role": "user",
+            "timezone": "UTC",
+            "type": "user",
+            "jobTitle": "Support",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      "page": { "number": 1, "size": 50, "totalElements": 1, "totalPages": 1 }
+    }
+  }
+}

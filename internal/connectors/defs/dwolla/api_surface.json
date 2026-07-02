@@ -1,0 +1,15 @@
+{
+  "api": "Dwolla API (https://api.dwolla.com, HAL+JSON)",
+  "docs": "https://developers.dwolla.com/api-reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 4 legacy-parity top-level list read streams only; per-customer-scoped resources (funding-sources, transfers) and any mutation surface are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/exchange-partners", "covered_by": { "stream": "exchange_partners" } },
+    { "method": "GET", "path": "/business-classifications", "covered_by": { "stream": "business_classifications" } },
+    { "method": "POST", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/customers/{id}/funding-sources", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (requires per-customer partition, out of legacy's first-cut scope too)" } },
+    { "method": "POST", "path": "/transfers", "excluded": { "category": "destructive_admin", "reason": "initiates a real money transfer" } }
+  ]
+}

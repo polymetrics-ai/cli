@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/users/synthetic-conformance-value/apps" },
+  "response": {
+    "status": 200,
+    "body": { "status": { "code": 10000, "description": "Ok" }, "apps": [] }
+  }
+}

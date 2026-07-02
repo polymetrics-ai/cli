@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "scorecards",
+  "type": "object",
+  "x-primary-key": ["scorecard_id"],
+  "x-cursor-field": "updated",
+  "required": ["scorecard_id"],
+  "properties": {
+    "scorecard_id": { "type": "string" },
+    "scorecard_name": { "type": ["string", "null"] },
+    "workspace_id": { "type": ["string", "null"] },
+    "enabled": { "type": ["boolean", "null"] },
+    "created": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] }
+  }
+}

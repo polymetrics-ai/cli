@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/projects/synthetic-conformance-value/environments", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "_id": "env_fixture_1", "key": "production", "name": "Production", "color": "417505", "defaultTtl": 0, "tags": ["fixture"] }
+      ],
+      "totalCount": 1
+    }
+  }
+}

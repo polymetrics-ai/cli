@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events",
+    "query": {
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ev_fixture_26",
+          "name": "Fixture Event 26",
+          "status": "live",
+          "website": "https://example.com",
+          "brief_url": "https://example.com/brief",
+          "time_zone": "UTC",
+          "paid_total": 126,
+          "actual_total": 146,
+          "planned_total": 176,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

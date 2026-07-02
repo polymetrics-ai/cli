@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Coda Connection Specification",
+  "type": "object",
+  "required": ["auth_token"],
+  "properties": {
+    "auth_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Coda API token. Sent only as Authorization: Bearer <auth_token>; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://coda.io/apis/v1",
+      "description": "Coda API base URL override for tests or proxies."
+    },
+    "doc_id": {
+      "type": "string",
+      "description": "Coda doc id. Required for the doc-scoped streams (tables, pages, formulas, controls); ignored by the workspace-level docs stream."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "25",
+      "description": "Records per page (1-100)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

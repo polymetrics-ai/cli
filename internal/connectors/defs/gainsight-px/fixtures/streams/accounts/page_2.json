@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "pageSize": "100", "scrollId": "scroll_fixture_page2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "accounts": [
+        {
+          "id": "acc_fixture_3",
+          "name": "Initech Fixture",
+          "trackedSubscriptionId": "sub_fixture_3",
+          "sfdcId": "sfdc_fixture_3",
+          "industry": "Finance",
+          "numberOfEmployees": "10",
+          "numberOfUsers": "5",
+          "plan": "starter",
+          "location": "Remote",
+          "website": "https://initech.example.com",
+          "createDate": "1767225603",
+          "lastModifiedDate": "1767225603",
+          "lastSeenDate": "1767225603"
+        }
+      ],
+      "scrollId": ""
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/collections" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "col_fixture_1",
+        "name": "Engineering",
+        "slug": "abc/engineering",
+        "description": "Engineering knowledge base",
+        "color": "#00b1a0",
+        "publicCardsEnabled": false,
+        "collectionType": "INTERNAL",
+        "dateCreated": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": "col_fixture_2",
+        "name": "Sales",
+        "slug": "def/sales",
+        "description": "Sales knowledge base",
+        "color": "#0063f7",
+        "publicCardsEnabled": true,
+        "collectionType": "EXTERNAL",
+        "dateCreated": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Fastly-Key", "value": "{{ secrets.fastly_api_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/current_user" },
+    "error_map": [
+      { "status": 401, "hint": "fastly api token is missing or invalid; re-run pm credentials add fastly" },
+      { "status": 429, "class": "rate_limited", "hint": "fastly rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "services",
+      "path": "/service",
+      "records": { "path": "." },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 2
+      },
+      "schema": "schemas/services.json"
+    },
+    {
+      "name": "current_user",
+      "path": "/current_user",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/current_user.json"
+    },
+    {
+      "name": "current_customer",
+      "path": "/current_customer",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/current_customer.json"
+    },
+    {
+      "name": "datacenters",
+      "path": "/datacenters",
+      "records": { "path": "." },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 2
+      },
+      "schema": "schemas/datacenters.json"
+    }
+  ]
+}

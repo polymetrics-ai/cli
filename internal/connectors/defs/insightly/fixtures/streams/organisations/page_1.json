@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/Organisations", "query": { "top": "100", "skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "ORGANISATION_ID": 101,
+        "ORGANISATION_NAME": "Fixture Org 1",
+        "PHONE": "+1-555-0200",
+        "WEBSITE": "https://fixture1.example.com",
+        "OWNER_USER_ID": 1,
+        "DATE_CREATED_UTC": "2026-01-01 00:00:00",
+        "DATE_UPDATED_UTC": "2026-01-01 00:00:00"
+      },
+      {
+        "ORGANISATION_ID": 102,
+        "ORGANISATION_NAME": "Fixture Org 2",
+        "PHONE": "+1-555-0201",
+        "WEBSITE": "https://fixture2.example.com",
+        "OWNER_USER_ID": 1,
+        "DATE_CREATED_UTC": "2026-01-02 00:00:00",
+        "DATE_UPDATED_UTC": "2026-01-02 00:00:00"
+      }
+    ]
+  }
+}

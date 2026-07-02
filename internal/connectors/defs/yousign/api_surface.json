@@ -1,0 +1,13 @@
+{
+  "api": "Yousign REST API v3 (https://developers.yousign.com/)",
+  "docs": "https://developers.yousign.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (signature_requests, contacts, documents); legacy is read-only (capabilities.write: false), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/signature_requests", "covered_by": { "stream": "signature_requests" } },
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/documents", "covered_by": { "stream": "documents" } },
+    { "method": "POST", "path": "/signature_requests", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not covered by legacy (read-only connector)" } },
+    { "method": "POST", "path": "/signature_requests/{id}/activate", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not covered by legacy (read-only connector)" } }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/lead/", "query": { "_limit": "100", "_skip": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "lead_101",
+          "display_name": "Fixture Lead 101",
+          "name": "Fixture Lead 101",
+          "description": "conformance fixture lead",
+          "url": "https://example.com/lead/101",
+          "status_id": "stat_1",
+          "status_label": "Potential",
+          "organization_id": "orga_fixture",
+          "created_by": "user_fixture_1",
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_updated": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

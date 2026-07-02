@@ -1,0 +1,13 @@
+{
+  "api": "Systeme.io API (https://systeme.io/api)",
+  "docs": "https://systeme.io/api",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the single legacy-parity read stream (contacts) only; the full Systeme.io surface (courses, funnels, tags, communities, email campaigns) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "POST", "path": "/api/contacts", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/tags", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/courses", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/funnels", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

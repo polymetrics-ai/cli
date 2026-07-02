@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/api/admin/projects/{{ config.project_id }}/features", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "unleash admin API token is missing or invalid; re-run pm credentials add unleash" },
+      { "status": 403, "hint": "unleash account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "unleash rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/api/admin/projects",
+      "records": { "path": "projects" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "features",
+      "path": "/api/admin/projects/{{ config.project_id }}/features",
+      "records": { "path": "features" },
+      "schema": "schemas/features.json"
+    },
+    {
+      "name": "environments",
+      "path": "/api/admin/environments",
+      "records": { "path": "environments" },
+      "schema": "schemas/environments.json"
+    },
+    {
+      "name": "segments",
+      "path": "/api/admin/segments",
+      "records": { "path": "segments" },
+      "schema": "schemas/segments.json"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "answers",
+  "type": "object",
+  "x-primary-key": ["form_answer_id"],
+  "x-cursor-field": "created_at",
+  "required": ["form_answer_id"],
+  "properties": {
+    "form_answer_id": { "type": "integer" },
+    "form_id": { "type": ["integer", "null"] },
+    "form_name": { "type": ["string", "null"] },
+    "form_state": { "type": ["string", "null"] },
+    "code": { "type": ["string", "null"] },
+    "user_name": { "type": ["string", "null"] },
+    "user_identifier": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "latitude": { "type": ["number", "null"] },
+    "longitude": { "type": ["number", "null"] }
+  }
+}

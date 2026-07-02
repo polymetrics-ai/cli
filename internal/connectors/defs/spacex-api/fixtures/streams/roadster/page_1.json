@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/roadster" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "roadster_fixture",
+      "name": "Elon Musk's Tesla Roadster",
+      "launch_date_utc": "2018-02-06T20:45:00.000Z",
+      "launch_mass_kg": 1305,
+      "speed_kph": 3492.0,
+      "earth_distance_km": 400000000.0,
+      "mars_distance_km": 300000000.0,
+      "wikipedia": "https://en.wikipedia.org/wiki/Elon_Musk%27s_Tesla_Roadster"
+    }
+  }
+}

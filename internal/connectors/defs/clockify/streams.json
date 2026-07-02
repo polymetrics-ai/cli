@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Api-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page-size",
+      "start_page": 1,
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/v1/workspaces" },
+    "error_map": [
+      { "status": 401, "hint": "clockify api_key is missing or invalid; re-run pm credentials add clockify" },
+      { "status": 403, "hint": "clockify api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "clockify rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "workspaces",
+      "path": "/v1/workspaces",
+      "records": { "path": "." },
+      "schema": "schemas/workspaces.json"
+    },
+    {
+      "name": "clients",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/clients",
+      "records": { "path": "." },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "projects",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/projects",
+      "records": { "path": "." },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "tags",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/tags",
+      "records": { "path": "." },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "users",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/users",
+      "records": { "path": "." },
+      "schema": "schemas/users.json"
+    }
+  ]
+}

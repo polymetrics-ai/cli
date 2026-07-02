@@ -1,0 +1,21 @@
+{
+  "api": "Opsgenie REST API (https://docs.opsgenie.com/docs/api-overview)",
+  "docs": "https://docs.opsgenie.com/docs/api-overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (alerts, incidents, users, teams, services). Opsgenie's write/mutation endpoints (create/close/ack alert, escalate incident, etc.) and other read resources (schedules, escalations, maintenance, heartbeats) are out of scope; legacy itself never implemented them. capabilities.write is false (read-only, no obviously-safe reverse-ETL writes).",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/alerts", "covered_by": { "stream": "alerts" } },
+    { "method": "GET", "path": "/v1/incidents", "covered_by": { "stream": "incidents" } },
+    { "method": "GET", "path": "/v2/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/v2/teams", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/v1/services", "covered_by": { "stream": "services" } },
+    { "method": "POST", "path": "/v2/alerts", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented alert creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/alerts/{identifier}/acknowledge", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented alert mutation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/alerts/{identifier}/close", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented alert mutation; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/schedules", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/escalations", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/heartbeats", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/maintenance", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented this endpoint; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/account", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-account introspection, not a syncable object stream" } }
+  ]
+}

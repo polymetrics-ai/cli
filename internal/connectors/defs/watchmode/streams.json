@@ -1,0 +1,36 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apiKey", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/v1/sources/" },
+    "error_map": [
+      { "status": 401, "hint": "watchmode api_key is missing or invalid; re-run pm credentials add watchmode" },
+      { "status": 429, "class": "rate_limited", "hint": "watchmode rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "search",
+      "path": "/v1/search/",
+      "query": {
+        "search_value": { "template": "{{ config.search_val }}", "default": "Terminator" },
+        "search_field": "name",
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "title_results" },
+      "schema": "schemas/search.json"
+    },
+    {
+      "name": "sources",
+      "path": "/v1/sources/",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/sources.json"
+    }
+  ]
+}

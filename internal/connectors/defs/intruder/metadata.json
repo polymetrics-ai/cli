@@ -1,0 +1,23 @@
+{
+  "name": "intruder",
+  "display_name": "Intruder",
+  "description": "Reads Intruder issues, scans, and targets through the Intruder REST API (read-only, full refresh).",
+  "integration_type": "api",
+  "docs_url": "https://developers.intruder.io/docs/welcome",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Intruder API read of vulnerability issues, scans, and target data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

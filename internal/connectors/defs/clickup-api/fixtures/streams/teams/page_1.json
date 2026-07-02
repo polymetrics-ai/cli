@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/team", "query": { "archived": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "teams": [
+        {
+          "id": "team_fixture_1",
+          "name": "Fixture Team",
+          "color": "#4287f5",
+          "avatar": null
+        }
+      ]
+    }
+  }
+}

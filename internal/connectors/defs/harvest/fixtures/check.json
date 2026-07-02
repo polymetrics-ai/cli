@@ -1,0 +1,6 @@
+{
+  "response": {
+    "status": 200,
+    "body": { "clients": [], "per_page": 1, "total_pages": 0, "total_entries": 0, "next_page": null, "previous_page": null, "page": 1 }
+  }
+}

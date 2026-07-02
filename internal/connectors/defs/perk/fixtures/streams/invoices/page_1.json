@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/invoices", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "invoices": [
+        { "serial_number": "INV-FIXTURE-1", "status": "paid", "issuing_date": "2026-01-01", "total": "120.00" }
+      ],
+      "limit": 50,
+      "offset": 0,
+      "total": 1
+    }
+  }
+}

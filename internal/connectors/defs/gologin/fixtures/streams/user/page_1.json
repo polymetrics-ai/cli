@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "user" },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "user_fixture_1",
+      "email": "fixture1@example.com",
+      "firstName": "Fixture",
+      "lastName": "User",
+      "plan": "free",
+      "profilesCount": 2,
+      "createdAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

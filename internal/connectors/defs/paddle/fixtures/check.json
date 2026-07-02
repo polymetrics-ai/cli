@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/transactions", "query": { "per_page": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "meta": { "pagination": { "next": "" } } }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/people" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "person_fixture_1",
+          "first_name": "Fixture",
+          "last_name": "Person",
+          "status": "active"
+        }
+      ]
+    }
+  }
+}

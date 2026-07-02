@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Teamtailor Connection Specification",
+  "type": "object",
+  "properties": {
+    "api": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Teamtailor API key, sent as the Authorization header (Token token=<api>). Takes precedence over api_key when both are set. Never logged."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Teamtailor API key (secret fallback), sent as the Authorization header (Token token=<api_key>) when 'api' is unset. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.teamtailor.com/v1",
+      "description": "Teamtailor API base URL override for tests or proxies."
+    },
+    "x_api_version": {
+      "type": "string",
+      "description": "Optional Teamtailor API version, sent as the X-Api-Version header when set."
+    }
+  }
+}

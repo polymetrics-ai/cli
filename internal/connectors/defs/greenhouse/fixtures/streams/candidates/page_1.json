@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/candidates", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "first_name": "Fixture1",
+        "last_name": "Candidate",
+        "company": "Example Inc",
+        "title": "Engineer",
+        "is_private": false,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-02T00:00:00Z",
+        "last_activity": "2026-01-02T00:00:00Z"
+      },
+      {
+        "id": 2,
+        "first_name": "Fixture2",
+        "last_name": "Candidate",
+        "company": "Example Inc",
+        "title": "Designer",
+        "is_private": false,
+        "created_at": "2026-01-01T00:00:01Z",
+        "updated_at": "2026-01-02T00:00:01Z",
+        "last_activity": "2026-01-02T00:00:01Z"
+      }
+    ]
+  }
+}

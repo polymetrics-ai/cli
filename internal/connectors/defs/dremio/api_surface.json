@@ -1,0 +1,16 @@
+{
+  "api": "Dremio REST API (https://docs.dremio.com/software/rest-api/)",
+  "docs": "https://docs.dremio.com/software/rest-api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (catalog, reflections, sources, users); Dremio's write endpoints (source/reflection create/update/delete, SQL job submission) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/catalog", "covered_by": { "stream": "catalog" } },
+    { "method": "GET", "path": "/reflections", "covered_by": { "stream": "reflections" } },
+    { "method": "GET", "path": "/source", "covered_by": { "stream": "sources" } },
+    { "method": "GET", "path": "/user", "covered_by": { "stream": "users" } },
+    { "method": "POST", "path": "/sql", "excluded": { "category": "out_of_scope", "reason": "SQL job submission is not a syncable object stream; legacy connector never implemented it" } },
+    { "method": "POST", "path": "/source", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented source create/update; Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/source/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive source deletion; not modeled by legacy" } },
+    { "method": "POST", "path": "/reflections", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented reflection create/update; Pass B capability expansion" } }
+  ]
+}

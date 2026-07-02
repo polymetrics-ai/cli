@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": { "per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "list",
+      "data": [
+        {
+          "id": "contact_fixture_1",
+          "type": "contact",
+          "role": "user",
+          "external_id": "ext_1",
+          "email": "fixture1@example.com",
+          "phone": "+15550100",
+          "name": "Fixture One",
+          "created_at": 1767225601,
+          "updated_at": 1767225701,
+          "last_seen_at": 1767225801,
+          "signed_up_at": 1767225601,
+          "owner_id": 900001,
+          "unsubscribed_from_emails": false
+        },
+        {
+          "id": "contact_fixture_2",
+          "type": "contact",
+          "role": "user",
+          "external_id": "ext_2",
+          "email": "fixture2@example.com",
+          "phone": "+15550101",
+          "name": "Fixture Two",
+          "created_at": 1767225602,
+          "updated_at": 1767225702,
+          "last_seen_at": 1767225802,
+          "signed_up_at": 1767225602,
+          "owner_id": 900001,
+          "unsubscribed_from_emails": false
+        }
+      ],
+      "pages": { "type": "pages", "next": { "starting_after": "cursor_fixture_page_2" } },
+      "total_count": 3
+    }
+  }
+}

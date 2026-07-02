@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API", "format": "JSON", "method": "Goals.getGoals",
+      "idSite": "synthetic-conformance-value", "period": "synthetic-conformance-value", "date": "synthetic-conformance-value",
+      "filter_limit": "100", "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "idgoal": "1", "name": "Signup", "active": true },
+      { "idgoal": "2", "name": "Purchase", "active": false }
+    ]
+  }
+}

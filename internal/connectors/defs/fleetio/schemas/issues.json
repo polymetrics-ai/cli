@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "issues",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "number": { "type": ["integer", "null"] },
+    "vehicle_id": { "type": ["integer", "null"] },
+    "vehicle_name": { "type": ["string", "null"] },
+    "summary": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "due_date": { "type": ["string", "null"], "format": "date-time" },
+    "resolved_at": { "type": ["string", "null"], "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

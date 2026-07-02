@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/splits", "query": { "dataset": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "splits": [
+        { "dataset": "synthetic-conformance-value", "config": "default", "split": "train" },
+        { "dataset": "synthetic-conformance-value", "config": "default", "split": "test" }
+      ],
+      "pending": [],
+      "failed": []
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/numbers" },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "current_page": 1, "per_page": 50, "next_page_link": null },
+      "numbers": [
+        {
+          "id": 1,
+          "name": "Fixture Number One",
+          "digits": "+15550100",
+          "country": "US",
+          "time_zone": "UTC",
+          "open": true,
+          "is_ivr": false,
+          "live_recording_activated": false,
+          "created_at": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

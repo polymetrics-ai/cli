@@ -1,0 +1,97 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_token }}", "prefix": "GenieKey " }
+    ],
+    "check": { "method": "GET", "path": "/alerts" },
+    "error_map": [
+      { "status": 401, "hint": "opsgenie api_token is missing or invalid; re-run pm credentials add opsgenie" },
+      { "status": 429, "class": "rate_limited", "hint": "opsgenie rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "alerts",
+      "path": "/alerts",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "paging.next"
+      },
+      "computed_fields": {
+        "tiny_id": "{{ record.tinyId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "last_occurred_at": "{{ record.lastOccurredAt }}"
+      },
+      "schema": "schemas/alerts.json"
+    },
+    {
+      "name": "incidents",
+      "path": "/incidents",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "paging.next"
+      },
+      "computed_fields": {
+        "tiny_id": "{{ record.tinyId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "owner_team": "{{ record.ownerTeam }}",
+        "impacted_services": "{{ record.impactedServices }}"
+      },
+      "schema": "schemas/incidents.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "paging.next"
+      },
+      "computed_fields": {
+        "full_name": "{{ record.fullName }}",
+        "time_zone": "{{ record.timeZone }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "paging.next"
+      },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "services",
+      "path": "/services",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "paging.next"
+      },
+      "computed_fields": {
+        "team_id": "{{ record.teamId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/services.json"
+    }
+  ]
+}

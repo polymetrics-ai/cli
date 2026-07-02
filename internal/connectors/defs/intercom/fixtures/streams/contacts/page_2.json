@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": { "per_page": "50", "starting_after": "cursor_fixture_page_2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "list",
+      "data": [
+        {
+          "id": "contact_fixture_3",
+          "type": "contact",
+          "role": "user",
+          "external_id": "ext_3",
+          "email": "fixture3@example.com",
+          "phone": "+15550102",
+          "name": "Fixture Three",
+          "created_at": 1767225603,
+          "updated_at": 1767225703,
+          "last_seen_at": 1767225803,
+          "signed_up_at": 1767225603,
+          "owner_id": 900001,
+          "unsubscribed_from_emails": false
+        }
+      ],
+      "pages": { "type": "pages" },
+      "total_count": 3
+    }
+  }
+}

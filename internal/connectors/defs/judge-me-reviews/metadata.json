@@ -1,0 +1,22 @@
+{
+  "name": "judge-me-reviews",
+  "display_name": "Judge.me Reviews",
+  "description": "Reads Judge.me reviews, products, and widgets for a Shopify shop through the Judge.me REST API.",
+  "integration_type": "api",
+  "docs_url": "https://judge.me/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Judge.me API read of Shopify shop reviews, products, and widgets"
+  }
+}

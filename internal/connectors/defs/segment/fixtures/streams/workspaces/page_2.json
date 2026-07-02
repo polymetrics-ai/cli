@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/workspaces", "query": { "page": "2", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "workspaces": [
+        { "id": "ws_fixture_3", "name": "Fixture Wholesale", "slug": "fixture-wholesale", "updated_at": "2026-01-03T00:00:00Z" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "api": "Tremendous API v2 (https://developers.tremendous.com/)",
+  "docs": "https://developers.tremendous.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (campaigns, orders, rewards, funding_sources). Tremendous's write endpoints (create order, create reward, generate funding source) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/api/v2/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/api/v2/rewards", "covered_by": { "stream": "rewards" } },
+    { "method": "GET", "path": "/api/v2/funding_sources", "covered_by": { "stream": "funding_sources" } },
+    { "method": "POST", "path": "/api/v2/orders", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented order creation; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/rewards/{id}", "excluded": { "category": "out_of_scope", "reason": "single-reward retrieval not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

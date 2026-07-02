@@ -1,0 +1,14 @@
+{
+  "api": "YouTube Data API v3 (https://developers.google.com/youtube/v3)",
+  "docs": "https://developers.google.com/youtube/v3",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (channels, videos, playlists); legacy is read-only (capabilities.write: false), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/channels", "covered_by": { "stream": "channels" } },
+    { "method": "GET", "path": "/videos", "covered_by": { "stream": "videos" } },
+    { "method": "GET", "path": "/playlists", "covered_by": { "stream": "playlists" } },
+    { "method": "GET", "path": "/playlistItems", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not covered by legacy" } },
+    { "method": "GET", "path": "/search", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not covered by legacy" } },
+    { "method": "GET", "path": "/commentThreads", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not covered by legacy" } }
+  ]
+}

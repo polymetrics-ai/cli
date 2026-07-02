@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/api/3/annotations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "date": "2026-01-01",
+          "label": "Fixture launch",
+          "details": "conformance fixture annotation"
+        },
+        {
+          "id": 1002,
+          "date": "2026-01-02",
+          "label": "Fixture rollback",
+          "details": "conformance fixture annotation"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v4/me" },
+  "response": {
+    "status": 200,
+    "body": { "username": "fixture-user", "email": "fixture1@example.com" }
+  }
+}

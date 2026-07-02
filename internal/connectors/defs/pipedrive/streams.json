@@ -1,0 +1,86 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "api_token", "value": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "start",
+      "token_path": "additional_data.pagination.next_start"
+    },
+    "check": { "method": "GET", "path": "/users", "query": { "start": "0", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "pipedrive api_token is missing or invalid; re-run pm credentials add pipedrive" },
+      { "status": 403, "hint": "pipedrive account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "pipedrive rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "deals",
+      "path": "/deals",
+      "query": {
+        "start": "0",
+        "limit": "100",
+        "since_timestamp": { "template": "{{ config.replication_start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/deals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "persons",
+      "path": "/persons",
+      "query": {
+        "start": "0",
+        "limit": "100",
+        "since_timestamp": { "template": "{{ config.replication_start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/persons.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "organizations",
+      "path": "/organizations",
+      "query": {
+        "start": "0",
+        "limit": "100",
+        "since_timestamp": { "template": "{{ config.replication_start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/organizations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "activities",
+      "path": "/activities",
+      "query": {
+        "start": "0",
+        "limit": "100",
+        "since": { "template": "{{ config.replication_start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/activities.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/products.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    }
+  ]
+}

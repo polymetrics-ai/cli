@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/suppression-list" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "recipient": "fixture1@example.com",
+          "type": "non_transactional",
+          "source": "List Unsubscribe",
+          "description": "Unsubscribed using list unsubscribe header",
+          "list_id": "fixture-newsletter",
+          "created": "2026-01-01T00:00:00+00:00",
+          "updated": "2026-01-01T00:00:00+00:00",
+          "transactional": false,
+          "non_transactional": true
+        }
+      ]
+    }
+  }
+}

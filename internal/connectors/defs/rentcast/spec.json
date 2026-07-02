@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RentCast Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "RentCast API key, sent as the X-Api-Key header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.rentcast.io/v1",
+      "description": "RentCast API base URL override for tests or proxies."
+    },
+    "address": {
+      "type": "string",
+      "description": "Optional street address filter applied to every stream's request, matching legacy's config-driven query filter."
+    },
+    "city": {
+      "type": "string",
+      "description": "Optional city filter applied to every stream's request."
+    },
+    "state": {
+      "type": "string",
+      "description": "Optional state filter applied to every stream's request."
+    },
+    "zip_code": {
+      "type": "string",
+      "description": "Optional ZIP code filter applied to every stream's request (RentCast's zipCode query parameter)."
+    },
+    "property_type": {
+      "type": "string",
+      "description": "Optional property type filter applied to every stream's request (RentCast's propertyType query parameter)."
+    }
+  }
+}

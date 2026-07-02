@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/projects", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "projects": [
+        {
+          "id": 501,
+          "description": "Fixture project 1",
+          "status": "Current",
+          "effort": "1",
+          "value": "high",
+          "roi": "5",
+          "private_to_circle": false,
+          "link": "https://app.glassfrog.com/fixture/501",
+          "created_at": "2026-01-01T00:00:00Z",
+          "archived_at": null,
+          "waiting_on_who": "",
+          "waiting_on_what": ""
+        },
+        {
+          "id": 502,
+          "description": "Fixture project 2",
+          "status": "Archived",
+          "effort": "2",
+          "value": "medium",
+          "roi": "3",
+          "private_to_circle": true,
+          "link": "https://app.glassfrog.com/fixture/502",
+          "created_at": "2026-01-02T00:00:00Z",
+          "archived_at": "2026-02-01T00:00:00Z",
+          "waiting_on_who": "someone",
+          "waiting_on_what": "review"
+        }
+      ]
+    }
+  }
+}

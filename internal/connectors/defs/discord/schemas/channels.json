@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "channels",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "guild_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["integer", "null"] },
+    "position": { "type": ["integer", "null"] },
+    "parent_id": { "type": ["string", "null"] },
+    "topic": { "type": ["string", "null"] },
+    "nsfw": { "type": ["boolean", "null"] }
+  }
+}

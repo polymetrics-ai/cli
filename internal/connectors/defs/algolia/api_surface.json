@@ -1,0 +1,16 @@
+{
+  "api": "Algolia Search REST API (https://<application_id>.algolia.net)",
+  "docs": "https://www.algolia.com/doc/rest-api/search/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: 2 of 3 legacy-parity read streams (api_keys, index_settings); the indices stream is blocked (ENGINE_GAP, see docs.md) and index records/search, ACL mutation, and analytics endpoints are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/1/indexes", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: legacy's indices listing starts at page 0 (0-based paging), but the engine's page_number paginator (connsdk.PageNumberPaginator.Start) unconditionally coerces StartPage==0 to 1 (cannot distinguish an explicit start_page:0 from an unset zero-value int), so every live read would silently skip the real first page's records -- an accepted-input data change, not a cosmetic deviation. See docs.md's Known limits." } },
+    { "method": "GET", "path": "/1/keys", "covered_by": { "stream": "api_keys" } },
+    { "method": "GET", "path": "/1/indexes/{indexName}/settings", "covered_by": { "stream": "index_settings" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/settings", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/query", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/1/keys", "excluded": { "category": "requires_elevated_scope", "reason": "API key creation is an admin mutation, not a read stream" } },
+    { "method": "DELETE", "path": "/1/keys/{key}", "excluded": { "category": "destructive_admin", "reason": "API key deletion is a destructive admin action" } },
+    { "method": "GET", "path": "/1/indexes/{indexName}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "api_token", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "",
+      "start_page": 1,
+      "page_size": 100,
+      "max_pages": 1000
+    },
+    "check": { "method": "GET", "path": "/reviews" },
+    "error_map": [
+      { "status": 401, "hint": "judge-me-reviews api_key is missing or invalid; re-run pm credentials add judge-me-reviews" },
+      { "status": 403, "hint": "judge-me-reviews shop_domain lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "judge.me rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "reviews",
+      "path": "/reviews",
+      "query": {
+        "shop_domain": "{{ config.shop_domain }}",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "reviews" },
+      "computed_fields": {
+        "reviewer_id": "{{ record.reviewer.id }}",
+        "reviewer_name": "{{ record.reviewer.name }}",
+        "reviewer_email": "{{ record.reviewer.email }}"
+      },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/reviews.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": {
+        "shop_domain": "{{ config.shop_domain }}",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "products" },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "widgets",
+      "path": "/widgets",
+      "query": {
+        "shop_domain": "{{ config.shop_domain }}",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "widgets" },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/widgets.json"
+    }
+  ]
+}

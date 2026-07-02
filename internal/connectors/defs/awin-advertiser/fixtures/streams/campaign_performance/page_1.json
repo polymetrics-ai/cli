@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/advertisers/synthetic-conformance-value/reports/aggregated/publisher",
+    "query": { "page": "1", "pageSize": "2" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "advertiserId": 42,
+        "publisherId": 7,
+        "publisherName": "Fixture Publisher",
+        "region": "GB",
+        "currency": "GBP",
+        "impressions": 1000,
+        "clicks": 100,
+        "pendingNo": 2,
+        "confirmedNo": 8,
+        "declinedNo": 0,
+        "totalNo": 10,
+        "totalSaleAmount": { "amount": 500.0, "currency": "GBP" },
+        "totalComm": 50.0
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "session_messages",
+  "type": "object",
+  "x-primary-key": ["message_id"],
+  "x-cursor-field": "created_at",
+  "required": ["message_id"],
+  "properties": {
+    "message_id": { "type": "string" },
+    "session_id": { "type": ["string", "null"] },
+    "role": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "content": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

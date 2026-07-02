@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/entities/Opportunities",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "opp_fixture_1",
+          "name": "Fixture Opportunities 1",
+          "status": "active",
+          "modified": "2026-01-01T00:00:01Z"
+        },
+        {
+          "id": "opp_fixture_2",
+          "name": "Fixture Opportunities 2",
+          "status": "active",
+          "modified": "2026-01-01T00:00:02Z"
+        }
+      ]
+    }
+  }
+}

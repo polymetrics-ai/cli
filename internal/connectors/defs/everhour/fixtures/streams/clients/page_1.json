@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/clients" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "cl:2001",
+        "name": "Fixture Client One",
+        "email": "fixture1@example.com",
+        "status": "active",
+        "favorite": false,
+        "createdAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": "cl:2002",
+        "name": "Fixture Client Two",
+        "email": "fixture2@example.com",
+        "status": "active",
+        "favorite": true,
+        "createdAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

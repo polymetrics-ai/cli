@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/codesnippets" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "_id": "cs_fixture_1", "title": "Fixture Snippet One", "language": "javascript", "theme": "default", "html": "<div>fixture</div>", "background": "#ffffff", "userId": "usr_fixture_1", "createdAt": "2026-01-01T00:00:00Z" },
+        { "_id": "cs_fixture_2", "title": "Fixture Snippet Two", "language": "javascript", "theme": "default", "html": "<div>fixture</div>", "background": "#ffffff", "userId": "usr_fixture_1", "createdAt": "2026-01-02T00:00:00Z" }
+      ],
+      "next": "fixture_cursor_2",
+      "hasNext": true
+    }
+  }
+}

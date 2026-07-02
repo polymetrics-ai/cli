@@ -1,0 +1,56 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100,
+      "max_pages": 3
+    },
+    "check": { "method": "GET", "path": "/companies", "query": { "limit": "1", "offset": "0" } },
+    "error_map": [
+      { "status": 401, "hint": "planhat api_token is missing or invalid; re-run pm credentials add planhat" },
+      { "status": 429, "class": "rate_limited", "hint": "planhat rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "companies",
+      "path": "/companies",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "endusers",
+      "path": "/endusers",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}",
+        "phase": "{{ record.status }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/endusers.json"
+    },
+    {
+      "name": "licenses",
+      "path": "/licenses",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}",
+        "name": "{{ record.product }}",
+        "phase": "{{ record.status }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/licenses.json"
+    }
+  ]
+}

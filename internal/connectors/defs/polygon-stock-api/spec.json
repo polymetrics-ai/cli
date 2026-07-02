@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Polygon Stock API Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Polygon.io API key, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.polygon.io",
+      "description": "Polygon.io API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000), sent as the 'limit' query param on the first request."
+    },
+    "ticker": {
+      "type": "string",
+      "description": "Optional ticker symbol filter, applied to all three streams."
+    },
+    "market": {
+      "type": "string",
+      "description": "Optional market filter (e.g. stocks, otc), applied to the tickers stream."
+    },
+    "locale": {
+      "type": "string",
+      "description": "Optional locale filter (e.g. us, global), applied to the tickers stream."
+    },
+    "type": {
+      "type": "string",
+      "description": "Optional ticker type filter (e.g. CS, ETF), applied to the tickers stream."
+    },
+    "active": {
+      "type": "string",
+      "description": "Optional active-tickers filter for the tickers stream; defaults to 'true' (matching legacy) when unset."
+    },
+    "sort": {
+      "type": "string",
+      "description": "Optional sort field, applied to all three streams."
+    },
+    "order": {
+      "type": "string",
+      "description": "Optional sort order (asc/desc), applied to all three streams."
+    },
+    "ex_dividend_date": {
+      "type": "string",
+      "description": "Optional ex-dividend date filter, applied to the dividends stream."
+    },
+    "execution_date": {
+      "type": "string",
+      "description": "Optional split execution date filter, applied to the splits stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

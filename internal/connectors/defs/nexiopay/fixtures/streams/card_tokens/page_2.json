@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/card/v3", "query": { "limit": "10", "offset": "10" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "key": "tok_fixture_11",
+          "cardType": "mastercard",
+          "lastFour": "4444",
+          "expirationMonth": "02",
+          "expirationYear": "2031",
+          "cardHolderName": "Fixture Holder 11",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

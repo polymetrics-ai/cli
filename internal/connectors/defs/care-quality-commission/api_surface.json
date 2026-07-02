@@ -1,0 +1,16 @@
+{
+  "api": "CQC Syndication API v1 (https://api.service.cqc.org.uk/public/v1)",
+  "docs": "https://www.cqc.org.uk/about-us/transparency/using-cqc-data",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity core read streams only; per-parent detail/fan-out endpoints (locations/{id}, providers/{id}, provider_locations) are out of scope, matching legacy's own read-only core-stream scoping",
+  "endpoints": [
+    { "method": "GET", "path": "/locations", "covered_by": { "stream": "locations" } },
+    { "method": "GET", "path": "/providers", "covered_by": { "stream": "providers" } },
+    { "method": "GET", "path": "/inspection-areas", "covered_by": { "stream": "inspection_areas" } },
+    { "method": "GET", "path": "/locations/{locationId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy itself never fanned out over per-location detail" } },
+    { "method": "GET", "path": "/providers/{providerId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy itself never fanned out over per-provider detail" } },
+    { "method": "GET", "path": "/providers/{providerId}/locations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy itself never fanned out over per-provider locations" } },
+    { "method": "GET", "path": "/changes/locations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/changes/providers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

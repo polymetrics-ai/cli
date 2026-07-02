@@ -1,0 +1,20 @@
+{
+  "name": "smartwaiver",
+  "display_name": "Smartwaiver",
+  "description": "Reads Smartwaiver waivers, checkins, templates, published keys, and user info through the Smartwaiver API.",
+  "integration_type": "api",
+  "docs_url": "https://api.smartwaiver.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "read-only waiver/checkin/template/user data from a connected Smartwaiver account",
+    "approval": "none; read-only"
+  }
+}

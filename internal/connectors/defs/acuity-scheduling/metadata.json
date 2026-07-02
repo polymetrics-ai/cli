@@ -1,0 +1,22 @@
+{
+  "name": "acuity-scheduling",
+  "display_name": "Acuity Scheduling",
+  "description": "Reads Acuity Scheduling appointments, clients, appointment types, calendars, and forms through the Acuity REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.acuityscheduling.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Acuity Scheduling API read of appointments, clients, appointment types, calendars, and forms"
+  }
+}

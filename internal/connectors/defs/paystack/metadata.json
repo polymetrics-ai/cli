@@ -1,0 +1,22 @@
+{
+  "name": "paystack",
+  "display_name": "Paystack",
+  "description": "Reads Paystack customers, transactions, subscriptions, invoices, and disputes through the Paystack REST API.",
+  "integration_type": "api",
+  "docs_url": "https://paystack.com/docs/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Paystack API read of customer and payment data"
+  }
+}

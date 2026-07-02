@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/provisioning/alert-rules" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "uid": "rule_fixture_1",
+        "orgID": 1,
+        "folderUID": "general",
+        "ruleGroup": "fixture-group",
+        "title": "Fixture Alert Rule 1",
+        "condition": "A",
+        "noDataState": "NoData",
+        "execErrState": "Error",
+        "for": "5m"
+      },
+      {
+        "id": 2,
+        "uid": "rule_fixture_2",
+        "orgID": 1,
+        "folderUID": "general",
+        "ruleGroup": "fixture-group",
+        "title": "Fixture Alert Rule 2",
+        "condition": "A",
+        "noDataState": "NoData",
+        "execErrState": "Alerting",
+        "for": "10m"
+      }
+    ]
+  }
+}

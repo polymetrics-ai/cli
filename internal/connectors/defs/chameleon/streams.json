@@ -1,0 +1,58 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Account-Secret", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/edit/segments" },
+    "error_map": [
+      { "status": 401, "hint": "chameleon api_key is missing or invalid; re-run pm credentials add chameleon" },
+      { "status": 403, "hint": "chameleon api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "chameleon rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "surveys",
+      "path": "/edit/surveys",
+      "records": { "path": "surveys" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/surveys.json"
+    },
+    {
+      "name": "tours",
+      "path": "/edit/tours",
+      "records": { "path": "tours" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/tours.json"
+    },
+    {
+      "name": "launchers",
+      "path": "/edit/launchers",
+      "records": { "path": "launchers" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/launchers.json"
+    },
+    {
+      "name": "tooltips",
+      "path": "/edit/tooltips",
+      "records": { "path": "tooltips" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/tooltips.json"
+    },
+    {
+      "name": "segments",
+      "path": "/edit/segments",
+      "records": { "path": "segments" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/segments.json"
+    }
+  ]
+}

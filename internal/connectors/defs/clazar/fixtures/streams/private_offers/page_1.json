@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/private_offers", "query": { "response_format": "common", "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "private_offers_fixture_1",
+          "name": "Fixture Private Offer 1",
+          "cloud": "aws",
+          "status": "accepted",
+          "archived": "false",
+          "cloud_id": "po-fixture-1",
+          "duration": "P1Y",
+          "eula_type": "standard",
+          "listing_id": "listing_fixture_1",
+          "offer_type": "private_offer",
+          "accepted_at": "2026-01-01T00:00:00.000000Z",
+          "published_at": "2026-01-01T00:00:00.000000Z",
+          "expiration_at": "2026-04-01T00:00:00.000000Z",
+          "last_modified_at": "2026-01-01T00:00:00.000000Z"
+        }
+      ],
+      "next": null,
+      "count": 1
+    }
+  }
+}

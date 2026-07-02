@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GoLogin Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "GoLogin API key. Used only for Bearer auth (Authorization: Bearer <api_key>); never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.gologin.com",
+      "description": "GoLogin API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "30",
+      "description": "Records per page for the profiles stream (1-100). GoLogin's profiles list has no page-size query parameter; this only sets the client-side short-page stop threshold."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages for the profiles stream; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

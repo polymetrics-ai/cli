@@ -1,0 +1,17 @@
+{
+  "api": "Lemlist API (https://api.lemlist.com/api)",
+  "docs": "https://developer.lemlist.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full lemlist surface (leads add/remove, unsubscribe management, webhooks, schedules) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/team", "covered_by": { "stream": "team" } },
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/activities", "covered_by": { "stream": "activities" } },
+    { "method": "GET", "path": "/unsubscribes", "covered_by": { "stream": "unsubscribes" } },
+    { "method": "POST", "path": "/campaigns/{campaignId}/leads/{email}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/unsubscribes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/unsubscribes/{email}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/schedules", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/senders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

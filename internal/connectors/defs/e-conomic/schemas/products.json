@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["product_number"],
+  "required": ["product_number"],
+  "properties": {
+    "product_number": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "sales_price": { "type": ["number", "null"] },
+    "cost_price": { "type": ["number", "null"] },
+    "recommended_price": { "type": ["number", "null"] },
+    "barred": { "type": ["boolean", "null"] },
+    "unit_number": { "type": ["integer", "null"] },
+    "product_group_number": { "type": ["integer", "null"] },
+    "self": { "type": ["string", "null"] }
+  }
+}

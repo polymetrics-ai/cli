@@ -1,0 +1,23 @@
+{
+  "name": "recruitee",
+  "display_name": "Recruitee",
+  "description": "Reads Recruitee offers, candidates, departments, sources, and tags through the Recruitee REST API.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.recruitee.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Recruitee API read of ATS offer and candidate data",
+    "approval": "none; read-only ATS API"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payments",
+  "type": "object",
+  "x-primary-key": ["PaymentID"],
+  "x-cursor-field": "UpdatedDateUTC",
+  "required": ["PaymentID"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "PaymentID": { "type": "string" },
+    "PaymentType": { "type": ["string", "null"] },
+    "Status": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "Amount": { "type": ["number", "null"] },
+    "Reference": { "type": ["string", "null"] },
+    "CurrencyRate": { "type": ["number", "null"] },
+    "Date": { "type": ["string", "null"] },
+    "UpdatedDateUTC": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

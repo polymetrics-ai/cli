@@ -1,0 +1,1817 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sms",
+    "query": {
+      "Offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Count": 100,
+      "Data": [
+        {
+          "ID": "sms_fixture_1",
+          "From": "MAILJETSMS",
+          "To": "+15550000001",
+          "MessageId": "msg_fixture_1",
+          "CreationTS": 1767225601,
+          "SentTS": 1767225602,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_2",
+          "From": "MAILJETSMS",
+          "To": "+15550000002",
+          "MessageId": "msg_fixture_2",
+          "CreationTS": 1767225602,
+          "SentTS": 1767225603,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_3",
+          "From": "MAILJETSMS",
+          "To": "+15550000003",
+          "MessageId": "msg_fixture_3",
+          "CreationTS": 1767225603,
+          "SentTS": 1767225604,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_4",
+          "From": "MAILJETSMS",
+          "To": "+15550000004",
+          "MessageId": "msg_fixture_4",
+          "CreationTS": 1767225604,
+          "SentTS": 1767225605,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_5",
+          "From": "MAILJETSMS",
+          "To": "+15550000005",
+          "MessageId": "msg_fixture_5",
+          "CreationTS": 1767225605,
+          "SentTS": 1767225606,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_6",
+          "From": "MAILJETSMS",
+          "To": "+15550000006",
+          "MessageId": "msg_fixture_6",
+          "CreationTS": 1767225606,
+          "SentTS": 1767225607,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_7",
+          "From": "MAILJETSMS",
+          "To": "+15550000007",
+          "MessageId": "msg_fixture_7",
+          "CreationTS": 1767225607,
+          "SentTS": 1767225608,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_8",
+          "From": "MAILJETSMS",
+          "To": "+15550000008",
+          "MessageId": "msg_fixture_8",
+          "CreationTS": 1767225608,
+          "SentTS": 1767225609,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_9",
+          "From": "MAILJETSMS",
+          "To": "+15550000009",
+          "MessageId": "msg_fixture_9",
+          "CreationTS": 1767225609,
+          "SentTS": 1767225610,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_10",
+          "From": "MAILJETSMS",
+          "To": "+15550000010",
+          "MessageId": "msg_fixture_10",
+          "CreationTS": 1767225610,
+          "SentTS": 1767225611,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_11",
+          "From": "MAILJETSMS",
+          "To": "+15550000011",
+          "MessageId": "msg_fixture_11",
+          "CreationTS": 1767225611,
+          "SentTS": 1767225612,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_12",
+          "From": "MAILJETSMS",
+          "To": "+15550000012",
+          "MessageId": "msg_fixture_12",
+          "CreationTS": 1767225612,
+          "SentTS": 1767225613,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_13",
+          "From": "MAILJETSMS",
+          "To": "+15550000013",
+          "MessageId": "msg_fixture_13",
+          "CreationTS": 1767225613,
+          "SentTS": 1767225614,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_14",
+          "From": "MAILJETSMS",
+          "To": "+15550000014",
+          "MessageId": "msg_fixture_14",
+          "CreationTS": 1767225614,
+          "SentTS": 1767225615,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_15",
+          "From": "MAILJETSMS",
+          "To": "+15550000015",
+          "MessageId": "msg_fixture_15",
+          "CreationTS": 1767225615,
+          "SentTS": 1767225616,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_16",
+          "From": "MAILJETSMS",
+          "To": "+15550000016",
+          "MessageId": "msg_fixture_16",
+          "CreationTS": 1767225616,
+          "SentTS": 1767225617,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_17",
+          "From": "MAILJETSMS",
+          "To": "+15550000017",
+          "MessageId": "msg_fixture_17",
+          "CreationTS": 1767225617,
+          "SentTS": 1767225618,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_18",
+          "From": "MAILJETSMS",
+          "To": "+15550000018",
+          "MessageId": "msg_fixture_18",
+          "CreationTS": 1767225618,
+          "SentTS": 1767225619,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_19",
+          "From": "MAILJETSMS",
+          "To": "+15550000019",
+          "MessageId": "msg_fixture_19",
+          "CreationTS": 1767225619,
+          "SentTS": 1767225620,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_20",
+          "From": "MAILJETSMS",
+          "To": "+15550000020",
+          "MessageId": "msg_fixture_20",
+          "CreationTS": 1767225620,
+          "SentTS": 1767225621,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_21",
+          "From": "MAILJETSMS",
+          "To": "+15550000021",
+          "MessageId": "msg_fixture_21",
+          "CreationTS": 1767225621,
+          "SentTS": 1767225622,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_22",
+          "From": "MAILJETSMS",
+          "To": "+15550000022",
+          "MessageId": "msg_fixture_22",
+          "CreationTS": 1767225622,
+          "SentTS": 1767225623,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_23",
+          "From": "MAILJETSMS",
+          "To": "+15550000023",
+          "MessageId": "msg_fixture_23",
+          "CreationTS": 1767225623,
+          "SentTS": 1767225624,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_24",
+          "From": "MAILJETSMS",
+          "To": "+15550000024",
+          "MessageId": "msg_fixture_24",
+          "CreationTS": 1767225624,
+          "SentTS": 1767225625,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_25",
+          "From": "MAILJETSMS",
+          "To": "+15550000025",
+          "MessageId": "msg_fixture_25",
+          "CreationTS": 1767225625,
+          "SentTS": 1767225626,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_26",
+          "From": "MAILJETSMS",
+          "To": "+15550000026",
+          "MessageId": "msg_fixture_26",
+          "CreationTS": 1767225626,
+          "SentTS": 1767225627,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_27",
+          "From": "MAILJETSMS",
+          "To": "+15550000027",
+          "MessageId": "msg_fixture_27",
+          "CreationTS": 1767225627,
+          "SentTS": 1767225628,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_28",
+          "From": "MAILJETSMS",
+          "To": "+15550000028",
+          "MessageId": "msg_fixture_28",
+          "CreationTS": 1767225628,
+          "SentTS": 1767225629,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_29",
+          "From": "MAILJETSMS",
+          "To": "+15550000029",
+          "MessageId": "msg_fixture_29",
+          "CreationTS": 1767225629,
+          "SentTS": 1767225630,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_30",
+          "From": "MAILJETSMS",
+          "To": "+15550000030",
+          "MessageId": "msg_fixture_30",
+          "CreationTS": 1767225630,
+          "SentTS": 1767225631,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_31",
+          "From": "MAILJETSMS",
+          "To": "+15550000031",
+          "MessageId": "msg_fixture_31",
+          "CreationTS": 1767225631,
+          "SentTS": 1767225632,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_32",
+          "From": "MAILJETSMS",
+          "To": "+15550000032",
+          "MessageId": "msg_fixture_32",
+          "CreationTS": 1767225632,
+          "SentTS": 1767225633,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_33",
+          "From": "MAILJETSMS",
+          "To": "+15550000033",
+          "MessageId": "msg_fixture_33",
+          "CreationTS": 1767225633,
+          "SentTS": 1767225634,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_34",
+          "From": "MAILJETSMS",
+          "To": "+15550000034",
+          "MessageId": "msg_fixture_34",
+          "CreationTS": 1767225634,
+          "SentTS": 1767225635,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_35",
+          "From": "MAILJETSMS",
+          "To": "+15550000035",
+          "MessageId": "msg_fixture_35",
+          "CreationTS": 1767225635,
+          "SentTS": 1767225636,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_36",
+          "From": "MAILJETSMS",
+          "To": "+15550000036",
+          "MessageId": "msg_fixture_36",
+          "CreationTS": 1767225636,
+          "SentTS": 1767225637,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_37",
+          "From": "MAILJETSMS",
+          "To": "+15550000037",
+          "MessageId": "msg_fixture_37",
+          "CreationTS": 1767225637,
+          "SentTS": 1767225638,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_38",
+          "From": "MAILJETSMS",
+          "To": "+15550000038",
+          "MessageId": "msg_fixture_38",
+          "CreationTS": 1767225638,
+          "SentTS": 1767225639,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_39",
+          "From": "MAILJETSMS",
+          "To": "+15550000039",
+          "MessageId": "msg_fixture_39",
+          "CreationTS": 1767225639,
+          "SentTS": 1767225640,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_40",
+          "From": "MAILJETSMS",
+          "To": "+15550000040",
+          "MessageId": "msg_fixture_40",
+          "CreationTS": 1767225640,
+          "SentTS": 1767225641,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_41",
+          "From": "MAILJETSMS",
+          "To": "+15550000041",
+          "MessageId": "msg_fixture_41",
+          "CreationTS": 1767225641,
+          "SentTS": 1767225642,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_42",
+          "From": "MAILJETSMS",
+          "To": "+15550000042",
+          "MessageId": "msg_fixture_42",
+          "CreationTS": 1767225642,
+          "SentTS": 1767225643,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_43",
+          "From": "MAILJETSMS",
+          "To": "+15550000043",
+          "MessageId": "msg_fixture_43",
+          "CreationTS": 1767225643,
+          "SentTS": 1767225644,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_44",
+          "From": "MAILJETSMS",
+          "To": "+15550000044",
+          "MessageId": "msg_fixture_44",
+          "CreationTS": 1767225644,
+          "SentTS": 1767225645,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_45",
+          "From": "MAILJETSMS",
+          "To": "+15550000045",
+          "MessageId": "msg_fixture_45",
+          "CreationTS": 1767225645,
+          "SentTS": 1767225646,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_46",
+          "From": "MAILJETSMS",
+          "To": "+15550000046",
+          "MessageId": "msg_fixture_46",
+          "CreationTS": 1767225646,
+          "SentTS": 1767225647,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_47",
+          "From": "MAILJETSMS",
+          "To": "+15550000047",
+          "MessageId": "msg_fixture_47",
+          "CreationTS": 1767225647,
+          "SentTS": 1767225648,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_48",
+          "From": "MAILJETSMS",
+          "To": "+15550000048",
+          "MessageId": "msg_fixture_48",
+          "CreationTS": 1767225648,
+          "SentTS": 1767225649,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_49",
+          "From": "MAILJETSMS",
+          "To": "+15550000049",
+          "MessageId": "msg_fixture_49",
+          "CreationTS": 1767225649,
+          "SentTS": 1767225650,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_50",
+          "From": "MAILJETSMS",
+          "To": "+15550000050",
+          "MessageId": "msg_fixture_50",
+          "CreationTS": 1767225650,
+          "SentTS": 1767225651,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_51",
+          "From": "MAILJETSMS",
+          "To": "+15550000051",
+          "MessageId": "msg_fixture_51",
+          "CreationTS": 1767225651,
+          "SentTS": 1767225652,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_52",
+          "From": "MAILJETSMS",
+          "To": "+15550000052",
+          "MessageId": "msg_fixture_52",
+          "CreationTS": 1767225652,
+          "SentTS": 1767225653,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_53",
+          "From": "MAILJETSMS",
+          "To": "+15550000053",
+          "MessageId": "msg_fixture_53",
+          "CreationTS": 1767225653,
+          "SentTS": 1767225654,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_54",
+          "From": "MAILJETSMS",
+          "To": "+15550000054",
+          "MessageId": "msg_fixture_54",
+          "CreationTS": 1767225654,
+          "SentTS": 1767225655,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_55",
+          "From": "MAILJETSMS",
+          "To": "+15550000055",
+          "MessageId": "msg_fixture_55",
+          "CreationTS": 1767225655,
+          "SentTS": 1767225656,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_56",
+          "From": "MAILJETSMS",
+          "To": "+15550000056",
+          "MessageId": "msg_fixture_56",
+          "CreationTS": 1767225656,
+          "SentTS": 1767225657,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_57",
+          "From": "MAILJETSMS",
+          "To": "+15550000057",
+          "MessageId": "msg_fixture_57",
+          "CreationTS": 1767225657,
+          "SentTS": 1767225658,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_58",
+          "From": "MAILJETSMS",
+          "To": "+15550000058",
+          "MessageId": "msg_fixture_58",
+          "CreationTS": 1767225658,
+          "SentTS": 1767225659,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_59",
+          "From": "MAILJETSMS",
+          "To": "+15550000059",
+          "MessageId": "msg_fixture_59",
+          "CreationTS": 1767225659,
+          "SentTS": 1767225660,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_60",
+          "From": "MAILJETSMS",
+          "To": "+15550000060",
+          "MessageId": "msg_fixture_60",
+          "CreationTS": 1767225660,
+          "SentTS": 1767225661,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_61",
+          "From": "MAILJETSMS",
+          "To": "+15550000061",
+          "MessageId": "msg_fixture_61",
+          "CreationTS": 1767225661,
+          "SentTS": 1767225662,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_62",
+          "From": "MAILJETSMS",
+          "To": "+15550000062",
+          "MessageId": "msg_fixture_62",
+          "CreationTS": 1767225662,
+          "SentTS": 1767225663,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_63",
+          "From": "MAILJETSMS",
+          "To": "+15550000063",
+          "MessageId": "msg_fixture_63",
+          "CreationTS": 1767225663,
+          "SentTS": 1767225664,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_64",
+          "From": "MAILJETSMS",
+          "To": "+15550000064",
+          "MessageId": "msg_fixture_64",
+          "CreationTS": 1767225664,
+          "SentTS": 1767225665,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_65",
+          "From": "MAILJETSMS",
+          "To": "+15550000065",
+          "MessageId": "msg_fixture_65",
+          "CreationTS": 1767225665,
+          "SentTS": 1767225666,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_66",
+          "From": "MAILJETSMS",
+          "To": "+15550000066",
+          "MessageId": "msg_fixture_66",
+          "CreationTS": 1767225666,
+          "SentTS": 1767225667,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_67",
+          "From": "MAILJETSMS",
+          "To": "+15550000067",
+          "MessageId": "msg_fixture_67",
+          "CreationTS": 1767225667,
+          "SentTS": 1767225668,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_68",
+          "From": "MAILJETSMS",
+          "To": "+15550000068",
+          "MessageId": "msg_fixture_68",
+          "CreationTS": 1767225668,
+          "SentTS": 1767225669,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_69",
+          "From": "MAILJETSMS",
+          "To": "+15550000069",
+          "MessageId": "msg_fixture_69",
+          "CreationTS": 1767225669,
+          "SentTS": 1767225670,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_70",
+          "From": "MAILJETSMS",
+          "To": "+15550000070",
+          "MessageId": "msg_fixture_70",
+          "CreationTS": 1767225670,
+          "SentTS": 1767225671,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_71",
+          "From": "MAILJETSMS",
+          "To": "+15550000071",
+          "MessageId": "msg_fixture_71",
+          "CreationTS": 1767225671,
+          "SentTS": 1767225672,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_72",
+          "From": "MAILJETSMS",
+          "To": "+15550000072",
+          "MessageId": "msg_fixture_72",
+          "CreationTS": 1767225672,
+          "SentTS": 1767225673,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_73",
+          "From": "MAILJETSMS",
+          "To": "+15550000073",
+          "MessageId": "msg_fixture_73",
+          "CreationTS": 1767225673,
+          "SentTS": 1767225674,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_74",
+          "From": "MAILJETSMS",
+          "To": "+15550000074",
+          "MessageId": "msg_fixture_74",
+          "CreationTS": 1767225674,
+          "SentTS": 1767225675,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_75",
+          "From": "MAILJETSMS",
+          "To": "+15550000075",
+          "MessageId": "msg_fixture_75",
+          "CreationTS": 1767225675,
+          "SentTS": 1767225676,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_76",
+          "From": "MAILJETSMS",
+          "To": "+15550000076",
+          "MessageId": "msg_fixture_76",
+          "CreationTS": 1767225676,
+          "SentTS": 1767225677,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_77",
+          "From": "MAILJETSMS",
+          "To": "+15550000077",
+          "MessageId": "msg_fixture_77",
+          "CreationTS": 1767225677,
+          "SentTS": 1767225678,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_78",
+          "From": "MAILJETSMS",
+          "To": "+15550000078",
+          "MessageId": "msg_fixture_78",
+          "CreationTS": 1767225678,
+          "SentTS": 1767225679,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_79",
+          "From": "MAILJETSMS",
+          "To": "+15550000079",
+          "MessageId": "msg_fixture_79",
+          "CreationTS": 1767225679,
+          "SentTS": 1767225680,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_80",
+          "From": "MAILJETSMS",
+          "To": "+15550000080",
+          "MessageId": "msg_fixture_80",
+          "CreationTS": 1767225680,
+          "SentTS": 1767225681,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_81",
+          "From": "MAILJETSMS",
+          "To": "+15550000081",
+          "MessageId": "msg_fixture_81",
+          "CreationTS": 1767225681,
+          "SentTS": 1767225682,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_82",
+          "From": "MAILJETSMS",
+          "To": "+15550000082",
+          "MessageId": "msg_fixture_82",
+          "CreationTS": 1767225682,
+          "SentTS": 1767225683,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_83",
+          "From": "MAILJETSMS",
+          "To": "+15550000083",
+          "MessageId": "msg_fixture_83",
+          "CreationTS": 1767225683,
+          "SentTS": 1767225684,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_84",
+          "From": "MAILJETSMS",
+          "To": "+15550000084",
+          "MessageId": "msg_fixture_84",
+          "CreationTS": 1767225684,
+          "SentTS": 1767225685,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_85",
+          "From": "MAILJETSMS",
+          "To": "+15550000085",
+          "MessageId": "msg_fixture_85",
+          "CreationTS": 1767225685,
+          "SentTS": 1767225686,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_86",
+          "From": "MAILJETSMS",
+          "To": "+15550000086",
+          "MessageId": "msg_fixture_86",
+          "CreationTS": 1767225686,
+          "SentTS": 1767225687,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_87",
+          "From": "MAILJETSMS",
+          "To": "+15550000087",
+          "MessageId": "msg_fixture_87",
+          "CreationTS": 1767225687,
+          "SentTS": 1767225688,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_88",
+          "From": "MAILJETSMS",
+          "To": "+15550000088",
+          "MessageId": "msg_fixture_88",
+          "CreationTS": 1767225688,
+          "SentTS": 1767225689,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_89",
+          "From": "MAILJETSMS",
+          "To": "+15550000089",
+          "MessageId": "msg_fixture_89",
+          "CreationTS": 1767225689,
+          "SentTS": 1767225690,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_90",
+          "From": "MAILJETSMS",
+          "To": "+15550000090",
+          "MessageId": "msg_fixture_90",
+          "CreationTS": 1767225690,
+          "SentTS": 1767225691,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_91",
+          "From": "MAILJETSMS",
+          "To": "+15550000091",
+          "MessageId": "msg_fixture_91",
+          "CreationTS": 1767225691,
+          "SentTS": 1767225692,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_92",
+          "From": "MAILJETSMS",
+          "To": "+15550000092",
+          "MessageId": "msg_fixture_92",
+          "CreationTS": 1767225692,
+          "SentTS": 1767225693,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_93",
+          "From": "MAILJETSMS",
+          "To": "+15550000093",
+          "MessageId": "msg_fixture_93",
+          "CreationTS": 1767225693,
+          "SentTS": 1767225694,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_94",
+          "From": "MAILJETSMS",
+          "To": "+15550000094",
+          "MessageId": "msg_fixture_94",
+          "CreationTS": 1767225694,
+          "SentTS": 1767225695,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_95",
+          "From": "MAILJETSMS",
+          "To": "+15550000095",
+          "MessageId": "msg_fixture_95",
+          "CreationTS": 1767225695,
+          "SentTS": 1767225696,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_96",
+          "From": "MAILJETSMS",
+          "To": "+15550000096",
+          "MessageId": "msg_fixture_96",
+          "CreationTS": 1767225696,
+          "SentTS": 1767225697,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_97",
+          "From": "MAILJETSMS",
+          "To": "+15550000097",
+          "MessageId": "msg_fixture_97",
+          "CreationTS": 1767225697,
+          "SentTS": 1767225698,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_98",
+          "From": "MAILJETSMS",
+          "To": "+15550000098",
+          "MessageId": "msg_fixture_98",
+          "CreationTS": 1767225698,
+          "SentTS": 1767225699,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_99",
+          "From": "MAILJETSMS",
+          "To": "+15550000099",
+          "MessageId": "msg_fixture_99",
+          "CreationTS": 1767225699,
+          "SentTS": 1767225700,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        },
+        {
+          "ID": "sms_fixture_100",
+          "From": "MAILJETSMS",
+          "To": "+15550000100",
+          "MessageId": "msg_fixture_100",
+          "CreationTS": 1767225700,
+          "SentTS": 1767225701,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        }
+      ]
+    }
+  }
+}

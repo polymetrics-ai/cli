@@ -1,0 +1,23 @@
+{
+  "name": "pennylane",
+  "display_name": "Pennylane",
+  "description": "Reads Pennylane v2 customers, customer invoices, suppliers, products, and categories through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://pennylane.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Pennylane API read of accounting data (customers, invoices, suppliers, products, categories)",
+    "approval": "none; read-only"
+  }
+}

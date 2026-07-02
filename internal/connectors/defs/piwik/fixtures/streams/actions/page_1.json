@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API", "format": "JSON", "method": "Actions.getPageUrls",
+      "idSite": "synthetic-conformance-value", "period": "synthetic-conformance-value", "date": "synthetic-conformance-value",
+      "filter_limit": "100", "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "label": "/", "nb_hits": 42, "nb_visits": 30 },
+      { "label": "/pricing", "nb_hits": 17, "nb_visits": 12 }
+    ]
+  }
+}

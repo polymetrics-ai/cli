@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/pypi/synthetic-conformance-value/json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "info": {
+        "name": "fixtureproject",
+        "version": "1.0.0",
+        "summary": "Fixture PyPI project"
+      }
+    }
+  }
+}

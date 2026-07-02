@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wikipedia Pageviews Connection Specification",
+  "type": "object",
+  "required": ["project", "access", "agent", "article", "start", "end"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://wikimedia.org",
+      "description": "Wikimedia REST API base URL override for tests or proxies."
+    },
+    "project": {
+      "type": "string",
+      "description": "Wikimedia project domain, e.g. en.wikipedia.org."
+    },
+    "access": {
+      "type": "string",
+      "description": "Access method filter for the pageviews endpoint, e.g. all-access, desktop, mobile-app, mobile-web."
+    },
+    "agent": {
+      "type": "string",
+      "description": "Agent type filter for the pageviews endpoint, e.g. all-agents, user, spider, automated."
+    },
+    "article": {
+      "type": "string",
+      "description": "Article title (as it appears in the Wikimedia URL, e.g. Ada_Lovelace) for the per-article pageviews stream."
+    },
+    "start": {
+      "type": "string",
+      "description": "Start date/time for the pageviews stream's requested range, YYYYMMDD or YYYYMMDDHH."
+    },
+    "end": {
+      "type": "string",
+      "description": "End date/time for the pageviews stream's requested range, YYYYMMDD or YYYYMMDDHH."
+    },
+    "country": {
+      "type": "string",
+      "description": "ISO country code for the top_articles stream, e.g. US. Required only when reading the top_articles stream."
+    },
+    "year": {
+      "type": "string",
+      "description": "4-digit year for the top_articles stream, e.g. 2026. Required only when reading the top_articles stream (see Known limits: legacy's start[:8]-truncation derivation is not modeled)."
+    },
+    "month": {
+      "type": "string",
+      "description": "2-digit month for the top_articles stream, e.g. 01. Required only when reading the top_articles stream."
+    },
+    "day": {
+      "type": "string",
+      "description": "2-digit day for the top_articles stream, e.g. 01. Required only when reading the top_articles stream."
+    }
+  }
+}

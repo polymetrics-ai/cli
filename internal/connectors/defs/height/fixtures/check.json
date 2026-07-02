@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/workspace" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "ws_fixture_1",
+      "model": "workspace",
+      "key": "FIX",
+      "name": "Fixture Workspace",
+      "url": "https://height.app/fixture",
+      "urlType": "default",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "createdUserId": "user_fixture_1",
+      "frozen": false
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "papersign",
+  "display_name": "PaperSign",
+  "description": "Reads PaperSign documents, templates, and recipients through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://papersign.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external PaperSign API read of document, template, and recipient data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "api": "Secoda API v1 (https://api.secoda.co/api/v1)",
+  "docs": "https://docs.secoda.co/api-reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read-only streams (tables, documents, collections, questions) only, matching internal/connectors/secoda's exact endpoint set; the full Secoda surface (single-resource fetches, dictionary terms, tags, users, create/update endpoints) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/tables", "covered_by": { "stream": "tables" } },
+    { "method": "GET", "path": "/documents", "covered_by": { "stream": "documents" } },
+    { "method": "GET", "path": "/collections", "covered_by": { "stream": "collections" } },
+    { "method": "GET", "path": "/questions", "covered_by": { "stream": "questions" } },
+    { "method": "GET", "path": "/dictionary", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/tags", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/tables", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

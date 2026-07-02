@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Revolut Merchant Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Revolut Merchant API secret key, sent as an Authorization: Bearer <api_key> header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://merchant.revolut.com/api/1.0",
+      "description": "Revolut Merchant API base URL override for tests or proxies."
+    },
+    "from_created_date": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return records created at or after this value."
+    },
+    "to_created_date": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return records created at or before this value."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Optional passthrough filter: scope the orders stream to a single customer id."
+    },
+    "state": {
+      "type": "string",
+      "description": "Optional passthrough filter: scope the orders stream to a single order state."
+    }
+  }
+}

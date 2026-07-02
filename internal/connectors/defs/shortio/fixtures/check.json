@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/links" },
+  "response": {
+    "status": 200,
+    "body": {
+      "links": [
+        { "idString": "lnk_fixture_1", "path": "fixture-1", "title": "Fixture link", "updatedAt": "2026-01-01T00:00:00Z" }
+      ],
+      "nextPageToken": null
+    }
+  }
+}

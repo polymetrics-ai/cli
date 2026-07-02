@@ -1,0 +1,15 @@
+{
+  "api": "Docker Hub Registry API v2 (https://docs.docker.com/docker-hub/api/latest/)",
+  "docs": "https://docs.docker.com/docker-hub/api/latest/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (repositories, tags, namespace); Docker Hub's write/webhook/build-trigger endpoints are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/repositories/{namespace}/", "covered_by": { "stream": "repositories" } },
+    { "method": "GET", "path": "/v2/repositories/{namespace}/{repository}/tags", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "/v2/users/{username}/", "covered_by": { "stream": "namespace" } },
+    { "method": "POST", "path": "/v2/repositories/{namespace}/{repository}/", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented repository create/update; Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/v2/repositories/{namespace}/{repository}/", "excluded": { "category": "destructive_admin", "reason": "destructive repository deletion; not modeled by legacy" } },
+    { "method": "GET", "path": "/v2/repositories/{namespace}/{repository}/tags/{tag}/images", "excluded": { "category": "out_of_scope", "reason": "per-tag image manifest detail not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/webhooks", "excluded": { "category": "out_of_scope", "reason": "webhook configuration not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

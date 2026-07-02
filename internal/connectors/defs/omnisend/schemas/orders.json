@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orders",
+  "type": "object",
+  "x-primary-key": ["orderID"],
+  "x-cursor-field": "createdAt",
+  "required": ["orderID"],
+  "properties": {
+    "orderID": { "type": "string" },
+    "orderNumber": { "type": ["number", "null"] },
+    "contactID": { "type": ["string", "null"] },
+    "cartID": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "orderSum": { "type": ["number", "null"] },
+    "subTotalSum": { "type": ["number", "null"] },
+    "taxSum": { "type": ["number", "null"] },
+    "shippingSum": { "type": ["number", "null"] },
+    "discountSum": { "type": ["number", "null"] },
+    "paymentStatus": { "type": ["string", "null"] },
+    "fulfillmentStatus": { "type": ["string", "null"] },
+    "products": { "type": ["array", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

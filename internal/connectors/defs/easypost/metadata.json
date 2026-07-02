@@ -1,0 +1,23 @@
+{
+  "name": "easypost",
+  "display_name": "EasyPost",
+  "description": "Reads EasyPost shipments, trackers, addresses, parcels, and insurances through the EasyPost REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.easypost.com/docs/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external EasyPost API read of shipment, tracker, address, parcel, and insurance data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

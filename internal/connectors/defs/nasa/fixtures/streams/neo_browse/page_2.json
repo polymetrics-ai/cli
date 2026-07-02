@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/neo/rest/v1/neo/browse", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": { "size": 20, "total_elements": 21, "total_pages": 2, "number": 1 },
+      "near_earth_objects": [
+        {
+          "id": "2000452",
+          "neo_reference_id": "2000452",
+          "name": "21 Fixteros",
+          "nasa_jpl_url": "https://ssd.jpl.nasa.gov/fixture",
+          "absolute_magnitude_h": 11.5,
+          "is_potentially_hazardous_asteroid": true,
+          "is_sentry_object": false
+        }
+      ]
+    }
+  }
+}

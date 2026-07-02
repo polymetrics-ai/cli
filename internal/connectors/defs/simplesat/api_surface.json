@@ -1,0 +1,13 @@
+{
+  "api": "Simplesat API (https://docs.simplesat.io/)",
+  "docs": "https://docs.simplesat.io/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (answers, surveys, questions, customers, tickets); legacy is read-only, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "answers/", "covered_by": { "stream": "answers" } },
+    { "method": "GET", "path": "surveys/", "covered_by": { "stream": "surveys" } },
+    { "method": "GET", "path": "questions/", "covered_by": { "stream": "questions" } },
+    { "method": "GET", "path": "customers/", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "tickets/", "covered_by": { "stream": "tickets" } }
+  ]
+}

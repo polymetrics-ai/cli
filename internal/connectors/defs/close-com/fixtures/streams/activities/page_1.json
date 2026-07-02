@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/activity/", "query": { "_limit": "100", "_skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "acti_fixture_1",
+          "_type": "Note",
+          "lead_id": "lead_1",
+          "contact_id": "cont_fixture_1",
+          "user_id": "user_fixture_1",
+          "user_name": "Fixture User",
+          "status": "outbound",
+          "direction": "outbound",
+          "organization_id": "orga_fixture",
+          "created_by": "user_fixture_1",
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_updated": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

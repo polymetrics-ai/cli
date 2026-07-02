@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/organizations", "query": { "perPage": "1000" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "org_fixture_1",
+        "name": "Fixture Organization 1",
+        "url": "https://dashboard.meraki.com/o/fixture_1",
+        "api": { "enabled": true },
+        "cloud": { "region": { "name": "North America" } },
+        "licensing": { "model": "co-term" },
+        "management": { "details": [] }
+      },
+      {
+        "id": "org_fixture_2",
+        "name": "Fixture Organization 2",
+        "url": "https://dashboard.meraki.com/o/fixture_2",
+        "api": { "enabled": true },
+        "cloud": { "region": { "name": "Europe" } },
+        "licensing": { "model": "per-device" },
+        "management": { "details": [] }
+      }
+    ]
+  }
+}

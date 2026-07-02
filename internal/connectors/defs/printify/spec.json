@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Printify Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Printify personal access token, sent as 'Authorization: Bearer <api_token>'. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.printify.com/v1",
+      "description": "Printify API base URL override for tests or proxies."
+    },
+    "shop_id": {
+      "type": "string",
+      "description": "Printify shop ID, required for the products and orders streams (substituted into the shop-scoped path)."
+    }
+  }
+}

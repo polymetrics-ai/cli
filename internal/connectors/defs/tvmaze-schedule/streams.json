@@ -1,0 +1,40 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "check": { "method": "GET", "path": "/schedule", "query": { "country": "US" } },
+    "error_map": [
+      { "status": 429, "class": "rate_limited", "hint": "tvmaze rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "schedule",
+      "path": "/schedule",
+      "query": {
+        "country": { "template": "{{ config.country }}", "omit_when_absent": true },
+        "date": { "template": "{{ config.date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "show_id": "{{ record.show.id }}",
+        "show_name": "{{ record.show.name }}"
+      },
+      "schema": "schemas/schedule.json"
+    },
+    {
+      "name": "web_schedule",
+      "path": "/web/schedule",
+      "query": {
+        "country": { "template": "{{ config.country }}", "omit_when_absent": true },
+        "date": { "template": "{{ config.date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "show_id": "{{ record.show.id }}",
+        "show_name": "{{ record.show.name }}"
+      },
+      "schema": "schemas/web_schedule.json"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/locks", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture Lock 1", "description": "front door", "place_id": 1, "geofence_restriction_enabled": false, "online": true, "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" }
+    ]
+  }
+}

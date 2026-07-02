@@ -1,0 +1,23 @@
+{
+  "name": "visma-economic",
+  "display_name": "Visma e-conomic",
+  "description": "Reads Visma e-conomic customers via the e-conomic REST API.",
+  "integration_type": "api",
+  "docs_url": "https://restdocs.e-conomic.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Visma e-conomic API read of customer data",
+    "approval": "none; read-only customer directory sync"
+  }
+}

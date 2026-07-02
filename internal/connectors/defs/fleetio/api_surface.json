@@ -1,0 +1,20 @@
+{
+  "api": "Fleetio API v1 (https://developer.fleetio.com/)",
+  "docs": "https://developer.fleetio.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (vehicles, contacts, fuel_entries, issues, service_entries); the full Fleetio surface (work orders, inspections, parts, vendors, expense entries, meter entries, etc.) is out of scope until Pass B. fleetio has no allow-listed write actions in legacy (read-only connector).",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/vehicles", "covered_by": { "stream": "vehicles" } },
+    { "method": "GET", "path": "/api/v1/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/api/v1/fuel_entries", "covered_by": { "stream": "fuel_entries" } },
+    { "method": "GET", "path": "/api/v1/issues", "covered_by": { "stream": "issues" } },
+    { "method": "GET", "path": "/api/v1/service_entries", "covered_by": { "stream": "service_entries" } },
+    { "method": "POST", "path": "/api/v1/vehicles", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy fleetio implements no write actions at all" } },
+    { "method": "GET", "path": "/api/v1/work_orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/inspection_submissions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/parts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/vendors", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/expense_entries", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/meter_entries", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

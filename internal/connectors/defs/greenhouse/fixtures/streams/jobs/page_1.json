@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/jobs", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 301,
+        "name": "Fixture Job 1",
+        "status": "open",
+        "confidential": false,
+        "requisition_id": "REQ-1",
+        "opened_at": "2026-01-01T00:00:00Z",
+        "closed_at": null,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-02T00:00:00Z"
+      },
+      {
+        "id": 302,
+        "name": "Fixture Job 2",
+        "status": "closed",
+        "confidential": false,
+        "requisition_id": "REQ-2",
+        "opened_at": "2026-01-01T00:00:01Z",
+        "closed_at": "2026-01-05T00:00:00Z",
+        "created_at": "2026-01-01T00:00:01Z",
+        "updated_at": "2026-01-05T00:00:00Z"
+      }
+    ]
+  }
+}

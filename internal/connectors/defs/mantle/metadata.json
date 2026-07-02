@@ -1,0 +1,22 @@
+{
+  "name": "mantle",
+  "display_name": "Mantle",
+  "description": "Reads Mantle customers and subscriptions through the Mantle (heymantle.com) REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.mantle.xyz/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 500
+  },
+  "risk": {
+    "read": "external Mantle API read of customer and subscription billing data"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "api": "Employment Hero API v1 (https://api.employmenthero.com/api/v1)",
+  "docs": "https://developer.employmenthero.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Employment Hero surface (payroll, timesheets, expenses, documents, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/organisations", "covered_by": { "stream": "organisations" } },
+    { "method": "GET", "path": "/organisations/{id}/employees", "covered_by": { "stream": "employees" } },
+    { "method": "GET", "path": "/organisations/{id}/leave_requests", "covered_by": { "stream": "leave_requests" } },
+    { "method": "GET", "path": "/organisations/{id}/teams", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/organisations/{id}/timesheets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/organisations/{id}/pay_runs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/organisations/{id}/expenses", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/organisations/{id}/documents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/organisations/{id}/employees", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

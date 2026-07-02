@@ -1,0 +1,16 @@
+{
+  "api": "Reddit OAuth API (https://oauth.reddit.com)",
+  "docs": "https://www.reddit.com/dev/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (posts, comments); legacy itself ships no writes (capabilities.write is false), no OAuth token acquisition (the caller supplies a valid access_token), and no other Reddit resource is modeled.",
+  "endpoints": [
+    { "method": "GET", "path": "/r/{subreddit}/new", "covered_by": { "stream": "posts" } },
+    { "method": "GET", "path": "/r/{subreddit}/comments", "covered_by": { "stream": "comments" } },
+    { "method": "GET", "path": "/r/{subreddit}/hot", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented the hot listing sort; Pass B capability expansion" } },
+    { "method": "GET", "path": "/r/{subreddit}/top", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented the top listing sort; Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/submit", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented post/comment submission; Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/comment", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented comment replies; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/access_token", "excluded": { "category": "out_of_scope", "reason": "OAuth token acquisition is intentionally out of scope; the caller supplies a valid access_token" } },
+    { "method": "GET", "path": "/api/v1/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream" } }
+  ]
+}

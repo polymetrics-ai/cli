@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/users" },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "current_page": 1, "per_page": 50, "next_page_link": null },
+      "users": [
+        {
+          "id": 1,
+          "name": "Fixture User One",
+          "email": "fixture1@example.com",
+          "available": true,
+          "availability_status": "available",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "time_zone": "UTC",
+          "language": "en",
+          "wrap_up_time": 30
+        }
+      ]
+    }
+  }
+}

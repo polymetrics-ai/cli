@@ -1,0 +1,23 @@
+{
+  "name": "planhat",
+  "display_name": "Planhat",
+  "description": "Reads Planhat companies, end users, and licenses through the Planhat REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.planhat.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Planhat API read of customer success data",
+    "approval": "none; read-only customer success platform API"
+  }
+}

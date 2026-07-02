@@ -1,0 +1,42 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "Token token=" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "",
+      "start_page": 1,
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/api/podcasts.json" },
+    "error_map": [
+      { "status": 401, "hint": "buzzsprout api_key is missing or invalid; re-run pm credentials add buzzsprout" },
+      { "status": 404, "hint": "buzzsprout podcast_id not found or not accessible with this api_key" },
+      { "status": 429, "class": "rate_limited", "hint": "buzzsprout rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "episodes",
+      "path": "/api/{{ config.podcast_id }}/episodes.json",
+      "records": { "path": "" },
+      "incremental": {
+        "cursor_field": "published_at"
+      },
+      "schema": "schemas/episodes.json"
+    },
+    {
+      "name": "podcasts",
+      "path": "/api/podcasts.json",
+      "records": { "path": "" },
+      "schema": "schemas/podcasts.json"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "model": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "key": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] },
+    "userId": { "type": ["string", "null"] },
+    "defaultList": { "type": ["boolean", "null"] },
+    "visualization": { "type": ["string", "null"] }
+  }
+}

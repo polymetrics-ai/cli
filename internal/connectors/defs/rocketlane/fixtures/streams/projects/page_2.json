@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/projects", "query": { "page": "2", "pageSize": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "proj_fixture_3", "name": "Fixture Rollout", "status": "COMPLETED", "customer_id": "cust_fixture_3", "updated_at": "2026-01-01T00:10:00Z" }
+      ],
+      "pageInfo": { "page": 2, "pageSize": 2, "totalRecords": 3 }
+    }
+  }
+}

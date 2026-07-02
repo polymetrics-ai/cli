@@ -1,0 +1,23 @@
+{
+  "name": "recreation",
+  "display_name": "Recreation.gov",
+  "description": "Reads Recreation.gov RIDB facilities, campsites, activities, organizations, and recreation areas through the RIDB REST API.",
+  "integration_type": "api",
+  "docs_url": "https://ridb.recreation.gov/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Recreation.gov RIDB API read of public facility, campsite, activity, organization, and recreation-area data",
+    "approval": "none; read-only public-data API"
+  }
+}

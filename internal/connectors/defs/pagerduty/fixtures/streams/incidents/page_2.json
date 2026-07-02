@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/incidents", "query": { "limit": "100", "offset": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "incidents": [
+        { "id": "P_fixture_101", "incident_number": 201, "title": "Fixture Incident 101", "status": "resolved", "created_at": "2026-01-01T00:02:00Z" }
+      ],
+      "more": false
+    }
+  }
+}

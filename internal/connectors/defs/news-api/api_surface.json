@@ -1,0 +1,11 @@
+{
+  "api": "News API (https://newsapi.org/v2)",
+  "docs": "https://newsapi.org/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 3 legacy-parity read streams only",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/everything", "covered_by": { "stream": "everything" } },
+    { "method": "GET", "path": "/v2/top-headlines", "covered_by": { "stream": "top_headlines" } },
+    { "method": "GET", "path": "/v2/top-headlines/sources", "covered_by": { "stream": "sources" } }
+  ]
+}

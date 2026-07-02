@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/organizers/" },
+  "response": {
+    "status": 200,
+    "body": { "count": 0, "next": null, "previous": null, "results": [] }
+  }
+}

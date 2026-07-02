@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/spaces" },
+  "response": {
+    "status": 200,
+    "body": { "results": [], "_links": {} }
+  }
+}

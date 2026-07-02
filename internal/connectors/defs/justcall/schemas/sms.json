@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sms",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "sms_date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "sms_date": { "type": ["string", "null"] },
+    "sms_time": { "type": ["string", "null"] },
+    "direction": { "type": ["string", "null"] },
+    "delivery_status": { "type": ["string", "null"] },
+    "agent_id": { "type": ["string", "null"] },
+    "agent_name": { "type": ["string", "null"] },
+    "agent_email": { "type": ["string", "null"] },
+    "contact_name": { "type": ["string", "null"] },
+    "contact_number": { "type": ["string", "null"] },
+    "justcall_number": { "type": ["string", "null"] },
+    "justcall_line_name": { "type": ["string", "null"] },
+    "cost_incurred": { "type": ["string", "null"] }
+  }
+}

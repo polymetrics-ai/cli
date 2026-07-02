@@ -1,0 +1,91 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      { "mode": "bearer", "token": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/businesses", "query": { "limit": "1", "offset": "0" } },
+    "error_map": [
+      { "status": 401, "hint": "railz access_token/api_key is missing or invalid; re-run pm credentials add railz" },
+      { "status": 403, "hint": "railz account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "railz rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "businesses",
+      "path": "/businesses",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 2
+      },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "computed_fields": {
+        "id": "{{ record.businessUuid }}",
+        "name": "{{ record.businessName }}"
+      },
+      "schema": "schemas/businesses.json"
+    },
+    {
+      "name": "connections",
+      "path": "/connections",
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "computed_fields": {
+        "id": "{{ record.connectionUuid }}",
+        "business_id": "{{ record.businessUuid }}"
+      },
+      "schema": "schemas/connections.json"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.customerUuid }}",
+        "business_id": "{{ record.businessUuid }}",
+        "name": "{{ record.name }}"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.invoiceUuid }}",
+        "business_id": "{{ record.businessUuid }}",
+        "customer_id": "{{ record.customerUuid }}",
+        "total_amount": "{{ record.totalAmount }}"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "bills",
+      "path": "/bills",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.billUuid }}",
+        "business_id": "{{ record.businessUuid }}",
+        "vendor_id": "{{ record.vendorUuid }}",
+        "total_amount": "{{ record.totalAmount }}"
+      },
+      "schema": "schemas/bills.json"
+    }
+  ]
+}

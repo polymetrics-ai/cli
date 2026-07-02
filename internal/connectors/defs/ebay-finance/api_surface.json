@@ -1,0 +1,14 @@
+{
+  "api": "eBay Sell Finances API v1",
+  "docs": "https://developer.ebay.com/api-docs/sell/finances/overview.html",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only, matching internal/connectors/ebay-finance's exact endpoint set; the full eBay Sell Finances surface (transaction summary reports, seller funds by currency, payout details/reversal) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/transaction", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/payout", "covered_by": { "stream": "payouts" } },
+    { "method": "GET", "path": "/transfer", "covered_by": { "stream": "transfers" } },
+    { "method": "GET", "path": "/seller_funds_summary", "covered_by": { "stream": "seller_funds_summary" } },
+    { "method": "GET", "path": "/transaction/{transaction_id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/payout/{payout_id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

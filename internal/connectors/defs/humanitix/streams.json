@@ -1,0 +1,55 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "x-api-key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "pageSize",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/events", "query": { "page": "1", "pageSize": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "humanitix api_key is missing or invalid; re-run pm credentials add humanitix" },
+      { "status": 429, "class": "rate_limited", "hint": "humanitix rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "events",
+      "path": "/events",
+      "query": {
+        "since": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "records": { "path": "events" },
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "request_param": "since",
+        "start_config_key": "since"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": { "path": "tags" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "orders",
+      "path": "/events/{{ config.event_id }}/orders",
+      "records": { "path": "orders" },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "tickets",
+      "path": "/events/{{ config.event_id }}/tickets",
+      "records": { "path": "tickets" },
+      "schema": "schemas/tickets.json"
+    }
+  ]
+}

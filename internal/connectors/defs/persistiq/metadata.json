@@ -1,0 +1,23 @@
+{
+  "name": "persistiq",
+  "display_name": "PersistIQ",
+  "description": "Reads PersistIQ users, leads, campaigns, mailboxes, activities, and accounts through v1 REST endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://persistiq.com/api-docs/index.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external PersistIQ API read of leads, users, campaigns, mailboxes, activities, and accounts",
+    "approval": "none; read-only, no writes"
+  }
+}

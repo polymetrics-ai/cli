@@ -1,0 +1,17 @@
+{
+  "api": "Clarifai API v2 (https://api.clarifai.com/v2)",
+  "docs": "https://docs.clarifai.com/api-guide/api-overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (applications, datasets, models, model_versions, workflows); Clarifai's model-prediction/training/annotation endpoints are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/users/{user_id}/apps", "covered_by": { "stream": "applications" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/datasets", "covered_by": { "stream": "datasets" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/models", "covered_by": { "stream": "models" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/models/versions", "covered_by": { "stream": "model_versions" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/workflows", "covered_by": { "stream": "workflows" } },
+    { "method": "POST", "path": "/v2/users/{user_id}/apps", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented app creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/models/{model_id}/outputs", "excluded": { "category": "out_of_scope", "reason": "prediction endpoint, not a syncable object stream; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/users/{user_id}/apps/{app_id}/datasets/{dataset_id}/inputs", "excluded": { "category": "out_of_scope", "reason": "input/annotation ingestion not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/apps/{app_id}/models/{model_id}/versions/{version_id}/status", "excluded": { "category": "non_data_endpoint", "reason": "async training-status polling, not a syncable object stream" } }
+  ]
+}

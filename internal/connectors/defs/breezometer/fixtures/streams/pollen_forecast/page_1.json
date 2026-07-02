@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pollen/v2/forecast/daily",
+    "query": {
+      "lat": "synthetic-conformance-value",
+      "lon": "synthetic-conformance-value",
+      "days": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "date": "2026-01-01",
+          "types": { "grass": { "index": { "value": 1 } } },
+          "plants": { "ragweed": { "index": { "value": 0 } } },
+          "index": { "value": 1, "category": "Low" },
+          "data_available": true
+        }
+      ]
+    }
+  }
+}

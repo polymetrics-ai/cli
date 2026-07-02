@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/notes/members", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "note_fixture_1",
+          "memberId": "mem_fixture_1",
+          "text": "Fixture note",
+          "htmlText": "<p>Fixture note</p>"
+        }
+      ],
+      "next": null
+    }
+  }
+}

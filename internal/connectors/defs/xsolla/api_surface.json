@@ -1,0 +1,13 @@
+{
+  "api": "Xsolla Merchant API v2 (https://api.xsolla.com/merchant/v2)",
+  "docs": "https://developers.xsolla.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Xsolla merchant surface (webhooks, pricing, promotions, subscriptions administration, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/projects/{project_id}/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/projects/{project_id}/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/projects/{project_id}/report_agents_orders_stats", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/projects/{project_id}/promotions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

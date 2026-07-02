@@ -1,0 +1,60 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "" }
+    ],
+    "pagination": {
+      "type": "link_header",
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/jobs",
+      "query": { "per_page": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "greenhouse api_key is missing or invalid; re-run pm credentials add greenhouse" },
+      { "status": 403, "hint": "greenhouse account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "greenhouse rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "candidates",
+      "path": "/candidates",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "schema": "schemas/candidates.json"
+    },
+    {
+      "name": "applications",
+      "path": "/applications",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "schema": "schemas/applications.json"
+    },
+    {
+      "name": "jobs",
+      "path": "/jobs",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "offers",
+      "path": "/offers",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "schema": "schemas/offers.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "schema": "schemas/users.json"
+    }
+  ]
+}

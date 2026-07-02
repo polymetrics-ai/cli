@@ -1,0 +1,23 @@
+{
+  "name": "freshsales",
+  "display_name": "Freshsales",
+  "description": "Reads Freshsales (Freshworks CRM) contacts, sales accounts, deals, and leads through the Freshsales REST API.",
+  "integration_type": "api",
+  "docs_url": "https://freshsales.io/api-docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Freshsales API read of CRM contact, account, deal, and lead data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

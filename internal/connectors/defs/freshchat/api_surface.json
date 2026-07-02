@@ -1,0 +1,18 @@
+{
+  "api": "Freshchat REST API v2",
+  "docs": "https://developers.freshchat.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Freshchat surface (conversations, messages, canned responses, business hours, webhooks, etc.) is out of scope until Pass B; this connector is read-only, matching legacy",
+  "endpoints": [
+    { "method": "GET", "path": "/agents", "covered_by": { "stream": "agents" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/groups", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/channels", "covered_by": { "stream": "channels" } },
+    { "method": "GET", "path": "/roles", "covered_by": { "stream": "roles" } },
+    { "method": "GET", "path": "/conversations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/conversations/{id}/messages", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/canned-responses", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/business-hours", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only" } }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/fieldTemplates" },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "id": "field_fixture_1",
+          "model": "fieldTemplate",
+          "type": "dropdown",
+          "name": "Priority",
+          "standardType": "custom",
+          "archived": false,
+          "hidden": false,
+          "required": false,
+          "labels": ["Low", "Medium", "High"]
+        }
+      ]
+    }
+  }
+}

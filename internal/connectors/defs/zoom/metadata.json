@@ -1,0 +1,23 @@
+{
+  "name": "zoom",
+  "display_name": "Zoom",
+  "description": "Reads Zoom users, meetings, and webinars through the Zoom REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.zoom.us/docs/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Zoom API read of user, meeting, and webinar data",
+    "approval": "none; read-only"
+  }
+}

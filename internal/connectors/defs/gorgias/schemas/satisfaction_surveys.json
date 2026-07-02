@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "satisfaction-surveys",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_datetime",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "ticket_id": { "type": ["integer", "null"] },
+    "customer_id": { "type": ["integer", "null"] },
+    "score": { "type": ["integer", "null"] },
+    "scale_range": { "type": ["integer", "null"] },
+    "body_text": { "type": ["string", "null"] },
+    "created_datetime": { "type": ["string", "null"] },
+    "sent_datetime": { "type": ["string", "null"] },
+    "scored_datetime": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["display_id"],
+  "x-cursor-field": "update_at",
+  "required": ["display_id"],
+  "properties": {
+    "display_id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "update_at": { "type": ["string", "null"] },
+    "google": { "type": ["boolean", "null"] },
+    "meta": { "type": ["boolean", "null"] },
+    "meta_campaign_id": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "default_link": { "type": ["boolean", "null"] },
+    "attributed_users": { "type": ["number", "null"] },
+    "link": { "type": ["string", "null"] },
+    "shareable_link": { "type": ["string", "null"] },
+    "website": { "type": ["string", "null"] },
+    "domain": { "type": ["string", "null"] }
+  }
+}

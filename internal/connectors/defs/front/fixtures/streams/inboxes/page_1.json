@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/inboxes", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_results": [
+        {
+          "id": "inboxes_fixture_1",
+          "name": "Fixture Inbox 1",
+          "is_private": false,
+          "is_public": true,
+          "custom_fields": {}
+        }
+      ],
+      "_pagination": { "next": null }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/reservations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "reservations": [
+        {
+          "id": "res_fixture_1",
+          "guest_name": "Fixture Guest One",
+          "date": "2026-01-01",
+          "status": "confirmed"
+        },
+        {
+          "id": "res_fixture_2",
+          "guest_name": "Fixture Guest Two",
+          "date": "2026-01-02",
+          "status": "pending"
+        }
+      ]
+    }
+  }
+}

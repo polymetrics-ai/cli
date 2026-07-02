@@ -1,0 +1,17 @@
+{
+  "api": "Clazar REST API (https://api.clazar.io)",
+  "docs": "https://clazar.io/api-docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (buyers, listings, contracts, opportunities, private_offers); Clazar is read-only in legacy (capabilities.write is false) and this bundle ships no writes.json.",
+  "endpoints": [
+    { "method": "GET", "path": "/buyers", "covered_by": { "stream": "buyers" } },
+    { "method": "GET", "path": "/listings", "covered_by": { "stream": "listings" } },
+    { "method": "GET", "path": "/contracts", "covered_by": { "stream": "contracts" } },
+    { "method": "GET", "path": "/opportunities", "covered_by": { "stream": "opportunities" } },
+    { "method": "GET", "path": "/private_offers", "covered_by": { "stream": "private_offers" } },
+    { "method": "POST", "path": "/authenticate/", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 client_credentials token exchange, not a syncable object stream" } },
+    { "method": "POST", "path": "/listings", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented listing creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/private_offers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented private offer creation; Pass B capability expansion" } },
+    { "method": "PATCH", "path": "/contracts/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented contract updates; Pass B capability expansion" } }
+  ]
+}

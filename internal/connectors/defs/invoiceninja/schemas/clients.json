@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "clients",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "display_name": { "type": ["string", "null"] },
+    "number": { "type": ["string", "null"] },
+    "balance": { "type": ["number", "null"] },
+    "paid_to_date": { "type": ["number", "null"] },
+    "currency_id": { "type": ["string", "null"] },
+    "vat_number": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "website": { "type": ["string", "null"] },
+    "is_deleted": { "type": ["boolean", "null"] },
+    "created_at": { "type": "integer" },
+    "updated_at": { "type": "integer" },
+    "archived_at": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Interzoid Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Interzoid license key. Sent as the `license` query parameter on every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.interzoid.com",
+      "description": "Interzoid API base URL override for tests or proxies."
+    },
+    "company": {
+      "type": "string",
+      "description": "Company name input for the company_name_matching stream (getcompanymatchadvanced). Required to read that stream."
+    },
+    "company_match_algorithm": {
+      "type": "string",
+      "description": "Optional matching algorithm override for the company_name_matching stream."
+    },
+    "fullname": {
+      "type": "string",
+      "description": "Full name input for the individual_name_matching stream (getfullnamematch). Required to read that stream."
+    },
+    "address": {
+      "type": "string",
+      "description": "Street address input for the street_address_matching stream (getaddressmatchadvanced). Required to read that stream."
+    },
+    "address_match_algorithm": {
+      "type": "string",
+      "description": "Optional matching algorithm override for the street_address_matching stream."
+    },
+    "org": {
+      "type": "string",
+      "description": "Organization name input for the standardize_company_names stream (getorgstandard). Required to read that stream."
+    }
+  }
+}

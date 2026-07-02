@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/prospecting_lists", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "title": "Fixture Prospecting List",
+        "user_id": 1,
+        "archived": false,
+        "prospects_count": 10,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

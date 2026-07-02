@@ -1,0 +1,14 @@
+{
+  "api": "ZapSign REST API (https://docs.zapsign.com.br/)",
+  "docs": "https://docs.zapsign.com.br/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (documents, signers, templates); write endpoints (create document, add signer, send reminder, etc.) are out of scope for this pass",
+  "endpoints": [
+    { "method": "GET", "path": "/docs/", "covered_by": { "stream": "documents" } },
+    { "method": "GET", "path": "/signers/", "covered_by": { "stream": "signers" } },
+    { "method": "GET", "path": "/templates/", "covered_by": { "stream": "templates" } },
+    { "method": "POST", "path": "/docs/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/docs/{token}/signer/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/docs/{token}/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

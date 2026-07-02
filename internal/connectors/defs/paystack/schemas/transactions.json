@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "reference": { "type": ["string", "null"] },
+    "amount": { "type": ["integer", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "domain": { "type": ["string", "null"] },
+    "gateway_response": { "type": ["string", "null"] },
+    "channel": { "type": ["string", "null"] },
+    "paid_at": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] }
+  }
+}

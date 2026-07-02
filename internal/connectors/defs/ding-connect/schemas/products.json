@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["uuid"],
+  "required": ["uuid"],
+  "properties": {
+    "uuid": { "type": "string" },
+    "SkuCode": { "type": ["string", "null"] },
+    "ProviderCode": { "type": ["string", "null"] },
+    "RegionCode": { "type": ["string", "null"] },
+    "DefaultDisplayText": { "type": ["string", "null"] },
+    "LocalizationKey": { "type": ["string", "null"] },
+    "ProcessingMode": { "type": ["string", "null"] },
+    "RedemptionMechanism": { "type": ["string", "null"] },
+    "CommissionRate": { "type": ["number", "null"] },
+    "Minimum": { "type": ["object", "null"] },
+    "Maximum": { "type": ["object", "null"] },
+    "Benefits": { "type": ["array", "null"] },
+    "PaymentTypes": { "type": ["array", "null"] },
+    "ValidityPeriodIso": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/v2/boards/synthetic-conformance-value/items", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "item_fixture_1",
+          "type": "sticky_note",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "modifiedAt": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "total": 1,
+      "size": 1,
+      "offset": 0,
+      "limit": 2
+    }
+  }
+}

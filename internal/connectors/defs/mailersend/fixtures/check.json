@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/domains", "query": { "limit": "10" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [] }
+  }
+}

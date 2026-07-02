@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/departments" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "department_fixture_1",
+          "name": "Fixture Department"
+        }
+      ]
+    }
+  }
+}

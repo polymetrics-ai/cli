@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "current",
+  "type": "object",
+  "x-primary-key": ["lat", "lon", "dt"],
+  "x-cursor-field": "dt",
+  "required": ["dt"],
+  "properties": {
+    "lat": { "type": "string" },
+    "lon": { "type": "string" },
+    "dt": { "type": "integer" },
+    "sunrise": { "type": ["integer", "null"] },
+    "sunset": { "type": ["integer", "null"] },
+    "temp": { "type": ["number", "null"] },
+    "feels_like": { "type": ["number", "null"] },
+    "pressure": { "type": ["integer", "null"] },
+    "humidity": { "type": ["integer", "null"] },
+    "dew_point": { "type": ["number", "null"] },
+    "uvi": { "type": ["number", "null"] },
+    "clouds": { "type": ["integer", "null"] },
+    "visibility": { "type": ["integer", "null"] },
+    "wind_speed": { "type": ["number", "null"] },
+    "wind_deg": { "type": ["integer", "null"] },
+    "wind_gust": { "type": ["number", "null"] },
+    "weather": { "type": ["array", "null"] }
+  }
+}

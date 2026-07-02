@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pingdom Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pingdom API 3.1 Bearer token. Sent as Authorization: Bearer <api_key>. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.pingdom.com/api/3.1",
+      "description": "Pingdom API base URL override for tests or proxies."
+    }
+  }
+}

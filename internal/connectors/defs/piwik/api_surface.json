@@ -1,0 +1,16 @@
+{
+  "api": "Piwik / Matomo Reporting API (index.php?module=API)",
+  "docs": "https://developer.matomo.org/api-reference/reporting-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams (SitesManager.getAllSites, Live.getLastVisitsDetails, Actions.getPageUrls, Goals.getGoals) only; the full Matomo Reporting API method surface (hundreds of report methods across VisitsSummary, Referrers, DevicesDetection, Goals conversions, custom segments, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/index.php?method=SitesManager.getAllSites", "covered_by": { "stream": "sites" } },
+    { "method": "GET", "path": "/index.php?method=Live.getLastVisitsDetails", "covered_by": { "stream": "visits" } },
+    { "method": "GET", "path": "/index.php?method=Actions.getPageUrls", "covered_by": { "stream": "actions" } },
+    { "method": "GET", "path": "/index.php?method=Goals.getGoals", "covered_by": { "stream": "goals" } },
+    { "method": "GET", "path": "/index.php?method=VisitsSummary.get", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/index.php?method=Referrers.getAll", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/index.php?method=Goals.get", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/index.php?method=SitesManager.addSite", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } }
+  ]
+}

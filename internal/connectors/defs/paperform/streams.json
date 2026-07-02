@@ -1,0 +1,42 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/forms", "query": { "limit": "1", "page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "paperform api_key is missing or invalid; re-run pm credentials add paperform" },
+      { "status": 403, "hint": "paperform credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "paperform rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "forms",
+      "path": "/forms",
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/forms.json"
+    },
+    {
+      "name": "submissions",
+      "path": "/forms/{{ config.form_id }}/submissions",
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/submissions.json"
+    }
+  ]
+}

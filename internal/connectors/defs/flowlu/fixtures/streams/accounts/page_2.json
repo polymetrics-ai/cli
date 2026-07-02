@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/crm/account/list", "query": { "page": "2", "count": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "total_result": 3,
+        "page": 2,
+        "count": 2,
+        "items": [
+          {
+            "id": 3,
+            "type": 1,
+            "name": "Fixture Account Three",
+            "first_name": "First3",
+            "last_name": "Last3",
+            "email": "fixture3@example.com",
+            "phone": "+10000000003",
+            "active": 1,
+            "owner_id": 10,
+            "created_date": "2026-01-03 00:00:00",
+            "updated_date": "2026-01-03 00:00:00"
+          }
+        ]
+      }
+    }
+  }
+}

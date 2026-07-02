@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/directory" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "dir_fixture_1", "name": "Fixture Directory Entry 1", "organizationId": "org_fixture_1", "modelName": "Directory", "createdAt": 1767225600000, "updatedAt": 1767225601000 }
+      ]
+    }
+  }
+}

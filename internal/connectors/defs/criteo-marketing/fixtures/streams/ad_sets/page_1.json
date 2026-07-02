@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/2024-01/marketing-solutions/ad-sets/search", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ad_set_fixture_1",
+          "type": "ad-set",
+          "attributes": {
+            "name": "Fixture Ad Set 1",
+            "advertiserId": "adv_fixture_1",
+            "datasetId": "ds_fixture_1",
+            "campaignId": "cmp_fixture_1",
+            "status": "Active",
+            "mediaType": "Display",
+            "destinationEnvironment": "web",
+            "objective": "Conversion"
+          }
+        },
+        {
+          "id": "ad_set_fixture_2",
+          "type": "ad-set",
+          "attributes": {
+            "name": "Fixture Ad Set 2",
+            "advertiserId": "adv_fixture_1",
+            "datasetId": "ds_fixture_1",
+            "campaignId": "cmp_fixture_1",
+            "status": "Paused",
+            "mediaType": "Display",
+            "destinationEnvironment": "app",
+            "objective": "Conversion"
+          }
+        }
+      ]
+    }
+  }
+}

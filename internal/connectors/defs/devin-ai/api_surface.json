@@ -1,0 +1,16 @@
+{
+  "api": "Devin v3 REST API (https://docs.devin.ai/api-reference/overview)",
+  "docs": "https://docs.devin.ai/api-reference/overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 5 legacy-parity read streams only (sessions, sessions_insights, session_messages, playbooks, secrets); Devin has no reverse-ETL write surface modeled by legacy (Capabilities.Write is false), so there are no write endpoints in or out of scope.",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/organizations/{org_id}/sessions", "covered_by": { "stream": "sessions" } },
+    { "method": "GET", "path": "/v3/organizations/{org_id}/sessions/insights", "covered_by": { "stream": "sessions_insights" } },
+    { "method": "GET", "path": "/v3/organizations/{org_id}/sessions/messages", "covered_by": { "stream": "session_messages" } },
+    { "method": "GET", "path": "/v3/organizations/{org_id}/playbooks", "covered_by": { "stream": "playbooks" } },
+    { "method": "GET", "path": "/v3/organizations/{org_id}/secrets", "covered_by": { "stream": "secrets" } },
+    { "method": "POST", "path": "/v3/organizations/{org_id}/sessions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; session creation is a mutation, not part of this read-only migration" } },
+    { "method": "GET", "path": "/v3/organizations/{org_id}/attachments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not modeled by legacy devin-ai connector" } },
+    { "method": "GET", "path": "/v3/organizations/{org_id}/knowledge", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not modeled by legacy devin-ai connector" } }
+  ]
+}

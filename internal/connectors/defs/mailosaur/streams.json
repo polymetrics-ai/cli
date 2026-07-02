@@ -1,0 +1,46 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "check": { "method": "GET", "path": "/servers" },
+    "error_map": [
+      { "status": 401, "hint": "mailosaur password (api key) is missing or invalid; re-run pm credentials add mailosaur" },
+      { "status": 403, "hint": "mailosaur account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "mailosaur rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "servers",
+      "path": "/servers",
+      "records": { "path": "." },
+      "schema": "schemas/servers.json"
+    },
+    {
+      "name": "messages",
+      "path": "/messages",
+      "query": {
+        "server": "{{ config.server }}",
+        "receivedAfter": { "template": "{{ config.received_after }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "itemsPerPage",
+        "start_page": 0,
+        "page_size": 50
+      },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/usage/transactions",
+      "records": { "path": "items" },
+      "schema": "schemas/transactions.json"
+    }
+  ]
+}

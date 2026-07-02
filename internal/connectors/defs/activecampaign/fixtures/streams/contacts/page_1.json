@@ -1,0 +1,240 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "limit": "20",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "id": "1",
+          "email": "fixture1@example.com",
+          "firstName": "Fixture1",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "2",
+          "email": "fixture2@example.com",
+          "firstName": "Fixture2",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "3",
+          "email": "fixture3@example.com",
+          "firstName": "Fixture3",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "4",
+          "email": "fixture4@example.com",
+          "firstName": "Fixture4",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "5",
+          "email": "fixture5@example.com",
+          "firstName": "Fixture5",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "6",
+          "email": "fixture6@example.com",
+          "firstName": "Fixture6",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "7",
+          "email": "fixture7@example.com",
+          "firstName": "Fixture7",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "8",
+          "email": "fixture8@example.com",
+          "firstName": "Fixture8",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "9",
+          "email": "fixture9@example.com",
+          "firstName": "Fixture9",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "10",
+          "email": "fixture10@example.com",
+          "firstName": "Fixture10",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "11",
+          "email": "fixture11@example.com",
+          "firstName": "Fixture11",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "12",
+          "email": "fixture12@example.com",
+          "firstName": "Fixture12",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "13",
+          "email": "fixture13@example.com",
+          "firstName": "Fixture13",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "14",
+          "email": "fixture14@example.com",
+          "firstName": "Fixture14",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "15",
+          "email": "fixture15@example.com",
+          "firstName": "Fixture15",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "16",
+          "email": "fixture16@example.com",
+          "firstName": "Fixture16",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "17",
+          "email": "fixture17@example.com",
+          "firstName": "Fixture17",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "18",
+          "email": "fixture18@example.com",
+          "firstName": "Fixture18",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "19",
+          "email": "fixture19@example.com",
+          "firstName": "Fixture19",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        },
+        {
+          "id": "20",
+          "email": "fixture20@example.com",
+          "firstName": "Fixture20",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        }
+      ],
+      "meta": {
+        "total": "21"
+      }
+    }
+  }
+}

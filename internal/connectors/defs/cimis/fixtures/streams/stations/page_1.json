@@ -1,0 +1,44 @@
+{
+  "request": { "method": "GET", "path": "/api/station" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Stations": [
+        {
+          "StationNbr": "2",
+          "Name": "FivePoints",
+          "City": "Five Points",
+          "RegionalOffice": "Fresno",
+          "County": "Fresno",
+          "ConnectDate": "6/17/1982",
+          "DisconnectDate": "",
+          "IsActive": "True",
+          "IsEtoStation": "True",
+          "Elevation": "285",
+          "GroundCover": "Grass",
+          "HmsLatitude": "36 20 11N / 36.336`",
+          "HmsLongitude": "120 6 44W / -120.1122`",
+          "ZipCodes": ["93624"],
+          "SitingDesc": "Fixture station"
+        },
+        {
+          "StationNbr": "5",
+          "Name": "Shafter",
+          "City": "Shafter",
+          "RegionalOffice": "Kern",
+          "County": "Kern",
+          "ConnectDate": "6/17/1982",
+          "DisconnectDate": "",
+          "IsActive": "True",
+          "IsEtoStation": "True",
+          "Elevation": "328",
+          "GroundCover": "Grass",
+          "HmsLatitude": "35 32 5N / 35.5347`",
+          "HmsLongitude": "119 16 55W / -119.2819`",
+          "ZipCodes": ["93263"],
+          "SitingDesc": "Fixture station"
+        }
+      ]
+    }
+  }
+}

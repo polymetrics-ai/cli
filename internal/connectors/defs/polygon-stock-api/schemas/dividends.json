@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "dividends",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "ex_dividend_date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "ticker": { "type": ["string", "null"] },
+    "ex_dividend_date": { "type": ["string", "null"] },
+    "cash_amount": { "type": ["number", "null"] },
+    "currency": { "type": ["string", "null"] }
+  }
+}

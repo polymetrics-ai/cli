@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Senseforce Connection Specification",
+  "type": "object",
+  "required": ["backend_url", "dataset_id", "access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Senseforce API access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged."
+    },
+    "backend_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Senseforce backend base URL (e.g. https://yourtenant.senseforce.io). No default: a Senseforce backend must be named explicitly, matching legacy's required config_backend_url."
+    },
+    "dataset_id": {
+      "type": "string",
+      "description": "The Senseforce dataset ID to read records from; substituted into /api/v1/datasets/<dataset_id>/records."
+    }
+  }
+}

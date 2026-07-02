@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/conversations",
+    "query": { "sortField": "modifiedAt", "sortOrder": "asc", "page": "2", "size": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "conversations": [
+          {
+            "id": 103,
+            "number": 1003,
+            "type": "email",
+            "folderId": 1,
+            "status": "open",
+            "state": "published",
+            "subject": "Fixture conversation three",
+            "mailboxId": 1,
+            "assigneeId": null,
+            "preview": "fixture preview three",
+            "threads": 1,
+            "createdAt": "2026-01-04T00:00:00Z",
+            "closedAt": null,
+            "userUpdatedAt": "2026-01-04T00:00:00Z"
+          }
+        ]
+      },
+      "page": { "number": 2, "size": 50, "totalElements": 3, "totalPages": 2 }
+    }
+  }
+}

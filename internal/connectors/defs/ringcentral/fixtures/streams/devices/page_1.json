@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/account/~/device",
+    "query": {
+      "page": "1",
+      "perPage": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "records": [
+        {
+          "id": "device_fixture_1",
+          "name": "Fixture Device 1",
+          "type": "SoftPhone",
+          "status": "Online"
+        },
+        {
+          "id": "device_fixture_2",
+          "name": "Fixture Device 2",
+          "type": "HardPhone",
+          "status": "Offline"
+        }
+      ]
+    }
+  }
+}

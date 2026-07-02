@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/latest", "query": { "size": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "totalResults": 0, "results": [] }
+  }
+}

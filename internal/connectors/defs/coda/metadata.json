@@ -1,0 +1,22 @@
+{
+  "name": "coda",
+  "display_name": "Coda",
+  "description": "Reads Coda docs and doc-scoped tables, pages, formulas, and controls through the Coda REST API v1. Read-only source.",
+  "integration_type": "api",
+  "docs_url": "https://coda.io/developers/apis/v1",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external Coda API read of docs and doc-scoped tables, pages, formulas, and controls"
+  }
+}

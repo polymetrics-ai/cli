@@ -1,0 +1,45 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "id": "user_fixture_1",
+          "type": "USER",
+          "accountId": "acc_fixture_1",
+          "aptrinsicId": "apt_fixture_1",
+          "email": "fixture1@example.com",
+          "firstName": "Fixture",
+          "lastName": "One",
+          "title": "Engineer",
+          "role": "member",
+          "score": 4.5,
+          "numberOfVisits": 12,
+          "signUpDate": 1767225600,
+          "createDate": 1767225601,
+          "lastSeenDate": 1767225601,
+          "lastModifiedDate": 1767225601
+        },
+        {
+          "id": "user_fixture_2",
+          "type": "USER",
+          "accountId": "acc_fixture_2",
+          "aptrinsicId": "apt_fixture_2",
+          "email": "fixture2@example.com",
+          "firstName": "Fixture",
+          "lastName": "Two",
+          "title": "Manager",
+          "role": "admin",
+          "score": 7.2,
+          "numberOfVisits": 30,
+          "signUpDate": 1767225600,
+          "createDate": 1767225602,
+          "lastSeenDate": 1767225602,
+          "lastModifiedDate": 1767225602
+        }
+      ],
+      "scrollId": ""
+    }
+  }
+}

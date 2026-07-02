@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "automations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "create_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "create_time": { "type": ["string", "null"] },
+    "start_time": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "emails_sent": { "type": ["integer", "null"] }
+  }
+}

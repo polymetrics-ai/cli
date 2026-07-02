@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2.1/calls"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "call_fixture_101",
+          "call_date": "2026-01-01",
+          "call_time": "10:00:00",
+          "call_sid": "sid_101",
+          "agent_id": "agent_fixture_1",
+          "agent_name": "Fixture Agent",
+          "agent_email": "agent@example.com",
+          "contact_name": "Contact 101",
+          "contact_number": "+15555550000",
+          "call_duration": "60",
+          "cost_incurred": "0",
+          "justcall_number": "+15555551111",
+          "justcall_line_name": "Fixture Line"
+        }
+      ]
+    }
+  }
+}

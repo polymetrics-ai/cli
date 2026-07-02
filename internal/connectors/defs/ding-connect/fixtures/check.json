@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/api/V1/GetCurrencies" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Items": [
+        { "CurrencyIso": "USD", "CurrencyName": "US Dollar" }
+      ]
+    }
+  }
+}

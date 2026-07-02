@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aircall Connection Specification",
+  "type": "object",
+  "required": ["api_id", "api_token"],
+  "properties": {
+    "api_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Aircall API ID, used as the HTTP Basic auth username. Never logged."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Aircall API token, used as the HTTP Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.aircall.io/v1",
+      "description": "Aircall API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only calls/contacts created at or after this time are read (sent as the unix-seconds `from` filter)."
+    }
+  }
+}

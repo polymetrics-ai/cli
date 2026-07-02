@@ -1,0 +1,23 @@
+{
+  "name": "jira",
+  "display_name": "Jira",
+  "description": "Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using HTTP Basic auth (email + API token). Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developer.atlassian.com/changelog/#",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Jira Cloud API read of issue, project, and user data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

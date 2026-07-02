@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "batches",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "endpoint": { "type": ["string", "null"] },
+    "created_at": { "type": ["integer", "null"] },
+    "completed_at": { "type": ["integer", "null"] },
+    "status": { "type": ["string", "null"] },
+    "input_file_id": { "type": ["string", "null"] },
+    "output_file_id": { "type": ["string", "null"] },
+    "error_file_id": { "type": ["string", "null"] }
+  }
+}

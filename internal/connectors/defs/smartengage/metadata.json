@@ -1,0 +1,20 @@
+{
+  "name": "smartengage",
+  "display_name": "SmartEngage",
+  "description": "Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers.",
+  "integration_type": "api",
+  "docs_url": "https://smartengage.com/docs/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "read-only avatar/tag/custom-field/sequence/subscriber data from a connected SmartEngage account",
+    "approval": "none; read-only"
+  }
+}

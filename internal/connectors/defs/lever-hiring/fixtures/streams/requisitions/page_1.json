@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/requisitions", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "req_fixture_1",
+          "requisitionCode": "REQ-1",
+          "name": "Fixture Requisition",
+          "status": "open",
+          "headcountTotal": 1,
+          "headcountHired": 0,
+          "owner": "user_fixture_1",
+          "createdAt": 1767225601,
+          "updatedAt": 1767225601
+        }
+      ],
+      "hasNext": false,
+      "next": null
+    }
+  }
+}

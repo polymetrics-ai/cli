@@ -1,0 +1,22 @@
+{
+  "name": "nexiopay",
+  "display_name": "Nexio Pay",
+  "description": "Reads Nexio Pay card tokens, payout recipients, spendbacks, payment types, terminals, and the API user via the Nexio REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.nexiopay.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 10
+  },
+  "risk": {
+    "read": "external Nexio Pay API read of card tokens, payout, and account data"
+  }
+}

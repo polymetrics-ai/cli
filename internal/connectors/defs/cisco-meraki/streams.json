@@ -1,0 +1,27 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "link_header"
+    },
+    "check": { "method": "GET", "path": "/organizations" },
+    "error_map": [
+      { "status": 401, "hint": "cisco-meraki api_key is missing or invalid; re-run pm credentials add cisco-meraki" },
+      { "status": 403, "hint": "cisco-meraki account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "cisco-meraki rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "organizations",
+      "path": "/organizations",
+      "query": { "perPage": "1000" },
+      "records": { "path": "" },
+      "schema": "schemas/organizations.json"
+    }
+  ]
+}

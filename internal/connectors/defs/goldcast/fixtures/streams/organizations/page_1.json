@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/core/organization/" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "org_fixture_1", "name": "Fixture Org 1", "slug": "fixture-org-1", "domain": "org1.goldcast.io", "created_at": "2026-01-01T00:00:00Z" },
+      { "id": "org_fixture_2", "name": "Fixture Org 2", "slug": "fixture-org-2", "domain": "org2.goldcast.io", "created_at": "2026-01-02T00:00:00Z" }
+    ]
+  }
+}

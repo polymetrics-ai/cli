@@ -1,0 +1,10 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/courses"
+  },
+  "response": {
+    "status": 200,
+    "body": { "items": [], "meta": { "pagination": { "total_items": 0 } } }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "api": "Wrike REST API v4 (https://developers.wrike.com/api/v4/)",
+  "docs": "https://developers.wrike.com/api/v4/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only, matching internal/connectors/wrike's exact endpoint set; the full Wrike surface (task/folder/contact mutation, comments, timelogs, attachments) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/folders", "covered_by": { "stream": "folders" } },
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "POST", "path": "/tasks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/tasks/{taskId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/comments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/timelogs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/attachments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

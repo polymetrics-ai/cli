@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/time-entries", "query": { "page": "1", "pageSize": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "te_fixture_1", "project_id": "proj_fixture_1", "task_id": "task_fixture_1", "user_id": "user_fixture_1", "minutes": 120, "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "pageInfo": { "page": 1, "pageSize": 2, "totalRecords": 1 }
+    }
+  }
+}

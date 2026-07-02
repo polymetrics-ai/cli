@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Clockodo Connection Specification",
+  "type": "object",
+  "required": ["api_key", "email_address", "external_application"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Clockodo API key, sent as the X-ClockodoApiKey header. Used only for auth; never logged."
+    },
+    "email_address": {
+      "type": "string",
+      "description": "Clockodo account email address, sent as the X-ClockodoApiUser header."
+    },
+    "external_application": {
+      "type": "string",
+      "description": "Application;contact identifier required by Clockodo, sent as the X-Clockodo-External-Application header (e.g. \"polymetrics;ops@example.com\")."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://my.clockodo.com/api",
+      "description": "Clockodo API base URL override for tests or proxies."
+    },
+    "language": {
+      "type": "string",
+      "description": "Optional Accept-Language header override (e.g. \"en\")."
+    }
+  }
+}

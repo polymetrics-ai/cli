@@ -1,0 +1,23 @@
+{
+  "name": "mailerlite",
+  "display_name": "MailerLite",
+  "description": "Reads MailerLite subscribers, campaigns, groups, segments, and automations through the MailerLite v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.mailerlite.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external MailerLite API read of subscriber, campaign, group, segment, and automation data",
+    "approval": "none; read-only"
+  }
+}

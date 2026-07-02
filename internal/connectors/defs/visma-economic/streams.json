@@ -1,0 +1,29 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-AppSecretToken": "{{ secrets.app_secret_token }}",
+      "X-AgreementGrantToken": "{{ secrets.agreement_grant_token }}"
+    },
+    "auth": [
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "/customers" },
+    "error_map": [
+      { "status": 401, "class": "auth_failed", "hint": "invalid app_secret_token or agreement_grant_token" },
+      { "status": 429, "class": "rate_limited", "hint": "e-conomic API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.customerNumber | last_path_segment }}"
+      },
+      "schema": "schemas/customers.json"
+    }
+  ]
+}

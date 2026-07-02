@@ -1,0 +1,22 @@
+{
+  "name": "fullstory",
+  "display_name": "Fullstory",
+  "description": "Reads FullStory segments, users, and events through the FullStory REST API (read-only analytics export).",
+  "integration_type": "api",
+  "docs_url": "https://developer.fullstory.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external FullStory API read of session-analytics segment, user, and event data"
+  }
+}

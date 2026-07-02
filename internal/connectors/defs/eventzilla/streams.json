@@ -1,0 +1,45 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "x-api-key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 2
+    },
+    "check": {
+      "method": "GET",
+      "path": "/events",
+      "query": { "limit": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "eventzilla api_key is missing or invalid; re-run pm credentials add eventzilla" },
+      { "status": 403, "hint": "eventzilla account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "eventzilla rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "events",
+      "path": "/events",
+      "records": { "path": "events" },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "categories",
+      "path": "/categories",
+      "records": { "path": "categories" },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "users" },
+      "schema": "schemas/users.json"
+    }
+  ]
+}

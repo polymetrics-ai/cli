@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/members", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "members": [
+        { "id": "member_fixture_1", "name": "Fixture Member", "email": "fixture1@example.com" }
+      ],
+      "paging": {}
+    }
+  }
+}

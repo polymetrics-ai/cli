@@ -1,0 +1,20 @@
+{
+  "name": "uppromote",
+  "display_name": "UpPromote",
+  "description": "Reads affiliates from the UpPromote API.",
+  "integration_type": "api",
+  "docs_url": "https://uppromote.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external UpPromote API read of affiliate data",
+    "approval": "none; read-only"
+  }
+}

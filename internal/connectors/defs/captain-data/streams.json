@@ -1,0 +1,50 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Project-Id": "{{ config.project_uid }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/workspace" },
+    "error_map": [
+      { "status": 401, "hint": "captain-data api_key is missing or invalid; re-run pm credentials add captain-data" },
+      { "status": 403, "hint": "captain-data project lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "captain-data rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "workspace",
+      "path": "/workspace",
+      "records": { "path": "" },
+      "schema": "schemas/workspace.json"
+    },
+    {
+      "name": "workflows",
+      "path": "/workflows",
+      "records": { "path": "" },
+      "schema": "schemas/workflows.json"
+    },
+    {
+      "name": "jobs",
+      "path": "/workflows/{{ config.workflow_uid }}/jobs",
+      "records": { "path": "" },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "job_results",
+      "path": "/jobs/{{ config.job_uid }}/results",
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "paging.next",
+        "stop_path": "paging.have_next_page"
+      },
+      "schema": "schemas/job_results.json"
+    }
+  ]
+}

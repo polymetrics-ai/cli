@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "list",
+      "data": {
+        "_object": "list",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "id": "fixture-product-1",
+            "_object": "product",
+            "name": "Fixture Widget",
+            "sku": "SKU-FIXTURE-1",
+            "description": "fixture record",
+            "hts_code": "0000.00.0000",
+            "country_of_origin": "US",
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-02T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

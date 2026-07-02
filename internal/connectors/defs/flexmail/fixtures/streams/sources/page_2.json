@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sources",
+    "query": {
+      "limit": "500",
+      "offset": "500"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "item": [
+          {
+            "id": 501,
+            "name": "Fixture Source 501"
+          }
+        ]
+      }
+    }
+  }
+}

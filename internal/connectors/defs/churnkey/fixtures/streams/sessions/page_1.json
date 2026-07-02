@@ -1,0 +1,62 @@
+{
+  "request": { "method": "GET", "path": "/sessions", "query": { "limit": "2", "skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "sess_fixture_1",
+        "org": "org_fixture",
+        "blueprintId": "bp_fixture_1",
+        "segmentId": "seg_fixture_1",
+        "abtest": "variant_a",
+        "provider": "stripe",
+        "mode": "live",
+        "aborted": false,
+        "canceled": false,
+        "surveyId": "survey_fixture_1",
+        "surveyChoiceId": "choice_fixture_1",
+        "surveyChoiceValue": "too_expensive",
+        "feedback": "Too pricey for my use case",
+        "discountCooldownApplied": false,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "customer": {
+          "id": "cus_fixture_1",
+          "email": "fixture1@example.com",
+          "planId": "plan_pro",
+          "billingInterval": "month"
+        },
+        "acceptedOffer": {
+          "offerType": "PAUSE"
+        }
+      },
+      {
+        "_id": "sess_fixture_2",
+        "org": "org_fixture",
+        "blueprintId": "bp_fixture_1",
+        "segmentId": "seg_fixture_1",
+        "abtest": "variant_b",
+        "provider": "stripe",
+        "mode": "live",
+        "aborted": false,
+        "canceled": true,
+        "surveyId": "survey_fixture_1",
+        "surveyChoiceId": "choice_fixture_2",
+        "surveyChoiceValue": "missing_features",
+        "feedback": "Missing key integrations",
+        "discountCooldownApplied": true,
+        "createdAt": "2026-01-02T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z",
+        "customer": {
+          "id": "cus_fixture_2",
+          "email": "fixture2@example.com",
+          "planId": "plan_pro",
+          "billingInterval": "month"
+        },
+        "acceptedOffer": {
+          "offerType": "DISCOUNT"
+        }
+      }
+    ]
+  }
+}

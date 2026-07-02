@@ -1,0 +1,16 @@
+{
+  "api": "DocuSeal REST API (https://www.docuseal.co/docs/api)",
+  "docs": "https://www.docuseal.co/docs/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (templates, submissions, submitters); DocuSeal's write endpoints (submission create, template create/clone/archive, submitter update) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/templates", "covered_by": { "stream": "templates" } },
+    { "method": "GET", "path": "/submissions", "covered_by": { "stream": "submissions" } },
+    { "method": "GET", "path": "/submitters", "covered_by": { "stream": "submitters" } },
+    { "method": "POST", "path": "/submissions", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented submission creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/templates/pdf", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented template upload; Pass B capability expansion" } },
+    { "method": "PUT", "path": "/submitters/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented submitter updates; Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/templates/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive template archival; not modeled by legacy" } },
+    { "method": "GET", "path": "/templates/{id}", "excluded": { "category": "out_of_scope", "reason": "single-template detail retrieval not modeled by legacy as its own stream; Pass B capability expansion" } }
+  ]
+}

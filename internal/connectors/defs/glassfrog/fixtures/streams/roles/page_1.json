@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/roles", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "roles": [
+        {
+          "id": 201,
+          "name": "Fixture Role 1",
+          "purpose": "Fixture purpose 1",
+          "is_core": false,
+          "elected_until": null,
+          "name_with_circle_for_core_roles": "Fixture Role 1",
+          "organization_id": 7
+        },
+        {
+          "id": 202,
+          "name": "Secretary",
+          "purpose": "Fixture purpose 2",
+          "is_core": true,
+          "elected_until": "2026-06-01T00:00:00Z",
+          "name_with_circle_for_core_roles": "Secretary of Fixture Circle",
+          "organization_id": 7
+        }
+      ]
+    }
+  }
+}

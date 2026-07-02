@@ -1,0 +1,16 @@
+{
+  "api": "Appcues REST API v2 (https://api.appcues.com/v2)",
+  "docs": "https://docs.appcues.com/en_US/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Appcues surface (users, events, step groups, group management) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/accounts/{account_id}/flows", "covered_by": { "stream": "flows" } },
+    { "method": "GET", "path": "/accounts/{account_id}/segments", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "/accounts/{account_id}/tags", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "/accounts/{account_id}/checklists", "covered_by": { "stream": "checklists" } },
+    { "method": "GET", "path": "/accounts/{account_id}/banners", "covered_by": { "stream": "banners" } },
+    { "method": "GET", "path": "/accounts/{account_id}/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/accounts/{account_id}/events", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/accounts/{account_id}/step-groups", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

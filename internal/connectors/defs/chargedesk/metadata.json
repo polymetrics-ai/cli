@@ -1,0 +1,23 @@
+{
+  "name": "chargedesk",
+  "display_name": "ChargeDesk",
+  "description": "Reads ChargeDesk charges, customers, subscriptions, and products through the ChargeDesk REST API.",
+  "integration_type": "api",
+  "docs_url": "https://chargedesk.com/api-docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external ChargeDesk API read of billing/charge and customer data",
+    "approval": "none; read-only"
+  }
+}

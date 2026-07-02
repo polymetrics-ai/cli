@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "id": 1,
+          "username": "user1",
+          "first_name": "First1",
+          "last_name": "Last1",
+          "email": "fixture1@example.com",
+          "company": "Fixture Co",
+          "user_type": "organizer",
+          "phone_primary": "+10000000000",
+          "timezone": "UTC",
+          "last_seen": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Flexmail Connection Specification",
+  "type": "object",
+  "required": ["account_id", "personal_access_token"],
+  "properties": {
+    "personal_access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Flexmail personal access token, used as the HTTP Basic auth password. Never logged."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Flexmail account id, used as the HTTP Basic auth username."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.flexmail.eu",
+      "description": "Flexmail API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "500",
+      "description": "Records per page for paginated endpoints (contacts, sources); 1-500."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

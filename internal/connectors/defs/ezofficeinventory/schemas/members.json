@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "members",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "full_name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "role_id": { "type": ["integer", "null"] },
+    "role_name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "contact_type": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

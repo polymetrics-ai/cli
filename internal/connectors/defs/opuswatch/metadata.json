@@ -1,0 +1,23 @@
+{
+  "name": "opuswatch",
+  "display_name": "OPUSWatch",
+  "description": "Reads OPUSWatch monitors, incidents, and checks.",
+  "integration_type": "api",
+  "docs_url": "https://opuswatch.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external OPUSWatch API read of monitor, incident, and check status data",
+    "approval": "none; read-only"
+  }
+}

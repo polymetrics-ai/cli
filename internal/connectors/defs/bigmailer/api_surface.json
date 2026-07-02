@@ -1,0 +1,13 @@
+{
+  "api": "BigMailer REST API v1 (https://api.bigmailer.io/v1)",
+  "docs": "https://www.bigmailer.io/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 top-level legacy-parity read streams (brands, users) only; the brand-scoped substreams (contacts, lists, custom fields) require a per-brand sub-resource fan-out read the Tier-1 declarative dialect cannot express (see docs.md Known limits) and are blocked pending a Tier-2 StreamHook in a follow-up wave",
+  "endpoints": [
+    { "method": "GET", "path": "/brands", "covered_by": { "stream": "brands" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/brands/{brand_id}/contacts", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out over dynamically-listed brands; requires a Tier-2 StreamHook (list brands, then paginate per brand, stamping brand_id) the declarative dialect cannot express; blocked, see docs.md" } },
+    { "method": "GET", "path": "/brands/{brand_id}/lists", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out over dynamically-listed brands; requires a Tier-2 StreamHook the declarative dialect cannot express; blocked, see docs.md" } },
+    { "method": "GET", "path": "/brands/{brand_id}/fields", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out over dynamically-listed brands; requires a Tier-2 StreamHook the declarative dialect cannot express; blocked, see docs.md" } }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Watchmode Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Watchmode API key. Sent as the apiKey query parameter on every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.watchmode.com",
+      "description": "Watchmode API base URL override for tests or proxies."
+    },
+    "search_val": {
+      "type": "string",
+      "default": "Terminator",
+      "description": "Search term for the search stream's search_value query parameter (matched against title name). Defaults to 'Terminator', matching legacy's in-code default."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional start_date query parameter forwarded to the search stream when set."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

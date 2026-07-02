@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["ContactID"],
+  "x-cursor-field": "UpdatedDateUTC",
+  "required": ["ContactID"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "ContactID": { "type": "string" },
+    "ContactStatus": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "Name": { "type": ["string", "null"] },
+    "FirstName": { "type": ["string", "null"] },
+    "LastName": { "type": ["string", "null"] },
+    "EmailAddress": { "type": ["string", "null"] },
+    "IsSupplier": { "type": ["boolean", "null"] },
+    "IsCustomer": { "type": ["boolean", "null"] },
+    "AccountNumber": { "type": ["string", "null"] },
+    "UpdatedDateUTC": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

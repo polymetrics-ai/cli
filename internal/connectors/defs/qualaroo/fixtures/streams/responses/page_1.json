@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/responses", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "responses": [
+        {
+          "id": 9001,
+          "nudge_id": 4001,
+          "email": "fixture1@example.com",
+          "created_at": "2026-01-05T00:00:00Z",
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": 9002,
+          "nudge_id": 4001,
+          "email": "fixture2@example.com",
+          "created_at": "2026-01-07T00:00:00Z",
+          "updated_at": "2026-01-08T00:00:00Z"
+        }
+      ],
+      "pagination": { "next_page": "" }
+    }
+  }
+}

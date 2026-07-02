@@ -1,0 +1,13 @@
+{
+  "api": "Guardian Open Platform Content API (https://open-platform.theguardian.com/documentation/)",
+  "docs": "https://open-platform.theguardian.com/documentation/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the single legacy-parity read stream (search) only; the full Guardian Content API surface (single-item retrieval, tags, sections, editions) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/search", "covered_by": { "stream": "search" } },
+    { "method": "GET", "path": "/{content-id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented single-item retrieval; Pass B capability expansion" } },
+    { "method": "GET", "path": "/tags", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/sections", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/editions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

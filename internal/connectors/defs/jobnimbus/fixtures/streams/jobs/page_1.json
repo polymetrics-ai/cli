@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/jobs", "query": { "size": "2", "from": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "results": [
+        {
+          "jnid": "jobs_fixture_1",
+          "type": "job",
+          "name": "Fixture Job 1",
+          "number": "1001",
+          "status_name": "Active",
+          "record_type_name": "jobs",
+          "customer": "cust_fixture_1",
+          "address_line1": "1 Example St",
+          "city": "Minneapolis",
+          "state_text": "MN",
+          "zip": "55401",
+          "sales_rep_name": "Fixture Rep",
+          "approved_estimate_total": 1000.5,
+          "approved_invoice_total": 500.25,
+          "is_active": true,
+          "is_archived": false,
+          "date_created": 1767225601,
+          "date_updated": 1767225601,
+          "date_status_change": 1767225601
+        }
+      ]
+    }
+  }
+}

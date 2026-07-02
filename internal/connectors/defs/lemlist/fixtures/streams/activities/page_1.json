@@ -1,0 +1,67 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/activities",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "act_fixture_1",
+        "type": "emailsSent",
+        "campaignId": "cmp_fixture_1",
+        "campaignName": "Fixture Campaign 1",
+        "companyName": "Fixture Co",
+        "createdAt": "2026-01-01T00:00:01Z",
+        "createdBy": "usr_fixture_1",
+        "email": "fixture1@example.com",
+        "emailTemplateId": "tpl_fixture_1",
+        "emailTemplateName": "Fixture Template",
+        "extra": {},
+        "firstName": "Fixture",
+        "lastName": "Lead1",
+        "icebreaker": null,
+        "isFirst": true,
+        "leadId": "lead_fixture_1",
+        "leadEmail": "fixture1@example.com",
+        "leadFirstName": "Fixture",
+        "leadLastName": "Lead1",
+        "linkedinUrl": null,
+        "phone": null,
+        "sequenceId": "seq_fixture_1",
+        "sequenceStep": 1,
+        "teamId": "team_fixture_1"
+      },
+      {
+        "_id": "act_fixture_2",
+        "type": "emailsSent",
+        "campaignId": "cmp_fixture_1",
+        "campaignName": "Fixture Campaign 1",
+        "companyName": "Fixture Co",
+        "createdAt": "2026-01-01T00:00:02Z",
+        "createdBy": "usr_fixture_1",
+        "email": "fixture2@example.com",
+        "emailTemplateId": "tpl_fixture_1",
+        "emailTemplateName": "Fixture Template",
+        "extra": {},
+        "firstName": "Fixture",
+        "lastName": "Lead2",
+        "icebreaker": null,
+        "isFirst": false,
+        "leadId": "lead_fixture_2",
+        "leadEmail": "fixture2@example.com",
+        "leadFirstName": "Fixture",
+        "leadLastName": "Lead2",
+        "linkedinUrl": null,
+        "phone": null,
+        "sequenceId": "seq_fixture_1",
+        "sequenceStep": 2,
+        "teamId": "team_fixture_1"
+      }
+    ]
+  }
+}

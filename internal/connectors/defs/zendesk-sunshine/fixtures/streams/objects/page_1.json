@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/objects/records" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "object_fixture_1",
+          "type": "asset",
+          "attributes": { "name": "Fixture Asset" }
+        }
+      ]
+    }
+  }
+}

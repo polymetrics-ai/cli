@@ -1,0 +1,23 @@
+{
+  "name": "youtube-data",
+  "display_name": "YouTube Data",
+  "description": "Reads channels, videos, and playlists through the YouTube Data API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.google.com/youtube/v3",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external YouTube Data API read of channel, video, and playlist metadata",
+    "approval": "none; read-only"
+  }
+}

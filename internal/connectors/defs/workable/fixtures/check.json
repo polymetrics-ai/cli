@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "jobs": []
+    }
+  }
+}

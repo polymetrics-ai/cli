@@ -1,0 +1,23 @@
+{
+  "name": "square",
+  "display_name": "Square",
+  "description": "Reads Square payments, refunds, customers, and locations through the Square Connect v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.squareup.com/reference/square",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Square API read of payments, refunds, customer, and location data",
+    "approval": "none; read-only"
+  }
+}

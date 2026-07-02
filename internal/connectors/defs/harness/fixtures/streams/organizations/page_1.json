@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/ng/api/organizations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "SUCCESS",
+      "data": {
+        "totalPages": 1,
+        "totalItems": 2,
+        "pageItemCount": 2,
+        "pageSize": 50,
+        "pageIndex": 0,
+        "empty": false,
+        "content": [
+          { "organization": { "identifier": "org_fixture_1", "name": "Org One", "accountIdentifier": "acct_fixture", "description": "first fixture org" } },
+          { "organization": { "identifier": "org_fixture_2", "name": "Org Two", "accountIdentifier": "acct_fixture", "description": "second fixture org" } }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "imagga",
+  "display_name": "Imagga",
+  "description": "Reads Imagga account API usage via the Imagga REST API. Read-only. Per-image detection streams (tags, categories, colors, faces_detections) are not yet ported — see docs.md Known limits.",
+  "integration_type": "api",
+  "docs_url": "https://docs.imagga.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1
+  },
+  "risk": {
+    "read": "external Imagga API read of account usage data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

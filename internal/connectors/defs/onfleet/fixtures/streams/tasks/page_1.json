@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/tasks/all" },
+  "response": {
+    "status": 200,
+    "body": {
+      "lastId": "task_fixture_2",
+      "tasks": [
+        {
+          "id": "task_fixture_1",
+          "shortId": "01",
+          "state": 1,
+          "completed": false,
+          "trackingURL": "https://onf.lt/fixture1",
+          "worker": "worker_fixture_1",
+          "merchant": "org_fixture_1",
+          "executor": "org_fixture_1",
+          "creator": "admin_fixture_1",
+          "timeCreated": 1767225601000,
+          "timeLastModified": 1767225601000
+        },
+        {
+          "id": "task_fixture_2",
+          "shortId": "02",
+          "state": 2,
+          "completed": false,
+          "trackingURL": "https://onf.lt/fixture2",
+          "worker": "worker_fixture_1",
+          "merchant": "org_fixture_1",
+          "executor": "org_fixture_1",
+          "creator": "admin_fixture_1",
+          "timeCreated": 1767225602000,
+          "timeLastModified": 1767225602000
+        }
+      ]
+    }
+  }
+}

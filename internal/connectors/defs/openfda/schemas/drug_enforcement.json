@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "drug_enforcement",
+  "type": "object",
+  "x-primary-key": ["recall_number"],
+  "required": ["recall_number"],
+  "properties": {
+    "recall_number": { "type": "string" },
+    "status": { "type": ["string", "null"] },
+    "classification": { "type": ["string", "null"] },
+    "product_type": { "type": ["string", "null"] },
+    "recalling_firm": { "type": ["string", "null"] },
+    "reason_for_recall": { "type": ["string", "null"] },
+    "report_date": { "type": ["string", "null"] },
+    "recall_initiation_date": { "type": ["string", "null"] },
+    "voluntary_mandated": { "type": ["string", "null"] },
+    "distribution_pattern": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] }
+  }
+}

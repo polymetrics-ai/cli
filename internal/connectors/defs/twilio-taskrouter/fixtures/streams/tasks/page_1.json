@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/Workspaces/synthetic-conformance-value/Tasks", "query": { "PageSize": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tasks": [
+        { "sid": "WT_fixture_1", "assignment_status": "pending", "workflow_sid": "WW_fixture_1" },
+        { "sid": "WT_fixture_2", "assignment_status": "assigned", "workflow_sid": "WW_fixture_1" }
+      ]
+    }
+  }
+}

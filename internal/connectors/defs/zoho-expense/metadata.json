@@ -1,0 +1,23 @@
+{
+  "name": "zoho-expense",
+  "display_name": "Zoho Expense",
+  "description": "Reads Zoho Expense reports, expenses, and users through the Zoho Expense REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.zoho.com/expense/api/v1/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Zoho Expense API read of expense report and user data",
+    "approval": "none; read-only"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "api": "Marketstack API v1 (https://api.marketstack.com/v1)",
+  "docs": "https://marketstack.com/documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; Marketstack's intraday/tickerinfo/currencies/timezones standalone endpoints are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/exchanges", "covered_by": { "stream": "exchanges" } },
+    { "method": "GET", "path": "/v1/tickers", "covered_by": { "stream": "tickers" } },
+    { "method": "GET", "path": "/v1/eod", "covered_by": { "stream": "eod" } },
+    { "method": "GET", "path": "/v1/splits", "covered_by": { "stream": "splits" } },
+    { "method": "GET", "path": "/v1/dividends", "covered_by": { "stream": "dividends" } },
+    { "method": "GET", "path": "/v1/intraday", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/currencies", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/timezones", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

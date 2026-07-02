@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/chats" },
+  "response": {
+    "status": 200,
+    "body": {
+      "chats": [
+        {
+          "id": "chat_fixture_1",
+          "type": "chat",
+          "timestamp": "2026-01-01T00:00:00Z",
+          "session": { "ip": "203.0.113.1", "browser": "Chrome", "platform": "Mac OS" },
+          "visitor": { "name": "Fixture Visitor", "email": "fixture1@example.com" },
+          "department_id": 1,
+          "rating": "good",
+          "comment": "Great support",
+          "duration": 120
+        },
+        {
+          "id": "chat_fixture_2",
+          "type": "chat",
+          "timestamp": "2026-01-02T00:00:00Z",
+          "session": { "ip": "203.0.113.2", "browser": "Firefox", "platform": "Windows" },
+          "visitor": { "name": "Fixture Visitor 2", "email": "fixture2@example.com" },
+          "department_id": 1,
+          "rating": null,
+          "comment": null,
+          "duration": 60
+        }
+      ],
+      "next_url": "",
+      "count": 2
+    }
+  }
+}

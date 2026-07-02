@@ -1,0 +1,72 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "" }
+    ],
+    "check": { "method": "GET", "path": "/account" },
+    "error_map": [
+      { "status": 401, "hint": "chartmogul API key is missing or invalid; re-run pm credentials add chartmogul" },
+      { "status": 403, "hint": "chartmogul account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "chartmogul rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": { "per_page": "2" },
+      "records": { "path": "entries" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "has_more"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "activities",
+      "path": "/activities",
+      "query": {
+        "per_page": "2",
+        "start-date": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "records": { "path": "entries" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "has_more"
+      },
+      "incremental": {
+        "cursor_field": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/activities.json"
+    },
+    {
+      "name": "customer_count",
+      "path": "/metrics/customer-count",
+      "query": {
+        "interval": "month",
+        "start-date": { "template": "{{ incremental.lower_bound }}", "default": "2026-01-01" },
+        "end-date": "2099-12-31"
+      },
+      "records": { "path": "entries" },
+      "incremental": {
+        "cursor_field": "date",
+        "start_config_key": "start_date",
+        "param_format": "date"
+      },
+      "schema": "schemas/customer_count.json"
+    },
+    {
+      "name": "account",
+      "path": "/account",
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/account.json"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "maintenances",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "type": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "asset_id": { "type": ["integer", "null"] },
+    "supplier_id": { "type": ["integer", "null"] },
+    "start_date": { "type": ["string", "null"] },
+    "end_date": { "type": ["string", "null"] },
+    "cost": { "type": ["number", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

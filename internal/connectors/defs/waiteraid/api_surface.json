@@ -1,0 +1,12 @@
+{
+  "api": "WaiterAid API (https://api.waiteraid.com)",
+  "docs": "https://waiteraid.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the single legacy-parity reservations read stream only; the full WaiterAid surface (tables, guests, waitlists, availability, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/reservations", "covered_by": { "stream": "reservations" } },
+    { "method": "GET", "path": "/tables", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/guests", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/reservations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

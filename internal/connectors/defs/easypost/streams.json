@@ -1,0 +1,87 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.username }}", "password": "" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "before_id",
+      "last_record_field": "id",
+      "stop_path": "has_more"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/shipments",
+      "query": { "page_size": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "easypost username (API key) is missing or invalid; re-run pm credentials add easypost" },
+      { "status": 403, "hint": "easypost account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "easypost rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "shipments",
+      "path": "/shipments",
+      "query": { "page_size": "100" },
+      "records": { "path": "shipments" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/shipments.json"
+    },
+    {
+      "name": "trackers",
+      "path": "/trackers",
+      "query": { "page_size": "100" },
+      "records": { "path": "trackers" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/trackers.json"
+    },
+    {
+      "name": "addresses",
+      "path": "/addresses",
+      "query": { "page_size": "100" },
+      "records": { "path": "addresses" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/addresses.json"
+    },
+    {
+      "name": "parcels",
+      "path": "/parcels",
+      "query": { "page_size": "100" },
+      "records": { "path": "parcels" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/parcels.json"
+    },
+    {
+      "name": "insurances",
+      "path": "/insurances",
+      "query": { "page_size": "100" },
+      "records": { "path": "insurances" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/insurances.json"
+    }
+  ]
+}

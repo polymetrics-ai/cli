@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/sources", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "sources": [
+        { "id": "src_fixture_1", "name": "Fixture Web App", "slug": "fixture-web-app", "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

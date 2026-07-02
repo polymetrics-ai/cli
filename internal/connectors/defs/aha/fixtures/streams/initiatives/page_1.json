@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/initiatives", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "initiatives": [
+        {
+          "id": "initiative_fixture_1",
+          "reference_num": "FIX-N-1",
+          "name": "Fixture Initiative One",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "workflow_status": { "id": "1", "name": "Under Consideration" },
+          "url": "https://secure.aha.io/initiatives/1"
+        }
+      ],
+      "pagination": { "total_records": 1, "total_pages": 1, "current_page": 1 }
+    }
+  }
+}

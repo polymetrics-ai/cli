@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stats/aggregate",
+    "query": {
+      "site_id": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "metrics": "synthetic-conformance-value",
+      "filters": "synthetic-conformance-value",
+      "compare": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": {
+        "visitors": { "value": 201524 },
+        "visits": { "value": 210044 },
+        "pageviews": { "value": 673814 },
+        "events": { "value": 700000 },
+        "bounce_rate": { "value": 53.0 },
+        "visit_duration": { "value": 86.0 }
+      }
+    }
+  }
+}

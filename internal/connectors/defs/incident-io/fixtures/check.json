@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v1/severities" },
+  "response": {
+    "status": 200,
+    "body": { "severities": [{ "id": "sev_fixture_1", "name": "Major", "rank": 1 }] }
+  }
+}

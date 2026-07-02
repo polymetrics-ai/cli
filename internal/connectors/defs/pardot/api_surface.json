@@ -1,0 +1,16 @@
+{
+  "api": "Pardot API v5 (https://pi.pardot.com/api/v5)",
+  "docs": "https://developer.salesforce.com/docs/marketing/pardot/overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Pardot object surface (opportunities, visitors, visits, emails, forms, custom fields, users) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v5/objects/prospects", "covered_by": { "stream": "prospects" } },
+    { "method": "GET", "path": "/api/v5/objects/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/api/v5/objects/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/api/v5/objects/opportunities", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v5/objects/visitors", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v5/objects/emails", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v5/objects/prospects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/api/v5/objects/prospects/{id}", "excluded": { "category": "destructive_admin", "reason": "delete mutation, not a read stream" } }
+  ]
+}

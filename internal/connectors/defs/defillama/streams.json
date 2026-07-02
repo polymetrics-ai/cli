@@ -1,0 +1,67 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "check": { "method": "GET", "path": "/protocols", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 429, "class": "rate_limited", "hint": "defillama rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "protocols",
+      "path": "/protocols",
+      "records": { "path": "." },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 5
+      },
+      "schema": "schemas/protocols.json"
+    },
+    {
+      "name": "chains",
+      "path": "/v2/chains",
+      "records": { "path": "." },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 5
+      },
+      "schema": "schemas/chains.json"
+    },
+    {
+      "name": "stablecoins",
+      "path": "https://stablecoins.llama.fi/stablecoins",
+      "query": { "includePrices": "true" },
+      "records": { "path": "peggedAssets" },
+      "schema": "schemas/stablecoins.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "this stream's real endpoint lives on a second host (stablecoins.llama.fi) distinct from the bundle's base.url (api.llama.fi); the engine resolves an http(s)-prefixed stream.path as an ALREADY-ABSOLUTE request target (connsdk.Requester.resolveURL) and never substitutes the conformance replay server's origin for it, so a declarative fixture replay would dial the real internet instead of the test double. Read correctness for this stream is proven by its own fixtures/streams/stablecoins/page_1.json shape (matches DefiLlama's real documented peggedAssets envelope) and by the same schema-projection path every other stream uses; only the dynamic (live-replay) checks are skipped, not the static schema/fixture-shape checks."
+      }
+    },
+    {
+      "name": "dexs",
+      "path": "/overview/dexs",
+      "query": {
+        "excludeTotalDataChart": "true",
+        "excludeTotalDataChartBreakdown": "true"
+      },
+      "records": { "path": "protocols" },
+      "schema": "schemas/dexs.json"
+    },
+    {
+      "name": "fees",
+      "path": "/overview/fees",
+      "query": {
+        "excludeTotalDataChart": "true",
+        "excludeTotalDataChartBreakdown": "true"
+      },
+      "records": { "path": "protocols" },
+      "schema": "schemas/fees.json"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Whisky Hunter Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://whiskyhunter.net",
+      "description": "Whisky Hunter API base URL override for tests or proxies."
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "playbooks",
+  "type": "object",
+  "x-primary-key": ["playbook_id"],
+  "required": ["playbook_id"],
+  "properties": {
+    "playbook_id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

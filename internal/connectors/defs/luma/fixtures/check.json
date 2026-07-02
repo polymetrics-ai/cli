@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/calendar/list-events" },
+  "response": {
+    "status": 200,
+    "body": { "entries": [], "has_more": false, "next_cursor": null }
+  }
+}

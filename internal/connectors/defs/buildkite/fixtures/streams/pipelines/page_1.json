@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/organizations/synthetic-conformance-value/pipelines", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "pipe_fixture_1",
+        "graphql_id": "gql_pipe_fixture_1",
+        "name": "Fixture Web",
+        "slug": "fixture-web",
+        "description": "Fixture pipeline for conformance",
+        "url": "https://api.buildkite.com/v2/organizations/fixture-org/pipelines/fixture-web",
+        "web_url": "https://buildkite.com/fixture-org/fixture-web",
+        "repository": "git@github.com:fixture-org/fixture-web.git",
+        "default_branch": "main",
+        "visibility": "private",
+        "builds_url": "https://api.buildkite.com/v2/organizations/fixture-org/pipelines/fixture-web/builds",
+        "created_at": "2026-01-01T00:00:00Z",
+        "archived_at": null
+      }
+    ]
+  }
+}

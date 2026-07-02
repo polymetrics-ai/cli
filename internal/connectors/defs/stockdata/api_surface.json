@@ -1,0 +1,16 @@
+{
+  "api": "StockData API v1 (https://api.stockdata.org/v1)",
+  "docs": "https://www.stockdata.org/documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (tickers, eod_prices, intraday_prices, news); StockData is read-only in legacy and the full StockData surface (real-time quotes, market status, dividends, splits, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/data/tickers", "covered_by": { "stream": "tickers" } },
+    { "method": "GET", "path": "/v1/data/eod", "covered_by": { "stream": "eod_prices" } },
+    { "method": "GET", "path": "/v1/data/intraday", "covered_by": { "stream": "intraday_prices" } },
+    { "method": "GET", "path": "/v1/news/all", "covered_by": { "stream": "news" } },
+    { "method": "GET", "path": "/v1/data/quote", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/data/market-status", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/data/dividends", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/data/splits", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "request": { "method": "GET", "path": "/latest", "query": { "size": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "totalResults": 3,
+      "results": [
+        {
+          "article_id": "latest_fixture_1",
+          "title": "Fixture Article 1",
+          "link": "https://example.com/article/1",
+          "description": "Fixture article description.",
+          "content": "Fixture article content.",
+          "pubDate": "2026-01-01 00:00:00",
+          "image_url": "https://example.com/image.png",
+          "source_id": "fixture_source",
+          "source_name": "Fixture Source",
+          "source_url": "https://example.com",
+          "language": "english",
+          "creator": ["Fixture Author"],
+          "keywords": ["fixture", "news"],
+          "category": ["top"],
+          "country": ["united states of america"],
+          "duplicate": false
+        },
+        {
+          "article_id": "latest_fixture_2",
+          "title": "Fixture Article 2",
+          "link": "https://example.com/article/2",
+          "description": "Fixture article description.",
+          "content": "Fixture article content.",
+          "pubDate": "2026-01-01 01:00:00",
+          "image_url": "https://example.com/image.png",
+          "source_id": "fixture_source",
+          "source_name": "Fixture Source",
+          "source_url": "https://example.com",
+          "language": "english",
+          "creator": ["Fixture Author"],
+          "keywords": ["fixture", "news"],
+          "category": ["top"],
+          "country": ["united states of america"],
+          "duplicate": false
+        }
+      ],
+      "nextPage": "PAGE2TOKEN"
+    }
+  }
+}

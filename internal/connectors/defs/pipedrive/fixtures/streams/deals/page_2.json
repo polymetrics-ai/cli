@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/deals",
+    "query": { "start": "2", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 3,
+          "title": "Fixture Deal Three",
+          "status": "lost",
+          "value": 800,
+          "currency": "USD",
+          "person_id": 12,
+          "org_id": 21,
+          "stage_id": 2,
+          "add_time": "2026-01-01 00:00:00",
+          "update_time": "2026-01-03 00:00:00"
+        }
+      ],
+      "additional_data": {
+        "pagination": { "start": 2, "limit": 100, "more_items_in_collection": false, "next_start": null }
+      }
+    }
+  }
+}

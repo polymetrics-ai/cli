@@ -1,0 +1,16 @@
+{
+  "api": "WorkflowMax API (https://www.workflowmax.com/api)",
+  "docs": "https://www.workflowmax.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only, matching internal/connectors/workflowmax's exact endpoint set; the full WorkflowMax surface (job/client/contact mutation, invoicing, timesheets) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/jobs", "covered_by": { "stream": "jobs" } },
+    { "method": "GET", "path": "/clients", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "POST", "path": "/jobs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/clients", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/timesheets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

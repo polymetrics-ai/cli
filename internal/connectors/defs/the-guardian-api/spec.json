@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "The Guardian API Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Guardian Open Platform API key, sent as the api-key query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://content.guardianapis.com",
+      "description": "Guardian Content API base URL override for tests or proxies."
+    },
+    "query": {
+      "type": "string",
+      "description": "Optional free-text search query (Guardian's q parameter); when unset, the search stream returns Guardian's default (unfiltered) content listing."
+    }
+  }
+}

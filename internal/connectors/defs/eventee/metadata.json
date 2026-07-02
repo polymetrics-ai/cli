@@ -1,0 +1,23 @@
+{
+  "name": "eventee",
+  "display_name": "Eventee",
+  "description": "Reads Eventee event agenda data (lectures, speakers, days, halls, tracks, workshops, partners) through the Eventee public REST API.",
+  "integration_type": "api",
+  "docs_url": "https://eventee.co/api-documentation",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Eventee API read of event agenda data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

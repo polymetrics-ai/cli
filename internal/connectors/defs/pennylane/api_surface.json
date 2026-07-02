@@ -1,0 +1,13 @@
+{
+  "api": "Pennylane External API v2",
+  "docs": "https://pennylane.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; legacy exposes no write actions and this bundle adds none",
+  "endpoints": [
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/customer_invoices", "covered_by": { "stream": "customer_invoices" } },
+    { "method": "GET", "path": "/suppliers", "covered_by": { "stream": "suppliers" } },
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/categories", "covered_by": { "stream": "categories" } }
+  ]
+}

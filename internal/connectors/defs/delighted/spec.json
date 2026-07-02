@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Delighted Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Delighted API key, sent as the HTTP Basic auth username with a blank password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.delighted.com/v1",
+      "description": "Delighted API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 timestamp or Unix-seconds lower bound for survey_responses/metrics; only records updated at or after this time are read. Legacy named this config key 'since' and also accepted a space/'T'-separated no-timezone datetime form; this bundle renames the key to start_date (matching this codebase's other unix_seconds+start_config_key bundles, e.g. stripe/chargebee/aircall) and accepts RFC3339 or Unix-seconds only (documented deviation/scope narrowing, see docs.md). The wire query parameter Delighted itself receives is still named 'since', unchanged."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "locations",
+  "type": "object",
+  "x-primary-key": ["locationId"],
+  "required": ["locationId"],
+  "properties": {
+    "locationId": { "type": "string" },
+    "locationName": { "type": ["string", "null"] },
+    "postalCode": { "type": ["string", "null"] }
+  }
+}

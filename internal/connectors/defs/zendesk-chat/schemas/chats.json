@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "chats",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "timestamp",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "timestamp": { "type": ["string", "null"] },
+    "session": { "type": ["object", "null"] },
+    "visitor": { "type": ["object", "null"] },
+    "department_id": { "type": ["integer", "null"] },
+    "rating": { "type": ["string", "null"] },
+    "comment": { "type": ["string", "null"] },
+    "duration": { "type": ["integer", "null"] }
+  }
+}

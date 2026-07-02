@@ -1,0 +1,33 @@
+{
+  "request": { "method": "GET", "path": "/exchanges", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "limit": 2, "offset": 0, "count": 2, "total": 3 },
+      "data": [
+        {
+          "mic": "XNAS",
+          "name": "NASDAQ Stock Exchange",
+          "acronym": "NASDAQ",
+          "country": "USA",
+          "country_code": "US",
+          "city": "New York",
+          "website": "https://www.nasdaq.com",
+          "currency": { "code": "USD", "symbol": "$", "name": "US Dollar" },
+          "timezone": { "timezone": "America/New_York", "abbr": "EST" }
+        },
+        {
+          "mic": "XLON",
+          "name": "London Stock Exchange",
+          "acronym": "LSE",
+          "country": "United Kingdom",
+          "country_code": "GB",
+          "city": "London",
+          "website": "https://www.londonstockexchange.com",
+          "currency": { "code": "GBP", "symbol": "£", "name": "British Pound" },
+          "timezone": { "timezone": "Europe/London", "abbr": "GMT" }
+        }
+      ]
+    }
+  }
+}

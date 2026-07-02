@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "list",
+      "data": {
+        "_object": "list",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "id": "fixture-shipment-1",
+            "_object": "shipment",
+            "status": "open",
+            "transportation_mode": "ocean",
+            "freight_type": "fcl",
+            "origin_port": "CNSHA",
+            "destination_port": "USLAX",
+            "estimated_departure_date": "2026-01-05",
+            "estimated_arrival_date": "2026-01-25",
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-02T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

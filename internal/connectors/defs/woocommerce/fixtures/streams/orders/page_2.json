@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders",
+    "query": {
+      "page": "2",
+      "per_page": "10",
+      "order": "asc",
+      "orderby": "id"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 11,
+        "number": "1011",
+        "status": "completed",
+        "currency": "USD",
+        "total": "110.00",
+        "total_tax": "0.00",
+        "customer_id": 11,
+        "payment_method": "stripe",
+        "date_created": "2026-01-02T00:00:00",
+        "date_created_gmt": "2026-01-02T00:00:00",
+        "date_modified": "2026-01-02T00:00:00",
+        "date_modified_gmt": "2026-01-02T00:00:00",
+        "date_paid": "2026-01-02T00:00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/books/", "query": { "sort": "descending" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 74999,
+          "title": "A Recently Added Fixture Title",
+          "authors": [{ "name": "Fixture, Author", "birth_year": 1900, "death_year": 1980 }],
+          "translators": [],
+          "subjects": ["Fiction"],
+          "bookshelves": ["Fixture Shelf"],
+          "languages": ["en"],
+          "copyright": false,
+          "media_type": "Text",
+          "download_count": 12
+        }
+      ]
+    }
+  }
+}

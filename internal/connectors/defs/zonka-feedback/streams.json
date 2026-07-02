@@ -1,0 +1,42 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.auth_token }}", "when": "{{ secrets.auth_token }}" },
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/responses", "query": { "page": "1", "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "zonka-feedback auth_token/access_token is missing or invalid; re-run pm credentials add zonka-feedback" },
+      { "status": 429, "class": "rate_limited", "hint": "zonka-feedback rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "responses",
+      "path": "/responses",
+      "records": { "path": "responses" },
+      "schema": "schemas/responses.json"
+    },
+    {
+      "name": "surveys",
+      "path": "/surveys",
+      "records": { "path": "surveys" },
+      "schema": "schemas/surveys.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "contacts" },
+      "schema": "schemas/contacts.json"
+    }
+  ]
+}

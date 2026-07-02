@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/v1/workspaces/synthetic-conformance-value/projects", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "proj_fixture_1",
+        "name": "Fixture Project One",
+        "workspaceId": "ws_fixture_1",
+        "clientId": "cl_fixture_1",
+        "clientName": "Fixture Client One",
+        "color": "#FF0000",
+        "billable": true,
+        "public": false,
+        "archived": false,
+        "duration": "PT0S",
+        "note": "conformance fixture project"
+      }
+    ]
+  }
+}

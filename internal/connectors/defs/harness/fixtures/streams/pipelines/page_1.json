@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/pipeline/api/pipelines/list" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "SUCCESS",
+      "data": {
+        "totalPages": 1,
+        "totalItems": 1,
+        "pageItemCount": 1,
+        "pageSize": 50,
+        "pageIndex": 0,
+        "empty": false,
+        "content": [
+          { "identifier": "pipe_fixture_1", "orgIdentifier": "org_fixture_1", "projectIdentifier": "proj_fixture_1", "name": "Pipeline One", "description": "fixture pipeline", "numOfStages": 3 }
+        ]
+      }
+    }
+  }
+}

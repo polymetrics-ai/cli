@@ -1,0 +1,429 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/loadtests/v2/tests"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "k6-tests": [
+        {
+          "id": 1,
+          "name": "k6-test-fixture-1",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_1",
+          "test_run_ids": [
+            "run_1"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "name": "k6-test-fixture-2",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_2",
+          "test_run_ids": [
+            "run_2"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "name": "k6-test-fixture-3",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_3",
+          "test_run_ids": [
+            "run_3"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4,
+          "name": "k6-test-fixture-4",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_4",
+          "test_run_ids": [
+            "run_4"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 5,
+          "name": "k6-test-fixture-5",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_5",
+          "test_run_ids": [
+            "run_5"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 6,
+          "name": "k6-test-fixture-6",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_6",
+          "test_run_ids": [
+            "run_6"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 7,
+          "name": "k6-test-fixture-7",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_7",
+          "test_run_ids": [
+            "run_7"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 8,
+          "name": "k6-test-fixture-8",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_8",
+          "test_run_ids": [
+            "run_8"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 9,
+          "name": "k6-test-fixture-9",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_9",
+          "test_run_ids": [
+            "run_9"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 10,
+          "name": "k6-test-fixture-10",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_10",
+          "test_run_ids": [
+            "run_10"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 11,
+          "name": "k6-test-fixture-11",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_11",
+          "test_run_ids": [
+            "run_11"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "name": "k6-test-fixture-12",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_12",
+          "test_run_ids": [
+            "run_12"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 13,
+          "name": "k6-test-fixture-13",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_13",
+          "test_run_ids": [
+            "run_13"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 14,
+          "name": "k6-test-fixture-14",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_14",
+          "test_run_ids": [
+            "run_14"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 15,
+          "name": "k6-test-fixture-15",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_15",
+          "test_run_ids": [
+            "run_15"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 16,
+          "name": "k6-test-fixture-16",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_16",
+          "test_run_ids": [
+            "run_16"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 17,
+          "name": "k6-test-fixture-17",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_17",
+          "test_run_ids": [
+            "run_17"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 18,
+          "name": "k6-test-fixture-18",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_18",
+          "test_run_ids": [
+            "run_18"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 19,
+          "name": "k6-test-fixture-19",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_19",
+          "test_run_ids": [
+            "run_19"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 20,
+          "name": "k6-test-fixture-20",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_20",
+          "test_run_ids": [
+            "run_20"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 21,
+          "name": "k6-test-fixture-21",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_21",
+          "test_run_ids": [
+            "run_21"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 22,
+          "name": "k6-test-fixture-22",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_22",
+          "test_run_ids": [
+            "run_22"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 23,
+          "name": "k6-test-fixture-23",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_23",
+          "test_run_ids": [
+            "run_23"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 24,
+          "name": "k6-test-fixture-24",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_24",
+          "test_run_ids": [
+            "run_24"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 25,
+          "name": "k6-test-fixture-25",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_25",
+          "test_run_ids": [
+            "run_25"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 26,
+          "name": "k6-test-fixture-26",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_26",
+          "test_run_ids": [
+            "run_26"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 27,
+          "name": "k6-test-fixture-27",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_27",
+          "test_run_ids": [
+            "run_27"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 28,
+          "name": "k6-test-fixture-28",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_28",
+          "test_run_ids": [
+            "run_28"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 29,
+          "name": "k6-test-fixture-29",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_29",
+          "test_run_ids": [
+            "run_29"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 30,
+          "name": "k6-test-fixture-30",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_30",
+          "test_run_ids": [
+            "run_30"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "name": "k6-test-fixture-31",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_31",
+          "test_run_ids": [
+            "run_31"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 32,
+          "name": "k6-test-fixture-32",
+          "project_id": 1,
+          "user_id": 1,
+          "last_test_run_id": "run_32",
+          "test_run_ids": [
+            "run_32"
+          ],
+          "script": "export default function () {}",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

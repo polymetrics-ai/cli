@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/sites/fixture-site/lists", "query": { "$top": "2", "$skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "list_1", "name": "Accounts", "displayName": "Accounts", "lastModifiedDateTime": "2026-01-01T00:00:00Z" },
+        { "id": "list_2", "name": "Contacts", "displayName": "Contacts", "lastModifiedDateTime": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

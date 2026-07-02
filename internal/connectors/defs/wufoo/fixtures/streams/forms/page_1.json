@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/forms.json", "query": { "page": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Forms": [
+        { "Hash": "form_fixture_1", "Name": "Fixture Form 1", "DateUpdated": "2026-01-01 00:00:00" },
+        { "Hash": "form_fixture_2", "Name": "Fixture Form 2", "DateUpdated": "2026-01-02 00:00:00" }
+      ]
+    }
+  }
+}

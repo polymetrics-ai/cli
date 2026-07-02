@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/sales-orders",
+    "query": {
+      "after": "so_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

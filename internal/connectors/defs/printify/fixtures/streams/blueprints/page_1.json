@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/catalog/blueprints.json" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 3,
+        "title": "Fixture Kids Regular Fit Tee",
+        "description": "Fixture description",
+        "brand": "FixtureBrand",
+        "model": "11736",
+        "images": ["https://images.printify.com/fixture1"]
+      }
+    ]
+  }
+}

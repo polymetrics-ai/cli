@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/timeoff/requests" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "status": "approved" },
+      { "id": 2, "status": "pending" }
+    ]
+  }
+}

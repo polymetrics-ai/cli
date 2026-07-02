@@ -1,0 +1,17 @@
+{
+  "api": "OpenWeather One Call API 3.0 (https://api.openweathermap.org/data/3.0)",
+  "docs": "https://openweathermap.org/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity forecast/alert streams for a single configured location, all backed by the One Call endpoint's response sections; the wider OpenWeather product surface (5-day/3-hour forecast, air pollution, geocoding, historical weather, weather maps/tiles) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/data/3.0/onecall (current section)", "covered_by": { "stream": "current" } },
+    { "method": "GET", "path": "/data/3.0/onecall (hourly section)", "covered_by": { "stream": "hourly" } },
+    { "method": "GET", "path": "/data/3.0/onecall (daily section)", "covered_by": { "stream": "daily" } },
+    { "method": "GET", "path": "/data/3.0/onecall (alerts section)", "covered_by": { "stream": "alerts" } },
+    { "method": "GET", "path": "/data/3.0/onecall (minutely section)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/data/2.5/forecast", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/data/2.5/air_pollution", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/geo/1.0/direct", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/data/3.0/onecall/timemachine", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "api": "Spotler CRM API v1 (https://api.spotlercrm.com/api/v1)",
+  "docs": "https://api.spotler.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only, matching internal/connectors/spotlercrm's exact endpoint set; the full Spotler CRM API (email campaigns, forms, custom fields, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/opportunities", "covered_by": { "stream": "opportunities" } },
+    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/forms", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

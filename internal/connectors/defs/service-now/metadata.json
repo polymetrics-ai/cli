@@ -1,0 +1,22 @@
+{
+  "name": "service-now",
+  "display_name": "ServiceNow",
+  "description": "Reads ServiceNow table data through the ServiceNow Table API.",
+  "integration_type": "api",
+  "docs_url": "manual intervention needed",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external ServiceNow API read of incident, user, and group table data"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/reservations" },
+    "error_map": [
+      { "status": 401, "hint": "track-pms access_token is missing or invalid; re-run pm credentials add track-pms" },
+      { "status": 429, "class": "rate_limited", "hint": "track-pms rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "reservations",
+      "path": "/reservations",
+      "records": { "path": "reservations" },
+      "schema": "schemas/reservations.json"
+    },
+    {
+      "name": "guests",
+      "path": "/guests",
+      "records": { "path": "guests" },
+      "schema": "schemas/guests.json"
+    },
+    {
+      "name": "units",
+      "path": "/units",
+      "records": { "path": "units" },
+      "schema": "schemas/units.json"
+    },
+    {
+      "name": "owners",
+      "path": "/owners",
+      "records": { "path": "owners" },
+      "schema": "schemas/owners.json"
+    }
+  ]
+}

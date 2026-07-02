@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/BankTransactions", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-1",
+      "Status": "OK",
+      "BankTransactions": [
+        {
+          "BankTransactionID": "banktxn_fixture_1",
+          "Type": "SPEND",
+          "Status": "AUTHORISED",
+          "IsReconciled": false,
+          "SubTotal": 45.0,
+          "TotalTax": 5.0,
+          "Total": 50.0,
+          "CurrencyCode": "USD",
+          "Date": "2026-01-01T00:00:00",
+          "Contact": { "ContactID": "contact_fixture_1" },
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

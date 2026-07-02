@@ -1,0 +1,69 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-Key", "value": "{{ secrets.api_key }}", "prefix": "" }
+    ],
+    "check": { "method": "GET", "path": "/contacts", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "spotlercrm API key is missing or invalid; re-run pm credentials add spotlercrm" },
+      { "status": 403, "hint": "spotlercrm account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "spotlercrm rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "opportunities",
+      "path": "/opportunities",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/opportunities.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/tasks.json"
+    }
+  ]
+}

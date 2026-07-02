@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/documents", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "document_fixture_1",
+          "name": "Fixture Document 1",
+          "status": "sent",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "document_fixture_2",
+          "name": "Fixture Document 2",
+          "status": "completed",
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "pagination": { "next_cursor": "fixture_cursor_2" }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/adAccounts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "elements": [
+        { "id": 1001, "name": "Fixture Account", "status": "ACTIVE" }
+      ]
+    }
+  }
+}

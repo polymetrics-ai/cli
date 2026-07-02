@@ -1,0 +1,23 @@
+{
+  "name": "mailjet-mail",
+  "display_name": "Mailjet Mail",
+  "description": "Reads Mailjet contacts, contact lists, messages, campaigns, and statistics through the Mailjet Email REST API (v3).",
+  "integration_type": "api",
+  "docs_url": "https://dev.mailjet.com/email/reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Mailjet API read of contact, list, message, campaign, and statistics data",
+    "approval": "none; read-only source connector"
+  }
+}

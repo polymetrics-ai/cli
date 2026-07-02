@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Simplesat Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Simplesat API token, sent as the X-Simplesat-Token header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.simplesat.io/api",
+      "description": "Simplesat API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 100,
+      "description": "Number of records requested per page (page_size query param), 1-1000."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional start_date query filter passed through verbatim."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Optional end_date query filter passed through verbatim."
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/countries", "query": { "limit": "2", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "page": 1, "limit": 100, "found": 3 },
+      "results": [
+        { "id": 1, "code": "US", "name": "United States", "datetimeFirst": "2016-01-01T00:00:00Z", "datetimeLast": "2026-01-01T00:00:00Z", "parameters": ["pm25", "o3"] },
+        { "id": 2, "code": "GB", "name": "United Kingdom", "datetimeFirst": "2017-01-01T00:00:00Z", "datetimeLast": "2026-01-01T00:00:00Z", "parameters": ["pm25"] }
+      ]
+    }
+  }
+}

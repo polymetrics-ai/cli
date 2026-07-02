@@ -1,0 +1,20 @@
+{
+  "name": "when-i-work",
+  "display_name": "When I Work",
+  "description": "Reads When I Work users, locations, positions, and shifts. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.wheniwork.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external When I Work API read of the caller's own workforce-scheduling data",
+    "approval": "none; read-only workforce-scheduling metadata connector"
+  }
+}

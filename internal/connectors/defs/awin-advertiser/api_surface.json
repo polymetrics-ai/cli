@@ -1,0 +1,15 @@
+{
+  "api": "Awin Advertiser API (https://api.awin.com)",
+  "docs": "https://wiki.awin.com/index.php/Advertiser_API",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Awin Advertiser surface (creatives, vouchers, commission groups management, contracts) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/advertisers/{advertiserId}/transactions/", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/advertisers/{advertiserId}/reports/aggregated/publisher", "covered_by": { "stream": "campaign_performance" } },
+    { "method": "GET", "path": "/advertisers/{advertiserId}/publishers/", "covered_by": { "stream": "publishers" } },
+    { "method": "GET", "path": "/advertisers/{advertiserId}/creatives/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/advertisers/{advertiserId}/vouchers/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/advertisers/{advertiserId}/programmeinfo", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/advertisers/{advertiserId}/transactions/{tid}", "excluded": { "category": "destructive_admin", "reason": "mutates a live commission transaction's status; not a syncable read" } }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Reddit Connection Specification",
+  "type": "object",
+  "required": ["access_token", "subreddit"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Reddit OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>). OAuth token acquisition/refresh is out of scope; the caller supplies a valid token. Never logged."
+    },
+    "subreddit": {
+      "type": "string",
+      "description": "Subreddit name to read posts/comments from (path-scoped as /r/{subreddit}/...)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://oauth.reddit.com",
+      "description": "Reddit OAuth API base URL override for tests or proxies."
+    }
+  }
+}

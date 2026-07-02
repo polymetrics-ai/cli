@@ -1,0 +1,46 @@
+{
+  "request": { "method": "GET", "path": "/v2/bookings", "query": { "limit": "synthetic-conformance-value", "last_updated_time.gt": "2020-01-01T00:00:00Z" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "bk_fixture_1",
+          "object": "booking",
+          "subject": "Fixture booking 1",
+          "status": "scheduled",
+          "booking_page": "page_fixture_1",
+          "event_type": "evt_fixture_1",
+          "contact": "contact_fixture_1",
+          "owner": "user_fixture_1",
+          "starting_time": "2026-01-01T00:00:00.000Z",
+          "duration_minutes": 30,
+          "customer_timezone": "UTC",
+          "location_description": "Online",
+          "tracking_id": "trk_1",
+          "in_trash": false,
+          "creation_time": "2026-01-01T00:00:00.000Z",
+          "last_updated_time": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "bk_fixture_2",
+          "object": "booking",
+          "subject": "Fixture booking 2",
+          "status": "completed",
+          "booking_page": "page_fixture_1",
+          "event_type": "evt_fixture_1",
+          "contact": "contact_fixture_2",
+          "owner": "user_fixture_1",
+          "starting_time": "2026-01-02T00:00:00.000Z",
+          "duration_minutes": 30,
+          "customer_timezone": "UTC",
+          "location_description": "Online",
+          "tracking_id": "trk_2",
+          "in_trash": false,
+          "creation_time": "2026-01-02T00:00:00.000Z",
+          "last_updated_time": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

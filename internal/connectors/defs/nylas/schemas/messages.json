@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "messages",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "grant_id": { "type": ["string", "null"] },
+    "object": { "type": ["string", "null"] },
+    "thread_id": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "snippet": { "type": ["string", "null"] },
+    "from": { "type": ["array", "null"] },
+    "to": { "type": ["array", "null"] },
+    "date": { "type": ["integer", "null"] },
+    "unread": { "type": ["boolean", "null"] },
+    "starred": { "type": ["boolean", "null"] },
+    "folders": { "type": ["array", "null"] }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "api": "Cal.com API v2 (https://api.cal.com/v2)",
+  "docs": "https://cal.com/docs/api-reference/introduction",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: 3 of legacy's 4 read streams are declarative-parity; 'event_types' is blocked (ENGINE_GAP, see docs.md Known limits) and excluded here pending a Tier-2/3 escalation.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/bookings", "covered_by": { "stream": "bookings" } },
+    { "method": "GET", "path": "/v2/schedules", "covered_by": { "stream": "schedules" } },
+    { "method": "GET", "path": "/v2/me", "covered_by": { "stream": "my_profile" } },
+    { "method": "GET", "path": "/v2/event-types", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: legacy flattens a two-level nested envelope (data.eventTypeGroups[].eventTypes[]) that the declarative records.path dialect can only extract one level deep; see docs.md Known limits" } },
+    { "method": "POST", "path": "/v2/bookings", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/event-types/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

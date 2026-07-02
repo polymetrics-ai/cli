@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SonarCloud Connection Specification",
+  "type": "object",
+  "required": ["user_token"],
+  "properties": {
+    "user_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SonarCloud user token, sent as a Bearer token (Authorization: Bearer <user_token>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://sonarcloud.io",
+      "description": "SonarCloud API base URL override for tests or proxies."
+    },
+    "organization": {
+      "type": "string",
+      "description": "SonarCloud organization key; sent as the 'organization' query parameter on every request when set."
+    },
+    "component_keys": {
+      "type": "string",
+      "description": "Comma-separated SonarCloud component keys. Sent as 'componentKeys' on issues/quality-gates/measures streams; only the first key is sent as 'component' on the components stream."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Lower bound sent as the 'createdAfter' query parameter (issues search)."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Upper bound sent as the 'createdBefore' query parameter (issues search)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-500), sent as the 'ps' query parameter."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

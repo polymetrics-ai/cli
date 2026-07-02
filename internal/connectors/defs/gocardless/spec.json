@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GoCardless Connection Specification",
+  "type": "object",
+  "required": ["access_token", "base_url"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "GoCardless access token, sent as Authorization: Bearer <access_token>. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "GoCardless API base URL. Use https://api.gocardless.com for live or https://api-sandbox.gocardless.com for sandbox. Legacy derives this from a gocardless_environment config value (live/sandbox), but that cross-key derivation has no engine mechanism today (see docs.md Known limits), so this bundle requires the fully-formed URL instead."
+    },
+    "gocardless_version": {
+      "type": "string",
+      "default": "2015-07-06",
+      "description": "GoCardless-Version header value sent on every request."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only objects created at or after this time are read on a full sync. Sent as the created_at[gt] query filter."
+    }
+  }
+}

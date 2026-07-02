@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/tasks", "query": { "page": "1", "pageSize": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "task_fixture_1", "name": "Fixture kickoff call", "status": "DONE", "project_id": "proj_fixture_1", "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "pageInfo": { "page": 1, "pageSize": 2, "totalRecords": 1 }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/integration_api/listings/query", "query": { "page": "1", "per_page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "listing_1", "type": "listing", "attributes": { "title": "Fixture Listing 1" }, "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "listing_2", "type": "listing", "attributes": { "title": "Fixture Listing 2" }, "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

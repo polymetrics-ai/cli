@@ -1,0 +1,46 @@
+{
+  "request": { "method": "GET", "path": "/memos", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "memo_fixture_1",
+        "title": "Fixture memo 1",
+        "body": "Fixture body.",
+        "documentType": "memo",
+        "archived": false,
+        "favorited": true,
+        "locked": false,
+        "publiclyVisible": false,
+        "sourcesVisible": true,
+        "tocVisible": true,
+        "bannerVisible": false,
+        "views": 10,
+        "emoji": "📈",
+        "backgroundColor": "#ffffff",
+        "foregroundColor": "#000000",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "id": "memo_fixture_2",
+        "title": "Fixture memo 2",
+        "body": "Fixture body.",
+        "documentType": "memo",
+        "archived": false,
+        "favorited": true,
+        "locked": false,
+        "publiclyVisible": false,
+        "sourcesVisible": true,
+        "tocVisible": true,
+        "bannerVisible": false,
+        "views": 20,
+        "emoji": "📈",
+        "backgroundColor": "#ffffff",
+        "foregroundColor": "#000000",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

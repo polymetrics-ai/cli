@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/v3/projects" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 3001, "name": "Fixture project one", "state": "active", "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "next": null
+    }
+  }
+}

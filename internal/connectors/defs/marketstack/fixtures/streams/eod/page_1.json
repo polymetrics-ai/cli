@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/eod", "query": { "limit": "2", "offset": "0", "symbols": "synthetic-conformance-value", "date_from": "2020-01-01" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "limit": 2, "offset": 0, "count": 1, "total": 1 },
+      "data": [
+        {
+          "symbol": "AAPL",
+          "date": "2026-01-02T00:00:00+0000",
+          "exchange": "XNAS",
+          "open": 184.0,
+          "high": 186.0,
+          "low": 183.5,
+          "close": 185.5,
+          "volume": 55000000.0,
+          "adj_open": 184.0,
+          "adj_high": 186.0,
+          "adj_low": 183.5,
+          "adj_close": 185.5,
+          "adj_volume": 55000000.0,
+          "split_factor": 1.0,
+          "dividend": 0.0
+        }
+      ]
+    }
+  }
+}

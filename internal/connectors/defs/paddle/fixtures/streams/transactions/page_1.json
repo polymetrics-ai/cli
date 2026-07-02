@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/transactions", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "txn_fixture_1",
+          "status": "completed",
+          "customer_id": "ctm_fixture_1",
+          "subscription_id": "sub_fixture_1",
+          "currency_code": "USD",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "txn_fixture_2",
+          "status": "completed",
+          "customer_id": "ctm_fixture_2",
+          "subscription_id": "sub_fixture_2",
+          "currency_code": "USD",
+          "created_at": "2026-01-01T00:00:01Z"
+        }
+      ],
+      "meta": { "pagination": { "next": "txn_fixture_cursor_2" } }
+    }
+  }
+}

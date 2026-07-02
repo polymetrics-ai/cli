@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/segments", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "seg_fixture_1",
+        "name": "Fixture Segment One",
+        "description": "conformance fixture segment",
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": "seg_fixture_2",
+        "name": "Fixture Segment Two",
+        "description": "conformance fixture segment",
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

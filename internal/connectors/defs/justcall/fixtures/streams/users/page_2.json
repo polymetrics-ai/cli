@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2.1/users"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "user_fixture_101",
+          "name": "Fixture User 101",
+          "email": "user101@example.com",
+          "role": "agent",
+          "extension": "201",
+          "available": "yes",
+          "on_call": "no",
+          "timezone": "America/New_York",
+          "created_at": "2026-01-01T00:00:00Z",
+          "last_login_timestamp": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

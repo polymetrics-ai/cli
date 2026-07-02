@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pretix Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pretix API token, sent as 'Authorization: Token <api_token>'. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://pretix.eu/api/v1",
+      "description": "Pretix API base URL override for self-hosted instances, tests, or proxies."
+    },
+    "organizer": {
+      "type": "string",
+      "description": "Pretix organizer slug, required for the events, items, and orders streams (substituted into the organizer-scoped path)."
+    },
+    "event": {
+      "type": "string",
+      "description": "Pretix event slug, required for the items and orders streams (substituted into the event-scoped path)."
+    }
+  }
+}

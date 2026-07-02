@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v2/incident_roles" },
+  "response": {
+    "status": 200,
+    "body": {
+      "incident_roles": [
+        { "id": "role_fixture_1", "name": "Incident Lead", "description": "Owns the incident", "role_type": "lead", "shortform": "lead", "instructions": "Coordinate the response", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "role_fixture_2", "name": "Communications Lead", "description": "Owns comms", "role_type": "custom", "shortform": "comms", "instructions": "Post updates", "created_at": "2026-01-02T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

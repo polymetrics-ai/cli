@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/api/2.0/sales", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sale_fixture_1",
+          "version": 3000,
+          "invoice_number": "INV-1",
+          "customer_id": "customer_fixture_1",
+          "status": "CLOSED",
+          "register_id": "register_fixture_1",
+          "user_id": "user_fixture_1",
+          "total_price": 10,
+          "total_tax": 1,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "sale_date": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "version": { "min": 3000, "max": null }
+    }
+  }
+}

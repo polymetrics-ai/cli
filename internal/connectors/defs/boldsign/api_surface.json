@@ -1,0 +1,15 @@
+{
+  "api": "BoldSign REST API v1 (https://api.boldsign.com)",
+  "docs": "https://developers.boldsign.com/api-reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (documents, templates, teams, contacts, brands); BoldSign's write surface (sending signature requests, uploading documents) is out of scope — legacy itself advertises Write=false, since these are not safe generic reverse-ETL targets",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/document/list", "covered_by": { "stream": "documents" } },
+    { "method": "GET", "path": "/v1/template/list", "covered_by": { "stream": "templates" } },
+    { "method": "GET", "path": "/v1/teams/list", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/v1/contacts/list", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/v1/brand/list", "covered_by": { "stream": "brands" } },
+    { "method": "POST", "path": "/v1/document/send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/document/create", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

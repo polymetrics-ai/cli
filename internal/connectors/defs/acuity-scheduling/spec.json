@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Acuity Scheduling Connection Specification",
+  "type": "object",
+  "required": ["username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "Acuity account User ID, sent as the HTTP Basic auth username."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Acuity API key, sent as the HTTP Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://acuityscheduling.com/api/v1",
+      "description": "Acuity API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

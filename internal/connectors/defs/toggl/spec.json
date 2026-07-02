@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Toggl Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Toggl Track API token, sent as HTTP Basic auth username with the literal string 'api_token' as password (Toggl's own token-auth convention). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.track.toggl.com/api/v9",
+      "description": "Toggl Track API base URL override for tests or proxies."
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Toggl workspace id required by the 'projects', 'clients', and 'workspace_users' streams."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Toggl organization id required by the 'organization_users' stream."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional start_date filter (Toggl date format) for the 'time_entries' stream."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Optional end_date filter (Toggl date format) for the 'time_entries' stream."
+    }
+  }
+}

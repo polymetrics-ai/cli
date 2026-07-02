@@ -1,0 +1,23 @@
+{
+  "name": "devin-ai",
+  "display_name": "Devin AI",
+  "description": "Reads Devin AI sessions, session insights, session messages, playbooks, and secret metadata through the Devin v3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.devin.ai/api-reference/overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Devin AI API read of session, playbook, and secret metadata",
+    "approval": "none; read-only source connector"
+  }
+}

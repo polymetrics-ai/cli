@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/locations/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Result": {
+        "addresses": [
+          {
+            "address": {
+              "properties": {
+                "MarId": "fixture_1",
+                "FullAddress": "100 FIXTURE ST NW",
+                "SSL": "0101    0801",
+                "StName": "FIXTURE ST",
+                "AddrNum": "100",
+                "Quadrant": "NW",
+                "Ward": "Ward 2",
+                "Anc": "2A",
+                "Zipcode": "20004",
+                "Status": "ACTIVE",
+                "ResidenceType": "RESIDENTIAL",
+                "CensusTract": "004701",
+                "Latitude": 38.901,
+                "Longitude": -77.031,
+                "Xcoord": 396001,
+                "Ycoord": 137001
+              }
+            },
+            "distance": 1.0
+          }
+        ]
+      }
+    }
+  }
+}

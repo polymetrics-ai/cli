@@ -1,0 +1,17 @@
+{
+  "api": "ShipStation REST API v1 (https://www.shipstation.com/docs/api/)",
+  "docs": "https://www.shipstation.com/docs/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (orders, shipments, products, customers); the full ShipStation surface (warehouses, carriers, webhooks, label purchasing, order creation) is out of scope until Pass B. ShipStation is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "endpoints": [
+    { "method": "GET", "path": "/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/shipments", "covered_by": { "stream": "shipments" } },
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "POST", "path": "/orders/createorder", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented order creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/shipments/createlabel", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented label purchasing; Pass B capability expansion" } },
+    { "method": "GET", "path": "/warehouses", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/carriers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/webhooks/subscribe", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

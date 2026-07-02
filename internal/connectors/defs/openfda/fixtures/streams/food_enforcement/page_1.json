@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/food/enforcement.json", "query": { "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "results": { "skip": 0, "limit": 2, "total": 1 } },
+      "results": [
+        {
+          "recall_number": "F-fixture-0001-2026",
+          "status": "Ongoing",
+          "classification": "Class I",
+          "product_type": "Food",
+          "recalling_firm": "Fixture Foods Co",
+          "reason_for_recall": "Fixture recall reason: undeclared allergen",
+          "report_date": "20260101",
+          "recall_initiation_date": "20251220",
+          "voluntary_mandated": "Voluntary: Firm Initiated",
+          "distribution_pattern": "CA, NY, TX",
+          "state": "CA",
+          "country": "United States"
+        }
+      ]
+    }
+  }
+}

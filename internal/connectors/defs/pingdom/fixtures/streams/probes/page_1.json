@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/probes", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "probes": [
+        { "id": 1, "name": "Fixture US East", "hostname": "probe-use1.pingdom.example", "country": "United States", "city": "New York", "active": true, "ip": "203.0.113.10" },
+        { "id": 2, "name": "Fixture EU West", "hostname": "probe-euw1.pingdom.example", "country": "Ireland", "city": "Dublin", "active": true, "ip": "203.0.113.20" }
+      ]
+    }
+  }
+}

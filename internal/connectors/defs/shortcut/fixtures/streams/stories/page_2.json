@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/v3/stories", "query": { "next": "fixture_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1003, "name": "Fixture story three", "state": "done", "updated_at": "2026-01-03T00:00:00Z" }
+      ],
+      "next": null
+    }
+  }
+}

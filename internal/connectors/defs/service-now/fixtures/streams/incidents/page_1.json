@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/now/table/incident", "query": { "sysparm_limit": "100", "sysparm_offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": [
+        { "sys_id": "incident_1", "number": "INC0000001", "name": "Fixture Incident 1", "short_description": "Cannot log in", "state": "2", "priority": "1", "sys_created_on": "2026-01-01 00:00:00", "updated_on": "2026-01-01 00:00:00" },
+        { "sys_id": "incident_2", "number": "INC0000002", "name": "Fixture Incident 2", "short_description": "Printer offline", "state": "1", "priority": "3", "sys_created_on": "2026-01-02 00:00:00", "updated_on": "2026-01-02 00:00:00" }
+      ]
+    }
+  }
+}

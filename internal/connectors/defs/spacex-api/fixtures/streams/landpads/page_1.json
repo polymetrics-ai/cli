@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/landpads" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "landpad_fixture_1", "name": "Fixture LZ", "full_name": "Fixture Landing Zone", "type": "RTLS", "locality": "Cape Canaveral", "region": "Florida", "latitude": 28.4, "longitude": -80.6, "landing_attempts": 1, "landing_successes": 1, "status": "active", "launches": ["launch_fixture_2"] }
+    ]
+  }
+}

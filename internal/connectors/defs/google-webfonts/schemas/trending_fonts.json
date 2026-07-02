@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "trending_fonts",
+  "type": "object",
+  "x-primary-key": [
+    "family"
+  ],
+  "x-cursor-field": "lastModified",
+  "required": [
+    "family"
+  ],
+  "properties": {
+    "family": {
+      "type": "string"
+    },
+    "category": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lastModified": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Natural incremental cursor field (legacy's own key name, not renamed)."
+    },
+    "kind": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "menu": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "variants": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "subsets": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "files": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "axes": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  }
+}

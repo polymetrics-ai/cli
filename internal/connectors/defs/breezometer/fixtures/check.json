@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/air-quality/v2/current-conditions",
+    "query": { "features": "local_aqi" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "datetime": "2026-01-01T00:00:00Z",
+        "indexes": { "baqi": { "aqi": 41, "category": "Good air quality" } },
+        "data_available": true
+      }
+    }
+  }
+}

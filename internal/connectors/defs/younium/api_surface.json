@@ -1,0 +1,13 @@
+{
+  "api": "Younium REST API (https://developer.younium.com/)",
+  "docs": "https://developer.younium.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (accounts, subscriptions, invoices); legacy is read-only (capabilities.write: false), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/Accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/Subscriptions", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/Invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/Orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not covered by legacy" } },
+    { "method": "GET", "path": "/Products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not covered by legacy" } }
+  ]
+}

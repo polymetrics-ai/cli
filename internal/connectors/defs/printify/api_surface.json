@@ -1,0 +1,17 @@
+{
+  "api": "Printify public REST API v1 (https://developers.printify.com/)",
+  "docs": "https://developers.printify.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (shops, products, orders, blueprints, print_providers). Printify's mutating product/order endpoints (create/update/delete product, submit/cancel order) are out of scope; legacy itself ships no writes (capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/shops.json", "covered_by": { "stream": "shops" } },
+    { "method": "GET", "path": "/v1/shops/{shop_id}/products.json", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/v1/shops/{shop_id}/orders.json", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/v1/catalog/blueprints.json", "covered_by": { "stream": "blueprints" } },
+    { "method": "GET", "path": "/v1/catalog/print_providers.json", "covered_by": { "stream": "print_providers" } },
+    { "method": "POST", "path": "/v1/shops/{shop_id}/products.json", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented product creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/shops/{shop_id}/orders.json", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented order submission; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/shops/{shop_id}/orders/{order_id}/cancel.json", "excluded": { "category": "destructive_admin", "reason": "order cancellation is a destructive mutation legacy never implemented; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/catalog/blueprints/{blueprint_id}/print_providers.json", "excluded": { "category": "out_of_scope", "reason": "blueprint-scoped print provider listing not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/reports", "query": { "count": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "reports": [
+        {
+          "id": "report_fixture_1",
+          "campaign_title": "Fixture Campaign One",
+          "type": "regular",
+          "list_id": "list_fixture_1",
+          "emails_sent": 100,
+          "abuse_reports": 0,
+          "unsubscribed": 1,
+          "send_time": "2026-01-02T00:00:00+00:00"
+        }
+      ],
+      "total_items": 1
+    }
+  }
+}

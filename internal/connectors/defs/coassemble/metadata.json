@@ -1,0 +1,22 @@
+{
+  "name": "coassemble",
+  "display_name": "Coassemble",
+  "description": "Reads Coassemble courses, screen types, and learner tracking records through the Coassemble headless REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.coassemble.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 20
+  },
+  "risk": {
+    "read": "external Coassemble headless API read of course, screen type, and learner tracking data"
+  }
+}

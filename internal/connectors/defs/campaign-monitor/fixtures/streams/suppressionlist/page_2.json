@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/clients/synthetic-conformance-value/suppressionlist.json",
+    "query": {
+      "page": "2",
+      "pagesize": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Results": [],
+      "PageNumber": 2,
+      "PageSize": 1,
+      "RecordsOnThisPage": 0,
+      "TotalNumberOfRecords": 1,
+      "NumberOfPages": 1
+    }
+  }
+}

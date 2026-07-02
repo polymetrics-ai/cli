@@ -1,0 +1,22 @@
+{
+  "name": "pipedrive",
+  "display_name": "Pipedrive",
+  "description": "Reads Pipedrive deals, persons, organizations, activities, products, and users through REST API v1.",
+  "integration_type": "api",
+  "docs_url": "https://developers.pipedrive.com/docs/api/v1",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Pipedrive API read of CRM deal, contact, and organization data"
+  }
+}

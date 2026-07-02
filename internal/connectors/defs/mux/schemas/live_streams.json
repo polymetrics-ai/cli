@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "live_streams",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "status": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "stream_key": { "type": ["string", "null"] },
+    "latency_mode": { "type": ["string", "null"] },
+    "reconnect_window": { "type": ["number", "null"] },
+    "max_continuous_duration": { "type": ["number", "null"] },
+    "test": { "type": ["boolean", "null"] }
+  }
+}

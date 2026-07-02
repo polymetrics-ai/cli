@@ -1,0 +1,14 @@
+{
+  "api": "signNow REST API (https://api.signnow.com)",
+  "docs": "https://docs.signnow.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full signNow surface (folders, invites, embedded signing, teams) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/document", "covered_by": { "stream": "documents" } },
+    { "method": "GET", "path": "/template", "covered_by": { "stream": "templates" } },
+    { "method": "GET", "path": "/user", "covered_by": { "stream": "users" } },
+    { "method": "POST", "path": "/document", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/folder", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/document/{id}/invite", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

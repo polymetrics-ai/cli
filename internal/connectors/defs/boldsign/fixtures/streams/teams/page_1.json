@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/v1/teams/list", "query": { "Page": "1", "PageSize": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "teamId": "team_fixture_1",
+          "teamName": "Legal",
+          "createdDate": "2026-01-01T00:00:00Z",
+          "users": ["fixture1@example.com", "fixture2@example.com"]
+        }
+      ],
+      "pageDetails": { "page": 1, "totalPages": 1 }
+    }
+  }
+}

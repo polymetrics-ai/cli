@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WaiterAid Connection Specification",
+  "type": "object",
+  "required": ["auth_hash", "restid"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.waiteraid.com",
+      "description": "WaiterAid API base URL. Defaults to the public WaiterAid API host."
+    },
+    "auth_hash": {
+      "type": "string",
+      "x-secret": true,
+      "description": "WaiterAid auth hash, sent as the X-Auth-Hash header on every request."
+    },
+    "restid": {
+      "type": "string",
+      "x-secret": true,
+      "description": "WaiterAid restaurant ID, sent as the X-Restaurant-ID header on every request."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional start_date query parameter passed through to the reservations endpoint verbatim. Not used as a stateful incremental cursor by legacy."
+    }
+  }
+}

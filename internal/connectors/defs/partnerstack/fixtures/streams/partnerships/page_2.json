@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/partnerships", "query": { "cursor": "fixture_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "ptn_fixture_3", "email": "fixture3@example.com", "status": "inactive", "created_at": "2026-01-03T00:00:00Z" }
+      ],
+      "pagination": { "next": "" }
+    }
+  }
+}

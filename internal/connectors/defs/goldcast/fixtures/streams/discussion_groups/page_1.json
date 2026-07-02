@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/event/discussion-groups/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "results": [
+        {
+          "id": "discussion_fixture_1",
+          "event": "event_fixture_1",
+          "name": "Fixture Discussion Group 1",
+          "capacity": 10,
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

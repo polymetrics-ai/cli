@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/people", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "people": [
+        {
+          "id": 101,
+          "name": "Fixture Person 1",
+          "email": "fixture1@example.com",
+          "external_id": "ext_1",
+          "tag_names": ["fixture"]
+        },
+        {
+          "id": 102,
+          "name": "Fixture Person 2",
+          "email": "fixture2@example.com",
+          "external_id": "ext_2",
+          "tag_names": []
+        }
+      ]
+    }
+  }
+}

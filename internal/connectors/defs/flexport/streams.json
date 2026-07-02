@@ -1,0 +1,71 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/products", "query": { "per": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "flexport api_key is missing or invalid; re-run pm credentials add flexport" },
+      { "status": 429, "class": "rate_limited", "hint": "flexport rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "companies",
+      "path": "/companies",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "data.next"
+      },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "locations",
+      "path": "/locations",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "data.next"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "data.next"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "data.next"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "shipments",
+      "path": "/shipments",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "data.next"
+      },
+      "schema": "schemas/shipments.json"
+    }
+  ]
+}

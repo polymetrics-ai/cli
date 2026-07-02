@@ -1,0 +1,77 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apikey", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/stock-screener", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "financial-modelling api key is missing or invalid; re-run pm credentials add financial-modelling" },
+      { "status": 403, "hint": "financial-modelling account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "financial-modelling rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "stock_screener",
+      "path": "/stock-screener",
+      "query": {
+        "exchange": { "template": "{{ config.exchange }}", "omit_when_absent": true },
+        "marketCapMoreThan": { "template": "{{ config.marketcapmorethan }}", "omit_when_absent": true },
+        "marketCapLowerThan": { "template": "{{ config.marketcaplowerthan }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "computed_fields": {
+        "company_name": "{{ record.companyName }}",
+        "market_cap": "{{ record.marketCap }}",
+        "last_annual_dividend": "{{ record.lastAnnualDividend }}",
+        "exchange_short_name": "{{ record.exchangeShortName }}",
+        "is_etf": "{{ record.isEtf }}",
+        "is_actively_trading": "{{ record.isActivelyTrading }}"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 2
+      },
+      "schema": "schemas/stock_screener.json"
+    },
+    {
+      "name": "delisted_companies",
+      "path": "/delisted-companies",
+      "records": { "path": "" },
+      "computed_fields": {
+        "company_name": "{{ record.companyName }}",
+        "ipo_date": "{{ record.ipoDate }}",
+        "delisted_date": "{{ record.delistedDate }}"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 2
+      },
+      "schema": "schemas/delisted_companies.json"
+    },
+    {
+      "name": "stocks",
+      "path": "/stock/list",
+      "records": { "path": "" },
+      "computed_fields": {
+        "exchange_short_name": "{{ record.exchangeShortName }}"
+      },
+      "schema": "schemas/stocks.json"
+    },
+    {
+      "name": "etfs",
+      "path": "/etf/list",
+      "records": { "path": "" },
+      "computed_fields": {
+        "exchange_short_name": "{{ record.exchangeShortName }}"
+      },
+      "schema": "schemas/etfs.json"
+    }
+  ]
+}

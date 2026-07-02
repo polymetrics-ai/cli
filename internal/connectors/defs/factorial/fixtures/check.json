@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api_public/credentials" },
+  "response": {
+    "status": 200,
+    "body": { "data": [] }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "campaign-monitor",
+  "display_name": "Campaign Monitor",
+  "description": "Reads Campaign Monitor clients, campaigns, subscriber lists, and suppression lists through the createsend.com v3.3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.campaignmonitor.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Campaign Monitor API read of client, campaign, and subscriber list data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

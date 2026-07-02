@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns",
+    "query": { "page": "1", "limit": "2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "campaigns": [
+          {
+            "display_id": "camp_fixture_1",
+            "name": "Fixture Campaign One",
+            "created_at": "2026-01-01T00:00:00Z",
+            "update_at": "2026-01-02T00:00:00Z",
+            "google": true,
+            "meta": false,
+            "meta_campaign_id": "",
+            "active": true,
+            "default_link": false,
+            "attributed_users": 10,
+            "link": "https://lr.example/c/1",
+            "shareable_link": "https://lr.example/s/1",
+            "website": "https://example.com",
+            "domain": "example.com"
+          },
+          {
+            "display_id": "camp_fixture_2",
+            "name": "Fixture Campaign Two",
+            "created_at": "2026-01-03T00:00:00Z",
+            "update_at": "2026-01-04T00:00:00Z",
+            "google": false,
+            "meta": true,
+            "meta_campaign_id": "meta_fixture_2",
+            "active": true,
+            "default_link": true,
+            "attributed_users": 20,
+            "link": "https://lr.example/c/2",
+            "shareable_link": "https://lr.example/s/2",
+            "website": "https://example.com",
+            "domain": "example.com"
+          }
+        ]
+      }
+    }
+  }
+}

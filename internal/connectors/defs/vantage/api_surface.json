@@ -1,0 +1,13 @@
+{
+  "api": "Vantage API v2 (https://api.vantage.sh)",
+  "docs": "https://docs.vantage.sh/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only (costs); minimal-honest api_surface per docs/migration/conventions.md section 2 / DECISIONS.md #4 - full Vantage API-surface research (every documented endpoint) is Pass B (wave5), not this fan-out.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/costs", "covered_by": { "stream": "costs" } },
+    { "method": "GET", "path": "/v2/cost_reports", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a cost_reports stream" } },
+    { "method": "GET", "path": "/v2/budgets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a budgets stream" } },
+    { "method": "GET", "path": "/v2/providers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a providers stream" } },
+    { "method": "POST", "path": "/v2/cost_reports", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy implements no write path (Write returns ErrUnsupportedOperation)" } }
+  ]
+}

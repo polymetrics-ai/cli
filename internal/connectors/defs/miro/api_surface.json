@@ -1,0 +1,19 @@
+{
+  "api": "Miro REST API v2 (https://developers.miro.com/reference/api-reference)",
+  "docs": "https://developers.miro.com/reference/api-reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (boards, board_users, board_items, board_tags, board_connectors). Miro's write endpoints (board/item creation, updates, deletion) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/boards", "covered_by": { "stream": "boards" } },
+    { "method": "GET", "path": "/v2/boards/{board_id}/members", "covered_by": { "stream": "board_users" } },
+    { "method": "GET", "path": "/v2/boards/{board_id}/items", "covered_by": { "stream": "board_items" } },
+    { "method": "GET", "path": "/v2/boards/{board_id}/tags", "covered_by": { "stream": "board_tags" } },
+    { "method": "GET", "path": "/v2/boards/{board_id}/connectors", "covered_by": { "stream": "board_connectors" } },
+    { "method": "POST", "path": "/v2/boards", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented board creation; Pass B capability expansion" } },
+    { "method": "PATCH", "path": "/v2/boards/{board_id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented board updates; Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/v2/boards/{board_id}", "excluded": { "category": "destructive_admin", "reason": "board deletion not modeled by legacy; Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/boards/{board_id}/items", "excluded": { "category": "out_of_scope", "reason": "item creation not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/boards/{board_id}/items/{item_id}", "excluded": { "category": "out_of_scope", "reason": "single-item retrieval not modeled by legacy; the board_items stream already lists every item" } },
+    { "method": "GET", "path": "/v2-experimental/orgs/{org_id}/members", "excluded": { "category": "out_of_scope", "reason": "organization-level membership not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

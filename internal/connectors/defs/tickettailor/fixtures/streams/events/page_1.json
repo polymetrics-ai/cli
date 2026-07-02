@@ -1,0 +1,717 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ev_fixture_1",
+          "name": "Fixture Event 1",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_2",
+          "name": "Fixture Event 2",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_3",
+          "name": "Fixture Event 3",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_4",
+          "name": "Fixture Event 4",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_5",
+          "name": "Fixture Event 5",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_6",
+          "name": "Fixture Event 6",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_7",
+          "name": "Fixture Event 7",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_8",
+          "name": "Fixture Event 8",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_9",
+          "name": "Fixture Event 9",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_10",
+          "name": "Fixture Event 10",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_11",
+          "name": "Fixture Event 11",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_12",
+          "name": "Fixture Event 12",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_13",
+          "name": "Fixture Event 13",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_14",
+          "name": "Fixture Event 14",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_15",
+          "name": "Fixture Event 15",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_16",
+          "name": "Fixture Event 16",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_17",
+          "name": "Fixture Event 17",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_18",
+          "name": "Fixture Event 18",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_19",
+          "name": "Fixture Event 19",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_20",
+          "name": "Fixture Event 20",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_21",
+          "name": "Fixture Event 21",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_22",
+          "name": "Fixture Event 22",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_23",
+          "name": "Fixture Event 23",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_24",
+          "name": "Fixture Event 24",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_25",
+          "name": "Fixture Event 25",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_26",
+          "name": "Fixture Event 26",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_27",
+          "name": "Fixture Event 27",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_28",
+          "name": "Fixture Event 28",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_29",
+          "name": "Fixture Event 29",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_30",
+          "name": "Fixture Event 30",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_31",
+          "name": "Fixture Event 31",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_32",
+          "name": "Fixture Event 32",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_33",
+          "name": "Fixture Event 33",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_34",
+          "name": "Fixture Event 34",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_35",
+          "name": "Fixture Event 35",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_36",
+          "name": "Fixture Event 36",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_37",
+          "name": "Fixture Event 37",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_38",
+          "name": "Fixture Event 38",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_39",
+          "name": "Fixture Event 39",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_40",
+          "name": "Fixture Event 40",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_41",
+          "name": "Fixture Event 41",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_42",
+          "name": "Fixture Event 42",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_43",
+          "name": "Fixture Event 43",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_44",
+          "name": "Fixture Event 44",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_45",
+          "name": "Fixture Event 45",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_46",
+          "name": "Fixture Event 46",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_47",
+          "name": "Fixture Event 47",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_48",
+          "name": "Fixture Event 48",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_49",
+          "name": "Fixture Event 49",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_50",
+          "name": "Fixture Event 50",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_51",
+          "name": "Fixture Event 51",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_52",
+          "name": "Fixture Event 52",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_53",
+          "name": "Fixture Event 53",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_54",
+          "name": "Fixture Event 54",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_55",
+          "name": "Fixture Event 55",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_56",
+          "name": "Fixture Event 56",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_57",
+          "name": "Fixture Event 57",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_58",
+          "name": "Fixture Event 58",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_59",
+          "name": "Fixture Event 59",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_60",
+          "name": "Fixture Event 60",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_61",
+          "name": "Fixture Event 61",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_62",
+          "name": "Fixture Event 62",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_63",
+          "name": "Fixture Event 63",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_64",
+          "name": "Fixture Event 64",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_65",
+          "name": "Fixture Event 65",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_66",
+          "name": "Fixture Event 66",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_67",
+          "name": "Fixture Event 67",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_68",
+          "name": "Fixture Event 68",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_69",
+          "name": "Fixture Event 69",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_70",
+          "name": "Fixture Event 70",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_71",
+          "name": "Fixture Event 71",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_72",
+          "name": "Fixture Event 72",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_73",
+          "name": "Fixture Event 73",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_74",
+          "name": "Fixture Event 74",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_75",
+          "name": "Fixture Event 75",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_76",
+          "name": "Fixture Event 76",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_77",
+          "name": "Fixture Event 77",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_78",
+          "name": "Fixture Event 78",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_79",
+          "name": "Fixture Event 79",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_80",
+          "name": "Fixture Event 80",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_81",
+          "name": "Fixture Event 81",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_82",
+          "name": "Fixture Event 82",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_83",
+          "name": "Fixture Event 83",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_84",
+          "name": "Fixture Event 84",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_85",
+          "name": "Fixture Event 85",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_86",
+          "name": "Fixture Event 86",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_87",
+          "name": "Fixture Event 87",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_88",
+          "name": "Fixture Event 88",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_89",
+          "name": "Fixture Event 89",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_90",
+          "name": "Fixture Event 90",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_91",
+          "name": "Fixture Event 91",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_92",
+          "name": "Fixture Event 92",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_93",
+          "name": "Fixture Event 93",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_94",
+          "name": "Fixture Event 94",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_95",
+          "name": "Fixture Event 95",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_96",
+          "name": "Fixture Event 96",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_97",
+          "name": "Fixture Event 97",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_98",
+          "name": "Fixture Event 98",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_99",
+          "name": "Fixture Event 99",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        },
+        {
+          "id": "ev_fixture_100",
+          "name": "Fixture Event 100",
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T02:00:00Z",
+          "status": "published"
+        }
+      ]
+    }
+  }
+}

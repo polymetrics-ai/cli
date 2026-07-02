@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cin7 Connection Specification",
+  "type": "object",
+  "required": ["accountid", "api_key"],
+  "properties": {
+    "accountid": {
+      "type": "string",
+      "description": "Cin7 Core account ID, sent as the api-auth-accountid header on every request."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Cin7 Core application key, sent as the api-auth-applicationkey header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://inventory.dearsystems.com/externalapi/v2",
+      "description": "Cin7 Core API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

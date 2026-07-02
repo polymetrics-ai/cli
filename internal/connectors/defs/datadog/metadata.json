@@ -1,0 +1,23 @@
+{
+  "name": "datadog",
+  "display_name": "Datadog",
+  "description": "Reads Datadog dashboards and scheduled downtimes through the Datadog REST API. Monitors, users, and SLOs are NOT migrated in this wave (see docs.md Known limits, ENGINE_GAP).",
+  "integration_type": "api",
+  "docs_url": "https://docs.datadoghq.com/api/latest/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Datadog API read of dashboard and downtime configuration data",
+    "approval": "none; read-only"
+  }
+}

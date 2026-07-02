@@ -1,0 +1,23 @@
+{
+  "name": "shortcut",
+  "display_name": "Shortcut",
+  "description": "Reads Shortcut stories, epics, projects, and iterations through the Shortcut REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.shortcut.com/api/rest/v3",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Shortcut API read of story, epic, project, and iteration data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

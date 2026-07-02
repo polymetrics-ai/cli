@@ -1,0 +1,23 @@
+{
+  "name": "e-conomic",
+  "display_name": "e-conomic",
+  "description": "Reads e-conomic customers, products, suppliers, accounts, and booked invoices through the e-conomic REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://restdocs.e-conomic.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external e-conomic API read of customer, product, supplier, account, and invoice data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

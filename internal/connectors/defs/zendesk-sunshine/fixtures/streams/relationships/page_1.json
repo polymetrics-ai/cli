@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/relationships/records" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "relationship_fixture_1",
+          "type": "owns",
+          "source": { "id": "object_fixture_1", "type": "asset" },
+          "target": { "id": "object_fixture_2", "type": "user" }
+        }
+      ]
+    }
+  }
+}

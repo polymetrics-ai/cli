@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/catalog" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "catalog_fixture_1",
+          "type": "CONTAINER",
+          "containerType": "SOURCE",
+          "datasetType": "PROMOTED",
+          "path": ["fixture", "catalog", "1"],
+          "tag": "tag_1",
+          "createdAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "catalog_fixture_2",
+          "type": "CONTAINER",
+          "containerType": "SOURCE",
+          "datasetType": "PROMOTED",
+          "path": ["fixture", "catalog", "2"],
+          "tag": "tag_2",
+          "createdAt": "2026-01-02T00:00:00.000Z"
+        }
+      ],
+      "nextPageToken": "page2token"
+    }
+  }
+}

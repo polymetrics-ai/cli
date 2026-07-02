@@ -1,0 +1,16 @@
+{
+  "api": "MailerSend API v1 (https://api.mailersend.com/v1)",
+  "docs": "https://developers.mailersend.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full MailerSend API surface (send email, templates, webhooks, scheduled messages, single-message detail) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/activity/{domain_id}", "covered_by": { "stream": "activity" } },
+    { "method": "GET", "path": "/domains", "covered_by": { "stream": "domains" } },
+    { "method": "GET", "path": "/messages", "covered_by": { "stream": "messages" } },
+    { "method": "GET", "path": "/recipients", "covered_by": { "stream": "recipients" } },
+    { "method": "POST", "path": "/email", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/templates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/scheduled-messages", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

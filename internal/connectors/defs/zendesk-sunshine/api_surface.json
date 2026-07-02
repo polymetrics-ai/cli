@@ -1,0 +1,14 @@
+{
+  "api": "Zendesk Sunshine custom objects API (https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/)",
+  "docs": "https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (object_types, objects, relationships); write endpoints (create custom object record, create relationship, etc.) are out of scope for this pass",
+  "endpoints": [
+    { "method": "GET", "path": "/objects/types", "covered_by": { "stream": "object_types" } },
+    { "method": "GET", "path": "/objects/records", "covered_by": { "stream": "objects" } },
+    { "method": "GET", "path": "/relationships/records", "covered_by": { "stream": "relationships" } },
+    { "method": "POST", "path": "/objects/records", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/objects/types", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/relationships/records", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

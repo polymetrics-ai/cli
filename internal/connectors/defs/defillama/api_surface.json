@@ -1,0 +1,17 @@
+{
+  "api": "DefiLlama public API (api.llama.fi, stablecoins.llama.fi)",
+  "docs": "https://defillama.com/docs/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full DefiLlama surface (yields, bridges, per-protocol TVL history, per-chain historical charts, NFT floor prices) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/protocols", "covered_by": { "stream": "protocols" } },
+    { "method": "GET", "path": "/v2/chains", "covered_by": { "stream": "chains" } },
+    { "method": "GET", "path": "/stablecoins", "covered_by": { "stream": "stablecoins" } },
+    { "method": "GET", "path": "/overview/dexs", "covered_by": { "stream": "dexs" } },
+    { "method": "GET", "path": "/overview/fees", "covered_by": { "stream": "fees" } },
+    { "method": "GET", "path": "/tvl/{protocol}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/charts/{chain}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/yields/pools", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/bridges", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

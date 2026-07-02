@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/onecall", "query": { "lat": "synthetic-conformance-value", "lon": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "lat": 33.44,
+      "lon": -94.04,
+      "timezone": "America/Chicago",
+      "alerts": [
+        {
+          "sender_name": "NWS",
+          "event": "Heat Advisory",
+          "start": 1767225600,
+          "end": 1767232800,
+          "description": "Stay hydrated and avoid the midday sun.",
+          "tags": ["Extreme temperature value"]
+        }
+      ]
+    }
+  }
+}

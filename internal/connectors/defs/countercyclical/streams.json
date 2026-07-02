@@ -1,0 +1,40 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apiKey", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/investments" },
+    "error_map": [
+      { "status": 401, "hint": "countercyclical api_key is missing or invalid; re-run pm credentials add countercyclical" },
+      { "status": 429, "class": "rate_limited", "hint": "countercyclical rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "investments",
+      "path": "/investments",
+      "records": { "path": "." },
+      "schema": "schemas/investments.json"
+    },
+    {
+      "name": "valuations",
+      "path": "/valuations",
+      "records": { "path": "." },
+      "schema": "schemas/valuations.json"
+    },
+    {
+      "name": "memos",
+      "path": "/memos",
+      "records": { "path": "." },
+      "schema": "schemas/memos.json"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "", "value": "{{ secrets.api_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/team" },
+    "error_map": [
+      { "status": 401, "hint": "clickup-api api_token is missing or invalid; re-run pm credentials add clickup-api" },
+      { "status": 403, "hint": "clickup-api account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "clickup-api rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "tasks",
+      "path": "/team/{{ config.team_id }}/task",
+      "query": {
+        "include_closed": { "template": "{{ config.include_closed_tasks }}", "omit_when_absent": true },
+        "archived": { "template": "{{ config.include_archived }}", "default": "false" }
+      },
+      "records": { "path": "tasks" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "start_page": 1,
+        "page_size": 2
+      },
+      "incremental": {
+        "cursor_field": "date_updated",
+        "client_filtered": true
+      },
+      "computed_fields": {
+        "status": "{{ record.status.status }}",
+        "creator_id": "{{ record.creator.id }}",
+        "list_id": "{{ record.list.id }}",
+        "folder_id": "{{ record.folder.id }}",
+        "space_id": "{{ record.space.id }}"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "teams",
+      "path": "/team",
+      "query": {
+        "archived": { "template": "{{ config.include_archived }}", "omit_when_absent": true }
+      },
+      "records": { "path": "teams" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "spaces",
+      "path": "/team/{{ config.team_id }}/space",
+      "query": {
+        "archived": { "template": "{{ config.include_archived }}", "omit_when_absent": true }
+      },
+      "records": { "path": "spaces" },
+      "schema": "schemas/spaces.json"
+    },
+    {
+      "name": "folders",
+      "path": "/space/{{ config.space_id }}/folder",
+      "query": {
+        "archived": { "template": "{{ config.include_archived }}", "omit_when_absent": true }
+      },
+      "records": { "path": "folders" },
+      "computed_fields": {
+        "space_id": "{{ record.space.id }}"
+      },
+      "schema": "schemas/folders.json"
+    },
+    {
+      "name": "lists",
+      "path": "/space/{{ config.space_id }}/list",
+      "query": {
+        "archived": { "template": "{{ config.include_archived }}", "omit_when_absent": true }
+      },
+      "records": { "path": "lists" },
+      "computed_fields": {
+        "space_id": "{{ record.space.id }}"
+      },
+      "schema": "schemas/lists.json"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/locations", "query": { "page": "2", "perPage": "1000" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 2,
+      "perPage": 1000,
+      "totalPages": 2,
+      "total": 1001,
+      "locations": [
+        { "locationId": "1-fixture-loc-1001", "locationName": "Fixture Care Home 1001", "postalCode": "AB1 2CD" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "request": { "method": "GET", "path": "/opportunities", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "opp_fixture_1",
+          "name": "Fixture One",
+          "headline": "Headline 1",
+          "stage": "stage_fixture_1",
+          "origin": "sourced",
+          "sources": ["LinkedIn"],
+          "tags": ["fixture"],
+          "emails": ["fixture1@example.com"],
+          "createdAt": 1767225601,
+          "updatedAt": 1767225601,
+          "lastInteractionAt": 1767225601,
+          "archivedAt": null
+        },
+        {
+          "id": "opp_fixture_2",
+          "name": "Fixture Two",
+          "headline": "Headline 2",
+          "stage": "stage_fixture_1",
+          "origin": "sourced",
+          "sources": ["LinkedIn"],
+          "tags": ["fixture"],
+          "emails": ["fixture2@example.com"],
+          "createdAt": 1767225602,
+          "updatedAt": 1767225602,
+          "lastInteractionAt": 1767225602,
+          "archivedAt": null
+        }
+      ],
+      "hasNext": true,
+      "next": "opp_fixture_2_cursor"
+    }
+  }
+}

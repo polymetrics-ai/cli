@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MailerSend Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "MailerSend API token. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.mailersend.com/v1",
+      "description": "MailerSend API base URL override for tests or proxies."
+    },
+    "domain_id": {
+      "type": "string",
+      "description": "MailerSend domain id. Required by the activity stream (path-scoped); optionally filters the messages stream when set."
+    },
+    "date_from": {
+      "type": "string",
+      "description": "Unix-seconds lower bound for the activity stream's required date window. Falls back to start_date when unset."
+    },
+    "date_to": {
+      "type": "string",
+      "description": "Unix-seconds upper bound for the activity stream's required date window."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fallback for date_from when date_from itself is unset (activity stream only)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

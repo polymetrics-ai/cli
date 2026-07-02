@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/metrics", "query": { "page[size]": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "metric_fixture_1",
+          "type": "metric",
+          "attributes": {
+            "name": "Placed Order",
+            "integration": { "name": "Shopify" },
+            "created": "2026-01-01T00:00:00Z",
+            "updated": "2026-01-01T00:00:00Z"
+          }
+        },
+        {
+          "id": "metric_fixture_2",
+          "type": "metric",
+          "attributes": {
+            "name": "Received Email",
+            "integration": { "name": "Klaviyo" },
+            "created": "2026-01-02T00:00:00Z",
+            "updated": "2026-01-02T00:00:00Z"
+          }
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

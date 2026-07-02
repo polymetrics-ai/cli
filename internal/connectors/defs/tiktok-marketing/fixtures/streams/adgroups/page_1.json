@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/adgroup/get/",
+    "query": { "page": "1", "page_size": "100", "advertiser_id": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "OK",
+      "data": {
+        "list": [
+          {
+            "adgroup_id": "adgroup_fixture_1",
+            "adgroup_name": "Fixture AdGroup 1",
+            "campaign_id": "campaign_fixture_1",
+            "advertiser_id": "synthetic-conformance-value",
+            "placement_type": "PLACEMENT_TYPE_AUTOMATIC",
+            "budget": 50.0,
+            "budget_mode": "BUDGET_MODE_DAY",
+            "operation_status": "ENABLE",
+            "create_time": "2026-01-01T00:00:00Z",
+            "modify_time": "2026-01-02T00:00:00Z"
+          },
+          {
+            "adgroup_id": "adgroup_fixture_2",
+            "adgroup_name": "Fixture AdGroup 2",
+            "campaign_id": "campaign_fixture_1",
+            "advertiser_id": "synthetic-conformance-value",
+            "placement_type": "PLACEMENT_TYPE_AUTOMATIC",
+            "budget": 75.0,
+            "budget_mode": "BUDGET_MODE_DAY",
+            "operation_status": "ENABLE",
+            "create_time": "2026-01-01T00:00:00Z",
+            "modify_time": "2026-01-03T00:00:00Z"
+          }
+        ],
+        "page_info": { "page": 1, "page_size": 100, "total_number": 2, "total_page": 1 }
+      }
+    }
+  }
+}

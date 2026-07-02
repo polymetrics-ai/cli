@@ -1,0 +1,45 @@
+{
+  "request": { "method": "GET", "path": "/latest", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "totalResults": 3,
+      "results": [
+        {
+          "article_id": "fixture-latest-1",
+          "title": "Fixture Article 1",
+          "link": "https://example.com/latest/1",
+          "description": "conformance fixture article 1",
+          "content": "Deterministic fixture content 1.",
+          "pubDate": "2026-01-01 00:00:00",
+          "image_url": null,
+          "source_id": "fixture-source",
+          "source_priority": 1,
+          "language": "english",
+          "creator": ["Fixture Author"],
+          "keywords": ["fixture"],
+          "category": ["top"],
+          "country": ["united states"]
+        },
+        {
+          "article_id": "fixture-latest-2",
+          "title": "Fixture Article 2",
+          "link": "https://example.com/latest/2",
+          "description": "conformance fixture article 2",
+          "content": "Deterministic fixture content 2.",
+          "pubDate": "2026-01-02 00:00:00",
+          "image_url": null,
+          "source_id": "fixture-source",
+          "source_priority": 1,
+          "language": "english",
+          "creator": ["Fixture Author"],
+          "keywords": ["fixture"],
+          "category": ["top"],
+          "country": ["united states"]
+        }
+      ],
+      "nextPage": "TOKEN2"
+    }
+  }
+}

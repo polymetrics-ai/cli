@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "version",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "handle": { "type": ["string", "null"] },
+    "sku": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "brand_id": { "type": ["string", "null"] },
+    "supplier_id": { "type": ["string", "null"] },
+    "product_category": { "type": ["string", "null"] },
+    "price_including_tax": { "type": ["number", "null"] },
+    "price_excluding_tax": { "type": ["number", "null"] },
+    "supply_price": { "type": ["number", "null"] },
+    "has_variants": { "type": ["boolean", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "is_composite": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

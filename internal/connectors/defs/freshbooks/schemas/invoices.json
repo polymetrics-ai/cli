@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "invoiceid": { "type": ["integer", "null"] },
+    "invoice_number": { "type": ["string", "null"] },
+    "customerid": { "type": ["integer", "null"] },
+    "status": { "type": ["integer", "null"] },
+    "amount": { "type": ["object", "null"] },
+    "outstanding": { "type": ["object", "null"] },
+    "currency_code": { "type": ["string", "null"] },
+    "create_date": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] }
+  }
+}

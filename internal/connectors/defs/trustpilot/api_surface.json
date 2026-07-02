@@ -1,0 +1,14 @@
+{
+  "api": "Trustpilot API v1 (https://api.trustpilot.com)",
+  "docs": "https://developers.trustpilot.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read-only streams (reviews, invitations, business_units) only, matching internal/connectors/trustpilot's exact endpoint set; the full Trustpilot surface (consumer profiles, categories, replies, private reviews) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/business-units/{business_unit_id}/reviews", "covered_by": { "stream": "reviews" } },
+    { "method": "GET", "path": "/v1/private/business-units/{business_unit_id}/invitations", "covered_by": { "stream": "invitations" } },
+    { "method": "GET", "path": "/v1/business-units/{business_unit_id}", "covered_by": { "stream": "business_units" } },
+    { "method": "POST", "path": "/v1/private/business-units/{business_unit_id}/invitations", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/business-units/{business_unit_id}/reviews/{review_id}/reply", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/consumers/{consumer_id}", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

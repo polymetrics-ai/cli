@@ -1,0 +1,12 @@
+{
+  "api": "Pabbly Subscriptions Billing API",
+  "docs": "https://www.pabbly.com/subscriptions/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; legacy exposes no write actions and this bundle adds none",
+  "endpoints": [
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/subscriptions", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/plans", "covered_by": { "stream": "plans" } },
+    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } }
+  ]
+}

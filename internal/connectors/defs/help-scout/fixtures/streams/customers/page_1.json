@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers",
+    "query": { "sortField": "modifiedAt", "sortOrder": "asc", "page": "1", "size": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "customers": [
+          {
+            "id": 201,
+            "firstName": "Fixture",
+            "lastName": "One",
+            "gender": "unknown",
+            "jobTitle": "Tester",
+            "organization": "Polymetrics",
+            "photoUrl": "",
+            "age": "30",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      "page": { "number": 1, "size": 50, "totalElements": 1, "totalPages": 1 }
+    }
+  }
+}

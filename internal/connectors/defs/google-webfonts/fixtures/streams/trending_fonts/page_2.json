@@ -1,0 +1,23 @@
+{
+  "kind": "webfonts#webfontList",
+  "items": [
+    {
+      "family": "Lato",
+      "category": "sans-serif",
+      "version": "v24",
+      "lastModified": "2026-01-03",
+      "kind": "webfonts#webfont",
+      "menu": "https://fonts.gstatic.com/s/lato/menu.ttf",
+      "variants": [
+        "regular",
+        "700"
+      ],
+      "subsets": [
+        "latin"
+      ],
+      "files": {
+        "regular": "https://fonts.gstatic.com/s/lato/regular.ttf"
+      }
+    }
+  ]
+}

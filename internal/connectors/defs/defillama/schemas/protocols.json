@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "protocols",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "symbol": { "type": ["string", "null"] },
+    "category": { "type": ["string", "null"] },
+    "chain": { "type": ["string", "null"] },
+    "chains": { "type": ["array", "null"] },
+    "tvl": { "type": ["number", "null"] },
+    "mcap": { "type": ["number", "null"] },
+    "change_1d": { "type": ["number", "null"] },
+    "change_7d": { "type": ["number", "null"] },
+    "url": { "type": ["string", "null"] }
+  }
+}

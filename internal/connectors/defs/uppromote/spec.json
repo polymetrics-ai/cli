@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UpPromote Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "UpPromote API key, sent as a Bearer token on every request."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.uppromote.com",
+      "description": "UpPromote API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional RFC3339 lower bound sent as the start_date query parameter, when set."
+    }
+  }
+}

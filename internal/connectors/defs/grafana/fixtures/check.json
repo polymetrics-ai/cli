@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/org" },
+  "response": {
+    "status": 200,
+    "body": { "id": 1, "name": "Fixture Org" }
+  }
+}

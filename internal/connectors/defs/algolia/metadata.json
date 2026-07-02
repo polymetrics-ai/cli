@@ -1,0 +1,22 @@
+{
+  "name": "algolia",
+  "display_name": "Algolia",
+  "description": "Reads Algolia indices, API keys, and index settings through the Algolia Search REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.algolia.com/doc/rest-api/search/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Algolia API read of index/key configuration metadata"
+  }
+}

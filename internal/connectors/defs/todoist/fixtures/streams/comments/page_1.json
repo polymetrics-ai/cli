@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/comments" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "cmt_fixture_1", "project_id": "prj_fixture_1", "task_id": null, "content": "Fixture comment one", "posted_at": "2026-01-01T00:00:00Z" },
+      { "id": "cmt_fixture_2", "project_id": null, "task_id": "tsk_fixture_1", "content": "Fixture comment two", "posted_at": "2026-01-02T00:00:00Z" }
+    ]
+  }
+}

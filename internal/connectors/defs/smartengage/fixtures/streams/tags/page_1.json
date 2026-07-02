@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags/list/"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "tags-1",
+        "avatar_id": "avatar-1",
+        "name": "Fixture tags 1"
+      },
+      {
+        "id": "tags-2",
+        "avatar_id": "avatar-2",
+        "name": "Fixture tags 2"
+      }
+    ]
+  }
+}

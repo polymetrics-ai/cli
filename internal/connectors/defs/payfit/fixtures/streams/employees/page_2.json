@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/employees", "query": { "offset": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "emp_fixture_3", "first_name": "Katherine", "last_name": "Fixture", "email": "fixture3@example.com", "updated_at": "2026-01-03T00:00:00Z" }
+      ],
+      "meta": { "next_offset": "" }
+    }
+  }
+}

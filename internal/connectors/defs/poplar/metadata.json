@@ -1,0 +1,23 @@
+{
+  "name": "poplar",
+  "display_name": "Poplar",
+  "description": "Reads Poplar campaigns and orders through read-only REST list endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://docs.poplar.studio/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Poplar API read of campaign and order data",
+    "approval": "none; read-only, no writes implemented by legacy"
+  }
+}

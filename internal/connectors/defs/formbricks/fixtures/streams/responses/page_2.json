@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/management/responses", "query": { "limit": "2", "skip": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "res_fixture_3",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_3",
+          "finished": true,
+          "data": { "q1": "answer three" },
+          "meta": { "source": "fixture" },
+          "createdAt": "2026-01-03T00:00:00.000Z",
+          "updatedAt": "2026-01-03T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/datasets/synthetic-conformance-value/records", "query": { "page_size": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "row_1", "Timestamp": "2026-01-01T00:00:00Z", "value": 1 },
+        { "id": "row_2", "Timestamp": "2026-01-01T00:01:00Z", "value": 2 }
+      ]
+    }
+  }
+}

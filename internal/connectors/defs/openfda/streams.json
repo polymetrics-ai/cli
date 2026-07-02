@@ -1,0 +1,68 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "api_key", "value": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" },
+      { "mode": "none" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "skip",
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/drug/event.json", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 404, "hint": "openfda query matched no records for this search" },
+      { "status": 429, "class": "rate_limited", "hint": "openfda rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "drug_event",
+      "path": "/drug/event.json",
+      "query": {
+        "search": { "template": "{{ config.search }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/drug_event.json"
+    },
+    {
+      "name": "drug_label",
+      "path": "/drug/label.json",
+      "query": {
+        "search": { "template": "{{ config.search }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/drug_label.json"
+    },
+    {
+      "name": "drug_enforcement",
+      "path": "/drug/enforcement.json",
+      "query": {
+        "search": { "template": "{{ config.search }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/drug_enforcement.json"
+    },
+    {
+      "name": "device_event",
+      "path": "/device/event.json",
+      "query": {
+        "search": { "template": "{{ config.search }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/device_event.json"
+    },
+    {
+      "name": "food_enforcement",
+      "path": "/food/enforcement.json",
+      "query": {
+        "search": { "template": "{{ config.search }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/food_enforcement.json"
+    }
+  ]
+}

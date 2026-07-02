@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Adobe Commerce (Magento) Invoice",
+  "type": "object",
+  "x-primary-key": ["entity_id"],
+  "x-cursor-field": "updated_at",
+  "properties": {
+    "entity_id": { "type": "integer" },
+    "increment_id": { "type": "string" },
+    "order_id": { "type": "integer" },
+    "state": { "type": "integer" },
+    "grand_total": { "type": "number" },
+    "base_grand_total": { "type": "number" },
+    "store_id": { "type": "integer" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  }
+}

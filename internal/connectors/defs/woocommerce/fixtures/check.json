@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders",
+    "query": {
+      "per_page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/playlists", "query": { "part": "snippet,statistics" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "pl_fixture_1",
+          "snippet": { "title": "Fixture Playlist One", "publishedAt": "2026-01-01T00:00:00Z" }
+        },
+        {
+          "id": "pl_fixture_2",
+          "snippet": { "title": "Fixture Playlist Two", "publishedAt": "2026-01-02T00:00:00Z" }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/cases", "query": { "page[size]": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "case_fixture_1",
+          "type": "case",
+          "attributes": { "status": "open", "created-at": "2026-01-01T00:00:00Z" },
+          "relationships": {}
+        }
+      ],
+      "links": { "next": null, "prev": null }
+    }
+  }
+}

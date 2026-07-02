@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pipelines",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "graphql_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "web_url": { "type": ["string", "null"] },
+    "repository": { "type": ["string", "null"] },
+    "default_branch": { "type": ["string", "null"] },
+    "visibility": { "type": ["string", "null"] },
+    "builds_url": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "archived_at": { "type": ["string", "null"] }
+  }
+}

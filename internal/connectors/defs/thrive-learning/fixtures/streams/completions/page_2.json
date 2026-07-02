@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/completions",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "completion_fixture_101",
+          "user_id": "user_fixture_101",
+          "content_id": "content_fixture_101",
+          "completed_at": "2026-01-18T00:00:00Z",
+          "updated_at": "2026-01-18T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

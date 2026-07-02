@@ -1,0 +1,73 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "after",
+      "token_path": "end_cursor",
+      "stop_path": "has_next_page"
+    },
+    "check": { "method": "GET", "path": "/v3/organizations/{{ config.org_id }}/sessions" },
+    "error_map": [
+      { "status": 401, "hint": "devin-ai api_token is missing or invalid; re-run pm credentials add devin-ai" },
+      { "status": 403, "hint": "devin-ai organization lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "devin-ai rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "sessions",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "created_after",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/sessions.json"
+    },
+    {
+      "name": "sessions_insights",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/insights",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "created_after",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/sessions_insights.json"
+    },
+    {
+      "name": "session_messages",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/messages",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "created_after",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/session_messages.json"
+    },
+    {
+      "name": "playbooks",
+      "path": "/v3/organizations/{{ config.org_id }}/playbooks",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "schema": "schemas/playbooks.json"
+    },
+    {
+      "name": "secrets",
+      "path": "/v3/organizations/{{ config.org_id }}/secrets",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "schema": "schemas/secrets.json"
+    }
+  ]
+}

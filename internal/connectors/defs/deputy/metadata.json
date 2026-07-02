@@ -1,0 +1,22 @@
+{
+  "name": "deputy",
+  "display_name": "Deputy",
+  "description": "Reads Deputy locations, employees, departments, timesheets, and tasks through the Deputy REST API (read-only, full refresh).",
+  "integration_type": "api",
+  "docs_url": "https://www.deputy.com/api-doc/API/Getting_Started",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 500
+  },
+  "risk": {
+    "read": "external Deputy API read of workforce scheduling, employee, and timesheet data"
+  }
+}

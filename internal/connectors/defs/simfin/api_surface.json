@@ -1,0 +1,13 @@
+{
+  "api": "SimFin REST API v3 (https://backend.simfin.com)",
+  "docs": "https://simfin.com/api/v3/documentation/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full SimFin surface (ratios, price data, bulk downloads) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v3/companies/list", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/api/v3/statements/list", "covered_by": { "stream": "statements" } },
+    { "method": "GET", "path": "/api/v3/markets/list", "covered_by": { "stream": "markets" } },
+    { "method": "GET", "path": "/api/v3/companies/prices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v3/companies/ratios", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

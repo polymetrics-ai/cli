@@ -1,0 +1,22 @@
+{
+  "name": "drift",
+  "display_name": "Drift",
+  "description": "Reads Drift users, accounts, conversations, and contacts through the Drift REST API.",
+  "integration_type": "api",
+  "docs_url": "https://devdocs.drift.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 65
+  },
+  "risk": {
+    "read": "external Drift API read of conversational-marketing users, accounts, conversations, and contacts"
+  }
+}

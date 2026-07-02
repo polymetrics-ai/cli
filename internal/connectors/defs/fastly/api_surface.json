@@ -1,0 +1,16 @@
+{
+  "api": "Fastly REST API (https://developer.fastly.com/reference/api/)",
+  "docs": "https://developer.fastly.com/reference/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (services, current_user, current_customer, datacenters); Fastly is read-only for reverse ETL purposes (no safe mutation surface), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/service", "covered_by": { "stream": "services" } },
+    { "method": "GET", "path": "/current_user", "covered_by": { "stream": "current_user" } },
+    { "method": "GET", "path": "/current_customer", "covered_by": { "stream": "current_customer" } },
+    { "method": "GET", "path": "/datacenters", "covered_by": { "stream": "datacenters" } },
+    { "method": "POST", "path": "/service", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; service create/update/delete has no reverse-ETL parity in legacy" } },
+    { "method": "GET", "path": "/service/{service_id}/version/{version}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; per-service version detail not modeled by legacy" } },
+    { "method": "GET", "path": "/billing", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; billing data not modeled by legacy" } },
+    { "method": "GET", "path": "/tokens", "excluded": { "category": "requires_elevated_scope", "reason": "API token management is credential-adjacent; not modeled by legacy" } }
+  ]
+}

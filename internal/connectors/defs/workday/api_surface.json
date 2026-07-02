@@ -1,0 +1,12 @@
+{
+  "api": "Workday tenant API (conservative endpoint subset; https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html)",
+  "docs": "https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (workers, organizations, positions); legacy is a deliberately conservative read-only Workday client and ships no writes.",
+  "endpoints": [
+    { "method": "GET", "path": "/ccx/api/v1/{tenant}/workers", "covered_by": { "stream": "workers" } },
+    { "method": "GET", "path": "/ccx/api/v1/{tenant}/organizations", "covered_by": { "stream": "organizations" } },
+    { "method": "GET", "path": "/ccx/api/v1/{tenant}/positions", "covered_by": { "stream": "positions" } },
+    { "method": "POST", "path": "/ccx/api/v1/{tenant}/workers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented worker mutation; Pass B capability expansion" } }
+  ]
+}

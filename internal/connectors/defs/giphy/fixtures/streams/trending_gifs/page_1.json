@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/gifs/trending",
+    "query": { "limit": "25", "offset": "0", "rating": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "trending_gifs_fixture_1",
+          "type": "gif",
+          "slug": "fixture-trending_gifs-1",
+          "url": "https://giphy.com/gifs/trending_gifs_fixture_1",
+          "bitly_url": "https://gph.is/fixture-1",
+          "embed_url": "https://giphy.com/embed/trending_gifs_fixture_1",
+          "title": "Fixture gif 1",
+          "rating": "g",
+          "username": "polymetrics-fixture",
+          "source": "https://example.com",
+          "source_tld": "example.com",
+          "content_url": "",
+          "import_datetime": "2026-01-01 00:00:00",
+          "trending_datetime": "0000-00-00 00:00:00"
+        }
+      ],
+      "pagination": { "total_count": 1, "count": 1, "offset": 0 }
+    }
+  }
+}

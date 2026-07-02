@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "transactionDate",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "url": { "type": ["string", "null"] },
+    "advertiserId": { "type": ["integer", "null"] },
+    "publisherId": { "type": ["integer", "null"] },
+    "commissionSharingPublisherId": { "type": ["integer", "null"] },
+    "siteName": { "type": ["string", "null"] },
+    "transactionDate": { "type": ["string", "null"] },
+    "validationDate": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "transactionStatus": { "type": ["string", "null"] },
+    "saleAmount": { "type": ["object", "null"] },
+    "commissionAmount": { "type": ["object", "null"] },
+    "clickDate": { "type": ["string", "null"] },
+    "clickRefs": { "type": ["object", "null"] },
+    "customParameters": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/headless/screen/types" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "text",
+        "title": "Text Screen",
+        "icon": "text-icon",
+        "premium": false
+      },
+      {
+        "id": 2,
+        "name": "quiz",
+        "title": "Quiz Screen",
+        "icon": "quiz-icon",
+        "premium": true
+      }
+    ]
+  }
+}

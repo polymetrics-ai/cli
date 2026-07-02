@@ -1,0 +1,717 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/account/~/extension",
+    "query": {
+      "page": "1",
+      "perPage": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "records": [
+        {
+          "id": 1001,
+          "extensionNumber": "101",
+          "name": "Fixture Extension 1",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1002,
+          "extensionNumber": "102",
+          "name": "Fixture Extension 2",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1003,
+          "extensionNumber": "103",
+          "name": "Fixture Extension 3",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1004,
+          "extensionNumber": "104",
+          "name": "Fixture Extension 4",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1005,
+          "extensionNumber": "105",
+          "name": "Fixture Extension 5",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1006,
+          "extensionNumber": "106",
+          "name": "Fixture Extension 6",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1007,
+          "extensionNumber": "107",
+          "name": "Fixture Extension 7",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1008,
+          "extensionNumber": "108",
+          "name": "Fixture Extension 8",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1009,
+          "extensionNumber": "109",
+          "name": "Fixture Extension 9",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1010,
+          "extensionNumber": "110",
+          "name": "Fixture Extension 10",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1011,
+          "extensionNumber": "111",
+          "name": "Fixture Extension 11",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1012,
+          "extensionNumber": "112",
+          "name": "Fixture Extension 12",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1013,
+          "extensionNumber": "113",
+          "name": "Fixture Extension 13",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1014,
+          "extensionNumber": "114",
+          "name": "Fixture Extension 14",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1015,
+          "extensionNumber": "115",
+          "name": "Fixture Extension 15",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1016,
+          "extensionNumber": "116",
+          "name": "Fixture Extension 16",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1017,
+          "extensionNumber": "117",
+          "name": "Fixture Extension 17",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1018,
+          "extensionNumber": "118",
+          "name": "Fixture Extension 18",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1019,
+          "extensionNumber": "119",
+          "name": "Fixture Extension 19",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1020,
+          "extensionNumber": "120",
+          "name": "Fixture Extension 20",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1021,
+          "extensionNumber": "121",
+          "name": "Fixture Extension 21",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1022,
+          "extensionNumber": "122",
+          "name": "Fixture Extension 22",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1023,
+          "extensionNumber": "123",
+          "name": "Fixture Extension 23",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1024,
+          "extensionNumber": "124",
+          "name": "Fixture Extension 24",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1025,
+          "extensionNumber": "125",
+          "name": "Fixture Extension 25",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1026,
+          "extensionNumber": "126",
+          "name": "Fixture Extension 26",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1027,
+          "extensionNumber": "127",
+          "name": "Fixture Extension 27",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1028,
+          "extensionNumber": "128",
+          "name": "Fixture Extension 28",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1029,
+          "extensionNumber": "129",
+          "name": "Fixture Extension 29",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1030,
+          "extensionNumber": "130",
+          "name": "Fixture Extension 30",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1031,
+          "extensionNumber": "131",
+          "name": "Fixture Extension 31",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1032,
+          "extensionNumber": "132",
+          "name": "Fixture Extension 32",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1033,
+          "extensionNumber": "133",
+          "name": "Fixture Extension 33",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1034,
+          "extensionNumber": "134",
+          "name": "Fixture Extension 34",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1035,
+          "extensionNumber": "135",
+          "name": "Fixture Extension 35",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1036,
+          "extensionNumber": "136",
+          "name": "Fixture Extension 36",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1037,
+          "extensionNumber": "137",
+          "name": "Fixture Extension 37",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1038,
+          "extensionNumber": "138",
+          "name": "Fixture Extension 38",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1039,
+          "extensionNumber": "139",
+          "name": "Fixture Extension 39",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1040,
+          "extensionNumber": "140",
+          "name": "Fixture Extension 40",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1041,
+          "extensionNumber": "141",
+          "name": "Fixture Extension 41",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1042,
+          "extensionNumber": "142",
+          "name": "Fixture Extension 42",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1043,
+          "extensionNumber": "143",
+          "name": "Fixture Extension 43",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1044,
+          "extensionNumber": "144",
+          "name": "Fixture Extension 44",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1045,
+          "extensionNumber": "145",
+          "name": "Fixture Extension 45",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1046,
+          "extensionNumber": "146",
+          "name": "Fixture Extension 46",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1047,
+          "extensionNumber": "147",
+          "name": "Fixture Extension 47",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1048,
+          "extensionNumber": "148",
+          "name": "Fixture Extension 48",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1049,
+          "extensionNumber": "149",
+          "name": "Fixture Extension 49",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1050,
+          "extensionNumber": "150",
+          "name": "Fixture Extension 50",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1051,
+          "extensionNumber": "151",
+          "name": "Fixture Extension 51",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1052,
+          "extensionNumber": "152",
+          "name": "Fixture Extension 52",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1053,
+          "extensionNumber": "153",
+          "name": "Fixture Extension 53",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1054,
+          "extensionNumber": "154",
+          "name": "Fixture Extension 54",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1055,
+          "extensionNumber": "155",
+          "name": "Fixture Extension 55",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1056,
+          "extensionNumber": "156",
+          "name": "Fixture Extension 56",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1057,
+          "extensionNumber": "157",
+          "name": "Fixture Extension 57",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1058,
+          "extensionNumber": "158",
+          "name": "Fixture Extension 58",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1059,
+          "extensionNumber": "159",
+          "name": "Fixture Extension 59",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1060,
+          "extensionNumber": "160",
+          "name": "Fixture Extension 60",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1061,
+          "extensionNumber": "161",
+          "name": "Fixture Extension 61",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1062,
+          "extensionNumber": "162",
+          "name": "Fixture Extension 62",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1063,
+          "extensionNumber": "163",
+          "name": "Fixture Extension 63",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1064,
+          "extensionNumber": "164",
+          "name": "Fixture Extension 64",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1065,
+          "extensionNumber": "165",
+          "name": "Fixture Extension 65",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1066,
+          "extensionNumber": "166",
+          "name": "Fixture Extension 66",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1067,
+          "extensionNumber": "167",
+          "name": "Fixture Extension 67",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1068,
+          "extensionNumber": "168",
+          "name": "Fixture Extension 68",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1069,
+          "extensionNumber": "169",
+          "name": "Fixture Extension 69",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1070,
+          "extensionNumber": "170",
+          "name": "Fixture Extension 70",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1071,
+          "extensionNumber": "171",
+          "name": "Fixture Extension 71",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1072,
+          "extensionNumber": "172",
+          "name": "Fixture Extension 72",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1073,
+          "extensionNumber": "173",
+          "name": "Fixture Extension 73",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1074,
+          "extensionNumber": "174",
+          "name": "Fixture Extension 74",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1075,
+          "extensionNumber": "175",
+          "name": "Fixture Extension 75",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1076,
+          "extensionNumber": "176",
+          "name": "Fixture Extension 76",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1077,
+          "extensionNumber": "177",
+          "name": "Fixture Extension 77",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1078,
+          "extensionNumber": "178",
+          "name": "Fixture Extension 78",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1079,
+          "extensionNumber": "179",
+          "name": "Fixture Extension 79",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1080,
+          "extensionNumber": "180",
+          "name": "Fixture Extension 80",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1081,
+          "extensionNumber": "181",
+          "name": "Fixture Extension 81",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1082,
+          "extensionNumber": "182",
+          "name": "Fixture Extension 82",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1083,
+          "extensionNumber": "183",
+          "name": "Fixture Extension 83",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1084,
+          "extensionNumber": "184",
+          "name": "Fixture Extension 84",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1085,
+          "extensionNumber": "185",
+          "name": "Fixture Extension 85",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1086,
+          "extensionNumber": "186",
+          "name": "Fixture Extension 86",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1087,
+          "extensionNumber": "187",
+          "name": "Fixture Extension 87",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1088,
+          "extensionNumber": "188",
+          "name": "Fixture Extension 88",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1089,
+          "extensionNumber": "189",
+          "name": "Fixture Extension 89",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1090,
+          "extensionNumber": "190",
+          "name": "Fixture Extension 90",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1091,
+          "extensionNumber": "191",
+          "name": "Fixture Extension 91",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1092,
+          "extensionNumber": "192",
+          "name": "Fixture Extension 92",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1093,
+          "extensionNumber": "193",
+          "name": "Fixture Extension 93",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1094,
+          "extensionNumber": "194",
+          "name": "Fixture Extension 94",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1095,
+          "extensionNumber": "195",
+          "name": "Fixture Extension 95",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1096,
+          "extensionNumber": "196",
+          "name": "Fixture Extension 96",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1097,
+          "extensionNumber": "197",
+          "name": "Fixture Extension 97",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1098,
+          "extensionNumber": "198",
+          "name": "Fixture Extension 98",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1099,
+          "extensionNumber": "199",
+          "name": "Fixture Extension 99",
+          "type": "User",
+          "status": "Enabled"
+        },
+        {
+          "id": 1100,
+          "extensionNumber": "200",
+          "name": "Fixture Extension 100",
+          "type": "User",
+          "status": "Enabled"
+        }
+      ]
+    }
+  }
+}

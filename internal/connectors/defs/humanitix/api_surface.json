@@ -1,0 +1,14 @@
+{
+  "api": "Humanitix Public API v1 (https://developers.humanitix.com/)",
+  "docs": "https://developers.humanitix.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (events, tags, orders, tickets); Humanitix exposes no safe reverse-ETL writes (legacy itself ships none; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/v1/tags", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "/v1/events/{eventId}/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/v1/events/{eventId}/tickets", "covered_by": { "stream": "tickets" } },
+    { "method": "GET", "path": "/v1/events/{eventId}", "excluded": { "category": "out_of_scope", "reason": "single-event lookup not modeled by legacy (list-only reads); Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/events/{eventId}/discount-codes", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy; Pass B capability expansion" } }
+  ]
+}

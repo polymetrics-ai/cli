@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/opportunities", "query": { "limit": "100", "offset": "opp_fixture_2_cursor" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "opp_fixture_3",
+          "name": "Fixture Three",
+          "headline": "Headline 3",
+          "stage": "stage_fixture_1",
+          "origin": "sourced",
+          "sources": ["LinkedIn"],
+          "tags": ["fixture"],
+          "emails": ["fixture3@example.com"],
+          "createdAt": 1767225603,
+          "updatedAt": 1767225603,
+          "lastInteractionAt": 1767225603,
+          "archivedAt": null
+        }
+      ],
+      "hasNext": false,
+      "next": null
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "railz",
+  "display_name": "Railz",
+  "description": "Reads Railz businesses, connections, customers, invoices, and bills through the Railz REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://docs.railz.ai/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Railz API read of connected-business accounting data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

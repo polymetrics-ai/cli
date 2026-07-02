@@ -1,0 +1,13 @@
+{
+  "api": "Huntr organization REST API",
+  "docs": "manual intervention needed (no public docs URL on file); legacy source (internal/connectors/huntr) is the ground truth for this bundle",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (members, candidates, activities, notes, actions); Huntr's organization API exposes only full_refresh reads, and legacy ships no writes (capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/members", "covered_by": { "stream": "members" } },
+    { "method": "GET", "path": "/candidates", "covered_by": { "stream": "candidates" } },
+    { "method": "GET", "path": "/activities", "covered_by": { "stream": "activities" } },
+    { "method": "GET", "path": "/notes/members", "covered_by": { "stream": "notes" } },
+    { "method": "GET", "path": "/actions", "covered_by": { "stream": "actions" } }
+  ]
+}

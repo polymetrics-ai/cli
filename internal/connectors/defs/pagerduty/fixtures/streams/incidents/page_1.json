@@ -1,0 +1,718 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/incidents",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "incidents": [
+        {
+          "id": "P_fixture_1",
+          "incident_number": 101,
+          "title": "Fixture Incident 1",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:01Z"
+        },
+        {
+          "id": "P_fixture_2",
+          "incident_number": 102,
+          "title": "Fixture Incident 2",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:02Z"
+        },
+        {
+          "id": "P_fixture_3",
+          "incident_number": 103,
+          "title": "Fixture Incident 3",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:03Z"
+        },
+        {
+          "id": "P_fixture_4",
+          "incident_number": 104,
+          "title": "Fixture Incident 4",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:04Z"
+        },
+        {
+          "id": "P_fixture_5",
+          "incident_number": 105,
+          "title": "Fixture Incident 5",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:05Z"
+        },
+        {
+          "id": "P_fixture_6",
+          "incident_number": 106,
+          "title": "Fixture Incident 6",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:06Z"
+        },
+        {
+          "id": "P_fixture_7",
+          "incident_number": 107,
+          "title": "Fixture Incident 7",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:07Z"
+        },
+        {
+          "id": "P_fixture_8",
+          "incident_number": 108,
+          "title": "Fixture Incident 8",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:08Z"
+        },
+        {
+          "id": "P_fixture_9",
+          "incident_number": 109,
+          "title": "Fixture Incident 9",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:09Z"
+        },
+        {
+          "id": "P_fixture_10",
+          "incident_number": 110,
+          "title": "Fixture Incident 10",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:10Z"
+        },
+        {
+          "id": "P_fixture_11",
+          "incident_number": 111,
+          "title": "Fixture Incident 11",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:11Z"
+        },
+        {
+          "id": "P_fixture_12",
+          "incident_number": 112,
+          "title": "Fixture Incident 12",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:12Z"
+        },
+        {
+          "id": "P_fixture_13",
+          "incident_number": 113,
+          "title": "Fixture Incident 13",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:13Z"
+        },
+        {
+          "id": "P_fixture_14",
+          "incident_number": 114,
+          "title": "Fixture Incident 14",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:14Z"
+        },
+        {
+          "id": "P_fixture_15",
+          "incident_number": 115,
+          "title": "Fixture Incident 15",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:15Z"
+        },
+        {
+          "id": "P_fixture_16",
+          "incident_number": 116,
+          "title": "Fixture Incident 16",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:16Z"
+        },
+        {
+          "id": "P_fixture_17",
+          "incident_number": 117,
+          "title": "Fixture Incident 17",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:17Z"
+        },
+        {
+          "id": "P_fixture_18",
+          "incident_number": 118,
+          "title": "Fixture Incident 18",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:18Z"
+        },
+        {
+          "id": "P_fixture_19",
+          "incident_number": 119,
+          "title": "Fixture Incident 19",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:19Z"
+        },
+        {
+          "id": "P_fixture_20",
+          "incident_number": 120,
+          "title": "Fixture Incident 20",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:20Z"
+        },
+        {
+          "id": "P_fixture_21",
+          "incident_number": 121,
+          "title": "Fixture Incident 21",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:21Z"
+        },
+        {
+          "id": "P_fixture_22",
+          "incident_number": 122,
+          "title": "Fixture Incident 22",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:22Z"
+        },
+        {
+          "id": "P_fixture_23",
+          "incident_number": 123,
+          "title": "Fixture Incident 23",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:23Z"
+        },
+        {
+          "id": "P_fixture_24",
+          "incident_number": 124,
+          "title": "Fixture Incident 24",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:24Z"
+        },
+        {
+          "id": "P_fixture_25",
+          "incident_number": 125,
+          "title": "Fixture Incident 25",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:25Z"
+        },
+        {
+          "id": "P_fixture_26",
+          "incident_number": 126,
+          "title": "Fixture Incident 26",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:26Z"
+        },
+        {
+          "id": "P_fixture_27",
+          "incident_number": 127,
+          "title": "Fixture Incident 27",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:27Z"
+        },
+        {
+          "id": "P_fixture_28",
+          "incident_number": 128,
+          "title": "Fixture Incident 28",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:28Z"
+        },
+        {
+          "id": "P_fixture_29",
+          "incident_number": 129,
+          "title": "Fixture Incident 29",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:29Z"
+        },
+        {
+          "id": "P_fixture_30",
+          "incident_number": 130,
+          "title": "Fixture Incident 30",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:30Z"
+        },
+        {
+          "id": "P_fixture_31",
+          "incident_number": 131,
+          "title": "Fixture Incident 31",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:31Z"
+        },
+        {
+          "id": "P_fixture_32",
+          "incident_number": 132,
+          "title": "Fixture Incident 32",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:32Z"
+        },
+        {
+          "id": "P_fixture_33",
+          "incident_number": 133,
+          "title": "Fixture Incident 33",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:33Z"
+        },
+        {
+          "id": "P_fixture_34",
+          "incident_number": 134,
+          "title": "Fixture Incident 34",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:34Z"
+        },
+        {
+          "id": "P_fixture_35",
+          "incident_number": 135,
+          "title": "Fixture Incident 35",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:35Z"
+        },
+        {
+          "id": "P_fixture_36",
+          "incident_number": 136,
+          "title": "Fixture Incident 36",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:36Z"
+        },
+        {
+          "id": "P_fixture_37",
+          "incident_number": 137,
+          "title": "Fixture Incident 37",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:37Z"
+        },
+        {
+          "id": "P_fixture_38",
+          "incident_number": 138,
+          "title": "Fixture Incident 38",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:38Z"
+        },
+        {
+          "id": "P_fixture_39",
+          "incident_number": 139,
+          "title": "Fixture Incident 39",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:39Z"
+        },
+        {
+          "id": "P_fixture_40",
+          "incident_number": 140,
+          "title": "Fixture Incident 40",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:40Z"
+        },
+        {
+          "id": "P_fixture_41",
+          "incident_number": 141,
+          "title": "Fixture Incident 41",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:41Z"
+        },
+        {
+          "id": "P_fixture_42",
+          "incident_number": 142,
+          "title": "Fixture Incident 42",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:42Z"
+        },
+        {
+          "id": "P_fixture_43",
+          "incident_number": 143,
+          "title": "Fixture Incident 43",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:43Z"
+        },
+        {
+          "id": "P_fixture_44",
+          "incident_number": 144,
+          "title": "Fixture Incident 44",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:44Z"
+        },
+        {
+          "id": "P_fixture_45",
+          "incident_number": 145,
+          "title": "Fixture Incident 45",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:45Z"
+        },
+        {
+          "id": "P_fixture_46",
+          "incident_number": 146,
+          "title": "Fixture Incident 46",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:46Z"
+        },
+        {
+          "id": "P_fixture_47",
+          "incident_number": 147,
+          "title": "Fixture Incident 47",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:47Z"
+        },
+        {
+          "id": "P_fixture_48",
+          "incident_number": 148,
+          "title": "Fixture Incident 48",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:48Z"
+        },
+        {
+          "id": "P_fixture_49",
+          "incident_number": 149,
+          "title": "Fixture Incident 49",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:49Z"
+        },
+        {
+          "id": "P_fixture_50",
+          "incident_number": 150,
+          "title": "Fixture Incident 50",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:50Z"
+        },
+        {
+          "id": "P_fixture_51",
+          "incident_number": 151,
+          "title": "Fixture Incident 51",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:51Z"
+        },
+        {
+          "id": "P_fixture_52",
+          "incident_number": 152,
+          "title": "Fixture Incident 52",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:52Z"
+        },
+        {
+          "id": "P_fixture_53",
+          "incident_number": 153,
+          "title": "Fixture Incident 53",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:53Z"
+        },
+        {
+          "id": "P_fixture_54",
+          "incident_number": 154,
+          "title": "Fixture Incident 54",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:54Z"
+        },
+        {
+          "id": "P_fixture_55",
+          "incident_number": 155,
+          "title": "Fixture Incident 55",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:55Z"
+        },
+        {
+          "id": "P_fixture_56",
+          "incident_number": 156,
+          "title": "Fixture Incident 56",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:56Z"
+        },
+        {
+          "id": "P_fixture_57",
+          "incident_number": 157,
+          "title": "Fixture Incident 57",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:57Z"
+        },
+        {
+          "id": "P_fixture_58",
+          "incident_number": 158,
+          "title": "Fixture Incident 58",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:00:58Z"
+        },
+        {
+          "id": "P_fixture_59",
+          "incident_number": 159,
+          "title": "Fixture Incident 59",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:00:59Z"
+        },
+        {
+          "id": "P_fixture_60",
+          "incident_number": 160,
+          "title": "Fixture Incident 60",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:00Z"
+        },
+        {
+          "id": "P_fixture_61",
+          "incident_number": 161,
+          "title": "Fixture Incident 61",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:01Z"
+        },
+        {
+          "id": "P_fixture_62",
+          "incident_number": 162,
+          "title": "Fixture Incident 62",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:02Z"
+        },
+        {
+          "id": "P_fixture_63",
+          "incident_number": 163,
+          "title": "Fixture Incident 63",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:03Z"
+        },
+        {
+          "id": "P_fixture_64",
+          "incident_number": 164,
+          "title": "Fixture Incident 64",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:04Z"
+        },
+        {
+          "id": "P_fixture_65",
+          "incident_number": 165,
+          "title": "Fixture Incident 65",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:05Z"
+        },
+        {
+          "id": "P_fixture_66",
+          "incident_number": 166,
+          "title": "Fixture Incident 66",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:06Z"
+        },
+        {
+          "id": "P_fixture_67",
+          "incident_number": 167,
+          "title": "Fixture Incident 67",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:07Z"
+        },
+        {
+          "id": "P_fixture_68",
+          "incident_number": 168,
+          "title": "Fixture Incident 68",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:08Z"
+        },
+        {
+          "id": "P_fixture_69",
+          "incident_number": 169,
+          "title": "Fixture Incident 69",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:09Z"
+        },
+        {
+          "id": "P_fixture_70",
+          "incident_number": 170,
+          "title": "Fixture Incident 70",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:10Z"
+        },
+        {
+          "id": "P_fixture_71",
+          "incident_number": 171,
+          "title": "Fixture Incident 71",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:11Z"
+        },
+        {
+          "id": "P_fixture_72",
+          "incident_number": 172,
+          "title": "Fixture Incident 72",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:12Z"
+        },
+        {
+          "id": "P_fixture_73",
+          "incident_number": 173,
+          "title": "Fixture Incident 73",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:13Z"
+        },
+        {
+          "id": "P_fixture_74",
+          "incident_number": 174,
+          "title": "Fixture Incident 74",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:14Z"
+        },
+        {
+          "id": "P_fixture_75",
+          "incident_number": 175,
+          "title": "Fixture Incident 75",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:15Z"
+        },
+        {
+          "id": "P_fixture_76",
+          "incident_number": 176,
+          "title": "Fixture Incident 76",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:16Z"
+        },
+        {
+          "id": "P_fixture_77",
+          "incident_number": 177,
+          "title": "Fixture Incident 77",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:17Z"
+        },
+        {
+          "id": "P_fixture_78",
+          "incident_number": 178,
+          "title": "Fixture Incident 78",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:18Z"
+        },
+        {
+          "id": "P_fixture_79",
+          "incident_number": 179,
+          "title": "Fixture Incident 79",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:19Z"
+        },
+        {
+          "id": "P_fixture_80",
+          "incident_number": 180,
+          "title": "Fixture Incident 80",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:20Z"
+        },
+        {
+          "id": "P_fixture_81",
+          "incident_number": 181,
+          "title": "Fixture Incident 81",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:21Z"
+        },
+        {
+          "id": "P_fixture_82",
+          "incident_number": 182,
+          "title": "Fixture Incident 82",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:22Z"
+        },
+        {
+          "id": "P_fixture_83",
+          "incident_number": 183,
+          "title": "Fixture Incident 83",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:23Z"
+        },
+        {
+          "id": "P_fixture_84",
+          "incident_number": 184,
+          "title": "Fixture Incident 84",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:24Z"
+        },
+        {
+          "id": "P_fixture_85",
+          "incident_number": 185,
+          "title": "Fixture Incident 85",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:25Z"
+        },
+        {
+          "id": "P_fixture_86",
+          "incident_number": 186,
+          "title": "Fixture Incident 86",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:26Z"
+        },
+        {
+          "id": "P_fixture_87",
+          "incident_number": 187,
+          "title": "Fixture Incident 87",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:27Z"
+        },
+        {
+          "id": "P_fixture_88",
+          "incident_number": 188,
+          "title": "Fixture Incident 88",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:28Z"
+        },
+        {
+          "id": "P_fixture_89",
+          "incident_number": 189,
+          "title": "Fixture Incident 89",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:29Z"
+        },
+        {
+          "id": "P_fixture_90",
+          "incident_number": 190,
+          "title": "Fixture Incident 90",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:30Z"
+        },
+        {
+          "id": "P_fixture_91",
+          "incident_number": 191,
+          "title": "Fixture Incident 91",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:31Z"
+        },
+        {
+          "id": "P_fixture_92",
+          "incident_number": 192,
+          "title": "Fixture Incident 92",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:32Z"
+        },
+        {
+          "id": "P_fixture_93",
+          "incident_number": 193,
+          "title": "Fixture Incident 93",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:33Z"
+        },
+        {
+          "id": "P_fixture_94",
+          "incident_number": 194,
+          "title": "Fixture Incident 94",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:34Z"
+        },
+        {
+          "id": "P_fixture_95",
+          "incident_number": 195,
+          "title": "Fixture Incident 95",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:35Z"
+        },
+        {
+          "id": "P_fixture_96",
+          "incident_number": 196,
+          "title": "Fixture Incident 96",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:36Z"
+        },
+        {
+          "id": "P_fixture_97",
+          "incident_number": 197,
+          "title": "Fixture Incident 97",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:37Z"
+        },
+        {
+          "id": "P_fixture_98",
+          "incident_number": 198,
+          "title": "Fixture Incident 98",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:38Z"
+        },
+        {
+          "id": "P_fixture_99",
+          "incident_number": 199,
+          "title": "Fixture Incident 99",
+          "status": "triggered",
+          "created_at": "2026-01-01T00:01:39Z"
+        },
+        {
+          "id": "P_fixture_100",
+          "incident_number": 200,
+          "title": "Fixture Incident 100",
+          "status": "acknowledged",
+          "created_at": "2026-01-01T00:01:40Z"
+        }
+      ],
+      "more": true
+    }
+  }
+}

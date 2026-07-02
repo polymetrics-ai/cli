@@ -1,0 +1,715 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "company-fixture-1",
+        "name": "Fixture Company 1",
+        "email": "contact1@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-2",
+        "name": "Fixture Company 2",
+        "email": "contact2@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-3",
+        "name": "Fixture Company 3",
+        "email": "contact3@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-4",
+        "name": "Fixture Company 4",
+        "email": "contact4@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-5",
+        "name": "Fixture Company 5",
+        "email": "contact5@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-6",
+        "name": "Fixture Company 6",
+        "email": "contact6@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-7",
+        "name": "Fixture Company 7",
+        "email": "contact7@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-8",
+        "name": "Fixture Company 8",
+        "email": "contact8@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-9",
+        "name": "Fixture Company 9",
+        "email": "contact9@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-10",
+        "name": "Fixture Company 10",
+        "email": "contact10@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-11",
+        "name": "Fixture Company 11",
+        "email": "contact11@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-12",
+        "name": "Fixture Company 12",
+        "email": "contact12@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-13",
+        "name": "Fixture Company 13",
+        "email": "contact13@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-14",
+        "name": "Fixture Company 14",
+        "email": "contact14@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-15",
+        "name": "Fixture Company 15",
+        "email": "contact15@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-16",
+        "name": "Fixture Company 16",
+        "email": "contact16@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-17",
+        "name": "Fixture Company 17",
+        "email": "contact17@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-18",
+        "name": "Fixture Company 18",
+        "email": "contact18@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-19",
+        "name": "Fixture Company 19",
+        "email": "contact19@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-20",
+        "name": "Fixture Company 20",
+        "email": "contact20@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-21",
+        "name": "Fixture Company 21",
+        "email": "contact21@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-22",
+        "name": "Fixture Company 22",
+        "email": "contact22@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-23",
+        "name": "Fixture Company 23",
+        "email": "contact23@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-24",
+        "name": "Fixture Company 24",
+        "email": "contact24@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-25",
+        "name": "Fixture Company 25",
+        "email": "contact25@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-26",
+        "name": "Fixture Company 26",
+        "email": "contact26@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-27",
+        "name": "Fixture Company 27",
+        "email": "contact27@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-28",
+        "name": "Fixture Company 28",
+        "email": "contact28@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-29",
+        "name": "Fixture Company 29",
+        "email": "contact29@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-30",
+        "name": "Fixture Company 30",
+        "email": "contact30@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-31",
+        "name": "Fixture Company 31",
+        "email": "contact31@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-32",
+        "name": "Fixture Company 32",
+        "email": "contact32@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-33",
+        "name": "Fixture Company 33",
+        "email": "contact33@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-34",
+        "name": "Fixture Company 34",
+        "email": "contact34@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-35",
+        "name": "Fixture Company 35",
+        "email": "contact35@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-36",
+        "name": "Fixture Company 36",
+        "email": "contact36@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-37",
+        "name": "Fixture Company 37",
+        "email": "contact37@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-38",
+        "name": "Fixture Company 38",
+        "email": "contact38@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-39",
+        "name": "Fixture Company 39",
+        "email": "contact39@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-40",
+        "name": "Fixture Company 40",
+        "email": "contact40@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-41",
+        "name": "Fixture Company 41",
+        "email": "contact41@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-42",
+        "name": "Fixture Company 42",
+        "email": "contact42@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-43",
+        "name": "Fixture Company 43",
+        "email": "contact43@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-44",
+        "name": "Fixture Company 44",
+        "email": "contact44@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-45",
+        "name": "Fixture Company 45",
+        "email": "contact45@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-46",
+        "name": "Fixture Company 46",
+        "email": "contact46@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-47",
+        "name": "Fixture Company 47",
+        "email": "contact47@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-48",
+        "name": "Fixture Company 48",
+        "email": "contact48@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-49",
+        "name": "Fixture Company 49",
+        "email": "contact49@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-50",
+        "name": "Fixture Company 50",
+        "email": "contact50@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-51",
+        "name": "Fixture Company 51",
+        "email": "contact51@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-52",
+        "name": "Fixture Company 52",
+        "email": "contact52@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-53",
+        "name": "Fixture Company 53",
+        "email": "contact53@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-54",
+        "name": "Fixture Company 54",
+        "email": "contact54@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-55",
+        "name": "Fixture Company 55",
+        "email": "contact55@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-56",
+        "name": "Fixture Company 56",
+        "email": "contact56@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-57",
+        "name": "Fixture Company 57",
+        "email": "contact57@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-58",
+        "name": "Fixture Company 58",
+        "email": "contact58@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-59",
+        "name": "Fixture Company 59",
+        "email": "contact59@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-60",
+        "name": "Fixture Company 60",
+        "email": "contact60@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-61",
+        "name": "Fixture Company 61",
+        "email": "contact61@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-62",
+        "name": "Fixture Company 62",
+        "email": "contact62@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-63",
+        "name": "Fixture Company 63",
+        "email": "contact63@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-64",
+        "name": "Fixture Company 64",
+        "email": "contact64@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-65",
+        "name": "Fixture Company 65",
+        "email": "contact65@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-66",
+        "name": "Fixture Company 66",
+        "email": "contact66@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-67",
+        "name": "Fixture Company 67",
+        "email": "contact67@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-68",
+        "name": "Fixture Company 68",
+        "email": "contact68@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-69",
+        "name": "Fixture Company 69",
+        "email": "contact69@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-70",
+        "name": "Fixture Company 70",
+        "email": "contact70@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-71",
+        "name": "Fixture Company 71",
+        "email": "contact71@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-72",
+        "name": "Fixture Company 72",
+        "email": "contact72@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-73",
+        "name": "Fixture Company 73",
+        "email": "contact73@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-74",
+        "name": "Fixture Company 74",
+        "email": "contact74@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-75",
+        "name": "Fixture Company 75",
+        "email": "contact75@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-76",
+        "name": "Fixture Company 76",
+        "email": "contact76@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-77",
+        "name": "Fixture Company 77",
+        "email": "contact77@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-78",
+        "name": "Fixture Company 78",
+        "email": "contact78@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-79",
+        "name": "Fixture Company 79",
+        "email": "contact79@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-80",
+        "name": "Fixture Company 80",
+        "email": "contact80@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-81",
+        "name": "Fixture Company 81",
+        "email": "contact81@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-82",
+        "name": "Fixture Company 82",
+        "email": "contact82@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-83",
+        "name": "Fixture Company 83",
+        "email": "contact83@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-84",
+        "name": "Fixture Company 84",
+        "email": "contact84@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-85",
+        "name": "Fixture Company 85",
+        "email": "contact85@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-86",
+        "name": "Fixture Company 86",
+        "email": "contact86@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-87",
+        "name": "Fixture Company 87",
+        "email": "contact87@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-88",
+        "name": "Fixture Company 88",
+        "email": "contact88@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-89",
+        "name": "Fixture Company 89",
+        "email": "contact89@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-90",
+        "name": "Fixture Company 90",
+        "email": "contact90@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-91",
+        "name": "Fixture Company 91",
+        "email": "contact91@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-92",
+        "name": "Fixture Company 92",
+        "email": "contact92@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-93",
+        "name": "Fixture Company 93",
+        "email": "contact93@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-94",
+        "name": "Fixture Company 94",
+        "email": "contact94@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-95",
+        "name": "Fixture Company 95",
+        "email": "contact95@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-96",
+        "name": "Fixture Company 96",
+        "email": "contact96@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-97",
+        "name": "Fixture Company 97",
+        "email": "contact97@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-98",
+        "name": "Fixture Company 98",
+        "email": "contact98@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-99",
+        "name": "Fixture Company 99",
+        "email": "contact99@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "_id": "company-fixture-100",
+        "name": "Fixture Company 100",
+        "email": "contact100@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

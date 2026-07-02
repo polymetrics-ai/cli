@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "status": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "from_name": { "type": ["string", "null"] },
+    "from_email_address": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "sent_at": { "type": ["string", "null"] }
+  }
+}

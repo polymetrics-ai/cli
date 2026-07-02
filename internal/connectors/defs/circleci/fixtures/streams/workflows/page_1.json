@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/pipeline/synthetic-conformance-value/workflow" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "wf_fixture_1", "name": "build-and-test", "pipeline_id": "pipe_fixture_1", "pipeline_number": 1, "project_slug": "gh/fixture-org/fixture-repo", "status": "success", "created_at": "2026-01-01T00:00:00Z", "stopped_at": "2026-01-01T00:10:00Z" },
+        { "id": "wf_fixture_2", "name": "deploy", "pipeline_id": "pipe_fixture_1", "pipeline_number": 1, "project_slug": "gh/fixture-org/fixture-repo", "status": "success", "created_at": "2026-01-01T00:11:00Z", "stopped_at": "2026-01-01T00:20:00Z" }
+      ],
+      "next_page_token": null
+    }
+  }
+}

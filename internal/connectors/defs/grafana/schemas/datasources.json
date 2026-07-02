@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "datasources",
+  "type": "object",
+  "x-primary-key": ["uid"],
+  "required": ["uid"],
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "uid": { "type": "string" },
+    "orgId": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "access": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "isDefault": { "type": ["boolean", "null"] },
+    "readOnly": { "type": ["boolean", "null"] }
+  }
+}

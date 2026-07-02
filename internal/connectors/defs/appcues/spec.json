@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Appcues Connection Specification",
+  "type": "object",
+  "required": ["account_id", "username", "password"],
+  "properties": {
+    "account_id": {
+      "type": "string",
+      "description": "Appcues account ID; every resource path is scoped to accounts/{account_id}/..."
+    },
+    "username": {
+      "type": "string",
+      "description": "Appcues API key, used as the HTTP Basic auth username."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Appcues API secret, used as the HTTP Basic auth password; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.appcues.com/v2",
+      "description": "Appcues API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "product_fixture_101",
+          "sku": "SKU-101",
+          "name": "Fixture Product 101",
+          "status": "active",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

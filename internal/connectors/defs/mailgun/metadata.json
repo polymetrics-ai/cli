@@ -1,0 +1,23 @@
+{
+  "name": "mailgun",
+  "display_name": "Mailgun",
+  "description": "Reads Mailgun sending domains, email events, mailing lists, and analytics tags through the Mailgun v3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://documentation.mailgun.com/en/latest/api_reference.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Mailgun API read of sending-domain, event, mailing-list, and tag data",
+    "approval": "none; read-only source connector"
+  }
+}

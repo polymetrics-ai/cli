@@ -1,0 +1,20 @@
+{
+  "name": "simplesat",
+  "display_name": "Simplesat",
+  "description": "Reads Simplesat surveys, answers, questions, customers, and tickets through the Simplesat API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.simplesat.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "read-only survey/answer/customer/ticket data from a connected Simplesat account",
+    "approval": "none; read-only"
+  }
+}

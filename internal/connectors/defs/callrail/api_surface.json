@@ -1,0 +1,16 @@
+{
+  "api": "CallRail API v3 (https://api.callrail.com/v3)",
+  "docs": "https://apidocs.callrail.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; CallRail's full analytics/tracking surface (trackers, form submissions, tags, integrations) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/a/{account_id}/calls.json", "covered_by": { "stream": "calls" } },
+    { "method": "GET", "path": "/a/{account_id}/companies.json", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/a/{account_id}/users.json", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/a/{account_id}/text-messages.json", "covered_by": { "stream": "text_messages" } },
+    { "method": "GET", "path": "/a/{account_id}/trackers.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/a/{account_id}/form_submissions.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/a/{account_id}/tags.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/a/{account_id}/calls/{id}/tags.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "flights",
+  "type": "object",
+  "x-primary-key": ["flight_date", "flight_iata"],
+  "x-cursor-field": "flight_date",
+  "properties": {
+    "flight_date": { "type": ["string", "null"] },
+    "flight_status": { "type": ["string", "null"] },
+    "flight_iata": { "type": ["string", "null"] },
+    "flight_icao": { "type": ["string", "null"] },
+    "flight_number": { "type": ["string", "null"] },
+    "departure_airport": { "type": ["string", "null"] },
+    "departure_iata": { "type": ["string", "null"] },
+    "departure_scheduled": { "type": ["string", "null"] },
+    "arrival_airport": { "type": ["string", "null"] },
+    "arrival_iata": { "type": ["string", "null"] },
+    "arrival_scheduled": { "type": ["string", "null"] },
+    "airline_name": { "type": ["string", "null"] },
+    "airline_iata": { "type": ["string", "null"] }
+  }
+}

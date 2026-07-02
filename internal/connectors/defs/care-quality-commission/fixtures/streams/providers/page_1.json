@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/providers", "query": { "page": "1", "perPage": "1000" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "perPage": 1000,
+      "totalPages": 1,
+      "total": 2,
+      "providers": [
+        { "providerId": "1-fixture-prov-1", "providerName": "Fixture Healthcare 1 Ltd" },
+        { "providerId": "1-fixture-prov-2", "providerName": "Fixture Healthcare 2 Ltd" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "api": "Zenefits Core API (https://developers.zenefits.com/)",
+  "docs": "https://developers.zenefits.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (people, companies, departments); write endpoints (create person, update employment, etc.) are out of scope for this pass",
+  "endpoints": [
+    { "method": "GET", "path": "/people", "covered_by": { "stream": "people" } },
+    { "method": "GET", "path": "/companies", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/departments", "covered_by": { "stream": "departments" } },
+    { "method": "POST", "path": "/people", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PATCH", "path": "/people/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/employments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

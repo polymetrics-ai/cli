@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/synthetic-conformance-value/incidents",
+    "query": { "page": "1", "per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "incident_fixture_1",
+        "name": "Fixture Incident",
+        "status": "resolved",
+        "started": "2026-01-01T00:00:00Z",
+        "resolved": "2026-01-02T00:00:00Z",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

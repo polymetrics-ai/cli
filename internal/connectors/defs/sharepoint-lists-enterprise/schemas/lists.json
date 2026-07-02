@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "lastModifiedDateTime",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "displayName": { "type": ["string", "null"] },
+    "lastModifiedDateTime": { "type": ["string", "null"] }
+  }
+}

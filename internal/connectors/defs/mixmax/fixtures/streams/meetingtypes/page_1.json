@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/meetingtypes" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "_id": "mt_fixture_1", "name": "Fixture Meeting Type", "type": "round-robin", "link": "https://example.com/meet", "durationMin": 30, "userId": "usr_fixture_1", "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-01T00:00:00Z" }
+      ],
+      "next": null,
+      "hasNext": false
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": {
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idproduct": 201,
+        "name": "Fixture Product 101",
+        "productcode": "FIX-101",
+        "price": 9.99,
+        "stock": [],
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      }
+    ]
+  }
+}

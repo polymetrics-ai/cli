@@ -1,0 +1,23 @@
+{
+  "name": "printify",
+  "display_name": "Printify",
+  "description": "Reads Printify shops, catalog resources, products, and orders through the Printify public API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.printify.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Printify API read of shop, catalog, product, and order data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

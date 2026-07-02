@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/user/forms", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "responseCode": 200,
+      "content": [
+        {
+          "id": "form_fixture_1",
+          "username": "fixture_user",
+          "title": "Fixture Form 1",
+          "status": "ENABLED",
+          "created_at": "2026-01-01 00:00:00",
+          "updated_at": "2026-01-01 12:00:00",
+          "last_submission": "2026-01-01 06:00:00",
+          "new": "1",
+          "count": "2",
+          "type": "LEGACY",
+          "url": "https://www.jotform.com/form_fixture_1"
+        },
+        {
+          "id": "form_fixture_2",
+          "username": "fixture_user",
+          "title": "Fixture Form 2",
+          "status": "ENABLED",
+          "created_at": "2026-01-02 00:00:00",
+          "updated_at": "2026-01-02 12:00:00",
+          "last_submission": "2026-01-02 06:00:00",
+          "new": "0",
+          "count": "5",
+          "type": "LEGACY",
+          "url": "https://www.jotform.com/form_fixture_2"
+        }
+      ],
+      "resultSet": { "offset": 0, "limit": 2, "count": 3 }
+    }
+  }
+}

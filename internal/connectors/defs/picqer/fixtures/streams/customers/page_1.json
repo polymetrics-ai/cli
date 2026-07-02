@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idcustomer": 201,
+        "name": "Fixture Customer One",
+        "contactname": "Fixture Contact",
+        "email": "fixture1@example.com",
+        "telephone": "+15550100",
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      }
+    ]
+  }
+}

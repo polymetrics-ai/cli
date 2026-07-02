@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/my/tasks"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "Id": 1,
+        "Title": "Fixture Task 1",
+        "DueTime": "2026-01-02T00:00:00",
+        "Completed": false,
+        "Priority": 2,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      },
+      {
+        "Id": 2,
+        "Title": "Fixture Task 2",
+        "DueTime": "2026-01-03T00:00:00",
+        "Completed": true,
+        "Priority": 1,
+        "Creator": 1,
+        "Created": "2026-01-01T01:00:00",
+        "Modified": "2026-01-01T01:05:00"
+      }
+    ]
+  }
+}

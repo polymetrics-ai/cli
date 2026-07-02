@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "News API Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "News API (newsapi.org) API key. Sent as the X-Api-Key header on every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://newsapi.org/v2",
+      "description": "News API base URL override; defaults to production."
+    },
+    "search_query": {
+      "type": "string",
+      "description": "Free-text query (`q` param) for the everything and top-headlines streams."
+    },
+    "search_in": {
+      "type": "string",
+      "description": "Comma-separated fields to restrict the everything search to (`searchIn`): title, description, content."
+    },
+    "sources": {
+      "type": "string",
+      "description": "Comma-separated News API source identifiers to restrict the everything/top-headlines streams to."
+    },
+    "domains": {
+      "type": "string",
+      "description": "Comma-separated domains to restrict the everything search to."
+    },
+    "exclude_domains": {
+      "type": "string",
+      "description": "Comma-separated domains to exclude from the everything search."
+    },
+    "language": {
+      "type": "string",
+      "description": "2-letter ISO-639-1 language code to restrict the everything/top-headlines/sources streams to."
+    },
+    "sort_by": {
+      "type": "string",
+      "description": "Sort order for the everything search: relevancy, popularity, or publishedAt."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Oldest article publish date/time (`from`) for the everything search. Also used as the incremental sync start when no cursor state exists yet."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Newest article publish date/time (`to`) for the everything search."
+    },
+    "country": {
+      "type": "string",
+      "description": "2-letter ISO 3166-1 country code for the top-headlines/sources streams."
+    },
+    "category": {
+      "type": "string",
+      "description": "News category for the top-headlines/sources streams: business, entertainment, general, health, science, sports, technology."
+    }
+  }
+}

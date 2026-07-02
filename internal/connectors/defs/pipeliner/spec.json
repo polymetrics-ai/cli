@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pipeliner Connection Specification",
+  "type": "object",
+  "required": ["space_id", "username", "password"],
+  "properties": {
+    "space_id": {
+      "type": "string",
+      "description": "Pipeliner space (account) id; sent as the /spaces/{space_id}/entities/... path segment."
+    },
+    "username": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pipeliner API username, sent as the HTTP Basic auth username. Never logged."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pipeliner API password, sent as the HTTP Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.pipelinersales.com/api/v100/rest",
+      "description": "Pipeliner API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

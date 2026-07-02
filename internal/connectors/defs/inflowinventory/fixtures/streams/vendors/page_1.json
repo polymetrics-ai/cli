@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/vendors"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "vendorId": "vend_fixture_1",
+        "name": "Fixture Vendor 1",
+        "contactName": "Vendor Contact One",
+        "email": "vendor1@example.com",
+        "phone": "+1-555-0200",
+        "fax": null,
+        "isActive": true,
+        "leadTimeDays": 5,
+        "currencyId": "USD",
+        "taxingSchemeId": "tax_fixture_1",
+        "timestamp": "AAAAAAAAD1k="
+      }
+    ]
+  }
+}

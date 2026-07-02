@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/labels", "query": { "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "id": "labels_fixture_1", "name": "fixture-label-1", "prefix": "global" },
+        { "id": "labels_fixture_2", "name": "fixture-label-2", "prefix": "global" }
+      ],
+      "_links": {}
+    }
+  }
+}

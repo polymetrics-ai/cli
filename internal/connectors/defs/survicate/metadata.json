@@ -1,0 +1,23 @@
+{
+  "name": "survicate",
+  "display_name": "Survicate",
+  "description": "Reads Survicate surveys through the Survicate API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.survicate.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Survicate API read of survey data",
+    "approval": "none; read-only"
+  }
+}

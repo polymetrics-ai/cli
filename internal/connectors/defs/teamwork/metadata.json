@@ -1,0 +1,23 @@
+{
+  "name": "teamwork",
+  "display_name": "Teamwork",
+  "description": "Reads Teamwork projects through the Teamwork API.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.teamwork.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Teamwork API read of project data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

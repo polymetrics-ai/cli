@@ -1,0 +1,23 @@
+{
+  "name": "oura",
+  "display_name": "Oura",
+  "description": "Reads Oura member profile info and daily readiness, sleep, and activity summaries through the Oura API v2 user-collection endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://cloud.ouraring.com/docs/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Oura API read of personal wellness/health data (profile, sleep, activity, readiness)",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

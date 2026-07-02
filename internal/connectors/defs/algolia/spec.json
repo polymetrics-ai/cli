@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Algolia Connection Specification",
+  "type": "object",
+  "required": ["application_id", "api_key", "base_url"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Algolia Admin API key, sent as the X-Algolia-API-Key header. Never logged."
+    },
+    "application_id": {
+      "type": "string",
+      "description": "Algolia application id, sent as the X-Algolia-Application-Id header and used to derive base_url when not overridden."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Algolia REST API base URL, e.g. https://<application_id>.algolia.net. Legacy derives this from application_id at runtime; this bundle requires it explicitly since the engine's spec-default mechanism only materializes a fixed literal, not an application_id-derived value (documented scope narrowing, see docs.md)."
+    },
+    "index_name": {
+      "type": "string",
+      "description": "Algolia index name (required for the 'index_settings' stream)."
+    }
+  }
+}

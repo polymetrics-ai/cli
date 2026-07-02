@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/payout", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "limit": 2,
+      "offset": 0,
+      "payouts": [
+        { "payoutId": "payout_fixture_1", "payoutStatus": "SUCCEEDED", "payoutDate": "2026-01-05T00:00:00.000Z", "transactionCount": 1, "amount": { "value": "99.00", "currency": "USD" }, "payoutInstrument": { "nickname": "Checking", "accountLastFourDigits": "6789" } }
+      ]
+    }
+  }
+}

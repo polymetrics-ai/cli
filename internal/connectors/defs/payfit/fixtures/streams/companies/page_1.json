@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/companies" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "cmp_fixture_1", "name": "Fixture Company One", "country": "FR", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "cmp_fixture_2", "name": "Fixture Company Two", "country": "FR", "updated_at": "2026-01-02T00:00:00Z" }
+      ],
+      "meta": { "next_offset": "" }
+    }
+  }
+}

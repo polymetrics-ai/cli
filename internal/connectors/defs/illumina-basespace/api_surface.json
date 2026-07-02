@@ -1,0 +1,16 @@
+{
+  "api": "Illumina BaseSpace v1pre3 REST API (https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference)",
+  "docs": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (projects, runs, samples, appsessions, datasets); BaseSpace exposes no safe reverse-ETL writes (legacy itself ships none; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v1pre3/users/{user}/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/v1pre3/users/{user}/runs", "covered_by": { "stream": "runs" } },
+    { "method": "GET", "path": "/v1pre3/users/{user}/samples", "covered_by": { "stream": "samples" } },
+    { "method": "GET", "path": "/v1pre3/users/{user}/appsessions", "covered_by": { "stream": "appsessions" } },
+    { "method": "GET", "path": "/v1pre3/users/{user}/datasets", "covered_by": { "stream": "datasets" } },
+    { "method": "GET", "path": "/v1pre3/users/{user}", "excluded": { "category": "non_data_endpoint", "reason": "used only by check for auth/connectivity confirmation, not a syncable object stream" } },
+    { "method": "GET", "path": "/v1pre3/runs/{Id}/files", "excluded": { "category": "out_of_scope", "reason": "run file listing/download not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1pre3/appsessions/{Id}/properties", "excluded": { "category": "out_of_scope", "reason": "app session properties not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

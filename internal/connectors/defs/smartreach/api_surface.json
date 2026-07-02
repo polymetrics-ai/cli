@@ -1,0 +1,13 @@
+{
+  "api": "SmartReach API v3 (https://api.smartreach.io/)",
+  "docs": "https://api.smartreach.io/",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (campaigns, prospects, teams, email_settings, do_not_contact); legacy is read-only, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "prospects", "covered_by": { "stream": "prospects" } },
+    { "method": "GET", "path": "teams", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "email-settings", "covered_by": { "stream": "email_settings" } },
+    { "method": "GET", "path": "do-not-contact", "covered_by": { "stream": "do_not_contact" } }
+  ]
+}

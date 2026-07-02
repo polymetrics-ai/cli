@@ -1,0 +1,23 @@
+{
+  "name": "incident-io",
+  "display_name": "Incident.io",
+  "description": "Reads incident.io incidents, severities, incident roles, users, and follow-ups through the incident.io REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api-docs.incident.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external incident.io API read of incidents, severities, roles, users, and follow-ups",
+    "approval": "none; read-only source"
+  }
+}

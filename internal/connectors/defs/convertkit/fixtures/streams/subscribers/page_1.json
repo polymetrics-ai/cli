@@ -1,0 +1,370 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscribers",
+    "query": {
+      "page": "1",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_subscribers": 51,
+      "page": 1,
+      "total_pages": 2,
+      "subscribers": [
+        {
+          "id": 1,
+          "first_name": "Fixture 1",
+          "email_address": "fixture1@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "first_name": "Fixture 2",
+          "email_address": "fixture2@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "first_name": "Fixture 3",
+          "email_address": "fixture3@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 4,
+          "first_name": "Fixture 4",
+          "email_address": "fixture4@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 5,
+          "first_name": "Fixture 5",
+          "email_address": "fixture5@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 6,
+          "first_name": "Fixture 6",
+          "email_address": "fixture6@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 7,
+          "first_name": "Fixture 7",
+          "email_address": "fixture7@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 8,
+          "first_name": "Fixture 8",
+          "email_address": "fixture8@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 9,
+          "first_name": "Fixture 9",
+          "email_address": "fixture9@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 10,
+          "first_name": "Fixture 10",
+          "email_address": "fixture10@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 11,
+          "first_name": "Fixture 11",
+          "email_address": "fixture11@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "first_name": "Fixture 12",
+          "email_address": "fixture12@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 13,
+          "first_name": "Fixture 13",
+          "email_address": "fixture13@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 14,
+          "first_name": "Fixture 14",
+          "email_address": "fixture14@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 15,
+          "first_name": "Fixture 15",
+          "email_address": "fixture15@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 16,
+          "first_name": "Fixture 16",
+          "email_address": "fixture16@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 17,
+          "first_name": "Fixture 17",
+          "email_address": "fixture17@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 18,
+          "first_name": "Fixture 18",
+          "email_address": "fixture18@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 19,
+          "first_name": "Fixture 19",
+          "email_address": "fixture19@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 20,
+          "first_name": "Fixture 20",
+          "email_address": "fixture20@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 21,
+          "first_name": "Fixture 21",
+          "email_address": "fixture21@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 22,
+          "first_name": "Fixture 22",
+          "email_address": "fixture22@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 23,
+          "first_name": "Fixture 23",
+          "email_address": "fixture23@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 24,
+          "first_name": "Fixture 24",
+          "email_address": "fixture24@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 25,
+          "first_name": "Fixture 25",
+          "email_address": "fixture25@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 26,
+          "first_name": "Fixture 26",
+          "email_address": "fixture26@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 27,
+          "first_name": "Fixture 27",
+          "email_address": "fixture27@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 28,
+          "first_name": "Fixture 28",
+          "email_address": "fixture28@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 29,
+          "first_name": "Fixture 29",
+          "email_address": "fixture29@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 30,
+          "first_name": "Fixture 30",
+          "email_address": "fixture30@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "first_name": "Fixture 31",
+          "email_address": "fixture31@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 32,
+          "first_name": "Fixture 32",
+          "email_address": "fixture32@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 33,
+          "first_name": "Fixture 33",
+          "email_address": "fixture33@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 34,
+          "first_name": "Fixture 34",
+          "email_address": "fixture34@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 35,
+          "first_name": "Fixture 35",
+          "email_address": "fixture35@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 36,
+          "first_name": "Fixture 36",
+          "email_address": "fixture36@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 37,
+          "first_name": "Fixture 37",
+          "email_address": "fixture37@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 38,
+          "first_name": "Fixture 38",
+          "email_address": "fixture38@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 39,
+          "first_name": "Fixture 39",
+          "email_address": "fixture39@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 40,
+          "first_name": "Fixture 40",
+          "email_address": "fixture40@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 41,
+          "first_name": "Fixture 41",
+          "email_address": "fixture41@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 42,
+          "first_name": "Fixture 42",
+          "email_address": "fixture42@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 43,
+          "first_name": "Fixture 43",
+          "email_address": "fixture43@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 44,
+          "first_name": "Fixture 44",
+          "email_address": "fixture44@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 45,
+          "first_name": "Fixture 45",
+          "email_address": "fixture45@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 46,
+          "first_name": "Fixture 46",
+          "email_address": "fixture46@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 47,
+          "first_name": "Fixture 47",
+          "email_address": "fixture47@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 48,
+          "first_name": "Fixture 48",
+          "email_address": "fixture48@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 49,
+          "first_name": "Fixture 49",
+          "email_address": "fixture49@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 50,
+          "first_name": "Fixture 50",
+          "email_address": "fixture50@example.com",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

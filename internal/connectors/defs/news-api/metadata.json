@@ -1,0 +1,22 @@
+{
+  "name": "news-api",
+  "display_name": "News API",
+  "description": "Reads articles and news sources from the News API (newsapi.org): the everything search, top headlines, and the sources directory.",
+  "integration_type": "api",
+  "docs_url": "https://newsapi.org/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external News API read of article and source metadata"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/user", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "usr_fixture_1", "name": "Fixture User One", "email": "fixture1@example.com", "created": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

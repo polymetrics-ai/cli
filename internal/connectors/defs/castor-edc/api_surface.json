@@ -1,0 +1,18 @@
+{
+  "api": "Castor EDC API (https://data.castoredc.com/api)",
+  "docs": "https://data.castoredc.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; Castor EDC's much larger clinical-data surface (fields, visits, forms, surveys, export, records, data-point mutations) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/study", "covered_by": { "stream": "study" } },
+    { "method": "GET", "path": "/user", "covered_by": { "stream": "user" } },
+    { "method": "GET", "path": "/country", "covered_by": { "stream": "country" } },
+    { "method": "GET", "path": "/audit-trail", "covered_by": { "stream": "audit_trail" } },
+    { "method": "GET", "path": "/study/{studyId}/record", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/study/{studyId}/field", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/study/{studyId}/visit", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/study/{studyId}/survey-package-instance", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/study/{studyId}/export", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/study/{studyId}/record", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

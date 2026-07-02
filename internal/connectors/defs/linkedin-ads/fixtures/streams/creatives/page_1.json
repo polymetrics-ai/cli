@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/creatives",
+    "query": { "q": "search", "count": "2", "start": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "elements": [
+        {
+          "id": "urn:li:sponsoredCreative:540001",
+          "campaign": "urn:li:sponsoredCampaign:530001",
+          "account": "urn:li:sponsoredAccount:510001",
+          "status": "ACTIVE",
+          "isServing": true,
+          "intendedStatus": "ACTIVE",
+          "reviewStatus": { "status": "APPROVED" },
+          "content": { "reference": "urn:li:ugcPost:700001" },
+          "createdAt": 1767225600000,
+          "lastModifiedAt": 1767225660000
+        }
+      ]
+    }
+  }
+}

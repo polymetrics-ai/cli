@@ -1,0 +1,10 @@
+{
+  "api": "Granola public API (https://public-api.granola.ai/v1)",
+  "docs": "https://docs.granola.ai/introduction",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the notes list stream only (GET /notes). The detailed_notes stream (per-note GET /notes/{id} fan-out from the notes list) requires a StreamHook (Tier 2) and is out of scope for this Tier-1 JSON-only wave; see docs.md's Known limits.",
+  "endpoints": [
+    { "method": "GET", "path": "/notes", "covered_by": { "stream": "notes" } },
+    { "method": "GET", "path": "/notes/{id}", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out per note requires a StreamHook (Tier 2); out of scope for this Tier-1 JSON-only wave, tracked as a follow-up hooks increment" } }
+  ]
+}

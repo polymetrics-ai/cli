@@ -1,0 +1,23 @@
+{
+  "name": "flexport",
+  "display_name": "Flexport",
+  "description": "Reads Flexport companies, locations, products, invoices, and shipments through the Flexport REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.flexport.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Flexport API read of freight/logistics and billing data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

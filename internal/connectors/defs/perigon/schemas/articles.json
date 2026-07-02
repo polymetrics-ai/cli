@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "articles",
+  "type": "object",
+  "x-primary-key": ["article_id"],
+  "x-cursor-field": "pub_date",
+  "required": ["article_id"],
+  "properties": {
+    "article_id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "pub_date": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "source": { "type": ["object", "null"] }
+  }
+}

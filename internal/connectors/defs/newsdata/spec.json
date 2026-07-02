@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NewsData.io Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "NewsData.io API key. Sent as the `apikey` query parameter on every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://newsdata.io/api/1",
+      "description": "NewsData.io API base URL override; defaults to production."
+    },
+    "category": {
+      "type": "string",
+      "description": "Comma-separated category filter forwarded as the `category` query parameter."
+    },
+    "country": {
+      "type": "string",
+      "description": "Comma-separated country filter forwarded as the `country` query parameter."
+    },
+    "language": {
+      "type": "string",
+      "description": "Comma-separated language filter forwarded as the `language` query parameter."
+    },
+    "domain": {
+      "type": "string",
+      "description": "Comma-separated domain filter forwarded as the `domain` query parameter."
+    },
+    "query": {
+      "type": "string",
+      "description": "Free-text search query forwarded as the `q` query parameter."
+    },
+    "query_in_title": {
+      "type": "string",
+      "description": "Free-text search query restricted to article titles, forwarded as the `qInTitle` query parameter."
+    },
+    "size": {
+      "type": "string",
+      "description": "Page size forwarded as the `size` query parameter (NewsData.io accepts this as a string-shaped value in its own docs)."
+    }
+  }
+}

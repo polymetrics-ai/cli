@@ -1,0 +1,18 @@
+{
+  "api": "Pipeliner CRM REST API v100",
+  "docs": "https://workspace.pipelinersales.com/community/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Pipeliner entity surface (activities, documents, projects, custom entities, and all write/mutation endpoints) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/spaces/{space_id}/entities/Accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/spaces/{space_id}/entities/Contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/spaces/{space_id}/entities/Opportunities", "covered_by": { "stream": "opportunities" } },
+    { "method": "GET", "path": "/spaces/{space_id}/entities/Leads", "covered_by": { "stream": "leads" } },
+    { "method": "GET", "path": "/spaces/{space_id}/entities/Activities", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/spaces/{space_id}/entities/Projects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/spaces/{space_id}/entities/Documents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/spaces/{space_id}/entities/{Resource}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/spaces/{space_id}/entities/{Resource}/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/spaces/{space_id}/entities/{Resource}/{id}", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } }
+  ]
+}

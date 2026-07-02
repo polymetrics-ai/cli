@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zoom Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zoom OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.zoom.us/v2",
+      "description": "Zoom API base URL override for tests or proxies."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Zoom user id or email the 'meetings' and 'webinars' streams are scoped to (required for those streams; substituted into the user-scoped path)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-300); sent as the 'page_size' query param."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

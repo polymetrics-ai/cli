@@ -1,0 +1,717 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/c/synthetic-conformance-value/offers",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "offers": [
+        {
+          "id": 1,
+          "title": "Fixture Offer 1",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "title": "Fixture Offer 2",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "title": "Fixture Offer 3",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4,
+          "title": "Fixture Offer 4",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 5,
+          "title": "Fixture Offer 5",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 6,
+          "title": "Fixture Offer 6",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 7,
+          "title": "Fixture Offer 7",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 8,
+          "title": "Fixture Offer 8",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 9,
+          "title": "Fixture Offer 9",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 10,
+          "title": "Fixture Offer 10",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 11,
+          "title": "Fixture Offer 11",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "title": "Fixture Offer 12",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 13,
+          "title": "Fixture Offer 13",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 14,
+          "title": "Fixture Offer 14",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 15,
+          "title": "Fixture Offer 15",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 16,
+          "title": "Fixture Offer 16",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 17,
+          "title": "Fixture Offer 17",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 18,
+          "title": "Fixture Offer 18",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 19,
+          "title": "Fixture Offer 19",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 20,
+          "title": "Fixture Offer 20",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 21,
+          "title": "Fixture Offer 21",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 22,
+          "title": "Fixture Offer 22",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 23,
+          "title": "Fixture Offer 23",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 24,
+          "title": "Fixture Offer 24",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 25,
+          "title": "Fixture Offer 25",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 26,
+          "title": "Fixture Offer 26",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 27,
+          "title": "Fixture Offer 27",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 28,
+          "title": "Fixture Offer 28",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 29,
+          "title": "Fixture Offer 29",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 30,
+          "title": "Fixture Offer 30",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "title": "Fixture Offer 31",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 32,
+          "title": "Fixture Offer 32",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 33,
+          "title": "Fixture Offer 33",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 34,
+          "title": "Fixture Offer 34",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 35,
+          "title": "Fixture Offer 35",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 36,
+          "title": "Fixture Offer 36",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 37,
+          "title": "Fixture Offer 37",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 38,
+          "title": "Fixture Offer 38",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 39,
+          "title": "Fixture Offer 39",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 40,
+          "title": "Fixture Offer 40",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 41,
+          "title": "Fixture Offer 41",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 42,
+          "title": "Fixture Offer 42",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 43,
+          "title": "Fixture Offer 43",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 44,
+          "title": "Fixture Offer 44",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 45,
+          "title": "Fixture Offer 45",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 46,
+          "title": "Fixture Offer 46",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 47,
+          "title": "Fixture Offer 47",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 48,
+          "title": "Fixture Offer 48",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 49,
+          "title": "Fixture Offer 49",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 50,
+          "title": "Fixture Offer 50",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 51,
+          "title": "Fixture Offer 51",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 52,
+          "title": "Fixture Offer 52",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 53,
+          "title": "Fixture Offer 53",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 54,
+          "title": "Fixture Offer 54",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 55,
+          "title": "Fixture Offer 55",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 56,
+          "title": "Fixture Offer 56",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 57,
+          "title": "Fixture Offer 57",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 58,
+          "title": "Fixture Offer 58",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 59,
+          "title": "Fixture Offer 59",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 60,
+          "title": "Fixture Offer 60",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 61,
+          "title": "Fixture Offer 61",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 62,
+          "title": "Fixture Offer 62",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 63,
+          "title": "Fixture Offer 63",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 64,
+          "title": "Fixture Offer 64",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 65,
+          "title": "Fixture Offer 65",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 66,
+          "title": "Fixture Offer 66",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 67,
+          "title": "Fixture Offer 67",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 68,
+          "title": "Fixture Offer 68",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 69,
+          "title": "Fixture Offer 69",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 70,
+          "title": "Fixture Offer 70",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 71,
+          "title": "Fixture Offer 71",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 72,
+          "title": "Fixture Offer 72",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 73,
+          "title": "Fixture Offer 73",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 74,
+          "title": "Fixture Offer 74",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 75,
+          "title": "Fixture Offer 75",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 76,
+          "title": "Fixture Offer 76",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 77,
+          "title": "Fixture Offer 77",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 78,
+          "title": "Fixture Offer 78",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 79,
+          "title": "Fixture Offer 79",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 80,
+          "title": "Fixture Offer 80",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 81,
+          "title": "Fixture Offer 81",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 82,
+          "title": "Fixture Offer 82",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 83,
+          "title": "Fixture Offer 83",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 84,
+          "title": "Fixture Offer 84",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 85,
+          "title": "Fixture Offer 85",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 86,
+          "title": "Fixture Offer 86",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 87,
+          "title": "Fixture Offer 87",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 88,
+          "title": "Fixture Offer 88",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 89,
+          "title": "Fixture Offer 89",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 90,
+          "title": "Fixture Offer 90",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 91,
+          "title": "Fixture Offer 91",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 92,
+          "title": "Fixture Offer 92",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 93,
+          "title": "Fixture Offer 93",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 94,
+          "title": "Fixture Offer 94",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 95,
+          "title": "Fixture Offer 95",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 96,
+          "title": "Fixture Offer 96",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 97,
+          "title": "Fixture Offer 97",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 98,
+          "title": "Fixture Offer 98",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 99,
+          "title": "Fixture Offer 99",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 100,
+          "title": "Fixture Offer 100",
+          "status": "published",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

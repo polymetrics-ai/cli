@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/user" },
+    "error_map": [
+      { "status": 401, "hint": "castor-edc client_id/client_secret are missing or invalid; re-run pm credentials add castor-edc" },
+      { "status": 403, "hint": "castor-edc credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "castor-edc rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "study",
+      "path": "/study",
+      "records": { "path": "_embedded.study" },
+      "incremental": { "cursor_field": "updated_on" },
+      "schema": "schemas/study.json"
+    },
+    {
+      "name": "user",
+      "path": "/user",
+      "records": { "path": "_embedded.user" },
+      "incremental": { "cursor_field": "last_login" },
+      "schema": "schemas/user.json"
+    },
+    {
+      "name": "country",
+      "path": "/country",
+      "records": { "path": "_embedded.countries" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/country.json"
+    },
+    {
+      "name": "audit_trail",
+      "path": "/audit-trail",
+      "records": { "path": "_embedded.audit_trail" },
+      "incremental": { "cursor_field": "datetime" },
+      "schema": "schemas/audit_trail.json"
+    }
+  ]
+}

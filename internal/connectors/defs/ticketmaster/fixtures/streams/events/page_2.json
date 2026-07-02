@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events.json",
+    "query": { "page": "1", "size": "200" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "events": [
+          {
+            "id": "event_fixture_201",
+            "name": "Fixture Event 201",
+            "url": "https://example.com/events/201",
+            "type": "event",
+            "locale": "en-us"
+          }
+        ]
+      }
+    }
+  }
+}

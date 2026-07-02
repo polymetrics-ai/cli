@@ -1,0 +1,15 @@
+{
+  "api": "Primetric REST API v1 (https://developer.primetric.com/)",
+  "docs": "https://developer.primetric.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (employees, projects, clients, roles). Primetric's write/mutation endpoints (project/employee assignment, time-off requests, etc.) are out of scope; legacy itself ships no writes (capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/employees", "covered_by": { "stream": "employees" } },
+    { "method": "GET", "path": "/api/v1/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/api/v1/clients", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/api/v1/roles", "covered_by": { "stream": "roles" } },
+    { "method": "POST", "path": "/api/v1/projects/{id}/assignments", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented assignment writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/time_entries", "excluded": { "category": "out_of_scope", "reason": "time-tracking data not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/vacations", "excluded": { "category": "out_of_scope", "reason": "time-off data not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/emailCampaigns", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        { "id": 10, "name": "Fixture Spring Sale", "status": "sent", "modifiedAt": "2026-01-01T00:00:00.000Z" }
+      ],
+      "count": 1
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "requisitions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "requisitionCode": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "headcountTotal": { "type": ["integer", "null"] },
+    "headcountHired": { "type": ["integer", "null"] },
+    "owner": { "type": ["string", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "updatedAt": { "type": ["integer", "null"] }
+  }
+}

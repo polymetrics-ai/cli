@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "data": [],
+        "next": null
+      }
+    }
+  }
+}

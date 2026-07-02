@@ -1,0 +1,17 @@
+{
+  "api": "EasyPost REST API (https://www.easypost.com/docs/api)",
+  "docs": "https://www.easypost.com/docs/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (shipments, trackers, addresses, parcels, insurances). EasyPost is read-only in legacy (no reverse-ETL writes); capabilities.write is false.",
+  "endpoints": [
+    { "method": "GET", "path": "/shipments", "covered_by": { "stream": "shipments" } },
+    { "method": "GET", "path": "/trackers", "covered_by": { "stream": "trackers" } },
+    { "method": "GET", "path": "/addresses", "covered_by": { "stream": "addresses" } },
+    { "method": "GET", "path": "/parcels", "covered_by": { "stream": "parcels" } },
+    { "method": "GET", "path": "/insurances", "covered_by": { "stream": "insurances" } },
+    { "method": "POST", "path": "/shipments", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented shipment creation; Pass B capability expansion" } },
+    { "method": "POST", "path": "/shipments/{id}/buy", "excluded": { "category": "destructive_admin", "reason": "purchases a real postage label / incurs a charge; not modeled by legacy" } },
+    { "method": "GET", "path": "/batches", "excluded": { "category": "out_of_scope", "reason": "batch shipping workflows not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/users", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-account/user introspection, not a syncable object stream" } }
+  ]
+}

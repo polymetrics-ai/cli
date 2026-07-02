@@ -1,0 +1,22 @@
+{
+  "name": "clarif-ai",
+  "display_name": "Clarif-ai",
+  "description": "Reads Clarifai applications, datasets, models, model versions, and workflows through the Clarifai v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.clarifai.com/api-guide/api-overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Clarifai API read of application, dataset, model, and workflow metadata"
+  }
+}

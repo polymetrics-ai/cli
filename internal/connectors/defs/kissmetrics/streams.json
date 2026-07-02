@@ -1,0 +1,46 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/products", "query": { "limit": "1", "offset": "0" } },
+    "error_map": [
+      { "status": 401, "hint": "kissmetrics username/password is missing or invalid; re-run pm credentials add kissmetrics" },
+      { "status": 429, "class": "rate_limited", "hint": "kissmetrics rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/products",
+      "records": { "path": "data" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "reports",
+      "path": "/products/{{ config.product_id }}/reports",
+      "records": { "path": "data" },
+      "schema": "schemas/reports.json"
+    },
+    {
+      "name": "events",
+      "path": "/products/{{ config.product_id }}/events",
+      "records": { "path": "data" },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "properties",
+      "path": "/products/{{ config.product_id }}/properties",
+      "records": { "path": "data" },
+      "schema": "schemas/properties.json"
+    }
+  ]
+}

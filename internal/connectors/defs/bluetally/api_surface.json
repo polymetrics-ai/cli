@@ -1,0 +1,15 @@
+{
+  "api": "BlueTally REST API v1 (https://app.bluetallyapp.com/api/v1)",
+  "docs": "https://bluetally.readme.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (assets, employees, licenses, maintenances, accessories); BlueTally's write/mutation endpoints are out of scope — legacy itself advertises Write=false (full-refresh reads only)",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/assets", "covered_by": { "stream": "assets" } },
+    { "method": "GET", "path": "/api/v1/employees", "covered_by": { "stream": "employees" } },
+    { "method": "GET", "path": "/api/v1/licenses", "covered_by": { "stream": "licenses" } },
+    { "method": "GET", "path": "/api/v1/maintenances", "covered_by": { "stream": "maintenances" } },
+    { "method": "GET", "path": "/api/v1/accessories", "covered_by": { "stream": "accessories" } },
+    { "method": "POST", "path": "/api/v1/assets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/api/v1/assets/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

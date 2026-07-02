@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/v3/grants/synthetic-conformance-value/events", "query": { "limit": "synthetic-conformance-value", "calendar_id": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request_id": "req_fixture_1",
+      "data": [
+        {
+          "id": "event_fixture_1",
+          "grant_id": "me",
+          "calendar_id": "primary",
+          "object": "event",
+          "title": "Fixture event 1",
+          "description": "fixture description",
+          "location": "Fixture room",
+          "status": "confirmed",
+          "busy": true,
+          "read_only": false,
+          "when": { "start_time": 1767225601, "end_time": 1767229201, "object": "timespan" },
+          "updated_at": 1767225601
+        }
+      ],
+      "next_cursor": ""
+    }
+  }
+}

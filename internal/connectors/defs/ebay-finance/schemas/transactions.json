@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["transactionId"],
+  "x-cursor-field": "transactionDate",
+  "required": ["transactionId"],
+  "properties": {
+    "transactionId": { "type": "string" },
+    "transactionType": { "type": ["string", "null"] },
+    "transactionStatus": { "type": ["string", "null"] },
+    "transactionDate": { "type": ["string", "null"] },
+    "bookingEntry": { "type": ["string", "null"] },
+    "orderId": { "type": ["string", "null"] },
+    "salesRecordReference": { "type": ["string", "null"] },
+    "payoutId": { "type": ["string", "null"] },
+    "transactionMemo": { "type": ["string", "null"] },
+    "feeType": { "type": ["string", "null"] },
+    "amount_value": { "type": ["string", "null"] },
+    "amount_currency": { "type": ["string", "null"] }
+  }
+}

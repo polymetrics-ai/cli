@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/vendors", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "ven_fixture_1", "company_name": "Fixture Vendor Co", "email": "billing@fixturevendor.example.com", "phone": "+15550100", "payment_accounts": [] }
+      ],
+      "next_cursor": null
+    }
+  }
+}

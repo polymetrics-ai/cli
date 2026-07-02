@@ -1,0 +1,26 @@
+{
+  "name": "clazar",
+  "display_name": "Clazar",
+  "description": "Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, and private offers) from the Clazar REST API using OAuth2 client credentials.",
+  "integration_type": "api",
+  "docs_url": "https://clazar.io/api-docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Clazar API read of cloud marketplace GTM data"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "oauth2_client_credentials auth's token_url is derived from config.base_url ({{ config.base_url }}/authenticate/); conformance's withReplayURL only overrides b.HTTP.URL (the base request URL used for stream/check paths), never RuntimeConfig.Config[\"base_url\"] itself, so the token_url template still resolves to the synthetic non-secret value (\"synthetic-conformance-value/authenticate/\"), an unreachable non-URL — the OAuth token exchange fails before any declarative stream/check request is ever issued, so every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass. This bundle has no Tier-2 AuthHook (auth is fully declarative oauth2_client_credentials), so there is no paritytest/clazar package for this wave; the read/pagination/incremental/schema-projection shape is proven by structural review against legacy internal/connectors/clazar instead. Matches sendpulse's identical documented precedent."
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/ad_accounts", "query": { "limit": "100", "offset": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "ad_accounts": [
+        { "id": "aa_fixture_101", "name": "Fixture Ad Account 101", "country": "GB" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v1/customers" },
+  "response": {
+    "status": 200,
+    "body": { "customers": [], "cursor": "", "hasNextPage": false }
+  }
+}

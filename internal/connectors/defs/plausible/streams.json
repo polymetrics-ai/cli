@@ -1,0 +1,104 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/sites" },
+    "error_map": [
+      { "status": 401, "hint": "plausible api_token is missing or invalid; re-run pm credentials add plausible" },
+      { "status": 403, "hint": "plausible api_token lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "plausible rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "sites",
+      "path": "/sites",
+      "records": { "path": "sites" },
+      "computed_fields": {
+        "site_id": "{{ record.domain }}"
+      },
+      "schema": "schemas/sites.json"
+    },
+    {
+      "name": "aggregate",
+      "path": "/stats/aggregate",
+      "query": {
+        "site_id": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": { "template": "{{ config.date }}", "omit_when_absent": true },
+        "metrics": { "template": "{{ config.metrics }}", "omit_when_absent": true },
+        "filters": { "template": "{{ config.filters }}", "omit_when_absent": true },
+        "compare": { "template": "{{ config.compare }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "site_id": "{{ config.site_id }}",
+        "visitors": "{{ record.visitors.value }}",
+        "visits": "{{ record.visits.value }}",
+        "pageviews": "{{ record.pageviews.value }}",
+        "events": "{{ record.events.value }}",
+        "bounce_rate": "{{ record.bounce_rate.value }}",
+        "visit_duration": "{{ record.visit_duration.value }}"
+      },
+      "schema": "schemas/aggregate.json"
+    },
+    {
+      "name": "timeseries",
+      "path": "/stats/timeseries",
+      "query": {
+        "site_id": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": { "template": "{{ config.date }}", "omit_when_absent": true },
+        "metrics": { "template": "{{ config.metrics }}", "omit_when_absent": true },
+        "filters": { "template": "{{ config.filters }}", "omit_when_absent": true },
+        "compare": { "template": "{{ config.compare }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "site_id": "{{ config.site_id }}",
+        "visitors": "{{ record.visitors }}",
+        "visits": "{{ record.visits }}",
+        "pageviews": "{{ record.pageviews }}",
+        "events": "{{ record.events }}",
+        "bounce_rate": "{{ record.bounce_rate }}",
+        "visit_duration": "{{ record.visit_duration }}"
+      },
+      "schema": "schemas/timeseries.json"
+    },
+    {
+      "name": "breakdown",
+      "path": "/stats/breakdown",
+      "query": {
+        "site_id": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "property": "{{ config.property }}",
+        "date": { "template": "{{ config.date }}", "omit_when_absent": true },
+        "metrics": { "template": "{{ config.metrics }}", "omit_when_absent": true },
+        "filters": { "template": "{{ config.filters }}", "omit_when_absent": true },
+        "compare": { "template": "{{ config.compare }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "computed_fields": {
+        "site_id": "{{ config.site_id }}",
+        "property_value": "{{ record.page }}",
+        "visitors": "{{ record.visitors }}",
+        "visits": "{{ record.visits }}",
+        "pageviews": "{{ record.pageviews }}",
+        "events": "{{ record.events }}",
+        "bounce_rate": "{{ record.bounce_rate }}",
+        "visit_duration": "{{ record.visit_duration }}"
+      },
+      "schema": "schemas/breakdown.json"
+    }
+  ]
+}

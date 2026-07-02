@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "neo_feed",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "neo_reference_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "nasa_jpl_url": { "type": ["string", "null"] },
+    "absolute_magnitude_h": { "type": ["number", "null"] },
+    "is_potentially_hazardous_asteroid": { "type": ["boolean", "null"] },
+    "is_sentry_object": { "type": ["boolean", "null"] }
+  }
+}

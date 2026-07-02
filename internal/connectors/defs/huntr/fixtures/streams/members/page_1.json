@@ -1,0 +1,33 @@
+{
+  "request": { "method": "GET", "path": "/members", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "mem_fixture_1",
+          "email": "fixture1@example.com",
+          "fullName": "Fixture One",
+          "givenName": "Fixture",
+          "familyName": "One",
+          "isActive": true,
+          "createdAt": 1767225601,
+          "lastSeenAt": 1767225602,
+          "boardIds": ["board_fixture_1"]
+        },
+        {
+          "id": "mem_fixture_2",
+          "email": "fixture2@example.com",
+          "fullName": "Fixture Two",
+          "givenName": "Fixture",
+          "familyName": "Two",
+          "isActive": true,
+          "createdAt": 1767225603,
+          "lastSeenAt": 1767225604,
+          "boardIds": ["board_fixture_1"]
+        }
+      ],
+      "next": "cursor_fixture_2"
+    }
+  }
+}

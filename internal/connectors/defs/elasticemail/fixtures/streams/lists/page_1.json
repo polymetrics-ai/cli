@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/lists", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "ListName": "List 1", "PublicListID": "pub_1", "DateAdded": "2026-01-01T00:00:00Z", "AllowUnsubscribe": true }
+    ]
+  }
+}

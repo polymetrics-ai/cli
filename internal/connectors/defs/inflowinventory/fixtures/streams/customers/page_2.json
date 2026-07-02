@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/customers",
+    "query": {
+      "after": "cust_fixture_2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

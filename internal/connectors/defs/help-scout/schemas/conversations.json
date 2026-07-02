@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "userUpdatedAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "number": { "type": ["integer", "null"] },
+    "type": { "type": ["string", "null"] },
+    "folderId": { "type": ["integer", "null"] },
+    "status": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "mailboxId": { "type": ["integer", "null"] },
+    "assigneeId": { "type": ["integer", "null"] },
+    "preview": { "type": ["string", "null"] },
+    "threads": { "type": ["integer", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "closedAt": { "type": ["string", "null"] },
+    "userUpdatedAt": { "type": ["string", "null"] }
+  }
+}

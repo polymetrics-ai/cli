@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["Name"],
+  "required": ["Name"],
+  "properties": {
+    "Name": { "type": "string" },
+    "Status": { "type": ["string", "null"] },
+    "Content": { "type": ["object", "null"] },
+    "Recipients": { "type": ["object", "null"] },
+    "Options": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tickets",
+    "query": {
+      "from": "100",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ticket_fixture_101",
+          "ticketNumber": "1101",
+          "subject": "Fixture ticket 101",
+          "status": "Open",
+          "priority": "Medium",
+          "channel": "Email",
+          "email": "fixture@example.com",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "modifiedTime": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

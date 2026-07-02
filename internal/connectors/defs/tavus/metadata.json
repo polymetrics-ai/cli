@@ -1,0 +1,23 @@
+{
+  "name": "tavus",
+  "display_name": "Tavus",
+  "description": "Reads Tavus replicas through the Tavus API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://docs.tavus.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Tavus API read of replica data",
+    "approval": "none; read-only"
+  }
+}

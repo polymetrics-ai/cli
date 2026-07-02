@@ -1,0 +1,72 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apikey", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "nextPage"
+    },
+    "check": { "method": "GET", "path": "/latest", "query": { "size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "newsdata-io api_key is missing or invalid; re-run pm credentials add newsdata-io" },
+      { "status": 429, "class": "rate_limited", "hint": "newsdata-io rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "latest",
+      "path": "/latest",
+      "query": {
+        "size": { "template": "{{ config.page_size }}", "default": "10" },
+        "q": { "template": "{{ config.search_query }}", "omit_when_absent": true },
+        "category": { "template": "{{ config.categories }}", "omit_when_absent": true },
+        "country": { "template": "{{ config.countries }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.languages }}", "omit_when_absent": true },
+        "domain": { "template": "{{ config.domains }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/latest.json"
+    },
+    {
+      "name": "crypto",
+      "path": "/crypto",
+      "query": {
+        "size": { "template": "{{ config.page_size }}", "default": "10" },
+        "q": { "template": "{{ config.search_query }}", "omit_when_absent": true },
+        "category": { "template": "{{ config.categories }}", "omit_when_absent": true },
+        "country": { "template": "{{ config.countries }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.languages }}", "omit_when_absent": true },
+        "domain": { "template": "{{ config.domains }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/crypto.json"
+    },
+    {
+      "name": "archive",
+      "path": "/archive",
+      "query": {
+        "size": { "template": "{{ config.page_size }}", "default": "10" },
+        "q": { "template": "{{ config.search_query }}", "omit_when_absent": true },
+        "category": { "template": "{{ config.categories }}", "omit_when_absent": true },
+        "country": { "template": "{{ config.countries }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.languages }}", "omit_when_absent": true },
+        "domain": { "template": "{{ config.domains }}", "omit_when_absent": true },
+        "from_date": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/archive.json"
+    },
+    {
+      "name": "sources",
+      "path": "/sources",
+      "records": { "path": "results" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/sources.json"
+    }
+  ]
+}

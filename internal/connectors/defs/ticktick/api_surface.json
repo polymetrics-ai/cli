@@ -1,0 +1,12 @@
+{
+  "api": "TickTick Open API v1",
+  "docs": "https://developer.ticktick.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (projects, tasks); TickTick's write/mutation endpoints and other resources (task completion, tags, habits) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/open/v1/project", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/open/v1/project/{projectId}/data", "covered_by": { "stream": "tasks" } },
+    { "method": "POST", "path": "/open/v1/task", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
+    { "method": "GET", "path": "/open/v1/project/{projectId}", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

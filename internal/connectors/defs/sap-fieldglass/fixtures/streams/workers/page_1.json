@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/workers", "query": { "page": "1", "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "worker_id": "worker_fixture_1", "name": "Fixture Worker One", "status": "active" },
+        { "worker_id": "worker_fixture_2", "name": "Fixture Worker Two", "status": "active" }
+      ],
+      "next": null
+    }
+  }
+}

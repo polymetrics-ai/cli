@@ -1,0 +1,22 @@
+{
+  "name": "drip",
+  "display_name": "Drip",
+  "description": "Reads Drip subscribers, campaigns, broadcasts, and accounts through the Drip REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.drip.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Drip API read of subscribers, campaigns, broadcasts, and account data"
+  }
+}

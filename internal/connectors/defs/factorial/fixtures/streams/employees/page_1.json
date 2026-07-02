@@ -1,0 +1,46 @@
+{
+  "request": { "method": "GET", "path": "/employees/employees", "query": { "page": "1", "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "company_id": 1,
+          "first_name": "Ada",
+          "last_name": "Lovelace",
+          "full_name": "Ada Lovelace",
+          "email": "fixture1@example.com",
+          "manager_id": null,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [10],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "company_id": 1,
+          "first_name": "Grace",
+          "last_name": "Hopper",
+          "full_name": "Grace Hopper",
+          "email": "fixture2@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [10],
+          "gender": "F",
+          "birthday_on": "1985-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-02T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

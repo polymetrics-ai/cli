@@ -1,0 +1,52 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "api-key ", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/workspace" },
+    "error_map": [
+      { "status": 401, "hint": "height api_key is missing or invalid; re-run pm credentials add height" },
+      { "status": 429, "class": "rate_limited", "hint": "height rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "query": { "usePagination": "true" },
+      "records": { "path": "list" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "nextPageToken"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "lists",
+      "path": "/lists",
+      "records": { "path": "list" },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "field_templates",
+      "path": "/fieldTemplates",
+      "records": { "path": "list" },
+      "schema": "schemas/field_templates.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "list" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "workspace",
+      "path": "/workspace",
+      "records": { "path": "" },
+      "schema": "schemas/workspace.json"
+    }
+  ]
+}

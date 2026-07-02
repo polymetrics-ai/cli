@@ -1,0 +1,15 @@
+{
+  "api": "YNAB API v1 (https://api.ynab.com/v1)",
+  "docs": "https://api.ynab.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full YNAB surface (categories, payees, months, scheduled transactions, write mutations, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/budgets", "covered_by": { "stream": "budgets" } },
+    { "method": "GET", "path": "/budgets/{budget_id}/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/budgets/{budget_id}/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/budgets/{budget_id}/categories", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/budgets/{budget_id}/payees", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/budgets/{budget_id}/months", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/budgets/{budget_id}/transactions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

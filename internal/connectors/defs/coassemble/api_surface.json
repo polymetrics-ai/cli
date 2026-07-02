@@ -1,0 +1,11 @@
+{
+  "api": "Coassemble Headless API",
+  "docs": "https://developers.coassemble.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; no writes exist in legacy and none are added here",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/headless/courses", "covered_by": { "stream": "courses" } },
+    { "method": "GET", "path": "/api/v1/headless/screen/types", "covered_by": { "stream": "screen_types" } },
+    { "method": "GET", "path": "/api/v1/headless/trackings", "covered_by": { "stream": "trackings" } }
+  ]
+}

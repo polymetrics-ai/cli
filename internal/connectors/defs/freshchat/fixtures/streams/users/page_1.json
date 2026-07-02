@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": { "page": "1", "items_per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "id": "users_fixture_1",
+          "email": "fixture1@example.com",
+          "first_name": "Fixture1",
+          "last_name": "User",
+          "phone": "",
+          "avatar": null,
+          "properties": [],
+          "reference_id": "ref_fixture_1",
+          "restore_id": "restore_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

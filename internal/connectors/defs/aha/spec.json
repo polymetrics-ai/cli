@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aha! Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Aha! API key, sent as a Bearer token exactly like an OAuth bearer token. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://secure.aha.io",
+      "description": "Aha! account base URL (e.g. https://<company>.aha.io). Defaults to https://secure.aha.io; because Aha! is account-scoped, most deployments override this."
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "smaily",
+  "display_name": "Smaily",
+  "description": "Reads Smaily campaigns, segments, contacts, templates, and automations.",
+  "integration_type": "api",
+  "docs_url": "https://smaily.com/help/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "read-only campaign/segment/contact/template/automation data from a connected Smaily account",
+    "approval": "none; read-only"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/v3/synthetic-conformance-value/tags" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "tag": "newsletter",
+          "description": "conformance fixture tag",
+          "first-seen": "Thu, 01 Jan 2026 00:00:00 GMT",
+          "last-seen": "Thu, 01 Jan 2026 00:05:00 GMT"
+        },
+        {
+          "tag": "onboarding",
+          "description": "conformance fixture tag",
+          "first-seen": "Thu, 01 Jan 2026 00:02:00 GMT",
+          "last-seen": "Thu, 01 Jan 2026 00:07:00 GMT"
+        }
+      ],
+      "paging": {
+        "next": ""
+      }
+    }
+  }
+}

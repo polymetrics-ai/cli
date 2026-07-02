@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/clients", "query": { "updated_since": "2020-01-01T00:00:00Z" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "clients": [
+        { "id": 1, "name": "Acme Fixture Co", "is_active": true, "address": "123 Fixture St.", "statement_key": "key_1", "currency": "USD", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": 2, "name": "Globex Fixture Corp", "is_active": false, "address": "456 Fixture Ave.", "statement_key": "key_2", "currency": "USD", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" }
+      ],
+      "per_page": 2,
+      "total_pages": 2,
+      "total_entries": 3,
+      "next_page": 2,
+      "previous_page": null,
+      "page": 1
+    }
+  }
+}

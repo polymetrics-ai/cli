@@ -1,0 +1,16 @@
+{
+  "api": "Instatus API v1/v2 (https://api.instatus.com)",
+  "docs": "https://instatus.com/help/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (pages, components, incidents, maintenances); write/mutation endpoints and any additional list resources are out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/pages", "covered_by": { "stream": "pages" } },
+    { "method": "GET", "path": "/v2/{page_id}/components", "covered_by": { "stream": "components" } },
+    { "method": "GET", "path": "/v1/{page_id}/incidents", "covered_by": { "stream": "incidents" } },
+    { "method": "GET", "path": "/v2/{page_id}/maintenances", "covered_by": { "stream": "maintenances" } },
+    { "method": "POST", "path": "/v1/{page_id}/incidents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/{page_id}/components", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/v2/{page_id}/components/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/v2/pages/{page_id}", "excluded": { "category": "destructive_admin", "reason": "destructive page deletion, not a syncable read" } }
+  ]
+}

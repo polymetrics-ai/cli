@@ -1,0 +1,22 @@
+{
+  "name": "ticketmaster",
+  "display_name": "Ticketmaster",
+  "description": "Reads events, venues, attractions, and classifications from the Ticketmaster Discovery API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Ticketmaster Discovery API read of public event/venue data"
+  }
+}

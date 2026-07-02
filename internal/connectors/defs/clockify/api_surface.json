@@ -1,0 +1,16 @@
+{
+  "api": "Clockify API v1 (https://api.clockify.me/api)",
+  "docs": "https://docs.clockify.me/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Clockify surface (time entries, tasks, tags CRUD, reports, webhooks, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/workspaces", "covered_by": { "stream": "workspaces" } },
+    { "method": "GET", "path": "/v1/workspaces/{workspaceId}/clients", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/v1/workspaces/{workspaceId}/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/v1/workspaces/{workspaceId}/tags", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "/v1/workspaces/{workspaceId}/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/v1/workspaces/{workspaceId}/user/{userId}/time-entries", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/workspaces/{workspaceId}/tasks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/workspaces/{workspaceId}/clients", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

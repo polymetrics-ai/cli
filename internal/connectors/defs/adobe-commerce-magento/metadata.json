@@ -1,0 +1,22 @@
+{
+  "name": "adobe-commerce-magento",
+  "display_name": "Adobe Commerce (Magento)",
+  "description": "Reads Adobe Commerce (Magento) products, orders, customers, categories, and invoices through the Magento REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.adobe.com/commerce/webapi/rest/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Adobe Commerce (Magento) REST API read of catalog and order data"
+  }
+}

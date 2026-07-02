@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/everything",
+    "query": {
+      "page": "2",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "totalResults": 101,
+      "articles": [
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 101",
+          "title": "Fixture Headline 101",
+          "description": "conformance fixture article 101",
+          "url": "https://example.com/article/101",
+          "urlToImage": "https://example.com/article/101.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 101."
+        }
+      ]
+    }
+  }
+}

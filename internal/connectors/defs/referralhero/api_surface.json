@@ -1,0 +1,14 @@
+{
+  "api": "ReferralHero API v2 (https://app.referralhero.com/api/v2)",
+  "docs": "https://support.referralhero.com/integrate/rest-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full ReferralHero surface (campaigns management, webhooks, custom fields, exports) is out of scope until Pass B. ReferralHero is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/api/v2/subscribers", "covered_by": { "stream": "subscribers" } },
+    { "method": "GET", "path": "/api/v2/referrals", "covered_by": { "stream": "referrals" } },
+    { "method": "GET", "path": "/api/v2/rewards", "covered_by": { "stream": "rewards" } },
+    { "method": "POST", "path": "/api/v2/subscribers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/api/v2/subscribers/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; ReferralHero connector is read-only" } }
+  ]
+}

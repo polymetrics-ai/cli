@@ -1,0 +1,17 @@
+{
+  "api": "Shortcut REST API v3 (https://developer.shortcut.com/api/rest/v3)",
+  "docs": "https://developer.shortcut.com/api/rest/v3",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (stories, epics, projects, iterations). Shortcut's write endpoints (story/epic create/update, comments, workflows) are out of scope for this wave (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v3/stories", "covered_by": { "stream": "stories" } },
+    { "method": "GET", "path": "/api/v3/epics", "covered_by": { "stream": "epics" } },
+    { "method": "GET", "path": "/api/v3/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/api/v3/iterations", "covered_by": { "stream": "iterations" } },
+    { "method": "POST", "path": "/api/v3/stories", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented story creation; Pass B capability expansion" } },
+    { "method": "PUT", "path": "/api/v3/stories/{story-public-id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented story updates; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v3/workflows", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v3/labels", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v3/member", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-member profile introspection, not a syncable object stream" } }
+  ]
+}

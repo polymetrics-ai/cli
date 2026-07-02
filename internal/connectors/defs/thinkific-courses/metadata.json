@@ -1,0 +1,22 @@
+{
+  "name": "thinkific-courses",
+  "display_name": "Thinkific Courses",
+  "description": "Reads courses, chapters, lessons, and enrollments from the Thinkific public API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.thinkific.com/api/api-documentation/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Thinkific API read of course catalog and enrollment data"
+  }
+}

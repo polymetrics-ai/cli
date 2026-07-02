@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "agents_activity",
+  "type": "object",
+  "x-primary-key": ["agent_id"],
+  "required": ["agent_id"],
+  "properties": {
+    "agent_id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "avatar_url": { "type": ["string", "null"] },
+    "agent_state": { "type": ["string", "null"] },
+    "call_status": { "type": ["string", "null"] },
+    "available_time": { "type": ["integer", "null"] },
+    "away_time": { "type": ["integer", "null"] },
+    "online_time": { "type": ["integer", "null"] },
+    "calls_accepted": { "type": ["integer", "null"] },
+    "calls_denied": { "type": ["integer", "null"] },
+    "calls_missed": { "type": ["integer", "null"] },
+    "forwarding_number": { "type": ["string", "null"] },
+    "total_call_duration": { "type": ["integer", "null"] },
+    "total_talk_time": { "type": ["integer", "null"] },
+    "total_wrap_up_time": { "type": ["integer", "null"] },
+    "via": { "type": ["string", "null"] }
+  }
+}

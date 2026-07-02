@@ -1,0 +1,45 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "api-key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/api/v3/companies/list", "query": { "limit": "1", "page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "simfin api key is missing or invalid; re-run pm credentials add simfin" },
+      { "status": 403, "hint": "simfin account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "simfin rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "companies",
+      "path": "/api/v3/companies/list",
+      "records": { "path": "data" },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "statements",
+      "path": "/api/v3/statements/list",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "updated_at": "{{ record.fiscalPeriod }}"
+      },
+      "schema": "schemas/statements.json"
+    },
+    {
+      "name": "markets",
+      "path": "/api/v3/markets/list",
+      "records": { "path": "data" },
+      "schema": "schemas/markets.json"
+    }
+  ]
+}

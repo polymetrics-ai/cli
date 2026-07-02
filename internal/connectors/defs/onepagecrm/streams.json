@@ -1,0 +1,106 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/users" },
+    "error_map": [
+      { "status": 401, "hint": "onepagecrm username/password is missing or invalid; re-run pm credentials add onepagecrm" },
+      { "status": 429, "class": "rate_limited", "hint": "onepagecrm rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "data.contacts" },
+      "computed_fields": {
+        "id": "{{ record.contact.id }}",
+        "first_name": "{{ record.contact.first_name }}",
+        "last_name": "{{ record.contact.last_name }}",
+        "company_name": "{{ record.contact.company_name }}",
+        "job_title": "{{ record.contact.job_title }}",
+        "status_id": "{{ record.contact.status_id }}",
+        "owner_id": "{{ record.contact.owner_id }}",
+        "starred": "{{ record.contact.starred }}",
+        "created_at": "{{ record.contact.created_at }}",
+        "updated_at": "{{ record.contact.updated_at }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "deals",
+      "path": "/deals",
+      "records": { "path": "data.deals" },
+      "computed_fields": {
+        "id": "{{ record.deal.id }}",
+        "name": "{{ record.deal.name }}",
+        "status": "{{ record.deal.status }}",
+        "stage": "{{ record.deal.stage }}",
+        "amount": "{{ record.deal.amount }}",
+        "currency": "{{ record.deal.currency }}",
+        "contact_id": "{{ record.deal.contact_id }}",
+        "owner_id": "{{ record.deal.owner_id }}",
+        "expected_close_date": "{{ record.deal.expected_close_date }}",
+        "created_at": "{{ record.deal.created_at }}",
+        "updated_at": "{{ record.deal.updated_at }}"
+      },
+      "schema": "schemas/deals.json"
+    },
+    {
+      "name": "actions",
+      "path": "/actions",
+      "records": { "path": "data.actions" },
+      "computed_fields": {
+        "id": "{{ record.action.id }}",
+        "contact_id": "{{ record.action.contact_id }}",
+        "text": "{{ record.action.text }}",
+        "status": "{{ record.action.status }}",
+        "date": "{{ record.action.date }}",
+        "done": "{{ record.action.done }}",
+        "assignee_id": "{{ record.action.assignee_id }}",
+        "created_at": "{{ record.action.created_at }}",
+        "updated_at": "{{ record.action.updated_at }}"
+      },
+      "schema": "schemas/actions.json"
+    },
+    {
+      "name": "companies",
+      "path": "/companies",
+      "records": { "path": "data.companies" },
+      "computed_fields": {
+        "id": "{{ record.company.id }}",
+        "name": "{{ record.company.name }}",
+        "phone": "{{ record.company.phone }}",
+        "url": "{{ record.company.url }}",
+        "description": "{{ record.company.description }}",
+        "created_at": "{{ record.company.created_at }}",
+        "updated_at": "{{ record.company.updated_at }}"
+      },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.user.id }}",
+        "first_name": "{{ record.user.first_name }}",
+        "last_name": "{{ record.user.last_name }}",
+        "email": "{{ record.user.email }}",
+        "role": "{{ record.user.role }}",
+        "status": "{{ record.user.status }}"
+      },
+      "schema": "schemas/users.json"
+    }
+  ]
+}

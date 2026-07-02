@@ -1,0 +1,13 @@
+{
+  "api": "Taboola Backstage API (https://backstage.taboola.com)",
+  "docs": "https://developers.taboola.com/backstage-api/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only (campaigns); Taboola is read-only in legacy and the full Backstage surface (campaign items, reports, audiences, creative previews, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/backstage/api/1.0/{account_id}/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/backstage/api/1.0/{account_id}/campaigns/{campaign_id}/items", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/backstage/api/1.0/{account_id}/reports/campaign-summary/dimensions/day", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/backstage/api/1.0/{account_id}/audiences", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/backstage/api/1.0/{account_id}/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy connector is read-only" } }
+  ]
+}

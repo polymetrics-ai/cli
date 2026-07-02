@@ -1,0 +1,40 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.email }}", "password": "{{ secrets.password }}" }
+    ],
+    "check": { "method": "GET", "path": "/2/users" },
+    "error_map": [
+      { "status": 401, "hint": "when-i-work email/password is missing or invalid; re-run pm credentials add when-i-work" },
+      { "status": 429, "class": "rate_limited", "hint": "when-i-work rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/2/users",
+      "records": { "path": "users" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "locations",
+      "path": "/2/locations",
+      "records": { "path": "locations" },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "positions",
+      "path": "/2/positions",
+      "records": { "path": "positions" },
+      "schema": "schemas/positions.json"
+    },
+    {
+      "name": "shifts",
+      "path": "/2/shifts",
+      "records": { "path": "shifts" },
+      "schema": "schemas/shifts.json"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "vehicles",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "vin": { "type": ["string", "null"] },
+    "make": { "type": ["string", "null"] },
+    "model": { "type": ["string", "null"] },
+    "year": { "type": ["integer", "null"] },
+    "license_plate": { "type": ["string", "null"] },
+    "vehicle_status_name": { "type": ["string", "null"] },
+    "vehicle_type_name": { "type": ["string", "null"] },
+    "current_meter_value": { "type": ["string", "null"] },
+    "archived_at": { "type": ["string", "null"], "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

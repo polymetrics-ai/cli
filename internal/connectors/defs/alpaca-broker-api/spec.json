@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Alpaca Broker API Connection Specification",
+  "type": "object",
+  "required": ["username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "Alpaca Broker API Key ID, sent as the HTTP Basic auth username."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Alpaca Broker API Secret Key, sent as the HTTP Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://broker-api.sandbox.alpaca.markets/v1",
+      "description": "Alpaca Broker API base URL. Defaults to the sandbox host, matching legacy's default when 'environment' is unset; override to https://broker-api.alpaca.markets/v1 for production. Legacy also derives this from an 'environment' enum (api/paper-api/broker-api.sandbox) at runtime; this bundle requires the resolved URL directly since the engine's spec-default mechanism only materializes a fixed literal, not an enum-derived value (documented scope narrowing, see docs.md)."
+    },
+    "limit": {
+      "type": "string",
+      "default": "20",
+      "description": "Records per page for the 'accounts' stream (matches legacy's page_token cursor limit)."
+    }
+  }
+}

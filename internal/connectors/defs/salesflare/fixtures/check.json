@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "page": "1", "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 11, "name": "Fixture Account 1", "email": "fixture1@example.com" }
+      ],
+      "pagination": { "next_page": null }
+    }
+  }
+}

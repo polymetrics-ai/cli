@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/ivrs", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "ivrs": [
+        { "id": 1, "name": "Main IVR", "phone_number_ids": [1, 2], "phone_number_names": ["+15550001", "+15550002"] }
+      ],
+      "next_page": null
+    }
+  }
+}

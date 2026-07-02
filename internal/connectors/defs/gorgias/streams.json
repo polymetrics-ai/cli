@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "meta.next_cursor"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/tickets",
+      "query": { "limit": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "gorgias username/password is missing or invalid; re-run pm credentials add gorgias" },
+      { "status": 403, "hint": "gorgias account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "gorgias rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "tickets",
+      "path": "/tickets",
+      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data" },
+      "schema": "schemas/tickets.json"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "messages",
+      "path": "/messages",
+      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data" },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "satisfaction_surveys",
+      "path": "/satisfaction-surveys",
+      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data" },
+      "schema": "schemas/satisfaction_surveys.json"
+    }
+  ]
+}

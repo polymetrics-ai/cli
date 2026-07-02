@@ -1,0 +1,15 @@
+{
+  "api": "lu.ma public API v1 (https://api.lu.ma/public/v1)",
+  "docs": "https://docs.lu.ma/reference/getting-started",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full lu.ma public API surface (creating/updating events, coupons, ticket types, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/calendar/list-events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/event/get-guests", "covered_by": { "stream": "event_guests" } },
+    { "method": "GET", "path": "/event/get-hosts", "covered_by": { "stream": "event_hosts" } },
+    { "method": "GET", "path": "/event/get", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/event/create", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/event/add-guests", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/calendar/list-people", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

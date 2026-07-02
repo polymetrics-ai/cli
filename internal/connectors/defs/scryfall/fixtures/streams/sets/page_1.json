@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/sets" },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        { "id": "set_fixture_1", "name": "Fixture Set One", "set": "one" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 2
+    },
+    "check": { "method": "GET", "path": "/v2/boards" },
+    "error_map": [
+      { "status": 401, "hint": "miro api_key is missing or invalid; re-run pm credentials add miro" },
+      { "status": 429, "class": "rate_limited", "hint": "miro rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "boards",
+      "path": "/v2/boards",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "view_link": "{{ record.viewLink }}",
+        "created_at": "{{ record.createdAt }}",
+        "modified_at": "{{ record.modifiedAt }}",
+        "owner_id": "{{ record.owner.id }}",
+        "team_id": "{{ record.team.id }}"
+      },
+      "schema": "schemas/boards.json"
+    },
+    {
+      "name": "board_users",
+      "path": "/v2/boards/{{ config.board_id }}/members",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "board_id": "{{ config.board_id }}"
+      },
+      "schema": "schemas/board_users.json"
+    },
+    {
+      "name": "board_items",
+      "path": "/v2/boards/{{ config.board_id }}/items",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "board_id": "{{ config.board_id }}",
+        "created_at": "{{ record.createdAt }}",
+        "modified_at": "{{ record.modifiedAt }}"
+      },
+      "schema": "schemas/board_items.json"
+    },
+    {
+      "name": "board_tags",
+      "path": "/v2/boards/{{ config.board_id }}/tags",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "board_id": "{{ config.board_id }}",
+        "fill_color": "{{ record.fillColor }}"
+      },
+      "schema": "schemas/board_tags.json"
+    },
+    {
+      "name": "board_connectors",
+      "path": "/v2/boards/{{ config.board_id }}/connectors",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "board_id": "{{ config.board_id }}"
+      },
+      "schema": "schemas/board_connectors.json"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/tickets", "query": { "limit": "100", "cursor": "fixture_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 3,
+          "subject": "Fixture ticket 3",
+          "status": "open",
+          "channel": "email",
+          "via": "email",
+          "priority": "normal",
+          "language": "en",
+          "is_unread": true,
+          "spam": false,
+          "trashed_datetime": null,
+          "created_datetime": "2026-01-01T00:00:03Z",
+          "updated_datetime": "2026-01-02T00:00:03Z",
+          "opened_datetime": "2026-01-01T00:07:00Z",
+          "closed_datetime": null
+        }
+      ],
+      "meta": { "next_cursor": null }
+    }
+  }
+}

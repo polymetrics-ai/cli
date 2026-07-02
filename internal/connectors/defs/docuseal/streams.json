@@ -1,0 +1,47 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Auth-Token", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "after",
+      "token_path": "pagination.next"
+    },
+    "check": { "method": "GET", "path": "/templates" },
+    "error_map": [
+      { "status": 401, "hint": "docuseal api_key is missing or invalid; re-run pm credentials add docuseal" },
+      { "status": 403, "hint": "docuseal api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "docuseal rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "templates",
+      "path": "/templates",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "submissions",
+      "path": "/submissions",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "template_id": "{{ record.template.id }}",
+        "template_name": "{{ record.template.name }}"
+      },
+      "schema": "schemas/submissions.json"
+    },
+    {
+      "name": "submitters",
+      "path": "/submitters",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/submitters.json"
+    }
+  ]
+}

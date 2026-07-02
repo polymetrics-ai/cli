@@ -1,0 +1,15 @@
+{
+  "api": "Split Admin API (https://api.split.io)",
+  "docs": "https://docs.split.io/reference/api-overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only, matching internal/connectors/split-io's exact endpoint set; the full Split Admin API (change requests, attributes, API keys, restrictions, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/internal/api/v2/workspaces", "covered_by": { "stream": "workspaces" } },
+    { "method": "GET", "path": "/internal/api/v2/environments/ws/{workspace_id}", "covered_by": { "stream": "environments" } },
+    { "method": "GET", "path": "/internal/api/v2/splits/ws/{workspace_id}", "covered_by": { "stream": "splits" } },
+    { "method": "GET", "path": "/internal/api/v2/segments/ws/{workspace_id}", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "/internal/api/v2/segments/ws/{workspace_id}/{segment_name}/keys", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/internal/api/v2/splits/ws/{workspace_id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/internal/api/v2/apiKeys", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

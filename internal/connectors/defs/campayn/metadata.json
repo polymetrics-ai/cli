@@ -1,0 +1,20 @@
+{
+  "name": "campayn",
+  "display_name": "Campayn",
+  "description": "Reads Campayn subscriber lists, email campaigns, and calendar reports through the Campayn REST API. List-scoped substreams (signup forms, contacts) are not yet migrated (see docs.md Known limits).",
+  "integration_type": "api",
+  "docs_url": "https://github.com/nebojsac/Campayn-API",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Campayn API read of subscriber lists, campaigns, and reports",
+    "approval": "none; read-only API"
+  }
+}

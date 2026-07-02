@@ -1,0 +1,23 @@
+{
+  "name": "insightful",
+  "display_name": "Insightful",
+  "description": "Reads Insightful workforce-analytics employees, teams, projects, and directory entries through the Insightful REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.insightful.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Insightful API read of workforce-analytics employees, teams, projects, and directory entries",
+    "approval": "none; read-only source"
+  }
+}

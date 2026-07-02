@@ -1,0 +1,621 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "list_fixture_1",
+          "name": "Fixture list 1",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_2",
+          "name": "Fixture list 2",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_3",
+          "name": "Fixture list 3",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_4",
+          "name": "Fixture list 4",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_5",
+          "name": "Fixture list 5",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_6",
+          "name": "Fixture list 6",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_7",
+          "name": "Fixture list 7",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_8",
+          "name": "Fixture list 8",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_9",
+          "name": "Fixture list 9",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_10",
+          "name": "Fixture list 10",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_11",
+          "name": "Fixture list 11",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_12",
+          "name": "Fixture list 12",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_13",
+          "name": "Fixture list 13",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_14",
+          "name": "Fixture list 14",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_15",
+          "name": "Fixture list 15",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_16",
+          "name": "Fixture list 16",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_17",
+          "name": "Fixture list 17",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_18",
+          "name": "Fixture list 18",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_19",
+          "name": "Fixture list 19",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_20",
+          "name": "Fixture list 20",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_21",
+          "name": "Fixture list 21",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_22",
+          "name": "Fixture list 22",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_23",
+          "name": "Fixture list 23",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_24",
+          "name": "Fixture list 24",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_25",
+          "name": "Fixture list 25",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_26",
+          "name": "Fixture list 26",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_27",
+          "name": "Fixture list 27",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_28",
+          "name": "Fixture list 28",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_29",
+          "name": "Fixture list 29",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_30",
+          "name": "Fixture list 30",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_31",
+          "name": "Fixture list 31",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_32",
+          "name": "Fixture list 32",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_33",
+          "name": "Fixture list 33",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_34",
+          "name": "Fixture list 34",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_35",
+          "name": "Fixture list 35",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_36",
+          "name": "Fixture list 36",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_37",
+          "name": "Fixture list 37",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_38",
+          "name": "Fixture list 38",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_39",
+          "name": "Fixture list 39",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_40",
+          "name": "Fixture list 40",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_41",
+          "name": "Fixture list 41",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_42",
+          "name": "Fixture list 42",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_43",
+          "name": "Fixture list 43",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_44",
+          "name": "Fixture list 44",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_45",
+          "name": "Fixture list 45",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_46",
+          "name": "Fixture list 46",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_47",
+          "name": "Fixture list 47",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_48",
+          "name": "Fixture list 48",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_49",
+          "name": "Fixture list 49",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_50",
+          "name": "Fixture list 50",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_51",
+          "name": "Fixture list 51",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_52",
+          "name": "Fixture list 52",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_53",
+          "name": "Fixture list 53",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_54",
+          "name": "Fixture list 54",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_55",
+          "name": "Fixture list 55",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_56",
+          "name": "Fixture list 56",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_57",
+          "name": "Fixture list 57",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_58",
+          "name": "Fixture list 58",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_59",
+          "name": "Fixture list 59",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_60",
+          "name": "Fixture list 60",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_61",
+          "name": "Fixture list 61",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_62",
+          "name": "Fixture list 62",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_63",
+          "name": "Fixture list 63",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_64",
+          "name": "Fixture list 64",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_65",
+          "name": "Fixture list 65",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_66",
+          "name": "Fixture list 66",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_67",
+          "name": "Fixture list 67",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_68",
+          "name": "Fixture list 68",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_69",
+          "name": "Fixture list 69",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_70",
+          "name": "Fixture list 70",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_71",
+          "name": "Fixture list 71",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_72",
+          "name": "Fixture list 72",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_73",
+          "name": "Fixture list 73",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_74",
+          "name": "Fixture list 74",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_75",
+          "name": "Fixture list 75",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_76",
+          "name": "Fixture list 76",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_77",
+          "name": "Fixture list 77",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_78",
+          "name": "Fixture list 78",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_79",
+          "name": "Fixture list 79",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_80",
+          "name": "Fixture list 80",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_81",
+          "name": "Fixture list 81",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_82",
+          "name": "Fixture list 82",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_83",
+          "name": "Fixture list 83",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_84",
+          "name": "Fixture list 84",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_85",
+          "name": "Fixture list 85",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_86",
+          "name": "Fixture list 86",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_87",
+          "name": "Fixture list 87",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_88",
+          "name": "Fixture list 88",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_89",
+          "name": "Fixture list 89",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_90",
+          "name": "Fixture list 90",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_91",
+          "name": "Fixture list 91",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_92",
+          "name": "Fixture list 92",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_93",
+          "name": "Fixture list 93",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_94",
+          "name": "Fixture list 94",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_95",
+          "name": "Fixture list 95",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_96",
+          "name": "Fixture list 96",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_97",
+          "name": "Fixture list 97",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_98",
+          "name": "Fixture list 98",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_99",
+          "name": "Fixture list 99",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_100",
+          "name": "Fixture list 100",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": {
+        "next_page": "2",
+        "current_page": "1"
+      }
+    }
+  }
+}

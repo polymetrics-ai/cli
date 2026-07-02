@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/entities/Accounts",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "acc_fixture_101",
+          "name": "Fixture Account 101",
+          "status": "active",
+          "modified": "2026-01-01T00:00:101Z"
+        }
+      ]
+    }
+  }
+}
