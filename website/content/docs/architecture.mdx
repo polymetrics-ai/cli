@@ -101,6 +101,18 @@ pm flow list --flows-dir .polymetrics/flows --json
 ```
 
 Flow manifests describe ordered ETL and query steps. `plan` and `preview` validate the manifest and DAG. `run` executes supported steps through existing app primitives and checkpoints progress.
+Flow dependencies are inferred from `in` and `out` warehouse tables. Supported step kinds are `sync`, `query`, `rlm`, and approval-gated `action`. RLM steps reuse the same analyzers as `pm rlm run`; a relative `spec` path is resolved from the flow manifest file.
+
+```json
+{
+  "id": "score",
+  "kind": "rlm",
+  "spec": "lead-score.json",
+  "mode": "fixture",
+  "in": [],
+  "out": ["lead_scores"]
+}
+```
 
 <Callout type="warn">
   Flow manifests can be listed as `.yaml`, but the current parser is JSON-backed. Use JSON manifests until YAML parsing is explicitly wired.

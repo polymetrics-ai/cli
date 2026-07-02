@@ -11,6 +11,7 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/flow"
+	"polymetrics.ai/internal/rlm"
 )
 
 // runFlow dispatches pm flow subcommands: plan | preview | run | status | list.
@@ -72,6 +73,7 @@ func readManifestFile(path string) (flow.FlowManifest, error) {
 	if err != nil {
 		return flow.FlowManifest{}, fmt.Errorf("flow: manifest parse error: %w", err)
 	}
+	resolveManifestPaths(filepath.Dir(path), &m)
 	if errs := flow.ValidateManifest(m); len(errs) > 0 {
 		msgs := make([]string, len(errs))
 		for i, e := range errs {
@@ -80,6 +82,19 @@ func readManifestFile(path string) (flow.FlowManifest, error) {
 		return flow.FlowManifest{}, fmt.Errorf("flow: manifest validation failed: %s", strings.Join(msgs, "; "))
 	}
 	return m, nil
+}
+
+func resolveManifestPaths(baseDir string, m *flow.FlowManifest) {
+	if baseDir == "" {
+		baseDir = "."
+	}
+	for i := range m.Steps {
+		step := &m.Steps[i]
+		if step.Kind != flow.KindRLM || step.Spec == "" || filepath.IsAbs(step.Spec) {
+			continue
+		}
+		step.Spec = filepath.Clean(filepath.Join(baseDir, step.Spec))
+	}
 }
 
 // flowPlan parses + validates the manifest and prints the DAG order.
@@ -140,6 +155,9 @@ func flowRun(ctx context.Context, a *app.App, args []string, stdout io.Writer, j
 	}
 
 	dir := os.TempDir()
+	if a != nil {
+		dir = a.ProjectDir()
+	}
 	cs := &flow.FileCheckpointStore{Dir: dir}
 
 	e := &flow.Engine{
@@ -253,6 +271,9 @@ func (n *noopAppAdapter) ETLRun(_ context.Context, _ string, _ []string) (flow.E
 func (n *noopAppAdapter) QuerySQL(_ context.Context, _ string, _ int) ([]map[string]any, error) {
 	return nil, nil
 }
+func (n *noopAppAdapter) RLMRun(_ context.Context, _ flow.RLMRunRequest) (flow.RLMResult, error) {
+	return flow.RLMResult{}, nil
+}
 
 // appFlowAdapter wraps *app.App to satisfy AppAdapter.
 type appFlowAdapter struct {
@@ -282,4 +303,57 @@ func (a *appFlowAdapter) QuerySQL(ctx context.Context, sql string, limit int) ([
 		out[i] = map[string]any(r)
 	}
 	return out, nil
+}
+
+func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (flow.RLMResult, error) {
+	specData, err := os.ReadFile(req.Spec)
+	if err != nil {
+		return flow.RLMResult{}, fmt.Errorf("flow rlm: read spec %q: %w", req.Spec, err)
+	}
+	spec, err := rlm.ParseSpec(specData)
+	if err != nil {
+		return flow.RLMResult{}, fmt.Errorf("flow rlm: parse spec: %w", err)
+	}
+
+	analyzer, closer, err := flowRLMAnalyzer(req.Mode)
+	if err != nil {
+		return flow.RLMResult{}, err
+	}
+	if closer != nil {
+		defer closer()
+	}
+
+	result, err := analyzer.Run(ctx, rlm.RunRequest{
+		Spec:         spec,
+		InTable:      req.InTable,
+		OutTable:     req.OutTable,
+		WarehouseDir: filepath.Join(a.app.ProjectDir(), "warehouse"),
+		DryRun:       req.DryRun,
+	})
+	if err != nil {
+		return flow.RLMResult{}, fmt.Errorf("flow rlm: run: %w", err)
+	}
+	return flow.RLMResult{
+		RecordsRead:   result.RecordsRead,
+		RecordsScored: result.RecordsScored,
+		RecordsFailed: result.RecordsFailed,
+	}, nil
+}
+
+func flowRLMAnalyzer(mode string) (rlm.Analyzer, func() error, error) {
+	if mode == "" {
+		mode = "deterministic"
+	}
+	switch mode {
+	case "deterministic":
+		return &rlm.DeterministicAnalyzer{}, nil, nil
+	case "fixture":
+		return &rlm.FixtureAnalyzer{}, nil, nil
+	case "model":
+		return &rlm.ModelAnalyzer{}, nil, nil
+	case "agent":
+		return buildAgentAnalyzer("")
+	default:
+		return nil, nil, usageErrorf("flow rlm: unknown mode %q (want deterministic|fixture|model|agent)", mode)
+	}
 }

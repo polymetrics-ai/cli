@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"polymetrics.ai/internal/agentmode"
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/registryset"
@@ -628,6 +629,12 @@ func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, 
 	if err != nil {
 		return err
 	}
+	if fields := parseCSVFlags(flags.values["fields"]); len(fields) > 0 {
+		rows = agentmode.FieldsProjection(rows, fields)
+	}
+	if mode := strings.TrimSpace(flags.first("agent-mode")); mode != "" {
+		return writeAgentModeQuery(stdout, rows, mode, flags)
+	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "QueryResult", "rows": rows, "count": len(rows)})
 	}
@@ -636,6 +643,42 @@ func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, 
 		fmt.Fprintln(stdout, string(b))
 	}
 	return nil
+}
+
+func parseCSVFlags(values []string) []string {
+	var out []string
+	for _, value := range values {
+		for _, item := range strings.Split(value, ",") {
+			item = strings.TrimSpace(item)
+			if item != "" {
+				out = append(out, item)
+			}
+		}
+	}
+	return out
+}
+
+func writeAgentModeQuery(stdout io.Writer, rows []connectors.Record, mode string, flags parsedFlags) error {
+	switch mode {
+	case "summary":
+		sampleN, err := parseIntFlag("sample", valueOr(flags.first("sample"), "3"), 3)
+		if err != nil {
+			return err
+		}
+		payload, err := agentmode.Summarize("QueryResult", rows, sampleN)
+		if err != nil {
+			return err
+		}
+		if _, err := stdout.Write(payload); err != nil {
+			return err
+		}
+		_, err = stdout.Write([]byte{'\n'})
+		return err
+	case "stream":
+		return agentmode.EncodeStream(stdout, rows)
+	default:
+		return usageErrorf("query run: unknown --agent-mode %q (want summary|stream)", mode)
+	}
 }
 
 func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {

@@ -169,6 +169,94 @@ func TestManifestValidate(t *testing.T) {
 	}
 }
 
+func TestManifestValidateRLMStep(t *testing.T) {
+	base := func() FlowManifest {
+		return FlowManifest{
+			Version: 1,
+			Name:    "rlm-flow",
+			Steps: []FlowStep{
+				{
+					ID:         "sync-contacts",
+					Kind:       KindSync,
+					Connection: "warehouse-seed",
+					Streams:    []string{"contacts"},
+					In:         []string{},
+					Out:        []string{"contacts"},
+				},
+				{
+					ID:   "score-contacts",
+					Kind: KindRLM,
+					Spec: "lead-score.json",
+					Mode: "deterministic",
+					In:   []string{"contacts"},
+					Out:  []string{"scored_contacts"},
+				},
+			},
+		}
+	}
+
+	tests := []struct {
+		name       string
+		mutate     func(*FlowManifest)
+		wantErrSub string
+	}{
+		{
+			name: "valid rlm step",
+		},
+		{
+			name: "missing spec is invalid",
+			mutate: func(m *FlowManifest) {
+				m.Steps[1].Spec = ""
+			},
+			wantErrSub: "must have spec",
+		},
+		{
+			name: "missing out table is invalid",
+			mutate: func(m *FlowManifest) {
+				m.Steps[1].Out = nil
+			},
+			wantErrSub: "must have at least one out table",
+		},
+		{
+			name: "deterministic mode requires input table",
+			mutate: func(m *FlowManifest) {
+				m.Steps[1].In = nil
+			},
+			wantErrSub: "must have at least one input table",
+		},
+		{
+			name: "fixture mode can run without input table",
+			mutate: func(m *FlowManifest) {
+				m.Steps[1].Mode = "fixture"
+				m.Steps[1].In = nil
+			},
+		},
+		{
+			name: "unknown mode is invalid",
+			mutate: func(m *FlowManifest) {
+				m.Steps[1].Mode = "mystery"
+			},
+			wantErrSub: "unknown mode",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			m := base()
+			if tc.mutate != nil {
+				tc.mutate(&m)
+			}
+			errs := ValidateManifest(m)
+			if tc.wantErrSub == "" {
+				assert.Empty(t, errs)
+				return
+			}
+			require.NotEmpty(t, errs)
+			assert.Contains(t, fmt.Sprint(errs), tc.wantErrSub)
+		})
+	}
+}
+
 // ---------------------------------------------------------------------------
 // T-02 — DAG build + topological sort + cycle detection
 // ---------------------------------------------------------------------------
@@ -237,6 +325,50 @@ func TestDAGDiamond(t *testing.T) {
 	require.Len(t, order, 4)
 	assert.Equal(t, "A", order[0], "A must be first")
 	assert.Equal(t, "D", order[3], "D must be last")
+}
+
+func TestDAGRLMChain(t *testing.T) {
+	steps := []FlowStep{
+		{ID: "sync-contacts", Kind: KindSync, Connection: "c", Streams: []string{"contacts"}, Out: []string{"contacts"}, In: []string{}},
+		{ID: "score-contacts", Kind: KindRLM, Spec: "lead-score.json", Mode: "deterministic", In: []string{"contacts"}, Out: []string{"scored_contacts"}},
+		{ID: "filter-scored", Kind: KindQuery, SQL: "SELECT * FROM scored_contacts WHERE _rlm_score > 0.5", In: []string{"scored_contacts"}, Out: []string{"hot_leads"}},
+	}
+	order, err := BuildDAG(makeManifestFromSteps(steps))
+	require.NoError(t, err)
+	require.Equal(t, []string{"sync-contacts", "score-contacts", "filter-scored"}, order)
+}
+
+func TestEngineDispatchesRLMStep(t *testing.T) {
+	m := FlowManifest{
+		Version: 1,
+		Name:    "rlm-flow",
+		Steps: []FlowStep{
+			{
+				ID:   "score-contacts",
+				Kind: KindRLM,
+				Spec: "lead-score.json",
+				Mode: "fixture",
+				In:   []string{},
+				Out:  []string{"scored_contacts"},
+			},
+		},
+	}
+	tracker := &stepCallTracker{}
+	led := &stubLedger{}
+	cs := &FileCheckpointStore{Dir: t.TempDir()}
+	e := newEngineForTest(t, m, tracker, led, cs)
+
+	result, err := e.Run(context.Background(), RunOptions{})
+	require.NoError(t, err)
+	require.Equal(t, "ok", result.Status)
+	require.Len(t, tracker.rlmRequests, 1)
+	assert.Equal(t, "lead-score.json", tracker.rlmRequests[0].Spec)
+	assert.Equal(t, "fixture", tracker.rlmRequests[0].Mode)
+	assert.Equal(t, "", tracker.rlmRequests[0].InTable)
+	assert.Equal(t, "scored_contacts", tracker.rlmRequests[0].OutTable)
+	require.Len(t, result.Steps, 1)
+	assert.Equal(t, 3, result.Steps[0].RecordsRead)
+	assert.Equal(t, 3, result.Steps[0].RecordsWritten)
 }
 
 // ---------------------------------------------------------------------------
@@ -335,6 +467,18 @@ func (s *stubApp) QuerySQL(_ context.Context, sql string, _ int) ([]map[string]a
 	return nil, nil
 }
 
+func (s *stubApp) RLMRun(_ context.Context, req RLMRunRequest) (RLMResult, error) {
+	s.mu.Lock()
+	s.calls = append(s.calls, req.Spec)
+	s.mu.Unlock()
+	if s.results != nil {
+		if err, ok := s.results[req.Spec]; ok {
+			return RLMResult{}, err
+		}
+	}
+	return RLMResult{RecordsRead: 3, RecordsScored: 3}, nil
+}
+
 // stubLedger records all appended LedgerRecords in memory.
 type stubLedger struct {
 	mu      sync.Mutex
@@ -410,9 +554,10 @@ func TestEngineLockReleasedAfterRun(t *testing.T) {
 
 // stepCallTracker is a stubApp that records step execution order by step ID.
 type stepCallTracker struct {
-	mu    sync.Mutex
-	order []string
-	fail  map[string]error // stepID -> error to return
+	mu          sync.Mutex
+	order       []string
+	fail        map[string]error // stepID -> error to return
+	rlmRequests []RLMRunRequest
 }
 
 func (s *stepCallTracker) ETLRun(_ context.Context, connectionID string, _ []string) (ETLResult, error) {
@@ -429,6 +574,15 @@ func (s *stepCallTracker) QuerySQL(_ context.Context, sql string, _ int) ([]map[
 	err := s.fail[sql]
 	s.mu.Unlock()
 	return nil, err
+}
+
+func (s *stepCallTracker) RLMRun(_ context.Context, req RLMRunRequest) (RLMResult, error) {
+	s.mu.Lock()
+	s.order = append(s.order, req.Spec)
+	s.rlmRequests = append(s.rlmRequests, req)
+	err := s.fail[req.Spec]
+	s.mu.Unlock()
+	return RLMResult{RecordsRead: 3, RecordsScored: 3}, err
 }
 
 func twoStepManifest() FlowManifest {

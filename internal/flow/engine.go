@@ -14,10 +14,27 @@ type ETLResult struct {
 	RecordsWritten int
 }
 
+// RLMResult is the result of an RLM scoring run.
+type RLMResult struct {
+	RecordsRead   int
+	RecordsScored int
+	RecordsFailed int
+}
+
+// RLMRunRequest is the engine-level RLM run request.
+type RLMRunRequest struct {
+	Spec     string
+	Mode     string
+	InTable  string
+	OutTable string
+	DryRun   bool
+}
+
 // AppAdapter abstracts the app layer for the engine.
 type AppAdapter interface {
 	ETLRun(ctx context.Context, connectionID string, streams []string) (ETLResult, error)
 	QuerySQL(ctx context.Context, sql string, limit int) ([]map[string]any, error)
+	RLMRun(ctx context.Context, req RLMRunRequest) (RLMResult, error)
 }
 
 // LedgerAdapter abstracts the ledger for the engine.
@@ -194,6 +211,17 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			sr.RecordsWritten = etlRes.RecordsWritten
 		case KindQuery:
 			_, stepErr = e.App.QuerySQL(ctx, s.SQL, 0)
+		case KindRLM:
+			var rlmRes RLMResult
+			rlmRes, stepErr = e.App.RLMRun(ctx, RLMRunRequest{
+				Spec:     s.Spec,
+				Mode:     s.Mode,
+				InTable:  firstTable(s.In),
+				OutTable: firstTable(s.Out),
+			})
+			sr.RecordsRead = rlmRes.RecordsRead
+			sr.RecordsWritten = rlmRes.RecordsScored
+			sr.RecordsFailed = rlmRes.RecordsFailed
 		case KindAction:
 			if e.ActionRunner == nil {
 				stepErr = fmt.Errorf("action step %q: no ActionRunner configured", s.ID)
@@ -246,4 +274,11 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 	result.Status = "ok"
 	e.appendLedger(ctx, flowOp, "success", "")
 	return result, nil
+}
+
+func firstTable(tables []string) string {
+	if len(tables) == 0 {
+		return ""
+	}
+	return tables[0]
 }

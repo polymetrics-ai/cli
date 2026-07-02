@@ -126,9 +126,11 @@ Use direct `check`, `catalog`, and `read` while developing a connector or testin
 ```bash
 pm query run --table github_pull_requests --limit 20 --json
 pm query run --sql "SELECT * FROM github_pull_requests LIMIT 20" --json
+pm query run --table github_pull_requests --fields id,title,state --agent-mode summary --sample 3
+pm query run --table github_pull_requests --fields id,title,state --agent-mode stream
 ```
 
-The default build uses the local JSONL query engine. Build with the DuckDB tag when you need richer SQL support.
+The default build uses the local JSONL query engine. Build with the DuckDB tag when you need richer SQL support. Agent mode adds compact summary JSON and projected NDJSON output for token-sensitive callers.
 
 ```bash
 pm reverse list --json
@@ -174,7 +176,7 @@ pm schedule install nightly --crontab --json
 pm schedule remove nightly --json
 ```
 
-Flows compose ETL and query steps. Schedules install named flows into the local scheduler backend.
+Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. Schedules install named flows into the local scheduler backend.
 
 ## Operational commands
 
