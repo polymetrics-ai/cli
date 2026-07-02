@@ -36,7 +36,7 @@ const instrumentSerif = Instrument_Serif({
 
 export const metadata: Metadata = {
   title: {
-    default: 'pm: Fivetran capability. Zero infrastructure.',
+    default: 'Polymetrics CLI: One CLI to rule them all',
     template: '%s | pm · Polymetrics',
   },
   description:
@@ -44,7 +44,17 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://cli.polymetrics.ai'),
   openGraph: {
     siteName: 'Polymetrics CLI',
+    title: 'Polymetrics CLI: One CLI to rule them all',
+    description:
+      `Local-first ETL, DuckDB SQL, reverse ETL, and AI-agent-safe automation across ${CONNECTOR_CATALOG_COUNT} connectors.`,
     url: 'https://cli.polymetrics.ai',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Polymetrics CLI: One CLI to rule them all',
+    description:
+      'A local-first data CLI for ETL, DuckDB SQL, reverse ETL, and agent-native automation.',
   },
 };
 
