@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ohlcv_historical_data",
+  "type": "object",
+  "x-primary-key": ["symbol_id", "time_period_start"],
+  "x-cursor-field": "time_period_start",
+  "required": ["symbol_id", "time_period_start"],
+  "properties": {
+    "symbol_id": { "type": "string", "description": "Stamped from config.symbol_id via computed_fields; not present on the raw wire record." },
+    "period_id": { "type": ["string", "null"], "description": "Stamped from config.period via computed_fields; not present on the raw wire record." },
+    "time_period_start": { "type": "string" },
+    "time_period_end": { "type": ["string", "null"] },
+    "time_open": { "type": ["string", "null"] },
+    "time_close": { "type": ["string", "null"] },
+    "price_open": { "type": ["number", "null"] },
+    "price_high": { "type": ["number", "null"] },
+    "price_low": { "type": ["number", "null"] },
+    "price_close": { "type": ["number", "null"] },
+    "volume_traded": { "type": ["number", "null"] },
+    "trades_count": { "type": ["integer", "null"] }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "browser/v2" },
+  "request": { "method": "GET", "path": "/browser/v2" },
   "response": {
     "status": 200,
     "body": { "profiles": [] }

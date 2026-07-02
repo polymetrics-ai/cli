@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/v1/exchanges" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "exchange_id": "BITSTAMP",
+        "name": "Bitstamp",
+        "website": "https://www.bitstamp.net",
+        "data_quote_start": "2016-01-01T00:00:00.0000000Z",
+        "data_quote_end": "2026-01-01T00:00:00.0000000Z",
+        "data_symbols_count": 120
+      },
+      {
+        "exchange_id": "KRAKEN",
+        "name": "Kraken",
+        "website": "https://www.kraken.com",
+        "data_quote_start": "2014-01-01T00:00:00.0000000Z",
+        "data_quote_end": "2026-01-01T00:00:00.0000000Z",
+        "data_symbols_count": 340
+      }
+    ]
+  }
+}

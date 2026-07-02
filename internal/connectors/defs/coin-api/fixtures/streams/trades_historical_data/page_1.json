@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/trades/synthetic-conformance-value/history",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "time_start": "2020-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "uuid": "00000000-0000-0000-0000-000000000001",
+        "time_exchange": "2020-01-01T00:00:01.0000000Z",
+        "time_coinapi": "2020-01-01T00:00:01.1230000Z",
+        "price": 29050.25,
+        "size": 0.015,
+        "taker_side": "BUY"
+      },
+      {
+        "uuid": "00000000-0000-0000-0000-000000000002",
+        "time_exchange": "2020-01-01T00:00:02.0000000Z",
+        "time_coinapi": "2020-01-01T00:00:02.4560000Z",
+        "price": 29055.75,
+        "size": 0.32,
+        "taker_side": "SELL"
+      }
+    ]
+  }
+}

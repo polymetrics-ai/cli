@@ -18,8 +18,11 @@ Provide a GitBook API access token via the `access_token` secret; it is used onl
   stream. `display_name`/`photo_url` are renamed from the raw API's camelCase `displayName`/
   `photoURL` via `computed_fields`.
 - `organizations` — `GET /orgs`, a paginated list of organizations the authenticated user belongs
-  to. Records live at `items`; `created_at` and `url` are renamed from the raw `createdAt`/`urls`
-  fields via `computed_fields`.
+  to. Records live at `items`; `created_at` is renamed from the raw `createdAt` field via
+  `computed_fields`. `url` is extracted from the raw API's nested `urls.location` field (GitBook
+  returns `urls` as an object, e.g. `{"location": "https://app.gitbook.com/o/<id>"}`, not a bare
+  string) so the output stays a schema-conformant `["string", "null"]` value rather than passing
+  the whole nested object through.
 - `org_members` — `GET /orgs/{{ config.organization_id }}/members`, members of the configured
   organization. `organization_id` is a required-at-read-time config value (interpolated into the
   path; an unset value hard-errors, matching legacy's explicit "config organization_id is required"

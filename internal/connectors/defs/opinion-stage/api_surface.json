@@ -1,0 +1,11 @@
+{
+  "api": "Opinion Stage Public Result API (https://api.opinionstage.com; https://api.opinionstage.com/api-docs/api/v2/openapi.yaml)",
+  "docs": "https://www.opinionstage.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-1 declarative migration of legacy internal/connectors/opinion-stage: the items stream only. Legacy's responses/questions substreams (GET /api/v2/items/{id}/responses, GET /api/v2/items/{id}/questions) require a list-then-fan-out-per-parent-id read, which the declarative dialect's single-fixed-path StreamSpec cannot express (no parent-id fan-out primitive); Tier-2 StreamHook Go would close this but is out of scope for this migration pass (see docs.md Known limits).",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2/items", "covered_by": { "stream": "items" } },
+    { "method": "GET", "path": "/api/v2/items/{id}/responses", "excluded": { "category": "out_of_scope", "reason": "per-item substream fan-out requires a StreamHook (Tier 2); Tier-1-only migration pass" } },
+    { "method": "GET", "path": "/api/v2/items/{id}/questions", "excluded": { "category": "out_of_scope", "reason": "per-item substream fan-out requires a StreamHook (Tier 2); Tier-1-only migration pass" } }
+  ]
+}

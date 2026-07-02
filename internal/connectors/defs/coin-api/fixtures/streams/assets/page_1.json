@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/v1/assets" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "asset_id": "BTC",
+        "name": "Bitcoin",
+        "type_is_crypto": 1,
+        "data_start": "2010-07-17",
+        "data_end": "2026-01-01",
+        "price_usd": 43250.5
+      },
+      {
+        "asset_id": "USD",
+        "name": "US Dollar",
+        "type_is_crypto": 0,
+        "data_start": "2010-07-17",
+        "data_end": "2026-01-01",
+        "price_usd": 1.0
+      }
+    ]
+  }
+}

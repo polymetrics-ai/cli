@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/news", "query": { "category": "general" } },
+  "request": { "method": "GET", "path": "/news", "query": { "category": "synthetic-conformance-value" } },
   "response": {
     "status": 200,
     "body": [

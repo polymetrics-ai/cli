@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/notes", "query": { "limit": "30" } },
+  "request": { "method": "GET", "path": "/notes" },
   "response": {
     "status": 200,
     "body": {

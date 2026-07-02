@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "folders" },
+  "request": { "method": "GET", "path": "/folders" },
   "response": {
     "status": 200,
     "body": [

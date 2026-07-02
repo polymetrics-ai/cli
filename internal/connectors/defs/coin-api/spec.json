@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Coin API Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "CoinAPI key, sent as the X-CoinAPI-Key request header. Used only for auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "CoinAPI base URL override for tests or proxies. When unset, environment selects the production or sandbox CoinAPI host."
+    },
+    "environment": {
+      "type": "string",
+      "enum": ["production", "sandbox"],
+      "default": "production",
+      "description": "Selects the CoinAPI host when base_url is not set: production (https://rest.coinapi.io) or sandbox (https://rest-sandbox.coinapi.io)."
+    },
+    "symbol_id": {
+      "type": "string",
+      "description": "CoinAPI symbol identifier (e.g. BITSTAMP_SPOT_BTC_USD), required for the ohlcv_historical_data and trades_historical_data streams."
+    },
+    "period": {
+      "type": "string",
+      "description": "CoinAPI OHLCV period identifier (e.g. 1DAY), required for the ohlcv_historical_data stream."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 lower bound for historical streams; only records at or after this time are read on a fresh sync."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional ISO-8601 upper bound (time_end) for historical streams."
+    },
+    "limit": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page for historical streams (1-100000)."
+    }
+  }
+}

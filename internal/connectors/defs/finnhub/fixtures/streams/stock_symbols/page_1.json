@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/stock/symbol", "query": { "exchange": "US" } },
+  "request": { "method": "GET", "path": "/stock/symbol", "query": { "exchange": "synthetic-conformance-value" } },
   "response": {
     "status": 200,
     "body": [

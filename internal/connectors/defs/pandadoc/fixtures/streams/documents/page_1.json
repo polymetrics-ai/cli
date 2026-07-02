@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/documents"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "id": "doc_fixture_1", "name": "Fixture Proposal", "status": "document.draft", "date_created": "2026-01-01T00:00:00Z", "date_modified": "2026-01-01T00:00:00Z" },
+        { "id": "doc_fixture_2", "name": "Fixture Order", "status": "document.sent", "date_created": "2026-01-02T00:00:00Z", "date_modified": "2026-01-02T00:00:00Z" }
+      ],
+      "next": null
+    }
+  }
+}

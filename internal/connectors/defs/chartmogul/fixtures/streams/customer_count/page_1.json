@@ -2,7 +2,7 @@
   "request": {
     "method": "GET",
     "path": "/metrics/customer-count",
-    "query": { "interval": "month", "start-date": "2026-01-01", "end-date": "2099-12-31" }
+    "query": { "interval": "month", "end-date": "2099-12-31" }
   },
   "response": {
     "status": 200,

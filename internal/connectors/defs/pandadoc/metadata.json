@@ -1,0 +1,23 @@
+{
+  "name": "pandadoc",
+  "display_name": "PandaDoc",
+  "description": "Reads PandaDoc documents, templates, and contacts through the public REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.pandadoc.com/reference/about",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external PandaDoc API read of document, template, and contact data",
+    "approval": "none; read-only public REST API"
+  }
+}

@@ -37,7 +37,7 @@
       "records": { "path": "items" },
       "computed_fields": {
         "created_at": "{{ record.createdAt }}",
-        "url": "{{ record.urls }}"
+        "url": "{{ record.urls.location }}"
       },
       "schema": "schemas/organizations.json"
     },

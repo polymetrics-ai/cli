@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "tags/all" },
+  "request": { "method": "GET", "path": "/tags/all" },
   "response": {
     "status": 200,
     "body": {

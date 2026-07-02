@@ -1,0 +1,88 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-CoinAPI-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/v1/exchanges" },
+    "error_map": [
+      { "status": 401, "hint": "coin-api api_key is missing or invalid; re-run pm credentials add coin-api" },
+      { "status": 403, "hint": "coin-api key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "coin-api rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "symbols",
+      "path": "/v1/symbols",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/symbols.json"
+    },
+    {
+      "name": "exchanges",
+      "path": "/v1/exchanges",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/exchanges.json"
+    },
+    {
+      "name": "assets",
+      "path": "/v1/assets",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/assets.json"
+    },
+    {
+      "name": "ohlcv_historical_data",
+      "path": "/v1/ohlcv/{{ config.symbol_id }}/history",
+      "query": {
+        "limit": "{{ config.limit }}",
+        "period_id": "{{ config.period }}",
+        "time_end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "time_start",
+        "last_record_field": "time_period_start"
+      },
+      "incremental": {
+        "cursor_field": "time_period_start",
+        "request_param": "time_start",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "symbol_id": "{{ config.symbol_id }}",
+        "period_id": "{{ config.period }}"
+      },
+      "schema": "schemas/ohlcv_historical_data.json"
+    },
+    {
+      "name": "trades_historical_data",
+      "path": "/v1/trades/{{ config.symbol_id }}/history",
+      "query": {
+        "limit": "{{ config.limit }}",
+        "time_end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "time_start",
+        "last_record_field": "time_exchange"
+      },
+      "incremental": {
+        "cursor_field": "time_exchange",
+        "request_param": "time_start",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "symbol_id": "{{ config.symbol_id }}"
+      },
+      "schema": "schemas/trades_historical_data.json"
+    }
+  ]
+}

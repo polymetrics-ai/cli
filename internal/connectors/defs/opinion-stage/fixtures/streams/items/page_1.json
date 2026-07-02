@@ -1,0 +1,40 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/items", "query": { "page[number]": "1", "page[size]": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "item_fixture_1",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Poll One",
+            "status": "published",
+            "embed": { "kind": "poll" },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": { "self": "https://api.opinionstage.com/api/v2/items/item_fixture_1" },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_2",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Quiz Two",
+            "status": "draft",
+            "embed": { "kind": "quiz" },
+            "timestamps": {
+              "created": "2026-01-03T00:00:00Z",
+              "modified": "2026-01-04T00:00:00Z"
+            }
+          },
+          "links": { "self": "https://api.opinionstage.com/api/v2/items/item_fixture_2" },
+          "relationships": {}
+        }
+      ]
+    }
+  }
+}

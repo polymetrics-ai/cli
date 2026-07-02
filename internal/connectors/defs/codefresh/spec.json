@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Codefresh Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Codefresh API key. Sent verbatim (no Bearer prefix) as the Authorization header; used only for auth and never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://g.codefresh.io/api",
+      "description": "Codefresh API base URL override for tests or proxies."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Optional Codefresh account id; sent as the X-Access-Token header for account scoping. Omitted entirely when unset."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

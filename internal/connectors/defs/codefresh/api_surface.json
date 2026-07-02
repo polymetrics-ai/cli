@@ -1,0 +1,16 @@
+{
+  "api": "Codefresh REST API (https://g.codefresh.io/api)",
+  "docs": "https://g.codefresh.io/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "legacy-parity migration: the 4 legacy-parity read streams only (projects, pipelines, agents, contexts); Codefresh is read-only in this connector (no reverse-ETL writes), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/pipelines", "covered_by": { "stream": "pipelines" } },
+    { "method": "GET", "path": "/agents", "covered_by": { "stream": "agents" } },
+    { "method": "GET", "path": "/contexts", "covered_by": { "stream": "contexts" } },
+    { "method": "POST", "path": "/pipelines/run/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/pipelines/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible pipeline deletion, not a syncable read" } },
+    { "method": "GET", "path": "/builds", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/user", "excluded": { "category": "non_data_endpoint", "reason": "current-user identity probe, not a syncable object stream" } }
+  ]
+}

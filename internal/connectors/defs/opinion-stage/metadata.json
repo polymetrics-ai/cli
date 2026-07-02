@@ -1,0 +1,23 @@
+{
+  "name": "opinion-stage",
+  "display_name": "Opinion Stage",
+  "description": "Reads Opinion Stage items (polls, quizzes, and forms) through the Opinion Stage Public Result API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://www.opinionstage.com/api",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Opinion Stage API read of item directory",
+    "approval": "none; read-only API-key access"
+  }
+}

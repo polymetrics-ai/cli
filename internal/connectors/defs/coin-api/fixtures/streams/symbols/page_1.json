@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/v1/symbols" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol_id": "BITSTAMP_SPOT_BTC_USD",
+        "exchange_id": "BITSTAMP",
+        "symbol_type": "SPOT",
+        "asset_id_base": "BTC",
+        "asset_id_quote": "USD",
+        "data_start": "2015-01-01",
+        "data_end": "2026-01-01"
+      },
+      {
+        "symbol_id": "BITSTAMP_SPOT_ETH_USD",
+        "exchange_id": "BITSTAMP",
+        "symbol_type": "SPOT",
+        "asset_id_base": "ETH",
+        "asset_id_quote": "USD",
+        "data_start": "2017-01-01",
+        "data_end": "2026-01-01"
+      }
+    ]
+  }
+}

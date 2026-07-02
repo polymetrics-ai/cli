@@ -1,0 +1,23 @@
+{
+  "name": "coin-api",
+  "display_name": "Coin API",
+  "description": "Reads CoinAPI market data: symbols, exchanges, assets, and historical OHLCV and trades for a configured symbol via the CoinAPI REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.coinapi.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external CoinAPI REST API read of public market data",
+    "approval": "none; read-only market-data API"
+  }
+}

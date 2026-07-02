@@ -1,0 +1,23 @@
+{
+  "name": "codefresh",
+  "display_name": "Codefresh",
+  "description": "Reads Codefresh projects, pipelines, runner agents, and shared contexts through the Codefresh REST API.",
+  "integration_type": "api",
+  "docs_url": "https://g.codefresh.io/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 2
+  },
+  "risk": {
+    "read": "external Codefresh API read of projects, pipelines, runner agents, and shared contexts",
+    "approval": "none; read-only"
+  }
+}

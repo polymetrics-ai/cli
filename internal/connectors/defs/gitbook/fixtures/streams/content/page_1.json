@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/spaces/space_fixture_1/content/pages", "query": { "limit": "50" } },
+  "request": { "method": "GET", "path": "/spaces/synthetic-conformance-value/content/pages", "query": { "limit": "50" } },
   "response": {
     "status": 200,
     "body": {

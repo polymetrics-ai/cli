@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/orgs/org_fixture_1/members", "query": { "limit": "50" } },
+  "request": { "method": "GET", "path": "/orgs/synthetic-conformance-value/members", "query": { "limit": "50" } },
   "response": {
     "status": 200,
     "body": {

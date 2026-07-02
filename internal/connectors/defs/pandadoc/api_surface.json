@@ -1,0 +1,22 @@
+{
+  "api": "PandaDoc Public API v1 (https://api.pandadoc.com/public/v1)",
+  "docs": "https://developers.pandadoc.com/reference/about",
+  "reviewed_at": "2026-07-03",
+  "scope": "migration: the 3 legacy-parity read streams only (documents, templates, contacts); the full PandaDoc surface (document creation/send/status-change writes, template folders, forms, webhooks, API usage) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/documents", "covered_by": { "stream": "documents" } },
+    { "method": "GET", "path": "/templates", "covered_by": { "stream": "templates" } },
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "POST", "path": "/documents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/documents/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/documents/{id}/details", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/documents/{id}/send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/documents/{id}/download", "excluded": { "category": "binary_payload", "reason": "returns a binary PDF payload, not a syncable JSON record stream" } },
+    { "method": "DELETE", "path": "/documents/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible document deletion, not a read/sync operation" } },
+    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/contacts/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/contacts/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible contact deletion, not a read/sync operation" } },
+    { "method": "GET", "path": "/templates/{id}/details", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api-usage", "excluded": { "category": "non_data_endpoint", "reason": "account usage/quota introspection, not a syncable object stream" } }
+  ]
+}

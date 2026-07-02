@@ -1,0 +1,20 @@
+{
+  "api": "CoinAPI REST API v1 (https://rest.coinapi.io/v1, sandbox https://rest-sandbox.coinapi.io/v1)",
+  "docs": "https://docs.coinapi.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "migration parity with legacy internal/connectors/coin-api: the 3 metadata reference streams and 2 symbol-scoped historical streams legacy implements; the full CoinAPI surface (quotes, orderbooks, indexes, metrics, exchange rates) is out of scope until Pass B capability expansion",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/symbols", "covered_by": { "stream": "symbols" } },
+    { "method": "GET", "path": "/v1/exchanges", "covered_by": { "stream": "exchanges" } },
+    { "method": "GET", "path": "/v1/assets", "covered_by": { "stream": "assets" } },
+    { "method": "GET", "path": "/v1/ohlcv/{symbol_id}/history", "covered_by": { "stream": "ohlcv_historical_data" } },
+    { "method": "GET", "path": "/v1/trades/{symbol_id}/history", "covered_by": { "stream": "trades_historical_data" } },
+    { "method": "GET", "path": "/v1/ohlcv/{symbol_id}/latest", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/trades/{symbol_id}/latest", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/quotes/current", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/orderbooks/current", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/exchangerate/{asset_id_base}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/indexes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/metrics/list", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

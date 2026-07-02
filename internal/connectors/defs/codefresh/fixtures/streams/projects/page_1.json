@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/projects", "query": { "limit": "2", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "projects": [
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d01",
+          "projectName": "platform-services",
+          "favorite": true,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d02",
+          "projectName": "web-frontend",
+          "favorite": false,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:05:00Z",
+          "tags": []
+        }
+      ]
+    }
+  }
+}

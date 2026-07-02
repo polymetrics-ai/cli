@@ -28,6 +28,9 @@
         "type": "next_url",
         "next_url_path": "data.next"
       },
+      "computed_fields": {
+        "account_id": "{{ record.accountId }}"
+      },
       "schema": "schemas/accounts.json"
     },
     {
