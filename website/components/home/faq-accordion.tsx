@@ -11,8 +11,8 @@ const faqs = [
     a: 'Most self-hosted ETL platforms need Docker and 8 GB+ of services to run locally, and they are ETL-only (no SQL engine, no reverse-ETL, no agent contract). pm runs as a single static binary, has embedded DuckDB, and supports bidirectional sync.',
   },
   {
-    q: 'Why not Fivetran?',
-    a: 'Fivetran is managed cloud-only, charges per row, and has no local mode. You have no control over where your data goes in transit. pm runs entirely on your machine, and credentials never leave your disk.',
+    q: 'Why not a managed cloud pipeline?',
+    a: 'Managed cloud pipelines are convenient when you want a hosted service, but they are not local-first and usually split extraction, analysis, and write-back into separate products. pm runs on your machine, keeps credentials in a local encrypted vault, and gives the same CLI contract to humans, CI, cron, and AI agents.',
   },
   {
     q: 'Why not dlt (data load tool)?',
@@ -20,7 +20,7 @@ const faqs = [
   },
   {
     q: 'Who is pm for?',
-    a: 'Developers and data engineers who want local-first data pipelines without infrastructure overhead. AI agents that need a stable, structured interface to extract data, query it, and act on it. Teams who want Fivetran-class connector quality without the cloud dependency.',
+    a: 'Developers and data engineers who want local-first data pipelines without infrastructure overhead. AI agents that need a stable, structured interface to extract data, query it, and act on it. Teams who want broad connector coverage without making a hosted service the first step.',
   },
   {
     q: 'Is pm public source?',

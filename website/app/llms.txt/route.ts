@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { BLOG_POSTS, blogUrl } from '@/lib/blog';
 import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.catalog.generated';
 import { DOCS_PAGES } from '@/lib/docs.generated';
 
@@ -12,6 +13,10 @@ export function GET() {
     })
     .join('\n');
 
+  const blogLines = BLOG_POSTS
+    .map((post) => `- [${post.title}](${blogUrl(post.slug)}): ${post.description}`)
+    .join('\n');
+
   const text = `\
 # pm — local-first data engine for ETL, SQL analytics, and reverse-ETL
 
@@ -20,6 +25,10 @@ export function GET() {
 ## Documentation
 
 ${docLines}
+
+## Blog
+
+${blogLines}
 
 ## Connectors
 

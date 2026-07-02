@@ -30,6 +30,7 @@ const COLUMNS: Col[] = [
   {
     title: 'Resources',
     links: [
+      ['Blog', '/blog'],
       ['Changelog', '/changelog'],
       ['Pattern registry', '/patterns'],
       ['GitHub', REPO],
