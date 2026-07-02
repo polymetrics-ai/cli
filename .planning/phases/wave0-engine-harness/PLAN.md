@@ -45,8 +45,10 @@ tester adds `golang-benchmark` only if a perf-sensitive path is touched (none ex
 - T-02 (RED): cases for `config./secrets./record./cursor` resolution, dotted record paths
   (`record.user.login`), filters `urlencode` (default applied to path-segment insertions —
   include injection cases: config value `a/../b`, `a?x=1`, `a b`, `%2e%2e`), `unix_seconds`,
-  `base64`; unresolved-key error (names the key + source); `when` grammar `==` / `in [...]` /
-  truthiness; type-check API `ResolveCheck(template, specKeys)` used later by connectorgen.
+  `base64`; CRLF/header-injection rejection (resolved values destined for headers or paths
+  containing `\r` or `\n` → error, per THREAT-MODEL §2); unresolved-key error (names the key +
+  source); `when` grammar `==` / `in [...]` / truthiness; type-check API
+  `ResolveCheck(template, specKeys)` used later by connectorgen.
 - B-02: implement per design §B.3 (~150 lines target).
 - Verify: `go test ./internal/connectors/engine -run TestInterpolate -v`
 
@@ -94,7 +96,9 @@ tester adds `golang-benchmark` only if a perf-sensitive path is touched (none ex
   `internal/connectors/stripe/stripe.go:147` harvest), `next_url`, `none`: drive against
   multi-page `httptest.Server` fixtures and assert TERMINATION (bounded page count), exact page
   sequence, and no duplicate page fetches; malformed spec errors (unknown type, cursor with both
-  token sources).
+  token sources); `next_url` SSRF guard (THREAT-MODEL §3): a next-page URL whose host differs from
+  the base URL host → error unless the PaginationSpec sets `allow_cross_host: true` (field added
+  to PaginationSpec; document in DATA-MODEL.md).
 - B-06: `newPaginator` mapping to `connsdk/paginate.go` types (`OffsetPaginator`:26,
   `PageNumberPaginator`:58, `CursorPaginator`:95, `LinkHeaderPaginator`:121) + two new engine-local
   `connsdk.Paginator` impls (`lastRecordCursor`, `nextURL`). connsdk is NOT modified.
@@ -162,8 +166,9 @@ tester adds `golang-benchmark` only if a perf-sensitive path is touched (none ex
 - B-11: implement subcommands; validation composes engine loader + `ResolveCheck` + meta-schemas.
 - Verify: `go test ./cmd/connectorgen -v && go run ./cmd/connectorgen validate internal/connectors/defs`
   (defs may be empty of bundles until Wave F; empty tree = pass with count 0)
-- Note: seeded-invalid corpus is shared with conformance self-tests (B-12) — B-11 owns
-  `cmd/connectorgen/testdata/invalid/`, B-12 symlinks/copies nothing: it has its own corpus.
+- Note: seeded-invalid corpus is shared in spirit with conformance self-tests (B-13) — B-11 owns
+  `cmd/connectorgen/testdata/invalid/`, B-13 has its own corpus under
+  `internal/connectors/conformance/testdata/invalid/`; no cross-package sharing.
 
 ### T-12 / B-12 — certify report + cliharness `wave:D`
 - Files: `internal/connectors/certify/report.go`, `cliharness.go`, `certify.go`,
@@ -298,10 +303,12 @@ tester adds `golang-benchmark` only if a perf-sensitive path is touched (none ex
 ## Dependency graph (coordinator dispatch order)
 
 ```
-Wave A: T/B-01  T/B-02  T/B-03  T/B-04          (parallel ×4)
+Wave A: T/B-01  T/B-02  T/B-03  T/B-04          (parallel ×4)  + T/B-12 floats here (DECISIONS.md #2:
+        certify report/cliharness has zero engine deps and lives in a disjoint package — dispatched
+        alongside Wave A)
 Wave B: T/B-05  T/B-06  T/B-07                  (parallel ×3; B-05 uses B-02, B-07)
 Wave C: T/B-08  T/B-09                          (parallel ×2; need A+B)
-Wave D: T/B-10  T/B-11  T/B-12                  (parallel ×3; B-12 has no engine dep — may float earlier)
+Wave D: T/B-10  T/B-11                          (parallel ×2; T/B-12 moved to Wave A per DECISIONS.md)
 Wave E: T/B-13  T/B-14                          (parallel ×2; need D)
 Wave F: T/B-15  T/B-16  T/B-17                  (parallel ×3; need E — conformance auto-covers goldens)
 Wave G: T/B-18  T/B-19  D-20                    (parallel ×3; need D; D-20 finalizes after F)
