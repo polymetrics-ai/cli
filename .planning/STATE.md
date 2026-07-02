@@ -1,8 +1,15 @@
 # State
 
-Current phase: wave1-http-api-longtail-complete-opencode
+Current milestone: connector-architecture-v2
 
-Status: completed
+Current phase: wave0-engine-harness
+
+Status: pending
+
+Model policy (user directive): coordinator/planner/reviewer roles → `fable`; backend/tester/
+security/reliability roles → `sonnet` (Sonnet 5); Go work applies cc-skills-golang skills.
+
+Previous phase: wave1-http-api-longtail-complete-opencode (completed)
 
 Latest verification (2026-06-26):
 

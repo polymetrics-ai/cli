@@ -2,6 +2,24 @@
   "workflow": {
     "use_worktrees": false,
     "tdd_mode": true,
-    "universal_programming_loop": true
+    "universal_programming_loop": true,
+    "plan_check": true,
+    "commit_docs": true
+  },
+  "model_profile": "quality",
+  "model_overrides": {
+    "gsd-loop-coordinator": "fable",
+    "gsd-loop-planner": "fable",
+    "gsd-loop-reviewer": "fable",
+    "gsd-loop-backend": "sonnet",
+    "gsd-loop-tester": "sonnet",
+    "gsd-loop-security": "sonnet",
+    "gsd-loop-reliability-observability": "sonnet",
+    "gsd-loop-frontend": "sonnet",
+    "gsd-planner": "fable",
+    "gsd-plan-checker": "sonnet",
+    "gsd-verifier": "sonnet",
+    "gsd-executor": "sonnet",
+    "gsd-debugger": "sonnet"
   }
 }

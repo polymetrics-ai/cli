@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-06-26T14:14:44.506Z",
+  "generatedAt": "2026-07-02T07:17:10.182Z",
   "repo": {
     "name": "polymetrics-v2",
     "root": ".",
@@ -25,6 +25,28 @@
   ],
   "languages": [
     {
+      "name": "TypeScript",
+      "paths": [
+        "build",
+        "website"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "name": "JavaScript",
+      "paths": [
+        "website"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "name": "Python",
+      "paths": [
+        "build"
+      ],
+      "confidence": 0.9
+    },
+    {
       "name": "Go",
       "paths": [
         "cmd",
@@ -35,9 +57,65 @@
   ],
   "applications": [
     {
+      "name": "polymetrics-rlm-agent",
+      "type": "application",
+      "root": "build/agent",
+      "frameworks": [],
+      "commands": {
+        "install": null,
+        "dev": null,
+        "test": null,
+        "build": "pnpm --filter polymetrics-rlm-agent build",
+        "lint": null,
+        "typecheck": null,
+        "format": null,
+        "e2e": null
+      },
+      "confidence": 0.65
+    },
+    {
+      "name": "cli-polymetrics-ai",
+      "type": "frontend-web",
+      "root": "website",
+      "frameworks": [
+        "Next.js",
+        "React",
+        "Playwright",
+        "Vitest"
+      ],
+      "commands": {
+        "install": null,
+        "dev": "pnpm --filter cli-polymetrics-ai dev",
+        "test": "pnpm --filter cli-polymetrics-ai test",
+        "build": "pnpm --filter cli-polymetrics-ai build",
+        "lint": "pnpm --filter cli-polymetrics-ai lint",
+        "typecheck": "pnpm --filter cli-polymetrics-ai typecheck",
+        "format": null,
+        "e2e": null
+      },
+      "confidence": 0.9
+    },
+    {
       "name": "pm",
       "type": "cli",
       "entrypoint": "cmd/pm/main.go",
+      "confidence": 1
+    },
+    {
+      "name": "pm-go-monolith",
+      "type": "cli",
+      "root": ".",
+      "frameworks": [],
+      "commands": {
+        "install": "go mod download && go mod verify",
+        "test": "go test ./...",
+        "build": "go build ./...",
+        "lint": "go vet ./...",
+        "typecheck": "go vet ./...",
+        "format": "gofmt -l cmd internal",
+        "integration": "make smoke",
+        "e2e": "make smoke"
+      },
       "confidence": 1
     }
   ],
