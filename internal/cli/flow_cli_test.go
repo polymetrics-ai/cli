@@ -132,6 +132,47 @@ func TestFlowPreviewValid(t *testing.T) {
 	assert.Equal(t, "dry_run", result["status"])
 }
 
+func TestFlowRunByNameResolvesProjectFlowManifest(t *testing.T) {
+	root := t.TempDir()
+	initProject(t, root)
+	flowsDir := filepath.Join(root, ".polymetrics", "flows")
+	require.NoError(t, os.MkdirAll(flowsDir, 0o755))
+
+	spec := `{
+		"name": "lead-score",
+		"features": [
+			{"name": "email", "weight": 1.0, "score_if_set": 1.0}
+		]
+	}`
+	require.NoError(t, os.WriteFile(filepath.Join(flowsDir, "lead-score.json"), []byte(spec), 0o644))
+
+	manifest := `{
+		"version": 1,
+		"name": "named-flow",
+		"steps": [
+			{
+				"id": "score",
+				"kind": "rlm",
+				"spec": "lead-score.json",
+				"mode": "fixture",
+				"in": [],
+				"out": ["named_scores"]
+			}
+		]
+	}`
+	require.NoError(t, os.WriteFile(filepath.Join(flowsDir, "named-flow.json"), []byte(manifest), 0o644))
+
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{"--root", root, "--json", "flow", "run", "named-flow"}, &stdout, &stderr)
+	require.Equalf(t, 0, code, "stderr = %s stdout = %s", stderr.String(), stdout.String())
+
+	var result map[string]any
+	require.NoError(t, json.Unmarshal(stdout.Bytes(), &result))
+	assert.Equal(t, "ok", result["status"])
+	_, err := os.Stat(filepath.Join(root, ".polymetrics", "warehouse", "named_scores.ndjson"))
+	require.NoError(t, err)
+}
+
 func TestFlowRunRLMFixtureMaterializesOutTable(t *testing.T) {
 	root := t.TempDir()
 	initProject(t, root)

@@ -64,7 +64,11 @@ func (b SystemdBackend) Remove(ctx context.Context, name string) error {
 func renderService(m Manifest, pmBin string) (string, error) {
 	var sb strings.Builder
 	fmt.Fprintf(&sb, "[Unit]\nDescription=pm schedule %s (flow: %s)\nAfter=network.target\n\n", m.Name, m.Flow)
-	fmt.Fprintf(&sb, "[Service]\nType=oneshot\nExecStart=%s flow run %s --json\n\n", pmBin, m.Flow)
+	rootArgs := ""
+	if m.Root != "" {
+		rootArgs = " --root " + shellArg(m.Root)
+	}
+	fmt.Fprintf(&sb, "[Service]\nType=oneshot\nExecStart=%s%s flow run %s --json\n\n", shellArg(pmBin), rootArgs, shellArg(m.Flow))
 	sb.WriteString("[Install]\nWantedBy=default.target\n")
 	return sb.String(), nil
 }

@@ -136,9 +136,22 @@ func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, 
 
 // flowRun executes the flow.
 func flowRun(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	file, _, force, _ := parseFlowFlags(args)
+	file, flowsDir, force, positional := parseFlowFlags(args)
 	if file == "" {
-		return usageErrorf("flow run: --file <path> is required")
+		if len(positional) == 0 {
+			return usageErrorf("flow run: --file <path> or <flow-name> is required")
+		}
+		if flowsDir == "" {
+			if a != nil {
+				flowsDir = filepath.Join(a.ProjectDir(), "flows")
+			} else {
+				flowsDir = filepath.Join(".polymetrics", "flows")
+			}
+		}
+		file = filepath.Join(flowsDir, positional[0])
+		if filepath.Ext(file) == "" {
+			file += ".json"
+		}
 	}
 
 	m, err := readManifestFile(file)

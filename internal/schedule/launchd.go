@@ -71,7 +71,12 @@ func renderPlist(m Manifest, pmBin string) (string, error) {
 	fmt.Fprintf(&sb, "\t<string>%s</string>\n", label)
 	sb.WriteString("\t<key>ProgramArguments</key>\n")
 	sb.WriteString("\t<array>\n")
-	for _, arg := range []string{pmBin, "flow", "run", m.Flow, "--json"} {
+	args := []string{pmBin}
+	if m.Root != "" {
+		args = append(args, "--root", m.Root)
+	}
+	args = append(args, "flow", "run", m.Flow, "--json")
+	for _, arg := range args {
 		fmt.Fprintf(&sb, "\t\t<string>%s</string>\n", arg)
 	}
 	sb.WriteString("\t</array>\n")

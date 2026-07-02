@@ -96,6 +96,45 @@ func TestRenderCrontabLine_Golden(t *testing.T) {
 	}
 }
 
+func TestRenderScheduleCommandsIncludeRoot(t *testing.T) {
+	manifest := nightlyManifest
+	manifest.Root = "/tmp/polymetrics root"
+	manifest.Flow = "nightly-flow"
+	pmBin := "/opt/Poly Metrics/pm"
+
+	crontab, err := renderCrontabLine(manifest, pmBin)
+	if err != nil {
+		t.Fatalf("renderCrontabLine: %v", err)
+	}
+	wantShellCommand := "'/opt/Poly Metrics/pm' --root '/tmp/polymetrics root' flow run nightly-flow --json"
+	if !strings.Contains(crontab, wantShellCommand) {
+		t.Fatalf("crontab command missing rooted flow run\ngot:  %q\nwant containing: %q", crontab, wantShellCommand)
+	}
+
+	service, err := renderService(manifest, pmBin)
+	if err != nil {
+		t.Fatalf("renderService: %v", err)
+	}
+	if !strings.Contains(service, "ExecStart="+wantShellCommand) {
+		t.Fatalf("systemd command missing rooted flow run\ngot:\n%s\nwant ExecStart containing: %q", service, wantShellCommand)
+	}
+
+	plist, err := renderPlist(manifest, pmBin)
+	if err != nil {
+		t.Fatalf("renderPlist: %v", err)
+	}
+	for _, fragment := range []string{
+		"<string>/opt/Poly Metrics/pm</string>",
+		"<string>--root</string>",
+		"<string>/tmp/polymetrics root</string>",
+		"<string>nightly-flow</string>",
+	} {
+		if !strings.Contains(plist, fragment) {
+			t.Fatalf("launchd plist missing %q\ngot:\n%s", fragment, plist)
+		}
+	}
+}
+
 // C-3 — removeCrontabLine removes sentinel.
 func TestRemoveCrontabLine_RemovesSentinel(t *testing.T) {
 	sentinel := "# pm-schedule-nightly-leads"

@@ -17,6 +17,7 @@ type Manifest struct {
 	Name      string    `json:"name"`
 	Cron      string    `json:"cron"`
 	Flow      string    `json:"flow"`
+	Root      string    `json:"root,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
