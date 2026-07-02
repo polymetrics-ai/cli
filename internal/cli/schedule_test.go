@@ -93,6 +93,45 @@ func TestScheduleCLI_Install_Crontab(t *testing.T) {
 	}
 }
 
+func TestScheduleCLI_Remove_CleansCrontabInstall(t *testing.T) {
+	root := t.TempDir()
+	_, _, code := scheduleRun(t, root, "schedule", "create",
+		"--name", "nightly-leads",
+		"--cron", "0 2 * * *",
+		"--flow", "likely-customers",
+	)
+	if code != 0 {
+		t.Fatal("create failed, cannot test remove")
+	}
+
+	tmpCrontab := t.TempDir() + "/crontab"
+	t.Setenv("PM_CRONTAB_FILE", tmpCrontab)
+
+	_, stderr, code := scheduleRun(t, root, "schedule", "install", "nightly-leads", "--crontab")
+	if code != 0 {
+		t.Fatalf("install: exit %d, stderr=%q", code, stderr)
+	}
+	data, err := os.ReadFile(tmpCrontab)
+	if err != nil {
+		t.Fatalf("read redirected crontab after install: %v", err)
+	}
+	if !strings.Contains(string(data), "pm-schedule-nightly-leads") {
+		t.Fatalf("expected crontab sentinel after install, got %q", string(data))
+	}
+
+	_, stderr, code = scheduleRun(t, root, "schedule", "remove", "nightly-leads")
+	if code != 0 {
+		t.Fatalf("remove: exit %d, stderr=%q", code, stderr)
+	}
+	data, err = os.ReadFile(tmpCrontab)
+	if err != nil {
+		t.Fatalf("read redirected crontab after remove: %v", err)
+	}
+	if strings.Contains(string(data), "pm-schedule-nightly-leads") {
+		t.Fatalf("crontab sentinel remained after remove: %q", string(data))
+	}
+}
+
 // E-4: pm schedule remove x → manifest deleted, exit 0.
 func TestScheduleCLI_Remove(t *testing.T) {
 	root := t.TempDir()
