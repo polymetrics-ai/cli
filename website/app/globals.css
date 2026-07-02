@@ -997,6 +997,54 @@ html.dark,
   border-bottom: 1px solid var(--line-structure);
 }
 
+.site-toc-social-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+
+.site-toc-social-link {
+  display: inline-flex;
+  min-height: 1.55rem;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--line-structure) 76%, transparent);
+  border-radius: 6px;
+  background-color: color-mix(in srgb, var(--surface-bg) 76%, white);
+  color: var(--text-tertiary);
+  font-size: 0.68rem;
+  font-weight: 650;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    border-color 150ms ease,
+    color 150ms ease,
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+.site-toc-social-link:hover {
+  border-color: color-mix(in srgb, var(--line-cta) 48%, var(--line-structure));
+  background-color: color-mix(in srgb, var(--surface-bg) 58%, white);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.site-toc-social-link:focus-visible {
+  outline: 2px solid var(--surface-cta-primary);
+  outline-offset: 2px;
+}
+
+.site-toc-social-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex: none;
+  object-fit: contain;
+}
+
 [data-site-toc] {
   border-left: 0;
 }
@@ -1006,7 +1054,8 @@ html.dark,
   .site-toc-path-join,
   .site-toc-node,
   .site-toc-link,
-  .site-toc-footer-link {
+  .site-toc-footer-link,
+  .site-toc-social-link {
     transition: none;
     animation: none;
   }
