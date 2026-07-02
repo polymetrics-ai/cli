@@ -178,3 +178,182 @@ deviations vs the §5 meta-rule) requires an explicit human decision before any 
 
 Handoff: B1/B2 → backend+tester (engine/read.go, conformance/dynamic.go, defs/stripe fixtures,
 docs/migration/conventions.md); B3 → coordinator/verifier (V-21 re-run).
+
+---
+
+# Re-review (gap loop cycle 1) — 2026-07-02, HEAD 7fb4eb6
+
+Focused re-review of the repair diff `b3f91af...7fb4eb6` (commits 898d337, 73a8b87, 7fb4eb6;
+ledgers traces/gaploop-r1-ledger.md, traces/gaploop-r2-ledger.md). Every ledger claim below was
+verified against the actual code, not the ledger text. Verification re-run live at HEAD:
+`go build ./...` exit 0; `go test ./internal/connectors/... ./cmd/...` — zero failures;
+`go test ./internal/connectors/engine -cover` → **85.7%** (gate ≥85, up from 85.0);
+conformance 83.1% (down from 84.3% — no gate on this package), certify 81.0%.
+
+## Block verdicts
+
+**B1 — RESOLVED.** `read.go` `formatParam` now routes `unix_seconds`/`date`/`github_date_range`
+through `parseLowerBoundTime`, which accepts an all-digits value (incl. a leading `-` for
+pre-epoch) as Unix seconds and falls back to RFC3339 otherwise; `rfc3339` stays verbatim. This is
+cross-checked against `internal/app/sync_modes.go` `recordCursor` → `toComparableString`: a
+`json.Number` cursor persists as its verbatim digit string — exactly the shape now accepted.
+`TestReadAppLevelCursorRoundTrip` (read_test.go:275) genuinely mimics the app's stringification
+(documented local copy of `toComparableString`), derives the max cursor across emitted records,
+feeds it back as `req.State["cursor"]`, and asserts the resumed request carries the correct
+unix-seconds wire value. `TestParityStripe_IncrementalCreatedGTEFromState` now feeds BOTH
+connectors the app-persisted digits cursor (`"1700000100"`) with a legacy-side verbatim-forward
+sanity assertion — the false RFC3339 hand-feed is gone. All four param formats covered
+(digits + RFC3339 inputs each). Residual (trivial): `incrementalLowerBoundValue`'s doc comment
+(read.go) still says the lower bound is "always RFC3339 when present" — now false; fix in pilot.
+
+**B2 — RESOLVED.** `conformance/dynamic.go` `checkCursorAdvances` uses `cursorValueString`
+(string / `json.Number` / defensive `float64`), with numeric max via `big.Float` (avoiding the
+`"9" > "10"` lexicographic trap) and a digit-passthrough
+`parseLowerBoundTimeForAssertion` mirroring the engine's fix on the independent assertion side.
+New self-test bundle `testdata/good/acme-numeric-cursor` (numeric `created`, `unix_seconds`) plus
+a string-cursor companion lock both shapes in. Falsification purged: grep of
+`defs/stripe/fixtures/**` finds ZERO string-typed `created`/`updated` values (all bare JSON
+numbers, spot-checked customers page_1/page_2); all five stream schemas tightened back to
+`"integer"`-only; the `customers.json` RFC3339-fixture description note is deleted. conventions.md
+§4's "RFC3339 string cursors in fixtures" convention is replaced with "fixtures use the API's
+REAL wire shape ... no cursor-representation substitutions", and deviation-ledger entry 2 is
+struck through as RESOLVED. Remaining `RFC3339` mentions in defs/stripe refer only to the
+`start_date` config value, which legitimately is RFC3339.
+
+**B3 — RESOLVED (code half; bookkeeping deferred to phase close by instruction).** `inventorygen`
+absent at HEAD (removed in 898d337); `.gitignore` now covers `/pm`, `/inventorygen`,
+`/connectorgen`, `/registrygen`; working tree clean. VERIFICATION.md now records a full 6/6
+acceptance-criteria run with commands and evidence (recorded at b3f91af; this re-review
+independently re-ran build/tests/coverage at 7fb4eb6 — all green). RUN-STATE.json/SUMMARY.md/
+TDD-GATE.json task-row refresh happens at phase close AFTER this verdict — not re-blocked.
+Note (info): the 11 MB blob remains in git HISTORY (commit bfad5e5) and will ride along in the
+pack on push; an optional history rewrite before the branch is pushed/PR'd would remove it.
+
+## Flag verdicts
+
+**F1 — RESOLVED.** `readDeclarative` interpolates `stream.Path` via `InterpolatePath` (urlencode
+default) when the paginator did not supply an absolute `page.URL`; `Check` interpolates
+`HTTP.Check.Path` the same way. Tests: `TestReadStreamPathIsInterpolated`,
+`TestCheckPathIsInterpolated`, unresolved-key error cases, and a static-golden-unaffected guard.
+
+**F3 — RESOLVED.** `newPaginator` takes `recordsPath` (wired from the stream's effective
+`RecordsSpec.Path` at the read.go call site); `lastRecordCursor` no longer hardcodes `"data"`
+(zero-value fallback only when literally unset); `stringifyLastRecordID` accepts
+`json.Number`/`float64` ids. Non-"data"-envelope and numeric-id truncation tests present.
+
+**F4 — RESOLVED, matrix verified.** Typed `*unresolvedKeyError` sentinel (interpolate.go) +
+`errors.As` classification replaces substring matching (`isUnresolvedRecordPath` too).
+`classifyHeaderResolutionError` decision table: `secrets.*` absent → ALWAYS hard error (never a
+silently-unauthenticated request); `config.*` declared-optional → omit (Stripe-Account pattern);
+`config.*` required or undeclared → hard error; any other interpolation failure (CRLF, unknown
+filter/namespace) propagates. Spec-less fallback safety confirmed: `loadSpec` hard-errors when
+spec.json is missing, so a nil-Spec bundle is only reachable via hand construction (tests) — and
+even there `secrets.*` still hard-errors. Five header tests cover every cell of the matrix.
+
+**F5 — RESOLVED.** `Bundle.RawSpec` retains the verbatim spec.json bytes at load;
+`specJSON` serves them byte-for-byte (lossy reconstruction kept only as the ad-hoc-bundle
+fallback). Byte-equality test against a rich schema (enum/default/required/integer/description).
+
+**F8 — RESOLVED.** `ctx` threaded `Read`/`Check`/`Write` → `newRuntime` → `selectAuth` →
+`buildAuthenticator` → `buildCustomAuth` → `AuthHook.Authenticator(ctx, ...)`. No
+`context.Background()` remains in the auth path.
+
+**F9 — RESOLVED (with two residual hardening notes).** Chained filters applied left-to-right
+with a hard error on an unknown name at ANY stage; `ResolveCheck` validates every filter stage
+(incl. the `join:<sep>` prefix form); `ResolveCheckAuthSpec` covers all nine templated AuthSpec
+fields and IS wired into `cmd/connectorgen/validate.go` `checkInterpolations` (two new invalid
+corpus bundles seed the regression). F9b `..` guard: `containsDotDotSegment` runs on the FINAL
+resolved path (so static-template composition like `/a/.{{ x }}` with `x="."` is caught), checking
+each `/`-segment raw AND once-percent-decoded. Bypass attempts made during this re-review:
+`%252e%252e` input → double-encoded on the wire (inert against single-decode servers); unicode
+dots → percent-encoded UTF-8 (inert); backslash `..\` → `..%5C` survives the guard; an embedded
+`x/../y` value → `x%2F..%2Fy` survives (segment is not exactly `..` after one decode). Both
+survivors are only exploitable against servers that percent-decode `%5C`/`%2F` BEFORE routing —
+beyond the original F9b finding's scope. Carried as a minor hardening follow-up: also reject a
+once-decoded segment that CONTAINS a `..` path step.
+
+**M1/F2/m2 (security) — RESOLVED.** Shared `checkOrigin` guard: unparseable next URL → fail
+closed; hostless next URL → fail closed; host mismatch → blocked; same-host scheme downgrade →
+blocked (distinct error wording); `allow_cross_host` opt-out preserved. New `linkHeaderPaginator`
+wraps connsdk's Link-header semantics with the identical guard + loop detection (the previously
+unguarded pagination type). read.go wires scheme+host via `baseHostSetter`/`requesterOrigin`.
+Behavioral note (deliberate tightening): a RELATIVE next URL now fails closed where it previously
+flowed through unguarded — correct posture; a pilot API returning relative next links will need
+explicit engine support (see carried flags).
+
+**F6 — RESOLVED.** searxng: the 8 genuinely-inert spec keys dropped; `api_key` now actually wired
+(`when`-gated bearer → `none` fallback) with both-ways parity tests
+(`ApiKeySecretSendsBearerAuth` / `ApiKeyAbsentSendsNoAuth`). stripe: dead
+`limit_param`/`page_size` removed from base pagination (regression test asserts absence);
+`metadata.json` `rate_limit.strategy` removed, `requests_per_minute` kept explicitly
+informational with a test asserting `HTTP.RateLimit == nil` (no new behavior-changing throttle).
+
+**F7 — RESOLVED.** The normalization workarounds are GONE, not relocated:
+`normalizeSearxngRecord` is now canonical JSON re-encode only (no `delete(r,"stream")`, no
+engines coercion — verified in full), and record comparison is raw `reflect.DeepEqual`. The
+bundle now emits legacy's exact shape via R1 primitives: `"engines": "{{ record.engines |
+join:, }}"` and static-literal `"stream": "search"/"reddit"`; schemas tightened
+(`engines` → `["string","null"]`, `stream` added). Deviation-ledger entries 4/6/8 marked
+RESOLVED; §5's meta-rule is no longer violated by its own ledger. Entry 7 (subreddit narrowing)
+remains an honestly-documented ACCEPTABLE scope narrowing (query templating has no
+absent-key-falsy tolerance — confirmed in interpolate.go).
+
+**F10 + M2/m4 (verified opportunistically).** conventions.md rule-name attribution and the
+"read-time (not load-time)" pagination-conflict fix are in (lines 146, 233). Certify M2: all ~21
+CLI call sites route through `runContext.run` (grep: only the wrapper itself calls
+`harness.Run`), raw stdout/stderr captured per stage, `finalizeSecretRedaction` scans argv +
+outputs + the marshaled report, and `rep.Passed` now requires `SecretRedaction.Result != "fail"`.
+m4 JSON-escaped secret-form detection added.
+
+## New findings from the repair diff
+
+- **N1 (minor).** `conformance/dynamic.go` `formatCursorForAssertion`'s `github_date_range`
+  branch returns `">=" + value` VERBATIM, while the engine's `formatParam` normalizes (digits →
+  RFC3339, offsets/fractional seconds → UTC second-precision). A future bundle combining
+  `github_date_range` with a numeric or non-UTC-normalized cursor would falsely FAIL
+  `cursor_advances`. No current bundle uses `github_date_range`; align the mirror during the
+  github-shaped pilot.
+- **N2 (minor, accepted trade).** Digits-passthrough opens a narrow silent-misinterpretation
+  window: an all-digits value that is NOT unix seconds (e.g. a `start_config_key` typo like
+  `"20260101"`) previously hard-errored and is now silently treated as Unix seconds (→ a 1970s
+  lower bound for `date` format). Out-of-int64 digits still error loudly. Acceptable — the
+  alternative broke every production resume (B1) — but consider a plausibility bound or a
+  validate-time RFC3339 check on start-date config values.
+- **N3 (info).** Relative next_url/Link URLs now fail closed (see M1 above) — deliberate; note
+  for pilot connector selection.
+- **N4 (trivial).** Stale doc comment: read.go `incrementalLowerBoundValue` "always RFC3339 when
+  present".
+- **N5 (minor).** `containsDotDotSegment` residual: `..%5C` and `x%2F..%2Fy`-style segments
+  survive (exploitable only vs decode-before-route servers); see F9 verdict.
+- **N6 (info).** conformance package coverage 84.3% → 83.1% (new dynamic.go code); no gate
+  applies to this package, engine's gated coverage ROSE to 85.7%.
+- **N7 (info).** 11 MB `inventorygen` blob persists in git history (see B3).
+
+No quality-gate reductions found anywhere in the repair diff; every touched test was strengthened
+or left intact (the one input-shape change, the stripe incremental cursor, strengthens the parity
+bar per B1's own instruction and keeps a legacy-side sanity assertion).
+
+## FINAL Go / No-Go
+
+**GO for wave1-pilot.** All three blocks resolved with substance; all of F1–F9 and the security
+majors resolved and verified in code; suite green at HEAD with engine coverage 85.7%.
+
+Carried into the pilot as documented follow-ups (non-blocking):
+1. N1 — align `formatCursorForAssertion`'s `github_date_range` with the engine before any
+   github-shaped bundle lands.
+2. N2 — optional plausibility/validate-time guard for digit-shaped non-unix start values.
+3. N3 — engine support (or documented rejection) for relative next-page URLs if a pilot API
+   needs them.
+4. N4 — fix the stale `incrementalLowerBoundValue` doc comment.
+5. N5 — harden `containsDotDotSegment` to reject once-decoded segments containing a `..` step
+   (incl. backslash variants).
+6. Deviation-ledger entry 7 (searxng subreddit narrowing) — remains a documented scope
+   narrowing; the §5 record-shape human-gate decision is now only needed for entry 7-class items
+   at cutover (entries 4/6 are resolved, so the wave6 human gate shrinks accordingly).
+7. Pre-existing carried items from the first review: gmail-style 3-legged OAuth token
+   acquisition/storage is out of engine scope (confirm credentials layer before a gmail pilot);
+   manifest RequiredFields/OptionalFields approximation (wave6 note);
+   `nextURL.BaseHost` implicit contract (partially mitigated by `baseHostSetter`).
+8. B3 bookkeeping — RUN-STATE.json / SUMMARY.md / TDD-GATE.json task rows must be refreshed at
+   phase close (explicitly sequenced after this verdict); VERIFICATION.md's recorded HEAD
+   (b3f91af) should be bumped to 7fb4eb6 in the same pass.

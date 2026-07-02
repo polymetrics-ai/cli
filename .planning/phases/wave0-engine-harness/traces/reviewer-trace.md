@@ -85,3 +85,47 @@ AuthHook. F7 needs a human decision before cutover.
   for cutover waves
 - make verify (smoke + lint) not re-run end-to-end by this review (golangci-lint availability not
   asserted); V-21 re-run must capture it
+
+---
+
+# Re-review trace (gap loop cycle 1) — 2026-07-02, HEAD 7fb4eb6
+
+Scope: repair diff b3f91af...7fb4eb6 (898d337 B3-binary; 73a8b87 R1 engine-core; 7fb4eb6 R2
+conformance/goldens/certify/docs). Ledgers read in full (gaploop-r1-ledger.md,
+gaploop-r2-ledger.md); every claim cross-verified against code, not ledger prose.
+
+Files read at HEAD: engine/read.go (full), engine/interpolate.go (full), engine/paginate.go
+(full), engine/auth.go (full), connector.go specJSON, bundle.go loadSpec/RawSpec, schema.go
+RequiredKeys, read_test.go (round-trip + header matrix + formatParam tests),
+parity_stripe_test.go (incremental test), parity_searxng_test.go (full),
+conformance/dynamic.go (checkCursorAdvances + cursorValueString + assertion mirrors),
+defs/stripe fixtures+schemas+metadata (grep + spot-read customers p1/p2),
+defs/searxng streams.json+spec.json, cmd/connectorgen/validate.go (ResolveCheckAuthSpec wiring),
+certify/stages_source.go (run wrapper + Passed computation, grep for bypassing call sites),
+docs/migration/conventions.md (§4 + §5 ledger + accuracy fixes), .gitignore, VERIFICATION.md.
+
+Cross-check performed: internal/app/sync_modes.go toComparableString/recordCursor (read-only)
+vs engine formatParam/parseLowerBoundTime — shapes match (json.Number → verbatim digits).
+
+Adversarial checks: containsDotDotSegment bypass attempts (%252e%252e double-encode, unicode
+dots, backslash `..%5C`, embedded `x%2F..%2Fy`) — two residual decode-before-route-only
+survivors noted as N5 (minor); digits-passthrough junk-cursor window noted as N2 (minor);
+relative-next-URL fail-closed tightening noted as N3 (info); formatCursorForAssertion
+github_date_range mirror divergence noted as N1 (minor).
+
+Verification re-run live at 7fb4eb6:
+- go build ./... — exit 0
+- go test ./internal/connectors/... ./cmd/... — zero failures (grep -v ok → empty)
+- go test ./internal/connectors/engine -cover — 85.7% (gate ≥85 MET, up from 85.0)
+- conformance 83.1% (no gate), certify 81.0%
+- ls inventorygen — absent; .gitignore covers tool binaries; git status --porcelain clean
+- grep defs/stripe for string created/updated — zero hits (falsification purged)
+- grep certify for harness.Run outside wrapper — only the wrapper itself
+
+Verdicts: B1/B2/B3 RESOLVED (B3 bookkeeping deferred to phase close by instruction);
+F1/F3/F4/F5/F8/F9 RESOLVED; M1/F2/m2 RESOLVED; F6/F7 RESOLVED; F10+M2/m4 verified.
+New findings N1–N7 (all minor/info, none blocking). No quality-gate reductions in the repair
+diff; no test weakenings.
+
+FINAL: **GO for wave1-pilot** with 8 carried follow-ups (REVIEW.md "Re-review (gap loop
+cycle 1)" section, Carried list).
