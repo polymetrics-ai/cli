@@ -23,6 +23,7 @@ this index tracks status. Coordinator merges after each dispatch wave.
 | T/B-10 connector assembly + Definition | red-confirmed → green | traces/waveD-b10-ledger.md §T-10 | pass |
 | T/B-18 .golangci.yml + Makefile gates | red-artifact → green | traces/waveD-b18-ledger.md | make lint 0 issues |
 | T/B-14 certify source stages vs sample | red-confirmed → green | traces/waveE-b14-ledger.md §T-14 | 21 |
+| T/B-13 conformance v2 | red-confirmed → green | traces/waveE-b13-ledger.md §T-13 | 24 (33 incl. subtests) |
 
 Wave A gate (coordinator, 2026-07-02): `go build ./...` ok · engine+certify tests ok · gofmt clean ·
 path guard clean (no tracked-file modifications outside plan). Noted deviations (agent-documented):

@@ -1,0 +1,8 @@
+{
+  "record": { "id": 1, "name": "renamed sprocket" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/widgets/999-wrong-id",
+    "body": { "name": "renamed sprocket" }
+  }
+}

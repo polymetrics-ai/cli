@@ -1,0 +1,12 @@
+{
+  "api": "Acme API v1 (synthetic, conformance self-test)",
+  "docs": "https://example.invalid/docs",
+  "reviewed_at": "2026-06-01",
+  "scope": "widgets + notes endpoints only",
+  "endpoints": [
+    { "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+    { "method": "GET", "path": "/notes", "covered_by": { "stream": "notes" } },
+    { "method": "PATCH", "path": "/widgets/{id}", "covered_by": { "write": "update_widget" } },
+    { "method": "DELETE", "path": "/widgets/{id}", "covered_by": { "write": "delete_widget" } }
+  ]
+}

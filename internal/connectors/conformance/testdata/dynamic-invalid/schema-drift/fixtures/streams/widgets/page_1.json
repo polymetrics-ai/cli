@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/widgets", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "not-an-integer", "name": "sprocket", "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}
