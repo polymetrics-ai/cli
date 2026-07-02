@@ -34,9 +34,37 @@ func Interpolate(template string, vars Vars) (string, error) {
 // InterpolatePath resolves every {{ }} expression in template against vars,
 // applying the urlencode filter by DEFAULT to every resolved value (path
 // segments are the primary injection surface; THREAT-MODEL §2). An explicit
-// filter still overrides the default.
+// filter still overrides the default. A resolved value that is exactly ".."
+// (or, after percent-decoding, still resolves to a ".." path segment) is
+// rejected outright (F9b/m3): urlencodeSegment intentionally leaves a bare
+// "." unescaped (it is not itself a metacharacter needing escaping for
+// safe insertion), which means a literal ".." value would otherwise survive
+// as an intact same-value path segment even though slashes are encoded.
 func InterpolatePath(template string, vars Vars) (string, error) {
-	return interpolate(template, vars, true)
+	out, err := interpolate(template, vars, true)
+	if err != nil {
+		return "", err
+	}
+	if containsDotDotSegment(out) {
+		return "", fmt.Errorf("interpolate path: resolved template %q contains a \"..\" path segment", template)
+	}
+	return out, nil
+}
+
+// containsDotDotSegment reports whether any "/"-delimited segment of path is
+// exactly "..", checking both the raw (possibly percent-encoded) segments
+// and their percent-decoded form so an encoded traversal segment (e.g.
+// "%2e%2e") is caught too.
+func containsDotDotSegment(path string) bool {
+	for _, seg := range strings.Split(path, "/") {
+		if seg == ".." {
+			return true
+		}
+		if decoded, err := url.PathUnescape(seg); err == nil && decoded == ".." {
+			return true
+		}
+	}
+	return false
 }
 
 // InterpolateHeader resolves every {{ }} expression in template against vars
@@ -74,43 +102,94 @@ func interpolate(template string, vars Vars, urlencodeDefault bool) (string, err
 }
 
 // resolveExpr resolves a single expression body (the text between {{ and
-// }}), which is a dotted reference optionally followed by "| filter". The
-// raw (pre-filter) resolved value is rejected outright if it carries CR/LF —
-// header and path/query insertion are the injection surfaces (THREAT-MODEL
-// §2) and no filter in this dialect is meant to legitimately produce or pass
-// through newlines.
+// }}), which is a dotted reference optionally followed by one or more
+// "| filter" stages, applied left-to-right (F9: a filter chain like
+// "| urlencode | base64" must apply BOTH filters in sequence, never silently
+// truncate after the first). The raw (pre-filter) resolved value is rejected
+// outright if it carries CR/LF — header and path/query insertion are the
+// injection surfaces (THREAT-MODEL §2) and no filter in this dialect is
+// meant to legitimately produce or pass through newlines.
 func resolveExpr(expr string, vars Vars, urlencodeDefault bool) (string, error) {
 	parts := strings.Split(expr, "|")
 	ref := strings.TrimSpace(parts[0])
 
-	val, err := resolveRef(ref, vars)
+	rawVal, err := resolveRefValue(ref, vars)
 	if err != nil {
 		return "", err
 	}
+	val := stringify(rawVal)
 	if strings.ContainsAny(val, "\r\n") {
 		return "", fmt.Errorf("interpolate: resolved value for %q contains CR/LF", ref)
 	}
 
-	filter := ""
-	if len(parts) > 1 {
-		filter = strings.TrimSpace(parts[1])
-	} else if urlencodeDefault {
-		filter = "urlencode"
+	filters := make([]string, 0, len(parts)-1)
+	for _, p := range parts[1:] {
+		if f := strings.TrimSpace(p); f != "" {
+			filters = append(filters, f)
+		}
+	}
+	if len(filters) == 0 && urlencodeDefault {
+		filters = []string{"urlencode"}
 	}
 
-	return applyFilter(filter, val)
+	cur := val
+	for _, filter := range filters {
+		next, err := applyFilterValue(filter, cur, rawVal)
+		if err != nil {
+			return "", err
+		}
+		cur = next
+		// After the first filter stage the "raw" array-shaped value (if any)
+		// no longer applies — only the FIRST filter in a chain may consume
+		// the pre-stringify raw value (e.g. "record.tags | join:,"); every
+		// subsequent filter operates on the running string result like
+		// urlencode/base64/unix_seconds always have.
+		rawVal = cur
+	}
+	return cur, nil
+}
+
+// unresolvedKeyError is the typed sentinel for "reference resolved to
+// nothing because the key is absent" (F4, REVIEW.md: error-classification by
+// substring matching is brittle — read.go's resolveHeaders/computed_fields
+// callers use errors.As against this type instead of scanning err.Error()
+// text). Namespace is "config", "secrets", or "record"; Key is the dotted
+// key/path that could not be resolved.
+type unresolvedKeyError struct {
+	Namespace string
+	Key       string
+}
+
+func (e *unresolvedKeyError) Error() string {
+	return fmt.Sprintf("interpolate: unresolved key %q in %s", e.Key, e.Namespace)
 }
 
 // resolveRef resolves a dotted reference like "config.base_url",
 // "secrets.token", "record.user.login", or the bare "cursor".
 func resolveRef(ref string, vars Vars) (string, error) {
+	v, err := resolveRefValue(ref, vars)
+	if err != nil {
+		return "", err
+	}
+	return stringify(v), nil
+}
+
+// resolveRefValue is resolveRef's raw-value counterpart: config/secrets/
+// cursor resolve to a string (as always), but a "record.*" reference returns
+// the RAW (possibly array/object/number) value rather than an
+// already-stringified one, so filters that need the pre-stringify shape
+// (join:<sep> on an array) can operate on it. Every other caller that only
+// ever wants a string (resolveRef, and therefore EvalWhen's
+// resolveRefForWhen) is unaffected — resolveRef just stringifies afterward,
+// exactly matching its prior behavior byte-for-byte.
+func resolveRefValue(ref string, vars Vars) (any, error) {
 	if ref == "cursor" {
 		return vars.Cursor, nil
 	}
 
 	segs := strings.Split(ref, ".")
 	if len(segs) < 2 {
-		return "", fmt.Errorf("interpolate: unresolved reference %q", ref)
+		return nil, fmt.Errorf("interpolate: unresolved reference %q", ref)
 	}
 	namespace, key := segs[0], segs[1]
 
@@ -118,42 +197,46 @@ func resolveRef(ref string, vars Vars) (string, error) {
 	case "config":
 		v, ok := vars.Config[key]
 		if !ok {
-			return "", fmt.Errorf("interpolate: unresolved key %q in config", key)
+			return nil, &unresolvedKeyError{Namespace: "config", Key: key}
 		}
 		return v, nil
 	case "secrets":
 		v, ok := vars.Secrets[key]
 		if !ok {
-			return "", fmt.Errorf("interpolate: unresolved key %q in secrets", key)
+			return nil, &unresolvedKeyError{Namespace: "secrets", Key: key}
 		}
 		return v, nil
 	case "record":
-		return resolveRecordPath(vars.Record, segs[1:])
+		return resolveRecordPathValue(vars.Record, segs[1:])
 	default:
-		return "", fmt.Errorf("interpolate: unknown namespace %q in reference %q", namespace, ref)
+		return nil, fmt.Errorf("interpolate: unknown namespace %q in reference %q", namespace, ref)
 	}
 }
 
-// resolveRecordPath walks a dotted path into a raw record. A missing
-// intermediate value resolves to "" rather than panicking (read.go's
-// computed_fields rely on this for optional nested fields).
-func resolveRecordPath(record map[string]any, path []string) (string, error) {
+// resolveRecordPathValue walks a dotted path into a raw record, returning the
+// RAW value found (string/number/bool/array/object/nil) rather than an
+// already-stringified one. A missing intermediate value is an
+// *unresolvedKeyError with Namespace "record" (read.go's computed_fields
+// relies on this — via errors.As, not string matching — to treat an absent
+// optional nested field as "omit the computed field" rather than a hard
+// error).
+func resolveRecordPathValue(record map[string]any, path []string) (any, error) {
 	if record == nil {
-		return "", fmt.Errorf("interpolate: unresolved key %q in record", strings.Join(path, "."))
+		return nil, &unresolvedKeyError{Namespace: "record", Key: strings.Join(path, ".")}
 	}
 	var cur any = record
 	for i, seg := range path {
 		m, ok := cur.(map[string]any)
 		if !ok {
-			return "", fmt.Errorf("interpolate: unresolved key %q in record", strings.Join(path[:i+1], "."))
+			return nil, &unresolvedKeyError{Namespace: "record", Key: strings.Join(path[:i+1], ".")}
 		}
 		v, ok := m[seg]
 		if !ok {
-			return "", fmt.Errorf("interpolate: unresolved key %q in record", strings.Join(path[:i+1], "."))
+			return nil, &unresolvedKeyError{Namespace: "record", Key: strings.Join(path[:i+1], ".")}
 		}
 		cur = v
 	}
-	return stringify(cur), nil
+	return cur, nil
 }
 
 func stringify(v any) string {
@@ -169,24 +252,63 @@ func stringify(v any) string {
 	}
 }
 
-// applyFilter applies the named filter to val. "" means no filter.
+// applyFilter applies the named filter to val ("" means no filter). Kept as
+// the string-only entry point for callers/tests that never need the
+// raw-value-aware join:<sep> filter; it delegates to applyFilterValue with
+// no raw value available (so "join" on a string is always the
+// not-an-array error, exactly as if no array had ever been in scope).
 func applyFilter(filter, val string) (string, error) {
-	switch filter {
-	case "":
+	return applyFilterValue(filter, val, val)
+}
+
+// applyFilterValue applies filter to val (the running string result of any
+// prior filter stage), with rawVal available for filters that need the
+// PRE-STRINGIFY shape of the value (currently only join:<sep>, which
+// requires an actual []any — not its already-stringified form). Every other
+// filter ignores rawVal and behaves exactly as before.
+func applyFilterValue(filter, val string, rawVal any) (string, error) {
+	switch {
+	case filter == "":
 		return val, nil
-	case "urlencode":
+	case filter == "urlencode":
 		return urlencodeSegment(val), nil
-	case "unix_seconds":
+	case filter == "unix_seconds":
 		t, err := time.Parse(time.RFC3339, val)
 		if err != nil {
 			return "", fmt.Errorf("interpolate: unix_seconds filter: invalid RFC3339 value %q: %w", val, err)
 		}
 		return strconv.FormatInt(t.Unix(), 10), nil
-	case "base64":
+	case filter == "base64":
 		return base64.StdEncoding.EncodeToString([]byte(val)), nil
+	case strings.HasPrefix(filter, "join:"):
+		sep := strings.TrimPrefix(filter, "join:")
+		return applyJoinFilter(sep, rawVal)
 	default:
 		return "", fmt.Errorf("interpolate: unknown filter %q", filter)
 	}
+}
+
+// applyJoinFilter joins an array-valued rawVal with sep (F7 meta-rule
+// enablement: e.g. searxng's "engines" declared as an array, joined into the
+// comma-separated wire form legacy sends, without changing the emitted
+// RECORD shape — only the outgoing request representation). A non-array
+// rawVal is a hard error rather than a silent fmt.Sprint stringification,
+// since joining a scalar is never the intended use of this filter. Note:
+// sep cannot itself be "|" — the filter-chain delimiter takes precedence
+// during the outer "|"-split, so "join:|" would be parsed as "join:" piped
+// into a next (empty) filter stage rather than a literal pipe separator; any
+// other separator (including multi-character ones, since sep is everything
+// after the first ":") is unambiguous.
+func applyJoinFilter(sep string, rawVal any) (string, error) {
+	arr, ok := rawVal.([]any)
+	if !ok {
+		return "", fmt.Errorf("interpolate: join filter requires an array value, got %T", rawVal)
+	}
+	parts := make([]string, len(arr))
+	for i, v := range arr {
+		parts[i] = stringify(v)
+	}
+	return strings.Join(parts, sep), nil
 }
 
 // urlencodeSegment percent-encodes val for safe insertion as a single path
@@ -339,23 +461,52 @@ func parseList(s string) ([]string, error) {
 	return out, nil
 }
 
+// knownFilterNames is the set of filter names ResolveCheck accepts
+// statically (F9: a typo'd filter name should fail `connectorgen validate`,
+// not silently error only at runtime). "join:<sep>" is a prefix form, not a
+// fixed name, and is checked separately in isKnownFilter.
+var knownFilterNames = map[string]bool{
+	"urlencode":    true,
+	"unix_seconds": true,
+	"base64":       true,
+}
+
+func isKnownFilter(filter string) bool {
+	if knownFilterNames[filter] {
+		return true
+	}
+	return strings.HasPrefix(filter, "join:")
+}
+
 // ResolveCheck statically validates every {{ }} reference in template against
 // specKeys (the declared spec.json property names), used by connectorgen at
 // build time. record/cursor/secrets references are not checked against
-// specKeys since they are not spec-declared.
+// specKeys since they are not spec-declared. Every filter stage in a
+// (possibly chained) "| filter1 | filter2" pipeline must be a known filter
+// name (F9: an unknown filter name is a validate-time error, not just a
+// runtime one).
 func ResolveCheck(template string, specKeys map[string]bool) error {
 	matches := templatePattern.FindAllStringSubmatch(template, -1)
 	for _, m := range matches {
-		expr := strings.Split(m[1], "|")[0]
-		ref := strings.TrimSpace(expr)
+		segs := strings.Split(m[1], "|")
+		ref := strings.TrimSpace(segs[0])
+		for _, f := range segs[1:] {
+			filter := strings.TrimSpace(f)
+			if filter == "" {
+				continue
+			}
+			if !isKnownFilter(filter) {
+				return fmt.Errorf("resolve check: unknown filter %q referenced in %q", filter, strings.TrimSpace(m[1]))
+			}
+		}
 		if ref == "cursor" {
 			continue
 		}
-		segs := strings.Split(ref, ".")
-		if len(segs) < 2 {
+		refSegs := strings.Split(ref, ".")
+		if len(refSegs) < 2 {
 			return fmt.Errorf("resolve check: malformed reference %q", ref)
 		}
-		namespace, key := segs[0], segs[1]
+		namespace, key := refSegs[0], refSegs[1]
 		switch namespace {
 		case "config":
 			if !specKeys[key] {
@@ -365,6 +516,38 @@ func ResolveCheck(template string, specKeys map[string]bool) error {
 			// not statically checkable against specKeys here.
 		default:
 			return fmt.Errorf("resolve check: unknown namespace %q in reference %q", namespace, ref)
+		}
+	}
+	return nil
+}
+
+// ResolveCheckAuthSpec statically validates EVERY templated field of an
+// AuthSpec against specKeys (F9, REVIEW.md: cmd/connectorgen/validate.go's
+// checkInterpolations only checked Token/Value/When, leaving username/
+// password/token_url/client_id/client_secret/scopes typos to pass static
+// validation and fail only at runtime). Wiring this into `connectorgen
+// validate` itself is a follow-up (cmd/connectorgen is outside this task's
+// editable file set); this is the engine-side building block for it.
+func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
+	fields := []struct {
+		name, tmpl string
+	}{
+		{"token", spec.Token},
+		{"username", spec.Username},
+		{"password", spec.Password},
+		{"value", spec.Value},
+		{"token_url", spec.TokenURL},
+		{"client_id", spec.ClientID},
+		{"client_secret", spec.ClientSecret},
+		{"scopes", spec.Scopes},
+		{"when", spec.When},
+	}
+	for _, f := range fields {
+		if f.tmpl == "" {
+			continue
+		}
+		if err := ResolveCheck(f.tmpl, specKeys); err != nil {
+			return fmt.Errorf("auth spec (mode %q) field %q: %w", spec.Mode, f.name, err)
 		}
 	}
 	return nil

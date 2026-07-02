@@ -455,6 +455,16 @@ func (s *Schema) Properties() []string {
 	return out
 }
 
+// RequiredKeys returns the root-level "required" property name list (F4,
+// REVIEW.md: resolveHeaders needs to distinguish a declared-but-OPTIONAL
+// config key, whose runtime absence is tolerated by omitting the header that
+// references it — e.g. Stripe-Account/account_id — from a declared-and-
+// REQUIRED one, whose absence is a hard configuration error, never silently
+// swallowed).
+func (s *Schema) RequiredKeys() []string {
+	return s.node.required
+}
+
 // PrimaryKeys returns the root-level x-primary-key list.
 func (s *Schema) PrimaryKeys() []string {
 	return s.node.primaryKey

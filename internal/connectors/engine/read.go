@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/url"
 	"strconv"
@@ -39,7 +40,7 @@ func ReadWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 		return err
 	}
 
-	rt, err := newRuntime(b, req.Config, h)
+	rt, err := newRuntime(ctx, b, req.Config, h)
 	if err != nil {
 		return err
 	}
@@ -75,12 +76,13 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	if pag != nil {
 		specForPaginator = *pag
 	}
-	paginator, err := newPaginator(specForPaginator, pageSize)
+	paginator, err := newPaginator(specForPaginator, pageSize, recordsPathOf(stream.Records))
 	if err != nil {
 		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
-	if nu, ok := paginator.(*nextURL); ok {
-		nu.BaseHost = requesterHost(rt.Requester.BaseURL)
+	if setter, ok := paginator.(baseHostSetter); ok {
+		scheme, host := requesterOrigin(rt.Requester.BaseURL)
+		setter.setBaseOrigin(scheme, host)
 	}
 
 	baseQuery, err := buildInitialQuery(stream, req)
@@ -120,9 +122,20 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			}
 		}
 
-		reqPath := stream.Path
+		var reqPath string
 		if page.URL != "" {
 			reqPath = page.URL
+		} else {
+			// F1/SECURITY-REVIEW.md m3: a stream path is a request path just
+			// like a write action's, and must go through InterpolatePath
+			// (urlencode-by-default) instead of being sent literally — a
+			// paginator-supplied absolute URL (page.URL, above) is already
+			// fully resolved and must NOT be re-interpolated.
+			resolved, err := InterpolatePath(stream.Path, requestVars(req.Config, nil, ""))
+			if err != nil {
+				return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: fmt.Errorf("resolve stream path: %w", err)}
+			}
+			reqPath = resolved
 		}
 		query := mergeQuery(baseQuery, page.Query)
 
@@ -200,8 +213,11 @@ func findStream(b Bundle, name string) (StreamSpec, error) {
 }
 
 // newRuntime builds the shared *Runtime (Requester + Bundle + Config) used
-// by both the declarative path and any dispatched hooks.
-func newRuntime(b Bundle, cfg connectors.RuntimeConfig, h Hooks) (*Runtime, error) {
+// by both the declarative path and any dispatched hooks. ctx is threaded
+// into selectAuth (F8) so a "custom" AuthHook's Authenticator resolution
+// (e.g. a network token exchange) honors the caller's context instead of
+// running under context.Background().
+func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks) (*Runtime, error) {
 	baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
 	if err != nil {
 		return nil, fmt.Errorf("engine: resolve base url: %w", err)
@@ -213,13 +229,13 @@ func newRuntime(b Bundle, cfg connectors.RuntimeConfig, h Hooks) (*Runtime, erro
 	// rather than forcing every caller to declare a trivial "none" rule.
 	var auth connsdk.Authenticator
 	if len(b.HTTP.Auth) > 0 {
-		auth, err = selectAuth(cfg, b.HTTP.Auth, h)
+		auth, err = selectAuth(ctx, cfg, b.HTTP.Auth, h)
 		if err != nil {
 			return nil, fmt.Errorf("engine: %w", err)
 		}
 	}
 
-	headers, err := resolveHeaders(b.HTTP.Headers, cfg)
+	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
 	if err != nil {
 		return nil, err
 	}
@@ -234,23 +250,60 @@ func newRuntime(b Bundle, cfg connectors.RuntimeConfig, h Hooks) (*Runtime, erro
 	return &Runtime{Requester: requester, Bundle: &b, Config: cfg}, nil
 }
 
-// resolveHeaders interpolates every declared header value, omitting any
+// resolveHeaders interpolates every declared header value, omitting a
 // header whose resolved value is empty (matches stripe's conditional
-// Stripe-Account header, SPEC §1.1).
-func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig) (map[string]string, error) {
+// Stripe-Account header, SPEC §1.1) or whose template references an
+// absent config key that spec DECLARES as optional (not in required[]).
+//
+// F4 (REVIEW.md flag / SECURITY-REVIEW.md finding): the prior version
+// swallowed ANY unresolved-key error uniformly, so
+// `Authorization: Bearer {{ secrets.token }}` with no token secret
+// configured was silently omitted — the request went out unauthenticated
+// instead of failing. The decision table now is:
+//   - an unresolved key in the "secrets" namespace is ALWAYS a hard error
+//     (never send a request that was meant to carry a secret-derived header
+//     but silently didn't);
+//   - an unresolved key in the "config" namespace is omitted ONLY when spec
+//     declares that key as an optional property (present in spec.Properties()
+//     but absent from spec.RequiredKeys()) — the Stripe-Account/account_id
+//     pattern; a REQUIRED key, or a key spec doesn't declare at all, is a
+//     hard error;
+//   - when spec is nil (a bundle/test with no compiled spec.json at all —
+//     common in ad hoc test bundles), a config-namespace absence is still
+//     omitted, preserving prior behavior for that case: there is no spec
+//     surface to know required-vs-optional, and a bundle with literally no
+//     declared config keys is not the target of this fix (secrets.* is
+//     still always a hard error even with a nil spec);
+//   - any other interpolation failure (CRLF injection, unknown
+//     namespace/filter) still propagates unchanged.
+func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spec *Schema) (map[string]string, error) {
 	if len(headers) == 0 {
 		return nil, nil
 	}
+
+	var optionalConfigKeys map[string]bool
+	if spec != nil {
+		required := make(map[string]bool, len(spec.RequiredKeys()))
+		for _, k := range spec.RequiredKeys() {
+			required[k] = true
+		}
+		optionalConfigKeys = make(map[string]bool, len(spec.Properties()))
+		for _, k := range spec.Properties() {
+			if !required[k] {
+				optionalConfigKeys[k] = true
+			}
+		}
+	}
+
 	out := make(map[string]string, len(headers))
 	for k, tmpl := range headers {
 		val, err := InterpolateHeader(tmpl, requestVars(cfg, nil, ""))
 		if err != nil {
-			// An unresolved config/secret key (the value is simply absent —
-			// e.g. an optional per-account header like Stripe-Account with no
-			// account_id configured) is treated the same as an empty resolved
-			// value: the header is omitted. Any other interpolation failure
-			// (CRLF injection, unknown namespace/filter) still propagates.
-			if isUnresolvedKey(err) {
+			omit, hardErr := classifyHeaderResolutionError(err, spec, optionalConfigKeys)
+			if hardErr != nil {
+				return nil, fmt.Errorf("engine: resolve header %q: %w", k, hardErr)
+			}
+			if omit {
 				continue
 			}
 			return nil, fmt.Errorf("engine: resolve header %q: %w", k, err)
@@ -263,8 +316,31 @@ func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig) (ma
 	return out, nil
 }
 
-func isUnresolvedKey(err error) bool {
-	return err != nil && strings.Contains(err.Error(), "unresolved key")
+// classifyHeaderResolutionError decides, for a single header's interpolation
+// error, whether the header should be silently OMITTED (omit=true), or the
+// error should hard-fail (hardErr non-nil), or neither applies (both false/
+// nil — caller wraps err as-is; this happens for any non-unresolvedKeyError
+// interpolation failure, e.g. CRLF injection or an unknown filter/namespace).
+func classifyHeaderResolutionError(err error, spec *Schema, optionalConfigKeys map[string]bool) (omit bool, hardErr error) {
+	var unresolved *unresolvedKeyError
+	if !errors.As(err, &unresolved) {
+		return false, nil
+	}
+	switch {
+	case unresolved.Namespace == "secrets":
+		return false, fmt.Errorf("%w (a header referencing an absent secret is never silently omitted)", err)
+	case unresolved.Namespace == "config" && spec == nil:
+		// No spec surface to know required-vs-optional: preserve prior
+		// omit-on-absent-config behavior for bundles/tests with no compiled
+		// spec.json at all.
+		return true, nil
+	case unresolved.Namespace == "config" && optionalConfigKeys[unresolved.Key]:
+		// Declared-optional config key, absent at runtime: omit (the
+		// Stripe-Account/account_id pattern).
+		return true, nil
+	default:
+		return false, err
+	}
 }
 
 // requestVars builds the interpolation environment shared by base URL,
@@ -319,32 +395,92 @@ func incrementalLowerBoundValue(stream StreamSpec, req connectors.ReadRequest) (
 	return strings.TrimSpace(req.Config.Config[stream.Incremental.StartConfigKey]), nil
 }
 
-// formatParam formats an RFC3339 lower-bound value per param_format
+// formatParam formats a lower-bound cursor value per param_format
 // (rfc3339|unix_seconds|date|github_date_range). An empty format defaults to
 // rfc3339 (send the value verbatim).
+//
+// The state cursor this function receives is NOT always RFC3339: the app
+// layer (internal/app/sync_modes.go recordCursor -> toComparableString)
+// persists a stream's cursor as the STRINGIFIED RECORD FIELD VALUE, which
+// for a numeric field (e.g. Stripe's Unix-seconds "created") is a bare
+// digits string like "1700000100", never converted to RFC3339 (B1,
+// REVIEW.md). formatParam therefore accepts BOTH input shapes for every
+// format that needs to parse a timestamp: an all-digits value is treated as
+// already-Unix-seconds (matching legacy's verbatim-forward semantics, and
+// the ONLY shape production code actually produces for a numeric cursor
+// field); any other value is parsed as RFC3339, exactly as before. rfc3339
+// itself never parses at all (verbatim passthrough either way).
 func formatParam(value, format string) (string, error) {
 	switch format {
 	case "", "rfc3339":
 		return value, nil
 	case "unix_seconds":
-		t, err := time.Parse(time.RFC3339, value)
+		t, err := parseLowerBoundTime(value)
 		if err != nil {
-			return "", fmt.Errorf("engine: param_format unix_seconds: invalid RFC3339 value %q: %w", value, err)
+			return "", fmt.Errorf("engine: param_format unix_seconds: %w", err)
 		}
 		return strconv.FormatInt(t.Unix(), 10), nil
 	case "date":
-		t, err := time.Parse(time.RFC3339, value)
+		t, err := parseLowerBoundTime(value)
 		if err != nil {
-			return "", fmt.Errorf("engine: param_format date: invalid RFC3339 value %q: %w", value, err)
+			return "", fmt.Errorf("engine: param_format date: %w", err)
 		}
 		return t.Format("2006-01-02"), nil
 	case "github_date_range":
 		// GitHub's date-range query-qualifier shape for a lower-bound-only
 		// range (design doc's workflow_runs example declares no upper bound).
-		return ">=" + value, nil
+		// A digits-only (Unix-seconds) input is normalized to RFC3339 first so
+		// the emitted qualifier is always a valid GitHub date-range value
+		// regardless of which shape the state cursor arrived in.
+		t, err := parseLowerBoundTime(value)
+		if err != nil {
+			return "", fmt.Errorf("engine: param_format github_date_range: %w", err)
+		}
+		return ">=" + t.UTC().Format(time.RFC3339), nil
 	default:
 		return "", fmt.Errorf("engine: unknown param_format %q", format)
 	}
+}
+
+// parseLowerBoundTime parses value as either a bare Unix-seconds digits
+// string (the app-persisted cursor shape for a numeric cursor field, B1) or
+// an RFC3339 timestamp (the shape used when the lower bound comes from a
+// string cursor field or a config start_date). Digits-only values are tried
+// first since RFC3339 values are never all-digits.
+func parseLowerBoundTime(value string) (time.Time, error) {
+	if isAllDigits(value) {
+		secs, err := strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			return time.Time{}, fmt.Errorf("invalid unix-seconds value %q: %w", value, err)
+		}
+		return time.Unix(secs, 0).UTC(), nil
+	}
+	t, err := time.Parse(time.RFC3339, value)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("invalid RFC3339 value %q: %w", value, err)
+	}
+	return t, nil
+}
+
+// isAllDigits reports whether s is non-empty and consists only of ASCII
+// digits (optionally a leading '-' for a pre-epoch Unix timestamp).
+func isAllDigits(s string) bool {
+	if s == "" {
+		return false
+	}
+	i := 0
+	if s[0] == '-' {
+		i = 1
+	}
+	if i == len(s) {
+		return false
+	}
+	for ; i < len(s); i++ {
+		if s[i] < '0' || s[i] > '9' {
+			return false
+		}
+	}
+	return true
 }
 
 // recordsPathOf returns the dotted path RecordsAt should use, defaulting the
@@ -438,8 +574,13 @@ func applyComputedFields(projected, raw map[string]any, computed map[string]stri
 	return nil
 }
 
+// isUnresolvedRecordPath reports whether err is the typed unresolvedKeyError
+// with Namespace "record" (F4/REVIEW.md: replaced brittle
+// strings.Contains(err.Error(), ...) classification with errors.As against
+// the typed sentinel from interpolate.go).
 func isUnresolvedRecordPath(err error) bool {
-	return err != nil && strings.Contains(err.Error(), "unresolved key") && strings.Contains(err.Error(), "in record")
+	var unresolved *unresolvedKeyError
+	return errors.As(err, &unresolved) && unresolved.Namespace == "record"
 }
 
 func methodOrDefault(method string) string {
@@ -465,12 +606,20 @@ func mergeQuery(base, extra url.Values) url.Values {
 	return out
 }
 
-func requesterHost(baseURL string) string {
+// requesterOrigin returns baseURL's (scheme, host) pair for wiring an
+// SSRF-guarded paginator's expected origin (M1/m2: the guard must compare
+// scheme AND host, not host alone). An unparseable baseURL yields ("", "")
+// — the guard treats an unset host as "no origin configured, do not
+// enforce" (matching prior behavior for callers that never had a real base
+// URL, e.g. some unit tests), which is safe because Check/Read already fail
+// earlier if HTTP.URL itself cannot be interpolated/parsed as a request
+// target.
+func requesterOrigin(baseURL string) (scheme, host string) {
 	u, err := url.Parse(baseURL)
 	if err != nil {
-		return ""
+		return "", ""
 	}
-	return u.Host
+	return u.Scheme, u.Host
 }
 
 // rateLimiter enforces RateLimitSpec{requests_per_minute} as a fixed
@@ -536,7 +685,7 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 		return err
 	}
 
-	rt, err := newRuntime(b, cfg, h)
+	rt, err := newRuntime(ctx, b, cfg, h)
 	if err != nil {
 		return err
 	}
@@ -554,7 +703,11 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if b.HTTP.Check == nil {
 		return nil
 	}
-	_, err = rt.Requester.Do(ctx, methodOrDefault(b.HTTP.Check.Method), b.HTTP.Check.Path, nil, nil)
+	checkPath, err := InterpolatePath(b.HTTP.Check.Path, requestVars(cfg, nil, ""))
+	if err != nil {
+		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("resolve check path: %w", err)}
+	}
+	_, err = rt.Requester.Do(ctx, methodOrDefault(b.HTTP.Check.Method), checkPath, nil, nil)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Class: class, Hint: hint, Err: err}

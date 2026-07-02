@@ -294,35 +294,30 @@ func incrementalCaptureServer(t *testing.T) (*httptest.Server, *string) {
 }
 
 // TestParityStripe_IncrementalCreatedGTEFromState asserts both connectors
-// arrive at the identical created[gte] WIRE VALUE (Unix seconds) for "the
-// same point in time", even though each connector's OWN native state-cursor
-// representation differs: legacy's incrementalLowerBound forwards
-// req.State["cursor"] to created[gte] completely verbatim (it does no
-// parsing at all — see stripe.go:264), so a real legacy sync's persisted
-// cursor is whatever internal/app's recordCursor(record, "created")
-// stringified a json.Number/int64 "created" field to, i.e. a raw
-// Unix-seconds string. The engine's declarative param_format: unix_seconds
-// (read.go's formatParam) instead treats req.State["cursor"] as an RFC3339
-// input and CONVERTS it to Unix seconds for the outgoing param — this
-// bundle's x-cursor-field: created is therefore declared to persist as an
-// RFC3339 string (docs.md "Known limits"), the engine-side normalization
-// this migration adopts for its cursor representation. Feeding each
-// connector its OWN native cursor format for the identical instant and
-// asserting they produce the identical outgoing created[gte] is the correct
-// parity bar — not byte-identical cursor STATE (which is an internal
-// bookkeeping detail neither side's Read() interface exposes to callers),
-// but byte-identical WIRE BEHAVIOR for the same logical resume point.
+// arrive at the identical created[gte] WIRE VALUE (Unix seconds) when fed
+// the SAME state cursor — and that cursor is the HONEST, app-produced shape
+// (B1, REVIEW.md): internal/app/sync_modes.go's recordCursor ->
+// toComparableString stringifies a numeric "created" field verbatim, never
+// converting it to RFC3339, so a real production cursor for this stream is
+// always a bare Unix-seconds digits string like "1700000100" — nothing in
+// internal/app ever produces an RFC3339 cursor for a numeric cursor field.
+// Both legacy (which forwards the state cursor to created[gte] completely
+// verbatim, stripe.go's incrementalLowerBound) and the engine (whose
+// param_format: unix_seconds now accepts a digits-only input verbatim
+// per B1's fix to formatParam) must therefore accept and correctly forward
+// this SAME cursor shape identically — this is the honest parity bar the
+// review calls for, not a hand-crafted RFC3339 cursor no production code
+// path ever generates.
 func TestParityStripe_IncrementalCreatedGTEFromState(t *testing.T) {
 	bundle := loadStripeBundle(t)
-	const legacyCursor = "1700000100"           // legacy's native persisted-cursor shape: raw unix seconds
-	const engineCursor = "2023-11-14T22:15:00Z" // the identical instant, RFC3339 (engine's persisted-cursor shape)
+	const appPersistedCursor = "1700000100" // internal/app's actual persisted-cursor shape: raw unix seconds digits
 
 	legacySrv, legacyGot := incrementalCaptureServer(t)
 	legacy := stripe.New()
 	_ = readAllRecords(t, legacy, connectors.ReadRequest{
 		Stream: "customers",
 		Config: stripeRuntimeConfig(legacySrv.URL, nil),
-		State:  map[string]string{"cursor": legacyCursor},
+		State:  map[string]string{"cursor": appPersistedCursor},
 	})
 
 	engSrv, engGot := incrementalCaptureServer(t)
@@ -330,14 +325,14 @@ func TestParityStripe_IncrementalCreatedGTEFromState(t *testing.T) {
 	_ = readAllRecords(t, eng, connectors.ReadRequest{
 		Stream: "customers",
 		Config: stripeRuntimeConfig(engSrv.URL, nil),
-		State:  map[string]string{"cursor": engineCursor},
+		State:  map[string]string{"cursor": appPersistedCursor},
 	})
 
-	if *legacyGot != legacyCursor {
-		t.Fatalf("legacy created[gte] = %q, want %q (test fixture bug)", *legacyGot, legacyCursor)
+	if *legacyGot != appPersistedCursor {
+		t.Fatalf("legacy created[gte] = %q, want %q (test fixture bug)", *legacyGot, appPersistedCursor)
 	}
 	if *engGot != *legacyGot {
-		t.Fatalf("engine created[gte] = %q, want %q (legacy, same instant %s)", *engGot, *legacyGot, engineCursor)
+		t.Fatalf("engine created[gte] = %q, want %q (legacy, same app-persisted cursor)", *engGot, *legacyGot)
 	}
 }
 

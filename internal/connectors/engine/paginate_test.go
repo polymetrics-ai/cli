@@ -38,20 +38,20 @@ func requester(baseURL string) *connsdk.Requester {
 	return &connsdk.Requester{BaseURL: baseURL}
 }
 
-// setBaseHost sets the SSRF guard's expected host on a next_url paginator
-// from a base URL string, mirroring how read.go (wave C) derives it from
-// requester.BaseURL before the first Harvest call.
+// setBaseHost sets the SSRF guard's expected origin (scheme+host) on an
+// SSRF-guarded paginator from a base URL string, mirroring how read.go
+// derives it from requester.BaseURL before the first Harvest call.
 func setBaseHost(t *testing.T, p connsdk.Paginator, baseURL string) {
 	t.Helper()
-	nu, ok := p.(*nextURL)
+	setter, ok := p.(baseHostSetter)
 	if !ok {
-		t.Fatalf("setBaseHost: paginator is not *nextURL (%T)", p)
+		t.Fatalf("setBaseHost: paginator %T does not implement baseHostSetter", p)
 	}
 	u, err := url.Parse(baseURL)
 	if err != nil {
 		t.Fatalf("setBaseHost: parse %q: %v", baseURL, err)
 	}
-	nu.BaseHost = u.Host
+	setter.setBaseOrigin(u.Scheme, u.Host)
 }
 
 func collectPages(t *testing.T, r *connsdk.Requester, p connsdk.Paginator, recordsPath string) ([]connsdk.Record, error) {
@@ -91,10 +91,11 @@ func TestNewPaginatorLinkHeader(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "link_header"}, 0)
+	p, err := newPaginator(PaginationSpec{Type: "link_header"}, 0, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
+	setBaseHost(t, p, srv.URL)
 	records, err := collectPages(t, requester(srv.URL), p, "data")
 	if err != nil {
 		t.Fatalf("collectPages() error = %v", err)
@@ -104,6 +105,111 @@ func TestNewPaginatorLinkHeader(t *testing.T) {
 	}
 	if records[0]["id"].(json.Number) != "1" || records[2]["id"].(json.Number) != "3" {
 		t.Fatalf("unexpected record order: %+v", records)
+	}
+}
+
+// TestNewPaginatorLinkHeaderCrossHostBlocked is M1 (SECURITY-REVIEW.md
+// MAJOR): link_header pagination had NO SSRF guard at all — a hostile/
+// compromised upstream's Link: rel="next" header pointing at an arbitrary
+// host (e.g. a cloud metadata endpoint) was followed with the connector's
+// auth applied. Before the fix, newPaginator's "link_header" case returns a
+// bare *connsdk.LinkHeaderPaginator with no BaseHost concept at all.
+func TestNewPaginatorLinkHeaderCrossHostBlocked(t *testing.T) {
+	evil := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[{"id":999}]}`))
+	}))
+	defer evil.Close()
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Link", `<`+evil.URL+`/steal>; rel="next"`)
+		_, _ = w.Write([]byte(`{"data":[{"id":1}]}`))
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "link_header"}, 0, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	setBaseHost(t, p, srv.URL)
+
+	records, err := collectPages(t, requester(srv.URL), p, "data")
+	if err != nil {
+		t.Fatalf("Harvest() error = %v, want nil (guard violations surface via Err())", err)
+	}
+	if len(records) != 1 {
+		t.Fatalf("got %d records, want 1 (only page 1; the cross-host Link header must never be followed)", len(records))
+	}
+	guardErr, ok := p.(interface{ Err() error })
+	if !ok {
+		t.Fatalf("paginator %T does not expose Err() for guard-violation reporting", p)
+	}
+	if guardErr.Err() == nil {
+		t.Fatalf("Err() = nil, want SSRF guard error for cross-host Link header")
+	}
+}
+
+// TestNewPaginatorLinkHeaderSameHostAllowed locks in that ordinary
+// github-shaped same-host Link-header pagination keeps working after the
+// guard is added (github.com's own paginator docstring example).
+func TestNewPaginatorLinkHeaderSameHostAllowed(t *testing.T) {
+	hits := newHitCounter()
+	var srv *httptest.Server
+	srv = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		n := hits.record(r.URL.RawQuery)
+		if n > 1 {
+			t.Fatalf("page fetched more than once: %s", r.URL.String())
+		}
+		if r.URL.Query().Get("page") == "" {
+			w.Header().Set("Link", `<`+srv.URL+`/list?page=2>; rel="next"`)
+			_, _ = w.Write([]byte(`{"data":[{"id":1}]}`))
+			return
+		}
+		_, _ = w.Write([]byte(`{"data":[{"id":2}]}`))
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "link_header"}, 0, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	setBaseHost(t, p, srv.URL)
+
+	records, err := collectPages(t, requester(srv.URL), p, "data")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("got %d records, want 2 (same-host Link-header pagination unaffected by the guard)", len(records))
+	}
+}
+
+// TestNewPaginatorLinkHeaderAllowCrossHostEscape proves allow_cross_host
+// opts a link_header paginator out of the guard, mirroring next_url's
+// existing escape hatch.
+func TestNewPaginatorLinkHeaderAllowCrossHostEscape(t *testing.T) {
+	other := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[{"id":2}]}`))
+	}))
+	defer other.Close()
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Link", `<`+other.URL+`/list>; rel="next"`)
+		_, _ = w.Write([]byte(`{"data":[{"id":1}]}`))
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "link_header", AllowCrossHost: true}, 0, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	setBaseHost(t, p, srv.URL)
+
+	records, err := collectPages(t, requester(srv.URL), p, "data")
+	if err != nil {
+		t.Fatalf("Harvest() error = %v, want success when allow_cross_host is set", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("got %d records, want 2", len(records))
 	}
 }
 
@@ -132,7 +238,7 @@ func TestNewPaginatorPageNumberShortPageStop(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2}, 2)
+	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2}, 2, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -155,7 +261,7 @@ func TestNewPaginatorPageNumberMaxPagesStop(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 1}, 2)
+	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 1}, 2, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -197,7 +303,7 @@ func TestNewPaginatorOffsetLimitShortPageStop(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "offset_limit", LimitParam: "limit", OffsetParam: "offset", PageSize: 2}, 2)
+	p, err := newPaginator(PaginationSpec{Type: "offset_limit", LimitParam: "limit", OffsetParam: "offset", PageSize: 2}, 2, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -231,7 +337,7 @@ func TestNewPaginatorCursorTokenPathExhausts(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "cursor", CursorParam: "cursor", TokenPath: "meta.next_cursor"}, 0)
+	p, err := newPaginator(PaginationSpec{Type: "cursor", CursorParam: "cursor", TokenPath: "meta.next_cursor"}, 0, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -270,7 +376,7 @@ func TestNewPaginatorCursorLastRecordFieldStripeShape(t *testing.T) {
 		CursorParam:     "starting_after",
 		LastRecordField: "id",
 		StopPath:        "has_more",
-	}, 0)
+	}, 0, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -305,7 +411,7 @@ func TestNewPaginatorCursorLastRecordFieldEmptyPageWithHasMoreTrueDefensiveStop(
 		CursorParam:     "starting_after",
 		LastRecordField: "id",
 		StopPath:        "has_more",
-	}, 0)
+	}, 0, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -339,7 +445,7 @@ func TestNewPaginatorCursorLastRecordFieldMissingIDFieldStops(t *testing.T) {
 		CursorParam:     "starting_after",
 		LastRecordField: "id",
 		StopPath:        "has_more",
-	}, 0)
+	}, 0, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -349,6 +455,141 @@ func TestNewPaginatorCursorLastRecordFieldMissingIDFieldStops(t *testing.T) {
 	}
 	if len(records) != 1 {
 		t.Fatalf("got %d records, want 1 (stop when last record has no id field)", len(records))
+	}
+}
+
+// --- F3 (REVIEW.md flag): lastRecordCursor hardcoded the records envelope
+// path to "data" and required the last-record id field to be a Go string —
+// an API whose list key isn't "data", or whose ids are numeric, silently
+// stopped after page 1 (data truncation, no error). ---
+
+// TestNewPaginatorCursorLastRecordFieldNonDataEnvelope proves the paginator
+// derives its records-envelope path from the effective RecordsSpec (wired
+// via newPaginator's recordsPath parameter) instead of hardcoding "data".
+// Before the fix, lastRecordFieldValue always calls
+// connsdk.RecordsAt(body, "data"), so a "results"-enveloped page silently
+// truncates after page 1 (no error, no second request).
+func TestNewPaginatorCursorLastRecordFieldNonDataEnvelope(t *testing.T) {
+	hits := newHitCounter()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		key := r.URL.RawQuery
+		if hits.record(key) > 1 {
+			t.Fatalf("page fetched more than once: %s", key)
+		}
+		after := r.URL.Query().Get("starting_after")
+		switch after {
+		case "":
+			_, _ = w.Write([]byte(`{"results":[{"id":"r_1"},{"id":"r_2"}],"has_more":true}`))
+		case "r_2":
+			_, _ = w.Write([]byte(`{"results":[{"id":"r_3"}],"has_more":false}`))
+		default:
+			t.Fatalf("unexpected starting_after: %s", after)
+		}
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{
+		Type:            "cursor",
+		CursorParam:     "starting_after",
+		LastRecordField: "id",
+		StopPath:        "has_more",
+	}, 0, "results")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	records, err := collectPages(t, requester(srv.URL), p, "results")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if len(records) != 3 {
+		t.Fatalf("got %d records, want 3 (both pages fetched via the non-\"data\" envelope path)", len(records))
+	}
+}
+
+// TestNewPaginatorCursorLastRecordFieldNumericID proves a numeric (not Go
+// string) last-record id field still advances pagination instead of
+// silently stopping. Before the fix, lastRecordFieldValue's v.(string) type
+// assertion fails for a json.Number id, so ok=false and pagination halts
+// after page 1 with no error.
+func TestNewPaginatorCursorLastRecordFieldNumericID(t *testing.T) {
+	hits := newHitCounter()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		key := r.URL.RawQuery
+		if hits.record(key) > 1 {
+			t.Fatalf("page fetched more than once: %s", key)
+		}
+		after := r.URL.Query().Get("starting_after")
+		switch after {
+		case "":
+			_, _ = w.Write([]byte(`{"data":[{"id":1001},{"id":1002}],"has_more":true}`))
+		case "1002":
+			_, _ = w.Write([]byte(`{"data":[{"id":1003}],"has_more":false}`))
+		default:
+			t.Fatalf("unexpected starting_after: %s", after)
+		}
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{
+		Type:            "cursor",
+		CursorParam:     "starting_after",
+		LastRecordField: "id",
+		StopPath:        "has_more",
+	}, 0, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	records, err := collectPages(t, requester(srv.URL), p, "data")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if len(records) != 3 {
+		t.Fatalf("got %d records, want 3 (numeric last-record id must still advance pagination)", len(records))
+	}
+}
+
+// TestLastRecordFieldValueDirectUnitCases exercises lastRecordFieldValue
+// directly (unit-level, bypassing the HTTP/paginator plumbing) to cover the
+// full type-dispatch table: string, empty string (rejected), json.Number
+// (the real connsdk-decoded shape reached through a JSON body), and an
+// unsupported type (bool) / absent / null field / empty records array.
+func TestLastRecordFieldValueDirectUnitCases(t *testing.T) {
+	cases := []struct {
+		name   string
+		body   []byte
+		wantID string
+		wantOK bool
+	}{
+		{"string id", []byte(`{"data":[{"id":"cus_1"}]}`), "cus_1", true},
+		{"empty string id rejected", []byte(`{"data":[{"id":""}]}`), "", false},
+		{"json.Number integer id", []byte(`{"data":[{"id":1002}]}`), "1002", true},
+		{"unsupported bool id type", []byte(`{"data":[{"id":true}]}`), "", false},
+		{"no records", []byte(`{"data":[]}`), "", false},
+		{"field absent", []byte(`{"data":[{"name":"x"}]}`), "", false},
+		{"field null", []byte(`{"data":[{"id":null}]}`), "", false},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			id, ok := lastRecordFieldValue(tc.body, "data", "id")
+			if id != tc.wantID || ok != tc.wantOK {
+				t.Fatalf("lastRecordFieldValue() = (%q, %v), want (%q, %v)", id, ok, tc.wantID, tc.wantOK)
+			}
+		})
+	}
+}
+
+// TestStringifyLastRecordIDFloat64Cases exercises stringifyLastRecordID's
+// float64 branch directly — connsdk.RecordsAt itself always decodes with
+// UseNumber (so lastRecordFieldValue's real call path never actually
+// produces a float64), but stringifyLastRecordID is written defensively for
+// any OTHER caller that builds a records map by hand (e.g. a future
+// non-UseNumber decode path); this locks in that defensive behavior.
+func TestStringifyLastRecordIDFloat64Cases(t *testing.T) {
+	if id, ok := stringifyLastRecordID(float64(1002)); !ok || id != "1002" {
+		t.Fatalf("stringifyLastRecordID(1002.0) = (%q, %v), want (1002, true) — integral float64 must not carry a redundant .0", id, ok)
+	}
+	if id, ok := stringifyLastRecordID(1002.5); !ok || id != "1002.5" {
+		t.Fatalf("stringifyLastRecordID(1002.5) = (%q, %v), want (1002.5, true)", id, ok)
 	}
 }
 
@@ -374,7 +615,7 @@ func TestNewPaginatorNextURLFollowsAbsoluteURL(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "next_url", NextURLPath: "next"}, 0)
+	p, err := newPaginator(PaginationSpec{Type: "next_url", NextURLPath: "next"}, 0, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -396,7 +637,7 @@ func TestNewPaginatorNextURLLoopGuardSameURLTwice(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "next_url", NextURLPath: "next"}, 0)
+	p, err := newPaginator(PaginationSpec{Type: "next_url", NextURLPath: "next"}, 0, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -424,7 +665,7 @@ func TestNewPaginatorNextURLSSRFGuardDifferentHostRejected(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "next_url", NextURLPath: "next"}, 0)
+	p, err := newPaginator(PaginationSpec{Type: "next_url", NextURLPath: "next"}, 0, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -453,7 +694,7 @@ func TestNewPaginatorNextURLAllowCrossHostEscape(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "next_url", NextURLPath: "next", AllowCrossHost: true}, 0)
+	p, err := newPaginator(PaginationSpec{Type: "next_url", NextURLPath: "next", AllowCrossHost: true}, 0, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -468,6 +709,72 @@ func TestNewPaginatorNextURLAllowCrossHostEscape(t *testing.T) {
 	}
 }
 
+// TestNewPaginatorNextURLSSRFGuardSchemeDowngradeBlocked is m2
+// (SECURITY-REVIEW.md MINOR): the same-host guard compared host only, never
+// scheme — a hostile API returning "http://<same-host>/..." when the base
+// was "https://<same-host>" passed the guard, sending the follow-up request
+// (potentially carrying Authorization) in cleartext. Before the fix, this
+// same-host/different-scheme next URL is followed without error.
+func TestNewPaginatorNextURLSSRFGuardSchemeDowngradeBlocked(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Same host as the base, but http:// instead of https://.
+		downgraded := "http://" + r.Host + "/steal"
+		_, _ = w.Write([]byte(`{"data":[{"id":1}],"next":"` + downgraded + `"}`))
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "next_url", NextURLPath: "next"}, 0, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	// The test server itself is http://, so simulate the base being https by
+	// setting the guard's origin to https explicitly on the same host string.
+	nu := p.(*nextURL)
+	u, _ := url.Parse(srv.URL)
+	nu.setBaseOrigin("https", u.Host)
+
+	records, err := collectPages(t, requester(srv.URL), p, "data")
+	if err != nil {
+		t.Fatalf("Harvest() error = %v, want nil (guard violations surface via Err())", err)
+	}
+	if len(records) != 1 {
+		t.Fatalf("got %d records, want 1 (a same-host but scheme-downgraded next URL must never be followed)", len(records))
+	}
+	if guardErr := nu.Err(); guardErr == nil {
+		t.Fatalf("nextURL.Err() = nil, want scheme-downgrade guard error")
+	}
+}
+
+// TestNewPaginatorNextURLUnparseableNextURLFailsClosed is m2: an unparseable
+// next-URL body value must FAIL CLOSED (rejected), not silently pass through
+// the guard. Before the fix, urlHost("") on a parse failure returns "",
+// and the guard condition `host != "" && host != BaseHost` treats an empty
+// host as "no host to compare, allow it".
+func TestNewPaginatorNextURLUnparseableNextURLFailsClosed(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// A control character makes this an invalid URL per net/url.Parse.
+		_, _ = w.Write([]byte(`{"data":[{"id":1}],"next":"http://` + "\x7f" + `evil.example.com/steal"}`))
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "next_url", NextURLPath: "next"}, 0, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	setBaseHost(t, p, srv.URL)
+
+	records, err := collectPages(t, requester(srv.URL), p, "data")
+	if err != nil {
+		t.Fatalf("Harvest() error = %v, want nil (guard violations surface via Err())", err)
+	}
+	if len(records) != 1 {
+		t.Fatalf("got %d records, want 1 (an unparseable next URL must fail closed, never be followed)", len(records))
+	}
+	if guardErr := p.(*nextURL).Err(); guardErr == nil {
+		t.Fatalf("nextURL.Err() = nil, want fail-closed guard error for an unparseable next URL")
+	}
+}
+
 // --- none ---
 
 func TestNewPaginatorNoneSingleRequest(t *testing.T) {
@@ -478,7 +785,7 @@ func TestNewPaginatorNoneSingleRequest(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "none"}, 0)
+	p, err := newPaginator(PaginationSpec{Type: "none"}, 0, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -497,7 +804,7 @@ func TestNewPaginatorNoneSingleRequest(t *testing.T) {
 // --- malformed spec errors ---
 
 func TestNewPaginatorUnknownTypeIsError(t *testing.T) {
-	_, err := newPaginator(PaginationSpec{Type: "bogus"}, 0)
+	_, err := newPaginator(PaginationSpec{Type: "bogus"}, 0, "data")
 	if err == nil {
 		t.Fatalf("newPaginator() error = nil, want error for unknown pagination type")
 	}
@@ -509,21 +816,21 @@ func TestNewPaginatorCursorWithBothTokenSourcesIsError(t *testing.T) {
 		CursorParam:     "cursor",
 		TokenPath:       "meta.next",
 		LastRecordField: "id",
-	}, 0)
+	}, 0, "data")
 	if err == nil {
 		t.Fatalf("newPaginator() error = nil, want error when cursor spec sets both token_path and last_record_field")
 	}
 }
 
 func TestNewPaginatorCursorWithNeitherTokenSourceIsError(t *testing.T) {
-	_, err := newPaginator(PaginationSpec{Type: "cursor", CursorParam: "cursor"}, 0)
+	_, err := newPaginator(PaginationSpec{Type: "cursor", CursorParam: "cursor"}, 0, "data")
 	if err == nil {
 		t.Fatalf("newPaginator() error = nil, want error when cursor spec sets neither token_path nor last_record_field")
 	}
 }
 
 func TestNewPaginatorNextURLMissingPathIsError(t *testing.T) {
-	_, err := newPaginator(PaginationSpec{Type: "next_url"}, 0)
+	_, err := newPaginator(PaginationSpec{Type: "next_url"}, 0, "data")
 	if err == nil {
 		t.Fatalf("newPaginator() error = nil, want error when next_url spec has no next_url_path")
 	}
@@ -542,7 +849,7 @@ func TestNewPaginatorMalformedSpecTable(t *testing.T) {
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			if _, err := newPaginator(tc.spec, 0); err == nil {
+			if _, err := newPaginator(tc.spec, 0, "data"); err == nil {
 				t.Fatalf("newPaginator(%+v) error = nil, want error", tc.spec)
 			}
 		})

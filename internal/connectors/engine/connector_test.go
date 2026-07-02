@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -180,6 +181,101 @@ func TestConnectorDefinitionSynthesizedFromBundle(t *testing.T) {
 	}
 	if def.WriteActions[0].Method != "PATCH" || def.WriteActions[0].Risk != "medium" {
 		t.Fatalf("Definition().WriteActions[0] = %+v, want method=PATCH risk=medium", def.WriteActions[0])
+	}
+}
+
+// --- F5 (REVIEW.md flag): Definition.Spec must be the bundle's VERBATIM
+// spec.json bytes, not a lossy reconstruction (every property flattened to
+// {"type":"string"}, dropping enum/default/required/descriptions/non-string
+// types). ---
+
+func richSpecJSONFullBundleFS(name string) fstest.MapFS {
+	richSpec := `{
+		"$schema": "http://json-schema.org/draft-07/schema#",
+		"type": "object",
+		"required": ["base_url"],
+		"properties": {
+			"base_url": { "type": "string", "description": "Base URL." },
+			"port": { "type": "integer", "default": 5432 },
+			"sslmode": { "type": "string", "enum": ["disable", "require", "verify-full"], "default": "require" },
+			"token": { "type": "string", "x-secret": true }
+		}
+	}`
+	fsys := fullValidBundleFS(name)
+	fsys[name+"/spec.json"] = &fstest.MapFile{Data: []byte(richSpec)}
+	return fsys
+}
+
+func TestDefinitionSpecByteEqualsBundleSpecJSON(t *testing.T) {
+	fsys := richSpecJSONFullBundleFS("acme")
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+
+	c := New(b, nil)
+	def := c.Definition()
+
+	wantRaw := fsys["acme/spec.json"].Data
+	var want, got map[string]any
+	if err := json.Unmarshal(wantRaw, &want); err != nil {
+		t.Fatalf("unmarshal want spec.json: %v", err)
+	}
+	if err := json.Unmarshal(def.Spec, &got); err != nil {
+		t.Fatalf("Definition().Spec is not valid JSON: %v (%s)", err, def.Spec)
+	}
+
+	// Canonical re-marshal comparison (tolerates whitespace-only differences,
+	// not semantic ones): every field (type, enum, default, required,
+	// description, x-secret) must survive verbatim — the F5 bug flattened all
+	// of this to {"type":"string"}.
+	wantCanon, _ := json.Marshal(want)
+	gotCanon, _ := json.Marshal(got)
+	if string(gotCanon) != string(wantCanon) {
+		t.Fatalf("Definition().Spec = %s, want byte-equivalent to bundle spec.json %s", gotCanon, wantCanon)
+	}
+
+	// Spot-check the specific fields the lossy reconstruction dropped.
+	props, ok := got["properties"].(map[string]any)
+	if !ok {
+		t.Fatalf("Definition().Spec properties = %+v, want an object", got["properties"])
+	}
+	port, ok := props["port"].(map[string]any)
+	if !ok || port["type"] != "integer" {
+		t.Fatalf("Definition().Spec properties.port = %+v, want type=integer preserved (not flattened to string)", props["port"])
+	}
+	if port["default"] == nil {
+		t.Fatalf("Definition().Spec properties.port = %+v, want default preserved", props["port"])
+	}
+	sslmode, ok := props["sslmode"].(map[string]any)
+	if !ok || sslmode["enum"] == nil {
+		t.Fatalf("Definition().Spec properties.sslmode = %+v, want enum preserved", props["sslmode"])
+	}
+	if got["required"] == nil {
+		t.Fatalf("Definition().Spec = %+v, want top-level required[] preserved", got)
+	}
+}
+
+// TestConnectorDefinitionSpecFallsBackForAdHocBundleWithNoRawSpec locks in
+// backward compatibility: a bundle built ad hoc in a test (never loaded via
+// Load, so RawSpec was never populated) still gets a valid Definition().Spec
+// derived from whatever *Schema it DID set — the existing
+// TestConnectorDefinitionSynthesizedFromBundle behavior, unchanged.
+func TestConnectorDefinitionSpecFallsBackForAdHocBundleWithNoRawSpec(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	t.Cleanup(srv.Close)
+	b := newConnectorTestBundle(t, srv) // Spec set via minimalSpecSchema, RawSpec never set
+
+	c := New(b, nil)
+	def := c.Definition()
+
+	var specDecoded map[string]any
+	if err := json.Unmarshal(def.Spec, &specDecoded); err != nil {
+		t.Fatalf("Definition().Spec is not valid JSON: %v (%s)", err, def.Spec)
+	}
+	props, ok := specDecoded["properties"].(map[string]any)
+	if !ok || props["api_key"] == nil {
+		t.Fatalf("Definition().Spec = %+v, want reconstructed properties.api_key (fallback path for a bundle with no RawSpec)", specDecoded)
 	}
 }
 

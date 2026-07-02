@@ -27,7 +27,7 @@ func TestSelectAuthBearerWhenMatches(t *testing.T) {
 	}
 	cfg := cfgWith(map[string]string{"auth_type": "auto"}, map[string]string{"token": "sekret"})
 
-	auth, err := selectAuth(cfg, specs, nil)
+	auth, err := selectAuth(context.Background(), cfg, specs, nil)
 	if err != nil {
 		t.Fatalf("selectAuth() error = %v", err)
 	}
@@ -46,7 +46,7 @@ func TestSelectAuthNoneWhenPublic(t *testing.T) {
 	}
 	cfg := cfgWith(map[string]string{"auth_type": "public"}, nil)
 
-	auth, err := selectAuth(cfg, specs, nil)
+	auth, err := selectAuth(context.Background(), cfg, specs, nil)
 	if err != nil {
 		t.Fatalf("selectAuth() error = %v", err)
 	}
@@ -64,7 +64,7 @@ func TestSelectAuthBasic(t *testing.T) {
 	}
 	cfg := cfgWith(map[string]string{"user": "alice"}, map[string]string{"pass": "hunter2"})
 
-	auth, err := selectAuth(cfg, specs, nil)
+	auth, err := selectAuth(context.Background(), cfg, specs, nil)
 	if err != nil {
 		t.Fatalf("selectAuth() error = %v", err)
 	}
@@ -83,7 +83,7 @@ func TestSelectAuthAPIKeyHeaderWithPrefix(t *testing.T) {
 	}
 	cfg := cfgWith(nil, map[string]string{"key": "abc123"})
 
-	auth, err := selectAuth(cfg, specs, nil)
+	auth, err := selectAuth(context.Background(), cfg, specs, nil)
 	if err != nil {
 		t.Fatalf("selectAuth() error = %v", err)
 	}
@@ -101,7 +101,7 @@ func TestSelectAuthAPIKeyQuery(t *testing.T) {
 	}
 	cfg := cfgWith(nil, map[string]string{"key": "abc123"})
 
-	auth, err := selectAuth(cfg, specs, nil)
+	auth, err := selectAuth(context.Background(), cfg, specs, nil)
 	if err != nil {
 		t.Fatalf("selectAuth() error = %v", err)
 	}
@@ -135,7 +135,7 @@ func TestSelectAuthOAuth2ClientCredentialsFetchesAndCachesToken(t *testing.T) {
 		map[string]string{"client_secret": "csecret"},
 	)
 
-	auth, err := selectAuth(cfg, specs, nil)
+	auth, err := selectAuth(context.Background(), cfg, specs, nil)
 	if err != nil {
 		t.Fatalf("selectAuth() error = %v", err)
 	}
@@ -175,12 +175,54 @@ func TestSelectAuthCustomResolvesAuthHook(t *testing.T) {
 	}
 	cfg := cfgWith(nil, nil)
 
-	auth, err := selectAuth(cfg, specs, hooks)
+	auth, err := selectAuth(context.Background(), cfg, specs, hooks)
 	if err != nil {
 		t.Fatalf("selectAuth() error = %v", err)
 	}
 	if auth != want {
 		t.Fatalf("selectAuth() did not return the AuthHook's authenticator")
+	}
+}
+
+// --- F8 (REVIEW.md flag): AuthHook.Authenticator must be called with the
+// CALLER's ctx, not context.Background() — a github_app JWT->installation-
+// token exchange (network call) needs to honor cancellation/deadlines. ---
+
+type ctxProbeKey struct{}
+
+// ctxProbeAuthHook is a fake AuthHook that stashes the ctx it actually
+// received (via Value lookup on ctxProbeKey) into probe, so the test can
+// assert selectAuth threaded the CALLER's context through rather than
+// substituting context.Background().
+type ctxProbeAuthHook struct {
+	name  string
+	probe *string
+}
+
+func (f *ctxProbeAuthHook) ConnectorName() string { return f.name }
+func (f *ctxProbeAuthHook) Authenticator(ctx context.Context, _ connectors.RuntimeConfig, _ AuthSpec) (connsdk.Authenticator, error) {
+	if v, ok := ctx.Value(ctxProbeKey{}).(string); ok {
+		*f.probe = v
+	} else {
+		*f.probe = ""
+	}
+	return connsdk.Bearer("hook-token"), nil
+}
+
+func TestSelectAuthCustomThreadsCallerContext(t *testing.T) {
+	var got string
+	hooks := &ctxProbeAuthHook{name: "acme", probe: &got}
+
+	specs := []AuthSpec{{Mode: "custom", Hook: "acme"}}
+	cfg := cfgWith(nil, nil)
+
+	ctx := context.WithValue(context.Background(), ctxProbeKey{}, "caller-marker")
+	_, err := selectAuth(ctx, cfg, specs, hooks)
+	if err != nil {
+		t.Fatalf("selectAuth() error = %v", err)
+	}
+	if got != "caller-marker" {
+		t.Fatalf("AuthHook.Authenticator received ctx value = %q, want %q (selectAuth must thread the caller's ctx, not context.Background())", got, "caller-marker")
 	}
 }
 
@@ -191,13 +233,13 @@ func TestSelectAuthCustomMissingHookIsTypedError(t *testing.T) {
 	cfg := cfgWith(nil, nil)
 
 	// nil Hooks: no hook set registered at all.
-	_, err := selectAuth(cfg, specs, nil)
+	_, err := selectAuth(context.Background(), cfg, specs, nil)
 	if err == nil {
 		t.Fatalf("selectAuth() error = nil, want error naming missing hook %q", "acme")
 	}
 
 	// Hooks present but does not implement AuthHook.
-	_, err2 := selectAuth(cfg, specs, plainHooks{name: "acme"})
+	_, err2 := selectAuth(context.Background(), cfg, specs, plainHooks{name: "acme"})
 	if err2 == nil {
 		t.Fatalf("selectAuth() error = nil, want error when Hooks does not implement AuthHook")
 	}
@@ -215,14 +257,14 @@ func TestSelectAuthNoRuleMatchesIsTypedError(t *testing.T) {
 	}
 	cfg := cfgWith(map[string]string{"auth_type": "public"}, nil)
 
-	_, err := selectAuth(cfg, specs, nil)
+	_, err := selectAuth(context.Background(), cfg, specs, nil)
 	if err == nil {
 		t.Fatalf("selectAuth() error = nil, want typed error naming auth_type when no rule matches")
 	}
 }
 
 func TestSelectAuthEmptySpecsIsError(t *testing.T) {
-	_, err := selectAuth(cfgWith(nil, nil), nil, nil)
+	_, err := selectAuth(context.Background(), cfgWith(nil, nil), nil, nil)
 	if err == nil {
 		t.Fatalf("selectAuth() error = nil, want error for empty spec list")
 	}
@@ -236,7 +278,7 @@ func TestSelectAuthFirstDeclaredRuleWinsOnOrdering(t *testing.T) {
 	}
 	cfg := cfgWith(nil, nil)
 
-	auth, err := selectAuth(cfg, specs, nil)
+	auth, err := selectAuth(context.Background(), cfg, specs, nil)
 	if err != nil {
 		t.Fatalf("selectAuth() error = %v", err)
 	}
@@ -260,7 +302,7 @@ func TestSelectAuthGithubStyleAutoTokenPublicTable(t *testing.T) {
 
 	t.Run("auto with token set uses bearer", func(t *testing.T) {
 		cfg := cfgWith(map[string]string{"auth_type": "auto"}, map[string]string{"token": "tok"})
-		auth, err := selectAuth(cfg, specs, nil)
+		auth, err := selectAuth(context.Background(), cfg, specs, nil)
 		if err != nil {
 			t.Fatalf("selectAuth() error = %v", err)
 		}
@@ -273,7 +315,7 @@ func TestSelectAuthGithubStyleAutoTokenPublicTable(t *testing.T) {
 
 	t.Run("token explicit uses bearer", func(t *testing.T) {
 		cfg := cfgWith(map[string]string{"auth_type": "token"}, map[string]string{"token": "tok2"})
-		auth, err := selectAuth(cfg, specs, nil)
+		auth, err := selectAuth(context.Background(), cfg, specs, nil)
 		if err != nil {
 			t.Fatalf("selectAuth() error = %v", err)
 		}
@@ -286,7 +328,7 @@ func TestSelectAuthGithubStyleAutoTokenPublicTable(t *testing.T) {
 
 	t.Run("public uses none", func(t *testing.T) {
 		cfg := cfgWith(map[string]string{"auth_type": "public"}, nil)
-		auth, err := selectAuth(cfg, specs, nil)
+		auth, err := selectAuth(context.Background(), cfg, specs, nil)
 		if err != nil {
 			t.Fatalf("selectAuth() error = %v", err)
 		}
@@ -301,7 +343,7 @@ func TestSelectAuthGithubStyleAutoTokenPublicTable(t *testing.T) {
 		want := connsdk.Bearer("installation-token")
 		hooks := &fakeAuthHook{name: "github_app", auth: want}
 		cfg := cfgWith(map[string]string{"auth_type": "github_app"}, nil)
-		auth, err := selectAuth(cfg, specs, hooks)
+		auth, err := selectAuth(context.Background(), cfg, specs, hooks)
 		if err != nil {
 			t.Fatalf("selectAuth() error = %v", err)
 		}
@@ -317,7 +359,7 @@ func TestSelectAuthSecretsNeverInError(t *testing.T) {
 	}
 	cfg := cfgWith(nil, map[string]string{"other": "sk_live_shouldnotleak"})
 
-	_, err := selectAuth(cfg, specs, nil)
+	_, err := selectAuth(context.Background(), cfg, specs, nil)
 	if err == nil {
 		t.Fatalf("selectAuth() error = nil, want unresolved-key error")
 	}

@@ -1,7 +1,10 @@
 poly
 
-# Built binary (Makefile builds ./pm; ~45MB, do not commit)
+# Built binaries (do not commit)
 /pm
+/inventorygen
+/connectorgen
+/registrygen
 
 # Local Claude Code settings
 .claude/settings.local.json

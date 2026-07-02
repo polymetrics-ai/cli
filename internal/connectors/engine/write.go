@@ -156,7 +156,7 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
 
-	rt, err := newRuntime(b, req.Config, h)
+	rt, err := newRuntime(ctx, b, req.Config, h)
 	if err != nil {
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}

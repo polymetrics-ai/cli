@@ -280,17 +280,20 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 	}
 }
 
-// specJSON returns a JSON object reconstructed from the bundle's compiled
-// spec.json: one property per declared config field, with x-secret carried
-// through for properties in SecretKeys(). *Schema does not retain the
-// original spec.json bytes (schema.go, out of this task's scope, only stores
-// the compiled node), so this is a faithful-but-not-byte-identical
-// reconstruction of the config field set rather than a verbatim passthrough;
-// callers needing byte-for-byte spec.json (e.g. connectorgen) should read the
-// file directly rather than go through Definition.Spec. A bundle with no
-// compiled spec (e.g. an ad hoc test bundle that never set Spec) gets an
-// empty JSON object.
+// specJSON returns the bundle's spec.json VERBATIM (F5, REVIEW.md fix): a
+// bundle loaded via Load/LoadAll always has RawSpec populated with the exact
+// bytes read from disk, so Definition.Spec now serves types, enums,
+// defaults, required, and descriptions byte-for-byte instead of a lossy
+// reconstruction. A bundle with no RawSpec at all (an ad hoc test bundle
+// that only ever set Spec directly, never went through Load) falls back to
+// reconstructing a JSON object from the compiled *Schema's Properties()/
+// SecretKeys() — every property flattened to {"type":"string"} (+x-secret) —
+// preserving prior behavior for that construction path. A bundle with
+// NEITHER RawSpec NOR Spec gets an empty JSON object.
 func specJSON(b Bundle) []byte {
+	if len(b.RawSpec) > 0 {
+		return []byte(b.RawSpec)
+	}
 	if b.Spec == nil {
 		return []byte("{}")
 	}

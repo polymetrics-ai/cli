@@ -20,11 +20,14 @@ func authVars(cfg connectors.RuntimeConfig) Vars {
 // selectAuth evaluates specs in declared order and returns the
 // connsdk.Authenticator for the first spec whose "when" condition matches
 // (a spec with no "when" always matches). mode "custom" resolves an
-// AuthHook via h (the connector's registered Hooks, or nil when none).
-// Secret values flow only into the constructed Authenticator, never into
-// error messages (mirrors stripe/stripe.go:279 — secrets never read from
-// Config, only Secrets).
-func selectAuth(cfg connectors.RuntimeConfig, specs []AuthSpec, h Hooks) (connsdk.Authenticator, error) {
+// AuthHook via h (the connector's registered Hooks, or nil when none). ctx
+// is the caller's context, threaded through to AuthHook.Authenticator (F8,
+// REVIEW.md: a github_app-style JWT->installation-token exchange is a
+// network call and must honor the caller's cancellation/deadline, not run
+// under context.Background()). Secret values flow only into the constructed
+// Authenticator, never into error messages (mirrors stripe/stripe.go:279 —
+// secrets never read from Config, only Secrets).
+func selectAuth(ctx context.Context, cfg connectors.RuntimeConfig, specs []AuthSpec, h Hooks) (connsdk.Authenticator, error) {
 	if len(specs) == 0 {
 		return nil, fmt.Errorf("select auth: no auth specs declared")
 	}
@@ -39,7 +42,7 @@ func selectAuth(cfg connectors.RuntimeConfig, specs []AuthSpec, h Hooks) (connsd
 		if !matched {
 			continue
 		}
-		return buildAuthenticator(cfg, spec, vars, h)
+		return buildAuthenticator(ctx, cfg, spec, vars, h)
 	}
 
 	return nil, fmt.Errorf("select auth: no auth spec matched for auth_type %q", cfg.Config["auth_type"])
@@ -56,7 +59,7 @@ func authSpecMatches(spec AuthSpec, vars Vars) (bool, error) {
 
 // buildAuthenticator constructs the connsdk.Authenticator for a matched
 // spec, interpolating every templated field first.
-func buildAuthenticator(cfg connectors.RuntimeConfig, spec AuthSpec, vars Vars, h Hooks) (connsdk.Authenticator, error) {
+func buildAuthenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, vars Vars, h Hooks) (connsdk.Authenticator, error) {
 	switch spec.Mode {
 	case "none":
 		return connsdk.AuthFunc(func(_ context.Context, _ *http.Request) error { return nil }), nil
@@ -97,7 +100,7 @@ func buildAuthenticator(cfg connectors.RuntimeConfig, spec AuthSpec, vars Vars, 
 		return buildOAuth2ClientCredentials(spec, vars)
 
 	case "custom":
-		return buildCustomAuth(cfg, spec, h)
+		return buildCustomAuth(ctx, cfg, spec, h)
 
 	default:
 		return nil, fmt.Errorf("unknown auth mode %q", spec.Mode)
@@ -138,8 +141,12 @@ func buildOAuth2ClientCredentials(spec AuthSpec, vars Vars) (connsdk.Authenticat
 // buildCustomAuth resolves an AuthHook for spec.Hook via h. A nil Hooks, or
 // a Hooks that does not implement AuthHook, is a typed error naming the
 // missing hook rather than a workaround (per PLAN.md: a needed hook is a
-// blocker, never silently skipped).
-func buildCustomAuth(cfg connectors.RuntimeConfig, spec AuthSpec, h Hooks) (connsdk.Authenticator, error) {
+// blocker, never silently skipped). ctx is the caller's context (F8):
+// AuthHook.Authenticator is invoked with it directly, never
+// context.Background(), so a hook that performs a network call (e.g. a
+// github_app JWT->installation-token exchange) honors the caller's
+// cancellation/deadline.
+func buildCustomAuth(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, h Hooks) (connsdk.Authenticator, error) {
 	if h == nil {
 		return nil, fmt.Errorf("custom auth: hook %q not registered (no hooks provided)", spec.Hook)
 	}
@@ -147,5 +154,5 @@ func buildCustomAuth(cfg connectors.RuntimeConfig, spec AuthSpec, h Hooks) (conn
 	if !ok {
 		return nil, fmt.Errorf("custom auth: hook %q not registered (hooks %q does not implement AuthHook)", spec.Hook, h.ConnectorName())
 	}
-	return authHook.Authenticator(context.Background(), cfg, spec)
+	return authHook.Authenticator(ctx, cfg, spec)
 }

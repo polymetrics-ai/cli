@@ -176,6 +176,161 @@ func TestReadIncrementalParamFormats(t *testing.T) {
 	}
 }
 
+// --- B1 (REVIEW.md BLOCK): formatParam must accept a digits-only
+// (unix-seconds) cursor input as well as RFC3339, since that is the ONLY
+// shape internal/app actually ever persists for a numeric cursor field
+// (internal/app/sync_modes.go recordCursor -> toComparableString stringifies
+// a json.Number/int64 verbatim, never converting it to RFC3339). ---
+
+func TestFormatParamUnixSecondsAcceptsDigitsPassthrough(t *testing.T) {
+	got, err := formatParam("1700000100", "unix_seconds")
+	if err != nil {
+		t.Fatalf("formatParam(digits, unix_seconds) error = %v, want digits-passthrough (matches legacy verbatim-forward semantics)", err)
+	}
+	if got != "1700000100" {
+		t.Fatalf("formatParam(digits, unix_seconds) = %q, want %q (verbatim)", got, "1700000100")
+	}
+}
+
+func TestFormatParamUnixSecondsStillAcceptsRFC3339(t *testing.T) {
+	got, err := formatParam("2026-03-01T12:00:00Z", "unix_seconds")
+	if err != nil {
+		t.Fatalf("formatParam(rfc3339, unix_seconds) error = %v", err)
+	}
+	if got != "1772366400" {
+		t.Fatalf("formatParam(rfc3339, unix_seconds) = %q, want 1772366400", got)
+	}
+}
+
+func TestFormatParamDateAcceptsDigitsPassthrough(t *testing.T) {
+	// 1700000100 unix seconds = 2023-11-14T22:15:00Z -> date "2023-11-14".
+	got, err := formatParam("1700000100", "date")
+	if err != nil {
+		t.Fatalf("formatParam(digits, date) error = %v, want the digits interpreted as unix seconds then formatted", err)
+	}
+	if got != "2023-11-14" {
+		t.Fatalf("formatParam(digits, date) = %q, want 2023-11-14", got)
+	}
+}
+
+func TestFormatParamGithubDateRangeAcceptsDigitsPassthrough(t *testing.T) {
+	got, err := formatParam("1700000100", "github_date_range")
+	if err != nil {
+		t.Fatalf("formatParam(digits, github_date_range) error = %v, want the digits interpreted as unix seconds then formatted as an RFC3339 lower bound", err)
+	}
+	if got != ">=2023-11-14T22:15:00Z" {
+		t.Fatalf("formatParam(digits, github_date_range) = %q, want >=2023-11-14T22:15:00Z", got)
+	}
+}
+
+func TestFormatParamRFC3339PassesThroughVerbatimUnaffected(t *testing.T) {
+	got, err := formatParam("2026-03-01T12:00:00Z", "rfc3339")
+	if err != nil {
+		t.Fatalf("formatParam(rfc3339, rfc3339) error = %v", err)
+	}
+	if got != "2026-03-01T12:00:00Z" {
+		t.Fatalf("formatParam(rfc3339, rfc3339) = %q, want verbatim passthrough", got)
+	}
+}
+
+// toComparableStringLikeApp is a deliberate, LOCAL copy of
+// internal/app/sync_modes.go's toComparableString (read-only reference; the
+// engine package must not import internal/app per PLAN.md). It exists only so
+// this test can prove the exact app-persisted cursor SHAPE without importing
+// app, per the task's "mimic recordCursor stringification" instruction.
+func toComparableStringLikeApp(value any) string {
+	switch v := value.(type) {
+	case nil:
+		return ""
+	case string:
+		return v
+	case json.Number:
+		return v.String()
+	case float64:
+		if v == float64(int64(v)) {
+			return strconv_FormatInt(int64(v))
+		}
+		return strconv_FormatFloat(v)
+	default:
+		return fmt.Sprint(v)
+	}
+}
+
+func strconv_FormatInt(v int64) string {
+	return fmt.Sprintf("%d", v)
+}
+
+func strconv_FormatFloat(v float64) string {
+	return fmt.Sprintf("%v", v)
+}
+
+// TestReadAppLevelCursorRoundTrip is the honest B1 parity bar: read a stream
+// whose "created" cursor field arrives as a numeric (json.Number) wire value
+// (Stripe's real shape), derive the persisted state cursor EXACTLY the way
+// internal/app/sync_modes.go's recordCursor does (stringify the raw
+// json.Number verbatim, never converting to RFC3339), feed that cursor back
+// into a second Read as req.State["cursor"], and assert the resumed read
+// sends the correct unix-seconds lower-bound query value. Before the B1 fix
+// this fails at the second Read call with formatParam's RFC3339-parse error.
+func TestReadAppLevelCursorRoundTrip(t *testing.T) {
+	var gotSince []string
+	page := 0
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotSince = append(gotSince, r.URL.Query().Get("created_gte"))
+		page++
+		switch page {
+		case 1:
+			_, _ = w.Write([]byte(`{"data":[{"id":"cus_1","name":"a","updated_at":1700000000},{"id":"cus_2","name":"b","updated_at":1700000100}]}`))
+		default:
+			_, _ = w.Write([]byte(`{"data":[]}`))
+		}
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records:     RecordsSpec{Path: "data"},
+		Incremental: &IncrementalSpec{CursorField: "updated_at", RequestParam: "created_gte", ParamFormat: "unix_seconds"},
+	})
+	// widgetsSchema declares "updated_at" as a string property; the wire value
+	// here is numeric, matching connsdk's json.Number-preserving decode of a
+	// real Stripe-shaped "created" field. Schema validation is not invoked on
+	// read (only on write), so this is safe.
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read (first, full sync): %v", err)
+	}
+	if len(recs) != 2 {
+		t.Fatalf("records = %+v, want 2", recs)
+	}
+
+	// Derive the persisted cursor exactly the way internal/app does: the MAX
+	// across emitted records of recordCursor(record, "updated_at") stringified
+	// via toComparableString. Both records here carry a json.Number
+	// "updated_at" (connsdk decodes with UseNumber), so this reproduces the
+	// real "1700000100" persisted-cursor shape from B1's failure scenario.
+	persisted := ""
+	for _, r := range recs {
+		cursor := toComparableStringLikeApp(r["updated_at"])
+		if persisted == "" || cursor > persisted {
+			persisted = cursor
+		}
+	}
+	if persisted != "1700000100" {
+		t.Fatalf("persisted cursor = %q, want %q (app-persisted unix-seconds string shape)", persisted, "1700000100")
+	}
+
+	// Resume: second Read with the app-persisted cursor must succeed AND send
+	// the correct unix-seconds value (itself, verbatim) as created_gte.
+	page = 0
+	gotSince = nil
+	_, err = readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", State: map[string]string{"cursor": persisted}}, nil)
+	if err != nil {
+		t.Fatalf("Read (resume with app-persisted cursor %q): %v (B1: formatParam must accept digits-only unix_seconds input)", persisted, err)
+	}
+	if len(gotSince) == 0 || gotSince[0] != "1700000100" {
+		t.Fatalf("resume created_gte = %v, want first request to carry %q", gotSince, "1700000100")
+	}
+}
+
 // --- records extraction ---
 
 func TestReadRecordsPathDot(t *testing.T) {
@@ -348,6 +503,72 @@ func TestReadComputedFieldsMissingIntermediateDoesNotPanic(t *testing.T) {
 	}
 	if v, ok := recs[0]["user_login"]; ok && v != nil {
 		t.Fatalf("user_login = %v, want nil/absent for missing intermediate", v)
+	}
+}
+
+// TestReadComputedFieldsStaticLiteralNoTemplate proves a computed_fields
+// entry whose value has NO {{ }} template markers at all (F7 meta-rule
+// enablement: a static literal, e.g. "source_system": "searxng") is emitted
+// as that exact literal string, not treated as an interpolation error or
+// dropped. This already works via Interpolate's existing "no {{ }} match
+// means no replacement" semantics (interpolate()'s ReplaceAllStringFunc is a
+// no-op when the template has nothing to replace) — this test locks it in as
+// a named regression guard rather than leaving the behavior implicit.
+func TestReadComputedFieldsStaticLiteralNoTemplate(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[{"id":"1","name":"a","updated_at":"2026-01-01T00:00:00Z"}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records:        RecordsSpec{Path: "data"},
+		ComputedFields: map[string]string{"source_system": "searxng"},
+	})
+	raw := json.RawMessage(`{
+		"type": "object", "x-primary-key": ["id"], "x-cursor-field": "updated_at",
+		"properties": {"id":{"type":"string"},"name":{"type":"string"},"updated_at":{"type":"string"},"source_system":{"type":"string"}}
+	}`)
+	sch, err := CompileSchema(raw)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b.Schemas["widgets"] = &StreamSchema{Schema: sch, PrimaryKey: sch.PrimaryKeys(), CursorField: sch.CursorFieldName()}
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(recs) != 1 || recs[0]["source_system"] != "searxng" {
+		t.Fatalf("records = %+v, want source_system=searxng (static literal, no {{ }} markers)", recs)
+	}
+}
+
+// TestReadComputedFieldsJoinFilterArrayField proves the join:<sep> filter
+// (F7 meta-rule enablement) is reachable through the full Read path: an
+// array-valued raw record field joined into a separator-delimited string
+// computed field, without changing the record's OTHER emitted fields.
+func TestReadComputedFieldsJoinFilterArrayField(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[{"id":"1","name":"a","updated_at":"2026-01-01T00:00:00Z","engines":["google","bing","ddg"]}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records:        RecordsSpec{Path: "data"},
+		ComputedFields: map[string]string{"engines_csv": "{{ record.engines | join:, }}"},
+	})
+	raw := json.RawMessage(`{
+		"type": "object", "x-primary-key": ["id"], "x-cursor-field": "updated_at",
+		"properties": {"id":{"type":"string"},"name":{"type":"string"},"updated_at":{"type":"string"},"engines_csv":{"type":"string"}}
+	}`)
+	sch, err := CompileSchema(raw)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b.Schemas["widgets"] = &StreamSchema{Schema: sch, PrimaryKey: sch.PrimaryKeys(), CursorField: sch.CursorFieldName()}
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(recs) != 1 || recs[0]["engines_csv"] != "google,bing,ddg" {
+		t.Fatalf("records = %+v, want engines_csv=google,bing,ddg", recs)
 	}
 }
 
@@ -1009,5 +1230,214 @@ func TestReadNextURLPaginationCrossHostBlocked(t *testing.T) {
 	}
 	if !containsStr(err.Error(), "cross-host") {
 		t.Fatalf("error = %q, want cross-host guard message", err.Error())
+	}
+}
+
+// --- F1 (REVIEW.md high flag / SECURITY-REVIEW.md m3): stream.Path and
+// HTTP.Check.Path must be run through InterpolatePath, exactly like write.go
+// already does for action.Path. Before the fix, `{{ }}` markers in a stream
+// path are sent to the live API LITERALLY. ---
+
+func TestReadStreamPathIsInterpolated(t *testing.T) {
+	var gotPath string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.EscapedPath()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Path: "/repos/{{ config.repo }}", Records: RecordsSpec{Path: "data"}})
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"repo": "acme/widgets"}}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	// InterpolatePath urlencodes by default (path segments are the primary
+	// injection surface, THREAT-MODEL §2): "/" in the config value is encoded
+	// on the wire (net/http decodes r.URL.Path for handler convenience, so the
+	// escaped form is what proves the literal-vs-interpolated distinction).
+	if gotPath != "/repos/acme%2Fwidgets" {
+		t.Fatalf("escaped path = %q, want /repos/acme%%2Fwidgets (templated path must be interpolated+urlencoded, not sent literally)", gotPath)
+	}
+}
+
+func TestReadStreamPathUnresolvedKeyErrors(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		t.Fatalf("no request should be sent when the stream path template cannot be resolved")
+	})
+	b := newTestBundle(t, srv, StreamSpec{Path: "/repos/{{ config.missing_repo }}", Records: RecordsSpec{Path: "data"}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err == nil {
+		t.Fatalf("Read: want error when the stream path template cannot be resolved")
+	}
+}
+
+// TestReadStreamPathStaticGoldenUnaffected locks in that a static
+// (non-templated) path — what every wave0 golden bundle uses — round-trips
+// unchanged through InterpolatePath (no `{{ }}` markers means no
+// replacement, hence no accidental encoding of literal path characters).
+func TestReadStreamPathStaticGoldenUnaffected(t *testing.T) {
+	var gotPath string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Path: "/widgets/all", Records: RecordsSpec{Path: "data"}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotPath != "/widgets/all" {
+		t.Fatalf("path = %q, want /widgets/all (static path unaffected)", gotPath)
+	}
+}
+
+func TestCheckPathIsInterpolated(t *testing.T) {
+	var gotPath string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	})
+	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL, Check: &RequestSpec{Method: "GET", Path: "/accounts/{{ config.account_id }}/status"}}}
+
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"account_id": "acct_123"}}
+	if err := Check(context.Background(), b, cfg, nil); err != nil {
+		t.Fatalf("Check: %v", err)
+	}
+	if gotPath != "/accounts/acct_123/status" {
+		t.Fatalf("path = %q, want /accounts/acct_123/status (check path must be interpolated)", gotPath)
+	}
+}
+
+func TestCheckPathUnresolvedKeyErrors(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		t.Fatalf("no request should be sent when the check path template cannot be resolved")
+	})
+	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL, Check: &RequestSpec{Method: "GET", Path: "/accounts/{{ config.missing_account_id }}/status"}}}
+
+	err := Check(context.Background(), b, connectors.RuntimeConfig{}, nil)
+	if err == nil {
+		t.Fatalf("Check: want error when the check path template cannot be resolved")
+	}
+}
+
+// --- F4 (REVIEW.md flag / SECURITY-REVIEW.md finding): resolveHeaders
+// swallowed ANY unresolved-key error uniformly (isUnresolvedKey substring
+// match), so a header referencing an absent secrets.* key was SILENTLY
+// OMITTED — sending the request unauthenticated instead of failing. ---
+
+// specSchemaWithRequired compiles a minimal spec.json-shaped Schema (as
+// Bundle.Spec) declaring optionalKey as a plain declared property and
+// requiredKey (when non-empty) as also present in "required".
+func specSchemaWithRequired(t *testing.T, optionalKey, requiredKey string) *Schema {
+	t.Helper()
+	props := `"` + optionalKey + `": {"type": "string"}`
+	req := ""
+	if requiredKey != "" {
+		props += `, "` + requiredKey + `": {"type": "string"}`
+		req = `, "required": ["` + requiredKey + `"]`
+	}
+	raw := json.RawMessage(`{"type": "object", "properties": {` + props + `}` + req + `}`)
+	sch, err := CompileSchema(raw)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	return sch
+}
+
+func TestReadHeaderAbsentSecretAuthorizationErrors(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		t.Fatalf("no request should be sent unauthenticated when a secrets.* header reference cannot be resolved")
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+	b.HTTP.Headers = map[string]string{"Authorization": "Bearer {{ secrets.token }}"}
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{}, Secrets: map[string]string{}}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err == nil {
+		t.Fatalf("Read: want error when an Authorization header's secrets.* reference cannot be resolved (never silently send unauthenticated)")
+	}
+}
+
+func TestReadHeaderOptionalDeclaredCustomHeaderOmitted(t *testing.T) {
+	// Stripe-Account pattern: a declared-but-not-required config key (account_id)
+	// with no runtime value must still OMIT the header, not error.
+	var sawHeader bool
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, sawHeader = r.Header["Stripe-Account"]
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+	b.HTTP.Headers = map[string]string{"Stripe-Account": "{{ config.account_id }}"}
+	b.Spec = specSchemaWithRequired(t, "account_id", "")
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{}}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if sawHeader {
+		t.Fatalf("Stripe-Account header present, want omitted (account_id is declared-optional, absent at runtime)")
+	}
+}
+
+func TestReadHeaderRequiredConfigKeyErrors(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		t.Fatalf("no request should be sent when a REQUIRED config header key is absent")
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+	b.HTTP.Headers = map[string]string{"X-Tenant": "{{ config.tenant_id }}"}
+	b.Spec = specSchemaWithRequired(t, "unrelated", "tenant_id")
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{}}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err == nil {
+		t.Fatalf("Read: want error when a REQUIRED config key referenced by a header is absent")
+	}
+}
+
+func TestReadHeaderUndeclaredConfigKeyErrors(t *testing.T) {
+	// A config.* reference to a key not declared in spec.json's properties AT
+	// ALL (not merely optional) must also hard-error, not be silently omitted
+	// — undeclared is a stronger signal of a bug than declared-optional.
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		t.Fatalf("no request should be sent when a header references an undeclared config key")
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+	b.HTTP.Headers = map[string]string{"X-Custom": "{{ config.totally_undeclared }}"}
+	b.Spec = specSchemaWithRequired(t, "account_id", "")
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{}}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err == nil {
+		t.Fatalf("Read: want error when a header references a config key not declared in spec.json at all")
+	}
+}
+
+// TestReadHeaderOptionalOmittedNoSpecOnBundle locks in backward compatibility
+// for the many existing test bundles (newTestBundle et al.) that never set
+// b.Spec at all: with no spec to consult, a header referencing an absent
+// config.* key still OMITS (cannot distinguish declared-optional from
+// undeclared without a spec; the safer-by-default reading for a bundle with
+// literally no declared config surface is to preserve the prior
+// omit-on-absent-config behavior, exactly as TestReadHeaderOmittedWhenInterpolatedValueEmpty
+// already asserts and continues to assert unmodified below).
+func TestReadHeaderOptionalOmittedNoSpecOnBundle(t *testing.T) {
+	var sawHeader bool
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, sawHeader = r.Header["X-Custom"]
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}}) // b.Spec is nil
+	b.HTTP.Headers = map[string]string{"X-Custom": "{{ config.account_id }}"}
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{}}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if sawHeader {
+		t.Fatalf("X-Custom header present, want omitted (no spec on bundle: preserve prior omit-on-absent-config behavior)")
 	}
 }

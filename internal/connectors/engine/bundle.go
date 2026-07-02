@@ -20,6 +20,7 @@ type Bundle struct {
 	Name     string
 	Metadata Metadata
 	Spec     *Schema                  // compiled spec.json; SecretKeys() from x-secret
+	RawSpec  json.RawMessage          // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
 	HTTP     HTTPBase                 // streams.json "base"; zero value when no streams.json
 	Streams  []StreamSpec             // streams.json "streams"
 	Writes   []WriteAction            // writes.json "actions"; nil when writes.json absent
@@ -321,7 +322,7 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		return Bundle{}, err
 	}
 
-	spec, err := loadSpec(sub, dirName)
+	spec, rawSpec, err := loadSpec(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
 	}
@@ -357,6 +358,7 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		Name:     dirName,
 		Metadata: metadata,
 		Spec:     spec,
+		RawSpec:  rawSpec,
 		HTTP:     httpBase,
 		Streams:  streams,
 		Writes:   writes,
@@ -391,19 +393,25 @@ func loadMetadata(sub fs.FS, dirName string) (Metadata, error) {
 	return m, nil
 }
 
-func loadSpec(sub fs.FS, dirName string) (*Schema, error) {
+// loadSpec returns both the compiled *Schema (used for runtime interpolation
+// checks, SecretKeys()/Properties()/RequiredKeys()) and the VERBATIM raw
+// spec.json bytes it already read (F5, REVIEW.md: the loader previously
+// discarded these after compiling, forcing Definition.Spec to lossily
+// reconstruct the config surface from the compiled Schema alone — dropping
+// types/enums/defaults/required/descriptions).
+func loadSpec(sub fs.FS, dirName string) (*Schema, json.RawMessage, error) {
 	raw, err := readFile(sub, "spec.json")
 	if err != nil {
-		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+		return nil, nil, fmt.Errorf("load bundle %s: %w", dirName, err)
 	}
 	if err := metaSchemas.spec.Validate(mustDecodeAny(raw)); err != nil {
-		return nil, fmt.Errorf("load bundle %s: spec.json: %w", dirName, err)
+		return nil, nil, fmt.Errorf("load bundle %s: spec.json: %w", dirName, err)
 	}
 	sch, err := CompileSchema(raw)
 	if err != nil {
-		return nil, fmt.Errorf("load bundle %s: spec.json: %w", dirName, err)
+		return nil, nil, fmt.Errorf("load bundle %s: spec.json: %w", dirName, err)
 	}
-	return sch, nil
+	return sch, json.RawMessage(raw), nil
 }
 
 func loadStreams(sub fs.FS, dirName string, metadata Metadata) (HTTPBase, []StreamSpec, error) {

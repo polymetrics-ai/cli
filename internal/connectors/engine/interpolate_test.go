@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/base64"
 	"strings"
 	"testing"
 )
@@ -163,6 +164,136 @@ func TestInterpolateFilters(t *testing.T) {
 	})
 }
 
+// --- F9 (REVIEW.md flag): chained filters must apply in sequence, not
+// silently truncate after the first pipe segment. ---
+
+func TestInterpolateMultipleFiltersChained(t *testing.T) {
+	vars := baseVars()
+	// space -> urlencode ("a%20b") -> base64 of THAT string. Before the fix,
+	// resolveExpr only looks at parts[1] ("urlencode"), silently dropping the
+	// "base64" stage, so the result would just be "a%20b" (unchained).
+	got, err := Interpolate("{{ config.space | urlencode | base64 }}", vars)
+	if err != nil {
+		t.Fatalf("Interpolate chained filters: unexpected error: %v", err)
+	}
+	want := base64Encode("a%20b")
+	if got != want {
+		t.Fatalf("Interpolate(chained urlencode|base64) = %q, want %q (both filters must apply in order)", got, want)
+	}
+}
+
+func TestInterpolateMultipleFiltersUnknownNameStillErrors(t *testing.T) {
+	vars := baseVars()
+	_, err := Interpolate("{{ config.space | urlencode | bogus_filter }}", vars)
+	if err == nil {
+		t.Fatalf("Interpolate: expected error for unknown filter name in a chain, got nil (no silent truncation/skip)")
+	}
+	if !strings.Contains(err.Error(), "bogus_filter") {
+		t.Fatalf("error %q does not name the unknown filter", err.Error())
+	}
+}
+
+func TestApplyFilterUnknownFilterNameErrors(t *testing.T) {
+	_, err := applyFilter("nonexistent", "x")
+	if err == nil {
+		t.Fatalf("applyFilter: expected error for unknown filter name")
+	}
+}
+
+// --- join:<sep> filter (F7 meta-rule enablement: array -> separator-joined
+// string, e.g. searxng's "engines" array vs. legacy's comma-joined string). ---
+
+func TestApplyFilterJoinSeparator(t *testing.T) {
+	vars := baseVars()
+	vars.Record["tags"] = []any{"a", "b", "c"}
+	got, err := Interpolate("{{ record.tags | join:, }}", vars)
+	if err != nil {
+		t.Fatalf("Interpolate join filter: unexpected error: %v", err)
+	}
+	if got != "a,b,c" {
+		t.Fatalf("Interpolate(join:,) = %q, want a,b,c", got)
+	}
+}
+
+func TestApplyFilterJoinCustomSeparator(t *testing.T) {
+	// "|" itself cannot be used as the join separator: it is the filter-chain
+	// delimiter in this dialect's grammar, so "join:|" would be ambiguous
+	// with "| <next filter>". Any other separator (including multi-char) is
+	// fine.
+	vars := baseVars()
+	vars.Record["tags"] = []any{"x", "y"}
+	got, err := Interpolate("{{ record.tags | join:; }}", vars)
+	if err != nil {
+		t.Fatalf("Interpolate join filter: unexpected error: %v", err)
+	}
+	if got != "x;y" {
+		t.Fatalf("Interpolate(join:;) = %q, want x;y", got)
+	}
+}
+
+func TestApplyFilterJoinNonArrayErrors(t *testing.T) {
+	vars := baseVars()
+	_, err := Interpolate("{{ config.space | join:, }}", vars)
+	if err == nil {
+		t.Fatalf("Interpolate join filter on a non-array value: expected error, got nil")
+	}
+}
+
+// --- static-literal computed_fields (no {{ }} markers at all): already
+// supported by Interpolate's no-op-on-no-match semantics; locked in here as
+// a named regression test per F7's meta-rule enablement. ---
+
+func TestInterpolateStaticLiteralNoTemplateMarkersPassesThroughVerbatim(t *testing.T) {
+	got, err := Interpolate("searxng", baseVars())
+	if err != nil {
+		t.Fatalf("Interpolate(no markers): unexpected error: %v", err)
+	}
+	if got != "searxng" {
+		t.Fatalf("Interpolate(no markers) = %q, want verbatim literal %q", got, "searxng")
+	}
+}
+
+// --- F9: InterpolatePath must reject a resolved segment that is exactly
+// ".." (or a raw "/../" survives after decode-normalization), closing the
+// SECURITY-REVIEW.md F9b/m3 gap where urlencodeSegment leaves bare "." (and
+// therefore "..") unescaped, so a literal ".." segment round-trips intact. ---
+
+func TestInterpolatePathRejectsDotDotSegment(t *testing.T) {
+	vars := baseVars()
+	vars.Config["traversal_id"] = ".."
+	_, err := InterpolatePath("/customers/{{ config.traversal_id }}", vars)
+	if err == nil {
+		t.Fatalf("InterpolatePath: expected error for a resolved value of exactly \"..\", got nil (path traversal must not survive as an intact segment)")
+	}
+}
+
+func TestInterpolatePathRejectsDotDotAmongMultipleSegments(t *testing.T) {
+	vars := baseVars()
+	vars.Config["mid"] = ".."
+	_, err := InterpolatePath("/a/{{ config.mid }}/b", vars)
+	if err == nil {
+		t.Fatalf("InterpolatePath: expected error for a \"..\" segment in the middle of a path template")
+	}
+}
+
+func TestInterpolatePathSingleDotSegmentStillAllowed(t *testing.T) {
+	// A single "." (not "..") is not a traversal primitive on its own in the
+	// same dangerous sense; only ".." is rejected outright per the fix scope.
+	vars := baseVars()
+	vars.Config["dot"] = "."
+	got, err := InterpolatePath("/customers/{{ config.dot }}", vars)
+	if err != nil {
+		t.Fatalf("InterpolatePath: unexpected error for a lone \".\" segment: %v", err)
+	}
+	if got != "/customers/." {
+		t.Fatalf("InterpolatePath(lone dot) = %q, want /customers/.", got)
+	}
+}
+
+func base64Encode(s string) string {
+	return base64.StdEncoding.EncodeToString([]byte(s))
+}
+
 func TestInterpolateHeaderCRLFInjectionRejected(t *testing.T) {
 	vars := baseVars()
 	vars.Config["evil"] = "value\r\nX-Injected: true"
@@ -321,4 +452,95 @@ func TestResolveCheck(t *testing.T) {
 	if err := ResolveCheck("{{ cursor }}", specKeys); err != nil {
 		t.Fatalf("unexpected error for cursor reference: %v", err)
 	}
+}
+
+// TestResolveCheckFilterNameValidation proves ResolveCheck also statically
+// validates every filter stage in a (possibly chained) pipeline (F9): known
+// filters (including the join:<sep> prefix form) pass; an unknown filter
+// name anywhere in the chain is a validate-time error naming the offending
+// filter.
+func TestResolveCheckFilterNameValidation(t *testing.T) {
+	specKeys := map[string]bool{"repository": true}
+
+	cases := []struct {
+		name      string
+		template  string
+		wantError bool
+	}{
+		{"single known filter", "/repos/{{ config.repository | urlencode }}", false},
+		{"chained known filters", "/repos/{{ config.repository | urlencode | base64 }}", false},
+		{"join filter prefix form", "{{ record.tags | join:, }}", false},
+		{"unknown single filter", "/repos/{{ config.repository | bogus }}", true},
+		{"unknown filter in a chain", "/repos/{{ config.repository | urlencode | bogus }}", true},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := ResolveCheck(tc.template, specKeys)
+			if tc.wantError && err == nil {
+				t.Fatalf("ResolveCheck(%q): expected error for unknown filter, got nil", tc.template)
+			}
+			if !tc.wantError && err != nil {
+				t.Fatalf("ResolveCheck(%q): unexpected error: %v", tc.template, err)
+			}
+		})
+	}
+}
+
+// --- F9 (REVIEW.md flag): ResolveCheck validated only Token/Value/When for
+// an AuthSpec (cmd/connectorgen/validate.go's checkInterpolations), leaving
+// username/password/token_url/client_id/client_secret/scopes typos to pass
+// static validation and fail at runtime. ResolveCheckAuthSpec closes that gap
+// at the engine layer (connectorgen wiring is out of this task's editable
+// scope — cmd/connectorgen is not in the allowed file list for this pass). ---
+
+func TestResolveCheckAuthFieldsValidatesAllTemplatedFields(t *testing.T) {
+	specKeys := map[string]bool{"user": true, "base_url": true}
+
+	t.Run("basic username+password: known keys pass", func(t *testing.T) {
+		spec := AuthSpec{Mode: "basic", Username: "{{ config.user }}", Password: "{{ secrets.pass }}"}
+		if err := ResolveCheckAuthSpec(spec, specKeys); err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+	})
+
+	t.Run("basic username: unknown spec key is caught", func(t *testing.T) {
+		spec := AuthSpec{Mode: "basic", Username: "{{ config.usr_typo }}", Password: "{{ secrets.pass }}"}
+		err := ResolveCheckAuthSpec(spec, specKeys)
+		if err == nil {
+			t.Fatalf("expected validation finding for unknown spec key in username template")
+		}
+		if !strings.Contains(err.Error(), "usr_typo") {
+			t.Fatalf("error %q does not name the offending key", err.Error())
+		}
+	})
+
+	t.Run("oauth2_client_credentials: token_url/client_id/client_secret/scopes all checked", func(t *testing.T) {
+		bad := AuthSpec{
+			Mode:         "oauth2_client_credentials",
+			TokenURL:     "{{ config.token_url_typo }}",
+			ClientID:     "{{ config.user }}",
+			ClientSecret: "{{ secrets.client_secret }}",
+			Scopes:       "{{ config.scopes_typo }}",
+		}
+		err := ResolveCheckAuthSpec(bad, specKeys)
+		if err == nil {
+			t.Fatalf("expected validation finding for unknown spec key in token_url/scopes templates")
+		}
+	})
+
+	t.Run("api_key_header: header value template checked", func(t *testing.T) {
+		spec := AuthSpec{Mode: "api_key_header", Header: "X-API-Key", Value: "{{ config.value_typo }}"}
+		err := ResolveCheckAuthSpec(spec, specKeys)
+		if err == nil {
+			t.Fatalf("expected validation finding for unknown spec key in api_key_header value template")
+		}
+	})
+
+	t.Run("when condition still checked", func(t *testing.T) {
+		spec := AuthSpec{Mode: "none", When: "{{ config.when_typo == 'x' }}"}
+		err := ResolveCheckAuthSpec(spec, specKeys)
+		if err == nil {
+			t.Fatalf("expected validation finding for unknown spec key in when template")
+		}
+	})
 }
