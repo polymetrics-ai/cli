@@ -129,6 +129,84 @@ func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {
 	}
 }
 
+// --- N2 (wave0 REVIEW.md carried flag): validate-time WARNING for a
+// digit-shaped non-unix start_config_key value ------------------------------
+//
+// N2's narrow, honest scope (SPEC.md §4 "noted, not blocking... promote to a
+// validate-time guard"): formatParam's digits-passthrough (B1) is CORRECT
+// for param_format unix_seconds (an all-digits config value there really
+// does mean Unix seconds) but is a silent-misinterpretation risk for
+// param_format date/github_date_range, where a free-form (no declared
+// date-ish format) start_config_key spec property could hold a value like
+// "20260101" (yyyymmdd) that would be silently treated as a 1970s-era
+// Unix-seconds lower bound instead of erroring. A property that DOES
+// declare format:date-time (or format:date) is not flagged: an operator
+// filling in a date-time-typed config field is exceedingly unlikely to type
+// a bare yyyymmdd digit string, and the risk is specifically about
+// UNDECLARED free-form string config. This is a WARNING (Report.Warnings,
+// not Report.Findings) — never blocks validate's exit code or the "0
+// findings" self-verify contract — because it is a plausibility heuristic,
+// not a structural defect: a legitimately-Unix-seconds start_config_key
+// used with date/github_date_range (unusual but not inexpressible) would
+// otherwise be a false positive if this were a hard error.
+
+func TestValidate_StartDateFreeFormStringWarns(t *testing.T) {
+	fsys := singleBundleFS(t, "testdata/invalid", "start-date-free-form-string")
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero hard Findings (this is warning-only), got %+v", report.Findings)
+	}
+	var found *Finding
+	for i := range report.Warnings {
+		if report.Warnings[i].Connector == "start-date-free-form-string" && report.Warnings[i].Rule == ruleStartDateFreeFormString {
+			found = &report.Warnings[i]
+			break
+		}
+	}
+	if found == nil {
+		t.Fatalf("expected a %s warning for start-date-free-form-string, got %+v", ruleStartDateFreeFormString, report.Warnings)
+	}
+	if found.File == "" || found.Message == "" {
+		t.Fatalf("warning %+v missing file/message", found)
+	}
+}
+
+// TestValidate_StartDateWithDateTimeFormatNoWarning is the no-false-positive
+// companion: an identical incremental shape whose start_config_key spec
+// property DOES declare format:date-time must not warn.
+func TestValidate_StartDateWithDateTimeFormatNoWarning(t *testing.T) {
+	fsys := singleBundleFS(t, "testdata/invalid", "start-date-rfc3339-format-no-warning")
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	for _, w := range report.Warnings {
+		if w.Connector == "start-date-rfc3339-format-no-warning" && w.Rule == ruleStartDateFreeFormString {
+			t.Fatalf("unexpected %s warning for a format:date-time start_config_key: %+v", ruleStartDateFreeFormString, w)
+		}
+	}
+}
+
+// TestValidate_UnixSecondsStartDateNeverWarns locks in that param_format
+// unix_seconds is never flagged by this rule at all (digits ARE the correct
+// shape there) — reusing the real stripe golden, whose start_date has no
+// declared format annotation either, proves this directly against
+// production defs, not just a synthetic fixture.
+func TestValidate_UnixSecondsStartDateNeverWarns(t *testing.T) {
+	report, err := validateDir(os.DirFS(filepath.Join("..", "..", "internal", "connectors", "defs")))
+	if err != nil {
+		t.Fatalf("validateDir(defs): %v", err)
+	}
+	for _, w := range report.Warnings {
+		if w.Rule == ruleStartDateFreeFormString {
+			t.Fatalf("unexpected %s warning against the real defs corpus: %+v", ruleStartDateFreeFormString, w)
+		}
+	}
+}
+
 // TestValidate_ExitCodeReflectsFindings exercises the run() entry point (the
 // one main() calls) end to end: a directory with findings must exit 1; a
 // clean directory must exit 0.

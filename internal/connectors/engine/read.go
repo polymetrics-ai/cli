@@ -377,9 +377,13 @@ func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Value
 	return q, nil
 }
 
-// incrementalLowerBoundValue returns the raw (unformatted, always RFC3339
-// when present) incremental lower bound: the state cursor if set, else the
-// start_config_key config value, else "" (full sync / no lower bound).
+// incrementalLowerBoundValue returns the raw (unformatted) incremental lower
+// bound: the state cursor if set, else the start_config_key config value,
+// else "" (full sync / no lower bound). This value is NOT always RFC3339
+// (N4, wave0 REVIEW.md re-review): the state cursor may be an all-digits
+// Unix-seconds string (the app-persisted shape for a numeric cursor field,
+// B1) or an RFC3339 timestamp (a string cursor field, or a config
+// start_date); formatParam/parseLowerBoundTime accept both shapes.
 // client_filtered streams (no server-side request_param) still need this
 // value to drop old records client-side.
 func incrementalLowerBoundValue(stream StreamSpec, req connectors.ReadRequest) (string, error) {

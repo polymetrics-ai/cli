@@ -1,0 +1,9 @@
+{
+  "api": "Start Date RFC3339 Format No Warning API v1",
+  "docs": "https://example.invalid/docs",
+  "reviewed_at": "2026-07-02",
+  "scope": "events endpoint only",
+  "endpoints": [
+    { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } }
+  ]
+}

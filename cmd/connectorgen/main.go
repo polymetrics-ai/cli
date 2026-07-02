@@ -120,7 +120,11 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 }
 
 // renderText renders a Report as human-readable lines: one finding per line
-// naming connector/file/rule, followed by a summary count.
+// naming connector/file/rule, followed by a summary count. The summary
+// line's wording ("N findings") is a stable self-verify contract (PLAN.md/
+// SPEC.md grep for "0 findings") and is deliberately unaffected by
+// Warnings, which render separately (N2, wave0 REVIEW.md carried flag: a
+// warning never blocks the gate or changes the finding count).
 func renderText(w io.Writer, report Report) {
 	for _, f := range report.Findings {
 		logf(w, "%s: %s: [%s] %s\n", f.Connector, f.File, f.Rule, f.Message)
@@ -129,6 +133,12 @@ func renderText(w io.Writer, report Report) {
 		logf(w, "connectorgen validate: %d connector(s) checked, 0 findings\n", report.ConnectorsChecked)
 	} else {
 		logf(w, "connectorgen validate: %d connector(s) checked, %d finding(s)\n", report.ConnectorsChecked, len(report.Findings))
+	}
+	for _, wr := range report.Warnings {
+		logf(w, "%s: %s: [warning:%s] %s\n", wr.Connector, wr.File, wr.Rule, wr.Message)
+	}
+	if len(report.Warnings) > 0 {
+		logf(w, "connectorgen validate: %d warning(s)\n", len(report.Warnings))
 	}
 }
 

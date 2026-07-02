@@ -471,6 +471,19 @@ func cursorNumericGreater(a, b string) bool {
 // is a deliberate, small, documented duplication rather than a
 // cross-package reach-in — it exists purely so the ASSERTION is derived
 // independently of the code under test).
+//
+// N1 (wave0 REVIEW.md re-review "New findings"): the github_date_range
+// branch used to return ">=" + value VERBATIM, while the engine's real
+// formatParam parses value (digits-passthrough-as-Unix-seconds or RFC3339,
+// parseLowerBoundTime) and re-emits ">=" + t.UTC().Format(time.RFC3339) —
+// i.e. it ALWAYS normalizes to UTC second precision regardless of which
+// shape the input cursor arrived in (a bare digit string, the app-persisted
+// numeric-cursor shape, or a non-UTC-offset/fractional-second RFC3339
+// string). The verbatim version only happened to match when maxCursor was
+// already exactly-UTC-normalized RFC3339 with no fractional seconds; a
+// numeric cursor or a non-UTC offset would falsely FAIL cursor_advances.
+// This branch now shares parseLowerBoundTimeForAssertion with unix_seconds/
+// date above, so all three timestamp-parsing formats normalize identically.
 func formatCursorForAssertion(value, format string) (string, error) {
 	switch format {
 	case "", "rfc3339":
@@ -488,7 +501,11 @@ func formatCursorForAssertion(value, format string) (string, error) {
 		}
 		return t.Format("2006-01-02"), nil
 	case "github_date_range":
-		return ">=" + value, nil
+		t, err := parseLowerBoundTimeForAssertion(value)
+		if err != nil {
+			return "", fmt.Errorf("param_format github_date_range: %w", err)
+		}
+		return ">=" + t.UTC().Format(time.RFC3339), nil
 	default:
 		return "", fmt.Errorf("unknown param_format %q", format)
 	}

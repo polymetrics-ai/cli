@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/fs"
 	"regexp"
@@ -29,7 +30,30 @@ const (
 	ruleNameRegex               = "name_regex"
 	ruleSecretLiteral           = "secret_literal"
 	ruleDocsHeading             = "docs_heading"
+	ruleStartDateFreeFormString = "start_date_free_form_string"
 )
+
+// dateShapedParamFormats are the incremental.param_format values whose
+// value-parsing path (engine/read.go parseLowerBoundTime, N4/B1) accepts an
+// all-digits input as Unix seconds and otherwise requires RFC3339. For these
+// two formats specifically (unlike unix_seconds, where digits ARE the
+// correct/intended shape), a digit-shaped config value that is NOT actually
+// Unix seconds — e.g. a yyyymmdd typo like "20260101" — is silently
+// misinterpreted as a 1970s-era lower bound rather than erroring (N2, wave0
+// REVIEW.md carried flag).
+var dateShapedParamFormats = map[string]bool{
+	"date":              true,
+	"github_date_range": true,
+}
+
+// dateShapedSpecFormats are the JSON Schema "format" annotation values that
+// make a start_config_key spec property's shape explicit enough that this
+// warning does not apply: an operator filling in a field the spec itself
+// declares as a timestamp is not the free-form-string risk N2 describes.
+var dateShapedSpecFormats = map[string]bool{
+	"date-time": true,
+	"date":      true,
+}
 
 // surfaceCategories is the closed exclusion vocabulary (design §E.1 rule 3).
 // The engine loader's meta-schema already enforces this via an enum on
@@ -83,8 +107,16 @@ type Finding struct {
 
 // Report is the aggregate result of validating every bundle in a directory
 // tree; it is what both the text and --json output modes render from.
+//
+// Warnings (N2, wave0 REVIEW.md carried flag) are a SEPARATE, lower-severity
+// list, deliberately never merged into Findings: they never affect
+// validate's exit code or the "0 findings" self-verify contract goldens
+// rely on (`go run ./cmd/connectorgen validate internal/connectors/defs`).
+// A warning names a plausibility risk a bundle author should look at, not a
+// structural defect connectorgen can prove is wrong.
 type Report struct {
 	Findings          []Finding `json:"findings"`
+	Warnings          []Finding `json:"warnings"`
 	ConnectorsChecked int       `json:"connectors_checked"`
 }
 
@@ -103,23 +135,30 @@ func validateDir(fsys fs.FS) (Report, error) {
 		return Report{}, err
 	}
 
-	// Always non-nil so JSON output renders "findings": [] rather than null
-	// on a clean run (the --json contract promises an array).
+	// Always non-nil so JSON output renders "findings": [] / "warnings": []
+	// rather than null on a clean run (the --json contract promises arrays).
 	findings := []Finding{}
+	warnings := []Finding{}
 	for _, name := range names {
-		findings = append(findings, validateBundleDir(fsys, name)...)
+		bundleFindings, bundleWarnings := validateBundleDir(fsys, name)
+		findings = append(findings, bundleFindings...)
+		warnings = append(warnings, bundleWarnings...)
 	}
-	sort.Slice(findings, func(i, j int) bool {
-		if findings[i].Connector != findings[j].Connector {
-			return findings[i].Connector < findings[j].Connector
-		}
-		if findings[i].File != findings[j].File {
-			return findings[i].File < findings[j].File
-		}
-		return findings[i].Rule < findings[j].Rule
-	})
+	sortFindings := func(list []Finding) {
+		sort.Slice(list, func(i, j int) bool {
+			if list[i].Connector != list[j].Connector {
+				return list[i].Connector < list[j].Connector
+			}
+			if list[i].File != list[j].File {
+				return list[i].File < list[j].File
+			}
+			return list[i].Rule < list[j].Rule
+		})
+	}
+	sortFindings(findings)
+	sortFindings(warnings)
 
-	return Report{Findings: findings, ConnectorsChecked: len(names)}, nil
+	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: len(names)}, nil
 }
 
 // bundleDirNames returns the sorted top-level directory names of fsys, the
@@ -139,17 +178,17 @@ func bundleDirNames(fsys fs.FS) ([]string, error) {
 	return names, nil
 }
 
-// validateBundleDir validates a single candidate bundle directory. It never
-// returns a bare error: any structural/loader failure is translated into a
-// Finding so a single malformed bundle does not abort validation of its
-// siblings (and so `--json` always has a machine-readable shape to render).
-func validateBundleDir(fsys fs.FS, name string) []Finding {
+// validateBundleDir validates a single candidate bundle directory, returning
+// (hard findings, warnings) separately. It never returns a bare error: any
+// structural/loader failure is translated into a Finding so a single
+// malformed bundle does not abort validation of its siblings (and so
+// `--json` always has a machine-readable shape to render).
+func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	b, err := engine.Load(fsys, name)
 	if err != nil {
-		return []Finding{loadErrorFinding(name, err)}
+		return []Finding{loadErrorFinding(name, err)}, nil
 	}
 
-	var findings []Finding
 	findings = append(findings, checkName(b)...)
 	findings = append(findings, checkInterpolations(b)...)
 	findings = append(findings, checkSchemaRefs(fsys, b)...)
@@ -158,7 +197,8 @@ func validateBundleDir(fsys fs.FS, name string) []Finding {
 	findings = append(findings, checkAPISurface(b)...)
 	findings = append(findings, checkDocsHeadings(b)...)
 	findings = append(findings, checkFixtureSecrets(b)...)
-	return findings
+	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
+	return findings, warnings
 }
 
 // loadErrorFinding classifies an engine.Load error into the most specific
@@ -552,4 +592,72 @@ func checkFixtureSecrets(b engine.Bundle) []Finding {
 		return nil
 	})
 	return findings
+}
+
+// checkIncrementalStartDateFormat is N2's narrow, honest WARNING (wave0
+// REVIEW.md carried flag; SPEC.md §4 "promote to a validate-time guard"):
+// for every stream whose incremental.param_format is "date" or
+// "github_date_range" (the two formats where engine/read.go's
+// parseLowerBoundTime treats an all-digits value as Unix seconds and
+// anything else as RFC3339, N4/B1) AND which names a start_config_key,
+// check whether that spec.json property declares a date-ish JSON Schema
+// "format" (date-time/date). If it does not, a digit-shaped config value —
+// e.g. an operator typo like "20260101" (yyyymmdd), which is NOT Unix
+// seconds — would silently be treated as one instead of erroring, producing
+// a bogus 1970s-era lower bound. This is deliberately scoped to ONLY these
+// two param_formats: unix_seconds is excluded because there an all-digits
+// value IS the correct, intended shape (no misinterpretation risk at all),
+// and rfc3339 never attempts digit parsing in the first place (verbatim
+// passthrough). Reads spec.json's per-property "format" directly from
+// b.RawSpec (F5, REVIEW.md) since the compiled *engine.Schema does not
+// expose annotation keywords like "format" through any accessor (schema.go:
+// "format" is accepted-but-only-preserved, never structurally enforced).
+func checkIncrementalStartDateFormat(b engine.Bundle) []Finding {
+	if len(b.RawSpec) == 0 {
+		return nil
+	}
+	var findings []Finding
+	seen := map[string]bool{} // de-dupe: multiple streams may share one start_config_key
+	for _, s := range b.Streams {
+		if s.Incremental == nil || s.Incremental.StartConfigKey == "" {
+			continue
+		}
+		if !dateShapedParamFormats[s.Incremental.ParamFormat] {
+			continue
+		}
+		key := s.Incremental.StartConfigKey
+		if seen[key] {
+			continue
+		}
+		if specPropertyHasDateShapedFormat(b.RawSpec, key) {
+			continue
+		}
+		seen[key] = true
+		findings = append(findings, Finding{
+			Connector: b.Name, File: "spec.json", Rule: ruleStartDateFreeFormString,
+			Message: fmt.Sprintf("spec.json property %q is used as stream %q's incremental.start_config_key with param_format %q but declares no date-ish \"format\" (date-time/date) — a digit-shaped value (e.g. a yyyymmdd typo) would be silently misinterpreted as Unix seconds rather than erroring", key, s.Name, s.Incremental.ParamFormat),
+		})
+	}
+	return findings
+}
+
+// specPropertyHasDateShapedFormat reports whether rawSpec's top-level
+// properties.<key>.format is one of dateShapedSpecFormats. Any parse
+// failure or absence is treated as "no date-ish format declared" (the
+// warning-worthy case), not an error — spec.json's own structural validity
+// is already enforced by the loader's meta-schema check elsewhere.
+func specPropertyHasDateShapedFormat(rawSpec []byte, key string) bool {
+	var doc struct {
+		Properties map[string]struct {
+			Format string `json:"format"`
+		} `json:"properties"`
+	}
+	if err := json.Unmarshal(rawSpec, &doc); err != nil {
+		return false
+	}
+	prop, ok := doc.Properties[key]
+	if !ok {
+		return false
+	}
+	return dateShapedSpecFormats[prop.Format]
 }

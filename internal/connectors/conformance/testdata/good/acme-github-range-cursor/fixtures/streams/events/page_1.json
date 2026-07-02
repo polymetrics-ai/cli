@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "evt_1", "created": 1700000000 },
+        { "id": "evt_2", "created": 1700000100 }
+      ]
+    }
+  }
+}

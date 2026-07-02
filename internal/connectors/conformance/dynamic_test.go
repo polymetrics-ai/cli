@@ -93,6 +93,41 @@ func TestCursorAdvances_StringCursorFieldStillSupported(t *testing.T) {
 	}
 }
 
+// TestCursorAdvances_GitHubDateRangeNumericCursorNormalized is the N1
+// regression test (wave0 REVIEW.md re-review "New findings"): a
+// param_format:github_date_range stream whose max-observed cursor is a bare
+// digit string (the Unix-seconds app-persisted cursor shape,
+// internal/app/sync_modes.go recordCursor -> toComparableString) must have
+// its re-read request_param assertion normalized (digits -> RFC3339) exactly
+// like the real engine's formatParam does — before the fix,
+// formatCursorForAssertion's github_date_range branch returned
+// ">=" + value VERBATIM (i.e. ">=1700000100", the raw digit string), which
+// never matches what engine.Read actually sends on the wire
+// (">=2023-11-14T22:15:00Z"), so this check falsely FAILS.
+func TestCursorAdvances_GitHubDateRangeNumericCursorNormalized(t *testing.T) {
+	b := loadTestBundle(t, "testdata/good", "acme-github-range-cursor")
+	result := checkCursorAdvances(b)
+	if !result.Passed {
+		t.Fatalf("cursor_advances failed on github_date_range with a numeric (Unix-seconds) cursor: %s", result.Error)
+	}
+}
+
+// TestCursorAdvances_GitHubDateRangeNonUTCOffsetCursorNormalized is N1's
+// second regression shape: a param_format:github_date_range stream whose
+// max-observed cursor is an RFC3339 STRING with a non-UTC offset (+05:30).
+// The engine's formatParam parses it and re-emits UTC second precision
+// (">=" + t.UTC().Format(time.RFC3339)); formatCursorForAssertion's
+// pre-fix verbatim passthrough would instead assert against the
+// un-normalized offset form (">=2023-11-14T22:15:00+05:30"), which never
+// matches the engine's actual UTC-normalized request.
+func TestCursorAdvances_GitHubDateRangeNonUTCOffsetCursorNormalized(t *testing.T) {
+	b := loadTestBundle(t, "testdata/good", "acme-github-range-cursor-offset")
+	result := checkCursorAdvances(b)
+	if !result.Passed {
+		t.Fatalf("cursor_advances failed on github_date_range with a non-UTC-offset RFC3339 cursor: %s", result.Error)
+	}
+}
+
 func TestWriteRequestShape_MatchesExpectBlock(t *testing.T) {
 	b := loadTestBundle(t, "testdata/good", "acme")
 	results := checkWriteRequestShape(b)

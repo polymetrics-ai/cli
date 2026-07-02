@@ -1,0 +1,15 @@
+{
+  "name": "start-date-rfc3339-format-no-warning",
+  "display_name": "Start Date RFC3339 Format No Warning",
+  "description": "N2 no-false-positive companion: identical shape to start-date-free-form-string, but spec.json's start_date declares format:date-time, so no start_date_free_form_string warning should fire",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": false,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}
