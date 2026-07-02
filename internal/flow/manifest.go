@@ -12,6 +12,7 @@ type StepKind string
 const (
 	KindSync   StepKind = "sync"
 	KindQuery  StepKind = "query"
+	KindRLM    StepKind = "rlm"
 	KindAction StepKind = "action"
 )
 
@@ -34,6 +35,8 @@ type FlowStep struct {
 	Connection string        `json:"connection,omitempty"`
 	Streams    []string      `json:"streams,omitempty"`
 	SQL        string        `json:"sql,omitempty"`
+	Spec       string        `json:"spec,omitempty"`
+	Mode       string        `json:"mode,omitempty"`
 	ActionCfg  *ActionConfig `json:"action_cfg,omitempty"`
 	In         []string      `json:"in"`
 	Out        []string      `json:"out"`
@@ -102,6 +105,26 @@ func ValidateManifest(m FlowManifest) []error {
 		case KindQuery:
 			if s.SQL == "" {
 				add("step %q (query) must have non-empty sql", s.ID)
+			}
+		case KindRLM:
+			mode := s.Mode
+			if mode == "" {
+				mode = "deterministic"
+			}
+			if s.Spec == "" {
+				add("step %q (rlm) must have spec", s.ID)
+			}
+			if len(s.Out) == 0 {
+				add("step %q (rlm) must have at least one out table", s.ID)
+			}
+			switch mode {
+			case "deterministic", "model", "agent":
+				if len(s.In) == 0 {
+					add("step %q (rlm) must have at least one input table in %s mode", s.ID, mode)
+				}
+			case "fixture":
+			default:
+				add("step %q (rlm) has unknown mode %q", s.ID, mode)
 			}
 		case KindAction:
 			cfg := s.ActionCfg

@@ -10,6 +10,8 @@ After an extraction lands data in the local warehouse, `pm query run` lets you i
 ```bash
 pm query run --table <table> [--limit <n>] [--json]
 pm query run --sql "<SQL statement>" [--limit <n>] [--json]
+pm query run --table <table> --agent-mode summary --fields id,email --sample 3
+pm query run --table <table> --agent-mode stream --fields id,email
 ```
 
 `--table` is shorthand for `SELECT * FROM <table> LIMIT <n>`. Use `--sql` for any other query.
@@ -21,6 +23,10 @@ pm query run --sql "<SQL statement>" [--limit <n>] [--json]
 | `--table` | Table name to query. Returns all columns up to `--limit` rows. |
 | `--sql` | Raw SQL statement. Takes precedence over `--table` when both are provided. |
 | `--limit` | Maximum rows to return. Default is 100. |
+| `--fields` | Comma-separated projection applied before output. |
+| `--agent-mode summary` | Emit compact JSON with count, sorted field list, and sample rows. |
+| `--agent-mode stream` | Emit projected rows as NDJSON. |
+| `--sample` | Summary sample size. Default is 3. |
 | `--json` | Emit structured JSON to stdout. |
 
 <Callout type="info">
@@ -67,6 +73,25 @@ pm query run \
   --json
 ```
 
+### Agent summary
+
+```bash
+pm query run \
+  --table customers \
+  --fields id,email,company \
+  --agent-mode summary \
+  --sample 3
+```
+
+### Agent NDJSON stream
+
+```bash
+pm query run \
+  --table customers \
+  --fields id,email \
+  --agent-mode stream
+```
+
 ## JSON output envelope
 
 ```json
@@ -85,6 +110,8 @@ The envelope always contains:
 - `count`: number of rows returned
 - `rows`: array of row objects, keys are column names
 
+With `--agent-mode summary`, the output is a compact single JSON object with `kind`, `count`, `fields`, and `sample`. With `--agent-mode stream`, each stdout line is one projected JSON row.
+
 ## Engine modes
 
 | Build | Query behavior |
@@ -92,7 +119,7 @@ The envelope always contains:
 | Default | Local JSONL table reads and conservative SELECT parsing. |
 | `-tags duckdb` | DuckDB-backed read-only SQL over local warehouse files. |
 
-Both modes keep query execution local. Output can contain data rows, so agents should use explicit `--limit` values.
+Both modes keep query execution local. Output can contain data rows, so agents should use explicit `--limit`, `--fields`, or `--agent-mode summary`.
 
 ## Workflow: extract then query
 

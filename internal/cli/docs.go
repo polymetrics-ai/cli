@@ -25,6 +25,9 @@ COMMANDS
   etl               run ETL and inspect run status
   query             query local warehouse tables
   reverse           list, plan, preview, run, and inspect reverse ETL
+  flow              plan, preview, run, list, and inspect multi-step flows
+  rlm               score warehouse records with deterministic or agent RLM
+  schedule          create, list, install, and remove flow schedules
   agent             produce typed plans for external agents
   runtime           check PostgreSQL, DragonflyDB, and Temporal dependencies
   perf              compare dependency-free and runtime-backed performance
@@ -69,6 +72,9 @@ var docs = map[string]string{
 	"connections": connectionsHelp,
 	"catalog":     catalogHelp,
 	"query":       queryHelp,
+	"flow":        flowHelp,
+	"rlm":         rlmHelp,
+	"schedule":    scheduleHelp,
 	"agent":       agentHelp,
 	"runtime":     runtimeHelp,
 	"perf":        perfHelp,
@@ -396,12 +402,106 @@ const queryHelp = `NAME
 SYNOPSIS
   pm query run --table <table> [--limit n] [--json]
   pm query run --sql "select * from <table> limit n" [--json]
+  pm query run --table <table> --agent-mode summary --fields id,email --sample 3
+  pm query run --table <table> --agent-mode stream --fields id,email
 
 DESCRIPTION
   The MVP query engine supports table reads and a small SELECT * FROM parser.
+  Agent mode can emit compact summary JSON or projected NDJSON rows to reduce
+  token usage for external agents.
+
+FLAGS
+  --table table              local warehouse table to scan
+  --sql sql                  read-only SQL query; takes precedence over --table
+  --limit n                  maximum rows to read; default 100
+  --fields a,b               project output to selected fields
+  --agent-mode summary       emit a count, sorted field list, and sample rows
+  --agent-mode stream        emit one projected JSON object per line
+  --sample n                 summary sample size; default 3
 
 SECURITY
-  Query output can contain data rows. Agent callers should use small limits.
+  Query output can contain data rows. Agent callers should use --fields and
+  small limits or --agent-mode summary.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+`
+
+const flowHelp = `NAME
+  pm flow - plan, preview, run, list, and inspect multi-step flows
+
+SYNOPSIS
+  pm flow plan --file flow.json [--json]
+  pm flow preview --file flow.json [--json]
+  pm flow run --file flow.json [--force] [--json]
+  pm flow status <name> [--flows-dir .polymetrics/flows] [--json]
+  pm flow list [--flows-dir .polymetrics/flows] [--json]
+
+DESCRIPTION
+  Flow manifests compose sync, query, rlm, and action steps. Dependencies are
+  inferred from in/out warehouse tables. RLM steps reuse pm rlm analyzers and
+  may reference a spec path relative to the flow manifest file.
+
+RLM STEP EXAMPLE
+  {
+    "id": "score",
+    "kind": "rlm",
+    "spec": "lead-score.json",
+    "mode": "fixture",
+    "in": [],
+    "out": ["lead_scores"]
+  }
+
+SECURITY
+  Read-only sync, query, and rlm steps run through existing app primitives.
+  Action steps remain approval-gated.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+`
+
+const rlmHelp = `NAME
+  pm rlm - score warehouse records with deterministic or agent RLM
+
+SYNOPSIS
+  pm rlm run --spec spec.json --in customers --out scored_customers --mode deterministic [--json]
+  pm rlm run --spec spec.json --out scored_customers --mode fixture [--json]
+  pm rlm run --spec spec.json --in customers --out scored_customers --mode agent --request "score leads" [--json]
+
+DESCRIPTION
+  RLM materializes scored records to the local warehouse. Deterministic and
+  fixture modes run dependency-free. Model and agent modes are opt-in and
+  runtime-backed.
+
+SECURITY
+  RLM output is data only. It does not send messages or mutate external systems.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+`
+
+const scheduleHelp = `NAME
+  pm schedule - create, list, install, and remove flow schedules
+
+SYNOPSIS
+  pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads [--json]
+  pm schedule list [--json]
+  pm schedule install nightly [--crontab] [--json]
+  pm schedule remove nightly [--json]
+
+DESCRIPTION
+  Schedules bind a cron expression to a named flow and install it into the
+  selected local scheduler backend. The payload is pm flow run.
+
+SECURITY
+  Schedules do not embed secret values. Flow execution still uses the normal
+  project credential references and approval gates.
 
 EXIT STATUS
   0 success

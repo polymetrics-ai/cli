@@ -86,7 +86,11 @@ func (b CrontabBackend) Remove(ctx context.Context, name string) error {
 // Pure function.
 func renderCrontabLine(m Manifest, pmBin string) (string, error) {
 	sentinel := "# pm-schedule-" + m.Name
-	return fmt.Sprintf("%s  %s flow run %s --json  %s", m.Cron, pmBin, m.Flow, sentinel), nil
+	rootArgs := ""
+	if m.Root != "" {
+		rootArgs = " --root " + shellArg(m.Root)
+	}
+	return fmt.Sprintf("%s  %s%s flow run %s --json  %s", m.Cron, shellArg(pmBin), rootArgs, shellArg(m.Flow), sentinel), nil
 }
 
 // removeCrontabLine removes the sentinel line for name from crontab content.
