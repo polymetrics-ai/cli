@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { PmLogoMark } from '@/components/brand/pm-logo-mark';
 import { CornerBox } from '@/components/ui/corner-box';
 
 const REPO = 'https://github.com/polymetrics-ai/cli';
@@ -148,10 +149,7 @@ export function SiteFooter() {
           <div className="flex flex-wrap items-center justify-between gap-2 text-[12px] text-text-tertiary">
             <span>© 2026 Polymetrics AI, public source project.</span>
             <span className="flex items-center gap-2">
-              <span className="flex items-center justify-center h-[18px] min-w-[18px] px-1 bg-emerald-800 select-none">
-                <span className="font-mono font-bold text-[10px] leading-none text-white tracking-tight">PM</span>
-                <span aria-hidden className="font-mono font-bold text-[10px] leading-none text-white cursor-blink">_</span>
-              </span>
+              <PmLogoMark className="h-[18px] w-[18px] shrink-0 select-none" />
               Built in pure Go.
             </span>
           </div>

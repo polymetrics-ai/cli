@@ -17,7 +17,7 @@ const sizeClasses: Record<HeadingSize, string> = {
 };
 
 const baseClasses =
-  'text-text-primary font-analog font-medium not-italic [font-variant-numeric:ordinal] [font-feature-settings:"dlig"_on]';
+  'text-text-primary font-square font-semibold not-italic tracking-normal';
 
 const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   ({ as: Tag = 'h2', size = 'normal', className, ...props }, ref) => (

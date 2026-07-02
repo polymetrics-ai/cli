@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="PM CLI logo">
+  <style>
+    .letter {
+      fill: #fff;
+      font: 700 16px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: -0.8px;
+      text-rendering: geometricPrecision;
+    }
+
+    .m {
+      opacity: 0;
+      animation: pm-m 1.08s ease-in-out infinite;
+    }
+
+    .cursor {
+      opacity: 1;
+      animation: pm-cursor 1.08s ease-in-out infinite;
+    }
+
+    @keyframes pm-m {
+      0%, 42% { opacity: 1; transform: translateY(0); }
+      48%, 90% { opacity: 0; transform: translateY(-0.8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pm-cursor {
+      0%, 42% { opacity: 0; transform: translateY(0.8px); }
+      48%, 90% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(0.8px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .m,
+      .cursor {
+        animation: none;
+      }
+
+      .m {
+        opacity: 1;
+      }
+
+      .cursor {
+        opacity: 0;
+      }
+    }
+  </style>
+  <rect width="32" height="32" fill="#065f46"/>
+  <text class="letter" x="6.4" y="21">P</text>
+  <text class="letter m" x="16" y="21">M</text>
+  <text class="letter cursor" x="16" y="21">_</text>
+</svg>
