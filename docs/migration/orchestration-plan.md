@@ -110,3 +110,11 @@ Migration bundle agent 150–300k tokens (avg ~220k); Pass B research/expansion 
 ~350k); reviewer ~120k; repair ~150k. Pass A ≈ 30M tokens; Pass B ≈ 125M; waves 0/6 + overhead ≈
 10M. Wall-clock at concurrency 12–16: wave 0: 2–3d · pilot: 0.5–1d · waves 2–4: 1.5–2d · Pass B:
 3–4d · convergence: 1d → **~8–11 working days**.
+
+## Pass B decision (USER, 2026-07-02, post-pilot)
+
+**Measure first.** Pass A fan-out proceeds once the S3 engine mini-wave lands. At wave5 start:
+expand 5 representative connectors (spread across S/M/L, read-only vs write-capable APIs) to get
+real Pass B per-connector costs, then auto-scale the roster to the data — full ~350-agent
+expansion if affordable, tiered top-100 otherwise. Matches docs/migration/pilot-costs.json's
+recommendation.
