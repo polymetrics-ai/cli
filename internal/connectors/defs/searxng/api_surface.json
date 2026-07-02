@@ -1,0 +1,12 @@
+{
+  "api": "SearXNG JSON search API (self-hosted instance; https://docs.searxng.org)",
+  "docs": "https://docs.searxng.org",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave0 golden migration: the 2 legacy-parity read streams only (search, reddit); SearXNG has no mutation API (read-only metasearch), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/search", "covered_by": { "stream": "search" } },
+    { "method": "GET", "path": "/search", "covered_by": { "stream": "reddit" } },
+    { "method": "GET", "path": "/config", "excluded": { "category": "non_data_endpoint", "reason": "instance configuration/capabilities introspection, not a syncable object stream" } },
+    { "method": "GET", "path": "/healthz", "excluded": { "category": "non_data_endpoint", "reason": "instance health probe, not a syncable object stream" } }
+  ]
+}

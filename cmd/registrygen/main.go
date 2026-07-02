@@ -32,6 +32,21 @@ var skip = map[string]bool{
 	"httpsource":  true,
 	"registryset": true,
 	"_quarantine": true,
+
+	// Engine-harness scaffolding (wave0-engine-harness): declarative-bundle
+	// support packages, not connector packages. defs/engine/certify/conformance
+	// each declare non-test .go files at their top level (and would otherwise
+	// be wrongly scanned in as connector directories); hooks/native currently
+	// have no top-level .go files of their own (only subpackages like
+	// hooks/hookset, native/postgres, native/nativeset) but are skip-listed
+	// defensively so a future top-level file under either never registers as a
+	// connector either.
+	"defs":        true,
+	"engine":      true,
+	"hooks":       true,
+	"native":      true,
+	"conformance": true,
+	"certify":     true,
 }
 
 func main() {

@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SearXNG Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your SearXNG instance's base URL (e.g. https://searx.example.com). No default: a SearXNG instance must be named explicitly."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional Bearer token for SearXNG instances behind an auth proxy. Public instances are open and need no credentials."
+    },
+    "query": {
+      "type": "string",
+      "description": "Search terms for the 'search' stream (required for that stream) and appended to the reddit-scoped query for the 'reddit' stream."
+    },
+    "subreddit": {
+      "type": "string",
+      "description": "Optional subreddit (without r/ prefix) to scope the 'reddit' stream's site:reddit.com query to."
+    },
+    "categories": {
+      "type": "string",
+      "description": "Optional SearXNG categories filter passthrough (e.g. general,news)."
+    },
+    "engines": {
+      "type": "string",
+      "description": "Optional SearXNG engines filter passthrough (e.g. duckduckgo,google)."
+    },
+    "language": {
+      "type": "string",
+      "description": "Optional SearXNG language filter passthrough (e.g. en-US)."
+    },
+    "time_range": {
+      "type": "string",
+      "description": "Optional SearXNG time_range filter passthrough (day|month|year)."
+    },
+    "safesearch": {
+      "type": "string",
+      "description": "Optional SearXNG safesearch filter passthrough (0|1|2)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "10",
+      "description": "Short-page pagination stop threshold (1-100). SearXNG's per-page result count is engine-defined; no size param is ever sent to the API — this value only decides when a page is short enough to stop paginating."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "1",
+      "description": "Maximum pages to request; use 0, all, or unlimited to exhaust the stream. SearXNG paging is fuzzy/engine-dependent, so the default is a conservative 1."
+    }
+  }
+}
