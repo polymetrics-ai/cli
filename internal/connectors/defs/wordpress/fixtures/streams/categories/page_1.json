@@ -3,8 +3,34 @@
   "response": {
     "status": 200,
     "body": [
-      { "id": 1, "name": "Fixture Category One", "slug": "fixture-category-one" },
-      { "id": 2, "name": "Fixture Category Two", "slug": "fixture-category-two" }
+      {
+        "id": 1,
+        "count": 3,
+        "description": "",
+        "link": "https://example.com/category/fixture-category-one/",
+        "name": "Fixture Category One",
+        "slug": "fixture-category-one",
+        "taxonomy": "category",
+        "parent": 0,
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/categories/1" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/categories" }]
+        }
+      },
+      {
+        "id": 2,
+        "count": 1,
+        "description": "",
+        "link": "https://example.com/category/fixture-category-two/",
+        "name": "Fixture Category Two",
+        "slug": "fixture-category-two",
+        "taxonomy": "category",
+        "parent": 0,
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/categories/2" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/categories" }]
+        }
+      }
     ]
   }
 }

@@ -17,18 +17,21 @@
       "name": "projects",
       "path": "/projects",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/projects.json"
     },
     {
       "name": "sections",
       "path": "/sections",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/sections.json"
     },
     {
       "name": "tasks",
       "path": "/tasks",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/tasks.json"
     },
     {
@@ -39,6 +42,7 @@
         "task_id": { "template": "{{ config.task_id }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/comments.json"
     }
   ]

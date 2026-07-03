@@ -30,6 +30,18 @@ stream's request (legacy's own `Read` builds this filter once and reuses it rega
 stream is being read — reproduced here per-stream since the declarative dialect has no
 once-per-Read shared-query-builder concept, but the resulting request is identical either way).
 
+All three streams declare `"projection": "passthrough"`, matching legacy's `Read` verbatim, which
+does `emit(connectors.Record(item))` for every decoded item (`workable.go:129`) — no field-building/
+allow-listing happens anywhere in legacy's read path. Without `passthrough`, this dialect's default
+`"schema"` projection mode would silently restrict every emitted record to only the properties
+declared in `schemas/jobs.json`/`candidates.json`/`members.json` (a handful of catalog-metadata
+fields each), dropping the rest of a real Workable response (`department`, `employment_type`, `url`,
+`resume_url`, `education_entries`, `experience_entries`, `location`, and more) that legacy actually
+emits today. The three schemas remain narrower than the full wire shape (they exist to satisfy
+`x-primary-key`/`x-cursor-field` and catalog metadata, not to gate what's emitted) — `passthrough`
+is what makes the schema's narrowness harmless to parity: every raw field survives regardless of
+whether it is separately declared as a schema property.
+
 ## Write actions & risks
 
 None. This connector is read-only in both legacy and this bundle (`capabilities.write: false`); no

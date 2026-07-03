@@ -28,6 +28,16 @@ bare top-level JSON array (`records.path: "."`), paginated by Awin's `page`/`pag
 clean fit for the engine's `page_number` paginator, unlike Auth0's 0-indexed API; see the
 `auth0`/`docs.md` for that unrelated gap).
 
+`streams.json`'s `base.pagination.page_size` is a fixed `100`, matching legacy's
+`awinDefaultPageSize`/`awinMaxPageSize` (legacy defaults to 100 and caps `page_size` at 100).
+Legacy additionally accepts a `page_size` config override in the 1-100 range (`awinPageSize`), but
+the engine's `page_number` paginator reads `PageSize` as a plain, non-templated value straight from
+`streams.json` (`bundle.go`'s `PaginationSpec`, `paginate.go`'s `newPaginator`) — there is no
+config-driven override mechanism for this field in the current dialect (unlike `stream.Query`
+params, which do support `{{ config.* }}`). This bundle narrows the config surface to legacy's own
+default/max (100 records per request) rather than exposing a `page_size` override; see Known
+limits.
+
 `transactions` (`GET /advertisers/{id}/transactions/`) additionally sends Awin's `startDate`/
 `endDate`/`dateType`/`timezone` date-window query params, matching legacy's `awinDateWindow`:
 
@@ -77,6 +87,17 @@ None. Awin Advertiser is a read-only source in both legacy and this bundle
 - Only the 3 legacy-parity streams are implemented; the broader Awin Advertiser surface (creatives,
   vouchers, programme info, commission group management) is out of scope — see
   `api_surface.json`'s `excluded` entries.
+- **`page_size` config override not exposed**: legacy accepts a `page_size` config value (integer,
+  1-100, default 100) that directly controls the `pageSize` query param sent on every request
+  (`awinPageSize`). This bundle's `base.pagination.page_size` is a fixed `100` (legacy's own
+  default and max) because the engine's `page_number` paginator reads `PageSize` as a static
+  literal from `streams.json`, not a templated value — there is no mechanism in the current
+  dialect to wire a `spec.json` config property into `base.pagination.page_size`. Every request
+  this bundle sends therefore uses legacy's default page size (100 records/page); an operator who
+  relied on legacy's override to request smaller pages (e.g. for slower downstream processing)
+  cannot reproduce that here. This never changes emitted record DATA (only request/response
+  cadence) for any operator who left legacy's `page_size` at its default — see the parity-deviation
+  ledger.
 
 ### Parity-deviation ledger (this connector)
 
@@ -85,3 +106,4 @@ None. Awin Advertiser is a read-only source in both legacy and this bundle
 | `endDate` sent as a static far-future sentinel instead of legacy's `time.Now()` | ACCEPTABLE — provably identical result set for any transaction that exists at read time (see Streams notes) |
 | `advertiserId` numeric-format validation is deferred to the live Awin API instead of a local pre-flight check | ACCEPTABLE — no valid numeric advertiserId behaves differently; only the failure mode for an already-invalid config differs |
 | `start_date` must be pre-formatted in Awin's exact wire shape rather than legacy's RFC3339-or-date auto-normalization | ACCEPTABLE (documented config-surface narrowing) — no engine `param_format` option reproduces legacy's exact normalization; verbatim `rfc3339` passthrough is the least-lossy available option |
+| `page_size` config override (legacy: 1-100, default 100) is not exposed; `base.pagination.page_size` is fixed at legacy's own default/max (100) | ACCEPTABLE (documented config-surface narrowing) — the engine's `page_number` paginator does not support a templated/config-driven `page_size`; fixing it at legacy's default reproduces legacy's default-configuration behavior exactly and never diverges in emitted data, only in request cadence for an operator who had overridden it away from the default |

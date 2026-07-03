@@ -5,14 +5,12 @@
     "body": {
       "data": [
         {
-          "id": "inv_fixture_1",
           "invoiceId": "inv_fixture_1",
           "invoiceNumber": "INV-0001",
           "accountId": "acc_fixture_1",
           "updated": "2026-01-01T00:00:00Z"
         },
         {
-          "id": "inv_fixture_2",
           "invoiceId": "inv_fixture_2",
           "invoiceNumber": "INV-0002",
           "accountId": "acc_fixture_2",

@@ -33,6 +33,14 @@ None. `capabilities.write` is `false` and this bundle ships no `writes.json`, ma
 
 ## Known limits
 
-None beyond the standard wave2 scope narrowing (write endpoints are Pass B, see `api_surface.json`).
-Every legacy read-path behavior (streams, auth, base URL default, record mapping) is fully modeled
-declaratively with no deviations.
+Beyond the standard wave2 scope narrowing (write endpoints are Pass B, see `api_surface.json`):
+`streams.json`'s `base` declares no `check` block, so `Check()` performs no network call at all —
+this matches legacy exactly (`zenefits.go:46-60`'s `Check` never calls the API; it only validates
+that `base_url` parses as an absolute http(s) URL and that the `token` secret resolves to a
+non-empty value). A prior draft of this bundle added a `check: {"method":"GET","path":"/people"}`
+block, which would have made Check issue a real `GET /people` request — a behavior change from
+legacy in both directions (a syntactically-present but server-rejected token, or any transient
+network/API failure, could newly fail Check where legacy always succeeded; conversely legacy never
+depended on network reachability at Check time at all). That block has been removed; there is no
+other read-path deviation from legacy (streams, auth, base URL default, record mapping are all
+modeled declaratively with no other deviations).

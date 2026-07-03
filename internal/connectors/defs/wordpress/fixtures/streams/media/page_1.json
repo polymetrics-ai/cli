@@ -3,8 +3,56 @@
   "response": {
     "status": 200,
     "body": [
-      { "id": 1, "date": "2026-01-01T00:00:00", "slug": "fixture-image-1", "media_type": "image" },
-      { "id": 2, "date": "2026-01-01T00:01:00", "slug": "fixture-image-2", "media_type": "image" }
+      {
+        "id": 1,
+        "date": "2026-01-01T00:00:00",
+        "date_gmt": "2026-01-01T00:00:00",
+        "guid": { "rendered": "https://example.com/wp-content/uploads/fixture-image-1.jpg" },
+        "modified": "2026-01-01T00:00:00",
+        "modified_gmt": "2026-01-01T00:00:00",
+        "slug": "fixture-image-1",
+        "status": "inherit",
+        "type": "attachment",
+        "link": "https://example.com/fixture-image-1/",
+        "title": { "rendered": "fixture-image-1" },
+        "author": 1,
+        "comment_status": "open",
+        "ping_status": "closed",
+        "media_type": "image",
+        "mime_type": "image/jpeg",
+        "source_url": "https://example.com/wp-content/uploads/fixture-image-1.jpg",
+        "media_details": { "width": 800, "height": 600, "file": "fixture-image-1.jpg" },
+        "post": 1,
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/media/1" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/media" }]
+        }
+      },
+      {
+        "id": 2,
+        "date": "2026-01-01T00:01:00",
+        "date_gmt": "2026-01-01T00:01:00",
+        "guid": { "rendered": "https://example.com/wp-content/uploads/fixture-image-2.jpg" },
+        "modified": "2026-01-01T00:01:00",
+        "modified_gmt": "2026-01-01T00:01:00",
+        "slug": "fixture-image-2",
+        "status": "inherit",
+        "type": "attachment",
+        "link": "https://example.com/fixture-image-2/",
+        "title": { "rendered": "fixture-image-2" },
+        "author": 1,
+        "comment_status": "open",
+        "ping_status": "closed",
+        "media_type": "image",
+        "mime_type": "image/jpeg",
+        "source_url": "https://example.com/wp-content/uploads/fixture-image-2.jpg",
+        "media_details": { "width": 1024, "height": 768, "file": "fixture-image-2.jpg" },
+        "post": 2,
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/media/2" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/media" }]
+        }
+      }
     ]
   }
 }

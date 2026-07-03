@@ -36,11 +36,6 @@
       "default": "1000",
       "description": "Martian sol (day) to filter mars_photos by."
     },
-    "max_pages": {
-      "type": "string",
-      "default": "5",
-      "description": "Maximum pages for neo_browse pagination; use 0, all, or unlimited to exhaust the stream."
-    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

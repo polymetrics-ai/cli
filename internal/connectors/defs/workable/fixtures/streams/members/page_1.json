@@ -4,7 +4,24 @@
     "status": 200,
     "body": {
       "members": [
-        { "id": "member_fixture_1", "name": "Fixture Member", "email": "fixture1@example.com" }
+        {
+          "id": "member_fixture_1",
+          "name": "Fixture Member One",
+          "email": "fixture.member.one@example.com",
+          "role": "admin",
+          "headline": "Fixture Talent Acquisition",
+          "phone": "+15550101",
+          "last_login": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "member_fixture_2",
+          "name": "Fixture Member Two",
+          "email": "fixture.member.two@example.com",
+          "role": "simple",
+          "headline": null,
+          "phone": null,
+          "last_login": null
+        }
       ],
       "paging": {}
     }

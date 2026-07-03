@@ -6,6 +6,10 @@ blueprints/print providers, products, and orders through the Printify public RES
 `internal/connectors/printify` (the hand-written connector it migrates); the legacy package stays
 registered and unchanged until wave6's registry flip.
 
+Status: **partial** — see Known limits for one typed `ENGINE_GAP` blocker (the `raw` field) that
+keeps this bundle short of full legacy parity; all 5 streams and every other field are otherwise
+migrated at full parity.
+
 ## Auth setup
 
 Provide a Printify personal access token via the `api_token` secret; it is sent as a standard
@@ -76,9 +80,29 @@ doc: "Mutating product/order endpoints intentionally remain unsupported"); `capa
   `updated_at`) are exactly the keys legacy's `mapRecord` reads; this bundle reproduces legacy's
   own (possibly incomplete) field selection rather than the full real Printify object shape, per
   the meta-rule (match legacy's accepted behavior, not the API's full shape).
-- **Legacy's `raw` escape-hatch field is not modeled.** `mapRecord` stamps a full copy of the
-  source item onto every record under the key `raw` (`printify.go:213`). The engine's
-  `computed_fields` dialect has no whole-record reference primitive, so this cannot be expressed.
+- **`raw` field is BLOCKED (`ENGINE_GAP`), not modeled in this bundle.** Legacy's `mapRecord`
+  (`printify.go:204-215`) unconditionally stamps a full nested copy of the source API object onto
+  every emitted record, for all 5 streams, under the key `raw` (`printify.go:213`). This is an
+  accepted-input EMITTED-DATA change (every live record is missing a field legacy always includes),
+  not a cosmetic/request-count deviation, so per the parity-deviation meta-rule
+  (`docs/migration/conventions.md` §5) it cannot be shipped as a documented-acceptable deviation —
+  it must be filed as a blocker (§6). `computed_fields` templates only resolve a namespaced
+  reference (`record.<dotted.path>`, `config.<key>`, the bare `cursor` pseudo-reference, or a
+  static literal) — `resolveRefValue` (`internal/connectors/engine/interpolate.go:197-227`) requires
+  at least a `<namespace>.<key>` pair (`len(segs) < 2` is a hard "unresolved reference" error), so a
+  bare whole-record reference with no dotted path (e.g. `{{ record }}`) cannot be written at all,
+  and there is no `computed_fields`, projection, or filter primitive that copies the entire raw
+  object as a nested value under one output key. `projection: "passthrough"` does not substitute:
+  it flattens every raw top-level key directly into the projected record (no nesting under a `raw`
+  key), which is a different, still-non-matching shape. This is a genuine `ENGINE_GAP` — not a
+  Tier-2-fixable shape (a `RecordHook` could do it, but this wave's hard rules forbid Tier-2/Tier-3
+  escape hatches) — for a follow-up engine-dialect increment (a whole-record-reference primitive,
+  e.g. a bare `record` reference or a `computed_fields` dialect extension that nests the full raw
+  object under a named key). Once closed, `raw` should be added to all 5 schemas
+  (`schemas/*.json`) as an `object`-typed property with a single `computed_fields` entry wired to
+  it. Legacy stays authoritative for this field until then; every other field
+  (`id`/`title`/`sales_channel`/`status`/`visible`/`created_at`/`updated_at`) is migrated at full
+  parity across all 5 streams.
 - **Legacy's fixture-mode-only synthetic records are not modeled.** Legacy's `readFixture` path
   (only reached when `config.mode == "fixture"`) emits synthetic records with an integer `id`
   (the loop counter, not derived from any real API field) and a `status: "fixture"` literal, a

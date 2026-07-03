@@ -17,6 +17,21 @@ token-as-username Basic-auth precedent (`docs/migration/conventions.md`). `base_
 
 ## Streams notes
 
+All five streams declare `"projection": "passthrough"` (conventions.md §3/§5 defect class 1):
+legacy's `Read` (`toggl.go:94-103`) does `emit(connectors.Record(rec))` on every record read from
+the raw API response with no field-building/filtering step at all — `streamSpecs[...].fields` is
+Catalog-only decoration (`toggl.go:125-137`, consumed solely by `Catalog()`'s `connectors.Stream`
+construction), never applied to the emitted record itself. Default `"schema"` projection mode would
+silently drop every real Toggl field not named in each stream's declared schema properties (e.g.
+`time_entries`' real `tags`/`tag_ids`/`billable`/`at`/`server_deleted_at`/`duronly`/`created_with`,
+`projects`' real `color`/`template`/`auto_estimates`/`is_private`/`billable`/`rate`/`currency`), an
+undocumented silent data-shape change relative to legacy's raw passthrough. Each schema still
+declares the real Toggl Track API v9 wire-shape properties it knows about (both the current
+`workspace_id`/`client_id`/`user_id`-style names and the API's legacy-compat aliases
+`wid`/`cid`/`uid`/`pid`/`tid` — Toggl's v9 API emits both on every record) for `x-primary-key`
+typing and `records_match_schema` coverage, but passthrough mode means ANY other real field Toggl
+adds or returns still survives unfiltered, matching legacy exactly.
+
 `time_entries` reads `GET /me/time_entries` for the authenticated user, optionally filtered by
 `start_date`/`end_date` config values sent only when configured (legacy: `toggl.go:82-89`,
 conditional `q.Set` calls) — reproduced here via the opt-in `omit_when_absent` query dialect

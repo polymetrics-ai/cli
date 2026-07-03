@@ -7,6 +7,11 @@
   "properties": {
     "id": { "type": "integer" },
     "name": { "type": ["string", "null"] },
-    "slug": { "type": ["string", "null"] }
+    "url": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "link": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "avatar_urls": { "type": ["object", "null"] },
+    "_links": { "type": ["object", "null"] }
   }
 }

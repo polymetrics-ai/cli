@@ -25,6 +25,7 @@
         "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "jobs" },
+      "projection": "passthrough",
       "schema": "schemas/jobs.json"
     },
     {
@@ -35,6 +36,7 @@
         "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "candidates" },
+      "projection": "passthrough",
       "schema": "schemas/candidates.json"
     },
     {
@@ -45,6 +47,7 @@
         "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "members" },
+      "projection": "passthrough",
       "schema": "schemas/members.json"
     }
   ]

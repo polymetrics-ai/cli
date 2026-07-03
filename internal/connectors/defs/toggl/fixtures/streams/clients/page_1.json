@@ -3,8 +3,24 @@
   "response": {
     "status": 200,
     "body": [
-      { "id": 200, "workspace_id": 9, "name": "Fixture Client One", "active": true },
-      { "id": 201, "workspace_id": 9, "name": "Fixture Client Two", "active": true }
+      {
+        "id": 200,
+        "wid": 9,
+        "workspace_id": 9,
+        "name": "Fixture Client One",
+        "at": "2026-01-01T00:00:00Z",
+        "server_deleted_at": null,
+        "archived": false
+      },
+      {
+        "id": 201,
+        "wid": 9,
+        "workspace_id": 9,
+        "name": "Fixture Client Two",
+        "at": "2026-01-02T00:00:00Z",
+        "server_deleted_at": null,
+        "archived": true
+      }
     ]
   }
 }

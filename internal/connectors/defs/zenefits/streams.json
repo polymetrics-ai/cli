@@ -5,7 +5,6 @@
     "auth": [
       { "mode": "bearer", "token": "{{ secrets.token }}" }
     ],
-    "check": { "method": "GET", "path": "/people" },
     "error_map": [
       { "status": 401, "hint": "zenefits token is missing or invalid; re-run pm credentials add zenefits" },
       { "status": 403, "hint": "zenefits account lacks access for this request" },

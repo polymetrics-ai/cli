@@ -3,8 +3,36 @@
   "response": {
     "status": 200,
     "body": [
-      { "id": 1, "name": "Fixture Org User One", "email": "fixture1@example.com", "active": true },
-      { "id": 2, "name": "Fixture Org User Two", "email": "fixture2@example.com", "active": true }
+      {
+        "id": 1,
+        "name": "Fixture Org User One",
+        "email": "fixture1@example.com",
+        "user_id": 1,
+        "avatar_url": null,
+        "admin": true,
+        "owner": true,
+        "joined": true,
+        "invitation_code": null,
+        "inactive": false,
+        "can_edit_email": true,
+        "workspaces": [],
+        "groups": []
+      },
+      {
+        "id": 2,
+        "name": "Fixture Org User Two",
+        "email": "fixture2@example.com",
+        "user_id": 2,
+        "avatar_url": null,
+        "admin": false,
+        "owner": false,
+        "joined": true,
+        "invitation_code": null,
+        "inactive": false,
+        "can_edit_email": false,
+        "workspaces": [],
+        "groups": []
+      }
     ]
   }
 }

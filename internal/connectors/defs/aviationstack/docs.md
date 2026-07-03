@@ -36,12 +36,17 @@ Legacy's `page_size` (config-overridable, default 100, max 100) and `max_pages` 
 (confirmed by `internal/connectors/engine/parity_searxng_test.go`'s own comment: "`PaginationSpec.
 MaxPages` is a static int with no template support") — this is the exact same engine-shape gap
 searxng's golden already documented and resolved by simply not declaring the dead config (F6,
-`docs/migration/conventions.md` searxng worked example). `streams.json`'s `pagination.page_size` is
-set to `2` purely so the required 2-page conformance fixture (`fixtures/streams/airlines/{page_1,
-page_2}.json`) stays small and readable — this has no bearing on a live deployment's real
-page-size/throughput, which every stream's actual `limit`/`offset` values are still driven
-end-to-end by the SAME paginator (no divergence between "what conformance replays" and "what a
-live read sends").
+`docs/migration/conventions.md` searxng worked example). `streams.json`'s `base.pagination.page_size`
+is set to legacy's real production default, `100` (legacy: `defaultPageSize = 100`,
+`maxPageSize = 100`) — this is the actual value a live deployment's paginator sends; it is not a
+fixture convenience. The `airlines` stream declares a stream-level `pagination` override
+(`page_size: 2`) so its required 2-page conformance fixture
+(`fixtures/streams/airlines/{page_1,page_2}.json`, §4 of `docs/migration/conventions.md`) can stay
+small and readable; since stream-level `pagination` replaces the base spec wholesale, this is an
+intentional, ledgered per-stream deviation from legacy's uniform 100-record page size — `airlines`
+reads in smaller, more numerous pages than legacy would, everywhere else identical. The other 4
+streams (`flights`, `airports`, `airplanes`, `countries`) are unaffected and use legacy's true
+100-record page size end-to-end, matching their single-page fixtures' `limit=100` request/response.
 
 ## Write actions & risks
 
@@ -58,3 +63,17 @@ None. Aviationstack is a read-only data source in both legacy and this bundle
 - Only the 5 legacy-parity reference/flight streams are implemented; premium-tier endpoints
   (`/v1/timetable`, `/v1/historical`) and additional reference resources (`/v1/routes`,
   `/v1/cities`, `/v1/taxes`) are out of scope — see `api_surface.json`'s `excluded` entries.
+- **Check request omits legacy's `limit=1` query param (`ENGINE_GAP`).** Legacy's `Check` sends
+  `GET /countries?limit=1` (a bounded read of the small countries reference list, used only to
+  confirm auth/connectivity without pulling a full page). This bundle's `streams.json` `base.check`
+  is `{"method": "GET", "path": "/countries"}` with no `limit` param, because the engine's check
+  dispatch (`internal/connectors/engine/bundle.go`'s `RequestSpec`, used only by `check`) is a
+  method+path descriptor with **no query-parameter field at all** —
+  `internal/connectors/engine/read.go`'s `Check()` calls `rt.Requester.Do(ctx, method, checkPath,
+  nil, nil)`, always passing a `nil` query. No bundle in this repo declares a check query param
+  (stripe's check is `{"method": "GET", "path": "/customers"}`, searxng's is `{"method": "GET",
+  "path": "/search"}`) because the dialect has nowhere to put one; adding this would require
+  extending `RequestSpec` with a `query` field and threading it through `Check()` — a genuine
+  engine gap, not a per-connector fix. Impact is minimal and non-data-emitting: the check still
+  hits the identical `/countries` endpoint and proves auth/connectivity the same way; the only
+  difference is legacy's check pulls at most 1 record instead of a full page.

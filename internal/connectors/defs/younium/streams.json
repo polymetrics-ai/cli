@@ -20,6 +20,7 @@
       "name": "accounts",
       "path": "/Accounts",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "computed_fields": {
         "id": "{{ record.id }}",
         "name": "{{ record.name }}",
@@ -32,6 +33,7 @@
       "name": "subscriptions",
       "path": "/Subscriptions",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "computed_fields": {
         "id": "{{ record.id }}",
         "name": "{{ record.name }}",
@@ -44,6 +46,7 @@
       "name": "invoices",
       "path": "/Invoices",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "computed_fields": {
         "id": "{{ record.id }}",
         "name": "{{ record.invoiceNumber }}",

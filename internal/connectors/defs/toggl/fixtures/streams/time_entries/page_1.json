@@ -3,8 +3,50 @@
   "response": {
     "status": 200,
     "body": [
-      { "id": 1, "workspace_id": 9, "project_id": 100, "description": "Build feature", "start": "2026-01-01T09:00:00Z", "stop": "2026-01-01T10:00:00Z", "duration": 3600 },
-      { "id": 2, "workspace_id": 9, "project_id": 100, "description": "Write tests", "start": "2026-01-01T10:00:00Z", "stop": "2026-01-01T11:30:00Z", "duration": 5400 }
+      {
+        "id": 1,
+        "workspace_id": 9,
+        "project_id": 100,
+        "task_id": null,
+        "user_id": 1,
+        "uid": 1,
+        "wid": 9,
+        "pid": 100,
+        "tid": null,
+        "description": "Build feature",
+        "start": "2026-01-01T09:00:00Z",
+        "stop": "2026-01-01T10:00:00Z",
+        "duration": 3600,
+        "billable": true,
+        "tags": ["billable"],
+        "tag_ids": [5],
+        "duronly": true,
+        "at": "2026-01-01T10:00:05Z",
+        "server_deleted_at": null,
+        "created_with": "polymetrics-fixture"
+      },
+      {
+        "id": 2,
+        "workspace_id": 9,
+        "project_id": 100,
+        "task_id": null,
+        "user_id": 1,
+        "uid": 1,
+        "wid": 9,
+        "pid": 100,
+        "tid": null,
+        "description": "Write tests",
+        "start": "2026-01-01T10:00:00Z",
+        "stop": "2026-01-01T11:30:00Z",
+        "duration": 5400,
+        "billable": false,
+        "tags": null,
+        "tag_ids": null,
+        "duronly": false,
+        "at": "2026-01-01T11:30:05Z",
+        "server_deleted_at": null,
+        "created_with": "polymetrics-fixture"
+      }
     ]
   }
 }

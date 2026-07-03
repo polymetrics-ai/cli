@@ -33,6 +33,19 @@ endpoints under `/wp-json/wp/v2/`; each response body is a bare top-level JSON a
 `connsdk.PageNumberPaginator{PageParam: "page", SizeParam: "per_page", StartPage: 1}`), stopping on
 a short page.
 
+Every stream declares `"projection": "passthrough"`. Legacy's `Read` does `emit(connectors.Record(item))`
+— it forwards each raw WordPress API object completely, unfiltered (`wordpress.go:117-119`); the
+`Fields` list attached to each `streamEndpoint` (e.g. `id`/`date`/`slug`/`status` for `posts`) is only
+ever read by `streams()` to populate `Catalog()`'s advertised field list — it is display metadata, not
+a filter applied anywhere in `Read`. The default `"schema"` projection mode would silently drop every
+field the schema doesn't itemize (`title`, `content`, `excerpt`, `link`, `guid`, `author`,
+`featured_media`, `categories`, `tags`, `_links`, etc. on `posts` alone), which would be a silent,
+undocumented emitted-record-data change from legacy — `passthrough` avoids that. Each stream's
+`schemas/<stream>.json` still declares the well-known WordPress REST API v2 fields (for
+`x-primary-key`/`x-cursor-field` and typed documentation purposes), but under `passthrough` this is
+non-exhaustive by design: any additional raw field a live site returns still survives to the emitted
+record.
+
 Legacy sends `after={{start_date}}` unconditionally on **every** stream's request whenever
 `start_date` is configured (`wordpress.go:112-115`, computed once before the per-stream endpoint
 lookup) — including `users`, `categories`, and `tags`, none of which have a `date` field or an
@@ -40,17 +53,28 @@ lookup) — including `users`, `categories`, and `tags`, none of which have a `d
 unrecognized param on those endpoints). This bundle reproduces that exact behavior: every stream's
 `query` declares `"after": {"template": "{{ config.start_date }}", "omit_when_absent": true}`
 (omitted entirely when `start_date` is unset, present verbatim when set), matching legacy's
-`if after != "" { base.Set("after", after) }` gate.
+`if after != "" { base.Set("after", after) }` gate. Crucially, legacy has **no state-cursor
+persistence anywhere** — `after` is recomputed from the static `cfg.Config["start_date"]` value on
+every single call, never from an advancing, app-persisted cursor. This bundle therefore does **not**
+declare `request_param`/`start_config_key` on any stream's `incremental` block: doing so would make
+the engine treat `after` as a genuine incremental filter, persisting and advancing a state cursor
+across syncs (`engine/read.go`'s `incrementalLowerBoundValue` prefers `req.State`'s cursor over
+`start_config_key` from the 2nd sync onward) and sending a DIFFERENT, advancing `after` value on every
+subsequent run — a silent, genuine change to what gets requested and what records come back that
+legacy never does. The plain `query.after` entry above (not tied to `incremental`) is what reproduces
+legacy's actual static, non-advancing behavior.
 
-Only `posts`, `pages`, `comments`, and `media` declare `x-cursor-field: date` and an `incremental`
-block (`request_param: after`, `start_config_key: start_date`) — these 4 streams have a genuine
-`date` field. `users`/`categories`/`tags` still send the (inert) `after` param when `start_date` is
-configured, matching legacy's request shape exactly, but declare no `x-cursor-field`/`incremental`
-block: legacy's own `streams()` sets `CursorFields: []string{"date"}` unconditionally for every
-stream even though `users`/`categories`/`tags` never emit a `date` field at all — this bundle does
-not reproduce that inconsistency in the schema layer, since `x-cursor-field` must name a property
-that actually exists in the same schema (a hard `connectorgen validate` rule); it is a legacy
-catalog-metadata quirk with no bearing on emitted record data.
+`posts`, `pages`, `comments`, and `media` declare a bare `incremental: {"cursor_field": "date"}` (no
+`request_param`) — these 4 streams have a genuine `date` field and legacy's own `streams()` publishes
+`CursorFields: []string{"date"}` for them via `Catalog()`, so the bare cursor-field declaration
+reproduces that published catalog metadata without introducing a server-side filter legacy never had.
+`users`/`categories`/`tags` still send the (inert) `after` param when `start_date` is configured,
+matching legacy's request shape exactly, but declare no `x-cursor-field`/`incremental` block: legacy's
+own `streams()` sets `CursorFields: []string{"date"}` unconditionally for every stream even though
+`users`/`categories`/`tags` never emit a `date` field at all — this bundle does not reproduce that
+inconsistency in the schema layer, since `x-cursor-field` must name a property that actually exists in
+that same schema (a hard `connectorgen validate` rule); it is a legacy catalog-metadata quirk with no
+bearing on emitted record data.
 
 ## Write actions & risks
 
@@ -94,3 +118,12 @@ None. Legacy `Write` always returns `connectors.ErrUnsupportedOperation`; `capab
   describe a request the connector never issues. This bundle ships single-page fixtures for every
   stream (the identical precedent set by `defs/searxng`'s own `max_pages: 1` streams), rather than
   a misleading 2-page fixture that `pagination_terminates` could never actually reach.
+- **Schemas are non-exhaustive by design under `passthrough` projection.** Each stream's
+  `schemas/<stream>.json` declares the well-known, stable WordPress REST API v2 fields (enough to
+  satisfy `x-primary-key`/`x-cursor-field` and give operators a typed reference), but `projection:
+  passthrough` means the schema's `properties` list is documentation, not a filter — a live site
+  running a different WordPress version or with plugins adding custom REST fields will emit
+  additional fields verbatim, exactly matching legacy's own unfiltered `emit(connectors.Record(item))`.
+  Fixtures include the full standard wire shape (including `_links`, `guid`, `title`/`content`/
+  `excerpt` rendered-HTML objects, etc.) rather than only the schema's declared subset, per §4's
+  recorded-real-shape rule.

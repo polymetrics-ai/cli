@@ -32,11 +32,23 @@ filter is sent only when its corresponding config value is set, and omitted enti
 
 Every stream stamps a static-literal `stream` marker field (`"people"`/`"campaigns"`/`"tasks"`/
 `"email_accounts"`) via `computed_fields`, matching legacy's own `out["stream"] = stream` line in
-`mapRecord`. All four streams publish `updated_at` as `x-cursor-field` (matching legacy's own
-`CursorFields: []string{"updated_at"}`), but Reply.io's list endpoints expose no server-side
-incremental filter parameter and legacy's own `harvest` never applies one — every read is a full
-paginated sweep, matching legacy's true read behavior (no `request_param`/`start_config_key`/
-`client_filtered` declared).
+`mapRecord`. All four streams publish `updated_at` as `x-cursor-field` on their schema (matching
+legacy's own descriptive `CursorFields: []string{"updated_at"}` in `Catalog()`, never wired to any
+filter there either) — but Reply.io's list endpoints expose no server-side incremental filter
+parameter and legacy's own `harvest` never applies one, so `streams.json` deliberately declares
+**no `incremental` block at all** on any of the four streams. This matters at the catalog level, not
+just at read time: the engine's `DerivedSyncModes` flips on `incremental_append`/
+`incremental_append_deduped` whenever a stream's `StreamSpec.Incremental` is non-nil, independent of
+whether that block actually carries a `request_param`/`client_filtered` filter — a bare
+`cursor_field`-only `incremental` block is sufficient by itself to advertise incremental sync modes
+this connector cannot honor (a caller selecting `incremental_append` would silently get every record
+replayed on every sync). Declaring `x-cursor-field` on the schema (catalog metadata only, matching
+legacy's descriptive `CursorFields`) while omitting `streams.json`'s `incremental` block entirely
+(no sync-mode advertisement) is the correct, exact-parity shape — identical to this wave's sibling
+`recurly` bundle, which hit the same non-incremental-legacy situation and made the same choice. Every
+read is a full paginated sweep, matching legacy's true read behavior (no `request_param`/
+`start_config_key`/`client_filtered` declared, and no `incremental` block to trigger sync-mode
+derivation).
 
 ## Write actions & risks
 

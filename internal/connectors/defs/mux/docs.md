@@ -39,5 +39,19 @@ legacy's `Write` stub that always returns `connectors.ErrUnsupportedOperation`.
   webhooks, Data API video views/errors) is out of scope for this wave; see `api_surface.json`'s
   `excluded: {category: out_of_scope | destructive_admin, reason: "Pass B capability expansion"}`
   entries. Only the 4 legacy-parity read streams are implemented.
-- `max_pages` config accepts an integer, `all`, or `unlimited` (0/absent means unbounded), matching
-  legacy's `muxMaxPages` parsing exactly.
+- **`page_size` is not runtime-configurable.** Legacy exposes `page_size` as a config-driven
+  override (`muxPageSize`, `mux.go:280-293`, default 25, max 100). The engine's `page_number`
+  paginator's `PageSize` is a static bundle-authored int (not templated), so there is no way to
+  expose it as a config override; `page_size` is therefore not declared in `spec.json` at all (F6,
+  REVIEW.md: a declared-but-unwireable config key is worse than an absent one), matching miro's
+  identical documented precedent. `streams.json`'s `base.pagination.page_size` is fixed at `25`,
+  legacy's own default, so the real per-page record count is unchanged for any caller who never
+  overrode it; a caller who relied on legacy's config override to request a different page size has
+  no equivalent here, a documented scope narrowing, not a data difference.
+- **`max_pages` is not runtime-configurable.** Legacy exposes `max_pages` as a config-driven hard
+  request-count cap override (`muxMaxPages`, `mux.go:295-308`, accepting an integer, `all`, or
+  `unlimited`, default `0`/unbounded). The engine's `PaginationSpec.MaxPages` is a static
+  bundle-authored int (not templated) — there is no config-driven knob to wire it to, so it is left
+  unset (unbounded) in `streams.json`, matching legacy's own default behavior; a caller who relied
+  on legacy's config override to bound page count has no equivalent here, a documented scope
+  narrowing, not a data difference.

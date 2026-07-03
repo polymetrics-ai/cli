@@ -8,7 +8,23 @@
   "properties": {
     "id": { "type": "integer" },
     "date": { "type": ["string", "null"] },
+    "date_gmt": { "type": ["string", "null"] },
+    "guid": { "type": ["object", "null"] },
+    "modified": { "type": ["string", "null"] },
+    "modified_gmt": { "type": ["string", "null"] },
     "slug": { "type": ["string", "null"] },
-    "media_type": { "type": ["string", "null"] }
+    "status": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "link": { "type": ["string", "null"] },
+    "title": { "type": ["object", "null"] },
+    "author": { "type": ["integer", "null"] },
+    "comment_status": { "type": ["string", "null"] },
+    "ping_status": { "type": ["string", "null"] },
+    "media_type": { "type": ["string", "null"] },
+    "mime_type": { "type": ["string", "null"] },
+    "source_url": { "type": ["string", "null"] },
+    "media_details": { "type": ["object", "null"] },
+    "post": { "type": ["integer", "null"] },
+    "_links": { "type": ["object", "null"] }
   }
 }

@@ -7,8 +7,18 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "integer" },
-    "date": { "type": ["string", "null"] },
     "post": { "type": ["integer", "null"] },
-    "status": { "type": ["string", "null"] }
+    "parent": { "type": ["integer", "null"] },
+    "author": { "type": ["integer", "null"] },
+    "author_name": { "type": ["string", "null"] },
+    "author_url": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "date_gmt": { "type": ["string", "null"] },
+    "content": { "type": ["object", "null"] },
+    "link": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "author_avatar_urls": { "type": ["object", "null"] },
+    "_links": { "type": ["object", "null"] }
   }
 }

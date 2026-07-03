@@ -6,7 +6,13 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "integer" },
+    "count": { "type": ["integer", "null"] },
+    "description": { "type": ["string", "null"] },
+    "link": { "type": ["string", "null"] },
     "name": { "type": ["string", "null"] },
-    "slug": { "type": ["string", "null"] }
+    "slug": { "type": ["string", "null"] },
+    "taxonomy": { "type": ["string", "null"] },
+    "parent": { "type": ["integer", "null"] },
+    "_links": { "type": ["object", "null"] }
   }
 }

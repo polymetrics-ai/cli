@@ -23,7 +23,6 @@
         "page_size": 50
       },
       "computed_fields": {
-        "id": "{{ record.id | last_path_segment }}",
         "personal_pronouns": "{{ record.personal.pronouns }}",
         "work_title": "{{ record.work.title }}",
         "work_department": "{{ record.work.department }}",
@@ -37,18 +36,12 @@
       "name": "named_lists",
       "path": "/company/named-lists",
       "records": { "path": "values" },
-      "computed_fields": {
-        "id": "{{ record.id | last_path_segment }}"
-      },
       "schema": "schemas/named_lists.json"
     },
     {
       "name": "company_lists",
       "path": "/company/people/fields",
       "records": { "path": "" },
-      "computed_fields": {
-        "id": "{{ record.id | last_path_segment }}"
-      },
       "schema": "schemas/company_lists.json"
     }
   ]

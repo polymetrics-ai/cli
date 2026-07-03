@@ -44,7 +44,8 @@
         "page_param": "page",
         "size_param": "",
         "start_page": 0,
-        "page_size": 20
+        "page_size": 20,
+        "max_pages": 5
       },
       "schema": "schemas/neo_browse.json"
     },

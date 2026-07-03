@@ -3,8 +3,56 @@
   "response": {
     "status": 200,
     "body": [
-      { "id": 100, "workspace_id": 9, "client_id": 200, "name": "Fixture Project One", "active": true },
-      { "id": 101, "workspace_id": 9, "client_id": 200, "name": "Fixture Project Two", "active": false }
+      {
+        "id": 100,
+        "workspace_id": 9,
+        "client_id": 200,
+        "wid": 9,
+        "cid": 200,
+        "name": "Fixture Project One",
+        "is_private": true,
+        "active": true,
+        "at": "2026-01-01T00:00:00Z",
+        "created_at": "2025-12-01T00:00:00Z",
+        "server_deleted_at": null,
+        "color": "#06a893",
+        "billable": true,
+        "template": false,
+        "auto_estimates": false,
+        "estimated_hours": null,
+        "rate": null,
+        "rate_last_updated": null,
+        "currency": "USD",
+        "recurring": false,
+        "recurring_parameters": null,
+        "fixed_fee": null,
+        "actual_hours": 12
+      },
+      {
+        "id": 101,
+        "workspace_id": 9,
+        "client_id": 200,
+        "wid": 9,
+        "cid": 200,
+        "name": "Fixture Project Two",
+        "is_private": false,
+        "active": false,
+        "at": "2026-01-02T00:00:00Z",
+        "created_at": "2025-12-02T00:00:00Z",
+        "server_deleted_at": null,
+        "color": "#c56bff",
+        "billable": false,
+        "template": false,
+        "auto_estimates": false,
+        "estimated_hours": 40,
+        "rate": null,
+        "rate_last_updated": null,
+        "currency": "USD",
+        "recurring": false,
+        "recurring_parameters": null,
+        "fixed_fee": null,
+        "actual_hours": 0
+      }
     ]
   }
 }

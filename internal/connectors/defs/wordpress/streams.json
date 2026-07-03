@@ -29,12 +29,10 @@
       },
       "records": { "path": "." },
       "incremental": {
-        "cursor_field": "date",
-        "request_param": "after",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
+        "cursor_field": "date"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "projection": "passthrough"
     },
     {
       "name": "pages",
@@ -44,12 +42,10 @@
       },
       "records": { "path": "." },
       "incremental": {
-        "cursor_field": "date",
-        "request_param": "after",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
+        "cursor_field": "date"
       },
-      "schema": "schemas/pages.json"
+      "schema": "schemas/pages.json",
+      "projection": "passthrough"
     },
     {
       "name": "comments",
@@ -59,12 +55,10 @@
       },
       "records": { "path": "." },
       "incremental": {
-        "cursor_field": "date",
-        "request_param": "after",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
+        "cursor_field": "date"
       },
-      "schema": "schemas/comments.json"
+      "schema": "schemas/comments.json",
+      "projection": "passthrough"
     },
     {
       "name": "media",
@@ -74,12 +68,10 @@
       },
       "records": { "path": "." },
       "incremental": {
-        "cursor_field": "date",
-        "request_param": "after",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
+        "cursor_field": "date"
       },
-      "schema": "schemas/media.json"
+      "schema": "schemas/media.json",
+      "projection": "passthrough"
     },
     {
       "name": "users",
@@ -88,7 +80,8 @@
         "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
-      "schema": "schemas/users.json"
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
     },
     {
       "name": "categories",
@@ -97,7 +90,8 @@
         "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
-      "schema": "schemas/categories.json"
+      "schema": "schemas/categories.json",
+      "projection": "passthrough"
     },
     {
       "name": "tags",
@@ -106,7 +100,8 @@
         "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
-      "schema": "schemas/tags.json"
+      "schema": "schemas/tags.json",
+      "projection": "passthrough"
     }
   ]
 }

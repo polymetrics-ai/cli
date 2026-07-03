@@ -36,7 +36,9 @@ wiring.
   (undocumented as configurable), so every page except the last is exactly 20 records long — the
   engine's short-page (fewer than `page_size`) stop condition is behaviorally equivalent to
   legacy's `page+1 >= total_pages` check for every real NeoWs browse response, without needing a
-  7th pagination type for a `page.total_pages`-driven stop signal.
+  7th pagination type for a `page.total_pages`-driven stop signal. `pagination.max_pages: 5` caps
+  the stream at 5 pages by default, matching legacy's `nasaDefaultMaxPages` — see Known limits for
+  why this is a static bundle-authored bound rather than a config-driven one.
 - `epic` (`GET /EPIC/api/natural`) returns a top-level JSON array; `records.path: ""` iterates it
   directly (the `[]any` branch of `connsdk.RecordsAt`), matching legacy's `arrayPath: "."`.
 - `mars_photos` (`GET /mars-photos/api/v1/rovers/curiosity/photos`) sends `sol` (default `1000`,
@@ -71,5 +73,16 @@ legacy's `Write` stub that always returns `connectors.ErrUnsupportedOperation`.
 - Full NASA Open API surface (DONKI space weather, Earth Landsat imagery, exoplanet archive, other
   rover cameras/rovers, TechPort, sounds) is out of scope for this wave; see `api_surface.json`'s
   `excluded` entries. Only the 5 legacy-parity streams are implemented.
-- `max_pages` (neo_browse only) accepts an integer, `all`, or `unlimited`, defaulting to `5`
-  matching legacy's `nasaDefaultMaxPages`.
+- **`neo_browse`'s page cap is a static 5-page bound, not a runtime-configurable one.** Legacy's
+  `nasaMaxPages` reads a `max_pages` config value (accepting an integer, `all`, or `unlimited`)
+  and falls back to `nasaDefaultMaxPages = 5` when unset, explicitly "so a sync cannot run
+  unbounded against the (large) NeoWs dataset." The engine's `PaginationSpec.max_pages`
+  (`streams.json`'s `neo_browse.pagination.max_pages: 5`) is a static bundle-authored int, never
+  templated against `config.*` — there is no dialect mechanism to make it operator-overridable per
+  sync. This bundle therefore reproduces legacy's DEFAULT behavior exactly (bounded at 5 pages) but
+  narrows legacy's accepted config surface: an operator can no longer opt into `all`/`unlimited`/a
+  different integer at runtime. A `max_pages` config property is not declared in `spec.json` for
+  this reason — a declared key with no template anywhere to consume it would be dead config (see
+  searxng's identical `max_pages`-removal precedent). Widening this would require a
+  `stream.pagination`-level templated-max-pages primitive; out of scope here as a genuine engine
+  gap, not silently worked around.

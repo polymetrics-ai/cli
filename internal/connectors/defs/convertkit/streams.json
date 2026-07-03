@@ -26,24 +26,28 @@
         "page_size": 50
       },
       "records": { "path": "subscribers" },
+      "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/subscribers.json"
     },
     {
       "name": "forms",
       "path": "/forms",
       "records": { "path": "forms" },
+      "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/forms.json"
     },
     {
       "name": "sequences",
       "path": "/sequences",
       "records": { "path": "sequences" },
+      "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/sequences.json"
     },
     {
       "name": "tags",
       "path": "/tags",
       "records": { "path": "tags" },
+      "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/tags.json"
     },
     {
@@ -57,6 +61,7 @@
         "page_size": 50
       },
       "records": { "path": "broadcasts" },
+      "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/broadcasts.json"
     }
   ]

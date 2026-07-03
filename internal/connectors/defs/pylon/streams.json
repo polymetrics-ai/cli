@@ -26,9 +26,6 @@
         "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "data" },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
       "schema": "schemas/issues.json"
     },
     {
@@ -39,9 +36,6 @@
         "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "data" },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
       "schema": "schemas/accounts.json"
     },
     {
@@ -52,9 +46,6 @@
         "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "data" },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
       "schema": "schemas/contacts.json"
     },
     {
@@ -75,9 +66,6 @@
         "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "data" },
-      "incremental": {
-        "cursor_field": "updated_at"
-      },
       "schema": "schemas/messages.json"
     }
   ]

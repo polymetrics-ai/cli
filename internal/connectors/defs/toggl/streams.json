@@ -20,30 +20,35 @@
         "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/time_entries.json"
     },
     {
       "name": "projects",
       "path": "/workspaces/{{ config.workspace_id }}/projects",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/projects.json"
     },
     {
       "name": "clients",
       "path": "/workspaces/{{ config.workspace_id }}/clients",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/clients.json"
     },
     {
       "name": "workspace_users",
       "path": "/workspaces/{{ config.workspace_id }}/users",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/workspace_users.json"
     },
     {
       "name": "organization_users",
       "path": "/organizations/{{ config.organization_id }}/users",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/organization_users.json"
     }
   ]

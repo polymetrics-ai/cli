@@ -25,6 +25,19 @@ block is declared and records are extracted from the response root (`records.pat
 legacy's `connsdk.RecordsAt(resp.Body, ".")` (`todoist.go:90`). None of the four streams expose an
 incremental cursor field in legacy, so all four are always full-refresh reads.
 
+All four streams declare `"projection": "passthrough"`. Legacy's `Read` emits the raw API record
+verbatim (`emit(connectors.Record(rec))`, `todoist.go:94-99`) with no field-building/filtering —
+`streamSpecs[stream].fields` is consumed only by `Catalog` (`todoist.go:133-141`), never by `Read`.
+Every real Todoist field beyond each stream's narrow catalog schema (e.g. `order`,
+`comment_count`, `is_archived`, `url`, `parent_id` on `projects`; `labels`, `priority`,
+`assignee_id`, `duration` on `tasks`; `attachment` on `comments`) survives to the emitted record
+exactly as legacy would emit it. Declaring the default `"schema"` projection mode here would
+silently narrow every emitted record to the catalog schema's properties — a silent, undocumented
+parity deviation from legacy's verbatim passthrough — so `passthrough` is required, matching
+conventions.md's projection rule (§3) and the passthrough-decision rule (§5 defect class 1:
+legacy's raw `emit(record)` with no `mapRecord` field-building is the mechanical signal to use
+`passthrough`).
+
 `comments` optionally scopes to one project or task via `project_id`/`task_id` query parameters,
 sent only when configured (legacy: `todoist.go:78-85`, `strings.TrimSpace` then conditionally
 `q.Set`). This bundle reproduces the identical optional behavior via the opt-in `omit_when_absent`

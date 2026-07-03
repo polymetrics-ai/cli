@@ -2,7 +2,7 @@
   "request": {
     "method": "GET",
     "path": "/advertisers/synthetic-conformance-value/publishers/",
-    "query": { "page": "1", "pageSize": "2" }
+    "query": { "page": "1", "pageSize": "100" }
   },
   "response": {
     "status": 200,

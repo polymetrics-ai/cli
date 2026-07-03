@@ -4,8 +4,70 @@
     "status": 200,
     "body": {
       "jobs": [
-        { "id": "job_fixture_1", "shortcode": "FIX1", "title": "Fixture Engineer", "state": "published" },
-        { "id": "job_fixture_2", "shortcode": "FIX2", "title": "Fixture Designer", "state": "draft" }
+        {
+          "id": "job_fixture_1",
+          "title": "Fixture Software Engineer",
+          "full_title": "Fixture Software Engineer - Engineering",
+          "shortcode": "FIX1",
+          "code": null,
+          "state": "published",
+          "department": "Engineering",
+          "url": "https://fixture.workable.com/spi/v3/jobs/FIX1",
+          "application_url": "https://apply.workable.com/fixture/j/FIX1/",
+          "shortlink": "https://workable.com/j/FIX1",
+          "category": "Engineering",
+          "location": {
+            "location_str": "Fixtureville, Fixture State, US",
+            "country": "US",
+            "country_code": "US",
+            "region": "Fixture State",
+            "region_code": "FS",
+            "city": "Fixtureville",
+            "zip_code": "00000",
+            "telecommuting": false
+          },
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "published_on": "2026-01-02T00:00:00.000Z",
+          "employment_type": "Full-time",
+          "telecommute": false,
+          "department_hierarchy": ["Fixture Co", "Engineering"],
+          "experience": "Mid-level",
+          "education": "Bachelor's Degree",
+          "function": "Engineering",
+          "industry": "Computer Software"
+        },
+        {
+          "id": "job_fixture_2",
+          "title": "Fixture Product Designer",
+          "full_title": "Fixture Product Designer - Design",
+          "shortcode": "FIX2",
+          "code": null,
+          "state": "draft",
+          "department": "Design",
+          "url": "https://fixture.workable.com/spi/v3/jobs/FIX2",
+          "application_url": "https://apply.workable.com/fixture/j/FIX2/",
+          "shortlink": "https://workable.com/j/FIX2",
+          "category": "Design",
+          "location": {
+            "location_str": "Remote",
+            "country": "US",
+            "country_code": "US",
+            "region": null,
+            "region_code": null,
+            "city": null,
+            "zip_code": null,
+            "telecommuting": true
+          },
+          "created_at": "2026-01-03T00:00:00.000Z",
+          "published_on": null,
+          "employment_type": "Full-time",
+          "telecommute": true,
+          "department_hierarchy": ["Fixture Co", "Design"],
+          "experience": "Senior",
+          "education": null,
+          "function": "Design",
+          "industry": "Computer Software"
+        }
       ],
       "paging": {}
     }
