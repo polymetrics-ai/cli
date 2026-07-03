@@ -22,6 +22,18 @@ call, which passes a nil `url.Values`. Every stream's `records.path` is `"."` (b
 `launches` through `ships` return a top-level JSON array; `roadster` and `company` return a
 top-level JSON object (`single_object: true`, both singleton resources with no list wrapper).
 
+All 11 streams declare `"projection": "passthrough"`. Legacy's `Read` emits the raw API record
+verbatim (`emit(connectors.Record(rec))`, `spacex_api.go:127`, inside `readRecords`) with no
+field-building/filtering step — `streams()`'s three-field `Fields` list (`spacex_api.go:109`) is
+consumed only by `Catalog`, never by `Read`. Every real SpaceX API field beyond each schema's
+narrow `id`/`name`/`date_utc`-shaped properties (e.g. `launches`' `rocket`/`success`/`links`/
+`fairings`, `rockets`' `height`/`mass`/`engines`) survives to the emitted record exactly as legacy
+would emit it. Declaring the default `"schema"` projection mode here would silently narrow every
+emitted record to the schema's declared properties — an undocumented parity deviation from
+legacy's verbatim passthrough — so `passthrough` is required, matching conventions.md §8 rule 1
+(legacy's raw `emit(record)` with no `mapRecord` field-building is the mechanical signal to use
+`passthrough`).
+
 ## Write actions & risks
 
 None. SpaceX API is read-only in both legacy and this bundle (`capabilities.write: false`, no

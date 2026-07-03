@@ -16,7 +16,15 @@ narrowed case where only one of the two is overridden.
 
 ## Streams notes
 
-All 3 streams (`addressbooks`, `campaigns`, `senders`) share the same shape: `GET` against the
+All 3 streams (`addressbooks`, `campaigns`, `senders`) declare `"projection": "passthrough"`:
+legacy's `Read` (`sendpulse.go:88-90`) emits `emit(connectors.Record(rec))` verbatim from
+`connsdk.Harvest`'s decoded record with no `mapRecord`-style field-building anywhere in the read
+path, so schema-mode projection (which would silently drop any raw field not enumerated in
+`schemas/*.json`) would be a parity regression versus legacy's every-field-survives behavior.
+`schemas/*.json` stay a documentation surface of the well-known fields; passthrough mode means the
+schema does not gate which fields actually reach the caller.
+
+All 3 streams share the same shape: `GET` against the
 SendPulse list endpoint, records at the JSON body root (`records.path: "."`, matching legacy's
 `recordsPath: ""` — SendPulse's list endpoints return a bare JSON array, no envelope object).
 Pagination is `page_number` (`page_param: page`, `size_param: limit`, `start_page: 1`,

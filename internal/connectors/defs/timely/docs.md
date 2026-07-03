@@ -31,6 +31,21 @@ client-side re-filtering — it is a one-shot "start from this timestamp" hint t
 itself interprets, so this bundle deliberately does not declare an `incremental` block (which
 would imply cursor-based state tracking legacy never had).
 
+All 4 streams declare `"projection": "passthrough"` (conventions.md §8 rule 1). Legacy's `Read`
+extracts records via `connsdk.RecordsAt(resp.Body, spec.recordsPath)` and does
+`emit(connectors.Record(rec))` on each one with no field-building step at all
+(`timely.go:95-103`); `streamSpecs[...].fields` (e.g. `id`/`name`/`email`/`created_at`/
+`updated_at` for `users`) is Catalog-only decoration (`timely.go:126-146`, consumed solely by
+`Catalog()`'s `connectors.Stream` construction), never applied to the emitted record itself.
+Default `"schema"` projection mode would silently drop every real Timely field not named in each
+stream's declared schema properties (the live API returns considerably more per-object detail
+than legacy's catalog list names, e.g. `users`' `external_id`/`role`/`holiday_calendar`,
+`projects`' `budget`/`color`/`active`/`billable`, `events`' `note`/`billed`/`from`/`to`/`user_ids`),
+an undocumented silent data-shape change relative to legacy's raw passthrough. Each schema still
+declares the fields legacy's own catalog names (for `x-primary-key` typing and
+`records_match_schema` coverage), but passthrough mode means any other real field Timely returns
+still survives unfiltered, matching legacy exactly.
+
 ## Write actions & risks
 
 None. Timely is read-only (`capabilities.write: false`, no `writes.json`), matching legacy's

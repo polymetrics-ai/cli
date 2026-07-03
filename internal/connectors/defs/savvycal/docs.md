@@ -59,15 +59,17 @@ unconditionally; `capabilities.write` is `false` and this bundle ships no `write
   of the live record shape, and is intentionally not modeled here — the engine's own
   conformance/fixture-replay harness (`internal/connectors/conformance`) provides the equivalent
   credential-free test affordance.
-- Schema is intentionally minimal (`id` + `name`) since legacy performs zero record shaping —
-  `savvycal.go:126`'s `emit(connectors.Record(rec))` passes the raw decoded record straight
-  through with no field renaming, computation, or filtering. `conformance`'s
-  `records_match_schema` check validates the RAW record against the schema before "schema"
-  projection drops undeclared fields, and draft-07's default `additionalProperties: true` means
-  any additional real-API fields beyond `id`/`name` pass validation without needing to be
-  enumerated here; full field-level schema expansion (every SavvyCal event/link/contact property)
-  is Pass B (wave5) scope, matching `api_surface.json`'s minimal-honest wave0/pilot depth
-  precedent applied to schema breadth.
+- **Every stream declares `projection: "passthrough"`** (conventions.md §8 rule 1): legacy performs
+  zero record shaping on any of the 3 streams — `savvycal.go:126`'s `emit(connectors.Record(rec))`
+  passes the raw decoded record straight through with no field renaming, computation, or
+  filtering. Schema-mode projection (the dialect default) would silently drop every real-API field
+  beyond `id`/`name` from the emitted record, a parity-breaking behavior change versus legacy;
+  `passthrough` keeps every raw field, matching legacy's actual emitted-record shape exactly.
+  Schema stays intentionally minimal (`id` + `name`, the fields legacy's own `Catalog` declares) as
+  a **documentation surface only** now that `passthrough` — not schema shape — governs what
+  survives projection; full field-level schema expansion (every SavvyCal event/link/contact
+  property) remains Pass B (wave5) scope, matching `api_surface.json`'s minimal-honest wave0/pilot
+  depth precedent applied to schema breadth.
 - Full SavvyCal API surface (link creation, availability lookups) is out of scope for this wave;
   see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability
   expansion"}` entries.

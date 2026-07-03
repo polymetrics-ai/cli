@@ -24,18 +24,21 @@
       "name": "subscribers",
       "path": "/subscribers",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/subscribers.json"
     },
     {
       "name": "lists",
       "path": "/lists",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/lists.json"
     },
     {
       "name": "campaigns",
       "path": "/campaigns",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/campaigns.json"
     }
   ]

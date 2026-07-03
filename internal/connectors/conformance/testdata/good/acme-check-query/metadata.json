@@ -1,0 +1,8 @@
+{
+  "name": "acme-check-query",
+  "display_name": "Acme Check Query",
+  "description": "conformance v2 self-test bundle for base.check.query (RequestSpec.Query, checkquery-ledger.md): a fixtures/check.json recording a matching request.query must pass check_fixture (synthetic, not a real API)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": { "check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false }
+}

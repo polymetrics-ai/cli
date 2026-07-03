@@ -28,18 +28,21 @@
       "name": "jobs",
       "path": "/jobs",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/jobs.json"
     },
     {
       "name": "clients",
       "path": "/clients",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/clients.json"
     },
     {
       "name": "contacts",
       "path": "/contacts",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/contacts.json"
     }
   ]

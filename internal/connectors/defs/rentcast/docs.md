@@ -25,10 +25,16 @@ exact parity match, not an approximation.
 Legacy applies five optional config-driven filters (`address`, `city`, `state`, `zipCode`,
 `propertyType`) uniformly to **every** stream's request (`rentcastFilters(cfg)`), regardless of
 whether that stream's endpoint documents support for the filter. This bundle reproduces that exact
-behavior via the opt-in optional-query dialect (`query.<param>.omit_when_absent: true`) on
-`base.query`, so each filter is sent only when its corresponding config value
+behavior via the opt-in optional-query dialect (`query.<param>.omit_when_absent: true`), declared
+identically on **each of the six streams' own `query` block** — `engine.HTTPBase` has no `query`
+field at all, so a `base.query` block is silently dropped by the JSON decoder (an unknown key, not
+an error) and would never reach an outgoing request; `engine.StreamSpec.Query` is the only field
+the engine actually reads (`docs/migration/conventions.md`'s optional-query dialect is a
+per-stream primitive, not a base-level one). Each stream therefore repeats the same five-filter
+`query` object so every filter is sent only when its corresponding config value
 (`address`/`city`/`state`/`zip_code`/`property_type`) is set, and omitted entirely otherwise —
-identical to legacy's `if value != "" { query.Set(...) }` loop.
+identical to legacy's `if value != "" { query.Set(...) }` loop, and identical across streams
+because legacy applies the same filter set uniformly regardless of per-endpoint support.
 
 Each stream's schema is a field-for-field projection of legacy's own `mapRecord` functions.
 `properties`/`sale_listings`/`rental_listings` rename RentCast's camelCase wire fields

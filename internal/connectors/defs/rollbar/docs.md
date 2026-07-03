@@ -21,6 +21,15 @@ records at `result`) share the same `page_number` pagination (`page`/`per_page`,
 primary key is `["id"]`; neither declares an incremental cursor (legacy exposes none for either
 endpoint).
 
+Legacy's `readPages` decodes each page with `connsdk.RecordsAt` and emits every record verbatim
+(`emit(connectors.Record(rec))`, `rollbar.go:134-138`) for both streams — there is no
+`mapRecord`-style field-building or filtering anywhere in the read path; the `fields` list on each
+`streamSpec` (`rollbar.go:37-50`) only documents legacy's `Catalog` metadata, it never gates what
+`Read` emits. Both streams therefore declare `"projection": "passthrough"` (conventions.md §8 rule
+1) so the engine's default schema-mode projection does not silently drop any field of the actual
+Rollbar item/project response object. Each `schemas/*.json`'s declared properties remain a
+documentation surface describing the catalog-known field set, not an allow-list.
+
 ## Write actions & risks
 
 None. Legacy `rollbar.go`'s `Write` returns `connectors.ErrUnsupportedOperation`

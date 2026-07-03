@@ -17,7 +17,8 @@
         "type": "next_url",
         "next_url_path": "next_page"
       },
-      "schema": "schemas/cards.json"
+      "schema": "schemas/cards.json",
+      "projection": "passthrough"
     },
     {
       "name": "sets",
@@ -27,7 +28,8 @@
         "type": "next_url",
         "next_url_path": "next_page"
       },
-      "schema": "schemas/sets.json"
+      "schema": "schemas/sets.json",
+      "projection": "passthrough"
     }
   ]
 }

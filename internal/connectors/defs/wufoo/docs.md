@@ -36,6 +36,13 @@ incremental cursor field for manifest-surface parity on all 3 streams, matching 
 `cursorFields`, though neither legacy nor this bundle actually issues a server-side incremental
 filter — legacy's `Read` performs a full stream read every time regardless of any prior cursor.
 
+All 3 streams declare `"projection": "passthrough"`: legacy's `Read` hands `connsdk.Harvest` a
+callback that does `emit(connectors.Record(rec))` verbatim for every stream — no field-built
+`connectors.Record{...}` mapping anywhere in `wufoo.go` — so schema-mode projection would silently
+drop any Wufoo field beyond the three currently declared per stream; passthrough reproduces
+legacy's actual raw-emission behavior exactly, and the schema remains a documentation surface of
+the known shape.
+
 ## Write actions & risks
 
 None. Legacy `wufoo.go`'s `Write` returns `connectors.ErrUnsupportedOperation` unconditionally;

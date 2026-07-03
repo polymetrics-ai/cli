@@ -7,6 +7,11 @@
   "properties": {
     "id": { "type": "string" },
     "country": { "type": ["string", "null"] },
-    "articles": { "type": ["array", "null"] }
+    "articles": { "type": ["array", "null"] },
+    "project": { "type": ["string", "null"] },
+    "access": { "type": ["string", "null"] },
+    "year": { "type": ["string", "null"] },
+    "month": { "type": ["string", "null"] },
+    "day": { "type": ["string", "null"] }
   }
 }

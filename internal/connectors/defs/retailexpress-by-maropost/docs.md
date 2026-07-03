@@ -26,7 +26,9 @@ All five streams (`products`, `customers`, `orders`, `stock_levels`, `stores`) r
 
 Legacy applies four optional config-driven filters (`updated_after`, `created_after`, `store_id`,
 `status`) uniformly to every stream's request. This bundle reproduces that exact behavior via the
-opt-in optional-query dialect (`query.<param>.omit_when_absent: true`) on `base.query`.
+opt-in optional-query dialect (`query.<param>.omit_when_absent: true`) declared identically on each
+of the five streams' own `query` block (`HTTPBase` has no `query` field in the engine dialect, so
+the shared filter set is duplicated per-stream rather than declared once at the base level).
 
 Every stream stamps a static-literal `stream` marker field (`"products"`/`"customers"`/`"orders"`/
 `"stock_levels"`/`"stores"`) via `computed_fields`, matching legacy's own `out["stream"] = stream`

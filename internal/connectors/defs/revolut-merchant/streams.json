@@ -15,12 +15,6 @@
       "start_page": 1,
       "page_size": 100
     },
-    "query": {
-      "from_created_date": { "template": "{{ config.from_created_date }}", "omit_when_absent": true },
-      "to_created_date": { "template": "{{ config.to_created_date }}", "omit_when_absent": true },
-      "customer_id": { "template": "{{ config.customer_id }}", "omit_when_absent": true },
-      "state": { "template": "{{ config.state }}", "omit_when_absent": true }
-    },
     "check": { "method": "GET", "path": "/orders", "query": { "limit": "1" } },
     "error_map": [
       { "status": 401, "hint": "revolut-merchant api_key is missing or invalid; re-run pm credentials add revolut-merchant" },
@@ -33,6 +27,12 @@
       "name": "orders",
       "path": "/orders",
       "records": { "path": "" },
+      "query": {
+        "from_created_date": { "template": "{{ config.from_created_date }}", "omit_when_absent": true },
+        "to_created_date": { "template": "{{ config.to_created_date }}", "omit_when_absent": true },
+        "customer_id": { "template": "{{ config.customer_id }}", "omit_when_absent": true },
+        "state": { "template": "{{ config.state }}", "omit_when_absent": true }
+      },
       "computed_fields": { "stream": "orders" },
       "schema": "schemas/orders.json"
     },
@@ -40,6 +40,12 @@
       "name": "customers",
       "path": "/customers",
       "records": { "path": "" },
+      "query": {
+        "from_created_date": { "template": "{{ config.from_created_date }}", "omit_when_absent": true },
+        "to_created_date": { "template": "{{ config.to_created_date }}", "omit_when_absent": true },
+        "customer_id": { "template": "{{ config.customer_id }}", "omit_when_absent": true },
+        "state": { "template": "{{ config.state }}", "omit_when_absent": true }
+      },
       "computed_fields": { "stream": "customers" },
       "schema": "schemas/customers.json"
     },
@@ -47,6 +53,12 @@
       "name": "settlements",
       "path": "/settlements",
       "records": { "path": "" },
+      "query": {
+        "from_created_date": { "template": "{{ config.from_created_date }}", "omit_when_absent": true },
+        "to_created_date": { "template": "{{ config.to_created_date }}", "omit_when_absent": true },
+        "customer_id": { "template": "{{ config.customer_id }}", "omit_when_absent": true },
+        "state": { "template": "{{ config.state }}", "omit_when_absent": true }
+      },
       "computed_fields": { "stream": "settlements" },
       "schema": "schemas/settlements.json"
     },
@@ -54,6 +66,12 @@
       "name": "payment_links",
       "path": "/payment-links",
       "records": { "path": "" },
+      "query": {
+        "from_created_date": { "template": "{{ config.from_created_date }}", "omit_when_absent": true },
+        "to_created_date": { "template": "{{ config.to_created_date }}", "omit_when_absent": true },
+        "customer_id": { "template": "{{ config.customer_id }}", "omit_when_absent": true },
+        "state": { "template": "{{ config.state }}", "omit_when_absent": true }
+      },
       "computed_fields": { "stream": "payment_links" },
       "schema": "schemas/payment_links.json"
     }

@@ -1,4 +1,5 @@
 {
+  "request": { "method": "GET", "path": "/products", "query": { "limit": "1", "page": "1" } },
   "response": {
     "status": 200,
     "body": { "data": [] }

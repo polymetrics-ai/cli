@@ -17,31 +17,36 @@
       "name": "campaigns",
       "path": "api/campaign.php",
       "records": { "path": "" },
-      "schema": "schemas/campaigns.json"
+      "schema": "schemas/campaigns.json",
+      "projection": "passthrough"
     },
     {
       "name": "segments",
       "path": "api/segment.php",
       "records": { "path": "" },
-      "schema": "schemas/segments.json"
+      "schema": "schemas/segments.json",
+      "projection": "passthrough"
     },
     {
       "name": "subscribers",
       "path": "api/contact.php",
       "records": { "path": "" },
-      "schema": "schemas/subscribers.json"
+      "schema": "schemas/subscribers.json",
+      "projection": "passthrough"
     },
     {
       "name": "templates",
       "path": "api/template.php",
       "records": { "path": "" },
-      "schema": "schemas/templates.json"
+      "schema": "schemas/templates.json",
+      "projection": "passthrough"
     },
     {
       "name": "automations",
       "path": "api/autoresponder.php",
       "records": { "path": "" },
-      "schema": "schemas/automations.json"
+      "schema": "schemas/automations.json",
+      "projection": "passthrough"
     }
   ]
 }

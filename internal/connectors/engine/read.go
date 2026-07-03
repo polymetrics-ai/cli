@@ -430,10 +430,31 @@ func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Value
 		}
 	}
 
-	q := url.Values{}
 	vars := requestVars(req.Config, nil, "")
 	vars.IncrementalLowerBound = formattedLower
-	for k, param := range stream.Query {
+	q, err := resolveQueryParams(stream.Query, vars)
+	if err != nil {
+		return nil, err
+	}
+
+	if formattedLower != "" && stream.Incremental.RequestParam != "" {
+		q.Set(stream.Incremental.RequestParam, formattedLower)
+	}
+	return q, nil
+}
+
+// resolveQueryParams resolves every entry of params against vars, applying
+// the SAME per-entry dialect stream.Query has always used (bundle.go's
+// QueryParam doc comment): a plain-string-sourced entry (OmitWhenAbsent
+// false, Default "") hard-errors on any unresolved config/secrets/
+// incremental key; an object-form entry tolerates an unresolved key via
+// OmitWhenAbsent (param dropped, no error) or Default (literal value sent
+// instead of erroring). Shared by buildInitialQuery (stream.Query) and
+// buildCheckQuery (RequestSpec.Query, checkquery-ledger.md) so both surfaces
+// resolve query templates identically by construction, not by convention.
+func resolveQueryParams(params map[string]QueryParam, vars Vars) (url.Values, error) {
+	q := url.Values{}
+	for k, param := range params {
 		val, err := Interpolate(param.Template, vars)
 		if err != nil {
 			if isUnresolvedConfigSecretOrIncremental(err) {
@@ -449,9 +470,22 @@ func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Value
 		}
 		q.Set(k, val)
 	}
+	return q, nil
+}
 
-	if formattedLower != "" && stream.Incremental.RequestParam != "" {
-		q.Set(stream.Incremental.RequestParam, formattedLower)
+// buildCheckQuery resolves check.query (RequestSpec.Query) against cfg using
+// the identical resolveQueryParams semantics stream.Query uses — see that
+// function's doc comment. A nil/empty Query returns an empty url.Values
+// (Check() sends no query string at all, exactly as before this dialect
+// existed).
+func buildCheckQuery(check *RequestSpec, cfg connectors.RuntimeConfig) (url.Values, error) {
+	if len(check.Query) == 0 {
+		return nil, nil
+	}
+	vars := requestVars(cfg, nil, "")
+	q, err := resolveQueryParams(check.Query, vars)
+	if err != nil {
+		return nil, fmt.Errorf("engine: resolve check query: %w", err)
 	}
 	return q, nil
 }
@@ -882,7 +916,11 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if err != nil {
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("resolve check path: %w", err)}
 	}
-	_, err = rt.Requester.Do(ctx, methodOrDefault(b.HTTP.Check.Method), checkPath, nil, nil)
+	checkQuery, err := buildCheckQuery(b.HTTP.Check, cfg)
+	if err != nil {
+		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	_, err = rt.Requester.Do(ctx, methodOrDefault(b.HTTP.Check.Method), checkPath, checkQuery, nil)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Class: class, Hint: hint, Err: err}

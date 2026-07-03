@@ -23,6 +23,13 @@ field `updated_at`. Pagination is `page_number` (`page`/`limit` query params, `p
 1-based), matching legacy's `connsdk.PageNumberPaginator{PageParam: "page", SizeParam: "limit",
 StartPage: 1, PageSize: pageSize}` with legacy's default `pageSize` of 100.
 
+All 3 streams declare `"projection": "passthrough"`: legacy's `Read` hands `connsdk.Harvest` a
+callback that does `emit(connectors.Record(rec))` verbatim for `projects`/`orders`/`transactions`
+alike — no field-built `connectors.Record{...}` mapping anywhere in `xsolla.go` — so schema-mode
+projection would silently drop any Xsolla field beyond the three currently declared per stream;
+passthrough reproduces legacy's actual raw-emission behavior exactly, and the schema remains a
+documentation surface of the known shape.
+
 ## Write actions & risks
 
 None — this connector is read-only (`capabilities.write: false`), matching legacy's

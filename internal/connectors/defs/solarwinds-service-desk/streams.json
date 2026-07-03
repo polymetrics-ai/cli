@@ -27,6 +27,7 @@
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
+      "projection": "passthrough",
       "schema": "schemas/incidents.json"
     },
     {
@@ -37,6 +38,7 @@
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
+      "projection": "passthrough",
       "schema": "schemas/users.json"
     },
     {
@@ -47,6 +49,7 @@
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
+      "projection": "passthrough",
       "schema": "schemas/departments.json"
     },
     {
@@ -57,6 +60,7 @@
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
+      "projection": "passthrough",
       "schema": "schemas/categories.json"
     },
     {
@@ -67,6 +71,7 @@
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
+      "projection": "passthrough",
       "schema": "schemas/problems.json"
     },
     {
@@ -77,6 +82,7 @@
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
+      "projection": "passthrough",
       "schema": "schemas/changes.json"
     }
   ]

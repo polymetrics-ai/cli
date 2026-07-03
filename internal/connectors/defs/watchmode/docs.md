@@ -29,6 +29,12 @@ config value is set (`omit_when_absent: true`), matching legacy's unconditional 
 `if start := ...; start != "" { q.Set("start_date", start) }` check that sits outside the
 stream-specific branch in `queryParams`.
 
+Both streams use `projection: "passthrough"`: legacy's `Read` emits each decoded record verbatim
+via `emit(connectors.Record(item))` with no field-building step (`watchmode.go:110`), so
+schema-mode projection would silently drop any Watchmode response field not in the declared list.
+The schemas document legacy's own known field surface (legacy's `streamEndpoints` field
+declarations, `watchmode.go:39-40`) but do not constrain what is actually emitted.
+
 ## Write actions & risks
 
 None. Watchmode is a read-only media metadata API with no mutation endpoints in legacy;

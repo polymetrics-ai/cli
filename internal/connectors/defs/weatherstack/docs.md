@@ -25,6 +25,16 @@ Every stream sends the `query` config value (location: city name, coordinates, I
 additionally sends `forecast_days` when set — both matching legacy's conditional
 `if value := ...; value != "" { q.Set(...) }` checks.
 
+All 3 streams declare `"projection": "passthrough"`: legacy's `Read` emits every decoded record
+verbatim (`emit(connectors.Record(item))` in `internal/connectors/weatherstack/weatherstack.go`,
+with no field-built `connectors.Record{...}` mapping — the only in-code touch is conditionally
+back-filling `item["id"]` when absent, never dropping or renaming any other key). Schema-mode
+projection would silently drop any Weatherstack response field not enumerated in
+`schemas/{current,historical,forecast}.json`, which is a meta-rule violation per conventions.md §8
+rule 1. The schemas remain a documentation surface listing the known/stable fields; the live
+response may carry additional Weatherstack fields not enumerated there, and passthrough mode
+ensures those still reach the record instead of being silently projected away.
+
 The raw Weatherstack API response carries no `id` field of its own. Legacy synthesizes one only
 when absent (`item["id"] == nil`) as `"{stream}:{query}"` — in practice always, since the raw
 response never sets it. This bundle's `computed_fields` unconditionally stamps the identical

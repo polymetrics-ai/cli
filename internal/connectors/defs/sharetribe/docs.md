@@ -16,13 +16,22 @@ tests/proxies.
 
 ## Streams notes
 
-All 4 streams (`listings`, `users`, `transactions`, `events`) share the same shape: `GET
+All 4 streams (`listings`, `users`, `transactions`, `events`) declare `"projection": "passthrough"`:
+legacy's `Read` (`sharetribe.go:88-90`) emits `emit(connectors.Record(rec))` verbatim from
+`connsdk.Harvest`'s decoded record with no `mapRecord`-style field-building anywhere in the read
+path, so schema-mode projection (which would silently drop any raw field not enumerated in
+`schemas/*.json`) would be a parity regression versus legacy's every-field-survives behavior.
+`schemas/*.json` stay a documentation surface of the well-known fields; passthrough mode means the
+schema does not gate which fields actually reach the caller.
+
+All 4 streams share the same shape: `GET
 /integration_api/<resource>/query`, records at the response body's `data` array, and `page_number`
 pagination (`page`/`per_page` query params, 1-based start page) — an exact port of legacy's
 `connsdk.PageNumberPaginator{PageParam: "page", SizeParam: "per_page", StartPage: 1, PageSize:
 pageSize}` (`sharetribe.go:87`). A page returning fewer records than `page_size` signals the last
 page. Every stream shares an identical field set (`id`, `type`, `attributes`, `updated_at`),
-matching legacy's own single shared `fields` slice (`sharetribe.go:115`).
+matching legacy's own single shared `fields` slice (`sharetribe.go:115`) — the raw records may
+carry additional attributes beyond this set, all of which now survive under passthrough.
 
 No stream is incremental; legacy's `streams()` declares no `CursorFields` for any of the 4 streams
 and never filters by time (matching this bundle's omission of any `incremental` block).

@@ -27,6 +27,15 @@ limit`, `offset_param: offset`, `page_size: 50`), stopping on a short page — i
 legacy's 4 streams declare an incremental cursor field, so this bundle declares no `incremental`
 block for any stream, matching legacy exactly (full-refresh reads only).
 
+Legacy's `Read` passes `connsdk.Harvest` a callback that emits every record verbatim
+(`func(rec connsdk.Record) error { return emit(connectors.Record(rec)) }`, `phyllo.go:86`) — there
+is no `mapRecord`-style field-building or filtering anywhere in the read path; `commonFields()`
+(`phyllo.go:104-106`) only documents legacy's `Catalog` metadata, it never gates what `Read` emits.
+Every stream therefore declares `"projection": "passthrough"` (conventions.md §8 rule 1) so the
+engine's default schema-mode projection does not silently drop any field of the actual Phyllo
+response object. Each `schemas/*.json`'s `id`/`platform`/`status`/`created_at`/`updated_at`
+properties remain a documentation surface describing the common field set, not an allow-list.
+
 ## Write actions & risks
 
 None. Legacy `phyllo.Write` always returns `connectors.ErrUnsupportedOperation`;

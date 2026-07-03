@@ -25,8 +25,7 @@
       "path": "/employees/employees",
       "records": { "path": "data" },
       "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
+        "cursor_field": "updated_at"
       },
       "schema": "schemas/employees.json"
     },
@@ -41,8 +40,7 @@
       "path": "/timeoff/leaves",
       "records": { "path": "data" },
       "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
+        "cursor_field": "updated_at"
       },
       "schema": "schemas/leaves.json"
     },

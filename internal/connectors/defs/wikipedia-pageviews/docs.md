@@ -31,6 +31,21 @@ carries its own `project` field identical to the requested one).
 `api/rest_v1/metrics/pageviews/top-per-country/{project}/{country}/{access}/{year}/{month}/{day}`.
 Records live at the `items` key; there is no pagination (legacy never paginates it either).
 
+Both streams declare `projection: "passthrough"` (§8 rule 1): legacy's `Read` decodes each stream's
+response body with `connsdk.RecordsAt(resp.Body, endpoint.recordsPath)` and, for every decoded item,
+only conditionally backfills the `id` key in place (`if item["id"] == nil { item["id"] =
+recordID(item, req.Config) }`) before emitting the *same* raw map verbatim —
+`emit(connectors.Record(item))` (`wikipedia_pageviews.go`) never field-builds a new
+`connectors.Record{...}` from named keys. This bundle's `computed_fields.id` reproduces that
+conditional backfill declaratively (matching the `defs/picqer` precedent of pairing
+`projection: "passthrough"` with a `computed_fields`-derived `id`); `passthrough` on top of it
+reproduces legacy's verbatim pass-through of every other raw field. The real wire shape carries more
+fields than either schema previously declared — confirmed by this bundle's own fixtures:
+`pageviews` items also carry `granularity` and `agent`; `top_articles` items also carry `project`,
+`access`, `year`, `month`, `day` alongside the per-item `articles[]` array. Both schemas now list
+these as documented (nullable) properties for accuracy; schema-mode projection would have silently
+dropped them without `passthrough`.
+
 ## Write actions & risks
 
 None. This connector is read-only in both legacy and this bundle (`capabilities.write: false`); no

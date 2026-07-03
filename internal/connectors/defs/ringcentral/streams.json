@@ -12,13 +12,6 @@
       "start_page": 1,
       "page_size": 100
     },
-    "query": {
-      "dateFrom": { "template": "{{ config.dateFrom }}", "omit_when_absent": true },
-      "dateTo": { "template": "{{ config.dateTo }}", "omit_when_absent": true },
-      "type": { "template": "{{ config.type }}", "omit_when_absent": true },
-      "messageType": { "template": "{{ config.messageType }}", "omit_when_absent": true },
-      "direction": { "template": "{{ config.direction }}", "omit_when_absent": true }
-    },
     "check": { "method": "GET", "path": "/account/~" },
     "error_map": [
       { "status": 401, "hint": "ringcentral access_token is missing, expired, or invalid; re-run pm credentials add ringcentral" },
@@ -31,6 +24,13 @@
       "name": "extensions",
       "path": "/account/~/extension",
       "records": { "path": "records" },
+      "query": {
+        "dateFrom": { "template": "{{ config.dateFrom }}", "omit_when_absent": true },
+        "dateTo": { "template": "{{ config.dateTo }}", "omit_when_absent": true },
+        "type": { "template": "{{ config.type }}", "omit_when_absent": true },
+        "messageType": { "template": "{{ config.messageType }}", "omit_when_absent": true },
+        "direction": { "template": "{{ config.direction }}", "omit_when_absent": true }
+      },
       "computed_fields": {
         "extension_number": "{{ record.extensionNumber }}",
         "stream": "extensions"
@@ -41,6 +41,13 @@
       "name": "call_log",
       "path": "/account/~/extension/~/call-log",
       "records": { "path": "records" },
+      "query": {
+        "dateFrom": { "template": "{{ config.dateFrom }}", "omit_when_absent": true },
+        "dateTo": { "template": "{{ config.dateTo }}", "omit_when_absent": true },
+        "type": { "template": "{{ config.type }}", "omit_when_absent": true },
+        "messageType": { "template": "{{ config.messageType }}", "omit_when_absent": true },
+        "direction": { "template": "{{ config.direction }}", "omit_when_absent": true }
+      },
       "computed_fields": {
         "start_time": "{{ record.startTime }}",
         "stream": "call_log"
@@ -51,6 +58,13 @@
       "name": "messages",
       "path": "/account/~/extension/~/message-store",
       "records": { "path": "records" },
+      "query": {
+        "dateFrom": { "template": "{{ config.dateFrom }}", "omit_when_absent": true },
+        "dateTo": { "template": "{{ config.dateTo }}", "omit_when_absent": true },
+        "type": { "template": "{{ config.type }}", "omit_when_absent": true },
+        "messageType": { "template": "{{ config.messageType }}", "omit_when_absent": true },
+        "direction": { "template": "{{ config.direction }}", "omit_when_absent": true }
+      },
       "computed_fields": {
         "creation_time": "{{ record.creationTime }}",
         "stream": "messages"
@@ -61,6 +75,13 @@
       "name": "contacts",
       "path": "/account/~/extension/~/address-book/contact",
       "records": { "path": "records" },
+      "query": {
+        "dateFrom": { "template": "{{ config.dateFrom }}", "omit_when_absent": true },
+        "dateTo": { "template": "{{ config.dateTo }}", "omit_when_absent": true },
+        "type": { "template": "{{ config.type }}", "omit_when_absent": true },
+        "messageType": { "template": "{{ config.messageType }}", "omit_when_absent": true },
+        "direction": { "template": "{{ config.direction }}", "omit_when_absent": true }
+      },
       "computed_fields": {
         "first_name": "{{ record.firstName }}",
         "last_name": "{{ record.lastName }}",
@@ -72,6 +93,13 @@
       "name": "devices",
       "path": "/account/~/device",
       "records": { "path": "records" },
+      "query": {
+        "dateFrom": { "template": "{{ config.dateFrom }}", "omit_when_absent": true },
+        "dateTo": { "template": "{{ config.dateTo }}", "omit_when_absent": true },
+        "type": { "template": "{{ config.type }}", "omit_when_absent": true },
+        "messageType": { "template": "{{ config.messageType }}", "omit_when_absent": true },
+        "direction": { "template": "{{ config.direction }}", "omit_when_absent": true }
+      },
       "computed_fields": { "stream": "devices" },
       "schema": "schemas/devices.json"
     }

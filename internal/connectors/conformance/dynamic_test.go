@@ -179,6 +179,45 @@ func TestCheckFixture_AndReadFixtureNonempty(t *testing.T) {
 	}
 }
 
+// --- ENGINE DIALECT ADDITION (checkquery-ledger.md item 5): check_fixture
+// must compare the fixture's recorded request.query, not just replay a
+// canned response to any request whatsoever. --------------------------------
+
+// TestCheckFixture_FailsWhenBundleSendsQueryFixtureDidNotRecord is the exact
+// scenario the ledger's item 5 names: streams.json now declares
+// base.check.query (RequestSpec.Query), but fixtures/check.json was recorded
+// before that field existed (or was never updated) and carries no "request"
+// field at all — so it implicitly expects no query string. Once Check()
+// actually sends "?limit=1", the replay server must NOT match the fixture,
+// and check_fixture must fail (not silently pass by ignoring the query the
+// way it did pre-hardening).
+func TestCheckFixture_FailsWhenBundleSendsQueryFixtureDidNotRecord(t *testing.T) {
+	b := loadTestBundle(t, "testdata/dynamic-invalid", "check-query-mismatch")
+	if b.HTTP.Check == nil || len(b.HTTP.Check.Query) == 0 {
+		t.Fatalf("test bundle must declare base.check.query; got %+v", b.HTTP.Check)
+	}
+	result := checkCheckFixture(b)
+	if result.Passed {
+		t.Fatalf("check_fixture passed despite fixtures/check.json recording no query while the bundle now sends one")
+	}
+	if result.Error == "" {
+		t.Fatalf("failing check_fixture has no Error message")
+	}
+}
+
+// TestCheckFixture_PassesWhenFixtureRecordsMatchingQuery proves the positive
+// case: a fixtures/check.json that DOES record the expected "request.query"
+// matching what Check() actually sends passes cleanly — check_fixture is not
+// merely stricter, it is CORRECTLY comparing the query, not just always
+// failing once any check.query is declared.
+func TestCheckFixture_PassesWhenFixtureRecordsMatchingQuery(t *testing.T) {
+	b := loadTestBundle(t, "testdata/good", "acme-check-query")
+	result := checkCheckFixture(b)
+	if !result.Passed {
+		t.Fatalf("check_fixture failed on a fixture whose recorded request.query matches base.check.query: %s", result.Error)
+	}
+}
+
 // --- conformance skip markers (R3: hook-aware dynamic conformance) --------
 //
 // A bundle may declare an OPTIONAL, explicit "conformance": {"skip_dynamic":

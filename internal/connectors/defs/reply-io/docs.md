@@ -27,8 +27,12 @@ legacy's `defaultPageSize`) with the identical short-page stop rule legacy's own
 
 Legacy applies four optional config-driven filters (`updated_after`, `created_after`, `email`,
 `status`) uniformly to every stream's request. This bundle reproduces that exact behavior via the
-opt-in optional-query dialect (`query.<param>.omit_when_absent: true`) on `base.query`, so each
-filter is sent only when its corresponding config value is set, and omitted entirely otherwise.
+opt-in optional-query dialect (`query.<param>.omit_when_absent: true`) declared identically on each
+of the four streams' own `query` block (`base.query` has no `query` field in the engine dialect — a
+declared `HTTPBase` field only supports `url`/`user_agent`/`headers`/`auth`/`pagination`/`check`/
+`error_map`/`rate_limit` — so the shared filter set is duplicated per-stream rather than declared
+once at the base level), so each filter is sent only when its corresponding config value is set,
+and omitted entirely otherwise.
 
 Every stream stamps a static-literal `stream` marker field (`"people"`/`"campaigns"`/`"tasks"`/
 `"email_accounts"`) via `computed_fields`, matching legacy's own `out["stream"] = stream` line in

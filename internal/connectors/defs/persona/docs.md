@@ -24,6 +24,15 @@ Persona's `links.next` absolute-URL convention (`pagination.type: next_url`, `ne
 "links.next"`), matching legacy's own manual loop that follows `resp.Body`'s `links.next` field
 verbatim until it is empty (`persona.go:104-111`).
 
+Legacy's `Read` decodes each page's `data` array with `connsdk.RecordsAt` and emits every record
+verbatim (`emit(connectors.Record(rec))`, `persona.go:99-103`) — there is no `mapRecord`-style
+field-building or filtering anywhere in the read path. Every stream therefore declares
+`"projection": "passthrough"` (conventions.md §8 rule 1) so the engine's default schema-mode
+projection does not silently drop any JSON:API attribute/relationship field legacy would have
+passed through unfiltered. The `id`/`type`/`attributes`/`relationships` properties in each
+`schemas/*.json` remain a documentation surface of the well-known JSON:API envelope shape, not an
+allow-list.
+
 Legacy declares `CursorFields: []string{"attributes.updated-at"}` on every stream's `Catalog`
 metadata (`persona.go:127`), but never actually implements a cursor-filtered/incremental read path
 — there is no request parameter or client-side filter applied against that field anywhere in

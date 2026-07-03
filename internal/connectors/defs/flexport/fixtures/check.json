@@ -1,15 +1,18 @@
 {
-  "request": {
-    "method": "GET",
-    "path": "/products"
-  },
-  "response": {
-    "status": 200,
-    "body": {
-      "data": {
-        "data": [],
-        "next": null
-      }
-    }
+ "request": {
+  "method": "GET",
+  "path": "/products",
+  "query": {
+   "per": "1"
   }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "data": {
+    "data": [],
+    "next": null
+   }
+  }
+ }
 }

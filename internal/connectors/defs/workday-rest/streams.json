@@ -24,18 +24,21 @@
       "name": "workers",
       "path": "/ccx/api/hcm/v1/{{ config.tenant }}/workers",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/workers.json"
     },
     {
       "name": "organizations",
       "path": "/ccx/api/hcm/v1/{{ config.tenant }}/organizations",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/organizations.json"
     },
     {
       "name": "jobs",
       "path": "/ccx/api/hcm/v1/{{ config.tenant }}/jobs",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/jobs.json"
     }
   ]

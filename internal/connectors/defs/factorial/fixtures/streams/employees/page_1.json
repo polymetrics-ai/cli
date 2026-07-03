@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/employees/employees", "query": { "page": "1", "limit": "50" } },
+  "request": {
+    "method": "GET",
+    "path": "/employees/employees",
+    "query": {
+      "page": "1",
+      "limit": "50"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -7,14 +14,556 @@
         {
           "id": 1,
           "company_id": 1,
-          "first_name": "Ada",
-          "last_name": "Lovelace",
-          "full_name": "Ada Lovelace",
+          "first_name": "First1",
+          "last_name": "Last1",
+          "full_name": "First1 Last1",
           "email": "fixture1@example.com",
           "manager_id": null,
           "legal_entity_id": 1,
           "location_id": 100,
-          "team_ids": [10],
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-02T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "company_id": 1,
+          "first_name": "First2",
+          "last_name": "Last2",
+          "full_name": "First2 Last2",
+          "email": "fixture2@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-03T00:00:00.000Z",
+          "updated_at": "2026-01-03T00:00:00.000Z"
+        },
+        {
+          "id": 3,
+          "company_id": 1,
+          "first_name": "First3",
+          "last_name": "Last3",
+          "full_name": "First3 Last3",
+          "email": "fixture3@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-04T00:00:00.000Z",
+          "updated_at": "2026-01-04T00:00:00.000Z"
+        },
+        {
+          "id": 4,
+          "company_id": 1,
+          "first_name": "First4",
+          "last_name": "Last4",
+          "full_name": "First4 Last4",
+          "email": "fixture4@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-05T00:00:00.000Z",
+          "updated_at": "2026-01-05T00:00:00.000Z"
+        },
+        {
+          "id": 5,
+          "company_id": 1,
+          "first_name": "First5",
+          "last_name": "Last5",
+          "full_name": "First5 Last5",
+          "email": "fixture5@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-06T00:00:00.000Z",
+          "updated_at": "2026-01-06T00:00:00.000Z"
+        },
+        {
+          "id": 6,
+          "company_id": 1,
+          "first_name": "First6",
+          "last_name": "Last6",
+          "full_name": "First6 Last6",
+          "email": "fixture6@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-07T00:00:00.000Z",
+          "updated_at": "2026-01-07T00:00:00.000Z"
+        },
+        {
+          "id": 7,
+          "company_id": 1,
+          "first_name": "First7",
+          "last_name": "Last7",
+          "full_name": "First7 Last7",
+          "email": "fixture7@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-08T00:00:00.000Z",
+          "updated_at": "2026-01-08T00:00:00.000Z"
+        },
+        {
+          "id": 8,
+          "company_id": 1,
+          "first_name": "First8",
+          "last_name": "Last8",
+          "full_name": "First8 Last8",
+          "email": "fixture8@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-09T00:00:00.000Z",
+          "updated_at": "2026-01-09T00:00:00.000Z"
+        },
+        {
+          "id": 9,
+          "company_id": 1,
+          "first_name": "First9",
+          "last_name": "Last9",
+          "full_name": "First9 Last9",
+          "email": "fixture9@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-10T00:00:00.000Z",
+          "updated_at": "2026-01-10T00:00:00.000Z"
+        },
+        {
+          "id": 10,
+          "company_id": 1,
+          "first_name": "First10",
+          "last_name": "Last10",
+          "full_name": "First10 Last10",
+          "email": "fixture10@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-11T00:00:00.000Z",
+          "updated_at": "2026-01-11T00:00:00.000Z"
+        },
+        {
+          "id": 11,
+          "company_id": 1,
+          "first_name": "First11",
+          "last_name": "Last11",
+          "full_name": "First11 Last11",
+          "email": "fixture11@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-12T00:00:00.000Z",
+          "updated_at": "2026-01-12T00:00:00.000Z"
+        },
+        {
+          "id": 12,
+          "company_id": 1,
+          "first_name": "First12",
+          "last_name": "Last12",
+          "full_name": "First12 Last12",
+          "email": "fixture12@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-13T00:00:00.000Z",
+          "updated_at": "2026-01-13T00:00:00.000Z"
+        },
+        {
+          "id": 13,
+          "company_id": 1,
+          "first_name": "First13",
+          "last_name": "Last13",
+          "full_name": "First13 Last13",
+          "email": "fixture13@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-14T00:00:00.000Z",
+          "updated_at": "2026-01-14T00:00:00.000Z"
+        },
+        {
+          "id": 14,
+          "company_id": 1,
+          "first_name": "First14",
+          "last_name": "Last14",
+          "full_name": "First14 Last14",
+          "email": "fixture14@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-15T00:00:00.000Z",
+          "updated_at": "2026-01-15T00:00:00.000Z"
+        },
+        {
+          "id": 15,
+          "company_id": 1,
+          "first_name": "First15",
+          "last_name": "Last15",
+          "full_name": "First15 Last15",
+          "email": "fixture15@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-16T00:00:00.000Z",
+          "updated_at": "2026-01-16T00:00:00.000Z"
+        },
+        {
+          "id": 16,
+          "company_id": 1,
+          "first_name": "First16",
+          "last_name": "Last16",
+          "full_name": "First16 Last16",
+          "email": "fixture16@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-17T00:00:00.000Z",
+          "updated_at": "2026-01-17T00:00:00.000Z"
+        },
+        {
+          "id": 17,
+          "company_id": 1,
+          "first_name": "First17",
+          "last_name": "Last17",
+          "full_name": "First17 Last17",
+          "email": "fixture17@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-18T00:00:00.000Z",
+          "updated_at": "2026-01-18T00:00:00.000Z"
+        },
+        {
+          "id": 18,
+          "company_id": 1,
+          "first_name": "First18",
+          "last_name": "Last18",
+          "full_name": "First18 Last18",
+          "email": "fixture18@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-19T00:00:00.000Z",
+          "updated_at": "2026-01-19T00:00:00.000Z"
+        },
+        {
+          "id": 19,
+          "company_id": 1,
+          "first_name": "First19",
+          "last_name": "Last19",
+          "full_name": "First19 Last19",
+          "email": "fixture19@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-20T00:00:00.000Z",
+          "updated_at": "2026-01-20T00:00:00.000Z"
+        },
+        {
+          "id": 20,
+          "company_id": 1,
+          "first_name": "First20",
+          "last_name": "Last20",
+          "full_name": "First20 Last20",
+          "email": "fixture20@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-21T00:00:00.000Z",
+          "updated_at": "2026-01-21T00:00:00.000Z"
+        },
+        {
+          "id": 21,
+          "company_id": 1,
+          "first_name": "First21",
+          "last_name": "Last21",
+          "full_name": "First21 Last21",
+          "email": "fixture21@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-22T00:00:00.000Z",
+          "updated_at": "2026-01-22T00:00:00.000Z"
+        },
+        {
+          "id": 22,
+          "company_id": 1,
+          "first_name": "First22",
+          "last_name": "Last22",
+          "full_name": "First22 Last22",
+          "email": "fixture22@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-23T00:00:00.000Z",
+          "updated_at": "2026-01-23T00:00:00.000Z"
+        },
+        {
+          "id": 23,
+          "company_id": 1,
+          "first_name": "First23",
+          "last_name": "Last23",
+          "full_name": "First23 Last23",
+          "email": "fixture23@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-24T00:00:00.000Z",
+          "updated_at": "2026-01-24T00:00:00.000Z"
+        },
+        {
+          "id": 24,
+          "company_id": 1,
+          "first_name": "First24",
+          "last_name": "Last24",
+          "full_name": "First24 Last24",
+          "email": "fixture24@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-25T00:00:00.000Z",
+          "updated_at": "2026-01-25T00:00:00.000Z"
+        },
+        {
+          "id": 25,
+          "company_id": 1,
+          "first_name": "First25",
+          "last_name": "Last25",
+          "full_name": "First25 Last25",
+          "email": "fixture25@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-26T00:00:00.000Z",
+          "updated_at": "2026-01-26T00:00:00.000Z"
+        },
+        {
+          "id": 26,
+          "company_id": 1,
+          "first_name": "First26",
+          "last_name": "Last26",
+          "full_name": "First26 Last26",
+          "email": "fixture26@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-27T00:00:00.000Z",
+          "updated_at": "2026-01-27T00:00:00.000Z"
+        },
+        {
+          "id": 27,
+          "company_id": 1,
+          "first_name": "First27",
+          "last_name": "Last27",
+          "full_name": "First27 Last27",
+          "email": "fixture27@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-28T00:00:00.000Z",
+          "updated_at": "2026-01-28T00:00:00.000Z"
+        },
+        {
+          "id": 28,
+          "company_id": 1,
+          "first_name": "First28",
+          "last_name": "Last28",
+          "full_name": "First28 Last28",
+          "email": "fixture28@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
           "gender": "F",
           "birthday_on": "1990-01-01",
           "terminated_on": null,
@@ -23,40 +572,444 @@
           "updated_at": "2026-01-01T00:00:00.000Z"
         },
         {
-          "id": 2,
+          "id": 29,
           "company_id": 1,
-          "first_name": "Grace",
-          "last_name": "Hopper",
-          "full_name": "Grace Hopper",
-          "email": "fixture2@example.com",
+          "first_name": "First29",
+          "last_name": "Last29",
+          "full_name": "First29 Last29",
+          "email": "fixture29@example.com",
           "manager_id": 1,
           "legal_entity_id": 1,
           "location_id": 100,
-          "team_ids": [10],
+          "team_ids": [
+            10
+          ],
           "gender": "F",
-          "birthday_on": "1985-01-01",
+          "birthday_on": "1990-01-01",
           "terminated_on": null,
           "active": true,
           "created_at": "2026-01-02T00:00:00.000Z",
           "updated_at": "2026-01-02T00:00:00.000Z"
         },
         {
-          "id": 3,
+          "id": 30,
           "company_id": 1,
-          "first_name": "Katherine",
-          "last_name": "Johnson",
-          "full_name": "Katherine Johnson",
-          "email": "fixture3@example.com",
+          "first_name": "First30",
+          "last_name": "Last30",
+          "full_name": "First30 Last30",
+          "email": "fixture30@example.com",
           "manager_id": 1,
           "legal_entity_id": 1,
           "location_id": 100,
-          "team_ids": [11],
+          "team_ids": [
+            10
+          ],
           "gender": "F",
-          "birthday_on": "1992-01-01",
+          "birthday_on": "1990-01-01",
           "terminated_on": null,
           "active": true,
           "created_at": "2026-01-03T00:00:00.000Z",
           "updated_at": "2026-01-03T00:00:00.000Z"
+        },
+        {
+          "id": 31,
+          "company_id": 1,
+          "first_name": "First31",
+          "last_name": "Last31",
+          "full_name": "First31 Last31",
+          "email": "fixture31@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-04T00:00:00.000Z",
+          "updated_at": "2026-01-04T00:00:00.000Z"
+        },
+        {
+          "id": 32,
+          "company_id": 1,
+          "first_name": "First32",
+          "last_name": "Last32",
+          "full_name": "First32 Last32",
+          "email": "fixture32@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-05T00:00:00.000Z",
+          "updated_at": "2026-01-05T00:00:00.000Z"
+        },
+        {
+          "id": 33,
+          "company_id": 1,
+          "first_name": "First33",
+          "last_name": "Last33",
+          "full_name": "First33 Last33",
+          "email": "fixture33@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-06T00:00:00.000Z",
+          "updated_at": "2026-01-06T00:00:00.000Z"
+        },
+        {
+          "id": 34,
+          "company_id": 1,
+          "first_name": "First34",
+          "last_name": "Last34",
+          "full_name": "First34 Last34",
+          "email": "fixture34@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-07T00:00:00.000Z",
+          "updated_at": "2026-01-07T00:00:00.000Z"
+        },
+        {
+          "id": 35,
+          "company_id": 1,
+          "first_name": "First35",
+          "last_name": "Last35",
+          "full_name": "First35 Last35",
+          "email": "fixture35@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-08T00:00:00.000Z",
+          "updated_at": "2026-01-08T00:00:00.000Z"
+        },
+        {
+          "id": 36,
+          "company_id": 1,
+          "first_name": "First36",
+          "last_name": "Last36",
+          "full_name": "First36 Last36",
+          "email": "fixture36@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-09T00:00:00.000Z",
+          "updated_at": "2026-01-09T00:00:00.000Z"
+        },
+        {
+          "id": 37,
+          "company_id": 1,
+          "first_name": "First37",
+          "last_name": "Last37",
+          "full_name": "First37 Last37",
+          "email": "fixture37@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-10T00:00:00.000Z",
+          "updated_at": "2026-01-10T00:00:00.000Z"
+        },
+        {
+          "id": 38,
+          "company_id": 1,
+          "first_name": "First38",
+          "last_name": "Last38",
+          "full_name": "First38 Last38",
+          "email": "fixture38@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-11T00:00:00.000Z",
+          "updated_at": "2026-01-11T00:00:00.000Z"
+        },
+        {
+          "id": 39,
+          "company_id": 1,
+          "first_name": "First39",
+          "last_name": "Last39",
+          "full_name": "First39 Last39",
+          "email": "fixture39@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-12T00:00:00.000Z",
+          "updated_at": "2026-01-12T00:00:00.000Z"
+        },
+        {
+          "id": 40,
+          "company_id": 1,
+          "first_name": "First40",
+          "last_name": "Last40",
+          "full_name": "First40 Last40",
+          "email": "fixture40@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-13T00:00:00.000Z",
+          "updated_at": "2026-01-13T00:00:00.000Z"
+        },
+        {
+          "id": 41,
+          "company_id": 1,
+          "first_name": "First41",
+          "last_name": "Last41",
+          "full_name": "First41 Last41",
+          "email": "fixture41@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-14T00:00:00.000Z",
+          "updated_at": "2026-01-14T00:00:00.000Z"
+        },
+        {
+          "id": 42,
+          "company_id": 1,
+          "first_name": "First42",
+          "last_name": "Last42",
+          "full_name": "First42 Last42",
+          "email": "fixture42@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-15T00:00:00.000Z",
+          "updated_at": "2026-01-15T00:00:00.000Z"
+        },
+        {
+          "id": 43,
+          "company_id": 1,
+          "first_name": "First43",
+          "last_name": "Last43",
+          "full_name": "First43 Last43",
+          "email": "fixture43@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-16T00:00:00.000Z",
+          "updated_at": "2026-01-16T00:00:00.000Z"
+        },
+        {
+          "id": 44,
+          "company_id": 1,
+          "first_name": "First44",
+          "last_name": "Last44",
+          "full_name": "First44 Last44",
+          "email": "fixture44@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-17T00:00:00.000Z",
+          "updated_at": "2026-01-17T00:00:00.000Z"
+        },
+        {
+          "id": 45,
+          "company_id": 1,
+          "first_name": "First45",
+          "last_name": "Last45",
+          "full_name": "First45 Last45",
+          "email": "fixture45@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-18T00:00:00.000Z",
+          "updated_at": "2026-01-18T00:00:00.000Z"
+        },
+        {
+          "id": 46,
+          "company_id": 1,
+          "first_name": "First46",
+          "last_name": "Last46",
+          "full_name": "First46 Last46",
+          "email": "fixture46@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-19T00:00:00.000Z",
+          "updated_at": "2026-01-19T00:00:00.000Z"
+        },
+        {
+          "id": 47,
+          "company_id": 1,
+          "first_name": "First47",
+          "last_name": "Last47",
+          "full_name": "First47 Last47",
+          "email": "fixture47@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-20T00:00:00.000Z",
+          "updated_at": "2026-01-20T00:00:00.000Z"
+        },
+        {
+          "id": 48,
+          "company_id": 1,
+          "first_name": "First48",
+          "last_name": "Last48",
+          "full_name": "First48 Last48",
+          "email": "fixture48@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-21T00:00:00.000Z",
+          "updated_at": "2026-01-21T00:00:00.000Z"
+        },
+        {
+          "id": 49,
+          "company_id": 1,
+          "first_name": "First49",
+          "last_name": "Last49",
+          "full_name": "First49 Last49",
+          "email": "fixture49@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-22T00:00:00.000Z",
+          "updated_at": "2026-01-22T00:00:00.000Z"
+        },
+        {
+          "id": 50,
+          "company_id": 1,
+          "first_name": "First50",
+          "last_name": "Last50",
+          "full_name": "First50 Last50",
+          "email": "fixture50@example.com",
+          "manager_id": 1,
+          "legal_entity_id": 1,
+          "location_id": 100,
+          "team_ids": [
+            10
+          ],
+          "gender": "F",
+          "birthday_on": "1990-01-01",
+          "terminated_on": null,
+          "active": true,
+          "created_at": "2026-01-23T00:00:00.000Z",
+          "updated_at": "2026-01-23T00:00:00.000Z"
         }
       ]
     }

@@ -24,18 +24,21 @@
       "name": "events",
       "path": "/events",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/events.json"
     },
     {
       "name": "orders",
       "path": "/orders",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/orders.json"
     },
     {
       "name": "issued_tickets",
       "path": "/issued_tickets",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/issued_tickets.json"
     }
   ]

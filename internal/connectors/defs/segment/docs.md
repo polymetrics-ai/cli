@@ -17,8 +17,13 @@ and may be overridden for tests, proxies, or a region-specific endpoint.
 
 `workspaces`, `sources`, and `destinations` are simple list endpoints (`GET /workspaces`,
 `/sources`, `/destinations`); records live at the top-level key matching the stream name, exactly
-matching legacy's `streamEndpoints` records-path map (`segment.go:111-115`). None of the three
-streams expose an incremental cursor field that legacy actually filters on — legacy declares no
+matching legacy's `streamEndpoints` records-path map (`segment.go:111-115`). All three streams
+declare `"projection": "passthrough"`: legacy's `Read` hands `connsdk.Harvest`'s per-record
+callback straight to `emit(connectors.Record(rec))` with no field-built mapping
+(`segment.go:88-90`), so schema-mode projection would silently drop any field the live API returns
+beyond `id`/`name`/`slug`/`updated_at` (conventions.md §8 rule 1) — passthrough preserves legacy's
+actual verbatim-emit behavior; the schemas remain a documentation surface, not an enforced
+allowlist. None of the three streams expose an incremental cursor field that legacy actually filters on — legacy declares no
 `CursorFields`/incremental request param anywhere; this bundle likewise declares no `incremental`
 block for any stream, matching legacy exactly (full refresh only). Pagination is `page_number`
 (`page`/`page_size` query params, `start_page: 1`, `page_size: 100`), matching legacy's

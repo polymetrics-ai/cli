@@ -33,6 +33,17 @@ Legacy has no incremental/state-cursor read mode (no persisted cursor is ever re
 `start_date`/`end_date` are static per-read filters, not an `incremental` block, so no stream
 declares `incremental` or `x-cursor-field` here.
 
+All 4 streams declare `"projection": "passthrough"`. Legacy's `Read` emits the raw API record
+verbatim (`emit(connectors.Record(rec))`, `sonar_cloud.go:126`, inside `readRecords`) with no
+field-building/filtering step — `streams()`'s four-field `Fields` list (`sonar_cloud.go:108`) is
+consumed only by `Catalog`, never by `Read`. Every real SonarCloud field beyond each schema's
+declared properties (e.g. `issues`' `effort`/`debt`/`hash`/`textRange`, `components`'
+`qualifier`/`path`) survives to the emitted record exactly as legacy would emit it. Declaring the
+default `"schema"` projection mode here would silently narrow every emitted record to the schema's
+declared properties — an undocumented parity deviation from legacy's verbatim passthrough — so
+`passthrough` is required, matching conventions.md §8 rule 1 (legacy's raw `emit(record)` with no
+`mapRecord` field-building is the mechanical signal to use `passthrough`).
+
 ## Write actions & risks
 
 None. SonarCloud is read-only in both legacy and this bundle (`capabilities.write: false`, no

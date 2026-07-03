@@ -1,6 +1,19 @@
 {
-  "response": {
-    "status": 200,
-    "body": { "data": [], "pagination": { "next_page": "" } }
+ "response": {
+  "status": 200,
+  "body": {
+   "data": [],
+   "pagination": {
+    "next_page": ""
+   }
   }
+ },
+ "request": {
+  "method": "GET",
+  "path": "/lists",
+  "query": {
+   "page": "1",
+   "per_page": "1"
+  }
+ }
 }

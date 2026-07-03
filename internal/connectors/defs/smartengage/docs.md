@@ -23,10 +23,16 @@ extracted from the response body's top-level array (`records.path: ""`), matchin
 per read, no loop) — `pagination.type: none` is declared, one request per read. An optional
 `avatar_id` config value is applied as a query filter on EVERY stream read, matching legacy's
 `queryParams` (called uniformly regardless of which stream is being read), omitted entirely when
-unset. Records carry `id`, `avatar_id`, and `name`, the exact field set legacy's `streams()`
-catalog declares for every stream; `x-primary-key` is `id` per legacy's own catalog declaration
-(`PrimaryKey: []string{"id"}`), even though the live avatars endpoint's natural identity field is
-`avatar_id` — `id` is not declared `required` in this bundle's schemas for that reason.
+unset. Every stream declares `"projection": "passthrough"`: legacy's `readRecords` emits
+`connectors.Record(rec)` verbatim off the wire with no field-built mapping
+(`smartengage.go:102-120`), so schema-mode projection would silently drop any field the live API
+returns beyond `id`/`avatar_id`/`name` — passthrough preserves legacy's actual verbatim-emit
+behavior (conventions.md §8 rule 1). Records carry `id`, `avatar_id`, and `name`, the exact field
+set legacy's `streams()` catalog declares for every stream; `x-primary-key` is `id` per legacy's
+own catalog declaration (`PrimaryKey: []string{"id"}`), even though the live avatars endpoint's
+natural identity field is `avatar_id` — `id` is not declared `required` in this bundle's schemas
+for that reason. The schemas remain a documentation surface (the three declared fields), not an
+enforced allowlist.
 
 ## Write actions & risks
 
@@ -37,4 +43,6 @@ None. SmartEngage's legacy connector is read-only (`Write` returns
 ## Known limits
 
 None beyond the `id`/`avatar_id` primary-key note above (Streams notes): this bundle is a
-byte-for-byte parity port of legacy's read behavior, with no scope narrowing.
+byte-for-byte parity port of legacy's read behavior, with no scope narrowing. Passthrough
+projection (Streams notes) means the schemas document the known field set but do not gate what
+flows through on a live read, matching legacy's own unfiltered emit.

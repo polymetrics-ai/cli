@@ -30,6 +30,12 @@ as legacy's `base.Set(endpoint.startParam, start)` with no reformatting).
 `invoices`' primary key is `serial_number` (not `id`) — legacy's own `streams()` declares
 `PrimaryKey: []string{"serial_number"}` for this stream; this bundle's schema matches that exactly.
 
+Both streams declare `"projection": "passthrough"` (post-wave2 review §8 rule 1): legacy's `Read`
+emits `emit(connectors.Record(rec))` for both `trips` and `invoices` — a verbatim type-cast of the
+raw harvested record, with no `mapRecord`-style field-building — so schema-mode projection would
+silently drop any raw field this bundle's schema omits. Each schema remains a documentation surface
+only; it does not gate what is emitted.
+
 ## Write actions & risks
 
 None. Legacy `perk.Write` always returns `connectors.ErrUnsupportedOperation`; `capabilities.write`

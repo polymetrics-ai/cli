@@ -34,10 +34,12 @@ response, which the root-array envelope never triggers. Pagination is `page_numb
 Legacy applies four passthrough filters (`from_created_date`, `to_created_date`, `customer_id`,
 `state`) identically to every stream's request (`revolut_merchant.go:87-92`'s loop iterates a
 fixed key list regardless of which stream is being read) — this bundle reproduces that exact
-blanket behavior via `base.query`'s four `omit_when_absent` entries (shared across all streams),
-sent only when the corresponding config value is set, matching legacy's own
-`strings.TrimSpace(...) != ""` gate. `computed_fields` stamps a static `stream` marker on every
-record, matching legacy's `mapRecord`'s `out["stream"] = stream`.
+blanket behavior via the identical four `omit_when_absent` query entries declared on EACH of the
+four streams' own `query` block (`HTTPBase` has no `query` field in the engine dialect, so this is
+per-stream duplicated rather than a single shared declaration), sent only when the corresponding
+config value is set, matching legacy's own `strings.TrimSpace(...) != ""` gate. `computed_fields`
+stamps a static `stream` marker on every record, matching legacy's `mapRecord`'s
+`out["stream"] = stream`.
 
 `created_at` is declared as `x-cursor-field` on every schema, matching legacy's own
 `CursorFields: []string{"created_at"}` Catalog declarations for all 4 streams. No `incremental`

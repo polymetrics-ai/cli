@@ -1,6 +1,14 @@
 {
-  "response": {
-    "status": 200,
-    "body": []
+ "response": {
+  "status": 200,
+  "body": []
+ },
+ "request": {
+  "method": "GET",
+  "path": "/properties",
+  "query": {
+   "limit": "1",
+   "offset": "0"
   }
+ }
 }

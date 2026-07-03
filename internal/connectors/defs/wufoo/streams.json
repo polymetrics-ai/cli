@@ -24,19 +24,22 @@
       "name": "forms",
       "path": "/forms.json",
       "records": { "path": "Forms" },
-      "schema": "schemas/forms.json"
+      "schema": "schemas/forms.json",
+      "projection": "passthrough"
     },
     {
       "name": "entries",
       "path": "/forms/{{ config.form_hash }}/entries.json",
       "records": { "path": "Entries" },
-      "schema": "schemas/entries.json"
+      "schema": "schemas/entries.json",
+      "projection": "passthrough"
     },
     {
       "name": "reports",
       "path": "/reports.json",
       "records": { "path": "Reports" },
-      "schema": "schemas/reports.json"
+      "schema": "schemas/reports.json",
+      "projection": "passthrough"
     }
   ]
 }

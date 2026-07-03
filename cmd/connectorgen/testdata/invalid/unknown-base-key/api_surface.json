@@ -1,0 +1,9 @@
+{
+  "api": "Unknown Base Key API v1",
+  "docs": "https://example.invalid/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "widgets endpoint only",
+  "endpoints": [
+    { "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } }
+  ]
+}

@@ -24,6 +24,15 @@ cursor-based filter parameter of any kind (no `updated_at`-style query param is 
 every read is a full paginated sweep — this bundle matches that exactly rather than inventing an
 incremental capability legacy never had.
 
+Legacy's `Read` calls `connsdk.Harvest` with a callback that does `return emit(connectors.Record(rec))`
+verbatim (`thinkific_courses.go:96-98`) — there is no `mapRecord`-style field-building step, so every
+raw field the Thinkific API returns for a record reaches the emitted output today, not just the
+fields listed in `commonFields(...)` (that list only backs the legacy `Catalog`'s advertised `Fields`
+metadata, not an actual projection filter). All four streams therefore declare
+`"projection": "passthrough"` to preserve that exact verbatim-emit behavior; the per-stream
+`schemas/*.json` files remain a documentation surface only (the advertised/expected shape) and are
+not widened to `additionalProperties: true`, matching the pingdom/searxng precedent for this rule.
+
 ## Write actions & risks
 
 None. Thinkific Courses is read-only (`capabilities.write` is `false`); this bundle ships no

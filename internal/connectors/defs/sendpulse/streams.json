@@ -28,19 +28,22 @@
       "name": "addressbooks",
       "path": "/addressbooks",
       "records": { "path": "." },
-      "schema": "schemas/addressbooks.json"
+      "schema": "schemas/addressbooks.json",
+      "projection": "passthrough"
     },
     {
       "name": "campaigns",
       "path": "/campaigns",
       "records": { "path": "." },
-      "schema": "schemas/campaigns.json"
+      "schema": "schemas/campaigns.json",
+      "projection": "passthrough"
     },
     {
       "name": "senders",
       "path": "/senders",
       "records": { "path": "." },
-      "schema": "schemas/senders.json"
+      "schema": "schemas/senders.json",
+      "projection": "passthrough"
     }
   ]
 }

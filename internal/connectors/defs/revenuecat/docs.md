@@ -40,9 +40,11 @@ documented cursor convention.
 Legacy applies three passthrough filters (`starting_after`, `created_after`, `updated_after`)
 identically to every stream's request (`revenuecat.go:92-95`'s loop iterates a fixed key list
 regardless of which stream is being read) — this bundle reproduces that exact blanket behavior via
-`base.query`'s three `omit_when_absent` entries (shared across all streams), sent only when the
-corresponding config value is set. `computed_fields` stamps a static `stream` marker on every
-record, matching legacy's `mapRecord`'s `out["stream"] = stream`.
+the identical three `omit_when_absent` query entries declared on EACH of the five streams' own
+`query` block (`HTTPBase` has no `query` field in the engine dialect, so this is per-stream
+duplicated rather than a single shared declaration), sent only when the corresponding config value
+is set. `computed_fields` stamps a static `stream` marker on every record, matching legacy's
+`mapRecord`'s `out["stream"] = stream`.
 
 `updated_at` is declared as `x-cursor-field` only on `customers` (matching legacy's own
 `CursorFields: []string{"updated_at"}`, declared only for that stream; the other 4 streams have no

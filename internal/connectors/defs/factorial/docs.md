@@ -16,18 +16,28 @@ All 5 streams share Factorial's page-increment pagination (`pagination.type: pag
 `page_param: page`, `size_param: limit`, `start_page: 1`), records at `data`, matching legacy's
 `connsdk.Harvest(..., "data", ...)` call.
 
-- `employees` (`GET /employees/employees`) — primary key `id`, incremental cursor `updated_at`
-  (`incremental.client_filtered: true` — Factorial has no server-side `updated_at` filter
-  parameter; legacy tracks the max `updated_at` seen client-side via `connsdk.MaxCursor` and the
-  engine's `client_filtered` mode reproduces the identical client-side drop-already-seen-records
-  behavior).
+- `employees` (`GET /employees/employees`) — primary key `id`, bare incremental cursor
+  `updated_at` (no `request_param`, no `client_filtered`; per conventions.md §8 rule 2, matching
+  legacy's own behavior exactly: `factorial.go`'s `Read` tracks the max `updated_at` seen via
+  `connsdk.MaxCursor` and stamps it onto each emitted record as `rec["_cursor"]` purely for state
+  persistence — it never sends an `updated_at` filter to Factorial's API (no server-side filter
+  exists) AND it never drops/filters out already-seen records client-side either; every record the
+  API returns is still emitted. `client_filtered` was previously (incorrectly) declared true here,
+  claiming a client-side drop-already-seen-records behavior legacy does not have — corrected to a
+  bare cursor field, which only affects sync-mode derivation, not filtering).
 - `teams` (`GET /teams/teams`) — primary key `id`, full refresh only.
-- `leaves` (`GET /timeoff/leaves`) — primary key `id`, incremental cursor `updated_at`
-  (`client_filtered: true`, same shape as `employees`).
+- `leaves` (`GET /timeoff/leaves`) — primary key `id`, bare incremental cursor `updated_at`, same
+  corrected shape as `employees` (no `request_param`, no `client_filtered`).
 - `leave_types` (`GET /timeoff/leave_types`) — primary key `id`, full refresh only.
 - `locations` (`GET /locations/locations`) — primary key `id`, full refresh only.
 
 `check` requests `GET /api_public/credentials` (matches legacy's `factorialCheckResource`).
+
+The `employees` stream (conformance's `pagination_terminates` first-eligible-stream candidate)
+ships a required 2-page conformance fixture (conventions.md §4):
+`fixtures/streams/employees/page_1.json` is a FULL page (50 records, matching
+`base.pagination.page_size`) and `page_2.json` is a short page (2 records), proving the
+`page_number` paginator issues exactly one request per page and terminates on the short page.
 
 ## Write actions & risks
 

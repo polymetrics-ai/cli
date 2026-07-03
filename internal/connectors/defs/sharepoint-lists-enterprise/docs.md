@@ -46,6 +46,15 @@ field (no `$filter`-style incremental query param exists in legacy's `Read`), so
 likewise sends no incremental filter param; the field only enables correct sync-mode derivation
 (`incremental_append[_deduped]`), matching legacy's own behavior exactly.
 
+Both streams declare `projection: "passthrough"` (conventions.md §8 rule 1): legacy's `Read` uses a
+single shared `connsdk.Harvest` call for both streams whose per-record callback is
+`return emit(connectors.Record(rec))` (`sharepoint_lists_enterprise.go:98-100`) — the raw decoded
+page record is emitted verbatim with no field-built `connectors.Record{...}` mapping anywhere in
+the read path. Schema-mode projection would silently drop any wire fields not enumerated in
+`schemas/lists.json`/`schemas/list_items.json`; passthrough is required to preserve full-record
+parity. The schemas remain a documentation surface only (conventions.md §8 rule 1's "schema stays
+documentation surface").
+
 ## Write actions & risks
 
 None. SharePoint Lists Enterprise is read-only (`capabilities.write: false`, no `writes.json`),

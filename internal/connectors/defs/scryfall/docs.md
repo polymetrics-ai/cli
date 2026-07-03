@@ -59,10 +59,14 @@ unconditionally; `capabilities.write` is `false` and this bundle ships no `write
   credential-free conformance-harness affordance, not part of the live record shape, and is
   intentionally not modeled — the engine's own conformance/fixture-replay harness provides the
   equivalent test affordance.
-- Schema is intentionally minimal (`id`/`name`/`set`) since legacy performs zero record shaping
-  beyond passing the raw decoded `data[]` entries straight through (`scryfall.go:126-129`'s
-  `emit(connectors.Record(rec))`). draft-07's default `additionalProperties: true` means any
-  additional real Scryfall card/set fields beyond these three pass schema validation without
-  needing enumeration; full field-level schema expansion is Pass B (wave5) scope.
+- **Every stream declares `projection: "passthrough"`** (conventions.md §8 rule 1): legacy performs
+  zero record shaping on either stream — `scryfall.go:126-129`'s `emit(connectors.Record(rec))`
+  passes the raw decoded `data[]` entries straight through with no field renaming, computation, or
+  filtering. Schema-mode projection (the dialect default) would silently drop every real Scryfall
+  card/set field beyond `id`/`name`/`set`, a parity-breaking behavior change versus legacy;
+  `passthrough` keeps every raw field, matching legacy's actual emitted-record shape exactly.
+  Schema stays intentionally minimal (`id`/`name`/`set`) as a **documentation surface only** now
+  that `passthrough` — not schema shape — governs what survives projection; full field-level schema
+  expansion is Pass B (wave5) scope.
 - Full Scryfall API surface (single-card lookup, symbology, bulk data) is out of scope for this
   wave; see `api_surface.json`'s `excluded` entries.

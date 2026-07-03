@@ -12,12 +12,6 @@
       "start_page": 1,
       "page_size": 100
     },
-    "query": {
-      "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
-      "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
-      "email": { "template": "{{ config.email }}", "omit_when_absent": true },
-      "status": { "template": "{{ config.status }}", "omit_when_absent": true }
-    },
     "check": { "method": "GET", "path": "/people", "query": { "limit": "1", "page": "1" } },
     "error_map": [
       { "status": 401, "hint": "reply.io api key is missing or invalid; re-run pm credentials add reply-io" },
@@ -30,6 +24,12 @@
       "name": "people",
       "path": "/people",
       "records": { "path": "" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "email": { "template": "{{ config.email }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
       "computed_fields": {
         "stream": "people"
       },
@@ -39,6 +39,12 @@
       "name": "campaigns",
       "path": "/campaigns",
       "records": { "path": "" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "email": { "template": "{{ config.email }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
       "computed_fields": {
         "stream": "campaigns"
       },
@@ -48,6 +54,12 @@
       "name": "tasks",
       "path": "/tasks",
       "records": { "path": "" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "email": { "template": "{{ config.email }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
       "computed_fields": {
         "stream": "tasks"
       },
@@ -57,6 +69,12 @@
       "name": "email_accounts",
       "path": "/emailAccounts",
       "records": { "path": "" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "email": { "template": "{{ config.email }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
       "computed_fields": {
         "stream": "email_accounts"
       },

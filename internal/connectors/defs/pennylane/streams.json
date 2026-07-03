@@ -26,7 +26,8 @@
         "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
       },
       "records": { "path": "items" },
-      "schema": "schemas/customers.json"
+      "schema": "schemas/customers.json",
+      "projection": "passthrough"
     },
     {
       "name": "customer_invoices",
@@ -37,7 +38,8 @@
         "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
       },
       "records": { "path": "items" },
-      "schema": "schemas/customer_invoices.json"
+      "schema": "schemas/customer_invoices.json",
+      "projection": "passthrough"
     },
     {
       "name": "suppliers",
@@ -48,7 +50,8 @@
         "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
       },
       "records": { "path": "items" },
-      "schema": "schemas/suppliers.json"
+      "schema": "schemas/suppliers.json",
+      "projection": "passthrough"
     },
     {
       "name": "products",
@@ -59,7 +62,8 @@
         "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
       },
       "records": { "path": "items" },
-      "schema": "schemas/products.json"
+      "schema": "schemas/products.json",
+      "projection": "passthrough"
     },
     {
       "name": "categories",
@@ -70,7 +74,8 @@
         "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
       },
       "records": { "path": "items" },
-      "schema": "schemas/categories.json"
+      "schema": "schemas/categories.json",
+      "projection": "passthrough"
     }
   ]
 }

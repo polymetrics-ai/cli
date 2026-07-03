@@ -24,18 +24,21 @@
       "name": "products",
       "path": "/core/v3/stores/{{ config.store_id }}/products",
       "records": { "path": "products" },
+      "projection": "passthrough",
       "schema": "schemas/products.json"
     },
     {
       "name": "customers",
       "path": "/core/v3/stores/{{ config.store_id }}/customers",
       "records": { "path": "customers" },
+      "projection": "passthrough",
       "schema": "schemas/customers.json"
     },
     {
       "name": "orders",
       "path": "/core/v3/stores/{{ config.store_id }}/orders",
       "records": { "path": "orders" },
+      "projection": "passthrough",
       "schema": "schemas/orders.json"
     }
   ]

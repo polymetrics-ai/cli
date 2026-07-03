@@ -22,6 +22,21 @@ matching legacy's `connsdk.PageNumberPaginator{PageParam: "page", SizeParam: "li
 1, PageSize: size}` contract exactly (`tickettailor.go:87-88`). The `check` request mirrors
 legacy's own check call (`GET /events?page=1&limit=1`, `tickettailor.go:47`).
 
+All 3 streams declare `"projection": "passthrough"` (conventions.md §8 rule 1). Legacy's `Read`
+calls `connsdk.Harvest(..., func(rec connsdk.Record) error { return emit(connectors.Record(rec)) })`
+(`tickettailor.go:88`) — every record `connsdk.Harvest` extracts from the raw `data` envelope is
+emitted completely unfiltered; `streamSpecs[...].fields` (the 5-ish field list per stream, e.g.
+`id`/`name`/`start_date`/`end_date`/`status` for `events`) is Catalog-only decoration
+(`tickettailor.go:116-129`, consumed solely by `Catalog()`'s `connectors.Stream` construction),
+never applied to the emitted record itself. Default `"schema"` projection mode would silently drop
+every real Ticket Tailor field not named in each stream's declared schema properties (the live API
+returns considerably more per-object detail than legacy's catalog list names, e.g. `events`'
+`description`/`venue`/`currency`/`timezone`/`ticket_types`/`url`), an undocumented silent
+data-shape change relative to legacy's raw passthrough. Each schema still declares the fields
+legacy's own catalog names (for `x-primary-key` typing and `records_match_schema` coverage), but
+passthrough mode means any other real field Ticket Tailor returns still survives unfiltered,
+matching legacy exactly.
+
 ## Write actions & risks
 
 None. Ticket Tailor is read-only (`capabilities.write: false`, no `writes.json`), matching

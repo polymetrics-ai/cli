@@ -5,10 +5,6 @@
     "auth": [
       { "mode": "bearer", "token": "{{ secrets.api_key }}" }
     ],
-    "query": {
-      "since_date": { "template": "{{ config.since_date }}", "omit_when_absent": true },
-      "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
-    },
     "check": { "method": "GET", "path": "/budgets" },
     "error_map": [
       { "status": 401, "hint": "you-need-a-budget-ynab api_key is missing or invalid; re-run pm credentials add you-need-a-budget-ynab" },
@@ -20,6 +16,10 @@
       "name": "budgets",
       "path": "/budgets",
       "records": { "path": "data.budgets" },
+      "query": {
+        "since_date": { "template": "{{ config.since_date }}", "omit_when_absent": true },
+        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      },
       "projection": "passthrough",
       "computed_fields": {
         "updated_at": "{{ record.last_modified_on }}"
@@ -30,6 +30,10 @@
       "name": "accounts",
       "path": "/budgets/{{ config.budget_id }}/accounts",
       "records": { "path": "data.accounts" },
+      "query": {
+        "since_date": { "template": "{{ config.since_date }}", "omit_when_absent": true },
+        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      },
       "projection": "passthrough",
       "computed_fields": {
         "updated_at": "{{ record.last_modified_on }}"
@@ -40,6 +44,10 @@
       "name": "transactions",
       "path": "/budgets/{{ config.budget_id }}/transactions",
       "records": { "path": "data.transactions" },
+      "query": {
+        "since_date": { "template": "{{ config.since_date }}", "omit_when_absent": true },
+        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      },
       "projection": "passthrough",
       "computed_fields": {
         "name": "{{ record.payee_name }}",

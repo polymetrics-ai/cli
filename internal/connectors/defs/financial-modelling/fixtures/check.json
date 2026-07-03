@@ -1,6 +1,13 @@
 {
-  "response": {
-    "status": 200,
-    "body": []
+ "response": {
+  "status": 200,
+  "body": []
+ },
+ "request": {
+  "method": "GET",
+  "path": "/stock-screener",
+  "query": {
+   "limit": "1"
   }
+ }
 }

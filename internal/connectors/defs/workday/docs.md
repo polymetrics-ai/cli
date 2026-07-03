@@ -43,6 +43,15 @@ field**: legacy's `Read` never references `req.State` or sends any date-range qu
 all (verified: no `State` reference anywhere in `workday.go`). Every read is a full-refresh
 page-through of the entire collection, identical on both sides.
 
+All 3 streams declare `projection: "passthrough"` (§8 rule 1): legacy's `Read` calls
+`connsdk.Harvest(...)` with an emit callback of `func(rec connsdk.Record) error { return
+emit(connectors.Record(rec)) }` (`workday.go:141-143`) — `Harvest` extracts each page's records via
+`RecordsAt` and hands them straight to that callback with no field-building anywhere in between.
+Schema-mode projection would silently drop any real Workday tenant-API field beyond the handful
+this bundle's schemas document (`id`/`name`/`updated_at` for `workers`, etc.); `passthrough`
+reproduces legacy's verbatim emission exactly. This bundle's fixtures only exercise the
+already-documented fields, so no schema widening was needed for fixture parity.
+
 ## Write actions & risks
 
 None. Legacy `Write` always returns `connectors.ErrUnsupportedOperation`; `capabilities.write` is

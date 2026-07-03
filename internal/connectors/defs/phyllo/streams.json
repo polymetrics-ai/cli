@@ -22,25 +22,29 @@
       "name": "users",
       "path": "/v1/users",
       "records": { "path": "data" },
-      "schema": "schemas/users.json"
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
     },
     {
       "name": "accounts",
       "path": "/v1/accounts",
       "records": { "path": "data" },
-      "schema": "schemas/accounts.json"
+      "schema": "schemas/accounts.json",
+      "projection": "passthrough"
     },
     {
       "name": "profiles",
       "path": "/v1/profiles",
       "records": { "path": "data" },
-      "schema": "schemas/profiles.json"
+      "schema": "schemas/profiles.json",
+      "projection": "passthrough"
     },
     {
       "name": "social_contents",
       "path": "/v1/social/contents",
       "records": { "path": "data" },
-      "schema": "schemas/social_contents.json"
+      "schema": "schemas/social_contents.json",
+      "projection": "passthrough"
     }
   ]
 }

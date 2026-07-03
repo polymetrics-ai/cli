@@ -22,7 +22,8 @@
       "computed_fields": {
         "id": "current:{{ config.query }}"
       },
-      "schema": "schemas/current.json"
+      "schema": "schemas/current.json",
+      "projection": "passthrough"
     },
     {
       "name": "historical",
@@ -35,7 +36,8 @@
       "computed_fields": {
         "id": "historical:{{ config.query }}"
       },
-      "schema": "schemas/historical.json"
+      "schema": "schemas/historical.json",
+      "projection": "passthrough"
     },
     {
       "name": "forecast",
@@ -48,7 +50,8 @@
       "computed_fields": {
         "id": "forecast:{{ config.query }}"
       },
-      "schema": "schemas/forecast.json"
+      "schema": "schemas/forecast.json",
+      "projection": "passthrough"
     }
   ]
 }

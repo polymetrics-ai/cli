@@ -19,12 +19,14 @@
       "name": "projects",
       "path": "/project",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/projects.json"
     },
     {
       "name": "tasks",
       "path": "/project/{{ config.project_id }}/data",
       "records": { "path": "tasks" },
+      "projection": "passthrough",
       "schema": "schemas/tasks.json"
     }
   ]

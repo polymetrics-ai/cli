@@ -26,6 +26,15 @@ block, no `pagination` block).
 `timestamp`, a legacy-only Field type with no draft-07 JSON Schema equivalent; the API returns them
 as RFC3339-shaped strings).
 
+All 4 streams declare `"projection": "passthrough"`: legacy's `Read` emits every decoded record
+verbatim (`emit(connectors.Record(item))` in
+`internal/connectors/when-i-work/when_i_work.go`, with no field-built `connectors.Record{...}`
+mapping and no allowlist). Schema-mode projection would silently drop any When I Work response field
+not enumerated in `schemas/{users,locations,positions,shifts}.json`, which is a meta-rule violation
+per conventions.md §8 rule 1. The schemas remain a documentation surface listing the known/stable
+fields; passthrough mode ensures any additional live-response field still reaches the record instead
+of being silently projected away.
+
 ## Write actions & risks
 
 None. This bundle covers only the read surface legacy implemented; `capabilities.write` is `false`

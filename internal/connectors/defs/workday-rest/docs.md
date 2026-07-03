@@ -48,6 +48,18 @@ connector's `organizations`.docs.md note): `x-cursor-field` must name a property
 exists in the same schema (a hard `connectorgen validate` rule), so this bundle omits it here
 rather than fabricate a field legacy never emits. No emitted record DATA differs from legacy.
 
+All 3 streams declare `"projection": "passthrough"`. Legacy's `Read` emits the raw API record
+verbatim (`return emit(connectors.Record(rec))`, `workday_rest.go:141-143`, fed by
+`connsdk.Harvest`'s unfiltered `RecordsAt` decode) with no field-building/filtering —
+`streamEndpoints[stream].fields` is consumed only by `Catalog` (`workday_rest.go:101-107`), never
+by `Read`. Any real Workday field beyond each stream's narrow catalog schema (e.g. HCM's
+richer worker/organization/job payload attributes) survives to the emitted record exactly as
+legacy would emit it. Declaring the default `"schema"` projection mode here would silently narrow
+every emitted record to the catalog schema's properties — a silent, undocumented parity deviation
+from legacy's verbatim passthrough — so `passthrough` is required, matching
+`docs/migration/conventions.md`'s projection rule (§3) and the post-wave2 §8 rule 1: legacy's raw
+`emit(record)` with no `mapRecord` field-building is the mechanical signal to use `passthrough`.
+
 ## Write actions & risks
 
 None. Legacy `Write` always returns `connectors.ErrUnsupportedOperation`; `capabilities.write` is

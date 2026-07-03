@@ -23,19 +23,22 @@
       "name": "workspaces",
       "path": "/workspaces",
       "records": { "path": "workspaces" },
-      "schema": "schemas/workspaces.json"
+      "schema": "schemas/workspaces.json",
+      "projection": "passthrough"
     },
     {
       "name": "sources",
       "path": "/sources",
       "records": { "path": "sources" },
-      "schema": "schemas/sources.json"
+      "schema": "schemas/sources.json",
+      "projection": "passthrough"
     },
     {
       "name": "destinations",
       "path": "/destinations",
       "records": { "path": "destinations" },
-      "schema": "schemas/destinations.json"
+      "schema": "schemas/destinations.json",
+      "projection": "passthrough"
     }
   ]
 }

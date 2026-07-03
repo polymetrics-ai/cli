@@ -1,6 +1,20 @@
 {
-  "response": {
-    "status": 200,
-    "body": { "meta": { "current_page": 1, "per_page": 1, "next_page_link": null }, "calls": [] }
+ "response": {
+  "status": 200,
+  "body": {
+   "meta": {
+    "current_page": 1,
+    "per_page": 1,
+    "next_page_link": null
+   },
+   "calls": []
   }
+ },
+ "request": {
+  "method": "GET",
+  "path": "/calls",
+  "query": {
+   "per_page": "1"
+  }
+ }
 }

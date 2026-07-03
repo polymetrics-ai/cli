@@ -13,12 +13,21 @@
       "type": "array",
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "method": { "type": "string" },
           "path": { "type": "string" },
-          "covered_by": { "type": "object" },
+          "covered_by": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "stream": { "type": "string" },
+              "write": { "type": "string" }
+            }
+          },
           "excluded": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
               "category": {
                 "type": "string",

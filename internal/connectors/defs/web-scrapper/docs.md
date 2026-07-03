@@ -21,6 +21,15 @@ at `data`). Primary key is `["id"]` for both; neither stream is incremental or p
 endpoint.resource, nil, nil)`) and this bundle mirrors that exactly (no `query` block, no
 `pagination` block).
 
+Both streams declare `"projection": "passthrough"`: legacy's `Read` emits every decoded record
+verbatim (`emit(connectors.Record(item))` in
+`internal/connectors/web-scrapper/web_scrapper.go`, with no field-built `connectors.Record{...}`
+mapping and no allowlist). Schema-mode projection would silently drop any Web Scraper Cloud response
+field not enumerated in `schemas/{sitemaps,jobs}.json`, which is a meta-rule violation per
+conventions.md §8 rule 1. The schemas remain a documentation surface listing the known/stable
+fields; passthrough mode ensures any additional live-response field still reaches the record instead
+of being silently projected away.
+
 ## Write actions & risks
 
 None. This bundle covers only the read surface legacy implemented; `capabilities.write` is `false`

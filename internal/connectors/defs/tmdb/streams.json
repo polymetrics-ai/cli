@@ -27,6 +27,7 @@
         "language": { "template": "{{ config.language }}", "omit_when_absent": true }
       },
       "records": { "path": "results" },
+      "projection": "passthrough",
       "schema": "schemas/popular_movies.json"
     },
     {
@@ -36,6 +37,7 @@
         "language": { "template": "{{ config.language }}", "omit_when_absent": true }
       },
       "records": { "path": "results" },
+      "projection": "passthrough",
       "schema": "schemas/now_playing_movies.json"
     },
     {
@@ -46,6 +48,7 @@
         "language": { "template": "{{ config.language }}", "omit_when_absent": true }
       },
       "records": { "path": "results" },
+      "projection": "passthrough",
       "schema": "schemas/search_movies.json"
     },
     {
@@ -56,6 +59,7 @@
       },
       "records": { "path": "" },
       "pagination": { "type": "none" },
+      "projection": "passthrough",
       "schema": "schemas/movie_details.json"
     }
   ]

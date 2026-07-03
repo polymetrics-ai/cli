@@ -28,18 +28,21 @@
       "name": "users",
       "path": "/v1/users",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/users.json"
     },
     {
       "name": "groups",
       "path": "/v1/groups",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/groups.json"
     },
     {
       "name": "courses",
       "path": "/v1/courses",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/courses.json"
     }
   ]

@@ -12,12 +12,6 @@
       "start_page": 1,
       "page_size": 100
     },
-    "query": {
-      "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
-      "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
-      "email": { "template": "{{ config.email }}", "omit_when_absent": true },
-      "campaign_id": { "template": "{{ config.campaign_id }}", "omit_when_absent": true }
-    },
     "check": { "method": "GET", "path": "/customers", "query": { "page": "1", "limit": "1" } },
     "error_map": [
       { "status": 401, "hint": "retently api_key is missing or invalid; re-run pm credentials add retently" },
@@ -30,6 +24,12 @@
       "name": "customers",
       "path": "/customers",
       "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "email": { "template": "{{ config.email }}", "omit_when_absent": true },
+        "campaign_id": { "template": "{{ config.campaign_id }}", "omit_when_absent": true }
+      },
       "computed_fields": { "stream": "customers" },
       "schema": "schemas/customers.json"
     },
@@ -37,6 +37,12 @@
       "name": "responses",
       "path": "/responses",
       "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "email": { "template": "{{ config.email }}", "omit_when_absent": true },
+        "campaign_id": { "template": "{{ config.campaign_id }}", "omit_when_absent": true }
+      },
       "computed_fields": { "stream": "responses" },
       "schema": "schemas/responses.json"
     },
@@ -44,6 +50,12 @@
       "name": "surveys",
       "path": "/surveys",
       "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "email": { "template": "{{ config.email }}", "omit_when_absent": true },
+        "campaign_id": { "template": "{{ config.campaign_id }}", "omit_when_absent": true }
+      },
       "computed_fields": { "stream": "surveys" },
       "schema": "schemas/surveys.json"
     },
@@ -51,6 +63,12 @@
       "name": "campaigns",
       "path": "/campaigns",
       "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "email": { "template": "{{ config.email }}", "omit_when_absent": true },
+        "campaign_id": { "template": "{{ config.campaign_id }}", "omit_when_absent": true }
+      },
       "computed_fields": { "stream": "campaigns" },
       "schema": "schemas/campaigns.json"
     }

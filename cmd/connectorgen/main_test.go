@@ -96,6 +96,14 @@ func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {
 		{"skip-marker-missing-reason", ruleConformanceSkipReason},
 		{"skip-marker-missing-reason-bundle", ruleConformanceSkipReason},
 		{"default-type-mismatch", ruleDefaultTypeMismatch},
+		{"unknown-base-key", ruleMetaSchema},
+		// checkquery-ledger.md: base.check.query is now a real, engine-level
+		// field (RequestSpec.Query) rather than an unknown key, so its
+		// templates must be statically validated exactly like stream.Query's
+		// — a check.query entry templating an undeclared spec key is a
+		// ruleInterpolationUnresolved finding, the same rule
+		// auth-field-unknown-spec-key already exercises for base.auth.
+		{"check-query-unknown-spec-key", ruleInterpolationUnresolved},
 	}
 
 	seenRules := map[string]bool{}

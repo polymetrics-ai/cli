@@ -31,7 +31,8 @@
         "param_format": "rfc3339",
         "start_config_key": "start_date"
       },
-      "schema": "schemas/trips.json"
+      "schema": "schemas/trips.json",
+      "projection": "passthrough"
     },
     {
       "name": "invoices",
@@ -43,7 +44,8 @@
         "param_format": "rfc3339",
         "start_config_key": "start_date"
       },
-      "schema": "schemas/invoices.json"
+      "schema": "schemas/invoices.json",
+      "projection": "passthrough"
     }
   ]
 }

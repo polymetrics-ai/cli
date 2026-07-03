@@ -28,6 +28,18 @@ incremental cursor field for manifest-surface parity, matching legacy's `cursorF
 neither legacy nor this bundle actually issues a server-side incremental filter — legacy's `Read`
 performs a full stream read every time regardless of any prior cursor.
 
+All 3 streams declare `"projection": "passthrough"`. Legacy's `Read` emits the raw API record
+verbatim (`return emit(connectors.Record(rec))`, `workramp.go:109-111`, fed by
+`connsdk.Harvest`'s unfiltered `RecordsAt` decode) with no field-building/filtering —
+`streamEndpoints[stream].fields` is consumed only by `Catalog` (`workramp.go:69-79`), never by
+`Read`. Any real WorkRamp field beyond each stream's narrow catalog schema survives to the
+emitted record exactly as legacy would emit it. Declaring the default `"schema"` projection mode
+here would silently narrow every emitted record to the catalog schema's properties — a silent,
+undocumented parity deviation from legacy's verbatim passthrough — so `passthrough` is required,
+matching `docs/migration/conventions.md`'s projection rule (§3) and the post-wave2 §8 rule 1:
+legacy's raw `emit(record)` with no `mapRecord` field-building is the mechanical signal to use
+`passthrough`.
+
 ## Write actions & risks
 
 None. Legacy `workramp.go`'s `Write` returns `connectors.ErrUnsupportedOperation`

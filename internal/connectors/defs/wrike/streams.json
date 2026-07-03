@@ -28,19 +28,22 @@
       "name": "tasks",
       "path": "/tasks",
       "records": { "path": "data" },
-      "schema": "schemas/tasks.json"
+      "schema": "schemas/tasks.json",
+      "projection": "passthrough"
     },
     {
       "name": "folders",
       "path": "/folders",
       "records": { "path": "data" },
-      "schema": "schemas/folders.json"
+      "schema": "schemas/folders.json",
+      "projection": "passthrough"
     },
     {
       "name": "contacts",
       "path": "/contacts",
       "records": { "path": "data" },
-      "schema": "schemas/contacts.json"
+      "schema": "schemas/contacts.json",
+      "projection": "passthrough"
     }
   ]
 }

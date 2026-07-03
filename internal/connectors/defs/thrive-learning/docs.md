@@ -25,11 +25,18 @@ records at `items`), `content` (`GET /content`, records at `items`), `completion
 /completions`, records at `items`); every emitted field matches the raw API's own field names
 exactly (`id`/`email`/`name`/`created_at`/`updated_at` for `users`,
 `id`/`title`/`type`/`created_at`/`updated_at` for `content`,
-`id`/`user_id`/`content_id`/`completed_at`/`updated_at` for `completions`) — no `computed_fields`
-rename needed, plain schema projection reproduces legacy's identity record pass-through
-(`thrive_learning.go:96-98`) field-for-field. All three declare primary key `["id"]`; legacy's own
-`Catalog` sets no `CursorFields` for any stream, so none of these schemas declare
-`x-cursor-field`, matching exactly.
+`id`/`user_id`/`content_id`/`completed_at`/`updated_at` for `completions`). All three declare
+primary key `["id"]`; legacy's own `Catalog` sets no `CursorFields` for any stream, so none of these
+schemas declare `x-cursor-field`, matching exactly.
+
+Legacy's `Read` calls `connsdk.Harvest` with a callback that does `return emit(connectors.Record(rec))`
+verbatim (`thrive_learning.go:96-98`) — there is no `mapRecord`-style field-building step, so the
+`fields(...)` list backing each `streamSpec` only describes legacy's advertised `Catalog` metadata,
+not an actual projection filter; every raw field the API returns for a record reaches the emitted
+output today. All three streams therefore declare `"projection": "passthrough"` to preserve that
+exact verbatim-emit behavior; `schemas/*.json` remain a documentation surface only (the
+advertised/expected shape) and are not widened to `additionalProperties: true`, matching the
+pingdom/searxng precedent for this rule.
 
 `config.start_date`, when set, is sent as the `updated_since` query parameter on **every** stream
 (legacy's shared `q.Set("updated_since", start)` branch inside `Read`, applied identically

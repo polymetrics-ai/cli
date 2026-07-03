@@ -21,7 +21,8 @@
         "type": "next_url",
         "next_url_path": "links.next"
       },
-      "schema": "schemas/events.json"
+      "schema": "schemas/events.json",
+      "projection": "passthrough"
     },
     {
       "name": "links",
@@ -32,7 +33,8 @@
         "type": "next_url",
         "next_url_path": "links.next"
       },
-      "schema": "schemas/links.json"
+      "schema": "schemas/links.json",
+      "projection": "passthrough"
     },
     {
       "name": "contacts",
@@ -43,7 +45,8 @@
         "type": "next_url",
         "next_url_path": "links.next"
       },
-      "schema": "schemas/contacts.json"
+      "schema": "schemas/contacts.json",
+      "projection": "passthrough"
     }
   ]
 }

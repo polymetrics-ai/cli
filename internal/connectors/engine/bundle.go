@@ -97,10 +97,22 @@ type HTTPBase struct {
 	RateLimit  *RateLimitSpec    `json:"rate_limit,omitempty"`
 }
 
-// RequestSpec is a minimal method+path request descriptor (used by "check").
+// RequestSpec is a method+path(+query) request descriptor (used by "check").
+//
+// ENGINE DIALECT ADDITION (checkquery-ledger.md): Query mirrors
+// StreamSpec.Query's existing string-or-object QueryParam dialect verbatim
+// (per hardening-ledger.md's suggested follow-up shape) rather than a plain
+// map[string]string, since 148 bundles under defs/ declare base.check.query
+// with the same plain-string-template shape stream.Query already supports,
+// and reusing the identical type gives check.query the same
+// omit_when_absent/default escape hatches for free with no new dialect to
+// learn. Before this field existed, base.check.query was either a load-time
+// meta-schema rejection (post-hardening) or a silently-dropped no-op
+// (pre-hardening) — see read.go's Check() for how it is now resolved+sent.
 type RequestSpec struct {
-	Method string `json:"method"`
-	Path   string `json:"path"`
+	Method string                `json:"method"`
+	Path   string                `json:"path"`
+	Query  map[string]QueryParam `json:"query,omitempty"`
 }
 
 // AuthSpec describes one candidate authenticator, selected by "when" (first
@@ -341,9 +353,67 @@ func init() {
 // bundle's directory, excepting streams.json (conditionally required).
 var requiredFiles = []string{"metadata.json", "spec.json", "api_surface.json", "docs.md"}
 
+// LoadAllError is the structured error LoadAll returns whenever one or more
+// (but not necessarily all) bundle directories under fsys failed to load.
+// Failures preserves discovery order (the same sorted directory-name order
+// LoadAll iterates) so callers that want per-bundle granularity (e.g.
+// conformance's TestConformance, which reports one failing subtest per
+// bundle name rather than a single opaque batch failure) can do so via
+// errors.As instead of parsing Error()'s message.
+type LoadAllError struct {
+	Failures []BundleLoadFailure
+}
+
+// BundleLoadFailure names one bundle directory that failed to load and the
+// error Load returned for it.
+type BundleLoadFailure struct {
+	Name string
+	Err  error
+}
+
+// GetFailures returns e.Failures, tolerating a nil *LoadAllError (the shape
+// errors.As leaves its target in when the wrapped error chain contained no
+// *LoadAllError at all, e.g. when LoadAll returned a nil error) so callers
+// that iterate "whatever failed, if anything" never need their own nil
+// check first.
+func (e *LoadAllError) GetFailures() []BundleLoadFailure {
+	if e == nil {
+		return nil
+	}
+	return e.Failures
+}
+
+func (e *LoadAllError) Error() string {
+	names := make([]string, 0, len(e.Failures))
+	msgs := make([]string, 0, len(e.Failures))
+	for _, f := range e.Failures {
+		names = append(names, f.Name)
+		msgs = append(msgs, f.Err.Error())
+	}
+	return fmt.Sprintf("load all bundles: %d bundle(s) failed to load (%s): %s",
+		len(e.Failures), strings.Join(names, ", "), strings.Join(msgs, "; "))
+}
+
 // LoadAll loads and validates every bundle directory found at the root of
 // fsys. Non-directory root entries are skipped. An empty tree is not an
 // error (returns zero bundles).
+//
+// ENGINE HARDENING (hardening-ledger.md): a single bundle that fails to load
+// no longer hides every OTHER bundle in fsys. LoadAll attempts every bundle
+// directory (never aborts partway through) and, if one or more failed,
+// returns the bundles that DID load cleanly alongside a non-nil *LoadAllError
+// naming every failure. This mirrors cmd/connectorgen validate's own
+// long-standing per-bundle isolation (validateBundleDir already turns one
+// bundle's engine.Load error into an isolated Finding rather than aborting
+// the whole validate run) — with ~400 independently-authored bundles under
+// defs/, fail-fast-on-first-error made fleet-wide discovery (the same path
+// production bundle-registry construction and every defs.FS-wide test in
+// this repo uses) an all-or-nothing proposition, which is exactly the
+// failure mode this change closes. Callers that must treat any failure as
+// fatal still get a non-nil error to check (via plain err != nil, or
+// errors.As(&LoadAllError{}) for the per-bundle detail); callers that want
+// the currently-loadable subset (this package's and conformance's
+// fleet-wide tests) can proceed with the returned bundles regardless.
 func LoadAll(fsys fs.FS) ([]Bundle, error) {
 	entries, err := fs.ReadDir(fsys, ".")
 	if err != nil {
@@ -360,12 +430,17 @@ func LoadAll(fsys fs.FS) ([]Bundle, error) {
 	sort.Strings(names)
 
 	bundles := make([]Bundle, 0, len(names))
+	var loadErr LoadAllError
 	for _, name := range names {
 		b, err := Load(fsys, name)
 		if err != nil {
-			return nil, fmt.Errorf("load all bundles: %s: %w", name, err)
+			loadErr.Failures = append(loadErr.Failures, BundleLoadFailure{Name: name, Err: err})
+			continue
 		}
 		bundles = append(bundles, b)
+	}
+	if len(loadErr.Failures) > 0 {
+		return bundles, &loadErr
 	}
 	return bundles, nil
 }
@@ -450,7 +525,7 @@ func loadMetadata(sub fs.FS, dirName string) (Metadata, error) {
 	}
 
 	var m Metadata
-	if err := json.Unmarshal(raw, &m); err != nil {
+	if err := strictDecode(raw, &m); err != nil {
 		return Metadata{}, fmt.Errorf("load bundle %s: metadata.json: %w", dirName, err)
 	}
 
@@ -506,7 +581,7 @@ func loadStreams(sub fs.FS, dirName string, metadata Metadata) (HTTPBase, []Stre
 		Base    HTTPBase     `json:"base"`
 		Streams []StreamSpec `json:"streams"`
 	}
-	if err := json.Unmarshal(raw, &doc); err != nil {
+	if err := strictDecode(raw, &doc); err != nil {
 		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
 	}
 	return doc.Base, doc.Streams, nil
@@ -526,7 +601,7 @@ func loadWrites(sub fs.FS, dirName string) ([]WriteAction, error) {
 	var doc struct {
 		Actions []WriteAction `json:"actions"`
 	}
-	if err := json.Unmarshal(raw, &doc); err != nil {
+	if err := strictDecode(raw, &doc); err != nil {
 		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
 	}
 	return doc.Actions, nil
@@ -564,7 +639,7 @@ func loadAPISurface(sub fs.FS, dirName string) (*APISurface, error) {
 		return nil, fmt.Errorf("load bundle %s: api_surface.json: %w", dirName, err)
 	}
 	var surface APISurface
-	if err := json.Unmarshal(raw, &surface); err != nil {
+	if err := strictDecode(raw, &surface); err != nil {
 		return nil, fmt.Errorf("load bundle %s: api_surface.json: %w", dirName, err)
 	}
 	return &surface, nil
@@ -605,6 +680,32 @@ func fileExists(fsys fs.FS, name string) bool {
 func dirExists(fsys fs.FS, name string) bool {
 	info, err := fs.Stat(fsys, name)
 	return err == nil && info.IsDir()
+}
+
+// strictDecode decodes raw into dst via encoding/json with
+// DisallowUnknownFields, independent of and in addition to the meta-schema
+// Validate() pass every caller already runs first.
+//
+// ENGINE HARDENING (hardening-ledger.md): the meta-schema pass alone is not
+// sufficient defense-in-depth for this specific mistake class — a bundle
+// author (or a future edit to the meta-schema files themselves) could
+// silently reopen the hole a bare {"type":"object"} sub-schema left open
+// (internal/connectors/defs/rentcast's now-repaired "base.query", still
+// exactly reproduced today by ~150 bundles' "base.check.query": RequestSpec
+// only has Method/Path, so that JSON silently did nothing at runtime while
+// passing every gate). DisallowUnknownFields rejects any key not matched by
+// a STRUCT field on dst (or on any nested struct/pointer-to-struct it
+// decodes into); fields typed as a map (HTTPBase.Headers, StreamSpec.Query/
+// Body/ComputedFields, FilterSpec.FieldEquals, RecordSchema, ...) remain
+// deliberately open, since those are genuinely caller-defined free-form
+// key sets, not a fixed dialect surface.
+func strictDecode(raw []byte, dst any) error {
+	dec := json.NewDecoder(strings.NewReader(string(raw)))
+	dec.DisallowUnknownFields()
+	if err := dec.Decode(dst); err != nil {
+		return fmt.Errorf("%w", err)
+	}
+	return nil
 }
 
 // mustDecodeAny decodes raw JSON into a generic any for meta-schema

@@ -21,6 +21,22 @@ matching legacy's `resolveResource`, which errors when `store_id` is unset. Pagi
 `connsdk.PageNumberPaginator{PageParam: "page", SizeParam: "limit", StartPage: 1, PageSize:
 pageSize}` with legacy's default `pageSize` of 100.
 
+All 3 streams declare `"projection": "passthrough"`. Legacy's `Read` decodes each page via
+`connsdk.Harvest` and emits every record verbatim (`emit(connectors.Record(rec))`, `yotpo.go:117-
+119`) with no field-building/filtering — `streamEndpoints[stream].fields` is consumed only by
+`Catalog` (`yotpo.go:79-81`), never by `Read`. Every real Yotpo field beyond each stream's narrow
+catalog schema (e.g. `sku`, `url`, `image_url`, `price` on `products`; `first_name`, `last_name`,
+`accepts_marketing` on `customers`; `email`, `total_price`, `financial_status` on `orders`)
+survives to the emitted record exactly as legacy would emit it. Declaring the default `"schema"`
+projection mode here would silently narrow every emitted record to the catalog schema's
+properties — a silent, undocumented parity deviation from legacy's verbatim passthrough — so
+`passthrough` is required, matching conventions.md's projection rule (§3) and the
+passthrough-decision rule (§8 rule 1: legacy's raw `emit(connectors.Record(rec))` with no
+`mapRecord`/field-building is the mechanical signal to use `passthrough`). Each stream's
+`schemas/<stream>.json` remains a narrow documentation surface (the fields legacy's `Catalog`
+advertises), not an enforced filter — with `passthrough` set, the engine never uses it to drop
+fields.
+
 ## Write actions & risks
 
 None — this connector is read-only (`capabilities.write: false`), matching legacy's `Write`

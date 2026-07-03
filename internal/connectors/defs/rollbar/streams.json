@@ -24,13 +24,15 @@
       "name": "items",
       "path": "/api/1/items/",
       "records": { "path": "result.items" },
-      "schema": "schemas/items.json"
+      "schema": "schemas/items.json",
+      "projection": "passthrough"
     },
     {
       "name": "projects",
       "path": "/api/1/projects",
       "records": { "path": "result" },
-      "schema": "schemas/projects.json"
+      "schema": "schemas/projects.json",
+      "projection": "passthrough"
     }
   ]
 }

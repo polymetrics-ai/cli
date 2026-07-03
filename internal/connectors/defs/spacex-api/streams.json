@@ -15,66 +15,77 @@
       "name": "launches",
       "path": "/launches",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/launches.json"
     },
     {
       "name": "rockets",
       "path": "/rockets",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/rockets.json"
     },
     {
       "name": "capsules",
       "path": "/capsules",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/capsules.json"
     },
     {
       "name": "crew",
       "path": "/crew",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/crew.json"
     },
     {
       "name": "payloads",
       "path": "/payloads",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/payloads.json"
     },
     {
       "name": "starlink",
       "path": "/starlink",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/starlink.json"
     },
     {
       "name": "launchpads",
       "path": "/launchpads",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/launchpads.json"
     },
     {
       "name": "landpads",
       "path": "/landpads",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/landpads.json"
     },
     {
       "name": "ships",
       "path": "/ships",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/ships.json"
     },
     {
       "name": "roadster",
       "path": "/roadster",
       "records": { "path": ".", "single_object": true },
+      "projection": "passthrough",
       "schema": "schemas/roadster.json"
     },
     {
       "name": "company",
       "path": "/company",
       "records": { "path": ".", "single_object": true },
+      "projection": "passthrough",
       "schema": "schemas/company.json"
     }
   ]

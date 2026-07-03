@@ -22,7 +22,8 @@
         "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
       },
       "records": { "path": "campaigns" },
-      "schema": "schemas/campaigns.json"
+      "schema": "schemas/campaigns.json",
+      "projection": "passthrough"
     },
     {
       "name": "prospects",
@@ -33,7 +34,8 @@
         "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
       },
       "records": { "path": "prospects" },
-      "schema": "schemas/prospects.json"
+      "schema": "schemas/prospects.json",
+      "projection": "passthrough"
     },
     {
       "name": "teams",
@@ -43,7 +45,8 @@
         "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
       },
       "records": { "path": "teams" },
-      "schema": "schemas/teams.json"
+      "schema": "schemas/teams.json",
+      "projection": "passthrough"
     },
     {
       "name": "email_settings",
@@ -54,7 +57,8 @@
         "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
       },
       "records": { "path": "email_settings" },
-      "schema": "schemas/email_settings.json"
+      "schema": "schemas/email_settings.json",
+      "projection": "passthrough"
     },
     {
       "name": "do_not_contact",
@@ -65,7 +69,8 @@
         "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
       },
       "records": { "path": "dnc" },
-      "schema": "schemas/do_not_contact.json"
+      "schema": "schemas/do_not_contact.json",
+      "projection": "passthrough"
     }
   ]
 }

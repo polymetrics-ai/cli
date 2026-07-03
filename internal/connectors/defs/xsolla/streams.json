@@ -24,19 +24,22 @@
       "name": "projects",
       "path": "/projects",
       "records": { "path": "items" },
-      "schema": "schemas/projects.json"
+      "schema": "schemas/projects.json",
+      "projection": "passthrough"
     },
     {
       "name": "orders",
       "path": "/projects/{{ config.project_id }}/orders",
       "records": { "path": "items" },
-      "schema": "schemas/orders.json"
+      "schema": "schemas/orders.json",
+      "projection": "passthrough"
     },
     {
       "name": "transactions",
       "path": "/projects/{{ config.project_id }}/transactions",
       "records": { "path": "items" },
-      "schema": "schemas/transactions.json"
+      "schema": "schemas/transactions.json",
+      "projection": "passthrough"
     }
   ]
 }

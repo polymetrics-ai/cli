@@ -26,7 +26,8 @@
         "updated_since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "items" },
-      "schema": "schemas/users.json"
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
     },
     {
       "name": "content",
@@ -35,7 +36,8 @@
         "updated_since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "items" },
-      "schema": "schemas/content.json"
+      "schema": "schemas/content.json",
+      "projection": "passthrough"
     },
     {
       "name": "completions",
@@ -44,7 +46,8 @@
         "updated_since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "items" },
-      "schema": "schemas/completions.json"
+      "schema": "schemas/completions.json",
+      "projection": "passthrough"
     }
   ]
 }

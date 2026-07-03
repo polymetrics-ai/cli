@@ -41,6 +41,17 @@ None. Legacy's package declares `Capabilities.Write: false` and its `Write` meth
 
 ## Known limits
 
+- **Every stream declares `projection: "passthrough"`** (conventions.md §8 rule 1): legacy performs
+  zero record shaping on any of the 4 streams — `sendinblue.go:88-90`'s
+  `connsdk.Harvest(..., func(rec connsdk.Record) error { return emit(connectors.Record(rec)) })`
+  extracts records at each stream's `recordsPath` and passes them straight through with no field
+  renaming, computation, or filtering. Schema-mode projection (the dialect default) would silently
+  drop every real Brevo field beyond each schema's declared properties, a parity-breaking behavior
+  change versus legacy; `passthrough` keeps every raw field, matching legacy's actual
+  emitted-record shape exactly. Schemas stay intentionally minimal (the fields legacy's own
+  `streams()` `Catalog` declares, e.g. `id`/`email`/`modifiedAt` for `contacts`) as a
+  **documentation surface only** now that `passthrough` — not schema shape — governs what survives
+  projection; full field-level schema expansion is Pass B (wave5) scope.
 - **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
   when `config.mode == "fixture"`) stamps a `previous_cursor` field (echoing
   `req.State["cursor"]` when a prior cursor happens to be set) onto fixture-mode records

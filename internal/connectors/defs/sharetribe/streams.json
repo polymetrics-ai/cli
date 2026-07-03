@@ -24,25 +24,29 @@
       "name": "listings",
       "path": "/integration_api/listings/query",
       "records": { "path": "data" },
-      "schema": "schemas/listings.json"
+      "schema": "schemas/listings.json",
+      "projection": "passthrough"
     },
     {
       "name": "users",
       "path": "/integration_api/users/query",
       "records": { "path": "data" },
-      "schema": "schemas/users.json"
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
     },
     {
       "name": "transactions",
       "path": "/integration_api/transactions/query",
       "records": { "path": "data" },
-      "schema": "schemas/transactions.json"
+      "schema": "schemas/transactions.json",
+      "projection": "passthrough"
     },
     {
       "name": "events",
       "path": "/integration_api/events/query",
       "records": { "path": "data" },
-      "schema": "schemas/events.json"
+      "schema": "schemas/events.json",
+      "projection": "passthrough"
     }
   ]
 }

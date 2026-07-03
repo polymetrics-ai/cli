@@ -24,6 +24,12 @@ page — identical to legacy's `connsdk.PageNumberPaginator{PageParam: "page", S
 cursor field (legacy `streams()` sets no `CursorFields` for any of them), so this bundle declares
 no `incremental` block for any stream, matching legacy exactly (full-refresh reads only).
 
+All 6 streams declare `"projection": "passthrough"` (post-wave2 review §8 rule 1): legacy's `Read`
+emits `emit(connectors.Record(rec))` — a verbatim type-cast of the raw harvested record, with no
+`mapRecord`-style field-building — so schema-mode projection would silently drop any raw field this
+bundle's schema omits. Each schema (`id`, `name`, `email`, `status`) remains a documentation surface
+only; it does not gate what is emitted.
+
 ## Write actions & risks
 
 None. Legacy `persistiq.Write` always returns `connectors.ErrUnsupportedOperation`;

@@ -34,8 +34,10 @@ does.
 Legacy applies five passthrough filters (`dateFrom`, `dateTo`, `type`, `messageType`,
 `direction`) identically to every stream's request (`ringcentral.go:87-92`'s loop iterates a fixed
 key list regardless of which stream is being read) — this bundle reproduces that exact blanket
-behavior via `base.query`'s five `omit_when_absent` entries (shared across all streams), sent only
-when the corresponding config value is set. RingCentral's real wire shape uses camelCase field
+behavior via the identical five `omit_when_absent` query entries declared on EACH of the five
+streams' own `query` block (`HTTPBase` has no `query` field in the engine dialect, so this is
+per-stream duplicated rather than a single shared declaration), sent only when the corresponding
+config value is set. RingCentral's real wire shape uses camelCase field
 names (`extensionNumber`, `startTime`, `creationTime`, `firstName`, `lastName`), while legacy's own
 `Catalog()` declares snake_case field names (`extension_number`, `start_time`, `creation_time`,
 `first_name`, `last_name`) as the advisory stream shape — this bundle bridges that gap with

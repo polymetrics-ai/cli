@@ -27,25 +27,29 @@
       "name": "courses",
       "path": "/courses",
       "records": { "path": "items" },
-      "schema": "schemas/courses.json"
+      "schema": "schemas/courses.json",
+      "projection": "passthrough"
     },
     {
       "name": "chapters",
       "path": "/chapters",
       "records": { "path": "items" },
-      "schema": "schemas/chapters.json"
+      "schema": "schemas/chapters.json",
+      "projection": "passthrough"
     },
     {
       "name": "lessons",
       "path": "/lessons",
       "records": { "path": "items" },
-      "schema": "schemas/lessons.json"
+      "schema": "schemas/lessons.json",
+      "projection": "passthrough"
     },
     {
       "name": "enrollments",
       "path": "/enrollments",
       "records": { "path": "items" },
-      "schema": "schemas/enrollments.json"
+      "schema": "schemas/enrollments.json",
+      "projection": "passthrough"
     }
   ]
 }

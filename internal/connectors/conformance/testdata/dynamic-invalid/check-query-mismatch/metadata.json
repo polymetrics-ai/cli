@@ -1,0 +1,8 @@
+{
+  "name": "check-query-mismatch",
+  "display_name": "Check Query Mismatch",
+  "description": "conformance v2 self-test bundle (synthetic, not a real API): base.check.query declares a query param that fixtures/check.json's recorded request does not carry, so check_fixture must fail (checkquery-ledger.md item 5)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false }
+}

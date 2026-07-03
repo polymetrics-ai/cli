@@ -29,9 +29,12 @@ Primary key is `["id"]` (always native on every YNAB object; legacy's `id`-fallb
 therefore always a no-op for real API traffic and is not modeled). No pagination is declared —
 legacy issues exactly one request per stream with no pager at all. Optional `since_date`
 (YYYY-MM-DD) and `limit` config values are sent as query params on every stream request via the
-opt-in optional-query dialect (`omit_when_absent: true`), matching legacy's `baseQuery`, which
-attaches both params unconditionally (including on the `budgets` request, where YNAB's API simply
-ignores them — legacy's own behavior, reproduced verbatim, not a new no-op param invented here).
+opt-in optional-query dialect (`omit_when_absent: true`) declared identically on each of the three
+streams' own `query` block (`HTTPBase` has no `query` field in the engine dialect, so this is
+per-stream duplicated rather than a single shared declaration), matching legacy's `baseQuery`,
+which attaches both params unconditionally (including on the `budgets` request, where YNAB's API
+simply ignores them — legacy's own behavior, reproduced verbatim, not a new no-op param invented
+here).
 
 ## Write actions & risks
 

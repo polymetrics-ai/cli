@@ -24,18 +24,21 @@
       "name": "workers",
       "path": "/ccx/api/v1/{{ config.tenant }}/workers",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/workers.json"
     },
     {
       "name": "organizations",
       "path": "/ccx/api/v1/{{ config.tenant }}/organizations",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/organizations.json"
     },
     {
       "name": "positions",
       "path": "/ccx/api/v1/{{ config.tenant }}/positions",
       "records": { "path": "data" },
+      "projection": "passthrough",
       "schema": "schemas/positions.json"
     }
   ]

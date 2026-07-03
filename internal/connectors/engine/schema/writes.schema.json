@@ -10,6 +10,7 @@
       "items": {
         "type": "object",
         "required": ["name", "kind", "method", "path", "record_schema", "risk"],
+        "additionalProperties": false,
         "properties": {
           "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
           "kind": { "type": "string", "enum": ["create", "update", "upsert", "delete", "custom"] },
@@ -21,6 +22,7 @@
           "record_schema": { "type": "object" },
           "delete": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
               "idempotent": { "type": "boolean" },
               "missing_ok_status": { "type": "array", "items": { "type": "integer" } }

@@ -23,37 +23,43 @@
       "name": "leads",
       "path": "/v1/leads",
       "records": { "path": "leads" },
-      "schema": "schemas/leads.json"
+      "schema": "schemas/leads.json",
+      "projection": "passthrough"
     },
     {
       "name": "users",
       "path": "/v1/users",
       "records": { "path": "users" },
-      "schema": "schemas/users.json"
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
     },
     {
       "name": "campaigns",
       "path": "/v1/campaigns",
       "records": { "path": "campaigns" },
-      "schema": "schemas/campaigns.json"
+      "schema": "schemas/campaigns.json",
+      "projection": "passthrough"
     },
     {
       "name": "mailboxes",
       "path": "/v1/mailboxes",
       "records": { "path": "mailboxes" },
-      "schema": "schemas/mailboxes.json"
+      "schema": "schemas/mailboxes.json",
+      "projection": "passthrough"
     },
     {
       "name": "activities",
       "path": "/v1/activities",
       "records": { "path": "activities" },
-      "schema": "schemas/activities.json"
+      "schema": "schemas/activities.json",
+      "projection": "passthrough"
     },
     {
       "name": "accounts",
       "path": "/v1/accounts",
       "records": { "path": "accounts" },
-      "schema": "schemas/accounts.json"
+      "schema": "schemas/accounts.json",
+      "projection": "passthrough"
     }
   ]
 }

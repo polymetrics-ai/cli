@@ -25,6 +25,7 @@
         "createdBefore": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "issues" },
+      "projection": "passthrough",
       "schema": "schemas/issues.json"
     },
     {
@@ -39,6 +40,7 @@
         "createdBefore": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "components" },
+      "projection": "passthrough",
       "schema": "schemas/components.json"
     },
     {
@@ -53,6 +55,7 @@
         "createdBefore": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "qualitygates" },
+      "projection": "passthrough",
       "schema": "schemas/quality_gates.json"
     },
     {
@@ -67,6 +70,7 @@
         "createdBefore": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "measures" },
+      "projection": "passthrough",
       "schema": "schemas/measures.json"
     }
   ]

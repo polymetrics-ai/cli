@@ -187,7 +187,11 @@ func checkCheckFixture(b engine.Bundle) CheckResult {
 		return CheckResult{Name: name, Skipped: true}
 	}
 
-	srv := newCheckReplayServer(fx)
+	checkQueryKeys := make([]string, 0, len(b.HTTP.Check.Query))
+	for k := range b.HTTP.Check.Query {
+		checkQueryKeys = append(checkQueryKeys, k)
+	}
+	srv := newCheckReplayServer(fx, checkQueryKeys)
 	defer srv.Close()
 
 	rb := withReplayURL(b, srv.URL)

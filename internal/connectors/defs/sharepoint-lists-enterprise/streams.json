@@ -40,7 +40,8 @@
       "incremental": {
         "cursor_field": "lastModifiedDateTime"
       },
-      "schema": "schemas/lists.json"
+      "schema": "schemas/lists.json",
+      "projection": "passthrough"
     },
     {
       "name": "list_items",
@@ -49,7 +50,8 @@
       "incremental": {
         "cursor_field": "lastModifiedDateTime"
       },
-      "schema": "schemas/list_items.json"
+      "schema": "schemas/list_items.json",
+      "projection": "passthrough"
     }
   ]
 }

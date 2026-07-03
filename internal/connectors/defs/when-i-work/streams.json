@@ -16,25 +16,29 @@
       "name": "users",
       "path": "/2/users",
       "records": { "path": "users" },
-      "schema": "schemas/users.json"
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
     },
     {
       "name": "locations",
       "path": "/2/locations",
       "records": { "path": "locations" },
-      "schema": "schemas/locations.json"
+      "schema": "schemas/locations.json",
+      "projection": "passthrough"
     },
     {
       "name": "positions",
       "path": "/2/positions",
       "records": { "path": "positions" },
-      "schema": "schemas/positions.json"
+      "schema": "schemas/positions.json",
+      "projection": "passthrough"
     },
     {
       "name": "shifts",
       "path": "/2/shifts",
       "records": { "path": "shifts" },
-      "schema": "schemas/shifts.json"
+      "schema": "schemas/shifts.json",
+      "projection": "passthrough"
     }
   ]
 }

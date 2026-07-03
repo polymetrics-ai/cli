@@ -10,6 +10,9 @@
     "project": { "type": "string" },
     "article": { "type": "string" },
     "timestamp": { "type": "string" },
-    "views": { "type": "integer" }
+    "views": { "type": "integer" },
+    "granularity": { "type": ["string", "null"] },
+    "access": { "type": ["string", "null"] },
+    "agent": { "type": ["string", "null"] }
   }
 }

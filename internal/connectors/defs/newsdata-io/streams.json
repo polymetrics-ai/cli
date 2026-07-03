@@ -8,7 +8,8 @@
     "pagination": {
       "type": "cursor",
       "cursor_param": "page",
-      "token_path": "nextPage"
+      "token_path": "nextPage",
+      "max_pages": 10
     },
     "check": { "method": "GET", "path": "/latest", "query": { "size": "1" } },
     "error_map": [

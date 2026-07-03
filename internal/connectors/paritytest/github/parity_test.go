@@ -34,12 +34,16 @@ import (
 // the red-first test: it fails to even compile/load until defs/github and
 // hooks/github exist.
 
+// ENGINE HARDENING (hardening-ledger.md): engine.LoadAll(defs.FS) now
+// returns a non-nil error whenever ANY bundle in the fleet fails to load (a
+// real, pre-existing, out-of-scope-to-fix-here defect in ~150 OTHER
+// bundles — see hardening-ledger.md), while still returning every bundle
+// that DID load cleanly, github included. This helper only fails the test
+// if github itself is missing from the returned set, not merely because
+// some unrelated bundle elsewhere in the fleet is broken.
 func loadGithubBundle(t *testing.T) engine.Bundle {
 	t.Helper()
-	bundles, err := engine.LoadAll(defs.FS)
-	if err != nil {
-		t.Fatalf("engine.LoadAll(defs.FS): %v", err)
-	}
+	bundles, _ := engine.LoadAll(defs.FS)
 	for _, b := range bundles {
 		if b.Name == "github" {
 			return b

@@ -22,25 +22,29 @@
       "name": "contacts",
       "path": "/contacts",
       "records": { "path": "contacts" },
-      "schema": "schemas/contacts.json"
+      "schema": "schemas/contacts.json",
+      "projection": "passthrough"
     },
     {
       "name": "email_campaigns",
       "path": "/emailCampaigns",
       "records": { "path": "campaigns" },
-      "schema": "schemas/email_campaigns.json"
+      "schema": "schemas/email_campaigns.json",
+      "projection": "passthrough"
     },
     {
       "name": "contacts_lists",
       "path": "/contacts/lists",
       "records": { "path": "lists" },
-      "schema": "schemas/contacts_lists.json"
+      "schema": "schemas/contacts_lists.json",
+      "projection": "passthrough"
     },
     {
       "name": "senders",
       "path": "/senders",
       "records": { "path": "senders" },
-      "schema": "schemas/senders.json"
+      "schema": "schemas/senders.json",
+      "projection": "passthrough"
     }
   ]
 }

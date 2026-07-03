@@ -23,6 +23,12 @@ exactly: `pagination.type: cursor` with `cursor_param: cursor` and `token_path: 
 flag). `limit` is sent on every request from `page_size` (default `50`, matching legacy's
 `defaultPageSize`).
 
+All 5 streams declare `"projection": "passthrough"` (post-wave2 review §8 rule 1): legacy's `Read`
+emits `emit(connectors.Record(rec))` — a verbatim type-cast of the raw harvested record, with no
+`mapRecord`-style field-building — so schema-mode projection would silently drop any raw field this
+bundle's schema omits. The schema (`id`, `name`, `created_at`, `updated_at`) remains a documentation
+surface only; it does not gate what is emitted.
+
 Legacy also forwards two optional, verbatim passthrough config values as query params whenever
 set: `filter` and `sort` (`if filter := ...; filter != "" { base.Set("filter", filter) }` /
 same for `sort`). This bundle wires both through the engine's opt-in optional-query dialect

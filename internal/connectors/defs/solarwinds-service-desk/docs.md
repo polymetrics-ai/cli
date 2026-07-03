@@ -40,6 +40,18 @@ streams forward `config.page`/`config.per_page` verbatim as `page`/`per_page` qu
 `CursorFields` for any of the 6 streams, and `updated_after` is a raw pass-through param, not an
 engine-computed incremental lower bound — matching that, no schema declares `x-cursor-field`.
 
+All 6 streams declare `"projection": "passthrough"`. Legacy's `Read` emits the raw API record
+verbatim (`emit(connectors.Record(rec))`, `solarwinds_service_desk.go:117`, inside `readRecords`)
+with no field-building/filtering step — `streams()`'s four-field `Fields` list
+(`solarwinds_service_desk.go:99`) is consumed only by `Catalog`, never by `Read`. Every real
+Samanage field beyond each schema's narrow `id`/`name`/`created_at`/`updated_at` properties (e.g.
+`priority`, `state`, `requester`, `assignee`, custom fields) survives to the emitted record exactly
+as legacy would emit it. Declaring the default `"schema"` projection mode here would silently
+narrow every emitted record to the schema's declared properties — an undocumented parity
+deviation from legacy's verbatim passthrough — so `passthrough` is required, matching
+conventions.md §8 rule 1 (legacy's raw `emit(record)` with no `mapRecord` field-building is the
+mechanical signal to use `passthrough`).
+
 ## Write actions & risks
 
 None. SolarWinds Service Desk is read-only (`capabilities.write: false`, no `writes.json`),

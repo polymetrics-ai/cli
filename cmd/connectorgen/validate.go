@@ -302,6 +302,17 @@ func checkInterpolations(b engine.Bundle) []Finding {
 	for _, h := range b.HTTP.Headers {
 		check("streams.json", h)
 	}
+	if b.HTTP.Check != nil {
+		check("streams.json", b.HTTP.Check.Path)
+		// checkquery-ledger.md: base.check.query (RequestSpec.Query) is the
+		// SAME QueryParam dialect as stream.Query, so its templates get the
+		// SAME static validation stream.Query's entries already get below —
+		// an entry templating an undeclared spec key is a
+		// ruleInterpolationUnresolved finding, not just a runtime failure.
+		for _, v := range b.HTTP.Check.Query {
+			check("streams.json", v.Template)
+		}
+	}
 	for _, a := range b.HTTP.Auth {
 		// engine.ResolveCheckAuthSpec validates EVERY templated AuthSpec
 		// field (token/username/password/header/value/token_url/client_id/

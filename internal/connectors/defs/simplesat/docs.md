@@ -14,15 +14,25 @@ overridden for tests/proxies, matching legacy's own `validatedBaseURL` default.
 
 ## Streams notes
 
-All five streams (`answers`, `surveys`, `questions`, `customers`, `tickets`) hit their own
+All five streams (`answers`, `surveys`, `questions`, `customers`, `tickets`) declare
+`"projection": "passthrough"`: legacy's `readRecords` (`simplesat.go:129`) emits
+`emit(connectors.Record(rec))` verbatim for every record returned by `connsdk.RecordsAt`, with no
+`mapRecord`-style field-building anywhere in the read path, so schema-mode projection (which would
+silently drop any raw field not enumerated in `schemas/*.json`) would be a parity regression versus
+legacy's every-field-survives behavior. `schemas/*.json` stay a documentation surface of the
+well-known fields; passthrough mode means the schema does not gate which fields actually reach the
+caller.
+
+All five streams hit their own
 `GET <resource>/` endpoint with records extracted from the top-level `results` key, matching
 legacy's `streamEndpoints` map exactly. None of the streams paginate in legacy (a single
 `r.Do` call per read, no loop) — `pagination.type: none` is declared, one request per read.
 `page_size` is sent on every request (default `100`, matching legacy's `defaultPageSize`);
 `start_date`/`end_date` are optional passthrough query filters, omitted entirely when unset,
 matching legacy's `copyConfig` (only set when non-empty). Records carry `id` (integer primary
-key), `created_at`, `name`, and `rating`, the exact field set legacy's `streams()` catalog
-declares for every stream.
+key), `created_at`, `name`, and `rating` at minimum — the exact field set legacy's `streams()`
+catalog declares for every stream — plus any additional raw fields the API returns, all of which
+now survive under passthrough.
 
 ## Write actions & risks
 

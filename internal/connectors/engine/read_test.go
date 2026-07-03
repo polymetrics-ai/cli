@@ -1816,6 +1816,155 @@ func TestCheckPathUnresolvedKeyErrors(t *testing.T) {
 	}
 }
 
+// --- ENGINE DIALECT ADDITION (checkquery-ledger.md): RequestSpec.Query ----
+//
+// 148 bundles under internal/connectors/defs declare "base.check.query"
+// (e.g. limit=1 probe params legacy checks genuinely send) that RequestSpec
+// (Method/Path only) could not express at all — the hardening ledger's own
+// follow-up note names exactly this gap. RequestSpec gains a Query
+// map[string]QueryParam field (mirroring StreamSpec.Query's existing
+// string-or-object dialect verbatim, per hardening-ledger.md's suggested
+// follow-up shape) and Check() resolves+sends it using the SAME semantics as
+// stream.Query: Interpolate against requestVars, hard error on an unresolved
+// config/secrets key for a plain-string entry, OmitWhenAbsent/Default honored
+// for an object-form entry.
+
+// TestCheckQuerySentOnRequest proves a static (non-templated) check.query
+// entry is resolved and actually sent on the wire — the exact defect class
+// the ledger names: RequestSpec previously had nowhere to put this value at
+// all, so it was either a load-time meta-schema rejection or (pre-hardening)
+// a silently dropped no-op.
+func TestCheckQuerySentOnRequest(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	})
+	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL, Check: &RequestSpec{
+		Method: "GET",
+		Path:   "/status",
+		Query:  map[string]QueryParam{"limit": {Template: "1"}},
+	}}}
+
+	if err := Check(context.Background(), b, connectors.RuntimeConfig{}, nil); err != nil {
+		t.Fatalf("Check: %v", err)
+	}
+	if gotQuery.Get("limit") != "1" {
+		t.Fatalf("query = %v, want limit=1", gotQuery)
+	}
+}
+
+// TestCheckQueryTemplateResolvedAgainstConfig proves a templated check.query
+// value resolves against the same config Check() already threads through
+// requestVars for the check path.
+func TestCheckQueryTemplateResolvedAgainstConfig(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	})
+	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL, Check: &RequestSpec{
+		Method: "GET",
+		Path:   "/status",
+		Query:  map[string]QueryParam{"page_size": {Template: "{{ config.page_size }}"}},
+	}}}
+
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"page_size": "5"}}
+	if err := Check(context.Background(), b, cfg, nil); err != nil {
+		t.Fatalf("Check: %v", err)
+	}
+	if gotQuery.Get("page_size") != "5" {
+		t.Fatalf("query = %v, want page_size=5", gotQuery)
+	}
+}
+
+// TestCheckQueryUnresolvedKeyErrorsHard proves a plain-string check.query
+// entry referencing an absent config/secrets key is a hard error — the SAME
+// semantics as stream.Query's plain-string entries (buildInitialQuery), not
+// a silent omission (F4's fail-open class the engine deliberately rejects
+// elsewhere).
+func TestCheckQueryUnresolvedKeyErrorsHard(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		t.Fatalf("no request should be sent when a check query template cannot be resolved")
+	})
+	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL, Check: &RequestSpec{
+		Method: "GET",
+		Path:   "/status",
+		Query:  map[string]QueryParam{"page_size": {Template: "{{ config.missing_page_size }}"}},
+	}}}
+
+	err := Check(context.Background(), b, connectors.RuntimeConfig{}, nil)
+	if err == nil {
+		t.Fatalf("Check: want error when a check query template cannot be resolved")
+	}
+}
+
+// TestCheckQueryOmitWhenAbsentDropsParam proves the object-form
+// omit_when_absent dialect works identically to stream.Query's: an
+// unresolved key is tolerated and the param is left off the request
+// entirely, rather than erroring.
+func TestCheckQueryOmitWhenAbsentDropsParam(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	})
+	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL, Check: &RequestSpec{
+		Method: "GET",
+		Path:   "/status",
+		Query:  map[string]QueryParam{"status": {Template: "{{ config.status }}", OmitWhenAbsent: true}},
+	}}}
+
+	if err := Check(context.Background(), b, connectors.RuntimeConfig{}, nil); err != nil {
+		t.Fatalf("Check: %v", err)
+	}
+	if gotQuery.Has("status") {
+		t.Fatalf("query = %v, want status omitted (unresolved + omit_when_absent)", gotQuery)
+	}
+}
+
+// TestCheckQueryDefaultSentWhenAbsent proves the object-form default dialect
+// works identically to stream.Query's: an unresolved key falls back to the
+// literal default value instead of erroring.
+func TestCheckQueryDefaultSentWhenAbsent(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	})
+	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL, Check: &RequestSpec{
+		Method: "GET",
+		Path:   "/status",
+		Query:  map[string]QueryParam{"count": {Template: "{{ config.missing_count }}", Default: "100"}},
+	}}}
+
+	if err := Check(context.Background(), b, connectors.RuntimeConfig{}, nil); err != nil {
+		t.Fatalf("Check: %v", err)
+	}
+	if gotQuery.Get("count") != "100" {
+		t.Fatalf("query = %v, want count=100 (default)", gotQuery)
+	}
+}
+
+// TestCheckNoQueryDeclaredSendsNoQuery locks in that a bundle with no
+// check.query at all (every pre-existing golden) is completely unaffected —
+// Check() sends no query string, same as before this dialect existed.
+func TestCheckNoQueryDeclaredSendsNoQuery(t *testing.T) {
+	var gotRawQuery string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotRawQuery = r.URL.RawQuery
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	})
+	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL, Check: &RequestSpec{Method: "GET", Path: "/status"}}}
+
+	if err := Check(context.Background(), b, connectors.RuntimeConfig{}, nil); err != nil {
+		t.Fatalf("Check: %v", err)
+	}
+	if gotRawQuery != "" {
+		t.Fatalf("raw query = %q, want empty (no check.query declared)", gotRawQuery)
+	}
+}
+
 // --- F4 (REVIEW.md flag / SECURITY-REVIEW.md finding): resolveHeaders
 // swallowed ANY unresolved-key error uniformly (isUnresolvedKey substring
 // match), so a header referencing an absent secrets.* key was SILENTLY

@@ -22,6 +22,12 @@ matching legacy's `connsdk.PageNumberPaginator{PageParam: "page", SizeParam: "li
 1, PageSize: size}` contract exactly (`tinyemail.go:87-88`). The `check` request mirrors legacy's
 own check call (`GET /subscribers?page=1&limit=1`, `tinyemail.go:47`).
 
+Every stream uses `projection: "passthrough"`: legacy's `Read` forwards each `connsdk.Harvest`
+record verbatim via `emit(connectors.Record(rec))` with no field-building step
+(`tinyemail.go:88`), so schema-mode projection would silently drop any API field not in the
+declared list. The schemas document legacy's own known field surface (legacy's `fields(...)`
+declarations, `tinyemail.go:116-118`) but do not constrain what is actually emitted.
+
 ## Write actions & risks
 
 None. tinyEmail is read-only (`capabilities.write: false`, no `writes.json`), matching legacy's

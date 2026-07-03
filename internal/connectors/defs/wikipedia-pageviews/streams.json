@@ -12,6 +12,7 @@
       "name": "pageviews",
       "path": "api/rest_v1/metrics/pageviews/per-article/{{ config.project }}/{{ config.access }}/{{ config.agent }}/{{ config.article }}/daily/{{ config.start }}/{{ config.end }}",
       "records": { "path": "items" },
+      "projection": "passthrough",
       "computed_fields": {
         "id": "{{ record.project }}:{{ record.article }}:{{ record.timestamp }}"
       },
@@ -21,6 +22,7 @@
       "name": "top_articles",
       "path": "api/rest_v1/metrics/pageviews/top-per-country/{{ config.project }}/{{ config.country }}/{{ config.access }}/{{ config.year }}/{{ config.month }}/{{ config.day }}",
       "records": { "path": "items" },
+      "projection": "passthrough",
       "computed_fields": {
         "id": "{{ config.project }}:<nil>:<nil>"
       },

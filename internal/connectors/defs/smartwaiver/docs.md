@@ -20,7 +20,12 @@ All five streams hit their own `GET` endpoint: `waivers` (`/v4/waivers`, records
 (`/v4/templates`, records at `templates.templates`), `published_keys` (`/v4/keys/published`,
 records at `published_keys.keys`), and `user_info` (`/v4/info`, a single JSON object with no
 records-array wrapper — `records.path: "."` returns the whole body as one record), matching
-legacy's `streamEndpoints` map's nested/flat `recordsPath` shapes exactly.
+legacy's `streamEndpoints` map's nested/flat `recordsPath` shapes exactly. Every stream declares
+`projection: "passthrough"`: legacy's `readRecords` emits each decoded record verbatim
+(`emit(connectors.Record(rec))`, `smartwaiver.go:122`, no field-building or `mapRecord` step), so
+this bundle emits every raw field the API returns rather than narrowing to whatever subset
+`schemas/*.json` declares — schema-mode projection on a verbatim-emitting legacy would silently
+drop real API fields (`conventions.md` §8 rule 1).
 
 None of the streams paginate in legacy (a single `r.Do` call per read, no loop) —
 `pagination.type: none` is declared, one request per read — despite every request sending
@@ -57,11 +62,14 @@ None. Smartwaiver's legacy connector is read-only (`Write` returns
   models only the primary `start_date` key (the documented, non-suffixed name); `start_date_2` is
   not declared in `spec.json` at all (a declared-but-unwireable key is worse than an absent one).
   Out-of-scope, not silently wrong: any sync relying solely on `start_date` is unaffected.
-- **Response field sets in `schemas/*.json` are conservative.** Smartwaiver's public API
-  reference was consulted for real wire-shape field names (`waiverId`, `templateId`, `createdOn`,
-  `checkinId`, `key`, `label`, `username`, etc.), but legacy's own `streams()` catalog only ever
-  declared a generic 3-field shape (`waiverId`/`templateId`/`createdAt`) shared identically across
-  all 5 streams regardless of each stream's real shape (a legacy catalog-authoring shortcut, not a
-  real per-stream contract). This bundle's schemas instead project each stream's own real,
-  distinct identity/timestamp fields — a strictly more accurate, non-regressive superset of what
-  legacy's shared catalog described, verified against Smartwaiver's public API documentation.
+- **Response field sets in `schemas/*.json` are documentation, not a projection filter.**
+  Smartwaiver's public API reference was consulted for real wire-shape field names (`waiverId`,
+  `templateId`, `createdOn`, `checkinId`, `key`, `label`, `username`, etc.), but legacy's own
+  `streams()` catalog only ever declared a generic 3-field shape (`waiverId`/`templateId`/
+  `createdAt`) shared identically across all 5 streams regardless of each stream's real shape (a
+  legacy catalog-authoring shortcut, not a real per-stream contract). This bundle's schemas
+  instead document each stream's own real, distinct identity/timestamp fields, verified against
+  Smartwaiver's public API documentation — but data completeness does not depend on how accurate
+  or complete that documentation is: `projection: "passthrough"` (see Streams notes) emits every
+  raw field the API actually returns regardless of what `schemas/*.json` declares, matching
+  legacy's own verbatim-emit behavior exactly.

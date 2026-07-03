@@ -22,8 +22,13 @@ extracted from the response body's top-level array (`records.path: ""`, root-arr
 matching legacy's `recordsPath: ""` for every stream and `connsdk.RecordsAt`'s empty-path ==
 body-root semantics. None of the streams paginate in legacy (a single `r.Do` call per read, no
 loop, and no query parameters at all) — `pagination.type: none` is declared, one request per
-read, no query. Records carry `id` (integer primary key), `name`, and `created_at`, the exact
-field set legacy's `streams()` catalog declares for every stream.
+read, no query. Every stream declares `projection: "passthrough"`: legacy's `readRecords` emits
+each decoded record verbatim (`emit(connectors.Record(rec))`, `smaily.go:112`, no field-building
+or `mapRecord` step), so this bundle emits every raw field the API returns rather than narrowing
+to the `id`/`name`/`created_at` triple `streams()`'s catalog happens to declare — schema-mode
+projection on a verbatim-emitting legacy would silently drop real API fields (`conventions.md`
+§8 rule 1). The `id`/`name`/`created_at` properties in `schemas/*.json` remain the documented,
+guaranteed-present fields; they are a floor, not a ceiling, on what a record contains.
 
 ## Write actions & risks
 

@@ -30,6 +30,21 @@ legacy's own hard requirement (`ticktick.go:125-129`: "ticktick tasks stream req
 project_id") — the engine's path-interpolation hard-errors identically when `project_id` is
 unset, with no special-casing needed. Both streams declare primary key `["id"]`.
 
+Both streams declare `"projection": "passthrough"` (conventions.md §8 rule 1). Legacy's `Read`
+extracts records via `connsdk.RecordsAt(resp.Body, spec.recordsPath)` and does
+`emit(connectors.Record(rec))` on each one with no field-building step at all
+(`ticktick.go:85-93`); `streamSpecs[...].fields` (e.g. `id`/`name`/`color`/`sortOrder` for
+`projects`, `id`/`projectId`/`title`/`content`/`status`/`modifiedTime` for `tasks`) is
+Catalog-only decoration (`ticktick.go:116-141`, consumed solely by `Catalog()`'s
+`connectors.Stream` construction), never applied to the emitted record itself. Default `"schema"`
+projection mode would silently drop every real TickTick field not named in each stream's declared
+schema properties (the Open API returns considerably more per-object detail than legacy's catalog
+list names, e.g. `projects`' `groupId`/`viewMode`/`kind`/`closed`, `tasks`' real
+`dueDate`/`priority`/`items`/`tags`/`reminders`), an undocumented silent data-shape change
+relative to legacy's raw passthrough. Each schema still declares the fields legacy's own catalog
+names (for `x-primary-key` typing and `records_match_schema` coverage), but passthrough mode means
+any other real field TickTick returns still survives unfiltered, matching legacy exactly.
+
 ## Write actions & risks
 
 None. TickTick is read-only (`capabilities.write: false`, no `writes.json`), matching legacy's

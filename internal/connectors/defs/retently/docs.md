@@ -31,9 +31,11 @@ which the primary `data` envelope never triggers. Pagination is `page_number` (`
 Legacy applies four passthrough filters (`updated_after`, `created_after`, `email`,
 `campaign_id`) identically to every stream's request (`retently.go:87-92`'s loop iterates a fixed
 key list regardless of which stream is being read) — this bundle reproduces that exact blanket
-behavior via `base.query`'s four `omit_when_absent` entries (shared across all streams, not
-per-stream duplicated), sent only when the corresponding config value is set, matching legacy's
-own `strings.TrimSpace(...) != ""` gate before adding each to the base `url.Values{}`.
+behavior via the identical four `omit_when_absent` query entries declared on EACH of the four
+streams' own `query` block (`HTTPBase` has no `query` field in the engine dialect, so this is
+per-stream duplicated rather than a single shared declaration), sent only when the corresponding
+config value is set, matching legacy's own `strings.TrimSpace(...) != ""` gate before adding each
+to the base `url.Values{}`.
 `computed_fields` stamps a static `stream` marker on every record (`"customers"`/`"responses"`/
 etc.), matching legacy's `mapRecord`'s `out["stream"] = stream`.
 

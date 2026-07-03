@@ -13,12 +13,6 @@
       "start_page": 1,
       "page_size": 100
     },
-    "query": {
-      "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
-      "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
-      "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
-      "status": { "template": "{{ config.status }}", "omit_when_absent": true }
-    },
     "check": { "method": "GET", "path": "/products", "query": { "limit": "1", "page": "1" } },
     "error_map": [
       { "status": 401, "hint": "retailexpress-by-maropost credentials are missing or invalid; re-run pm credentials add retailexpress-by-maropost" },
@@ -31,6 +25,12 @@
       "name": "products",
       "path": "/products",
       "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
       "incremental": {
         "cursor_field": "updated_at"
       },
@@ -43,6 +43,12 @@
       "name": "customers",
       "path": "/customers",
       "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
       "incremental": {
         "cursor_field": "updated_at"
       },
@@ -55,6 +61,12 @@
       "name": "orders",
       "path": "/orders",
       "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
       "incremental": {
         "cursor_field": "updated_at"
       },
@@ -67,6 +79,12 @@
       "name": "stock_levels",
       "path": "/stock-levels",
       "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
       "incremental": {
         "cursor_field": "updated_at"
       },
@@ -79,6 +97,12 @@
       "name": "stores",
       "path": "/stores",
       "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
       "computed_fields": {
         "stream": "stores"
       },

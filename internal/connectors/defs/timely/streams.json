@@ -17,18 +17,21 @@
       "name": "users",
       "path": "/{{ config.account_id }}/users",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/users.json"
     },
     {
       "name": "projects",
       "path": "/{{ config.account_id }}/projects",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/projects.json"
     },
     {
       "name": "clients",
       "path": "/{{ config.account_id }}/clients",
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/clients.json"
     },
     {
@@ -38,6 +41,7 @@
         "since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/events.json"
     }
   ]

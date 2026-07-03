@@ -37,6 +37,13 @@ straight from `connsdk.RecordsAt`, no `mapRecord` step), so the real emitted dat
 contained these nested objects; this bundle's schemas correct the type to match the real emitted
 data rather than propagating legacy's inaccurate catalog-metadata typing.
 
+Because that same evidence line establishes a verbatim, no-field-building emit (no `mapRecord` step
+of any kind, for any of the four streams), all four declare `"projection": "passthrough"` so every
+raw field the Discovery API returns reaches the emitted record, matching legacy exactly rather than
+silently dropping any field not listed in `schemas/*.json` (a schema-mode projection would have done
+exactly that). The schemas stay a documentation surface describing the known/expected shape and are
+not widened to `additionalProperties: true`, matching the pingdom/searxng precedent for this rule.
+
 None of the four streams declare an `incremental` block: legacy's `Read`/`harvestPages` never
 applies a cursor-based filter parameter — every read is a full paginated sweep, matching legacy's
 true behavior exactly.

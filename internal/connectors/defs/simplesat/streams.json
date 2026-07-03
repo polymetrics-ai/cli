@@ -22,7 +22,8 @@
         "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "results" },
-      "schema": "schemas/answers.json"
+      "schema": "schemas/answers.json",
+      "projection": "passthrough"
     },
     {
       "name": "surveys",
@@ -33,7 +34,8 @@
         "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "results" },
-      "schema": "schemas/surveys.json"
+      "schema": "schemas/surveys.json",
+      "projection": "passthrough"
     },
     {
       "name": "questions",
@@ -44,7 +46,8 @@
         "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "results" },
-      "schema": "schemas/questions.json"
+      "schema": "schemas/questions.json",
+      "projection": "passthrough"
     },
     {
       "name": "customers",
@@ -55,7 +58,8 @@
         "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "results" },
-      "schema": "schemas/customers.json"
+      "schema": "schemas/customers.json",
+      "projection": "passthrough"
     },
     {
       "name": "tickets",
@@ -66,7 +70,8 @@
         "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "results" },
-      "schema": "schemas/tickets.json"
+      "schema": "schemas/tickets.json",
+      "projection": "passthrough"
     }
   ]
 }

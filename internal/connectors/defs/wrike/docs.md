@@ -29,6 +29,11 @@ either, matching that exactly. Primary key is `id` for every stream; `tasks`/`fo
 `updatedDate` as the incremental cursor field for manifest-surface parity, matching legacy's
 `cursorFields`, though neither legacy nor this bundle actually issues a server-side incremental
 filter — legacy's `Read` performs a full stream read every time regardless of any prior cursor.
+All 3 streams declare `"projection": "passthrough"`: legacy's `Read` hands `connsdk.Harvest` a
+callback that does `emit(connectors.Record(rec))` verbatim for every stream — no field-built
+`connectors.Record{...}` mapping anywhere in `wrike.go` — so schema-mode projection would silently
+drop any Wrike field beyond the three currently declared; passthrough reproduces legacy's actual
+raw-emission behavior exactly, and the schema remains a documentation surface of the known shape.
 
 ## Write actions & risks
 

@@ -41,6 +41,13 @@ None of the four streams declare an `incremental` block: legacy's `Read` never a
 cursor-based filter parameter of any kind — every read is either a full paginated sweep or (for
 `movie_details`) a single fixed-resource fetch, matching legacy's true behavior exactly.
 
+Every stream uses `projection: "passthrough"`: legacy's `Read` emits each record verbatim via
+`emit(connectors.Record(rec))` for both the paginated-list branch (`tmdb.go:109`) and the
+`Harvest`-driven branch (`tmdb.go:124`), with no field-building step in either case. Schema-mode
+projection would silently drop any TMDb response field not in the declared list; the schemas here
+document legacy's own known field surface (legacy's `fields(...)` declarations, `tmdb.go:153-156`)
+but do not constrain what is actually emitted.
+
 ## Write actions & risks
 
 None. TMDb is read-only (`capabilities.write` is `false`); this bundle ships no `writes.json`,

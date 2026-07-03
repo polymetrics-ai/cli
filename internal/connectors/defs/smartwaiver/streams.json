@@ -23,7 +23,8 @@
         "toDts": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "waivers.waivers" },
-      "schema": "schemas/waivers.json"
+      "schema": "schemas/waivers.json",
+      "projection": "passthrough"
     },
     {
       "name": "checkins",
@@ -35,7 +36,8 @@
         "toDts": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "checkins.checkins" },
-      "schema": "schemas/checkins.json"
+      "schema": "schemas/checkins.json",
+      "projection": "passthrough"
     },
     {
       "name": "templates",
@@ -47,7 +49,8 @@
         "toDts": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "templates.templates" },
-      "schema": "schemas/templates.json"
+      "schema": "schemas/templates.json",
+      "projection": "passthrough"
     },
     {
       "name": "published_keys",
@@ -59,7 +62,8 @@
         "toDts": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "published_keys.keys" },
-      "schema": "schemas/published_keys.json"
+      "schema": "schemas/published_keys.json",
+      "projection": "passthrough"
     },
     {
       "name": "user_info",
@@ -71,7 +75,8 @@
         "toDts": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
-      "schema": "schemas/user_info.json"
+      "schema": "schemas/user_info.json",
+      "projection": "passthrough"
     }
   ]
 }

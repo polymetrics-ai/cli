@@ -20,7 +20,8 @@
         "avatar_id": { "template": "{{ config.avatar_id }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
-      "schema": "schemas/avatars.json"
+      "schema": "schemas/avatars.json",
+      "projection": "passthrough"
     },
     {
       "name": "tags",
@@ -29,7 +30,8 @@
         "avatar_id": { "template": "{{ config.avatar_id }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
-      "schema": "schemas/tags.json"
+      "schema": "schemas/tags.json",
+      "projection": "passthrough"
     },
     {
       "name": "custom_fields",
@@ -38,7 +40,8 @@
         "avatar_id": { "template": "{{ config.avatar_id }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
-      "schema": "schemas/custom_fields.json"
+      "schema": "schemas/custom_fields.json",
+      "projection": "passthrough"
     },
     {
       "name": "sequences",
@@ -47,7 +50,8 @@
         "avatar_id": { "template": "{{ config.avatar_id }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
-      "schema": "schemas/sequences.json"
+      "schema": "schemas/sequences.json",
+      "projection": "passthrough"
     },
     {
       "name": "subscribers",
@@ -56,7 +60,8 @@
         "avatar_id": { "template": "{{ config.avatar_id }}", "omit_when_absent": true }
       },
       "records": { "path": "" },
-      "schema": "schemas/subscribers.json"
+      "schema": "schemas/subscribers.json",
+      "projection": "passthrough"
     }
   ]
 }

@@ -21,6 +21,7 @@
         "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "title_results" },
+      "projection": "passthrough",
       "schema": "schemas/search.json"
     },
     {
@@ -30,6 +31,7 @@
         "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
+      "projection": "passthrough",
       "schema": "schemas/sources.json"
     }
   ]

@@ -16,13 +16,15 @@
       "name": "sitemaps",
       "path": "/sitemap",
       "records": { "path": "data" },
-      "schema": "schemas/sitemaps.json"
+      "schema": "schemas/sitemaps.json",
+      "projection": "passthrough"
     },
     {
       "name": "jobs",
       "path": "/scraping-job",
       "records": { "path": "data" },
-      "schema": "schemas/jobs.json"
+      "schema": "schemas/jobs.json",
+      "projection": "passthrough"
     }
   ]
 }

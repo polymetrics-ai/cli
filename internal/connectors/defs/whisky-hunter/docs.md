@@ -25,6 +25,13 @@ declares no `CursorFields` for either stream (`streams()` never sets one), so ne
 declares `x-cursor-field` or an `incremental` block here — both are full-refresh-only, matching
 legacy exactly.
 
+Both streams declare `projection: "passthrough"` (§8 rule 1): legacy's `Read` decodes each stream's
+response body with `connsdk.RecordsAt(resp.Body, endpoint.recordsPath)` and emits every element
+verbatim — `for _, item := range records { ... emit(connectors.Record(item)) }` (`whisky_hunter.go`)
+never field-builds a `connectors.Record{...}` from named keys. Schema-mode projection would silently
+drop any raw wire field beyond the 3 documented per stream, which schema-mode projection alone
+cannot detect; `passthrough` reproduces legacy's verbatim emission exactly.
+
 ## Write actions & risks
 
 None. Legacy `Write` always returns `connectors.ErrUnsupportedOperation`; `capabilities.write` is

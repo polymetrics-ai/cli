@@ -28,7 +28,8 @@
         "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
       },
       "records": { "path": "_embedded.events" },
-      "schema": "schemas/events.json"
+      "schema": "schemas/events.json",
+      "projection": "passthrough"
     },
     {
       "name": "venues",
@@ -39,7 +40,8 @@
         "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
       },
       "records": { "path": "_embedded.venues" },
-      "schema": "schemas/venues.json"
+      "schema": "schemas/venues.json",
+      "projection": "passthrough"
     },
     {
       "name": "attractions",
@@ -50,7 +52,8 @@
         "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
       },
       "records": { "path": "_embedded.attractions" },
-      "schema": "schemas/attractions.json"
+      "schema": "schemas/attractions.json",
+      "projection": "passthrough"
     },
     {
       "name": "classifications",
@@ -61,7 +64,8 @@
         "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
       },
       "records": { "path": "_embedded.classifications" },
-      "schema": "schemas/classifications.json"
+      "schema": "schemas/classifications.json",
+      "projection": "passthrough"
     }
   ]
 }

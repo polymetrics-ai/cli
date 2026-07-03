@@ -3,6 +3,7 @@
   "title": "spec.json",
   "type": "object",
   "required": ["type", "properties"],
+  "additionalProperties": false,
   "properties": {
     "$schema": { "type": "string" },
     "title": { "type": "string" },

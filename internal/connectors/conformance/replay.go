@@ -184,12 +184,34 @@ func requestMatchesFixture(r *http.Request, want fixtureRequest) bool {
 	return true
 }
 
-// checkFixtureFile is fixtures/check.json's shape: {"response":{"status","body"}}.
-// Check() always hits the bundle's single declared HTTP.Check request, so
-// unlike stream pages there is exactly one file, not a numbered sequence,
-// and no "request" field to match against (any request the connector's
-// Check() sends is answered the same way).
+// checkFixtureFile is fixtures/check.json's shape:
+// {"response":{"status","body"}}, now also carrying an OPTIONAL "request"
+// field: {"request":{"method","path","query"},"response":{...}}. Check()
+// always hits the bundle's single declared HTTP.Check request, so unlike
+// stream pages there is exactly one file, not a numbered sequence, and
+// Request.Method/Request.Path are NOT matched against the incoming request
+// (checkquery-ledger.md item 5 scoped this to query only, deliberately): a
+// pre-existing, repo-wide authoring convention (e.g.
+// internal/connectors/defs/github/fixtures/check.json, recorded against
+// "/repos/octocat/hello-world") records a realistic EXAMPLE path/method in
+// "request" purely as human-readable documentation of what was captured,
+// while conformance's runtimeConfigForEngine synthesizes a DIFFERENT,
+// generic placeholder value ("synthetic-conformance-value") for every
+// config property — so a templated check.Path (e.g.
+// "/repos/{{ config.owner }}/{{ config.repo }}") never equals the fixture's
+// documentary path at replay time, unlike stream page fixtures, which
+// separately follow the OPPOSITE convention of recording the synthetic
+// placeholder verbatim precisely so page-fixture path matching works.
+// Enforcing path/method equality here would break that pre-existing,
+// widespread convention for a dimension nothing asked to change; query is
+// the one dimension RequestSpec.Query newly makes runtime-significant, so
+// only query is compared, and (per newCheckReplayServer's doc comment) only
+// for the KEYS the bundle's own base.check.query declares — never the full
+// query string, which may also carry an auth-injected param
+// (api_key_query's Param, e.g. nasa/openweather/aviationstack's "api_key")
+// that has nothing to do with RequestSpec.Query and predates it entirely.
 type checkFixtureFile struct {
+	Request  fixtureRequest  `json:"request,omitempty"`
 	Response fixtureResponse `json:"response"`
 }
 
@@ -212,10 +234,31 @@ func loadCheckFixture(fixtures fs.FS) (checkFixtureFile, bool, error) {
 }
 
 // newCheckReplayServer builds an httptest.Server that answers EVERY request
+// whose query matches fx's recorded request for each key in checkQueryKeys
 // with fx's recorded response — used for engine.Check(), which issues
-// exactly one request to a single declared path with no pagination/query
-// variation worth matching against.
-func newCheckReplayServer(fx checkFixtureFile) *httptest.Server {
+// exactly one request to a single declared path (method/path are
+// deliberately not matched; see checkFixtureFile's doc comment).
+// checkQueryKeys is the bundle's OWN base.check.query key set (b.HTTP.Check.
+// Query, not fx's): matching is scoped to exactly those keys, both because
+// that is the one dimension RequestSpec.Query makes newly runtime-
+// significant (checkquery-ledger.md item 5), and because the live request's
+// FULL query string may carry an auth-injected param (api_key_query mode)
+// that predates this dialect entirely and has nothing to do with it — a
+// bundle with query-param auth but no check.query must still pass exactly
+// as it always did. For each key in checkQueryKeys: if fx's recorded
+// request.query has that key, its value must match the live request's
+// value for that key; if fx's recorded request.query does NOT have that
+// key (including when it records no query at all — every check.json that
+// predates RequestSpec.Query), the match fails — this is precisely the
+// ledger's named scenario: a fixture recorded before base.check.query
+// existed (or never updated to match it) must fail loudly rather than
+// silently pass by ignoring the query entirely. A key the bundle does NOT
+// declare in check.query is never compared, regardless of what fx.Request.
+// Query happens to record for it (aspirational/stale fixture data outside
+// this dialect's concern). An unmatched request responds 404, which
+// Requester.Do surfaces as a non-2xx error and therefore a failing
+// check_fixture CheckResult, not a silent pass.
+func newCheckReplayServer(fx checkFixtureFile, checkQueryKeys []string) *httptest.Server {
 	status := fx.Response.Status
 	if status == 0 {
 		status = http.StatusOK
@@ -225,8 +268,31 @@ func newCheckReplayServer(fx checkFixtureFile) *httptest.Server {
 		body = json.RawMessage("{}")
 	}
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !checkQueryMatchesFixture(r, fx.Request.Query, checkQueryKeys) {
+			http.NotFound(w, r)
+			return
+		}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(status)
 		_, _ = w.Write(body)
 	}))
+}
+
+// checkQueryMatchesFixture reports whether r's query values, for exactly the
+// keys named in checkQueryKeys, match wantQuery's recorded values for those
+// same keys — see newCheckReplayServer's doc comment for the full rationale.
+// A checkQueryKeys entry absent from wantQuery (nil/zero-value map included)
+// always fails the match.
+func checkQueryMatchesFixture(r *http.Request, wantQuery map[string]string, checkQueryKeys []string) bool {
+	if len(checkQueryKeys) == 0 {
+		return true
+	}
+	got := r.URL.Query()
+	for _, k := range checkQueryKeys {
+		want, ok := wantQuery[k]
+		if !ok || got.Get(k) != want {
+			return false
+		}
+	}
+	return true
 }

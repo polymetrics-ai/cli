@@ -7,6 +7,7 @@
 package conformance
 
 import (
+	"errors"
 	"os"
 	"testing"
 
@@ -62,10 +63,33 @@ func TestReportPassedTrueWhenNoFailures(t *testing.T) {
 // yet) must pass trivially; goldens auto-join in Wave F. Later waves run
 // `go test ./internal/connectors/conformance -run 'TestConformance/<name>'`,
 // so the subtest name MUST be exactly the bundle/connector name.
+//
+// ENGINE HARDENING (hardening-ledger.md): engine.LoadAll now returns a
+// non-nil *engine.LoadAllError whenever one or more (but not necessarily
+// all) bundles fail to load, alongside every bundle that DID load cleanly
+// (internal/connectors/engine's bundle.go doc comment on LoadAll has the
+// full rationale — a single malformed bundle must not hide the rest of a
+// ~400-bundle fleet from discovery). TestConformance no longer treats that
+// error as fatal for the whole run: every bundle engine.Load actually
+// failed to parse gets its own FAILING subtest (named after the bundle, so
+// `-run 'TestConformance/<name>'` still isolates it) whose failure message
+// is the load error itself, and every bundle that loaded still runs the
+// full RunBundle check set exactly as before. This is a strengthening, not
+// a loosening: previously a single bad bundle anywhere in the fleet made
+// TestConformance report ZERO information about any other bundle at all
+// (a bare t.Fatalf on the aggregate error, no subtests created); now every
+// bundle — loadable or not — gets a named, individually-inspectable result.
 func TestConformance(t *testing.T) {
 	bundles, err := engine.LoadAll(defs.FS)
-	if err != nil {
+	var loadErr *engine.LoadAllError
+	if err != nil && !errors.As(err, &loadErr) {
 		t.Fatalf("engine.LoadAll(defs.FS): %v", err)
+	}
+	for _, f := range loadErr.GetFailures() {
+		f := f
+		t.Run(f.Name, func(t *testing.T) {
+			t.Fatalf("bundle %s failed to load: %v", f.Name, f.Err)
+		})
 	}
 	for _, b := range bundles {
 		b := b
@@ -84,7 +108,8 @@ func TestConformance_EmptyDefsTreePassesTrivially(t *testing.T) {
 	// defs.FS happens to contain when this runs (belt & suspenders on top
 	// of TestConformance itself, which already iterates whatever's there).
 	bundles, err := engine.LoadAll(defs.FS)
-	if err != nil {
+	var loadErr *engine.LoadAllError
+	if err != nil && !errors.As(err, &loadErr) {
 		t.Fatalf("engine.LoadAll(defs.FS): %v", err)
 	}
 	if len(bundles) != 0 {
