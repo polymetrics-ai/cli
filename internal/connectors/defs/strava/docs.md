@@ -16,7 +16,9 @@ wave6 registry flip.
 
 ## Auth setup
 
-Provide three secrets: `client_id`, `client_secret`, and `refresh_token` (long-lived; never logged).
+Provide `client_id` (plain config, not a secret — matching legacy's `cfg.Config["client_id"]` read,
+`strava.go:319`; Strava client IDs are public OAuth application identifiers, not credentials) plus
+two secrets: `client_secret` and `refresh_token` (long-lived; never logged).
 `hooks/strava/hooks.go` implements `AuthHook`, mirroring legacy `strava.go`'s `refreshTokenAuth`: it
 POSTs `grant_type=refresh_token` + `refresh_token` + `client_id` + `client_secret` to `token_url`
 (default `https://www.strava.com/oauth/token`, config-overridable), caches the resulting access

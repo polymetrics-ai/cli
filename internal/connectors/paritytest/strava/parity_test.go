@@ -144,8 +144,19 @@ func stravaDataServer(t *testing.T) *httptest.Server {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/athlete/activities", func(w http.ResponseWriter, r *http.Request) {
-		if got := r.URL.Query().Get("per_page"); got != "2" {
-			t.Fatalf("activities per_page = %q, want 2", got)
+		// per_page varies by caller: TestParityStrava_StreamRecords drives both
+		// sides at their shared default (legacy's stravaDefaultPageSize == the
+		// engine bundle's static streams.json pagination.page_size, both 100,
+		// docs.md's Known limits — no config-driven override exists on the
+		// engine side), while TestParityStrava_ActivitiesTwoPagePagination
+		// drives legacy ALONE at an explicit page_size:"2" override (a
+		// legacy-only knob per that test's own comment). Both values must
+		// still be present and well-formed; whichever the caller sent is
+		// honored by paging on the fixture bodies' own short-page shape
+		// (2 then 1 record) rather than re-asserting one hardcoded value.
+		got := r.URL.Query().Get("per_page")
+		if got != "2" && got != "100" {
+			t.Fatalf("activities per_page = %q, want 2 or 100", got)
 		}
 		switch r.URL.Query().Get("page") {
 		case "1":
