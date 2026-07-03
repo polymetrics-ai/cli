@@ -1,0 +1,745 @@
+{
+  "summary": "20% adversarial review sample of wave2 bundles (16 reviewers x 5 bundles)",
+  "agentCount": 16,
+  "logs": [
+    "reviewed 80: 32 fail"
+  ],
+  "result": {
+    "reviewed": 80,
+    "fails": [
+      {
+        "connector": "7shifts",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/7shifts/ (absent)",
+            "issue": "No wave2 bundle exists for 7shifts at all — internal/connectors/defs/7shifts/ does not exist (no metadata.json, spec.json, streams.json, schemas, fixtures, or docs.md). The connector remains listed only in docs/migration/inventory.json (bucket L, 730 loc, catalog slug source-7shifts) and is absent from docs/migration/quarantine.json and from every wave2/wave1 trace/ledger under .planning/ — i.e. it was neither migrated nor quarantined with a documented blocker. Legacy internal/connectors/7shifts/{7shifts.go,streams.go} is the only implementation that exists. This is a complete non-delivery for one of the five connectors assigned to this review, not a quality defect in an existing bundle."
+          }
+        ]
+      },
+      {
+        "connector": "adjust",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/adjust/ (absent)",
+            "issue": "No wave2 bundle exists for adjust at all — internal/connectors/defs/adjust/ does not exist. adjust is listed only in docs/migration/inventory.json (bucket S, 263 loc, runtime_kind native_go, catalog slug source-adjust) and is absent from docs/migration/quarantine.json and every wave planning trace — no ENGINE_GAP/AUTH_COMPLEX/other blocker was ever filed for it. Legacy internal/connectors/adjust/{adjust.go,adjust_test.go} is the only implementation that exists. Complete non-delivery, not a quality defect."
+          }
+        ]
+      },
+      {
+        "connector": "asana",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/asana",
+            "issue": "No migrated bundle exists at all (directory absent). Legacy internal/connectors/asana is tracked in docs/migration/inventory.json as native_go, not quarantined, but wave2 produced no defs/asana output to review against conventions.md or legacy parity."
+          }
+        ]
+      },
+      {
+        "connector": "aviationstack",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/aviationstack/streams.json",
+            "issue": "base.pagination.page_size hardcoded to 2 (legacy default 100, configurable 1-100) with no override path; this is the live production page size, not just a fixture convenience, and docs.md's claim that it 'has no bearing on a live deployment's real page-size/throughput' is self-contradictory / misleading given the same doc admits the live paginator uses this exact value."
+          },
+          {
+            "severity": "minor",
+            "file": "internal/connectors/defs/aviationstack/streams.json",
+            "issue": "check request omits legacy's limit=1 query param (GET /countries vs GET /countries?limit=1). Non-data-emitting, low impact."
+          }
+        ]
+      },
+      {
+        "connector": "awin-advertiser",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/awin-advertiser/streams.json",
+            "issue": "base.pagination.page_size hardcoded to 2 (legacy default 100, configurable 1-100) with no config override, silently changing live request volume/pagination behavior ~50x versus legacy. Unlike aviationstack's bundle, this deviation is completely undisclosed in docs.md's Known limits or parity-deviation ledger."
+          }
+        ]
+      },
+      {
+        "connector": "canny",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/canny",
+            "issue": "No bundle exists at all: internal/connectors/defs/canny/ is absent (no metadata.json, spec.json, streams.json, api_surface.json, docs.md, schemas/, or fixtures/), and there is no conformance subtest for canny. This connector was never migrated. It IS legitimately recorded in docs/migration/quarantine.json as an ENGINE_GAP blocker (Canny's API requires POST requests with apiKey and pagination params carried in a form-encoded body, which the declarative read path cannot express) -- so the absence is a sanctioned quarantine outcome per conventions.md section 6, not a silent/sloppy skip. However, since the review's premise is a 'wave2-migrated bundle' for canny, there is nothing to certify: it fails the review on the grounds that no migration artifact exists to check for parity, fidelity, or fixture honesty."
+          }
+        ]
+      },
+      {
+        "connector": "convertkit",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "major",
+            "file": "internal/connectors/defs/convertkit/streams.json",
+            "issue": "Legacy's Catalog() publishes CursorFields: [\"created_at\"] on all 5 streams (subscribers, forms, sequences, tags, broadcasts) via convertkitStreams() in internal/connectors/convertkit/streams.go, which internal/app/app.go reads to populate stream.CursorField for downstream incremental-sync selection. The migrated bundle declares x-cursor-field: \"created_at\" in every schemas/*.json but omits streams.json's per-stream `incremental` block entirely. Per engine/connector.go's DerivedSyncModes (keyed strictly on s.Incremental != nil, not on schema x-cursor-field), the migrated connector's Manifest.SyncModes will never include incremental_append/incremental_append_deduped for any stream -- a silent capability narrowing versus legacy's published catalog. This is the identical situation chameleon and circleci face in this same review batch (a cursor field legacy declares but never server-side-filters on), and both of those bundles correctly add the bare incremental.cursor_field block specifically to reproduce this catalog capability (see internal/connectors/defs/chameleon/streams.json and internal/connectors/defs/circleci/streams.json's workflows/pipelines/jobs blocks), proving the engine can express this with zero data/behavior change. convertkit's docs.md 'Streams notes' section explicitly reasons about this exact tradeoff and reaches the opposite conclusion from its siblings, and the omission is not ledgered in docs.md's 'Known limits' section as an accepted parity deviation with the required meta-rule justification -- it is instead framed as a deliberate, unflagged design choice. This is an unledgered, inconsistent parity gap in selectable sync-mode capability, not a change to any single emitted record's data."
+          }
+        ]
+      },
+      {
+        "connector": "everhour",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/everhour/docs.md",
+            "severity": "blocker",
+            "issue": "Legacy (internal/connectors/everhour/streams.go) applies a generic stringField(item, \"id\") coercion uniformly across ALL five mapRecord functions (projects, clients, users, tasks, time) specifically to guarantee the emitted `id` is always a string regardless of the raw wire type (the helper's default branch does fmt.Sprintf(\"%v\", v) for any non-string/non-nil value). The migrated bundle (internal/connectors/defs/everhour/streams.json) uses plain schema projection for all 4 ported streams with no computed_fields id-coercion, and the engine's schema-projection path (engine/read.go's projectRecord) copies raw values verbatim with zero type coercion. docs.md asserts without evidence that 'Every id field is emitted as a string in both legacy... and Everhour's real wire shape' to justify skipping the coercion -- a claim that is hard to square with legacy's own defensive, uniformly-applied helper existing at all (a helper that only stringifies when the value is ALREADY a string would be pointless). schemas/users.json and schemas/time.json declare id as type string only (not a union with integer), and every fixture (fixtures/streams/users/page_1.json, fixtures/streams/time/page_1.json, fixtures/check.json) has been pre-authored with quoted string ids everywhere -- consistent with fixtures shaped to match the schema/claim rather than recorded from the real API's actual wire response, which conventions.md section 4 requires ('recorded-real-shape... capture what the live API actually returns'). If Everhour's real /team/users (or /team/time) endpoint returns a bare JSON integer for id (plausible given legacy's own defensive code), every live sync would silently emit a different JSON type for that field than legacy did -- a silent emitted-record-data change forbidden by the meta-rule (conventions.md section 5), not merely cosmetic since downstream warehouse destinations derive column types from it."
+          }
+        ]
+      },
+      {
+        "connector": "hibob",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/hibob/streams.json",
+            "severity": "blocker",
+            "issue": "computed_fields uses `{{ record.id | last_path_segment }}` on all three streams (profiles, named_lists, company_lists) to reproduce legacy's `nestedString(item, \"id\")` helper (internal/connectors/hibob/hibob.go:340-354, used at streams.go:100,122,134). The two are not equivalent: nestedString is a pure type-coercion (stringify a non-string; pass a string through byte-for-byte; return \"\" for nil) that never inspects the string's content, whereas last_path_segment actively truncates everything up through the final '/'. Any HiBob id containing a literal '/' — plausible for this platform, whose own endpoints are slash-namespaced (company/named-lists, company/people/fields) and which commonly uses hierarchical ids for named-list values — would be silently emitted with a different, truncated value than legacy produces for the identical input, a data-shape change the parity meta-rule forbids. All three bundled fixtures use slash-free synthetic ids ('1'..'51', 'department_fixture_1', 'field_fixture_1'), so this divergence can never be caught by conformance or parity fixture-replay — the fixtures mask the exact behavior they should be proving. docs.md's Known limits/Streams notes section claims the substitution is safe because 'last_path_segment is a no-op on a slash-free id value... matching legacy's own defensive intent,' which is a factually incorrect equivalence claim, not an honestly-scoped deviation; it does not meet the meta-rule's bar of 'never changes the emitted record DATA for any input legacy itself would accept.' A secondary, smaller divergence: computed_fields silently omits the output key when the source path is absent, whereas legacy's nestedString returns \"\" for a nil id — since schemas/profiles.json (and the other two) declare `id` as required, an upstream record with a null/absent id would fail schema validation here where legacy would have emitted an empty-string id instead."
+          }
+        ]
+      },
+      {
+        "connector": "iterable",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/iterable/ (absent)",
+            "issue": "No wave2 bundle exists for iterable. Only the legacy package (internal/connectors/iterable/{iterable.go,iterable_test.go}) is present; there is no internal/connectors/defs/iterable directory (no metadata.json, spec.json, streams.json, schemas/, fixtures/, docs.md, api_surface.json) anywhere in the working tree or git history on this branch."
+          }
+        ]
+      },
+      {
+        "connector": "keka",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/keka/ (absent)",
+            "issue": "No wave2 bundle exists for keka. Only the legacy package (internal/connectors/keka/{auth.go,keka.go,keka_test.go,streams.go}) is present; there is no internal/connectors/defs/keka directory anywhere in the working tree or git history on this branch."
+          }
+        ]
+      },
+      {
+        "connector": "linear",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/linear/",
+            "issue": "No wave2-migrated bundle exists at all. internal/connectors/defs/linear/ is absent (metadata.json, spec.json, streams.json, schemas/, fixtures/, docs.md, api_surface.json all missing); only the untouched legacy internal/connectors/linear/{linear.go,linear_test.go} exists, and there is no trace of linear in .planning/phases/wave2-fanout-http-sm/ either. There is nothing to review for parity, and the connector is not deliverable as 'migrated'."
+          }
+        ]
+      },
+      {
+        "connector": "mixpanel",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/mixpanel/",
+            "severity": "blocker",
+            "issue": "No wave2-migrated bundle exists for mixpanel. internal/connectors/defs/mixpanel/ is entirely absent (confirmed via filesystem search and git log/status) despite legacy internal/connectors/mixpanel/mixpanel.go existing as ground truth. There is no hooks/mixpanel or native/mixpanel package either. The only similarly-named defs directory, defs/mixmax/, is an unrelated connector (Mixmax, an email/sales-engagement tool, not Mixpanel analytics). The migration for this connector was never produced, so no parity review is possible."
+          }
+        ]
+      },
+      {
+        "connector": "mux",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/mux/spec.json",
+            "line": 22,
+            "severity": "major",
+            "issue": "spec.json declares page_size (default \"25\", description \"Records per page (1-100)\") and max_pages (default \"0\", description \"Maximum pages; use 0, all, or unlimited to exhaust the stream\") as if they are live runtime overrides, matching legacy's config-driven muxPageSize/muxMaxPages. Neither is referenced anywhere in streams.json: base.pagination.page_size is a hardcoded static 25 (confirmed no {{ config.page_size }} template anywhere in the bundle), and there is no max_pages/MaxPages field set on the pagination block at all. This is F6 dead config (a spec property no template consumes) combined with misleading documentation implying the properties are functional. docs.md's Known limits section does not disclose this at all, unlike miro's identical situation (miro's docs.md explicitly states 'page_size is not runtime-configurable... therefore not declared in spec.json at all'). A caller who sets page_size or max_pages expecting legacy's override behavior gets silently ignored."
+          }
+        ]
+      },
+      {
+        "connector": "nasa",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/nasa/streams.json",
+            "line": 42,
+            "severity": "blocker",
+            "issue": "neo_browse's pagination block sets no max_pages, making it unbounded by default at the engine level (engine/read.go: MaxPages<=0 means unbounded). Legacy's nasaDefaultMaxPages=5 caps neo_browse to 5 pages by default specifically 'so a sync cannot run unbounded against the (large) NeoWs dataset' (nasa.go comment). spec.json still declares max_pages with default \"5\" and a description claiming it controls neo_browse pagination, but nothing in streams.json wires it to any static MaxPages value or template (PaginationSpec.max_pages is a static bundle-authored int, not templated, same limitation documented correctly elsewhere for miro/mux-class deviations). This is a real, undisclosed default-behavior divergence (unbounded vs. legacy's bounded-by-default 5 pages) that changes how much data a default-config sync pulls, not just dead config — and it is not mentioned in docs.md's Known limits (which only says 'max_pages (neo_browse only) accepts an integer, all, or unlimited, defaulting to 5 matching legacy's nasaDefaultMaxPages,' which is false as written since no default cap is actually enforced by this bundle)."
+          }
+        ]
+      },
+      {
+        "connector": "okta",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/okta/",
+            "issue": "No wave2-migrated bundle exists for okta at all: internal/connectors/defs/okta/ is absent (verified via ls/find), there is no docs/migration/quarantine.json entry for okta, and no phase-trace artifact under .planning/phases/wave2-fanout-http-sm/traces/ mentions it -- okta appears only as a name in an earlier wave1 batch listing. Legacy internal/connectors/okta/ (ground truth) still exists untouched. Cannot review parity, schema fidelity, pagination/incremental/auth, fixtures, api_surface, or docs.md for a connector that was never migrated; this is a missing deliverable, not a quality defect in an existing bundle."
+          }
+        ]
+      },
+      {
+        "connector": "posthog",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/posthog/",
+            "severity": "blocker",
+            "issue": "No wave2 bundle exists for posthog at all: internal/connectors/defs/posthog/ is entirely absent (no metadata.json/spec.json/streams.json/schemas/fixtures/docs.md), confirmed by directory listing, git status, and git log across all branches. The connector is also absent from docs/migration/quarantine.json, so it was neither migrated nor blocked-and-quarantined -- it was simply skipped. Nothing exists to check for field-for-field schema fidelity, pagination/auth parity, fixture realism, or docs honesty; legacy internal/connectors/posthog/posthog.go (194 lines, events+persons streams, Bearer auth, cursor pagination via a body 'next' URL) has no declarative counterpart to compare against."
+          }
+        ]
+      },
+      {
+        "connector": "printify",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/printify/streams.json",
+            "line": 1,
+            "severity": "blocker",
+            "issue": "Legacy printify.go's mapRecord() (printify.go:204-215) unconditionally stamps a 'raw' field (a full nested copy of the source API object) onto every emitted record for all 5 streams (shops, products, orders, blueprints, print_providers). None of the 5 migrated schemas (schemas/*.json) declare a 'raw' property, and no stream declares 'projection: passthrough' (default is schema-mode, which drops any field not in the schema) -- so every record emitted by this bundle for every legacy-accepted input is missing the 'raw' field legacy always includes. docs.md's 'Known limits' does disclose this ('Legacy's raw escape-hatch field is not modeled'), but per the migration meta-rule (conventions.md §5) a deviation that changes emitted record DATA for accepted input is not an acceptable, silently-shippable 'Known limit' -- it is required to be filed as an ENGINE_GAP blocker (§6) since the engine genuinely cannot express a whole-record-reference computed_fields primitive. It is not present in docs/migration/conventions.md's §5 parity-deviation ledger table or any result.schema.json trace, i.e. it was never escalated through the required blocker process, only mentioned in the bundle's own docs.md."
+          }
+        ]
+      },
+      {
+        "connector": "pylon",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/pylon/streams.json",
+            "line": 29,
+            "severity": "blocker",
+            "issue": "issues/accounts/contacts/messages streams declare an 'incremental': {'cursor_field': 'updated_at'} block with no request_param, client_filtered, or start_config_key. Legacy pylon.go never reads req.State at all (only a static config.start_date passthrough sent as 'updated_after'), so it has no true state-cursor incremental capability. Declaring a non-nil Incremental block, however, makes the engine's DerivedSyncModes (verified empirically via engine.Load + engine.DerivedSyncModes against this exact bundle) report incremental_append and incremental_append_deduped as SUPPORTED sync modes for these 4 streams -- a capability legacy never had. Worse, on an actual incremental_append sync with a previously persisted state cursor, engine/read.go's incrementalLowerBoundValue resolves a non-empty lower bound from that state cursor, but because RequestParam is empty (never wired) and ClientFiltered is false, that value is silently computed and discarded: it is never sent to the Pylon API and never used to filter records client-side. The connector would therefore silently re-fetch and re-emit every record from the beginning on every 'incremental' sync while claiming incremental behavior succeeded -- a genuine emitted-data-shape/duplication defect, not merely a missing feature. docs.md (Streams notes) explicitly claims 'No stream declares an incremental.request_param, matching legacy's own behavior' as if this were inert, but omits that the mere presence of the incremental block (independent of request_param) already changes advertised/derived sync-mode capability -- this is not disclosed anywhere, is not in conventions.md's §5 ledger, and is a real accepted-input-behavior change forbidden by the §5 meta-rule. Compare pipedrive's bundle, which correctly declares NO incremental block for the analogous since_timestamp-is-a-static-passthrough-only shape and documents why in its own Known limits -- pylon should have followed the identical pattern."
+          }
+        ]
+      },
+      {
+        "connector": "recharge",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/recharge",
+            "issue": "No wave2-migrated bundle exists at internal/connectors/defs/recharge (directory absent). Only the legacy package internal/connectors/recharge/ exists. Cannot review a migration that was not produced; flagging as fail/not-migrated rather than silently skipping.",
+            "severity": "blocker"
+          }
+        ]
+      },
+      {
+        "connector": "reply-io",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/reply-io/streams.json",
+            "line": 33,
+            "issue": "All four streams declare an incremental: {cursor_field: updated_at} block with no request_param, client_filtered, or start_config_key. Per engine/connector.go's DerivedSyncModes, the mere presence of a non-nil Incremental spec (independent of whether it actually filters anything) causes the connector to advertise incremental_append/incremental_append_deduped as supported sync modes in its catalog/manifest (all 4 streams also carry x-primary-key, so both modes activate). Legacy's reply_io.go has zero incremental/sync-mode concept at all: Read always performs a full paginated sweep, and CursorFields in Catalog() is purely descriptive metadata never wired to any filter. This invents a capability legacy never had: a caller selecting incremental_append against this connector will silently get every record replayed on every sync (read.go's clientFilterKeeps is only invoked when ClientFiltered is true, and RequestParam is empty here, so no filtering of any kind occurs). The sibling recurly bundle in this same wave hit the identical situation and correctly declared NO incremental block for exactly this reason, with docs.md explicitly explaining why; reply-io deviates from that established pattern without acknowledging the inconsistency.",
+            "severity": "blocker"
+          },
+          {
+            "file": "internal/connectors/defs/reply-io/docs.md",
+            "line": 38,
+            "issue": "docs.md's Streams notes section asserts 'every read is a full paginated sweep, matching legacy's true read behavior (no request_param/start_config_key/client_filtered declared)' as if this means no incremental capability is exposed. This is materially misleading: streams.json DOES declare a bare incremental block (cursor_field only) on all four streams, which is sufficient by itself to flip on incremental_append/incremental_append_deduped in the derived sync-mode catalog. The ledgered claim describes read-time mechanics accurately but omits the catalog-visible capability consequence, so a reader of docs.md would not learn that this bundle silently over-advertises incremental support.",
+            "severity": "major"
+          },
+          {
+            "file": "internal/connectors/defs/reply-io/reply_io.go",
+            "line": 173,
+            "issue": "Legacy's recordsAt tries a sequence of candidate body paths (stream's own path, then data/items/records/results, then bare root) and uses whichever first yields a non-empty list. The migrated bundle hardcodes records.path: '' (the first candidate only). If Reply.io's real API ever wraps records in one of the fallback envelope keys instead of a bare array, this bundle silently returns zero records where legacy would have found them via fallback. This is disclosed candidly in docs.md's Known limits, so it is a lesser finding on its own, but compounds the overall parity-fidelity picture for this connector.",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "connector": "smartsheets",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/smartsheets/",
+            "issue": "No wave2-migrated bundle exists for smartsheets anywhere in the repo (no metadata.json/spec.json/streams.json/schemas/fixtures/docs.md, no git history, no planning trace). The legacy package internal/connectors/smartsheets/smartsheets.go is unmigrated; there is nothing to review against conventions.md and no parity with legacy has been established at all."
+          }
+        ]
+      },
+      {
+        "connector": "strava",
+        "verdict": "fail",
+        "findings": [
+          {
+            "severity": "blocker",
+            "file": "internal/connectors/defs/strava/",
+            "issue": "No wave2-migrated bundle exists for strava anywhere in the repo (no metadata.json/spec.json/streams.json/schemas/fixtures/docs.md, no git history, no planning trace). The legacy package internal/connectors/strava/{strava.go,streams.go} is unmigrated; there is nothing to review against conventions.md and no parity with legacy has been established at all."
+          }
+        ]
+      },
+      {
+        "connector": "todoist",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/todoist/streams.json",
+            "severity": "blocker",
+            "issue": "Legacy internal/connectors/todoist/todoist.go:94-99 emits the raw API record verbatim (emit(connectors.Record(rec)), full unfiltered passthrough of whatever fields Todoist's REST v2 API returns) for all 4 streams -- streamSpecs.fields is only used by Catalog(), never by Read(). The wave2 bundle declares no 'projection' field on any of the 4 streams, so the engine defaults to schema projection mode (internal/connectors/engine/bundle.go:182), which silently drops every raw field not in the narrow 4-8-property schema (e.g. real Todoist fields like order, priority, labels, comment_count, is_archived, is_deleted, url, parent_id, assignee_id, duration on tasks/projects would be silently dropped from every emitted record). This is an undocumented silent data-shape change -- docs.md's Known limits section only calls out fixture-mode-only fields and lack of pagination, never this schema-narrowing-vs-passthrough deviation, and api_surface.json has no mention of it either.",
+            "failure_scenario": "A live Todoist task with labels:[\"urgent\"], priority:4, duration:{amount:30,unit:minute} is emitted by legacy as-is (all fields present) but by the wave2 bundle with those fields silently absent from the record delivered downstream -- a silent, undocumented parity deviation per conventions.md section 5's meta-rule, which requires either matching passthrough behavior or an explicit ledger entry."
+          }
+        ]
+      },
+      {
+        "connector": "toggl",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/toggl/streams.json",
+            "severity": "blocker",
+            "issue": "Identical pattern to todoist: legacy internal/connectors/toggl/toggl.go:94-103 does emit(connectors.Record(rec)) -- full raw-API passthrough, no field filtering -- for all 5 streams (streamSpecs.fields is Catalog-only decoration). The wave2 bundle declares no projection on any stream, so default schema mode silently drops every real Toggl API field not in the declared 4-7 properties per stream (e.g. real time_entries fields like tags, billable, at, server_deleted_at, tag_ids, project color/template/auto_estimates, etc. would be dropped). docs.md's Known limits only documents fixture-mode fields and no-pagination; this schema-narrowing deviation from legacy's raw-passthrough emission is never mentioned in docs.md or api_surface.json.",
+            "failure_scenario": "A live Toggl time entry with tags:[\"billable\"], billable:true, tag_ids:[5] is emitted by legacy verbatim but by the wave2 bundle with those fields silently missing -- an undocumented silent data-shape change per conventions.md section 5's meta-rule."
+          }
+        ]
+      },
+      {
+        "connector": "typeform",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/typeform/streams.json",
+            "severity": "blocker",
+            "issue": "The legacy responses stream (internal/connectors/typeform/streams.go:25,42-47,82-95,154-167 and typeform.go:134-146) -- with its own primary key response_id, cursor field submitted_at, and per-form_id sub-resource fan-out reading GET /forms/{form_id}/responses -- is entirely absent from the wave2 bundle: no stream entry in streams.json, no schemas/responses.json, no fixtures/streams/responses/*. Requirement (1) of this review (every legacy stream declared with field-for-field schema fidelity) is not met since an entire stream is missing. This is honestly ledgered (docs.md's Known limits and api_surface.json both explicitly document the gap and correctly identify it as Tier-2 StreamHook territory per conventions.md section 1, not silently dropped or faked), so it is not gaming/fabrication -- but the bundle is nonetheless an incomplete migration of the legacy connector's stream surface.",
+            "failure_scenario": "Any pipeline configured to read the responses stream from the migrated typeform connector has no stream to read at all -- a consumer relying on Typeform form-response data (the connector's primary reason for existing, arguably) gets nothing, with no engine-level indication beyond an unknown-stream error, until a follow-up Tier-2 hooks wave is built."
+          }
+        ]
+      },
+      {
+        "connector": "trello",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/trello",
+            "severity": "blocker",
+            "issue": "No wave2 migration exists for trello at all: internal/connectors/defs/trello/ does not exist in the repository (confirmed via ls/find), while the legacy internal/connectors/trello/ package (streams.go, trello.go, trello_test.go) is present and unmigrated. There is nothing to review against conventions.md's Tier-1 bundle layout because no bundle was produced.",
+            "failure_scenario": "Any tooling or downstream process expecting a wave2 defs bundle for trello (per this review's assignment listing testrail, todoist, toggl, trello, typeform as wave2-migrated bundles) will find no metadata.json/spec.json/streams.json/schemas/fixtures/docs.md whatsoever -- the migration for this connector has not started, let alone been reviewed-worthy."
+          }
+        ]
+      },
+      {
+        "connector": "webflow",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/webflow",
+            "issue": "No migrated bundle exists at all. internal/connectors/defs/webflow/ is absent (no metadata.json, spec.json, streams.json, schemas/, fixtures/, api_surface.json, or docs.md), even though internal/connectors/webflow/ (legacy) exists and webflow was in review scope. Nothing was migrated to review.",
+            "severity": "blocker"
+          }
+        ]
+      },
+      {
+        "connector": "wordpress",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/wordpress/streams.json",
+            "issue": "No `projection: passthrough` is declared for any of the 7 streams, so the engine's default `schema` projection mode silently drops every WordPress field not in the 3-4-property schemas (title, content, excerpt, link, guid, author, featured_media, categories, tags, _links, etc.). Legacy's Read() does `emit(connectors.Record(item))` — a full raw passthrough of the entire API object per record; legacy's `Fields` list in streamEndpoints is catalog-display metadata only, never a filter. This silently changes emitted record data for every stream and is not mentioned anywhere in docs.md.",
+            "severity": "blocker"
+          },
+          {
+            "file": "internal/connectors/defs/wordpress/streams.json",
+            "issue": "posts/pages/comments/media declare an `incremental` block (cursor_field: date, request_param: after, start_config_key: start_date). The engine persists and advances a state cursor across syncs (engine/read.go's incrementalLowerBoundValue prefers req.State's cursor over start_config_key), so on the 2nd+ sync the bundle sends after=<last-seen-date> instead of legacy's behavior of always resending the static config.start_date value verbatim (legacy has no InitialState/cursor-persistence logic anywhere in wordpress.go — `after` is computed once per call directly from cfg.Config[\"start_date\"]). This is a genuine, silent change to what gets requested and therefore what records are returned on every incremental run after the first, and it is not documented in docs.md (which only discusses the uniform first-sync `after` behavior).",
+            "severity": "blocker"
+          },
+          {
+            "file": "internal/connectors/defs/wordpress/fixtures/streams/posts/page_1.json",
+            "issue": "Fixtures for all 7 streams only contain the schema's declared fields, not a real WordPress wire shape (missing title/content/link/guid/etc. present on any live /wp-json/wp/v2/* response). This reinforces the projection blocker above rather than exposing it — a schema-echo fixture, not a recorded-real-shape fixture per §4.",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "connector": "workable",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/workable/streams.json",
+            "issue": "Same schema-projection gap as wordpress: no `projection: passthrough`, so default schema-mode projection restricts jobs/candidates/members to 4/4/3 fields taken from legacy's catalog-metadata Fields list. Legacy's Read() does `emit(connectors.Record(item))` — full raw item passthrough (department, employment_type, url, resume_url, education, experience, etc. for a real Workable API response) — none of that survives projection here. Not documented in docs.md.",
+            "severity": "blocker"
+          },
+          {
+            "file": "internal/connectors/defs/workable/fixtures/streams/jobs/page_1.json",
+            "issue": "Fixtures are schema-echoes (only id/shortcode/title/state for jobs, etc.) rather than real Workable SPI v3 wire shapes, masking the projection gap above instead of exposing it.",
+            "severity": "major"
+          },
+          {
+            "file": "internal/connectors/defs/workable/docs.md",
+            "issue": "Known limits honestly documents that `next_url` pagination has no max_pages cap (unlike legacy's max_pages=1 default), so more records may be read per sync than legacy would have returned by default. This is a real accepted-input-behavior difference (record count varies across implementations for the same config) but it is disclosed and framed correctly as a narrowing-in-legacy's-favor deviation, not silently shipped.",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "connector": "younium",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/younium/streams.json",
+            "issue": "No `projection: passthrough` declared; default schema-mode projection restricts accounts/subscriptions/invoices to 4 declared properties. Legacy's mapRecord does `for k, v := range in { out[k] = v }` first (copying every raw field: accountId, accountName, invoiceId, updated, etc.) and only then overlays the 4 derived aliases — legacy's real emitted record is therefore a superset of raw+derived fields, not just the 4. This drop is not mentioned in docs.md (which covers the fallback-chain gap but not the raw-field passthrough loss).",
+            "severity": "blocker"
+          },
+          {
+            "file": "internal/connectors/defs/younium/fixtures/streams/accounts/page_1.json",
+            "issue": "Fixtures for accounts and invoices are shaped to always include a literal top-level `id` key alongside `accountId`/`invoiceId`, specifically so the bare `computed_fields.id: \"{{ record.id }}\"` template always resolves. This masks that the bundle has no fallback logic for legacy's real idKeys preference chains (accounts: [\"id\",\"accountId\"], invoices: [\"id\",\"invoiceId\"]) — a real Younium response using only accountId/invoiceId (the scenario legacy's fallback chain exists to handle) would silently leave the projected record's primary-key field null/absent here. The gap is disclosed in docs.md's Known limits (which mitigates severity, since it meets the ledger requirement), but the fixtures were built to avoid ever exercising or exposing the gap rather than to represent the real wire shape per §4's recorded-real-shape rule.",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "connector": "zenefits",
+        "verdict": "fail",
+        "findings": [
+          {
+            "file": "internal/connectors/defs/zenefits/streams.json",
+            "issue": "The declarative `check` block issues a real `GET /people` request. Legacy's Check() never makes a network call at all — it only validates that base_url parses and that the `token` secret is non-empty (zenefits.go:46-60). This means a config/token combination legacy's Check would accept (e.g., a syntactically-present but server-rejected token, or any transient network/API failure) can now fail Check where it previously always succeeded, and vice versa a live API hiccup now fails Check where legacy never touched the network. docs.md's Known limits explicitly (and incorrectly) states 'Every legacy read-path behavior... is fully modeled declaratively with no deviations' — this Check divergence is real and unacknowledged.",
+            "severity": "major"
+          }
+        ]
+      }
+    ],
+    "dropped": 0
+  },
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Review"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "review-0",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a55766856353bfcf3",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045791289,
+      "queuedAt": 1783045791280,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): 100ms, 7shifts, activecampaign, adjust, aha. Per connector check: (1) every legacy stream declared with field-for-field schema fide…",
+      "lastProgressAt": 1783045978089,
+      "tokens": 132806,
+      "toolCalls": 39,
+      "durationMs": 186800,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"100ms\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"7shifts\",\"verdict\":\"fail\",\"findings\":[{\"severity\":\"blocker\",\"file\":\"internal/connectors/defs/7shifts/ (absent)\",\"issue\":\"No wave2 bundle exists for 7shifts at all — internal/connectors/defs/7shifts/ does not exist (no metadata.json, spec.json, streams.json, schemas, fixtures, or docs.md). The connector remains listed on…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "review-1",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a99f58707c1b5d18e",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045791290,
+      "queuedAt": 1783045791280,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): aircall, amplitude, asana, aviationstack, awin-advertiser. Per connector check: (1) every legacy stream declared with field-for-fie…",
+      "lastProgressAt": 1783046067835,
+      "tokens": 142290,
+      "toolCalls": 47,
+      "durationMs": 276545,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"aircall\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"amplitude\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"asana\",\"verdict\":\"fail\",\"findings\":[{\"severity\":\"blocker\",\"file\":\"internal/connectors/defs/asana\",\"issue\":\"No migrated bundle exists at all (directory absent). Legacy internal/connectors/asana is tracked in docs/migration/inventory.json as native_go, not quarant…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "review-2",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "adcb5a82c99e1fabc",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045791290,
+      "queuedAt": 1783045791280,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): bamboo-hr, brevo, buildkite, cal-com, canny. Per connector check: (1) every legacy stream declared with field-for-field schema fide…",
+      "lastProgressAt": 1783046281026,
+      "tokens": 172511,
+      "toolCalls": 74,
+      "durationMs": 489736,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"bamboo-hr\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"brevo\",\"verdict\":\"pass\",\"findings\":[{\"severity\":\"major\",\"file\":\"internal/connectors/defs/brevo/spec.json\",\"issue\":\"spec.json declares page_size and max_pages properties but neither is referenced by any template in streams.json (the offset_limit paginator's page_size is a fixed literal '100'); this is dead config per…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 4,
+      "label": "review-3",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a9c827a564ae58b6e",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045791290,
+      "queuedAt": 1783045791280,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): chameleon, circleci, clockify, coda, convertkit. Per connector check: (1) every legacy stream declared with field-for-field schema …",
+      "lastProgressAt": 1783046156169,
+      "tokens": 177277,
+      "toolCalls": 77,
+      "durationMs": 364879,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"chameleon\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"circleci\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"clockify\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"coda\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"convertkit\",\"verdict\":\"fail\",\"findings\":[{\"severity\":\"major\",\"file\":\"internal/connectors/defs/convertkit/streams.json\",\"issue\":\"Legacy's Catalog() publis…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 5,
+      "label": "review-4",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a05d66ac107e07aff",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045791291,
+      "queuedAt": 1783045791280,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): datadog, delighted, dixa, drip, everhour. Per connector check: (1) every legacy stream declared with field-for-field schema fidelit…",
+      "lastProgressAt": 1783046132853,
+      "tokens": 174195,
+      "toolCalls": 75,
+      "durationMs": 341562,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"datadog\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"delighted\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"dixa\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"drip\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"everhour\",\"verdict\":\"fail\",\"findings\":[{\"file\":\"internal/connectors/defs/everhour/docs.md\",\"severity\":\"blocker\",\"issue\":\"Legacy (internal/connectors/everhour/…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 6,
+      "label": "review-5",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a535ca7e77073a16a",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045791291,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): fastly, float, front, getgist, gitlab. Per connector check: (1) every legacy stream declared with field-for-field schema fidelity t…",
+      "lastProgressAt": 1783046063197,
+      "tokens": 195627,
+      "toolCalls": 89,
+      "durationMs": 271906,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"fastly\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"float\",\"verdict\":\"pass\",\"findings\":[{\"file\":\"internal/connectors/defs/float/spec.json\",\"issue\":\"spec.json declares a 'page_size' config property (default \\\"200\\\") but no template anywhere in streams.json references {{ config.page_size }} — the base.pagination block's page_size:200 is a static literal. This is dead conf…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 7,
+      "label": "review-6",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "abe1375aebe712efd",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045791291,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): gnews, gorgias, harvest, height, hibob. Per connector check: (1) every legacy stream declared with field-for-field schema fidelity …",
+      "lastProgressAt": 1783046047695,
+      "tokens": 167726,
+      "toolCalls": 54,
+      "durationMs": 256404,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"gnews\",\"verdict\":\"pass\",\"findings\":[{\"file\":\"internal/connectors/defs/gnews/spec.json\",\"severity\":\"minor\",\"issue\":\"page_size and max_pages are declared as spec.json properties with defaults but no template in streams.json consumes them (pagination.page_size is a fixed literal baked into base.pagination, not templated from config) — dead config per conventions.md F6. Hones…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 8,
+      "label": "review-7",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "ab49c4923999d8383",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045791291,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): insightly, iterable, jotform, keka, klaviyo. Per connector check: (1) every legacy stream declared with field-for-field schema fide…",
+      "lastProgressAt": 1783046049324,
+      "tokens": 153894,
+      "toolCalls": 68,
+      "durationMs": 258033,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"insightly\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"iterable\",\"verdict\":\"fail\",\"findings\":[{\"severity\":\"blocker\",\"file\":\"internal/connectors/defs/iterable/ (absent)\",\"issue\":\"No wave2 bundle exists for iterable. Only the legacy package (internal/connectors/iterable/{iterable.go,iterable_test.go}) is present; there is no internal/connectors/defs/iterable directory (no…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 9,
+      "label": "review-8",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a906ce1426ca9233c",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045791292,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): launchdarkly, linear, lob, mailerlite, mailgun. Per connector check: (1) every legacy stream declared with field-for-field schema f…",
+      "lastProgressAt": 1783046060471,
+      "tokens": 160783,
+      "toolCalls": 78,
+      "durationMs": 269179,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"launchdarkly\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"linear\",\"verdict\":\"fail\",\"findings\":[{\"severity\":\"blocker\",\"file\":\"internal/connectors/defs/linear/\",\"issue\":\"No wave2-migrated bundle exists at all. internal/connectors/defs/linear/ is absent (metadata.json, spec.json, streams.json, schemas/, fixtures/, docs.md, api_surface.json all missing); only the untouched …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 10,
+      "label": "review-9",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "ac096918195e4c5f7",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045791292,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): mention, miro, mixpanel, mux, nasa. Per connector check: (1) every legacy stream declared with field-for-field schema fidelity to l…",
+      "lastProgressAt": 1783046057481,
+      "tokens": 153733,
+      "toolCalls": 82,
+      "durationMs": 266189,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"mention\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"miro\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"mixpanel\",\"verdict\":\"fail\",\"findings\":[{\"file\":\"internal/connectors/defs/mixpanel/\",\"severity\":\"blocker\",\"issue\":\"No wave2-migrated bundle exists for mixpanel. internal/connectors/defs/mixpanel/ is entirely absent (confirmed via filesystem search and git log/status) …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 11,
+      "label": "review-10",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a9a1ddeb575e5831e",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783045978090,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): okta, omnisend, onfleet, pagerduty, pendo. Per connector check: (1) every legacy stream declared with field-for-field schema fideli…",
+      "lastProgressAt": 1783046368248,
+      "tokens": 152310,
+      "toolCalls": 77,
+      "durationMs": 390158,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"okta\",\"verdict\":\"fail\",\"findings\":[{\"severity\":\"blocker\",\"file\":\"internal/connectors/defs/okta/\",\"issue\":\"No wave2-migrated bundle exists for okta at all: internal/connectors/defs/okta/ is absent (verified via ls/find), there is no docs/migration/quarantine.json entry for okta, and no phase-trace artifact under .planning/phases/wave2-fanout-http-sm/traces/ mentions it -- …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 12,
+      "label": "review-11",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a6412d86285c9709f",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783046047696,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): pipedrive, plausible, posthog, printify, pylon. Per connector check: (1) every legacy stream declared with field-for-field schema f…",
+      "lastProgressAt": 1783046481137,
+      "tokens": 169369,
+      "toolCalls": 90,
+      "durationMs": 433441,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"pipedrive\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"plausible\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"posthog\",\"verdict\":\"fail\",\"findings\":[{\"file\":\"internal/connectors/defs/posthog/\",\"severity\":\"blocker\",\"issue\":\"No wave2 bundle exists for posthog at all: internal/connectors/defs/posthog/ is entirely absent (no metadata.json/spec.json/streams.json/schemas/fix…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 13,
+      "label": "review-12",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a7837a296c3040e99",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783046049325,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): recharge, recurly, reply-io, rollbar, sendgrid. Per connector check: (1) every legacy stream declared with field-for-field schema f…",
+      "lastProgressAt": 1783046357040,
+      "tokens": 156122,
+      "toolCalls": 60,
+      "durationMs": 307715,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"recharge\",\"verdict\":\"fail\",\"findings\":[{\"file\":\"internal/connectors/defs/recharge\",\"issue\":\"No wave2-migrated bundle exists at internal/connectors/defs/recharge (directory absent). Only the legacy package internal/connectors/recharge/ exists. Cannot review a migration that was not produced; flagging as fail/not-migrated rather than silently skipping.\",\"severity\":\"blocker\"…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 14,
+      "label": "review-13",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a5e59acc54c200902",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783046057482,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): shortcut, smartsheets, sparkpost, strava, teamwork. Per connector check: (1) every legacy stream declared with field-for-field sche…",
+      "lastProgressAt": 1783046298764,
+      "tokens": 107704,
+      "toolCalls": 37,
+      "durationMs": 241282,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"shortcut\",\"verdict\":\"pass\",\"findings\":[{\"severity\":\"minor\",\"file\":\"internal/connectors/defs/shortcut/streams.json\",\"issue\":\"Legacy mapRecord's fallback field resolution (state -> workflow_state_id, updated_at -> updated_at_override, shortcut.go:152-154) is not modeled; plain schema projection only copies the primary field name. This is honestly ledgered in docs.md Known l…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 15,
+      "label": "review-14",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "aebccbb96f35aa7a7",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783046060471,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): testrail, todoist, toggl, trello, typeform. Per connector check: (1) every legacy stream declared with field-for-field schema fidel…",
+      "lastProgressAt": 1783046355504,
+      "tokens": 154273,
+      "toolCalls": 67,
+      "durationMs": 295033,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"testrail\",\"verdict\":\"pass\",\"findings\":[]},{\"connector\":\"todoist\",\"verdict\":\"fail\",\"findings\":[{\"file\":\"internal/connectors/defs/todoist/streams.json\",\"severity\":\"blocker\",\"issue\":\"Legacy internal/connectors/todoist/todoist.go:94-99 emits the raw API record verbatim (emit(connectors.Record(rec)), full unfiltered passthrough of whatever fields Todoist's REST v2 API returns)…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 16,
+      "label": "review-15",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a2a5b6b355f52be32",
+      "model": "claude-sonnet-5",
+      "state": "done",
+      "startedAt": 1783046063198,
+      "queuedAt": 1783045791281,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "READ-ONLY adversarial reviewer in /Users/karthiksivadas/Development/polymetrics-cli-agents/connector-architecture-rewrite. Review these wave2-migrated bundles against docs/migration/conventions.md and their LEGACY packages (internal/connectors/<name>/ = ground truth): webflow, wordpress, workable, younium, zenefits. Per connector check: (1) every legacy stream declared with field-for-field schema …",
+      "lastProgressAt": 1783046399513,
+      "tokens": 122733,
+      "toolCalls": 47,
+      "durationMs": 336315,
+      "resultPreview": "{\"reviews\":[{\"connector\":\"webflow\",\"verdict\":\"fail\",\"findings\":[{\"file\":\"internal/connectors/defs/webflow\",\"issue\":\"No migrated bundle exists at all. internal/connectors/defs/webflow/ is absent (no metadata.json, spec.json, streams.json, schemas/, fixtures/, api_surface.json, or docs.md), even though internal/connectors/webflow/ (legacy) exists and webflow was in review scope. Nothing was migrated…"
+    }
+  ],
+  "totalTokens": 2493353,
+  "totalToolCalls": 1061
+}
