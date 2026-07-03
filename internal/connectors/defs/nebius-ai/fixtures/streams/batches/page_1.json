@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/v1/batches", "query": { "limit": "20" } },
+  "request": { "method": "GET", "path": "/v1/batches", "query": { "limit": "synthetic-conformance-value" } },
   "response": {
     "status": 200,
     "body": {

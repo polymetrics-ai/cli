@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/jobs", "query": { "page": "2", "page_size": "100" } },
+  "request": { "method": "GET", "path": "/jobs", "query": { "page": "2", "page_size": "2" } },
   "response": {
     "status": 200,
     "body": {

@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/incidents", "query": { "per_page": "50" } },
+  "request": { "method": "GET", "path": "/incidents", "query": { "per_page": "synthetic-conformance-value" } },
   "response": {
     "status": 200,
     "body": {

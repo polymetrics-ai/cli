@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/users/synthetic-conformance-value/webinars", "query": { "page_size": "100" } },
+  "request": { "method": "GET", "path": "/users/synthetic-conformance-value/webinars", "query": { "page_size": "synthetic-conformance-value" } },
   "response": {
     "status": 200,
     "body": {

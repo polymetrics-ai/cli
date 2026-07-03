@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/accounting/account/fixture_acct/users/clients",
+    "path": "/accounting/account/synthetic-conformance-value/users/clients",
     "query": { "page": "2", "per_page": "100" }
   },
   "response": {
@@ -10,12 +10,12 @@
       "response": {
         "result": {
           "clients": [
-            { "id": 3, "userid": 1, "organization": "Fixture Org 3", "fname": "Fixture", "lname": "Client 3", "email": "fixture3@example.com", "currency_code": "USD", "vis_state": 0, "updated": "2026-01-03 00:00:00" }
+            { "id": 101, "userid": 1, "organization": "Fixture Org 101", "fname": "Fixture", "lname": "Client 101", "email": "fixture101@example.com", "currency_code": "USD", "vis_state": 0, "updated": "2026-01-04 00:00:00" }
           ],
           "page": 2,
           "pages": 2,
           "per_page": 100,
-          "total": 3
+          "total": 101
         }
       }
     }

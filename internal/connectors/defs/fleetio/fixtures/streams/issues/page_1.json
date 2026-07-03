@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/issues", "query": { "per_page": "100" } },
+  "request": { "method": "GET", "path": "/issues", "query": { "per_page": "synthetic-conformance-value" } },
   "response": {
     "status": 200,
     "body": {

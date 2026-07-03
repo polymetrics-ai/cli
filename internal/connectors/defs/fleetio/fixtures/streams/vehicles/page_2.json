@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/vehicles", "query": { "per_page": "100", "start_cursor": "fixture_cursor_2" } },
+  "request": { "method": "GET", "path": "/vehicles", "query": { "per_page": "synthetic-conformance-value", "start_cursor": "fixture_cursor_2" } },
   "response": {
     "status": 200,
     "body": {

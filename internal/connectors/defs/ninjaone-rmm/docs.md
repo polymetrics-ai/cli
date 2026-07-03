@@ -16,7 +16,13 @@ Provide a NinjaOne RMM API token via the `api_key` secret; it is sent as a Beare
 
 `organizations`, `devices`, `locations`, and `activities` share an identical shape: `GET` against
 the matching NinjaOne v2 endpoint, records at the response root (a bare top-level JSON array —
-`records.path: ""`), pagination via NinjaOne's `after=<last entity id>` convention
+`records.path: "."`, the engine's documented root-selector spelling; a plain `""` also selects root
+for record extraction via `connsdk.RecordsAt`/`selectPath`, but the `cursor`+`last_record_field`
+paginator's own last-record lookup (`lastRecordCursor.Next`) additionally treats an EMPTY
+`recordsPath` string as "unset" and silently substitutes `"data"` — which does not exist on a bare
+top-level array and would silently stop pagination after page 1. `"."` avoids that fallback so the
+paginator finds the last record's `id` from the true root array, while extraction behaves
+identically either way), pagination via NinjaOne's `after=<last entity id>` convention
 (`pagination.type: cursor` with `last_record_field: id`, `cursor_param: after`) — the next page's
 `after` value is the numeric `id` of the last record on the current page, matching legacy's
 `harvest` loop. `policies` is unpaginated (legacy's `endpoint.paginated == false` branch): it

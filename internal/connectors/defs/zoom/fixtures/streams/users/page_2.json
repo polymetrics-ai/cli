@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/users", "query": { "page_size": "100", "next_page_token": "fixture_token_2" } },
+  "request": { "method": "GET", "path": "/users", "query": { "page_size": "synthetic-conformance-value", "next_page_token": "fixture_token_2" } },
   "response": {
     "status": 200,
     "body": {

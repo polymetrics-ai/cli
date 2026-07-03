@@ -382,5 +382,29 @@
   "blocker_type": "AUTH_COMPLEX",
   "reason": "Legacy auth.go implements Google OAuth 2.0 refresh-token grant (client_id/client_secret/refresh_token exchanged for a short-lived access token via POST to a token endpoint with grant_type=refresh_token, form-encoded body, caching until near-expiry, then Bearer <access_token> on the Reporting API). T",
   "attempts": 1
+ },
+ {
+  "name": "marketstack",
+  "blocker_type": "ENGINE_GAP",
+  "reason": "parseLowerBoundTime strict-RFC3339 only; date-only start values unsupported",
+  "attempts": 2
+ },
+ {
+  "name": "zoho-analytics-metadata-api",
+  "blocker_type": "AUTH_COMPLEX",
+  "reason": "OAuth refresh-token exchange (hook needed)",
+  "attempts": 2
+ },
+ {
+  "name": "nexus-datasets",
+  "blocker_type": "AUTH_COMPLEX",
+  "reason": "complex auth (hook needed)",
+  "attempts": 2
+ },
+ {
+  "name": "outlook",
+  "blocker_type": "AUTH_COMPLEX",
+  "reason": "OAuth2 refresh_token grant pre-request (hook needed, gmail pattern)",
+  "attempts": 2
  }
 ]

@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/prospects",
+    "query": { "page[size]": "100", "filter[updatedAt]": "2020-01-01T00:00:00Z" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "prospect_fixture_1",
+          "type": "prospect",
+          "attributes": {
+            "email": "fixture1@example.com",
+            "name": "Fixture One",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        },
+        {
+          "id": "prospect_fixture_2",
+          "type": "prospect",
+          "attributes": {
+            "email": "fixture2@example.com",
+            "name": "Fixture Two",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-02T00:00:00Z"
+          }
+        }
+      ],
+      "links": { "next": "" }
+    }
+  }
+}

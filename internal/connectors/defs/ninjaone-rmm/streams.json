@@ -21,7 +21,7 @@
       "name": "organizations",
       "path": "/v2/organizations",
       "query": { "pageSize": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "" },
+      "records": { "path": "." },
       "computed_fields": {
         "id": "{{ record.id }}",
         "name": "{{ record.name }}",
@@ -34,7 +34,7 @@
       "name": "devices",
       "path": "/v2/devices",
       "query": { "pageSize": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "" },
+      "records": { "path": "." },
       "computed_fields": {
         "id": "{{ record.id }}",
         "organization_id": "{{ record.organizationId }}",
@@ -51,7 +51,7 @@
       "name": "locations",
       "path": "/v2/locations",
       "query": { "pageSize": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "" },
+      "records": { "path": "." },
       "computed_fields": {
         "id": "{{ record.id }}",
         "organization_id": "{{ record.organizationId }}",
@@ -65,7 +65,7 @@
       "name": "activities",
       "path": "/v2/activities",
       "query": { "pageSize": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "" },
+      "records": { "path": "." },
       "computed_fields": {
         "id": "{{ record.id }}",
         "activityTime": "{{ record.activityTime }}",
@@ -79,7 +79,7 @@
     {
       "name": "policies",
       "path": "/v2/policies",
-      "records": { "path": "" },
+      "records": { "path": "." },
       "pagination": { "type": "none" },
       "computed_fields": {
         "id": "{{ record.id }}",

@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/users", "query": { "limit": "100", "cursor": "fixture_cursor_2" } },
+  "request": { "method": "GET", "path": "/users", "query": { "limit": "synthetic-conformance-value", "cursor": "fixture_cursor_2" } },
   "response": {
     "status": 200,
     "body": {

@@ -1,23 +1,22 @@
 {
-  "kind": "webfonts#webfontList",
-  "items": [
-    {
-      "family": "Lato",
-      "category": "sans-serif",
-      "version": "v24",
-      "lastModified": "2026-01-03",
-      "kind": "webfonts#webfont",
-      "menu": "https://fonts.gstatic.com/s/lato/menu.ttf",
-      "variants": [
-        "regular",
-        "700"
-      ],
-      "subsets": [
-        "latin"
-      ],
-      "files": {
-        "regular": "https://fonts.gstatic.com/s/lato/regular.ttf"
-      }
+  "request": { "method": "GET", "path": "/webfonts", "query": { "pageToken": "fixture_page_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "webfonts#webfontList",
+      "items": [
+        {
+          "family": "Lato",
+          "category": "sans-serif",
+          "version": "v24",
+          "lastModified": "2026-01-03",
+          "kind": "webfonts#webfont",
+          "menu": "https://fonts.gstatic.com/s/lato/menu.ttf",
+          "variants": ["regular", "700"],
+          "subsets": ["latin"],
+          "files": { "regular": "https://fonts.gstatic.com/s/lato/regular.ttf" }
+        }
+      ]
     }
-  ]
+  }
 }

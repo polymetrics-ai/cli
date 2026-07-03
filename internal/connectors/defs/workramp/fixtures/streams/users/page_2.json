@@ -4,7 +4,7 @@
     "status": 200,
     "body": {
       "data": [
-        { "id": "user_fixture_3", "email": "fixture3@example.test", "updated_at": "2026-01-03T00:00:00Z" }
+        { "id": "user_fixture_101", "email": "fixture101@example.test", "updated_at": "2026-01-15T00:00:00Z" }
       ]
     }
   }

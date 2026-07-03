@@ -17,11 +17,17 @@ test proxies.
 
 All 3 streams (`jobs`, `clients`, `contacts`) share the identical envelope (records at the
 top-level `data` array) and `page_number` pagination (`page`/`page_size` query params, matching
-legacy's `PageNumberPaginator{PageParam: "page", SizeParam: "page_size", StartPage: 1}`).
-`page_size` defaults to 100 (legacy's `defaultPageSize`); legacy bounds it to a max of 500
-(`maxPageSize`) and `max_pages` defaults to 1 (legacy's `readMaxPages` default) when unset — the
-declarative pagination block's static `page_size: 100` mirrors legacy's default; a config-driven
-`page_size`/`max_pages` override is not modeled (see Known limits).
+legacy's `PageNumberPaginator{PageParam: "page", SizeParam: "page_size", StartPage: 1}`). The
+base pagination block's `page_size: 100` mirrors legacy's `defaultPageSize`; legacy bounds it to
+a max of 500 (`maxPageSize`) and `max_pages` defaults to 1 (legacy's `readMaxPages` default) when
+unset — a config-driven `page_size`/`max_pages` override is not modeled (see Known limits).
+`jobs` declares a stream-level `pagination` override (`page_size: 2`) so its conformance fixture
+(`fixtures/streams/jobs/{page_1,page_2}.json`) can ship a genuine full page-1 (2 records) followed
+by a genuine short page-2 (1 record) that proves real two-page termination
+(`docs/migration/conventions.md` §4) — this is a fixture-authoring device, not a behavior
+difference from `clients`/`contacts`, which share the base 100-per-page default and ship a single
+fixture page (2 records, an honestly short final page under a 100 page-size, matching legacy's
+own default).
 
 `jobs` (`GET /jobs`) emits `id`/`name`/`updated_at`, matching legacy's field set exactly.
 `clients` (`GET /clients`) emits the identical shape. `contacts` (`GET /contacts`) additionally

@@ -2,7 +2,7 @@
   "request": {
     "method": "GET",
     "path": "/search/movie",
-    "query": { "page": "1", "query": "fixture" }
+    "query": { "page": "1", "query": "synthetic-conformance-value" }
   },
   "response": {
     "status": 200,

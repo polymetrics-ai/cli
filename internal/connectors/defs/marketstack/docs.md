@@ -70,8 +70,17 @@ market data has no sensible reverse-ETL surface.
   `"2006-01-02T15:04:05-0700"` as a fallback layout) or a `param_format` variant that truncates via
   string slicing instead of full time parsing — either is an engine change, not a bundle-level
   workaround, since faking success here would mean silently sending a wrong/stale `date_from` on
-  every second-and-later incremental sync. First-sync reads (the common bootstrap case, and every
-  read this bundle's own conformance fixtures exercise) are unaffected.
+  every second-and-later incremental sync. First-sync reads (the common bootstrap case) are
+  unaffected. `conformance`'s `cursor_advances` dynamic check re-reads a stream seeded with the max
+  cursor value it observes IN the fixture records themselves (Marketstack's real `+0000` wire
+  shape) and requires the engine to format that value per `param_format: date` — i.e. it exercises
+  exactly the repeat-sync path this gap affects, not the fresh-sync path. `eod`/`splits`/`dividends`
+  each therefore carry a `streams.json` stream-level `"conformance": {"skip_dynamic": true, "reason":
+  "..."}` marker (`docs/migration/conventions.md` §4) rather than a fixture workaround: rewriting the
+  fixture's `date` value to a colon-offset RFC3339 string would make the check pass but would
+  misrepresent Marketstack's real wire shape (the exact "recorded-real-shape" violation §4 forbids).
+  No `paritytest/marketstack` exists to cite as a live substitute (this bundle has no hooks); the
+  marker's reason is the honest ENGINE_GAP description above, not a claim of alternate proof.
 - `page_size`/`max_pages` are not exposed as config (see Streams notes above) — only the static,
   bundle-declared page size (2) governs every request's `limit` and the pagination stop threshold.
   This never changes emitted record DATA for any input legacy itself would accept; it narrows

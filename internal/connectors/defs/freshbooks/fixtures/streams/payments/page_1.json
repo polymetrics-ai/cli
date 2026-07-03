@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/accounting/account/fixture_acct/payments/payments",
+    "path": "/accounting/account/synthetic-conformance-value/payments/payments",
     "query": { "page": "1", "per_page": "100" }
   },
   "response": {

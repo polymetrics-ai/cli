@@ -1,0 +1,23 @@
+{
+  "name": "outreach",
+  "display_name": "Outreach",
+  "description": "Reads Outreach prospects, accounts, sequences, and mailings via the Outreach API v2 (JSON:API links.next pagination).",
+  "integration_type": "api",
+  "docs_url": "https://api.outreach.io/api/v2/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Outreach API read of prospect, account, sequence, and mailing data",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  }
+}

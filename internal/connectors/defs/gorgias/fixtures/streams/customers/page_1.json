@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/customers", "query": { "limit": "100" } },
+  "request": { "method": "GET", "path": "/customers", "query": { "limit": "synthetic-conformance-value" } },
   "response": {
     "status": 200,
     "body": {

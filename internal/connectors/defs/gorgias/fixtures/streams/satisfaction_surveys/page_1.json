@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/satisfaction-surveys", "query": { "limit": "100" } },
+  "request": { "method": "GET", "path": "/satisfaction-surveys", "query": { "limit": "synthetic-conformance-value" } },
   "response": {
     "status": 200,
     "body": {

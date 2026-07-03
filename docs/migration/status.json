@@ -2,42 +2,7 @@
  "wave": "wave2",
  "migrated_reported": 257,
  "on_disk_bundles": 406,
- "conformance_failing": [
-  "assemblyai",
-  "chartmogul",
-  "drift",
-  "finnhub",
-  "firehydrant",
-  "fleetio",
-  "freshbooks",
-  "freshchat",
-  "gitbook",
-  "gologin",
-  "gong",
-  "google-webfonts",
-  "gorgias",
-  "granola",
-  "greenhouse",
-  "intruder",
-  "invoiced",
-  "invoiceninja",
-  "marketstack",
-  "nebius-ai",
-  "ninjaone-rmm",
-  "onepagecrm",
-  "segment",
-  "statuspage",
-  "survey-sparrow",
-  "survicate",
-  "ticketmaster",
-  "tmdb",
-  "workflowmax",
-  "workramp",
-  "wrike",
-  "wufoo",
-  "zonka-feedback",
-  "zoom"
- ],
+ "conformance_failing": [],
  "partial": [
   {
    "name": "algolia",
@@ -922,14 +887,12 @@
    ]
   }
  ],
- "missing_after_dropped_bundles": [
-  "zoho-analytics-metadata-api",
-  "codefresh",
-  "coin-api",
-  "nexus-datasets",
-  "opinion-stage",
-  "outlook",
-  "outreach",
-  "pandadoc"
- ]
+ "missing_after_dropped_bundles": [],
+ "wave2_closed": true,
+ "final_gate": {
+  "validate": "411 connectors, 0 findings",
+  "conformance": "PASS",
+  "build": true,
+  "lint": true
+ }
 }

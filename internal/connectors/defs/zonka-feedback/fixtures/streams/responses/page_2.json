@@ -4,7 +4,7 @@
     "status": 200,
     "body": {
       "responses": [
-        { "id": "resp_fixture_3", "survey_id": "survey_fixture_2", "respondent_name": "Fixture Respondent Three", "rating": 7, "updated_at": "2026-01-03T00:00:00Z" }
+        { "id": "resp_fixture_101", "survey_id": "survey_fixture_2", "respondent_name": "Fixture Respondent 101", "rating": 7, "updated_at": "2026-01-03T00:00:00Z" }
       ]
     }
   }

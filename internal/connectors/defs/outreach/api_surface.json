@@ -1,0 +1,20 @@
+{
+  "api": "Outreach API v2 (https://api.outreach.io/api/v2)",
+  "docs": "https://api.outreach.io/api/v2/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave1 migration: the 4 legacy-parity read streams only; legacy outreach is read-only and the full Outreach surface (calls, tasks, opportunities, users, webhooks, custom objects, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2/prospects", "covered_by": { "stream": "prospects" } },
+    { "method": "GET", "path": "/api/v2/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/api/v2/sequences", "covered_by": { "stream": "sequences" } },
+    { "method": "GET", "path": "/api/v2/mailings", "covered_by": { "stream": "mailings" } },
+    { "method": "GET", "path": "/api/v2/calls", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/tasks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/opportunities", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/sequenceStates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v2/prospects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PATCH", "path": "/api/v2/prospects/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

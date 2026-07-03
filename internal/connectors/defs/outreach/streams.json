@@ -1,0 +1,101 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "links.next"
+    },
+    "check": { "method": "GET", "path": "/prospects", "query": { "page[size]": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "outreach access_token is missing, invalid, or expired; re-run pm credentials add outreach" },
+      { "status": 403, "hint": "outreach credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "outreach rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "prospects",
+      "path": "/prospects",
+      "query": { "page[size]": "100" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "filter[updatedAt]",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "type": "{{ record.type }}",
+        "email": "{{ record.attributes.email }}",
+        "name": "{{ record.attributes.name }}",
+        "created_at": "{{ record.attributes.createdAt }}",
+        "updated_at": "{{ record.attributes.updatedAt }}"
+      },
+      "schema": "schemas/prospects.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "query": { "page[size]": "100" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "filter[updatedAt]",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "type": "{{ record.type }}",
+        "email": "{{ record.attributes.email }}",
+        "name": "{{ record.attributes.name }}",
+        "created_at": "{{ record.attributes.createdAt }}",
+        "updated_at": "{{ record.attributes.updatedAt }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "sequences",
+      "path": "/sequences",
+      "query": { "page[size]": "100" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "filter[updatedAt]",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "type": "{{ record.type }}",
+        "email": "{{ record.attributes.email }}",
+        "name": "{{ record.attributes.name }}",
+        "created_at": "{{ record.attributes.createdAt }}",
+        "updated_at": "{{ record.attributes.updatedAt }}"
+      },
+      "schema": "schemas/sequences.json"
+    },
+    {
+      "name": "mailings",
+      "path": "/mailings",
+      "query": { "page[size]": "100" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "filter[updatedAt]",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "type": "{{ record.type }}",
+        "email": "{{ record.attributes.email }}",
+        "name": "{{ record.attributes.name }}",
+        "created_at": "{{ record.attributes.createdAt }}",
+        "updated_at": "{{ record.attributes.updatedAt }}"
+      },
+      "schema": "schemas/mailings.json"
+    }
+  ]
+}

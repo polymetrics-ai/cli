@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Outreach Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Outreach OAuth2 access token (resolved from legacy's refresh-token grant). Sent as a Bearer token; never logged. The client_id/client_secret/refresh_token exchange is performed outside this connector."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.outreach.io/api/v2",
+      "description": "Outreach API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only records updated at or after this time are read (sent as filter[updatedAt])."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (page[size]), 1-100."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}
