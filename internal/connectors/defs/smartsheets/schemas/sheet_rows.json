@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sheet_rows",
+  "type": "object",
+  "x-primary-key": ["row_id"],
+  "x-cursor-field": "modified_at",
+  "required": ["row_id"],
+  "properties": {
+    "sheet_id": { "type": "integer" },
+    "sheet_name": { "type": "string" },
+    "row_id": { "type": "integer" },
+    "row_number": { "type": "integer" },
+    "modified_at": { "type": ["string", "null"] },
+    "cells": { "type": ["array", "null"] }
+  }
+}

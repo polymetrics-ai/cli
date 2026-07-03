@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views",
+    "query": {
+      "page": "2",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "view_fixture_101",
+        "name": "Fixture View 101"
+      }
+    ]
+  }
+}

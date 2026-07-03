@@ -1,0 +1,23 @@
+{
+  "name": "outbrain-amplify",
+  "display_name": "Outbrain Amplify",
+  "description": "Reads Outbrain Amplify marketers, campaigns, and performance reports via the Outbrain Amplify REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developer.outbrain.com/home-page/amplify-api/documentation/",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Outbrain Amplify API read of marketer, campaign, and performance report data",
+    "approval": "none; read-only marketing API"
+  }
+}

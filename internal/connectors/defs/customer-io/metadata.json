@@ -1,0 +1,23 @@
+{
+  "name": "customer-io",
+  "display_name": "Customer.io",
+  "description": "Reads Customer.io campaigns, newsletters, segments, and broadcasts through the Customer.io App (Beta) API.",
+  "integration_type": "api",
+  "docs_url": "https://customer.io/docs/api/app/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Customer.io App API read of campaign/newsletter/segment/broadcast metadata",
+    "approval": "none; read-only source"
+  }
+}

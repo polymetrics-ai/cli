@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/groups",
+    "query": {
+      "customer": "synthetic-conformance-value",
+      "maxResults": "synthetic-conformance-value",
+      "pageToken": "fixture-page-2-token"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "admin#directory#groups",
+      "groups": [
+        {
+          "id": "group_fixture_3",
+          "email": "team-three@fixture.example.com",
+          "name": "Team Three",
+          "description": "fixture group three"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/reports-service/report" },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        { "dimensions": { "date": "2026-01-01", "country": "US", "app": "fixture-app" }, "metrics": { "installs": 10, "clicks": 100, "cost": 25.5 } },
+        { "dimensions": { "date": "2026-01-01", "country": "DE", "app": "fixture-app" }, "metrics": { "installs": 3, "clicks": 40, "cost": 8.25 } }
+      ],
+      "next_page": 2
+    }
+  }
+}

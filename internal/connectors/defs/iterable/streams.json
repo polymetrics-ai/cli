@@ -1,0 +1,38 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Api-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "pageToken",
+      "token_path": "nextPageToken"
+    },
+    "check": { "method": "GET", "path": "/lists", "query": { "pageSize": "1" } }
+  },
+  "streams": [
+    {
+      "name": "lists",
+      "path": "/lists",
+      "query": { "pageSize": "{{ config.page_size }}" },
+      "records": { "path": "lists" },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "query": { "pageSize": "{{ config.page_size }}" },
+      "records": { "path": "campaigns" },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "templates",
+      "path": "/templates",
+      "query": { "pageSize": "{{ config.page_size }}" },
+      "records": { "path": "templates" },
+      "schema": "schemas/templates.json"
+    }
+  ]
+}

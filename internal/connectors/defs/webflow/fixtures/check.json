@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v2/sites/synthetic-conformance-value/collections" },
+  "response": {
+    "status": 200,
+    "body": { "collections": [] }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/api/raw-data/export/app/{{ config.app_id }}/installs_report/v5" },
+    "error_map": [
+      { "status": 401, "hint": "appsflyer api_token is missing or invalid; re-run pm credentials add appsflyer" },
+      { "status": 403, "hint": "appsflyer account lacks access for this app_id" },
+      { "status": 429, "class": "rate_limited", "hint": "appsflyer rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "installs_report",
+      "path": "/api/raw-data/export/app/{{ config.app_id }}/installs_report/v5",
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/installs_report.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (CSV export download + header-row decode; the response is text/csv, not JSON, so the standard fixtures/streams/<stream>/page_N.json JSON-body replay envelope cannot represent this wire shape); hook-covered, proven by internal/connectors/hooks/appsflyer/hooks_test.go" }
+    },
+    {
+      "name": "in_app_events_report",
+      "path": "/api/raw-data/export/app/{{ config.app_id }}/in_app_events_report/v5",
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/in_app_events_report.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (CSV export download + header-row decode; the response is text/csv, not JSON, so the standard fixtures/streams/<stream>/page_N.json JSON-body replay envelope cannot represent this wire shape); hook-covered, proven by internal/connectors/hooks/appsflyer/hooks_test.go" }
+    }
+  ]
+}

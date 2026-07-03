@@ -1,0 +1,27 @@
+{
+  "name": "mixpanel",
+  "display_name": "Mixpanel",
+  "description": "Reads Mixpanel cohorts, annotations, and engage profiles through read-only Query API endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://developer.mixpanel.com/reference/overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1000
+  },
+  "risk": {
+    "read": "external Mixpanel Query API read of cohort, annotation, and profile data",
+    "approval": "none; read-only Query API"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by internal/connectors/paritytest/mixpanel (the AuthHook's real Basic-auth username/password + api_secret fallback resolution) -- conformance's synthetic config has no real username/password/api_secret combination and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

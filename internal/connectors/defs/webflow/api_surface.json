@@ -1,0 +1,16 @@
+{
+  "api": "Webflow Data API v2 (https://api.webflow.com)",
+  "docs": "https://developers.webflow.com/data/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "fan-out migration: the 3 legacy-parity read streams (collections, pages, forms) for a single configured site only; the full Webflow Data API surface (CMS items, ecommerce, users, assets, custom code, webhooks, form submissions, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/sites/{site_id}/collections", "covered_by": { "stream": "collections" } },
+    { "method": "GET", "path": "/v2/sites/{site_id}/pages", "covered_by": { "stream": "pages" } },
+    { "method": "GET", "path": "/v2/sites/{site_id}/forms", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/v2/collections/{collection_id}/items", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/forms/{form_id}/submissions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/sites/{site_id}/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/sites", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v2/collections/{collection_id}/items", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

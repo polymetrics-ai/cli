@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/" },
+  "response": {
+    "status": 200,
+    "body": { "note": "rss's real item reads decode an RSS/XML <channel><item> body, not JSON; this fixture documents the PROJECTED record shape only (id/title/link/description/published_at) and is never replayed (metadata.json's bundle-level conformance.skip_dynamic marker skips every dynamic check for this bundle). See internal/connectors/hooks/rss/hooks_test.go and internal/connectors/paritytest/rss/parity_test.go for the real XML-based read coverage.", "example_projected_record": { "id": "fixture-item-1", "title": "Fixture item 1", "link": "https://example.test/1", "description": "Fixture item 1 description", "published_at": "Mon, 02 Jan 2006 15:04:05 MST" } }
+  }
+}

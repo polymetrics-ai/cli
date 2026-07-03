@@ -1,0 +1,20 @@
+{
+  "name": "appsflyer",
+  "display_name": "AppsFlyer",
+  "description": "Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through the AppsFlyer Pull API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://dev.appsflyer.com/hc/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external AppsFlyer API read of raw installs/in-app-event export reports",
+    "approval": "none; read-only, no writes"
+  }
+}

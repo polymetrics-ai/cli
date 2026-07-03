@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/segments", "query": { "limit": "synthetic-conformance-value", "start": "cio_fixture_cursor_1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "segments": [
+        { "id": 3, "name": "Fixture Segment Three", "description": "Fixture segment description 3", "state": "draft", "type": "dynamic", "updated": 1767225606 }
+      ],
+      "next": null
+    }
+  }
+}

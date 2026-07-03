@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "customer": "synthetic-conformance-value", "maxResults": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "kind": "admin#directory#users", "users": [] }
+  }
+}

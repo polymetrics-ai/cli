@@ -1,0 +1,23 @@
+{
+  "name": "iterable",
+  "display_name": "Iterable",
+  "description": "Reads Iterable lists, campaigns, and templates through the Iterable REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://api.iterable.com/api/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Iterable API read of lists, campaigns, and templates",
+    "approval": "none; read-only marketing-data API"
+  }
+}

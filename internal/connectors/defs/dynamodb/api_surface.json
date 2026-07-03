@@ -1,0 +1,17 @@
+{
+  "api": "AWS DynamoDB JSON HTTP API (DynamoDB_20120810 protocol, X-Amz-Target header dispatch) -- not a REST API",
+  "docs": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Migration of legacy's single implemented operation (DynamoDB_20120810.Scan, paginated via LastEvaluatedKey/ExclusiveStartKey), matching internal/connectors/dynamodb exactly. DynamoDB's full documented API surface (Query, GetItem, BatchGetItem, PutItem/UpdateItem/DeleteItem writes, table/index administration, DynamoDB Streams CDC) is out of scope until Pass B; legacy itself is also read-only (Write always returns ErrUnsupportedOperation) and never implemented Query/GetItem/BatchGetItem. Every covered/excluded entry below is declared method GET (not the literal wire HTTP verb, which is always POST with an X-Amz-Target header for every DynamoDB JSON-protocol operation) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design SS E.1 rule 4) -- matching bing-ads's and monday's identical convention for their POST-only wire protocols. Genuine mutation/administrative operations keep their real semantics annotated in the reason text since they are excluded, not covered.",
+  "endpoints": [
+    { "method": "GET", "path": "DynamoDB_20120810.Scan", "covered_by": { "stream": "items" } },
+    { "method": "GET", "path": "DynamoDB_20120810.Query", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not read by legacy" } },
+    { "method": "GET", "path": "DynamoDB_20120810.GetItem", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not read by legacy" } },
+    { "method": "GET", "path": "DynamoDB_20120810.BatchGetItem", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not read by legacy" } },
+    { "method": "GET", "path": "DynamoDB_20120810.DescribeTable", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not read by legacy (legacy's Catalog is a static single-stream constant, no live DescribeTable call)" } },
+    { "method": "POST", "path": "DynamoDB_20120810.PutItem", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; dynamodb is read-only in this migration (legacy Write returns ErrUnsupportedOperation)" } },
+    { "method": "POST", "path": "DynamoDB_20120810.UpdateItem", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; dynamodb is read-only in this migration" } },
+    { "method": "POST", "path": "DynamoDB_20120810.DeleteItem", "excluded": { "category": "destructive_admin", "reason": "destructive mutation; out of scope, dynamodb is read-only in this migration" } },
+    { "method": "GET", "path": "DynamoDB Streams GetRecords (change data capture)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; a distinct, separate AWS API legacy never touched -- no CDC stub exists in this migration (see docs.md Known limits)" } }
+  ]
+}

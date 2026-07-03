@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SurveyCTO Connection Specification",
+  "type": "object",
+  "required": ["username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SurveyCTO account username/email, sent as the HTTP Basic auth username. Never logged."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SurveyCTO password or API key, sent as the HTTP Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "SurveyCTO API base URL override for tests or proxies. Takes precedence over server_name when both are set."
+    },
+    "server_name": {
+      "type": "string",
+      "description": "Bare SurveyCTO server name (no scheme/path), used to derive https://<server_name>.surveycto.com/api/v2 when base_url is unset."
+    },
+    "form_id": {
+      "type": "string",
+      "description": "SurveyCTO form ID; required for the submissions stream, which is scoped to a single form."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

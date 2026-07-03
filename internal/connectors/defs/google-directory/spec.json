@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Directory Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 access token with Admin SDK Directory read scope. Used only for Bearer auth; never logged. Acquisition/refresh is out of scope for this connector (credentials layer already owns it) -- see docs.md Known limits."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://admin.googleapis.com/admin/directory/v1",
+      "description": "Google Admin SDK Directory API base URL override for tests or proxies."
+    },
+    "customer_id": {
+      "type": "string",
+      "default": "my_customer",
+      "description": "Google Workspace customer id. 'my_customer' (the default) resolves to the caller's own customer, matching legacy's default."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 100,
+      "description": "maxResults per page (1-500)."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Maximum pages fetched per stream. A positive integer, or 'all'/'unlimited' (default) for no cap."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

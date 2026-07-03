@@ -1,0 +1,16 @@
+{
+  "api": "Outbrain Amplify API v0.1 (https://api.outbrain.com/amplify/v0.1)",
+  "docs": "https://developer.outbrain.com/home-page/amplify-api/documentation/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 3 legacy-parity read streams only (marketers, campaigns, performance_reports); legacy is read-only (Write: false) and the full Amplify surface (budget/creative/promoted-link management, marketer-scoped campaign/report paths) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/marketers", "covered_by": { "stream": "marketers" } },
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/reports", "covered_by": { "stream": "performance_reports" } },
+    { "method": "GET", "path": "/marketers/{marketerId}/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/marketers/{marketerId}/reports", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/marketers/{marketerId}/promotedlinks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/marketers/{marketerId}/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/campaigns/{campaignId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

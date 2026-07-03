@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/projects", "query": { "limit": "100", "opt_fields": "gid,name,resource_type,created_at,modified_at" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_proj_1", "name": "Fixture Project", "resource_type": "project", "created_at": "2026-01-01T00:00:00Z", "modified_at": "2026-01-02T00:00:00Z" }
+      ],
+      "next_page": null
+    }
+  }
+}

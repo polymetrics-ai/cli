@@ -1,0 +1,12 @@
+{
+  "api": "Iterable REST API (https://api.iterable.com/api)",
+  "docs": "https://api.iterable.com/api/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave migration: the 3 legacy-parity read streams only (lists, campaigns, templates); legacy iterable connector is read-only, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/templates", "covered_by": { "stream": "templates" } },
+    { "method": "*", "path": "/*", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy iterable connector only implements lists/campaigns/templates reads" } }
+  ]
+}

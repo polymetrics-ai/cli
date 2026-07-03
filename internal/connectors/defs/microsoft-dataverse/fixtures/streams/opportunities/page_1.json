@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/opportunities", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "opportunityid": "fixture_opportunity_1", "name": "Fixture Opportunity 1", "emailaddress1": "fixture1@example.com", "createdon": "2026-01-01T00:00:00Z", "modifiedon": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/projects/synthetic-conformance-value/persons/",
+    "query": { "limit": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "per_fixture_1",
+          "distinct_id": "user_fixture_1",
+          "properties": { "email": "fixture1@example.com" },
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "per_fixture_2",
+          "distinct_id": "user_fixture_2",
+          "properties": { "email": "fixture2@example.com" },
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "next": null
+    }
+  }
+}

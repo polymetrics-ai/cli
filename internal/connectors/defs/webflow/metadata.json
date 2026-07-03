@@ -1,0 +1,20 @@
+{
+  "name": "webflow",
+  "display_name": "Webflow",
+  "description": "Reads Webflow site collections, pages, and forms for a configured site using the Webflow Data API v2.",
+  "integration_type": "api",
+  "docs_url": "https://developers.webflow.com/data/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Webflow API read of site collections, pages, and forms",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}", "when": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/marketers", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "outbrain-amplify access_token or username/password is missing or invalid; re-run pm credentials add outbrain-amplify" },
+      { "status": 403, "hint": "outbrain-amplify credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "outbrain-amplify rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "marketers",
+      "path": "/marketers",
+      "records": { "path": "marketers" },
+      "schema": "schemas/marketers.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "records": { "path": "campaigns" },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "performance_reports",
+      "path": "/reports",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true },
+        "report_granularity": { "template": "{{ config.report_granularity }}", "omit_when_absent": true },
+        "conversion_count": { "template": "{{ config.conversion_count }}", "omit_when_absent": true },
+        "geo_location_breakdown": { "template": "{{ config.geo_location_breakdown }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/performance_reports.json"
+    }
+  ]
+}

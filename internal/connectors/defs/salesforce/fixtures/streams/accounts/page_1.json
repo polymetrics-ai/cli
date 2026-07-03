@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/services/data/synthetic-conformance-value/query",
+    "query": { "q": "SELECT Id, Name, LastModifiedDate FROM Account ORDER BY LastModifiedDate ASC" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "totalSize": 2,
+      "done": true,
+      "records": [
+        { "attributes": { "type": "Account" }, "Id": "001fixture1", "Name": "Fixture Account One", "LastModifiedDate": "2026-01-01T00:00:00Z" },
+        { "attributes": { "type": "Account" }, "Id": "001fixture2", "Name": "Fixture Account Two", "LastModifiedDate": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

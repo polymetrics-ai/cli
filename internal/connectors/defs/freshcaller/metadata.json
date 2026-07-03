@@ -1,0 +1,22 @@
+{
+  "name": "freshcaller",
+  "display_name": "Freshcaller",
+  "description": "Reads Freshcaller calls, agents, teams, and phone numbers through the Freshcaller REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.freshcaller.com/api/",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Freshcaller API read of call, agent, team, and phone number data"
+  }
+}

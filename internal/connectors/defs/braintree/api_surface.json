@@ -1,0 +1,15 @@
+{
+  "api": "Braintree Gateway REST-shaped API (https://developer.paypal.com/braintree/docs)",
+  "docs": "https://developer.paypal.com/braintree/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave1 migration: the 3 legacy-parity read streams only (transactions, customers, subscriptions); Braintree's primary integration surface is its GraphQL/SDK API which legacy never used (legacy is a hand-rolled read-only REST client against merchants/{id}/... list endpoints) — no write surface exists in legacy, so there is nothing to expand for writes",
+  "endpoints": [
+    { "method": "GET", "path": "/merchants/{merchant_id}/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/subscriptions", "covered_by": { "stream": "subscriptions" } },
+    { "method": "POST", "path": "/merchants/{merchant_id}/transactions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/merchants/{merchant_id}/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/disputes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/settlement-batch-summary", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

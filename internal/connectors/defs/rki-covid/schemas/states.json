@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "states",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer", "description": "Raw API's own state id (already present on every state object; passed through verbatim by projection: passthrough, matching legacy's mapRecord which never overwrites an already-present id)." },
+    "name": { "type": ["string", "null"] },
+    "abbreviation": { "type": ["string", "null"], "description": "Also stamped as the keyed_object key_field (the 'data' object's own key), redundant with the raw field of the same name for documentation purposes." },
+    "population": { "type": ["integer", "null"] },
+    "cases": { "type": ["integer", "null"] },
+    "deaths": { "type": ["integer", "null"] },
+    "recovered": { "type": ["integer", "null"] },
+    "weekIncidence": { "type": ["number", "null"] },
+    "casesPer100k": { "type": ["number", "null"] },
+    "stream": { "type": "string", "description": "Static-literal computed_field naming which stream this record came from, matching legacy's derived marker field." }
+  }
+}

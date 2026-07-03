@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/kyve/query/v1beta1/stakers", "query": { "pagination.limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "stakers": [
+        { "address": "kyve1fixturestaker1", "amount": "1000000" },
+        { "address": "kyve1fixturestaker2", "amount": "2000000" }
+      ],
+      "pagination": { "next_key": "fixture-next-key-1", "total": "3" }
+    }
+  }
+}

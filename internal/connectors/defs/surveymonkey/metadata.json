@@ -1,0 +1,23 @@
+{
+  "name": "surveymonkey",
+  "display_name": "SurveyMonkey",
+  "description": "Reads SurveyMonkey surveys, collectors, and bulk survey responses through the v3 REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developer.surveymonkey.com/api/v3/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external SurveyMonkey API read of survey, collector, and response data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

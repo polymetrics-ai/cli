@@ -1,0 +1,77 @@
+{
+  "base": {
+    "url": "{{ config.instance_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/services/data/{{ config.api_version }}/" },
+    "error_map": [
+      { "status": 401, "hint": "salesforce access_token is missing, expired, or invalid; re-run pm credentials add salesforce" },
+      { "status": 403, "hint": "salesforce connected app or user lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "salesforce rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "sobjects",
+      "path": "/services/data/{{ config.api_version }}/sobjects",
+      "records": { "path": "sobjects" },
+      "computed_fields": {
+        "qualified_api_name": "{{ record.name }}",
+        "label": "{{ record.label }}"
+      },
+      "schema": "schemas/sobjects.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/services/data/{{ config.api_version }}/query",
+      "query": { "q": "SELECT Id, Name, LastModifiedDate FROM Account ORDER BY LastModifiedDate ASC" },
+      "records": { "path": "records" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "nextRecordsUrl"
+      },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "name": "{{ record.Name }}",
+        "last_modified_date": "{{ record.LastModifiedDate }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/services/data/{{ config.api_version }}/query",
+      "query": { "q": "SELECT Id, Name, Email, LastModifiedDate FROM Contact ORDER BY LastModifiedDate ASC" },
+      "records": { "path": "records" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "nextRecordsUrl"
+      },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "name": "{{ record.Name }}",
+        "email": "{{ record.Email }}",
+        "last_modified_date": "{{ record.LastModifiedDate }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "leads",
+      "path": "/services/data/{{ config.api_version }}/query",
+      "query": { "q": "SELECT Id, Name, Email, LastModifiedDate FROM Lead ORDER BY LastModifiedDate ASC" },
+      "records": { "path": "records" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "nextRecordsUrl"
+      },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "name": "{{ record.Name }}",
+        "email": "{{ record.Email }}",
+        "last_modified_date": "{{ record.LastModifiedDate }}"
+      },
+      "schema": "schemas/leads.json"
+    }
+  ]
+}

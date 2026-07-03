@@ -1,0 +1,23 @@
+{
+  "name": "facebook-pages",
+  "display_name": "Facebook Pages",
+  "description": "Reads Facebook Page metadata and posts from the Graph API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.facebook.com/docs/pages/",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Facebook Graph API read of page metadata and posts",
+    "approval": "none; read-only, no writes"
+  }
+}

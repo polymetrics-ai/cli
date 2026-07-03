@@ -1,0 +1,14 @@
+{
+  "api": "SurveyCTO REST API v2 (https://<server>.surveycto.com/api/v2)",
+  "docs": "https://docs.surveycto.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-1 migration: the 4 legacy-parity read streams only (forms, submissions, datasets, cases). SurveyCTO's server-console/form-deployment/media-attachment endpoints are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2/forms", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/api/v2/forms/{form_id}/submissions", "covered_by": { "stream": "submissions" } },
+    { "method": "GET", "path": "/api/v2/datasets", "covered_by": { "stream": "datasets" } },
+    { "method": "GET", "path": "/api/v2/cases", "covered_by": { "stream": "cases" } },
+    { "method": "GET", "path": "/api/v2/forms/{form_id}/submissions/{submission_id}/attachments", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented attachment retrieval; Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v2/forms/{form_id}/submissions", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented submission upload; Pass B capability expansion" } }
+  ]
+}

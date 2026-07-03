@@ -1,0 +1,71 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "custom", "hook": "netsuite" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/customer", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "netsuite OAuth 1.0a signature rejected or credentials invalid; verify realm/consumer_key/consumer_secret/token_key/token_secret" },
+      { "status": 403, "hint": "netsuite integration/role lacks access to this REST record resource" },
+      { "status": 429, "class": "rate_limited", "hint": "netsuite concurrency/rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customer",
+      "records": { "path": "items" },
+      "computed_fields": {
+        "entity_id": "{{ record.entityId }}",
+        "name": "{{ record.companyName }}",
+        "status": "{{ record.status }}",
+        "last_modified_date": "{{ record.lastModifiedDate }}"
+      },
+      "schema": "schemas/customer_record.json"
+    },
+    {
+      "name": "vendors",
+      "path": "/vendor",
+      "records": { "path": "items" },
+      "computed_fields": {
+        "entity_id": "{{ record.entityId }}",
+        "name": "{{ record.companyName }}",
+        "status": "{{ record.status }}",
+        "last_modified_date": "{{ record.lastModifiedDate }}"
+      },
+      "schema": "schemas/customer_record.json"
+    },
+    {
+      "name": "items",
+      "path": "/inventoryItem",
+      "records": { "path": "items" },
+      "computed_fields": {
+        "entity_id": "{{ record.entityId }}",
+        "name": "{{ record.companyName }}",
+        "status": "{{ record.status }}",
+        "last_modified_date": "{{ record.lastModifiedDate }}"
+      },
+      "schema": "schemas/customer_record.json"
+    },
+    {
+      "name": "sales_orders",
+      "path": "/salesOrder",
+      "records": { "path": "items" },
+      "computed_fields": {
+        "entity_id": "{{ record.entityId }}",
+        "name": "{{ record.companyName }}",
+        "status": "{{ record.status }}",
+        "last_modified_date": "{{ record.lastModifiedDate }}"
+      },
+      "schema": "schemas/customer_record.json"
+    }
+  ]
+}

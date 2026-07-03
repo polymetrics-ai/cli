@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/history/deaths" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "deaths": 1, "date": "2026-01-01T00:00:00.000Z" },
+        { "deaths": 2, "date": "2026-01-02T00:00:00.000Z" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Adjust Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Adjust Report Service API token. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://automate.adjust.com",
+      "description": "Adjust Report Service base URL override for tests or proxies."
+    },
+    "dimensions": {
+      "type": "string",
+      "default": "country",
+      "description": "Comma-separated list of Adjust report dimensions (e.g. country,app). Defaults to country."
+    },
+    "metrics": {
+      "type": "string",
+      "default": "installs",
+      "description": "Comma-separated list of Adjust report metrics (e.g. installs,clicks,cost). Defaults to installs."
+    },
+    "additional_metrics": {
+      "type": "string",
+      "description": "Optional comma-separated list of additional Adjust metrics sent as additional_metrics."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Report period lower bound (YYYY-MM-DD), sent as the start of date_period."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Report period upper bound (YYYY-MM-DD), sent as the end of date_period. Defaults to start_date when unset."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

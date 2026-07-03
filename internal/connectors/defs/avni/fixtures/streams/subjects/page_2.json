@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/subjects",
+    "query": { "page": "2", "page_size": "synthetic-conformance-value", "start_date": "2020-01-01T00:00:00Z" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "subjects_fixture_3", "name": "Fixture Subject Three", "updated_at": "2026-01-03T00:00:00Z" }
+      ],
+      "next_page": ""
+    }
+  }
+}

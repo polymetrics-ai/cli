@@ -1,0 +1,23 @@
+{
+  "name": "google-ads",
+  "display_name": "Google Ads",
+  "description": "Reads accessible customers and allow-listed Google Ads GAQL search resources (campaigns, ad groups) through the Google Ads REST API. Read-only; arbitrary GAQL is not accepted.",
+  "integration_type": "api",
+  "docs_url": "https://developers.google.com/google-ads/api/docs/release-notes",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1000
+  },
+  "risk": {
+    "read": "external Google Ads API read of customer/campaign/ad-group metadata",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  }
+}

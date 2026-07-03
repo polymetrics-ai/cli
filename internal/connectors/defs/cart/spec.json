@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cart.com Connection Specification",
+  "type": "object",
+  "required": ["base_url", "access_token"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Cart.com store API base URL, e.g. https://{store_name}/api/v1. Required: legacy derives this from a store_name config value when base_url is unset, but that cross-key derivation has no engine mechanism today (see docs.md Known limits), so this bundle requires the fully-formed URL instead."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Cart.com API access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (matches legacy's page_size query param and defaultPageSize)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

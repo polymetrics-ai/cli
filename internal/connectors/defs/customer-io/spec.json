@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Customer.io Connection Specification",
+  "type": "object",
+  "required": ["app_api_key", "base_url"],
+  "properties": {
+    "app_api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Customer.io App API key. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Customer.io App API base URL for your region: https://api.customer.io/v1 (US) or https://api-eu.customer.io/v1 (EU). Required: legacy derived this from a region config value, but the engine dialect has no config-derivation mechanism for a base URL (see docs.md Known limits), so the resolved URL must be supplied directly."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

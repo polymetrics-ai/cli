@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sample Data (faker) Connection Specification",
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "string",
+      "default": "1000",
+      "description": "Number of records generated per read for the users/purchases streams (products always generates 10). Must be a positive integer; defaults to 1000."
+    },
+    "seed": {
+      "type": "string",
+      "default": "0",
+      "description": "Non-negative integer offset added to every generated record's sequence number, so different seeds produce different (but still deterministic) ids. Defaults to 0; negative values are clamped to 0."
+    }
+  }
+}

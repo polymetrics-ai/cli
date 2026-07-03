@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v2/sites/synthetic-conformance-value/pages" },
+  "response": {
+    "status": 200,
+    "body": {
+      "pages": [
+        { "id": "page_fixture_1", "title": "Fixture Page One", "slug": "fixture-page-one" },
+        { "id": "page_fixture_2", "title": "Fixture Page Two", "slug": "fixture-page-two" }
+      ]
+    }
+  }
+}

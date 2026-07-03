@@ -1,0 +1,9 @@
+{
+  "api": "Adjust Report Service API (https://automate.adjust.com)",
+  "docs": "https://help.adjust.com/en/article/reports-endpoint",
+  "reviewed_at": "2026-07-03",
+  "scope": "Migration parity scope: the single legacy-parity reports-service/report read stream only; Adjust also publishes campaign/creative-set management and KPI-service endpoints not implemented by legacy and therefore out of scope until Pass B capability expansion.",
+  "endpoints": [
+    { "method": "GET", "path": "/reports-service/report", "covered_by": { "stream": "reports" } }
+  ]
+}

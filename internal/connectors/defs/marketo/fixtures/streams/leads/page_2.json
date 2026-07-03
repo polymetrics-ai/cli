@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/leads.json", "query": { "batchSize": "synthetic-conformance-value", "nextPageToken": "fixture-token-1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        { "id": 103, "email": "fixture3@example.com", "updatedAt": "2026-01-02T00:00:00Z", "createdAt": "2026-01-02T00:00:00Z" }
+      ],
+      "moreResult": false
+    }
+  }
+}

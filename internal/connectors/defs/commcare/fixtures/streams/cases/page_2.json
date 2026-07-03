@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/v0.5/case/",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        {
+          "id": "case_fixture_101",
+          "received_on": "2026-02-28T00:00:00Z",
+          "server_modified_on": "2026-02-28T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "limit": 100,
+        "next": null,
+        "offset": 100,
+        "previous": "/a/synthetic-conformance-value/api/v0.5/case/?limit=100&offset=0",
+        "total_count": 101
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "api": "Google Ads REST API v24 (https://googleads.googleapis.com/v24)",
+  "docs": "https://developers.google.com/google-ads/api/docs/release-notes",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave-fanout migration: legacy's conservative allow-list of customer discovery + 2 GAQL search resources only; arbitrary GAQL and the full Google Ads resource/reporting surface are out of scope, matching legacy's own deliberate restriction. campaigns/ad_groups are declared method GET (not the literal wire HTTP verb, which is POST for a GAQL googleAds:search call) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design SS E.1 rule 4) -- GAQL search is a read operation carried over a POST request, so the wire verb alone cannot distinguish it from a mutation.",
+  "endpoints": [
+    { "method": "GET", "path": "/customers:listAccessibleCustomers", "covered_by": { "stream": "accessible_customers" } },
+    { "method": "GET", "path": "/customers/{customerId}/googleAds:search (query: campaign)", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/customers/{customerId}/googleAds:search (query: ad_group)", "covered_by": { "stream": "ad_groups" } },
+    { "method": "GET", "path": "/customers/{customerId}/googleAds:searchStream", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy only implements the paginated search endpoint" } },
+    { "method": "POST", "path": "/customers/{customerId}/googleAds:mutate", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy has no write support" } },
+    { "method": "GET", "path": "/customers/{customerId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

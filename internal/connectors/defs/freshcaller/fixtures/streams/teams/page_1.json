@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/teams",
+    "query": { "page": "1", "page_size": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "teams": [
+        {
+          "id": 3001,
+          "name": "Fixture Team 1"
+        },
+        {
+          "id": 3002,
+          "name": "Fixture Team 2"
+        }
+      ]
+    }
+  }
+}

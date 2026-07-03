@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/routing/queues",
+    "query": { "pageSize": "100", "pageNumber": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entities": [
+        {
+          "id": "q1",
+          "name": "Fixture Queue 1",
+          "description": "conformance fixture queue"
+        },
+        {
+          "id": "q2",
+          "name": "Fixture Queue 2",
+          "description": "conformance fixture queue"
+        }
+      ]
+    }
+  }
+}

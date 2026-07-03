@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "$top": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "accountid": "fixture_account_1", "name": "Fixture Account 1", "emailaddress1": "fixture1@example.com", "createdon": "2026-01-01T00:00:00Z", "modifiedon": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

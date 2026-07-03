@@ -1,0 +1,524 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/v0.5/case/",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        {
+          "id": "case_fixture_1",
+          "received_on": "2026-02-02T00:00:00Z",
+          "server_modified_on": "2026-02-02T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_2",
+          "received_on": "2026-02-03T00:00:00Z",
+          "server_modified_on": "2026-02-03T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_3",
+          "received_on": "2026-02-04T00:00:00Z",
+          "server_modified_on": "2026-02-04T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_4",
+          "received_on": "2026-02-05T00:00:00Z",
+          "server_modified_on": "2026-02-05T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_5",
+          "received_on": "2026-02-06T00:00:00Z",
+          "server_modified_on": "2026-02-06T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_6",
+          "received_on": "2026-02-07T00:00:00Z",
+          "server_modified_on": "2026-02-07T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_7",
+          "received_on": "2026-02-08T00:00:00Z",
+          "server_modified_on": "2026-02-08T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_8",
+          "received_on": "2026-02-09T00:00:00Z",
+          "server_modified_on": "2026-02-09T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_9",
+          "received_on": "2026-02-10T00:00:00Z",
+          "server_modified_on": "2026-02-10T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_10",
+          "received_on": "2026-02-11T00:00:00Z",
+          "server_modified_on": "2026-02-11T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_11",
+          "received_on": "2026-02-12T00:00:00Z",
+          "server_modified_on": "2026-02-12T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_12",
+          "received_on": "2026-02-13T00:00:00Z",
+          "server_modified_on": "2026-02-13T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_13",
+          "received_on": "2026-02-14T00:00:00Z",
+          "server_modified_on": "2026-02-14T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_14",
+          "received_on": "2026-02-15T00:00:00Z",
+          "server_modified_on": "2026-02-15T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_15",
+          "received_on": "2026-02-16T00:00:00Z",
+          "server_modified_on": "2026-02-16T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_16",
+          "received_on": "2026-02-17T00:00:00Z",
+          "server_modified_on": "2026-02-17T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_17",
+          "received_on": "2026-02-18T00:00:00Z",
+          "server_modified_on": "2026-02-18T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_18",
+          "received_on": "2026-02-19T00:00:00Z",
+          "server_modified_on": "2026-02-19T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_19",
+          "received_on": "2026-02-20T00:00:00Z",
+          "server_modified_on": "2026-02-20T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_20",
+          "received_on": "2026-02-21T00:00:00Z",
+          "server_modified_on": "2026-02-21T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_21",
+          "received_on": "2026-02-22T00:00:00Z",
+          "server_modified_on": "2026-02-22T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_22",
+          "received_on": "2026-02-23T00:00:00Z",
+          "server_modified_on": "2026-02-23T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_23",
+          "received_on": "2026-02-24T00:00:00Z",
+          "server_modified_on": "2026-02-24T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_24",
+          "received_on": "2026-02-25T00:00:00Z",
+          "server_modified_on": "2026-02-25T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_25",
+          "received_on": "2026-02-26T00:00:00Z",
+          "server_modified_on": "2026-02-26T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_26",
+          "received_on": "2026-02-27T00:00:00Z",
+          "server_modified_on": "2026-02-27T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_27",
+          "received_on": "2026-02-28T00:00:00Z",
+          "server_modified_on": "2026-02-28T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_28",
+          "received_on": "2026-02-01T00:00:00Z",
+          "server_modified_on": "2026-02-01T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_29",
+          "received_on": "2026-02-02T00:00:00Z",
+          "server_modified_on": "2026-02-02T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_30",
+          "received_on": "2026-02-03T00:00:00Z",
+          "server_modified_on": "2026-02-03T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_31",
+          "received_on": "2026-02-04T00:00:00Z",
+          "server_modified_on": "2026-02-04T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_32",
+          "received_on": "2026-02-05T00:00:00Z",
+          "server_modified_on": "2026-02-05T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_33",
+          "received_on": "2026-02-06T00:00:00Z",
+          "server_modified_on": "2026-02-06T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_34",
+          "received_on": "2026-02-07T00:00:00Z",
+          "server_modified_on": "2026-02-07T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_35",
+          "received_on": "2026-02-08T00:00:00Z",
+          "server_modified_on": "2026-02-08T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_36",
+          "received_on": "2026-02-09T00:00:00Z",
+          "server_modified_on": "2026-02-09T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_37",
+          "received_on": "2026-02-10T00:00:00Z",
+          "server_modified_on": "2026-02-10T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_38",
+          "received_on": "2026-02-11T00:00:00Z",
+          "server_modified_on": "2026-02-11T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_39",
+          "received_on": "2026-02-12T00:00:00Z",
+          "server_modified_on": "2026-02-12T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_40",
+          "received_on": "2026-02-13T00:00:00Z",
+          "server_modified_on": "2026-02-13T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_41",
+          "received_on": "2026-02-14T00:00:00Z",
+          "server_modified_on": "2026-02-14T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_42",
+          "received_on": "2026-02-15T00:00:00Z",
+          "server_modified_on": "2026-02-15T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_43",
+          "received_on": "2026-02-16T00:00:00Z",
+          "server_modified_on": "2026-02-16T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_44",
+          "received_on": "2026-02-17T00:00:00Z",
+          "server_modified_on": "2026-02-17T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_45",
+          "received_on": "2026-02-18T00:00:00Z",
+          "server_modified_on": "2026-02-18T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_46",
+          "received_on": "2026-02-19T00:00:00Z",
+          "server_modified_on": "2026-02-19T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_47",
+          "received_on": "2026-02-20T00:00:00Z",
+          "server_modified_on": "2026-02-20T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_48",
+          "received_on": "2026-02-21T00:00:00Z",
+          "server_modified_on": "2026-02-21T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_49",
+          "received_on": "2026-02-22T00:00:00Z",
+          "server_modified_on": "2026-02-22T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_50",
+          "received_on": "2026-02-23T00:00:00Z",
+          "server_modified_on": "2026-02-23T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_51",
+          "received_on": "2026-02-24T00:00:00Z",
+          "server_modified_on": "2026-02-24T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_52",
+          "received_on": "2026-02-25T00:00:00Z",
+          "server_modified_on": "2026-02-25T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_53",
+          "received_on": "2026-02-26T00:00:00Z",
+          "server_modified_on": "2026-02-26T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_54",
+          "received_on": "2026-02-27T00:00:00Z",
+          "server_modified_on": "2026-02-27T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_55",
+          "received_on": "2026-02-28T00:00:00Z",
+          "server_modified_on": "2026-02-28T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_56",
+          "received_on": "2026-02-01T00:00:00Z",
+          "server_modified_on": "2026-02-01T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_57",
+          "received_on": "2026-02-02T00:00:00Z",
+          "server_modified_on": "2026-02-02T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_58",
+          "received_on": "2026-02-03T00:00:00Z",
+          "server_modified_on": "2026-02-03T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_59",
+          "received_on": "2026-02-04T00:00:00Z",
+          "server_modified_on": "2026-02-04T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_60",
+          "received_on": "2026-02-05T00:00:00Z",
+          "server_modified_on": "2026-02-05T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_61",
+          "received_on": "2026-02-06T00:00:00Z",
+          "server_modified_on": "2026-02-06T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_62",
+          "received_on": "2026-02-07T00:00:00Z",
+          "server_modified_on": "2026-02-07T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_63",
+          "received_on": "2026-02-08T00:00:00Z",
+          "server_modified_on": "2026-02-08T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_64",
+          "received_on": "2026-02-09T00:00:00Z",
+          "server_modified_on": "2026-02-09T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_65",
+          "received_on": "2026-02-10T00:00:00Z",
+          "server_modified_on": "2026-02-10T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_66",
+          "received_on": "2026-02-11T00:00:00Z",
+          "server_modified_on": "2026-02-11T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_67",
+          "received_on": "2026-02-12T00:00:00Z",
+          "server_modified_on": "2026-02-12T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_68",
+          "received_on": "2026-02-13T00:00:00Z",
+          "server_modified_on": "2026-02-13T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_69",
+          "received_on": "2026-02-14T00:00:00Z",
+          "server_modified_on": "2026-02-14T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_70",
+          "received_on": "2026-02-15T00:00:00Z",
+          "server_modified_on": "2026-02-15T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_71",
+          "received_on": "2026-02-16T00:00:00Z",
+          "server_modified_on": "2026-02-16T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_72",
+          "received_on": "2026-02-17T00:00:00Z",
+          "server_modified_on": "2026-02-17T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_73",
+          "received_on": "2026-02-18T00:00:00Z",
+          "server_modified_on": "2026-02-18T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_74",
+          "received_on": "2026-02-19T00:00:00Z",
+          "server_modified_on": "2026-02-19T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_75",
+          "received_on": "2026-02-20T00:00:00Z",
+          "server_modified_on": "2026-02-20T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_76",
+          "received_on": "2026-02-21T00:00:00Z",
+          "server_modified_on": "2026-02-21T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_77",
+          "received_on": "2026-02-22T00:00:00Z",
+          "server_modified_on": "2026-02-22T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_78",
+          "received_on": "2026-02-23T00:00:00Z",
+          "server_modified_on": "2026-02-23T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_79",
+          "received_on": "2026-02-24T00:00:00Z",
+          "server_modified_on": "2026-02-24T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_80",
+          "received_on": "2026-02-25T00:00:00Z",
+          "server_modified_on": "2026-02-25T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_81",
+          "received_on": "2026-02-26T00:00:00Z",
+          "server_modified_on": "2026-02-26T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_82",
+          "received_on": "2026-02-27T00:00:00Z",
+          "server_modified_on": "2026-02-27T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_83",
+          "received_on": "2026-02-28T00:00:00Z",
+          "server_modified_on": "2026-02-28T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_84",
+          "received_on": "2026-02-01T00:00:00Z",
+          "server_modified_on": "2026-02-01T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_85",
+          "received_on": "2026-02-02T00:00:00Z",
+          "server_modified_on": "2026-02-02T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_86",
+          "received_on": "2026-02-03T00:00:00Z",
+          "server_modified_on": "2026-02-03T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_87",
+          "received_on": "2026-02-04T00:00:00Z",
+          "server_modified_on": "2026-02-04T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_88",
+          "received_on": "2026-02-05T00:00:00Z",
+          "server_modified_on": "2026-02-05T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_89",
+          "received_on": "2026-02-06T00:00:00Z",
+          "server_modified_on": "2026-02-06T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_90",
+          "received_on": "2026-02-07T00:00:00Z",
+          "server_modified_on": "2026-02-07T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_91",
+          "received_on": "2026-02-08T00:00:00Z",
+          "server_modified_on": "2026-02-08T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_92",
+          "received_on": "2026-02-09T00:00:00Z",
+          "server_modified_on": "2026-02-09T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_93",
+          "received_on": "2026-02-10T00:00:00Z",
+          "server_modified_on": "2026-02-10T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_94",
+          "received_on": "2026-02-11T00:00:00Z",
+          "server_modified_on": "2026-02-11T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_95",
+          "received_on": "2026-02-12T00:00:00Z",
+          "server_modified_on": "2026-02-12T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_96",
+          "received_on": "2026-02-13T00:00:00Z",
+          "server_modified_on": "2026-02-13T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_97",
+          "received_on": "2026-02-14T00:00:00Z",
+          "server_modified_on": "2026-02-14T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_98",
+          "received_on": "2026-02-15T00:00:00Z",
+          "server_modified_on": "2026-02-15T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_99",
+          "received_on": "2026-02-16T00:00:00Z",
+          "server_modified_on": "2026-02-16T00:00:00Z"
+        },
+        {
+          "id": "case_fixture_100",
+          "received_on": "2026-02-17T00:00:00Z",
+          "server_modified_on": "2026-02-17T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "limit": 100,
+        "next": "/a/synthetic-conformance-value/api/v0.5/case/?limit=100&offset=100",
+        "offset": 0,
+        "previous": null,
+        "total_count": 101
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "microsoft-dataverse",
+  "display_name": "Microsoft Dataverse",
+  "description": "Reads Microsoft Dataverse accounts, contacts, leads, opportunities, and users through the Web API.",
+  "integration_type": "api",
+  "docs_url": "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Microsoft Dataverse Web API read of CRM records",
+    "approval": "none; read-only OAuth2 client-credentials API"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "Every stream is StreamHook-handled (hooks/microsoft-dataverse/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all — see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-dataverse (TestParityMicrosoftDataverse_AccountsNextLinkPagination) and internal/connectors/hooks/microsoft-dataverse/hooks_test.go."
+  }
+}

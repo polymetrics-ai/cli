@@ -1,0 +1,17 @@
+{
+  "api": "Mixpanel Query API v2.0 (https://mixpanel.com/api/2.0)",
+  "docs": "https://developer.mixpanel.com/reference/overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "connector-v2 migration: the 3 legacy-parity read streams only; the full Mixpanel Query/Import/Export API surface (JQL, raw event export, funnels, retention, insights) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/cohorts/list", "covered_by": { "stream": "cohorts" } },
+    { "method": "GET", "path": "/annotations", "covered_by": { "stream": "annotations" } },
+    { "method": "GET", "path": "/engage", "covered_by": { "stream": "engage" } },
+    { "method": "GET", "path": "/export", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/jql", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/funnels", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/retention", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/insights", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/import", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

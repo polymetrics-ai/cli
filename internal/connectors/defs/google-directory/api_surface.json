@@ -1,0 +1,16 @@
+{
+  "api": "Google Admin SDK Directory API v1 (https://admin.googleapis.com/admin/directory/v1)",
+  "docs": "https://developers.google.com/admin-sdk/directory/reference/rest",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave-fanout migration: the 4 legacy-parity read streams only; the full Directory API surface (domains, aliases, calendar resources, mobile devices, roles, schemas) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/groups", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/customer/{customer}/orgunits", "covered_by": { "stream": "orgunits" } },
+    { "method": "GET", "path": "/customer/{customer}/devices/chromeos", "covered_by": { "stream": "chromeos_devices" } },
+    { "method": "GET", "path": "/groups/{groupKey}/members", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/customer/{customer}/domains", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/customer/{customer}/roles", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy has no write support" } }
+  ]
+}

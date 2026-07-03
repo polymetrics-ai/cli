@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "entries",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string", "description": "The API's name, matching legacy's id=api convention (the raw API has no dedicated id field)." },
+    "api": { "type": "string" },
+    "description": { "type": ["string", "null"] },
+    "category": { "type": ["string", "null"] },
+    "auth": { "type": ["string", "null"] },
+    "https": { "type": ["boolean", "null"] },
+    "cors": { "type": ["string", "null"] },
+    "link": { "type": ["string", "null"] }
+  }
+}

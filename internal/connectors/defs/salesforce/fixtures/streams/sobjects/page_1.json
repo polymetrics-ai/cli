@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/services/data/synthetic-conformance-value/sobjects" },
+  "response": {
+    "status": 200,
+    "body": {
+      "encoding": "UTF-8",
+      "maxBatchSize": 200,
+      "sobjects": [
+        { "name": "Account", "label": "Account", "custom": false, "queryable": true },
+        { "name": "Contact", "label": "Contact", "custom": false, "queryable": true }
+      ]
+    }
+  }
+}

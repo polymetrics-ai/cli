@@ -1,0 +1,43 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "next_page",
+      "max_pages": 100
+    },
+    "check": { "method": "GET", "path": "/api/subjects", "query": { "page_size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "avni username/password are missing or invalid; re-run pm credentials add avni" },
+      { "status": 403, "hint": "avni account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "avni rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "subjects",
+      "path": "/api/subjects",
+      "query": {
+        "page_size": "{{ config.page_size }}",
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/subjects.json"
+    },
+    {
+      "name": "encounters",
+      "path": "/api/encounters",
+      "query": {
+        "page_size": "{{ config.page_size }}",
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/encounters.json"
+    }
+  ]
+}

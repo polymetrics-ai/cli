@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v2/sites/synthetic-conformance-value/forms" },
+  "response": {
+    "status": 200,
+    "body": {
+      "forms": [
+        { "id": "form_fixture_1", "displayName": "Fixture Form One", "createdOn": "2026-01-01T00:00:00Z" },
+        { "id": "form_fixture_2", "displayName": "Fixture Form Two", "createdOn": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

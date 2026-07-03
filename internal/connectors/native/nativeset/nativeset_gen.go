@@ -9,6 +9,9 @@
 package nativeset
 
 import (
+	_ "polymetrics.ai/internal/connectors/native/amazon-sqs"
 	_ "polymetrics.ai/internal/connectors/native/bing-ads"
+	_ "polymetrics.ai/internal/connectors/native/dynamodb"
+	_ "polymetrics.ai/internal/connectors/native/faker"
 	_ "polymetrics.ai/internal/connectors/native/postgres"
 )

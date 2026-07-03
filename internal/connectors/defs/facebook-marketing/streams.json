@@ -1,0 +1,55 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "paging.next"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/me/adaccounts",
+      "query": { "limit": "1", "fields": "id,account_id,name" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "facebook-marketing access token is missing or invalid; re-run pm credentials add facebook-marketing" },
+      { "status": 403, "hint": "facebook-marketing token lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "facebook-marketing rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "ad_accounts",
+      "path": "/me/adaccounts",
+      "query": {
+        "limit": "100",
+        "fields": "id,account_id,name,account_status,currency,timezone_name"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/ad_accounts.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/{{ config.ad_account_id }}/campaigns",
+      "query": {
+        "limit": "100",
+        "fields": "id,name,status,effective_status,objective,created_time,updated_time"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "ads",
+      "path": "/{{ config.ad_account_id }}/ads",
+      "query": {
+        "limit": "100",
+        "fields": "id,name,status,effective_status,created_time,updated_time"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/ads.json"
+    }
+  ]
+}

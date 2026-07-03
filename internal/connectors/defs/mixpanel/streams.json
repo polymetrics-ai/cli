@@ -1,0 +1,43 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "custom", "hook": "mixpanel" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "next"
+    },
+    "check": { "method": "GET", "path": "/cohorts/list" },
+    "error_map": [
+      { "status": 401, "hint": "mixpanel username/password credentials are missing or invalid; re-run pm credentials add mixpanel" },
+      { "status": 403, "hint": "mixpanel service account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "mixpanel rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "cohorts",
+      "path": "/cohorts/list",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "cohorts" },
+      "schema": "schemas/cohorts.json"
+    },
+    {
+      "name": "annotations",
+      "path": "/annotations",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "annotations" },
+      "schema": "schemas/annotations.json"
+    },
+    {
+      "name": "engage",
+      "path": "/engage",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "results" },
+      "schema": "schemas/engage.json"
+    }
+  ]
+}

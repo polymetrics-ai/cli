@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customer/synthetic-conformance-value/orgunits",
+    "query": {
+      "maxResults": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "admin#directory#orgUnits",
+      "nextPageToken": "fixture-page-2-token",
+      "organizationUnits": [
+        {
+          "orgUnitId": "orgunit_fixture_1",
+          "name": "Engineering",
+          "orgUnitPath": "/Engineering",
+          "description": "fixture org unit one"
+        },
+        {
+          "orgUnitId": "orgunit_fixture_2",
+          "name": "Sales",
+          "orgUnitPath": "/Sales",
+          "description": "fixture org unit two"
+        }
+      ]
+    }
+  }
+}

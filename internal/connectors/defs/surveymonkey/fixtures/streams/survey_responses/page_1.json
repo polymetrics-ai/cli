@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/surveys/synthetic-conformance-value/responses/bulk", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "response_fixture_1",
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_modified": "2026-01-02T00:00:00Z",
+          "analyze_url": "https://www.surveymonkey.com/analyze/fixture1"
+        }
+      ],
+      "links": { "next": "" }
+    }
+  }
+}

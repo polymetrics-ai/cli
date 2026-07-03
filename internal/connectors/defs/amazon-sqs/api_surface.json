@@ -1,0 +1,7 @@
+{
+  "api": "Amazon SQS Query API over signed HTTP(S) POST (AWS SigV4) — not a declarative REST resource surface",
+  "docs": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html",
+  "reviewed_at": "2026-07-03",
+  "scope": "This is a Tier-3 message-queue connector (capabilities.dynamic_schema: true, no streams.json — see docs.md): it speaks the SQS Query API (Action=ReceiveMessage/GetQueueAttributes form-encoded POST, AWS SigV4-signed, XML response body) via hand-written Go, not a declarative streams.json a covered_by.stream entry could resolve against. Check calls GetQueueAttributes; Read calls ReceiveMessage in a bounded poll loop. Legacy never calls SendMessage/DeleteMessage/ChangeMessageVisibility/PurgeQueue or any other SQS action (read-only source, wave0 parity). This api_surface.json intentionally has zero endpoints entries, matching the Tier-3 minimal-surface pattern for non-REST/no-static-stream connectors (design §B.7, see native/postgres's and native/faker's identical zero-endpoint precedent) — there is nothing for either covered_by or excluded to describe once no streams.json exists to reference.",
+  "endpoints": []
+}

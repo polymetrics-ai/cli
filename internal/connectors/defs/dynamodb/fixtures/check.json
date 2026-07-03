@@ -1,0 +1,7 @@
+{
+  "request": { "method": "POST", "path": "/" },
+  "response": {
+    "status": 200,
+    "body": { "Items": [], "Count": 0, "ScannedCount": 0 }
+  }
+}

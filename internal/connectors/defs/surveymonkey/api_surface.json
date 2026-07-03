@@ -1,0 +1,16 @@
+{
+  "api": "SurveyMonkey REST API v3 (https://api.surveymonkey.com/v3)",
+  "docs": "https://developer.surveymonkey.com/api/v3/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-1 migration: the 3 legacy-parity read streams only (surveys, collectors, survey_responses). SurveyMonkey's survey-editing, webhook, and contact-management endpoints are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/surveys", "covered_by": { "stream": "surveys" } },
+    { "method": "GET", "path": "/v3/surveys/{id}/collectors", "covered_by": { "stream": "collectors" } },
+    { "method": "GET", "path": "/v3/surveys/{id}/responses/bulk", "covered_by": { "stream": "survey_responses" } },
+    { "method": "GET", "path": "/v3/users/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream; used only by base.check" } },
+    { "method": "POST", "path": "/v3/surveys", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented survey creation; Pass B capability expansion" } },
+    { "method": "PATCH", "path": "/v3/surveys/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented survey updates; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/webhooks", "excluded": { "category": "out_of_scope", "reason": "webhook management not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/contacts", "excluded": { "category": "out_of_scope", "reason": "contact management not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

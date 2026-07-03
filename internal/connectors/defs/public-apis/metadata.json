@@ -1,0 +1,23 @@
+{
+  "name": "public-apis",
+  "display_name": "Public APIs",
+  "description": "Reads public API directory entries and categories from the api.publicapis.org directory API. Read-only and credential-free.",
+  "integration_type": "api",
+  "docs_url": "https://github.com/davemachado/public-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external public-apis.org directory read of API listing metadata",
+    "approval": "none; read-only, credential-free public directory API"
+  }
+}

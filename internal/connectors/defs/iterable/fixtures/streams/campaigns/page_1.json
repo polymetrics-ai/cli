@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/campaigns", "query": { "pageSize": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        { "id": 101, "name": "Fixture Welcome Campaign", "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

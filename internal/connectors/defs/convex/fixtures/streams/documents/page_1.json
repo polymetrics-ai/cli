@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/tables/synthetic-conformance-value/documents"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "documents": [
+        { "_id": "doc_fixture_1", "text": "fixture document 1" },
+        { "_id": "doc_fixture_2", "text": "fixture document 2" }
+      ],
+      "cursor": "fixture_cursor_1"
+    }
+  }
+}

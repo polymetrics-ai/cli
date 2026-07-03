@@ -1,0 +1,23 @@
+{
+  "name": "posthog",
+  "display_name": "PostHog",
+  "description": "Reads PostHog events and persons for a project via the PostHog REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://posthog.com/docs/api",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external PostHog API read of project event and person data",
+    "approval": "none; read-only analytics API"
+  }
+}

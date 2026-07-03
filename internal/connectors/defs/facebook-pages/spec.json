@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Facebook Pages Connection Specification",
+  "type": "object",
+  "required": ["page_id", "access_token"],
+  "properties": {
+    "page_id": {
+      "type": "string",
+      "description": "Facebook Page id whose metadata and posts are read."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Facebook Graph API page access token, sent as a Bearer token. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://graph.facebook.com/v19.0",
+      "description": "Facebook Graph API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Number of posts requested per page (Graph API 'limit' query param). Defaults to 100."
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/tables"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tables": [
+        { "name": "fixture_table_1" },
+        { "name": "fixture_table_2" }
+      ]
+    }
+  }
+}

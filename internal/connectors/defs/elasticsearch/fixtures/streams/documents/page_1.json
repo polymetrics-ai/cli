@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/_search", "query": { "from": "0", "size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "hits": {
+        "hits": [
+          { "_index": "fixture_index_1", "_id": "doc_fixture_1", "_score": 1.0, "_source": { "order_number": "F-0001", "status": "open" } },
+          { "_index": "fixture_index_1", "_id": "doc_fixture_2", "_score": 1.0, "_source": { "order_number": "F-0002", "status": "closed" } }
+        ]
+      }
+    }
+  }
+}

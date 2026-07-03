@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/cosmos/staking/v1beta1/validators", "query": { "pagination.limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "validators": [
+        { "operator_address": "kyvevaloper1fixture1", "description": { "moniker": "Fixture Validator One" }, "status": "BOND_STATUS_BONDED" },
+        { "operator_address": "kyvevaloper1fixture2", "description": { "moniker": "Fixture Validator Two" }, "status": "BOND_STATUS_BONDED" }
+      ],
+      "pagination": { "next_key": "fixture-next-key-1", "total": "3" }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/groups",
+    "query": { "pageSize": "100", "pageNumber": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entities": [
+        {
+          "id": "g1",
+          "name": "Fixture Group 1",
+          "description": "conformance fixture group"
+        },
+        {
+          "id": "g2",
+          "name": "Fixture Group 2",
+          "description": "conformance fixture group"
+        }
+      ]
+    }
+  }
+}

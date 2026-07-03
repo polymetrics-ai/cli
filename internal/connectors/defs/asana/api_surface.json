@@ -1,0 +1,18 @@
+{
+  "api": "Asana API v1 (https://app.asana.com/api/1.0)",
+  "docs": "https://developers.asana.com/reference/rest-api-reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "migration: the 3 legacy-parity read streams only (workspaces, projects, tasks); Asana has no writes modeled by legacy (capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/workspaces", "covered_by": { "stream": "workspaces" } },
+    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/users/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user identity probe, used only by Check, not a syncable object stream" } },
+    { "method": "POST", "path": "/tasks", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented task creation; Pass B capability expansion" } },
+    { "method": "PUT", "path": "/tasks/{task_gid}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented task updates; Pass B capability expansion" } },
+    { "method": "GET", "path": "/tasks/{task_gid}/stories", "excluded": { "category": "out_of_scope", "reason": "task comments/stories not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/tags", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/teams", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+  ]
+}

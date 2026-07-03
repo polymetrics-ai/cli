@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Webflow Connection Specification",
+  "type": "object",
+  "required": ["api_key", "site_id"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Webflow API token (Site or OAuth access token). Used only for Bearer auth (Authorization: Bearer <api_key>); never logged."
+    },
+    "site_id": {
+      "type": "string",
+      "description": "The Webflow site ID to read collections, pages, and forms from. Required by every stream (legacy's siteResource helper fails without it)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.webflow.com",
+      "description": "Webflow API base URL override for tests or proxies."
+    },
+    "accept_version": {
+      "type": "string",
+      "description": "Optional Webflow Data API version to send as the Accept-Version header (e.g. 1.0.0 or 2.0.0). Omitted entirely when unset."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

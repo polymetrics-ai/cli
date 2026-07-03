@@ -1,0 +1,22 @@
+{
+  "name": "gridly",
+  "display_name": "Gridly",
+  "description": "Reads Gridly views, per-view records (with flattened column cells), and per-view branches through the Gridly REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api.gridly.com/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Gridly API read of view/grid content"
+  }
+}

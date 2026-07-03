@@ -12,45 +12,9 @@
   "attempts": 1
  },
  {
-  "name": "serpstat",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Serpstat's real API is a JSON-RPC-over-HTTP style endpoint: every stream (domain_keywords, domain_competitors) requires a POST request whose body carries {\"id\":page,\"method\":\"<procedure>\",\"params\":{\"domain\",\"se\",\"page\",\"size\"}} \u2014 pagination state (page number) lives INSIDE the request body, not in q",
-  "attempts": 1
- },
- {
-  "name": "stigg",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Stigg's legacy connector is a GraphQL-over-HTTP API: every read is a POST to /graphql with a JSON body carrying a query string, and records are extracted from data.<field> in the response. The engine's declarative read path always issues its request with a nil body - there is no streams.json mechani",
-  "attempts": 1
- },
- {
-  "name": "us-census",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Legacy's query stream returns a raw top-level JSON array-of-arrays (a header row followed by data rows) with entirely dynamic, caller-driven field names derived at read-time from the header row, itself a function of the caller-supplied query_path/query_params get= qualifier; there is no fixed schema",
-  "attempts": 1
- },
- {
-  "name": "wasabi-stats-api",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "Legacy's requester() branches auth mode on the CONTENTS of the api_key secret at runtime: connsdk.APIKeyHeader(\"Authorization\", key, \"Bearer \") is used unless strings.SplitN(key, \":\", 2) yields exactly two parts, in which case it switches to connsdk.Basic(parts[0], parts[1]). The engine's `when` gra",
-  "attempts": 1
- },
- {
   "name": "yahoo-finance-price",
   "blocker_type": "ENGINE_GAP",
   "reason": "The legacy connector's single 'prices' stream flattens ONE Yahoo Finance chart API response into N per-timestamp OHLCV records by zipping parallel arrays by index: chart.result[0].timestamp[i] with chart.result[0].indicators.quote[0].{open,high,low,close,volume}[i] and indicators.adjclose[0].adjclos",
-  "attempts": 1
- },
- {
-  "name": "zoho-bigin",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "Legacy performs an OAuth2 refresh_token grant token exchange (POST to token_url with grant_type=refresh_token, client_id, client_secret, client_refresh_token secrets, decoding access_token from the JSON response) before every read/check. The engine's declarative auth dialect only supports the oauth2",
-  "attempts": 1
- },
- {
-  "name": "akeneo",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "Legacy uses OAuth2 password grant: POST /api/oauth/v1/token with HTTP Basic (client_id:secret) plus a JSON body {grant_type:password, username, password}, caching/refreshing the resulting bearer token. The engine's declarative auth dialect only supports oauth2_client_credentials (client_credentials ",
   "attempts": 1
  },
  {
@@ -102,57 +66,15 @@
   "attempts": 2
  },
  {
-  "name": "chift",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "Chift authenticates via a session-token exchange that is NOT the dialect's oauth2_client_credentials grant: legacy POSTs a JSON body {clientId, clientSecret, accountId} (no grant_type field at all, and a 3rd accountId field the standard grant has no slot for) to <base>/token and reads {access_token}",
-  "attempts": 1
- },
- {
-  "name": "coingecko-coins",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "market_chart (legacy /coins/{id}/market_chart) zips three parallel [timestamp,value] arrays (prices/market_caps/total_volumes) into one record per timestamp via indexByTimestamp; the dialect has no array-zip/parallel-array-join primitive (computed_fields/join:<sep> only joins ONE array into a delimi",
-  "attempts": 1
- },
- {
-  "name": "coinmarketcap",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "4 of 5 streams (map, listings_latest, categories, fiat) use CoinMarketCap's documented 1-based `start` pagination: legacy sends start=1 on the first request then start += pageSize on each subsequent page (harvest() in coinmarketcap.go). The engine's offset_limit paginator (connsdk.OffsetPaginator) i",
-  "attempts": 1
- },
- {
-  "name": "concord",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "All 5 streams (agreements, user_organizations, folders, reports, tags) share Concord's harvest() pagination: pages are explicitly 0-indexed (`for page := 0; ...; page++`, limit sent as the page-size param) - the legacy comment states 'Pages start at 0' as deliberate, tested API behavior. The engine'",
-  "attempts": 1
- },
- {
-  "name": "configcat",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "3 of 5 streams (configs, environments, tags) require sub-resource fan-out: legacy's readNested first lists /v1/products, then issues one request per product id (path fmt '/v1/products/%s/configs' etc.) and stamps product_id onto every nested record. The declarative dialect has no mechanism to drive ",
-  "attempts": 1
- },
- {
   "name": "copper",
   "blocker_type": "ENGINE_GAP",
   "reason": "Copper's legacy connector paginates via POST /<resource>/search with page_number/page_size carried in a JSON request BODY (not query params), returning a top-level JSON array. The engine's declarative read path (engine/read.go's readDeclarative) unconditionally calls rt.Requester.Do(ctx, method, pat",
   "attempts": 1
  },
  {
-  "name": "customerly",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Both streams (users, leads) page from 0 in legacy (harvest's `for page := 0; ...` sends page=0 as the true first request). The engine's page_number PaginationSpec delegates to connsdk.PageNumberPaginator, whose Start() unconditionally coerces StartPage 0 to 1 (verified by direct execution of the pag",
-  "attempts": 1
- },
- {
   "name": "dixa",
   "blocker_type": "ENGINE_GAP",
   "reason": "Dixa has no per-request paginator at all: legacy's harvest() walks an arbitrary [start_date, end_date) range one batch_size-day date window at a time (max 31 days per request, dixaMaxWindows=4096 loop guard), issuing a variable, config-dependent number of GET conversation_export requests with cross-",
-  "attempts": 1
- },
- {
-  "name": "dolibarr",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Dolibarr's REST API is genuinely 0-indexed (legacy sends page=0 for the first page, page=1 for the second, etc. \u2014 internal/connectors/dolibarr/dolibarr.go's harvest loop starts at `for page := 0; ...`). The engine's page_number pagination cannot express a 0-indexed start: both engine/paginate.go's n",
   "attempts": 1
  },
  {
@@ -165,12 +87,6 @@
   "name": "feishu",
   "blocker_type": "AUTH_COMPLEX",
   "reason": "Confirmed still blocked after repair attempt (S4 engine mini-wave's oauth2_client_credentials extra_params addition does not change this gap). Feishu/Lark authenticates via a tenant_access_token EXCHANGE: app_id + app_secret are POSTed as a JSON body to open-apis/auth/v3/tenant_access_token/internal, which returns {code, msg, tenant_access_token, expire} (a non-zero code is an API-level error even on HTTP 200); the token is cached with a TTL (legacy: internal/connectors/feishu/auth.go's tenantTokenAuth, ~2h default, refreshed 60s before expiry) and applied as a Bearer header. Evidence: engine/auth.go's only token-exchange auth mode is oauth2_client_credentials, whose connsdk.OAuth2ClientCredentials (connsdk/auth.go:122-138) hardcodes an application/x-www-form-urlencoded body with fixed field names grant_type/client_id/client_secret/scope (extra_params only ADDS keys, per S4, never renames these or switches encoding) and parses a standard access_token/expires_in JSON response -- incompatible with Feishu's JSON-body app_id/app_secret request and tenant_access_token/expire/code response shape on every axis (encoding, field names, response schema, and the code-in-200-body error convention). No other AuthSpec mode (none/bearer/basic/api_key_header/api_key_query/custom) fits either; mode custom would resolve via an AuthHook, which is a Tier-2 Go escape hatch, out of scope for a JSON-only bundle.",
-  "attempts": 2
- },
- {
-  "name": "fillout",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "PARTIAL (see internal/connectors/defs/fillout/): forms migrated to Tier-1 (no fan-out needed, GET /forms is a single unpaginated top-level array). questions and submissions remain quarantined -- confirmed still blocked after repair attempt now that fan_out exists (S4 engine mini-wave). Both require per-form sub-resource fan-out where legacy's resolveFormIDs (internal/connectors/fillout/fillout.go:259) uses the configured comma-separated form_id WHEN SET, else discovers every form id via GET /forms -- a runtime conditional fallback between two id sources. Evidence: FanOutIDsFrom (engine/bundle.go:243) and resolveFanOutIDs (engine/read.go:122-138) require declaring EXACTLY ONE of config_key or request at load time (both or neither is a read-time error) -- there is no combinator for \"config_key when present, else request\". Statically choosing request would silently return every form's data for a caller who set form_id to narrow scope (a legacy-accepted input emitting MORE records than legacy); statically choosing config_key would silently emit ZERO records for a caller who left form_id unset (legacy's other accepted, and most common, input, emitting FEWER records than legacy). Both diverge from legacy for a legacy-accepted input, which conventions.md section 5's meta-rule forbids as a silent workaround -- a narrower, fan_out-specific gap than the pre-S4 quarantine reason (which predated fan_out's existence entirely).",
   "attempts": 2
  },
  {
@@ -190,24 +106,6 @@
   "blocker_type": "ENGINE_GAP",
   "reason": "Legacy's Read (internal/connectors/google-pagespeed-insights/google_pagespeed_insights.go:141-165) issues one GET /runPagespeed request per (url, strategy) pair, iterating the full cartesian product of the configured urls and strategies config lists and emitting one record per request. The Tier-1 di",
   "attempts": 1
- },
- {
-  "name": "google-tasks",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "The tasklists stream alone is plain Tier-1 cursor pagination (nextPageToken/pageToken over GET /users/@me/lists) and would migrate cleanly on its own. But the tasks stream (internal/connectors/google-tasks/google_tasks.go:156-196, readTasks/collectTaskListIDs) requires first listing every task list,",
-  "attempts": 1
- },
- {
-  "name": "hoorayhr",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "Legacy uses a custom session-token exchange auth flow: POST {email,password,strategy:'local'} JSON body to /authentication, read accessToken from the response, cache it, and inject it RAW (no 'Bearer ' prefix) into every subsequent Authorization header (internal/connectors/hoorayhr/hoorayhr.go:242-2",
-  "attempts": 1
- },
- {
-  "name": "ip2whois",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "UPDATED (wave3 unblock, superseding the prior reason below): the original per-domain-request-iteration + whole-object fan-out blocker is now solved by the fan_out dialect (fan_out.ids_from.config_key over the comma-separated domains config value) -- whois and 4 per-role contact streams (contacts_registrant/admin/tech/billing) are migrated to internal/connectors/defs/ip2whois (status: partial). Only the nameservers stream remains blocked: legacy's nameserverRecords fans the raw nameservers field -- a bare JSON array of SCALAR strings, not objects -- out into one record per nameserver ({domain, nameserver}). Neither connsdk.RecordsAt (keeps only array elements that decode as a JSON object; a bare string element is silently dropped) nor records.keyed_object (explodes a JSON object's VALUES, which must themselves be objects) fans a scalar-valued array into one record per element; joining into a single string instead would change record cardinality versus legacy's genuine 1-record-per-nameserver stream, an accepted-input data change. See internal/connectors/defs/ip2whois/docs.md Known limits and conventions.md's parity-deviation ledger entry 12. Superseded original reason: legacy performs one HTTP lookup per domain in a config-supplied comma-separated domain list (N requests per stream read from one config value) and fans each single-object lookup response out into 1 (whois), 0..4 (contacts), or 0..N (nameservers) output records. Neither 'iterate a delimited config list' nor 'fan a single response into N streams' had a declarative primitive at the time this connector was first quarantined.",
-  "attempts": 2
  },
  {
   "name": "less-annoying-crm",
@@ -240,30 +138,6 @@
   "attempts": 1
  },
  {
-  "name": "metricool",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Legacy Read fans out one HTTP request per configured blog_id for every per-brand stream (instagram_posts/facebook_posts/linkedin_posts/tiktok_posts) within a single stream read, stamping blogId onto each record. The declarative dialect has no mechanism to repeat a request once per item in a runtime ",
-  "attempts": 1
- },
- {
-  "name": "microsoft-entra-id",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Legacy follows Microsoft Graph's @odata.nextLink absolute-URL pagination cursor via a hand-written harvest loop (explicitly because connsdk has no paginator for the body-embedded absolute-next-link shape). The engine's next_url pagination type reads its cursor via connsdk.StringAt/selectPath, which ",
-  "attempts": 1
- },
- {
-  "name": "microsoft-lists",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Identical @odata.nextLink dotted-literal-key pagination gap as microsoft-entra-id/microsoft-teams: legacy's harvest loop follows the absolute nextLink URL for lists/list_items/columns/content_types, but the engine's next_url_path dotted-path parser (connsdk.StringAt/selectPath) cannot address a JSON",
-  "attempts": 1
- },
- {
-  "name": "microsoft-teams",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Identical @odata.nextLink dotted-literal-key pagination gap as microsoft-entra-id/microsoft-lists: legacy's harvest loop follows the absolute nextLink URL for users/groups/channels/team_device_usage_report, but the engine's next_url_path dotted-path parser (connsdk.StringAt/selectPath) cannot addres",
-  "attempts": 1
- },
- {
   "name": "mode",
   "blocker_type": "ENGINE_GAP",
   "reason": "Confirmed still blocked after repair attempt (S4 engine mini-wave's fan_out/keyed_object/start_page:0/oauth2 extra_params/date-only additions do not touch this gap). Mode's REST API is HAL+JSON: list responses embed records under _embedded.<resource> and the next page is followed via _links.next.href (legacy internal/connectors/mode/mode.go's harvest loop, and its own mode_test.go's TestReadPaginatesAndAuthenticates fixture, which serves a RELATIVE next link, \"/acme/spaces?page=2\", and legacy's own doc comment: \"The href may be a relative path-with-query or an absolute URL; either is fed straight back to the Requester, which treats absolute URLs as-is and resolves relative ones against base_url\"). The engine's pagination.type: next_url paginator (engine/paginate.go's nextURL.Next -> checkOrigin) cannot follow this: checkOrigin parses the resolved next-page value with net/url and hard-rejects it whenever u.Host == \"\" (\"next URL ... has no host; rejecting (fail closed)\") -- confirmed directly: url.Parse(\"/acme/spaces?page=2\").Host is the empty string, so a purely relative href fails the same-origin SSRF guard on the very first follow attempt, before a second page is ever requested. This is a genuine same-host-absolute-URL-only limitation, not a config/fixture issue: engine/read.go's readOneSequence passes page.URL straight to rt.Requester.Do with no relative-to-base_url resolution step (unlike legacy's own connsdk.Requester, which does resolve a relative next-link against BaseURL). No other pagination type in PaginationSpec (none/link_header/page_number/offset_limit/cursor) reads a next-page URL from the response body at all, so there is no Tier-1 substitute shape either. A Tier-2 StreamHook could reimplement the relative-href follow directly, but this task's scope is restricted to JSON+docs.md only (no Go hook files); the fresh, narrower blocker is therefore \"the next_url paginator cannot resolve a relative href against base_url,\" distinct from (and more precise than) the original quarantine reason's framing.",
@@ -276,36 +150,6 @@
   "attempts": 2
  },
  {
-  "name": "notion",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Notion's databases/pages streams require POST /search with the pagination cursor (start_cursor) and object filter injected into the JSON request body on every page. The engine's declarative read path (engine/read.go readDeclarative) always issues rt.Requester.Do(...) with a hardcoded nil body; Strea",
-  "attempts": 1
- },
- {
-  "name": "nutshell",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Legacy's page[page]/page[limit] pagination is genuinely 0-indexed (harvest loop starts 'for page := 0'; the Check request itself sends page[page]=0). The engine's PaginationSpec.StartPage (int, JSON omitempty) and connsdk.PageNumberPaginator.Start() both treat StartPage==0 as unset and silently coer",
-  "attempts": 1
- },
- {
-  "name": "onesignal",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "OneSignal legitimately needs two DIFFERENT credential values used simultaneously across streams in the same bundle: the account-level 'apps' stream must always authenticate with user_auth_key, while devices/notifications/outcomes must always authenticate with app_api_key (fallback rest_api_key) -- a",
-  "attempts": 1
- },
- {
-  "name": "open-exchange-rates",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Every stream (latest, historical, currencies) flattens a raw JSON OBJECT into N records (one per map key: currencies-in-rates for latest/historical, currency-code-to-name for currencies) \u2014 connsdk.RecordsAt/the engine's records.path extraction only ever yields exactly ONE record for an object path (",
-  "attempts": 1
- },
- {
-  "name": "plaid",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "Plaid's entire API is POST-only with ALL credentials (client_id/secret) and ALL pagination/filter state (count/offset/country_codes) carried in the JSON request body, never in headers or query params. The engine's read path (engine/read.go's readDeclarative) always calls Requester.Do(ctx, method, pa",
-  "attempts": 1
- },
- {
   "name": "pocket",
   "blocker_type": "ENGINE_GAP",
   "reason": "Legacy pocket authenticates and paginates entirely via JSON fields inside a POST request body (consumer_key, access_token, count, offset all sent in requestBody() to POST /v3/get) \u2014 there is no query-param or header-based auth/pagination at all. The engine's declarative read path never sends a reque",
@@ -316,54 +160,6 @@
   "blocker_type": "ENGINE_GAP",
   "reason": "PrestaShop's Webservice pagination wire format is a single combined query parameter limit=<offset>,<count> (e.g. limit=0,100) \u2014 confirmed in legacy's harvest(): query.Set(\"limit\", fmt.Sprintf(\"%d,%d\", offset, pageSize)). The engine's only offset-based pagination type, offset_limit, always sends offs",
   "attempts": 1
- },
- {
-  "name": "quickbooks",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "QuickBooks' entire pagination scheme (STARTPOSITION/MAXRESULTS) is embedded inside a single Query-API query string value (query=SELECT * FROM <Entity> STARTPOSITION <n> MAXRESULTS <size>), not sent as independent query parameters. The engine's 6 pagination types (page_number, offset_limit, cursor x2",
-  "attempts": 1
- },
- {
-  "name": "slack",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Slack's Web API always returns HTTP 200 even for logical failures, signaling errors solely via a JSON body field ({\"ok\":false,\"error\":\"<code>\"}) -- this is Slack's primary, first-class error-signaling mechanism (auth failures, invalid_auth, token_revoked, missing_scope, etc. all surface this way, no",
-  "attempts": 1
- },
- {
-  "name": "twilio",
-  "blocker_type": "OTHER",
-  "reason": "",
-  "attempts": 1
- },
- {
-  "name": "youtube-analytics",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "Legacy auth.go implements Google OAuth 2.0 refresh-token grant (client_id/client_secret/refresh_token exchanged for a short-lived access token via POST to a token endpoint with grant_type=refresh_token, form-encoded body, caching until near-expiry, then Bearer <access_token> on the Reporting API). T",
-  "attempts": 1
- },
- {
-  "name": "marketstack",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "parseLowerBoundTime strict-RFC3339 only; date-only start values unsupported",
-  "attempts": 2
- },
- {
-  "name": "zoho-analytics-metadata-api",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "OAuth refresh-token exchange (hook needed)",
-  "attempts": 2
- },
- {
-  "name": "nexus-datasets",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "complex auth (hook needed)",
-  "attempts": 2
- },
- {
-  "name": "outlook",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "OAuth2 refresh_token grant pre-request (hook needed, gmail pattern)",
-  "attempts": 2
  },
  {
   "name": "freightview",
@@ -382,5 +178,11 @@
   "blocker_type": "ENGINE_GAP",
   "reason": "wave3 residual re-block (see ws4ewqk4q output for fresh typed reason)",
   "attempts": 2
+ },
+ {
+  "name": "tally-prime",
+  "blocker_type": "NON_REST",
+  "reason": "TallyPrime = local TDL envelope gateway (XML and JSON modes both envelope/RPC, POST to localhost:9000, no REST resources/pagination) \u2014 Tier-3 native build queued",
+  "attempts": 1
  }
 ]

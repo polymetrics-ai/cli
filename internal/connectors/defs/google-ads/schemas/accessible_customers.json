@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "accessible_customers",
+  "type": "object",
+  "x-primary-key": ["customer_id"],
+  "required": ["customer_id"],
+  "properties": {
+    "customer_id": { "type": "string" },
+    "resource_name": { "type": "string" }
+  }
+}

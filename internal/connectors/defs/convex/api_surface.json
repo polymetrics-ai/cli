@@ -1,0 +1,13 @@
+{
+  "api": "Convex deployment HTTP API (https://docs.convex.dev/http-api/)",
+  "docs": "https://docs.convex.dev/http-api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave migration: the 2 legacy-parity read streams only (tables, documents); Convex's write/mutation HTTP API is out of scope for this pass",
+  "endpoints": [
+    { "method": "GET", "path": "api/tables", "covered_by": { "stream": "tables" } },
+    { "method": "GET", "path": "api/tables/{table}/documents", "covered_by": { "stream": "documents" } },
+    { "method": "POST", "path": "api/mutation", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; also matches the legacy connector's read-only capability set (Write returns ErrUnsupportedOperation)" } },
+    { "method": "POST", "path": "api/query", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "api/action", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

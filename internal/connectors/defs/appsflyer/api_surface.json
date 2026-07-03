@@ -1,0 +1,13 @@
+{
+  "api": "AppsFlyer Pull API (https://hq1.appsflyer.com)",
+  "docs": "https://dev.appsflyer.com/hc/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "migration: the 2 legacy-parity raw-data CSV export report streams only (installs_report, in_app_events_report); AppsFlyer has no writes modeled by legacy (capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/api/raw-data/export/app/{app_id}/installs_report/v5", "covered_by": { "stream": "installs_report" } },
+    { "method": "GET", "path": "/api/raw-data/export/app/{app_id}/in_app_events_report/v5", "covered_by": { "stream": "in_app_events_report" } },
+    { "method": "GET", "path": "/api/raw-data/export/app/{app_id}/organic_installs_report/v5", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented the organic-installs report; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/raw-data/export/app/{app_id}/organic_in_app_events_report/v5", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented the organic in-app-events report; Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/raw-data/export/app/{app_id}/uninstall_events_report/v5", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented the uninstall-events report; Pass B capability expansion" } }
+  ]
+}

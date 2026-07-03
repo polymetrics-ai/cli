@@ -1,0 +1,1015 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views/synthetic-conformance-value/records",
+    "query": {
+      "page": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "r1",
+        "path": "/item/1",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 1"
+          }
+        ]
+      },
+      {
+        "id": "r2",
+        "path": "/item/2",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 2"
+          }
+        ]
+      },
+      {
+        "id": "r3",
+        "path": "/item/3",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 3"
+          }
+        ]
+      },
+      {
+        "id": "r4",
+        "path": "/item/4",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 4"
+          }
+        ]
+      },
+      {
+        "id": "r5",
+        "path": "/item/5",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 5"
+          }
+        ]
+      },
+      {
+        "id": "r6",
+        "path": "/item/6",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 6"
+          }
+        ]
+      },
+      {
+        "id": "r7",
+        "path": "/item/7",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 7"
+          }
+        ]
+      },
+      {
+        "id": "r8",
+        "path": "/item/8",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 8"
+          }
+        ]
+      },
+      {
+        "id": "r9",
+        "path": "/item/9",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 9"
+          }
+        ]
+      },
+      {
+        "id": "r10",
+        "path": "/item/10",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 10"
+          }
+        ]
+      },
+      {
+        "id": "r11",
+        "path": "/item/11",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 11"
+          }
+        ]
+      },
+      {
+        "id": "r12",
+        "path": "/item/12",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 12"
+          }
+        ]
+      },
+      {
+        "id": "r13",
+        "path": "/item/13",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 13"
+          }
+        ]
+      },
+      {
+        "id": "r14",
+        "path": "/item/14",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 14"
+          }
+        ]
+      },
+      {
+        "id": "r15",
+        "path": "/item/15",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 15"
+          }
+        ]
+      },
+      {
+        "id": "r16",
+        "path": "/item/16",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 16"
+          }
+        ]
+      },
+      {
+        "id": "r17",
+        "path": "/item/17",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 17"
+          }
+        ]
+      },
+      {
+        "id": "r18",
+        "path": "/item/18",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 18"
+          }
+        ]
+      },
+      {
+        "id": "r19",
+        "path": "/item/19",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 19"
+          }
+        ]
+      },
+      {
+        "id": "r20",
+        "path": "/item/20",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 20"
+          }
+        ]
+      },
+      {
+        "id": "r21",
+        "path": "/item/21",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 21"
+          }
+        ]
+      },
+      {
+        "id": "r22",
+        "path": "/item/22",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 22"
+          }
+        ]
+      },
+      {
+        "id": "r23",
+        "path": "/item/23",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 23"
+          }
+        ]
+      },
+      {
+        "id": "r24",
+        "path": "/item/24",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 24"
+          }
+        ]
+      },
+      {
+        "id": "r25",
+        "path": "/item/25",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 25"
+          }
+        ]
+      },
+      {
+        "id": "r26",
+        "path": "/item/26",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 26"
+          }
+        ]
+      },
+      {
+        "id": "r27",
+        "path": "/item/27",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 27"
+          }
+        ]
+      },
+      {
+        "id": "r28",
+        "path": "/item/28",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 28"
+          }
+        ]
+      },
+      {
+        "id": "r29",
+        "path": "/item/29",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 29"
+          }
+        ]
+      },
+      {
+        "id": "r30",
+        "path": "/item/30",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 30"
+          }
+        ]
+      },
+      {
+        "id": "r31",
+        "path": "/item/31",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 31"
+          }
+        ]
+      },
+      {
+        "id": "r32",
+        "path": "/item/32",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 32"
+          }
+        ]
+      },
+      {
+        "id": "r33",
+        "path": "/item/33",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 33"
+          }
+        ]
+      },
+      {
+        "id": "r34",
+        "path": "/item/34",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 34"
+          }
+        ]
+      },
+      {
+        "id": "r35",
+        "path": "/item/35",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 35"
+          }
+        ]
+      },
+      {
+        "id": "r36",
+        "path": "/item/36",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 36"
+          }
+        ]
+      },
+      {
+        "id": "r37",
+        "path": "/item/37",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 37"
+          }
+        ]
+      },
+      {
+        "id": "r38",
+        "path": "/item/38",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 38"
+          }
+        ]
+      },
+      {
+        "id": "r39",
+        "path": "/item/39",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 39"
+          }
+        ]
+      },
+      {
+        "id": "r40",
+        "path": "/item/40",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 40"
+          }
+        ]
+      },
+      {
+        "id": "r41",
+        "path": "/item/41",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 41"
+          }
+        ]
+      },
+      {
+        "id": "r42",
+        "path": "/item/42",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 42"
+          }
+        ]
+      },
+      {
+        "id": "r43",
+        "path": "/item/43",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 43"
+          }
+        ]
+      },
+      {
+        "id": "r44",
+        "path": "/item/44",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 44"
+          }
+        ]
+      },
+      {
+        "id": "r45",
+        "path": "/item/45",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 45"
+          }
+        ]
+      },
+      {
+        "id": "r46",
+        "path": "/item/46",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 46"
+          }
+        ]
+      },
+      {
+        "id": "r47",
+        "path": "/item/47",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 47"
+          }
+        ]
+      },
+      {
+        "id": "r48",
+        "path": "/item/48",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 48"
+          }
+        ]
+      },
+      {
+        "id": "r49",
+        "path": "/item/49",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 49"
+          }
+        ]
+      },
+      {
+        "id": "r50",
+        "path": "/item/50",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 50"
+          }
+        ]
+      },
+      {
+        "id": "r51",
+        "path": "/item/51",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 51"
+          }
+        ]
+      },
+      {
+        "id": "r52",
+        "path": "/item/52",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 52"
+          }
+        ]
+      },
+      {
+        "id": "r53",
+        "path": "/item/53",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 53"
+          }
+        ]
+      },
+      {
+        "id": "r54",
+        "path": "/item/54",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 54"
+          }
+        ]
+      },
+      {
+        "id": "r55",
+        "path": "/item/55",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 55"
+          }
+        ]
+      },
+      {
+        "id": "r56",
+        "path": "/item/56",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 56"
+          }
+        ]
+      },
+      {
+        "id": "r57",
+        "path": "/item/57",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 57"
+          }
+        ]
+      },
+      {
+        "id": "r58",
+        "path": "/item/58",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 58"
+          }
+        ]
+      },
+      {
+        "id": "r59",
+        "path": "/item/59",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 59"
+          }
+        ]
+      },
+      {
+        "id": "r60",
+        "path": "/item/60",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 60"
+          }
+        ]
+      },
+      {
+        "id": "r61",
+        "path": "/item/61",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 61"
+          }
+        ]
+      },
+      {
+        "id": "r62",
+        "path": "/item/62",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 62"
+          }
+        ]
+      },
+      {
+        "id": "r63",
+        "path": "/item/63",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 63"
+          }
+        ]
+      },
+      {
+        "id": "r64",
+        "path": "/item/64",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 64"
+          }
+        ]
+      },
+      {
+        "id": "r65",
+        "path": "/item/65",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 65"
+          }
+        ]
+      },
+      {
+        "id": "r66",
+        "path": "/item/66",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 66"
+          }
+        ]
+      },
+      {
+        "id": "r67",
+        "path": "/item/67",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 67"
+          }
+        ]
+      },
+      {
+        "id": "r68",
+        "path": "/item/68",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 68"
+          }
+        ]
+      },
+      {
+        "id": "r69",
+        "path": "/item/69",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 69"
+          }
+        ]
+      },
+      {
+        "id": "r70",
+        "path": "/item/70",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 70"
+          }
+        ]
+      },
+      {
+        "id": "r71",
+        "path": "/item/71",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 71"
+          }
+        ]
+      },
+      {
+        "id": "r72",
+        "path": "/item/72",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 72"
+          }
+        ]
+      },
+      {
+        "id": "r73",
+        "path": "/item/73",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 73"
+          }
+        ]
+      },
+      {
+        "id": "r74",
+        "path": "/item/74",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 74"
+          }
+        ]
+      },
+      {
+        "id": "r75",
+        "path": "/item/75",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 75"
+          }
+        ]
+      },
+      {
+        "id": "r76",
+        "path": "/item/76",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 76"
+          }
+        ]
+      },
+      {
+        "id": "r77",
+        "path": "/item/77",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 77"
+          }
+        ]
+      },
+      {
+        "id": "r78",
+        "path": "/item/78",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 78"
+          }
+        ]
+      },
+      {
+        "id": "r79",
+        "path": "/item/79",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 79"
+          }
+        ]
+      },
+      {
+        "id": "r80",
+        "path": "/item/80",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 80"
+          }
+        ]
+      },
+      {
+        "id": "r81",
+        "path": "/item/81",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 81"
+          }
+        ]
+      },
+      {
+        "id": "r82",
+        "path": "/item/82",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 82"
+          }
+        ]
+      },
+      {
+        "id": "r83",
+        "path": "/item/83",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 83"
+          }
+        ]
+      },
+      {
+        "id": "r84",
+        "path": "/item/84",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 84"
+          }
+        ]
+      },
+      {
+        "id": "r85",
+        "path": "/item/85",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 85"
+          }
+        ]
+      },
+      {
+        "id": "r86",
+        "path": "/item/86",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 86"
+          }
+        ]
+      },
+      {
+        "id": "r87",
+        "path": "/item/87",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 87"
+          }
+        ]
+      },
+      {
+        "id": "r88",
+        "path": "/item/88",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 88"
+          }
+        ]
+      },
+      {
+        "id": "r89",
+        "path": "/item/89",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 89"
+          }
+        ]
+      },
+      {
+        "id": "r90",
+        "path": "/item/90",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 90"
+          }
+        ]
+      },
+      {
+        "id": "r91",
+        "path": "/item/91",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 91"
+          }
+        ]
+      },
+      {
+        "id": "r92",
+        "path": "/item/92",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 92"
+          }
+        ]
+      },
+      {
+        "id": "r93",
+        "path": "/item/93",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 93"
+          }
+        ]
+      },
+      {
+        "id": "r94",
+        "path": "/item/94",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 94"
+          }
+        ]
+      },
+      {
+        "id": "r95",
+        "path": "/item/95",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 95"
+          }
+        ]
+      },
+      {
+        "id": "r96",
+        "path": "/item/96",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 96"
+          }
+        ]
+      },
+      {
+        "id": "r97",
+        "path": "/item/97",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 97"
+          }
+        ]
+      },
+      {
+        "id": "r98",
+        "path": "/item/98",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 98"
+          }
+        ]
+      },
+      {
+        "id": "r99",
+        "path": "/item/99",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 99"
+          }
+        ]
+      },
+      {
+        "id": "r100",
+        "path": "/item/100",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 100"
+          }
+        ]
+      }
+    ]
+  }
+}

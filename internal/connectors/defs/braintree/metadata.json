@@ -1,0 +1,23 @@
+{
+  "name": "braintree",
+  "display_name": "Braintree",
+  "description": "Reads Braintree transactions, customers, and subscriptions through a read-only HTTP API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.paypal.com/braintree/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Braintree API read of transaction, customer, and subscription data",
+    "approval": "none; read-only"
+  }
+}

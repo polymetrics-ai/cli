@@ -1,0 +1,16 @@
+{
+  "api": "corona-zahlen.org public JSON API (Robert Koch-Institut derived data; https://api.corona-zahlen.org)",
+  "docs": "https://api.corona-zahlen.org",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave1 fan-out migration: the 5 legacy-parity read streams only (germany, states, districts, cases_history, deaths_history), each a distinct GET endpoint; the API's full documented surface (vaccinations, hospitalization, incidence-campaigns) is out of scope until Pass B, matching legacy's own 5-endpoint coverage.",
+  "endpoints": [
+    { "method": "GET", "path": "/germany", "covered_by": { "stream": "germany" } },
+    { "method": "GET", "path": "/states", "covered_by": { "stream": "states" } },
+    { "method": "GET", "path": "/districts", "covered_by": { "stream": "districts" } },
+    { "method": "GET", "path": "/history/cases", "covered_by": { "stream": "cases_history" } },
+    { "method": "GET", "path": "/history/deaths", "covered_by": { "stream": "deaths_history" } },
+    { "method": "GET", "path": "/vaccinations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not read by legacy" } },
+    { "method": "GET", "path": "/germany/hospitalization", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not read by legacy" } },
+    { "method": "GET", "path": "/states/history/cases, /districts/history/cases, ...", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy only reads the Germany-wide history endpoints, not per-state/per-district history" } }
+  ]
+}

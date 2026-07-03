@@ -1,0 +1,62 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_token }}", "prefix": "SSWS ", "when": "{{ secrets.api_token }}" },
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "link_header",
+      "size_param": "limit",
+      "page_size": 200
+    },
+    "check": { "method": "GET", "path": "/api/v1/users", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "okta api_token/access_token is missing or invalid; re-run pm credentials add okta" },
+      { "status": 403, "hint": "okta credential lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "okta rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/api/v1/users",
+      "query": { "limit": "200" },
+      "records": { "path": "." },
+      "computed_fields": {
+        "email": "{{ record.profile.email }}",
+        "login": "{{ record.profile.login }}",
+        "last_login": "{{ record.lastLogin }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "groups",
+      "path": "/api/v1/groups",
+      "query": { "limit": "200" },
+      "records": { "path": "." },
+      "computed_fields": {
+        "name": "{{ record.profile.name }}",
+        "description": "{{ record.profile.description }}"
+      },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "system_logs",
+      "path": "/api/v1/logs",
+      "query": { "limit": "200" },
+      "records": { "path": "." },
+      "incremental": {
+        "cursor_field": "published",
+        "request_param": "since",
+        "param_format": "rfc3339"
+      },
+      "computed_fields": {
+        "event_type": "{{ record.eventType }}",
+        "display_message": "{{ record.displayMessage }}"
+      },
+      "schema": "schemas/system_logs.json"
+    }
+  ]
+}

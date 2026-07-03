@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Facebook Marketing Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Facebook Graph API access token, sent as a Bearer token. Used for every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://graph.facebook.com/v20.0",
+      "description": "Facebook Graph API base URL override for tests or proxies."
+    },
+    "ad_account_id": {
+      "type": "string",
+      "description": "Facebook ad account id, required for the account-scoped 'campaigns' and 'ads' streams. Must include the 'act_' prefix (e.g. act_1234567890); legacy accepted a bare numeric id and auto-prepended 'act_' when missing, but the engine's declarative path templating has no conditional-prefix primitive (see docs.md Known limits) -- provide the prefixed form directly."
+    }
+  }
+}

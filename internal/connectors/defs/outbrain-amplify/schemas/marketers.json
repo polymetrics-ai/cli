@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "marketers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "enabled": { "type": ["boolean", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "impressions": { "type": ["integer", "null"] },
+    "clicks": { "type": ["integer", "null"] },
+    "spend": { "type": ["number", "null"] }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Smartsheets Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Smartsheet API access token, used as the Bearer credential. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.smartsheet.com/2.0",
+      "description": "Smartsheet API base URL override for tests or proxies."
+    },
+    "spreadsheet_id": {
+      "type": "string",
+      "description": "Smartsheet sheet (or report) ID to read rows from; required for the sheet_rows stream."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (Smartsheet pageSize)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

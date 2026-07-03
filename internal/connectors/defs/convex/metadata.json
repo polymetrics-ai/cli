@@ -1,0 +1,22 @@
+{
+  "name": "convex",
+  "display_name": "Convex",
+  "description": "Reads Convex tables and documents through the deployment HTTP API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.convex.dev/http-api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Convex deployment API read of table metadata and documents"
+  }
+}

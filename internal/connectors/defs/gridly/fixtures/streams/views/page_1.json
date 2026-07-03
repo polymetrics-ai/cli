@@ -1,0 +1,415 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views",
+    "query": {
+      "page": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "view_fixture_1",
+        "name": "Fixture View 1"
+      },
+      {
+        "id": "view_fixture_2",
+        "name": "Fixture View 2"
+      },
+      {
+        "id": "view_fixture_3",
+        "name": "Fixture View 3"
+      },
+      {
+        "id": "view_fixture_4",
+        "name": "Fixture View 4"
+      },
+      {
+        "id": "view_fixture_5",
+        "name": "Fixture View 5"
+      },
+      {
+        "id": "view_fixture_6",
+        "name": "Fixture View 6"
+      },
+      {
+        "id": "view_fixture_7",
+        "name": "Fixture View 7"
+      },
+      {
+        "id": "view_fixture_8",
+        "name": "Fixture View 8"
+      },
+      {
+        "id": "view_fixture_9",
+        "name": "Fixture View 9"
+      },
+      {
+        "id": "view_fixture_10",
+        "name": "Fixture View 10"
+      },
+      {
+        "id": "view_fixture_11",
+        "name": "Fixture View 11"
+      },
+      {
+        "id": "view_fixture_12",
+        "name": "Fixture View 12"
+      },
+      {
+        "id": "view_fixture_13",
+        "name": "Fixture View 13"
+      },
+      {
+        "id": "view_fixture_14",
+        "name": "Fixture View 14"
+      },
+      {
+        "id": "view_fixture_15",
+        "name": "Fixture View 15"
+      },
+      {
+        "id": "view_fixture_16",
+        "name": "Fixture View 16"
+      },
+      {
+        "id": "view_fixture_17",
+        "name": "Fixture View 17"
+      },
+      {
+        "id": "view_fixture_18",
+        "name": "Fixture View 18"
+      },
+      {
+        "id": "view_fixture_19",
+        "name": "Fixture View 19"
+      },
+      {
+        "id": "view_fixture_20",
+        "name": "Fixture View 20"
+      },
+      {
+        "id": "view_fixture_21",
+        "name": "Fixture View 21"
+      },
+      {
+        "id": "view_fixture_22",
+        "name": "Fixture View 22"
+      },
+      {
+        "id": "view_fixture_23",
+        "name": "Fixture View 23"
+      },
+      {
+        "id": "view_fixture_24",
+        "name": "Fixture View 24"
+      },
+      {
+        "id": "view_fixture_25",
+        "name": "Fixture View 25"
+      },
+      {
+        "id": "view_fixture_26",
+        "name": "Fixture View 26"
+      },
+      {
+        "id": "view_fixture_27",
+        "name": "Fixture View 27"
+      },
+      {
+        "id": "view_fixture_28",
+        "name": "Fixture View 28"
+      },
+      {
+        "id": "view_fixture_29",
+        "name": "Fixture View 29"
+      },
+      {
+        "id": "view_fixture_30",
+        "name": "Fixture View 30"
+      },
+      {
+        "id": "view_fixture_31",
+        "name": "Fixture View 31"
+      },
+      {
+        "id": "view_fixture_32",
+        "name": "Fixture View 32"
+      },
+      {
+        "id": "view_fixture_33",
+        "name": "Fixture View 33"
+      },
+      {
+        "id": "view_fixture_34",
+        "name": "Fixture View 34"
+      },
+      {
+        "id": "view_fixture_35",
+        "name": "Fixture View 35"
+      },
+      {
+        "id": "view_fixture_36",
+        "name": "Fixture View 36"
+      },
+      {
+        "id": "view_fixture_37",
+        "name": "Fixture View 37"
+      },
+      {
+        "id": "view_fixture_38",
+        "name": "Fixture View 38"
+      },
+      {
+        "id": "view_fixture_39",
+        "name": "Fixture View 39"
+      },
+      {
+        "id": "view_fixture_40",
+        "name": "Fixture View 40"
+      },
+      {
+        "id": "view_fixture_41",
+        "name": "Fixture View 41"
+      },
+      {
+        "id": "view_fixture_42",
+        "name": "Fixture View 42"
+      },
+      {
+        "id": "view_fixture_43",
+        "name": "Fixture View 43"
+      },
+      {
+        "id": "view_fixture_44",
+        "name": "Fixture View 44"
+      },
+      {
+        "id": "view_fixture_45",
+        "name": "Fixture View 45"
+      },
+      {
+        "id": "view_fixture_46",
+        "name": "Fixture View 46"
+      },
+      {
+        "id": "view_fixture_47",
+        "name": "Fixture View 47"
+      },
+      {
+        "id": "view_fixture_48",
+        "name": "Fixture View 48"
+      },
+      {
+        "id": "view_fixture_49",
+        "name": "Fixture View 49"
+      },
+      {
+        "id": "view_fixture_50",
+        "name": "Fixture View 50"
+      },
+      {
+        "id": "view_fixture_51",
+        "name": "Fixture View 51"
+      },
+      {
+        "id": "view_fixture_52",
+        "name": "Fixture View 52"
+      },
+      {
+        "id": "view_fixture_53",
+        "name": "Fixture View 53"
+      },
+      {
+        "id": "view_fixture_54",
+        "name": "Fixture View 54"
+      },
+      {
+        "id": "view_fixture_55",
+        "name": "Fixture View 55"
+      },
+      {
+        "id": "view_fixture_56",
+        "name": "Fixture View 56"
+      },
+      {
+        "id": "view_fixture_57",
+        "name": "Fixture View 57"
+      },
+      {
+        "id": "view_fixture_58",
+        "name": "Fixture View 58"
+      },
+      {
+        "id": "view_fixture_59",
+        "name": "Fixture View 59"
+      },
+      {
+        "id": "view_fixture_60",
+        "name": "Fixture View 60"
+      },
+      {
+        "id": "view_fixture_61",
+        "name": "Fixture View 61"
+      },
+      {
+        "id": "view_fixture_62",
+        "name": "Fixture View 62"
+      },
+      {
+        "id": "view_fixture_63",
+        "name": "Fixture View 63"
+      },
+      {
+        "id": "view_fixture_64",
+        "name": "Fixture View 64"
+      },
+      {
+        "id": "view_fixture_65",
+        "name": "Fixture View 65"
+      },
+      {
+        "id": "view_fixture_66",
+        "name": "Fixture View 66"
+      },
+      {
+        "id": "view_fixture_67",
+        "name": "Fixture View 67"
+      },
+      {
+        "id": "view_fixture_68",
+        "name": "Fixture View 68"
+      },
+      {
+        "id": "view_fixture_69",
+        "name": "Fixture View 69"
+      },
+      {
+        "id": "view_fixture_70",
+        "name": "Fixture View 70"
+      },
+      {
+        "id": "view_fixture_71",
+        "name": "Fixture View 71"
+      },
+      {
+        "id": "view_fixture_72",
+        "name": "Fixture View 72"
+      },
+      {
+        "id": "view_fixture_73",
+        "name": "Fixture View 73"
+      },
+      {
+        "id": "view_fixture_74",
+        "name": "Fixture View 74"
+      },
+      {
+        "id": "view_fixture_75",
+        "name": "Fixture View 75"
+      },
+      {
+        "id": "view_fixture_76",
+        "name": "Fixture View 76"
+      },
+      {
+        "id": "view_fixture_77",
+        "name": "Fixture View 77"
+      },
+      {
+        "id": "view_fixture_78",
+        "name": "Fixture View 78"
+      },
+      {
+        "id": "view_fixture_79",
+        "name": "Fixture View 79"
+      },
+      {
+        "id": "view_fixture_80",
+        "name": "Fixture View 80"
+      },
+      {
+        "id": "view_fixture_81",
+        "name": "Fixture View 81"
+      },
+      {
+        "id": "view_fixture_82",
+        "name": "Fixture View 82"
+      },
+      {
+        "id": "view_fixture_83",
+        "name": "Fixture View 83"
+      },
+      {
+        "id": "view_fixture_84",
+        "name": "Fixture View 84"
+      },
+      {
+        "id": "view_fixture_85",
+        "name": "Fixture View 85"
+      },
+      {
+        "id": "view_fixture_86",
+        "name": "Fixture View 86"
+      },
+      {
+        "id": "view_fixture_87",
+        "name": "Fixture View 87"
+      },
+      {
+        "id": "view_fixture_88",
+        "name": "Fixture View 88"
+      },
+      {
+        "id": "view_fixture_89",
+        "name": "Fixture View 89"
+      },
+      {
+        "id": "view_fixture_90",
+        "name": "Fixture View 90"
+      },
+      {
+        "id": "view_fixture_91",
+        "name": "Fixture View 91"
+      },
+      {
+        "id": "view_fixture_92",
+        "name": "Fixture View 92"
+      },
+      {
+        "id": "view_fixture_93",
+        "name": "Fixture View 93"
+      },
+      {
+        "id": "view_fixture_94",
+        "name": "Fixture View 94"
+      },
+      {
+        "id": "view_fixture_95",
+        "name": "Fixture View 95"
+      },
+      {
+        "id": "view_fixture_96",
+        "name": "Fixture View 96"
+      },
+      {
+        "id": "view_fixture_97",
+        "name": "Fixture View 97"
+      },
+      {
+        "id": "view_fixture_98",
+        "name": "Fixture View 98"
+      },
+      {
+        "id": "view_fixture_99",
+        "name": "Fixture View 99"
+      },
+      {
+        "id": "view_fixture_100",
+        "name": "Fixture View 100"
+      }
+    ]
+  }
+}

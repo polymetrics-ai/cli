@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gridly Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Gridly API key, sent as the Authorization header (\"ApiKey <key>\"). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.gridly.com/v1",
+      "description": "Gridly API base URL override for tests or proxies."
+    },
+    "view_ids": {
+      "type": "string",
+      "description": "Comma-separated list of Gridly view ids to fan out over for the records and branches streams (one request per id). Required for records/branches; not used by the views stream, which lists all views in one request."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages per view; use 0, all, or unlimited to exhaust each stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

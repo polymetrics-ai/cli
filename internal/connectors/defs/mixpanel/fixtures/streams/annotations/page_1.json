@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/annotations", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "annotations": [
+        { "id": 21, "date": "2026-01-01T00:00:00Z", "description": "Fixture release annotation" }
+      ]
+    }
+  }
+}

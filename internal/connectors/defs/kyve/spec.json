@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "KYVE Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.korellia.kyve.network",
+      "description": "KYVE Cosmos-style REST query endpoint base URL. No credentials required; defaults to the public KYVE Korellia network endpoint."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000), sent as the pagination.limit query parameter."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages to read; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

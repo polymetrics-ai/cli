@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/agents",
+    "query": { "page": "1", "page_size": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "agents": [
+        {
+          "id": 2001,
+          "name": "Fixture Agent 1",
+          "email": "fixture.agent1@example.com",
+          "status": "available"
+        },
+        {
+          "id": 2002,
+          "name": "Fixture Agent 2",
+          "email": "fixture.agent2@example.com",
+          "status": "busy"
+        }
+      ]
+    }
+  }
+}

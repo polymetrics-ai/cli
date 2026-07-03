@@ -1,0 +1,22 @@
+{
+  "name": "commcare",
+  "display_name": "CommCare",
+  "description": "Reads CommCare forms and cases through the CommCare HQ API.",
+  "integration_type": "api",
+  "docs_url": "https://confluence.dimagi.com/display/commcarepublic/CommCare+HQ+APIs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external CommCare HQ API read of project forms and cases"
+  }
+}

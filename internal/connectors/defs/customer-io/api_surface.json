@@ -1,0 +1,16 @@
+{
+  "api": "Customer.io App (Beta) API v1 (https://api.customer.io/v1, or https://api-eu.customer.io/v1 for the EU region)",
+  "docs": "https://customer.io/docs/api/app/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 4 legacy-parity read streams only, matching internal/connectors/customer-io. The App API's transactional/broadcast-trigger send endpoints and journeys/reporting surface are out of scope until Pass B; this connector is read-only (capabilities.write is false, matching legacy).",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/v1/newsletters", "covered_by": { "stream": "newsletters" } },
+    { "method": "GET", "path": "/v1/segments", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "/v1/broadcasts", "covered_by": { "stream": "broadcasts" } },
+    { "method": "GET", "path": "/v1/campaigns/{id}/metrics", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/send/email", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/send/push", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/exports", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

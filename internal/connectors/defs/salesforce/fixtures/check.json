@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/services/data/synthetic-conformance-value/" },
+  "response": {
+    "status": 200,
+    "body": { "label": "Spring '26", "currentVersion": "60.0" }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "rss",
+  "display_name": "RSS",
+  "description": "Reads RSS channel metadata and feed items from any RSS 2.0 feed URL. Read-only and credential-free.",
+  "integration_type": "api",
+  "docs_url": "https://www.rssboard.org/rss-specification",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external RSS feed read (XML over HTTP/HTTPS)",
+    "approval": "none; read-only, credential-free feed reader"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "StreamHook/CheckHook-handled: every read AND the health check decode an RSS/XML response body (encoding/xml), which the engine's declarative fixture-replay path cannot express (it only decodes JSON bodies, engine/read.go); hook-covered, proven live by internal/connectors/hooks/rss/hooks_test.go and internal/connectors/paritytest/rss/parity_test.go"
+  }
+}

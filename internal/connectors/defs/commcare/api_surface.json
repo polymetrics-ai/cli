@@ -1,0 +1,13 @@
+{
+  "api": "CommCare HQ API v0.5 (https://confluence.dimagi.com/display/commcarepublic/CommCare+HQ+APIs)",
+  "docs": "https://confluence.dimagi.com/display/commcarepublic/CommCare+HQ+APIs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave migration: the 2 legacy-parity read streams only (forms, cases); CommCare HQ's write/mutation API is out of scope for this pass",
+  "endpoints": [
+    { "method": "GET", "path": "/a/{domain}/api/v0.5/form/", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/a/{domain}/api/v0.5/case/", "covered_by": { "stream": "cases" } },
+    { "method": "GET", "path": "/a/{domain}/api/v0.5/application/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/a/{domain}/api/v0.5/user/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/a/{domain}/receiver/", "excluded": { "category": "out_of_scope", "reason": "form submission ingestion, not a read/catalog data stream" } }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/transactions",
+    "query": { "page_size": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "transactions": [], "pagination": {} }
+  }
+}

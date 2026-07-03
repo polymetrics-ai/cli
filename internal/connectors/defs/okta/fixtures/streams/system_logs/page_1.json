@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/logs", "query": { "limit": "200" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "uuid": "log_fixture_1",
+        "published": "2026-01-01T00:00:00Z",
+        "eventType": "user.session.start",
+        "displayMessage": "User login to Okta"
+      },
+      {
+        "uuid": "log_fixture_2",
+        "published": "2026-01-01T00:00:01Z",
+        "eventType": "user.session.end",
+        "displayMessage": "User logout from Okta"
+      }
+    ]
+  }
+}

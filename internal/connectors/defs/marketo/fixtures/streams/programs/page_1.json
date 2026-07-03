@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/programs.json", "query": { "batchSize": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        { "id": 201, "name": "Fixture Program One", "updatedAt": "2026-01-01T00:00:00Z", "createdAt": "2026-01-01T00:00:00Z" },
+        { "id": 202, "name": "Fixture Program Two", "updatedAt": "2026-01-01T00:00:00Z", "createdAt": "2026-01-01T00:00:00Z" }
+      ],
+      "nextPageToken": "fixture-token-1",
+      "moreResult": true
+    }
+  }
+}

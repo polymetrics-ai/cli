@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mixpanel Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "Mixpanel Query API service account username (not secret), consumed by hooks/mixpanel/hooks.go's AuthHook. Takes priority over the username_secret secret when both are set (matches legacy's mixpanelCredentials config-then-secrets precedence)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://mixpanel.com/api/2.0",
+      "description": "Mixpanel Query API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "1000",
+      "description": "Records per page (1-10000)."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Maximum pages; leave unset, or use all/unlimited, to exhaust the stream."
+    },
+    "username_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mixpanel Query API service account username, provided as a secret (mirrors legacy's cfg.Secrets[\"username\"] fallback). Used only when the non-secret username config value is unset; matches legacy's mixpanelCredentials config-then-secrets precedence exactly. Never logged."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mixpanel Query API service account secret (password). Takes priority over api_secret when both are set (matches legacy's password-then-api_secret precedence). Used only for Basic auth; never logged."
+    },
+    "api_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mixpanel legacy project API secret, used as the Basic auth password only when the password secret is unset (matches legacy's mixpanelCredentials fallback). Never logged."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

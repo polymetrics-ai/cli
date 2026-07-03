@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/synthetic-conformance-value/submissions",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "submissions": []
+    }
+  }
+}

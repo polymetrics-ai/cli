@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value", "query": { "fields": "id,name,category,fan_count,link" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "page_fixture_1",
+      "name": "Fixture Page",
+      "category": "Software company",
+      "fan_count": 4200,
+      "link": "https://www.facebook.com/fixture-page"
+    }
+  }
+}

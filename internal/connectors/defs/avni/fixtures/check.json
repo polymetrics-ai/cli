@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/subjects", "query": { "page_size": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "items": [], "next_page": "" }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Genesys Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "base_url", "token_url"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Genesys Cloud OAuth client credentials grant client id. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Genesys Cloud OAuth client credentials grant client secret. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Genesys Cloud Platform API base URL, e.g. https://api.mypurecloud.com/api/v2. No derived default: legacy derives this from a region config value (https://api.<region>/api/v2, region defaulting to mypurecloud.com), but the engine's spec.json 'default' mechanism only materializes a fixed literal, not a value derived from another config key (conventions.md §3, auth0's identical audience narrowing) — set this explicitly instead of relying on region-based derivation."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Genesys Cloud OAuth token endpoint, e.g. https://login.mypurecloud.com/oauth/token. No derived default, for the same reason as base_url above: legacy derives this from region (https://login.<region>/oauth/token) but the engine cannot express a derived-from-another-config-key default."
+    },
+    "scope": {
+      "type": "string",
+      "default": "",
+      "description": "Optional OAuth scope requested on the client-credentials token exchange. Defaults to empty (no scope requested), matching legacy's own scope-only-if-set behavior (genesys.go:149-150)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-500), matching legacy's defaultPageSize/maxPageSize bounds."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

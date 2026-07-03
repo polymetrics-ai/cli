@@ -1,0 +1,23 @@
+{
+  "name": "facebook-marketing",
+  "display_name": "Facebook Marketing",
+  "description": "Reads Facebook Marketing ad accounts, campaigns, and ads through the Graph API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.facebook.com/docs/marketing-api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Facebook Graph API read of ad account, campaign, and ad metadata",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  }
+}

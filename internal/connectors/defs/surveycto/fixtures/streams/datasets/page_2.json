@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/datasets",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "datasets": []
+    }
+  }
+}

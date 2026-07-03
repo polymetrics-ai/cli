@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/_cat/indices", "query": { "format": "json" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "index": "fixture_index_1", "docs.count": "12" },
+      { "index": "fixture_index_2", "docs.count": "34" }
+    ]
+  }
+}

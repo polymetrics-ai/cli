@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/leads", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "leadid": "fixture_lead_1", "fullname": "Fixture Lead 1", "emailaddress1": "fixture1@example.com", "createdon": "2026-01-01T00:00:00Z", "modifiedon": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

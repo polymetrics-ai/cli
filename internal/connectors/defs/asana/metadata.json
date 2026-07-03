@@ -1,0 +1,23 @@
+{
+  "name": "asana",
+  "display_name": "Asana",
+  "description": "Reads Asana workspaces, projects, and tasks through the Asana v1 REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.asana.com/reference/rest-api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Asana API read of workspace, project, and task data",
+    "approval": "none; read-only, no writes"
+  }
+}

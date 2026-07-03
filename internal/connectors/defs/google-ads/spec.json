@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Ads Connection Specification",
+  "type": "object",
+  "required": ["access_token", "developer_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 access token with Google Ads read scope. Used only for Bearer auth; never logged. Acquisition/refresh is out of scope for this connector (credentials layer already owns it)."
+    },
+    "developer_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google Ads developer token, sent as the developer-token header on every request. Never logged."
+    },
+    "login_customer_id": {
+      "type": "string",
+      "description": "Optional manager (MCC) customer id sent as the login-customer-id header. Omitted entirely when unset."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://googleads.googleapis.com/v24",
+      "description": "Google Ads REST API base URL override for tests or proxies."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Google Ads customer id to query GAQL search resources (campaigns, ad_groups) against. Required for those streams only; accessible_customers is account-scoped and does not reference it."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 1000,
+      "description": "GAQL search pageSize (1-10000)."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Maximum pages fetched per GAQL search stream. A positive integer, or 'all'/'unlimited' (default) for no cap."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

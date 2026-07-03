@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/customer", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "items": [], "hasMore": false }
+  }
+}

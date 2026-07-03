@@ -1,0 +1,16 @@
+{
+  "api": "Facebook Marketing (Graph) API v20.0 (https://developers.facebook.com/docs/marketing-api/)",
+  "docs": "https://developers.facebook.com/docs/marketing-api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave4 migration: the 3 legacy-parity read streams only (ad_accounts, campaigns, ads); legacy facebook-marketing is read-only (Write always returns ErrUnsupportedOperation) despite the catalog inventory labeling this connector runtime_kind:native_go -- read internal/connectors/facebook-marketing/facebook_marketing.go (ground truth): it is a plain connsdk.Requester-based HTTP connector, not a protocol-native SDK client, and Capabilities.Write is false. The full Marketing API surface (ad sets, ad creatives, insights/reporting, audiences, write/mutation endpoints) is out of scope until a write-capable Pass B, if ever approved.",
+  "endpoints": [
+    { "method": "GET", "path": "/me/adaccounts", "covered_by": { "stream": "ad_accounts" } },
+    { "method": "GET", "path": "/{ad_account_id}/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/{ad_account_id}/ads", "covered_by": { "stream": "ads" } },
+    { "method": "GET", "path": "/{ad_account_id}/adsets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/{ad_account_id}/insights", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/{ad_id}/adcreatives", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/{ad_account_id}/customaudiences", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/{ad_account_id}/campaigns", "excluded": { "category": "out_of_scope", "reason": "legacy connector is read-only; no write action exists to migrate" } }
+  ]
+}

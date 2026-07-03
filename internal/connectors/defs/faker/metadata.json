@@ -1,0 +1,21 @@
+{
+  "name": "faker",
+  "display_name": "Sample Data",
+  "description": "Generates deterministic sample users, purchases, and products without network access.",
+  "integration_type": "api",
+  "docs_url": "https://faker.readthedocs.io/en/master/",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": true
+  },
+  "risk": {
+    "read": "none; in-process synthetic data generation, no network access",
+    "write": "n/a (read-only source)",
+    "approval": "none required; no external data is read or written"
+  }
+}

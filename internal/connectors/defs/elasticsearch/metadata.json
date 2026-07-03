@@ -1,0 +1,27 @@
+{
+  "name": "elasticsearch",
+  "display_name": "Elasticsearch",
+  "description": "Reads Elasticsearch index metadata and documents through the REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://www.elastic.co/docs/reference/elasticsearch",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Elasticsearch cluster read of index metadata and documents",
+    "approval": "none; read-only cluster access"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "auth-dependent (mode:custom AuthHook is the FIRST candidate, and conformance's synthetic non-secret config populates api_key_id with a truthy synthetic-conformance-value, so its when-gate always matches during dynamic replay); hook-covered, proven live by internal/connectors/hooks/elasticsearch/hooks_test.go (api-key/basic/none auth precedence and the documents-stream _source flatten) -- conformance's dynamic replay runs with Hooks=nil (hookset registration is orchestrator-owned, wave6 scope) and cannot exercise the custom auth candidate or the RecordHook flatten at all"
+  }
+}

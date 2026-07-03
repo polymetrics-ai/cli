@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/campaigns" },
+  "response": {
+    "status": 200,
+    "body": { "campaigns": [] }
+  }
+}

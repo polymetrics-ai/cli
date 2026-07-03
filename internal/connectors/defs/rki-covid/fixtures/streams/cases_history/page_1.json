@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/history/cases" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "cases": 100, "date": "2026-01-01T00:00:00.000Z" },
+        { "cases": 120, "date": "2026-01-02T00:00:00.000Z" }
+      ]
+    }
+  }
+}

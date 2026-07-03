@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/calls",
+    "query": {
+      "page": "2",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "calls": [
+        {
+          "id": 101,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-29T00:00:00Z",
+          "duration": 6060,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        }
+      ]
+    }
+  }
+}

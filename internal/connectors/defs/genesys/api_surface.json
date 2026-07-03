@@ -1,0 +1,17 @@
+{
+  "api": "Genesys Cloud Platform API v2 (https://api.<region>/api/v2)",
+  "docs": "https://developer.genesys.cloud/devapps/api-explorer",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave1 fan-out migration: the 4 legacy-parity read streams (users, queues, groups, divisions) and legacy's single OAuth2 client-credentials auth mode are fully migrated. The broader Genesys Cloud Platform API surface (conversations, analytics, routing configuration, presence, recordings) remains out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/api/v2/routing/queues", "covered_by": { "stream": "queues" } },
+    { "method": "GET", "path": "/api/v2/groups", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/api/v2/authorization/divisions", "covered_by": { "stream": "divisions" } },
+    { "method": "POST", "path": "/oauth/token", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 client-credentials token exchange, driven by base.auth's oauth2_client_credentials mode; not a syncable stream in its own right" } },
+    { "method": "GET", "path": "/api/v2/analytics/conversations/details/query", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/conversations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2/recording/recordings", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/api/v2/users/{id}", "excluded": { "category": "destructive_admin", "reason": "deletes user data; not a syncable read" } }
+  ]
+}

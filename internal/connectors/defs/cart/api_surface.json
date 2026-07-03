@@ -1,0 +1,14 @@
+{
+  "api": "Cart.com store REST API (self-hosted store base_url; https://developers.cart.com)",
+  "docs": "https://developers.cart.com",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave1 migration: the 3 legacy-parity read streams only (orders, customers, products); legacy is a hand-rolled read-only REST client with no write surface, so there is nothing to expand for writes",
+  "endpoints": [
+    { "method": "GET", "path": "/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "POST", "path": "/orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/products/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/inventory", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

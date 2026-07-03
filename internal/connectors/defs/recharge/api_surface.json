@@ -1,0 +1,17 @@
+{
+  "api": "Recharge API 2021-11 (https://api.rechargeapps.com)",
+  "docs": "https://developer.rechargepayments.com/2021-11/",
+  "reviewed_at": "2026-07-03",
+  "scope": "migration: the 3 legacy-parity read streams only (customers, subscriptions, orders); legacy itself ships no writes (capabilities.write is false) and no other Recharge resource is modeled.",
+  "endpoints": [
+    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/subscriptions", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/charges", "excluded": { "category": "out_of_scope", "reason": "charges not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/discounts", "excluded": { "category": "out_of_scope", "reason": "discounts not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "products not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/addresses", "excluded": { "category": "out_of_scope", "reason": "addresses not modeled by legacy; Pass B capability expansion" } },
+    { "method": "GET", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "webhooks not modeled by legacy; Pass B capability expansion" } },
+    { "method": "POST", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "legacy is read-only; write actions never implemented" } }
+  ]
+}

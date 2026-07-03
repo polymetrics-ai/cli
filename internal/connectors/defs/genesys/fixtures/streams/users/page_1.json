@@ -1,0 +1,617 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": {
+      "pageSize": "100",
+      "pageNumber": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entities": [
+        {
+          "id": "u1",
+          "name": "Fixture User 1",
+          "email": "fixture.user1@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u2",
+          "name": "Fixture User 2",
+          "email": "fixture.user2@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u3",
+          "name": "Fixture User 3",
+          "email": "fixture.user3@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u4",
+          "name": "Fixture User 4",
+          "email": "fixture.user4@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u5",
+          "name": "Fixture User 5",
+          "email": "fixture.user5@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u6",
+          "name": "Fixture User 6",
+          "email": "fixture.user6@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u7",
+          "name": "Fixture User 7",
+          "email": "fixture.user7@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u8",
+          "name": "Fixture User 8",
+          "email": "fixture.user8@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u9",
+          "name": "Fixture User 9",
+          "email": "fixture.user9@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u10",
+          "name": "Fixture User 10",
+          "email": "fixture.user10@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u11",
+          "name": "Fixture User 11",
+          "email": "fixture.user11@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u12",
+          "name": "Fixture User 12",
+          "email": "fixture.user12@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u13",
+          "name": "Fixture User 13",
+          "email": "fixture.user13@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u14",
+          "name": "Fixture User 14",
+          "email": "fixture.user14@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u15",
+          "name": "Fixture User 15",
+          "email": "fixture.user15@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u16",
+          "name": "Fixture User 16",
+          "email": "fixture.user16@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u17",
+          "name": "Fixture User 17",
+          "email": "fixture.user17@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u18",
+          "name": "Fixture User 18",
+          "email": "fixture.user18@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u19",
+          "name": "Fixture User 19",
+          "email": "fixture.user19@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u20",
+          "name": "Fixture User 20",
+          "email": "fixture.user20@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u21",
+          "name": "Fixture User 21",
+          "email": "fixture.user21@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u22",
+          "name": "Fixture User 22",
+          "email": "fixture.user22@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u23",
+          "name": "Fixture User 23",
+          "email": "fixture.user23@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u24",
+          "name": "Fixture User 24",
+          "email": "fixture.user24@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u25",
+          "name": "Fixture User 25",
+          "email": "fixture.user25@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u26",
+          "name": "Fixture User 26",
+          "email": "fixture.user26@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u27",
+          "name": "Fixture User 27",
+          "email": "fixture.user27@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u28",
+          "name": "Fixture User 28",
+          "email": "fixture.user28@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u29",
+          "name": "Fixture User 29",
+          "email": "fixture.user29@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u30",
+          "name": "Fixture User 30",
+          "email": "fixture.user30@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u31",
+          "name": "Fixture User 31",
+          "email": "fixture.user31@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u32",
+          "name": "Fixture User 32",
+          "email": "fixture.user32@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u33",
+          "name": "Fixture User 33",
+          "email": "fixture.user33@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u34",
+          "name": "Fixture User 34",
+          "email": "fixture.user34@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u35",
+          "name": "Fixture User 35",
+          "email": "fixture.user35@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u36",
+          "name": "Fixture User 36",
+          "email": "fixture.user36@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u37",
+          "name": "Fixture User 37",
+          "email": "fixture.user37@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u38",
+          "name": "Fixture User 38",
+          "email": "fixture.user38@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u39",
+          "name": "Fixture User 39",
+          "email": "fixture.user39@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u40",
+          "name": "Fixture User 40",
+          "email": "fixture.user40@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u41",
+          "name": "Fixture User 41",
+          "email": "fixture.user41@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u42",
+          "name": "Fixture User 42",
+          "email": "fixture.user42@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u43",
+          "name": "Fixture User 43",
+          "email": "fixture.user43@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u44",
+          "name": "Fixture User 44",
+          "email": "fixture.user44@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u45",
+          "name": "Fixture User 45",
+          "email": "fixture.user45@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u46",
+          "name": "Fixture User 46",
+          "email": "fixture.user46@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u47",
+          "name": "Fixture User 47",
+          "email": "fixture.user47@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u48",
+          "name": "Fixture User 48",
+          "email": "fixture.user48@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u49",
+          "name": "Fixture User 49",
+          "email": "fixture.user49@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u50",
+          "name": "Fixture User 50",
+          "email": "fixture.user50@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u51",
+          "name": "Fixture User 51",
+          "email": "fixture.user51@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u52",
+          "name": "Fixture User 52",
+          "email": "fixture.user52@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u53",
+          "name": "Fixture User 53",
+          "email": "fixture.user53@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u54",
+          "name": "Fixture User 54",
+          "email": "fixture.user54@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u55",
+          "name": "Fixture User 55",
+          "email": "fixture.user55@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u56",
+          "name": "Fixture User 56",
+          "email": "fixture.user56@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u57",
+          "name": "Fixture User 57",
+          "email": "fixture.user57@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u58",
+          "name": "Fixture User 58",
+          "email": "fixture.user58@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u59",
+          "name": "Fixture User 59",
+          "email": "fixture.user59@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u60",
+          "name": "Fixture User 60",
+          "email": "fixture.user60@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u61",
+          "name": "Fixture User 61",
+          "email": "fixture.user61@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u62",
+          "name": "Fixture User 62",
+          "email": "fixture.user62@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u63",
+          "name": "Fixture User 63",
+          "email": "fixture.user63@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u64",
+          "name": "Fixture User 64",
+          "email": "fixture.user64@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u65",
+          "name": "Fixture User 65",
+          "email": "fixture.user65@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u66",
+          "name": "Fixture User 66",
+          "email": "fixture.user66@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u67",
+          "name": "Fixture User 67",
+          "email": "fixture.user67@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u68",
+          "name": "Fixture User 68",
+          "email": "fixture.user68@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u69",
+          "name": "Fixture User 69",
+          "email": "fixture.user69@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u70",
+          "name": "Fixture User 70",
+          "email": "fixture.user70@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u71",
+          "name": "Fixture User 71",
+          "email": "fixture.user71@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u72",
+          "name": "Fixture User 72",
+          "email": "fixture.user72@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u73",
+          "name": "Fixture User 73",
+          "email": "fixture.user73@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u74",
+          "name": "Fixture User 74",
+          "email": "fixture.user74@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u75",
+          "name": "Fixture User 75",
+          "email": "fixture.user75@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u76",
+          "name": "Fixture User 76",
+          "email": "fixture.user76@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u77",
+          "name": "Fixture User 77",
+          "email": "fixture.user77@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u78",
+          "name": "Fixture User 78",
+          "email": "fixture.user78@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u79",
+          "name": "Fixture User 79",
+          "email": "fixture.user79@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u80",
+          "name": "Fixture User 80",
+          "email": "fixture.user80@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u81",
+          "name": "Fixture User 81",
+          "email": "fixture.user81@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u82",
+          "name": "Fixture User 82",
+          "email": "fixture.user82@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u83",
+          "name": "Fixture User 83",
+          "email": "fixture.user83@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u84",
+          "name": "Fixture User 84",
+          "email": "fixture.user84@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u85",
+          "name": "Fixture User 85",
+          "email": "fixture.user85@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u86",
+          "name": "Fixture User 86",
+          "email": "fixture.user86@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u87",
+          "name": "Fixture User 87",
+          "email": "fixture.user87@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u88",
+          "name": "Fixture User 88",
+          "email": "fixture.user88@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u89",
+          "name": "Fixture User 89",
+          "email": "fixture.user89@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u90",
+          "name": "Fixture User 90",
+          "email": "fixture.user90@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u91",
+          "name": "Fixture User 91",
+          "email": "fixture.user91@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u92",
+          "name": "Fixture User 92",
+          "email": "fixture.user92@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u93",
+          "name": "Fixture User 93",
+          "email": "fixture.user93@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u94",
+          "name": "Fixture User 94",
+          "email": "fixture.user94@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u95",
+          "name": "Fixture User 95",
+          "email": "fixture.user95@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u96",
+          "name": "Fixture User 96",
+          "email": "fixture.user96@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u97",
+          "name": "Fixture User 97",
+          "email": "fixture.user97@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u98",
+          "name": "Fixture User 98",
+          "email": "fixture.user98@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u99",
+          "name": "Fixture User 99",
+          "email": "fixture.user99@example.com",
+          "state": "active"
+        },
+        {
+          "id": "u100",
+          "name": "Fixture User 100",
+          "email": "fixture.user100@example.com",
+          "state": "active"
+        }
+      ]
+    }
+  }
+}

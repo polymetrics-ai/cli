@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/groups", "query": { "limit": "200" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "00g_fixture_1",
+        "created": "2026-01-01T00:00:00Z",
+        "profile": {
+          "name": "Fixture Group One",
+          "description": "conformance fixture group"
+        }
+      },
+      {
+        "id": "00g_fixture_2",
+        "created": "2026-01-01T00:00:01Z",
+        "profile": {
+          "name": "Fixture Group Two",
+          "description": "conformance fixture group"
+        }
+      }
+    ]
+  }
+}

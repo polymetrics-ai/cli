@@ -1,0 +1,23 @@
+{
+  "name": "marketo",
+  "display_name": "Marketo",
+  "description": "Reads Marketo leads, programs, and activities through Marketo REST endpoints. Read-only; does not refresh OAuth tokens internally.",
+  "integration_type": "api",
+  "docs_url": "https://developers.marketo.com/rest-api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 300
+  },
+  "risk": {
+    "read": "external Marketo REST API read of lead, program, and activity data",
+    "approval": "none; read-only Marketo REST API"
+  }
+}

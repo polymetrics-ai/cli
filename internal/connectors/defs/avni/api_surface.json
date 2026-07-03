@@ -1,0 +1,10 @@
+{
+  "api": "Avni REST API",
+  "docs": "https://avniproject.org/",
+  "reviewed_at": "2026-07-03",
+  "scope": "the 2 legacy-parity read streams only (subjects, encounters); legacy avni is read-only",
+  "endpoints": [
+    { "method": "GET", "path": "/api/subjects", "covered_by": { "stream": "subjects" } },
+    { "method": "GET", "path": "/api/encounters", "covered_by": { "stream": "encounters" } }
+  ]
+}

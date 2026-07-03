@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/newsletters", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "newsletters": [
+        { "id": 1, "name": "Fixture Newsletter One", "type": "newsletter", "subject": "Fixture subject 1", "created": 1767225601, "updated": 1767225602 },
+        { "id": 2, "name": "Fixture Newsletter Two", "type": "newsletter", "subject": "Fixture subject 2", "created": 1767225603, "updated": 1767225604 }
+      ],
+      "next": "cio_fixture_cursor_1"
+    }
+  }
+}

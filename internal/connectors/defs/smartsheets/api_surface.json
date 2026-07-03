@@ -1,0 +1,19 @@
+{
+  "api": "Smartsheet REST API v2 (https://api.smartsheet.com/2.0)",
+  "docs": "https://smartsheet.redoc.ly/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Migration of the read-only legacy connector: sheet metadata and sheet row listing only. The full Smartsheet surface (reports, sights, workspaces, attachments, discussions, webhooks, writes) is out of scope; a read-only migration mirrors legacy exactly.",
+  "endpoints": [
+    { "method": "GET", "path": "/sheets", "covered_by": { "stream": "sheets" } },
+    { "method": "GET", "path": "/sheets/{sheetId}", "covered_by": { "stream": "sheet_rows" } },
+    { "method": "GET", "path": "/reports/{reportId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/sights/{sightId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/workspaces", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/sheets/{sheetId}/attachments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/sheets/{sheetId}/discussions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/sheets/{sheetId}/rows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/sheets/{sheetId}/rows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/sheets/{sheetId}/rows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

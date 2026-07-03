@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CommCare Connection Specification",
+  "type": "object",
+  "required": ["api_key", "project_space"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "CommCare HQ API key. Sent as an ApiKey-scheme Authorization header (Authorization: ApiKey <api_key>); never logged."
+    },
+    "project_space": {
+      "type": "string",
+      "description": "CommCare HQ project space slug; substituted into every stream path (a/{{ config.project_space }}/api/v0.5/<resource>/)."
+    },
+    "app_id": {
+      "type": "string",
+      "description": "Optional CommCare application id; when set, scopes both streams to this app via the app_id query parameter."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.commcarehq.org",
+      "description": "CommCare HQ base URL override for self-hosted instances, tests, or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Dataverse Connection Specification",
+  "type": "object",
+  "required": ["base_url", "scope"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Microsoft Dataverse Web API base URL, e.g. https://org.crm.dynamics.com/api/data/v9.2. No default: an organization URL must be named explicitly (matches legacy's requirement for either config base_url or org_url)."
+    },
+    "login_base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://login.microsoftonline.com",
+      "description": "Azure AD login base URL override for tests or proxies; combined with tenant_id to derive the OAuth2 token endpoint."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full OAuth2 token endpoint override. When set, takes priority over the derived login_base_url/tenant_id endpoint."
+    },
+    "scope": {
+      "type": "string",
+      "description": "OAuth2 client-credentials scope, e.g. https://org.crm.dynamics.com/.default (Dataverse's own resource-scope convention: the scheme+host of base_url, with a /.default suffix). Legacy derives this automatically from base_url's host; the declarative template dialect has no mechanism to strip a URL's path component, so this bundle requires scope to be supplied directly instead (documented parity deviation; see docs.md Known limits)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records requested per @odata.nextLink page (1-5000), sent as the $top query parameter on the first request of each stream."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional hard cap on the number of @odata.nextLink pages read per stream, consumed by hooks/microsoft-dataverse/hooks.go's StreamHook — NOT a declarative streams.json field (pagination is entirely hook-driven since next_url_path cannot address the literal \"@odata.nextLink\" key; see docs.md Known limits). Permissive parse: empty, \"all\", or \"unlimited\" means unbounded."
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Azure AD application (client) ID used for the OAuth2 client-credentials grant. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Azure AD application client secret, sent only in the OAuth2 client-credentials token-exchange request; never logged."
+    },
+    "tenant_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Azure AD tenant ID (GUID or verified domain), used to derive the per-tenant token endpoint. Marked secret to match legacy, which reads it from Secrets."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

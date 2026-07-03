@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views",
+    "query": {
+      "page": "1",
+      "pageSize": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tables",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "rki-covid",
+  "display_name": "RKI COVID",
+  "description": "Reads public Germany COVID case, state, district, and history data derived from RKI reports via the corona-zahlen.org JSON API. Read-only, credential-free.",
+  "integration_type": "api",
+  "docs_url": "https://api.corona-zahlen.org",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external corona-zahlen.org public JSON API read of Germany COVID metrics",
+    "approval": "none; read-only public data API, no credentials"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "recharge",
+  "display_name": "Recharge",
+  "description": "Reads Recharge customers, subscriptions, and orders through the Recharge REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.rechargepayments.com/2021-11/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 250
+  },
+  "risk": {
+    "read": "external Recharge API read of customer, subscription, and order data",
+    "approval": "none; read-only"
+  }
+}

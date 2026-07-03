@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/users/me" },
+  "response": {
+    "status": 200,
+    "body": { "data": { "gid": "fixture_user_1", "name": "Fixture User", "resource_type": "user" } }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "branches",
+  "type": "object",
+  "x-primary-key": ["view_id", "id"],
+  "required": ["id", "view_id"],
+  "properties": {
+    "view_id": { "type": "string" },
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] }
+  }
+}

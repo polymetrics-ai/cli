@@ -1,0 +1,23 @@
+{
+  "name": "surveycto",
+  "display_name": "SurveyCTO",
+  "description": "Reads SurveyCTO forms, submissions, datasets, and cases through the SurveyCTO API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.surveycto.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external SurveyCTO API read of form, submission, dataset, and case data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

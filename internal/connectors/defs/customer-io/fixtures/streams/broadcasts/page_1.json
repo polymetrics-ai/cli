@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/broadcasts", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "broadcasts": [
+        { "id": 1, "name": "Fixture Broadcast One", "type": "broadcast", "state": "active", "active": true, "created": 1767225601, "updated": 1767225602 },
+        { "id": 2, "name": "Fixture Broadcast Two", "type": "broadcast", "state": "active", "active": true, "created": 1767225603, "updated": 1767225604 }
+      ],
+      "next": "cio_fixture_cursor_1"
+    }
+  }
+}
