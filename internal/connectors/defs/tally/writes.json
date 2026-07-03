@@ -1,0 +1,187 @@
+{
+  "actions": [
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["formId", "url", "eventTypes"],
+        "properties": {
+          "formId": { "type": "string", "description": "The ID of the form to create the webhook for" },
+          "url": { "type": "string", "description": "The URL to send webhook events to" },
+          "signingSecret": { "type": "string", "description": "Optional secret used to sign webhook payloads" },
+          "httpHeaders": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "value"],
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            }
+          },
+          "eventTypes": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["FORM_RESPONSE"] }
+          },
+          "externalSubscriber": { "type": "string" }
+        }
+      },
+      "risk": "registers an external endpoint to receive form submission events"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "formId", "url", "eventTypes", "isEnabled"],
+        "properties": {
+          "id": { "type": "string" },
+          "formId": { "type": "string", "description": "The ID of the form the webhook is for" },
+          "url": { "type": "string", "description": "The URL to send webhook events to" },
+          "signingSecret": { "type": "string" },
+          "httpHeaders": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "value"],
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            }
+          },
+          "eventTypes": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["FORM_RESPONSE"] }
+          },
+          "isEnabled": { "type": "boolean" }
+        }
+      },
+      "risk": "changes where and whether an existing webhook delivers form submission events"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "stops delivery of form submission events to the webhook's registered endpoint; if this is the form's last webhook, the webhooks integration is also marked deleted",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_form",
+      "kind": "create",
+      "method": "POST",
+      "path": "/forms",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["blocks", "status"],
+        "properties": {
+          "workspaceId": { "type": "string", "description": "ID of the workspace to create the form in; defaults to the user's default workspace" },
+          "templateId": { "type": "string", "description": "ID of the template to base the form on" },
+          "status": { "type": "string", "enum": ["BLANK", "DRAFT", "PUBLISHED", "DELETED"] },
+          "blocks": { "type": "array", "items": { "type": "object" } },
+          "settings": { "type": "object" }
+        }
+      },
+      "risk": "creates a new live form in the Tally account"
+    },
+    {
+      "name": "update_form",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/forms/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "type": "string", "enum": ["BLANK", "DRAFT", "PUBLISHED", "DELETED"] },
+          "blocks": { "type": "array", "items": { "type": "object" } },
+          "settings": { "type": "object" }
+        }
+      },
+      "risk": "changes a live form's name, status, blocks, or settings"
+    },
+    {
+      "name": "delete_form",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/forms/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "moves a form to the trash, stopping new submissions",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_submission",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/forms/{{ record.form_id }}/submissions/{{ record.id }}",
+      "path_fields": ["form_id", "id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["form_id", "id"],
+        "properties": {
+          "form_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a respondent's submission and its answers from Tally",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new workspace; requires the account to have a Pro subscription"
+    }
+  ]
+}

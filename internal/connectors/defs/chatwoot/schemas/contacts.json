@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_activity_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "phone_number": { "type": ["string", "null"] },
+    "identifier": { "type": ["string", "null"] },
+    "thumbnail": { "type": ["string", "null"] },
+    "blocked": { "type": ["boolean", "null"] },
+    "availability_status": { "type": ["string", "null"] },
+    "additional_attributes": { "type": ["object", "null"] },
+    "custom_attributes": { "type": ["object", "null"] },
+    "last_activity_at": { "type": ["integer", "null"] },
+    "created_at": { "type": ["integer", "null"] },
+    "contact_inboxes": { "type": ["array", "null"], "items": { "type": "object" } }
+  }
+}

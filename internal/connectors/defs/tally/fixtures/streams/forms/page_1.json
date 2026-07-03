@@ -1,0 +1,1021 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms",
+    "query": {
+      "limit": "100",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "form_fixture_1",
+          "name": "Fixture Form 1",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 2,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_2",
+          "name": "Fixture Form 2",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 4,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_3",
+          "name": "Fixture Form 3",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 6,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_4",
+          "name": "Fixture Form 4",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 8,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_5",
+          "name": "Fixture Form 5",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 10,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_6",
+          "name": "Fixture Form 6",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 12,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_7",
+          "name": "Fixture Form 7",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 14,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_8",
+          "name": "Fixture Form 8",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 16,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_9",
+          "name": "Fixture Form 9",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 18,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_10",
+          "name": "Fixture Form 10",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 20,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_11",
+          "name": "Fixture Form 11",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 22,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_12",
+          "name": "Fixture Form 12",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 24,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_13",
+          "name": "Fixture Form 13",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 26,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_14",
+          "name": "Fixture Form 14",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 28,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_15",
+          "name": "Fixture Form 15",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 30,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_16",
+          "name": "Fixture Form 16",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 32,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_17",
+          "name": "Fixture Form 17",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 34,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_18",
+          "name": "Fixture Form 18",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 36,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_19",
+          "name": "Fixture Form 19",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 38,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_20",
+          "name": "Fixture Form 20",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 40,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_21",
+          "name": "Fixture Form 21",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 42,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_22",
+          "name": "Fixture Form 22",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 44,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_23",
+          "name": "Fixture Form 23",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 46,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_24",
+          "name": "Fixture Form 24",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 48,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_25",
+          "name": "Fixture Form 25",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 50,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_26",
+          "name": "Fixture Form 26",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 52,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_27",
+          "name": "Fixture Form 27",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 54,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_28",
+          "name": "Fixture Form 28",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 56,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_29",
+          "name": "Fixture Form 29",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 58,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_30",
+          "name": "Fixture Form 30",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 60,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_31",
+          "name": "Fixture Form 31",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 62,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_32",
+          "name": "Fixture Form 32",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 64,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_33",
+          "name": "Fixture Form 33",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 66,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_34",
+          "name": "Fixture Form 34",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 68,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_35",
+          "name": "Fixture Form 35",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 70,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_36",
+          "name": "Fixture Form 36",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 72,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_37",
+          "name": "Fixture Form 37",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 74,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_38",
+          "name": "Fixture Form 38",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 76,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_39",
+          "name": "Fixture Form 39",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 78,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_40",
+          "name": "Fixture Form 40",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 80,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_41",
+          "name": "Fixture Form 41",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 82,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_42",
+          "name": "Fixture Form 42",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 84,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_43",
+          "name": "Fixture Form 43",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 86,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_44",
+          "name": "Fixture Form 44",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 88,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_45",
+          "name": "Fixture Form 45",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 90,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_46",
+          "name": "Fixture Form 46",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 92,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_47",
+          "name": "Fixture Form 47",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 94,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_48",
+          "name": "Fixture Form 48",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 96,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_49",
+          "name": "Fixture Form 49",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 98,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_50",
+          "name": "Fixture Form 50",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 100,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_51",
+          "name": "Fixture Form 51",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 102,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_52",
+          "name": "Fixture Form 52",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 104,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_53",
+          "name": "Fixture Form 53",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 106,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_54",
+          "name": "Fixture Form 54",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 108,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_55",
+          "name": "Fixture Form 55",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 110,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_56",
+          "name": "Fixture Form 56",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 112,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_57",
+          "name": "Fixture Form 57",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 114,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_58",
+          "name": "Fixture Form 58",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 116,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_59",
+          "name": "Fixture Form 59",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 118,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_60",
+          "name": "Fixture Form 60",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 120,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_61",
+          "name": "Fixture Form 61",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 122,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_62",
+          "name": "Fixture Form 62",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 124,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_63",
+          "name": "Fixture Form 63",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 126,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_64",
+          "name": "Fixture Form 64",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 128,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_65",
+          "name": "Fixture Form 65",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 130,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_66",
+          "name": "Fixture Form 66",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 132,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_67",
+          "name": "Fixture Form 67",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 134,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_68",
+          "name": "Fixture Form 68",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 136,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_69",
+          "name": "Fixture Form 69",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 138,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_70",
+          "name": "Fixture Form 70",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 140,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_71",
+          "name": "Fixture Form 71",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 142,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_72",
+          "name": "Fixture Form 72",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 144,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_73",
+          "name": "Fixture Form 73",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 146,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_74",
+          "name": "Fixture Form 74",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 148,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_75",
+          "name": "Fixture Form 75",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 150,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_76",
+          "name": "Fixture Form 76",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 152,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_77",
+          "name": "Fixture Form 77",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 154,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_78",
+          "name": "Fixture Form 78",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 156,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_79",
+          "name": "Fixture Form 79",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 158,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_80",
+          "name": "Fixture Form 80",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 160,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_81",
+          "name": "Fixture Form 81",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 162,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_82",
+          "name": "Fixture Form 82",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 164,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_83",
+          "name": "Fixture Form 83",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 166,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_84",
+          "name": "Fixture Form 84",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 168,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_85",
+          "name": "Fixture Form 85",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 170,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_86",
+          "name": "Fixture Form 86",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 172,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_87",
+          "name": "Fixture Form 87",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 174,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_88",
+          "name": "Fixture Form 88",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 176,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_89",
+          "name": "Fixture Form 89",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 178,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_90",
+          "name": "Fixture Form 90",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 180,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_91",
+          "name": "Fixture Form 91",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 182,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_92",
+          "name": "Fixture Form 92",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 184,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_93",
+          "name": "Fixture Form 93",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 186,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_94",
+          "name": "Fixture Form 94",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 188,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_95",
+          "name": "Fixture Form 95",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 190,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_96",
+          "name": "Fixture Form 96",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 192,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_97",
+          "name": "Fixture Form 97",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 194,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_98",
+          "name": "Fixture Form 98",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 196,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_99",
+          "name": "Fixture Form 99",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 198,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "form_fixture_100",
+          "name": "Fixture Form 100",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 200,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "page": 1,
+      "limit": 100,
+      "total": 101,
+      "hasMore": true
+    }
+  }
+}

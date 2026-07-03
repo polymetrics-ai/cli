@@ -1,0 +1,31 @@
+{
+  "record": {
+    "status": "DRAFT",
+    "blocks": [
+      { "uuid": "block_fixture_1", "type": "FORM_TITLE", "groupUuid": "group_fixture_1", "groupType": "TEXT", "payload": { "html": "Fixture Form" } }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/forms",
+    "body": {
+      "status": "DRAFT",
+      "blocks": [
+        { "uuid": "block_fixture_1", "type": "FORM_TITLE", "groupUuid": "group_fixture_1", "groupType": "TEXT", "payload": { "html": "Fixture Form" } }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "form_fixture_2",
+      "name": "Fixture Form",
+      "workspaceId": "workspace_fixture_1",
+      "status": "DRAFT",
+      "numberOfSubmissions": 0,
+      "isClosed": false,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

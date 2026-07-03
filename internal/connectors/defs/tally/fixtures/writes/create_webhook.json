@@ -1,0 +1,26 @@
+{
+  "record": {
+    "formId": "form_fixture_1",
+    "url": "https://example.com/webhooks/tally",
+    "eventTypes": ["FORM_RESPONSE"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "formId": "form_fixture_1",
+      "url": "https://example.com/webhooks/tally",
+      "eventTypes": ["FORM_RESPONSE"]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "webhook_fixture_1",
+      "url": "https://example.com/webhooks/tally",
+      "eventTypes": ["FORM_RESPONSE"],
+      "isEnabled": true,
+      "createdAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "form_fixture_1",
+    "name": "Fixture Form Renamed",
+    "status": "PUBLISHED"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/forms/form_fixture_1",
+    "body": {
+      "name": "Fixture Form Renamed",
+      "status": "PUBLISHED"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "form_fixture_1",
+      "name": "Fixture Form Renamed",
+      "workspaceId": "workspace_fixture_1",
+      "status": "PUBLISHED",
+      "numberOfSubmissions": 2,
+      "isClosed": false,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-02T00:00:00Z"
+    }
+  }
+}

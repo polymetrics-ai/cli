@@ -1,0 +1,20 @@
+{
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "account_id": 1,
+        "availability_status": "online",
+        "auto_offline": true,
+        "confirmed": true,
+        "email": "agent1@fixture.example",
+        "available_name": "Fixture Agent",
+        "name": "Fixture Agent",
+        "role": "agent",
+        "thumbnail": "",
+        "custom_role_id": null
+      }
+    ]
+  }
+}

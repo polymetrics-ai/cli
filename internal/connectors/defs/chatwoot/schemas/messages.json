@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "messages",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "content": { "type": ["string", "null"] },
+    "account_id": { "type": ["integer", "null"] },
+    "inbox_id": { "type": ["integer", "null"] },
+    "conversation_id": { "type": ["string", "integer", "null"], "description": "Post-projection, this is always a string: stamped by the fan_out dialect from the conversation id discovered via the conversations listing, overwriting the raw field. The raw wire value (validated pre-projection by conformance's records_match_schema) is an integer, hence both types are declared here." },
+    "message_type": { "type": ["integer", "null"] },
+    "content_type": { "type": ["string", "null"] },
+    "content_attributes": { "type": ["object", "null"] },
+    "status": { "type": ["string", "null"] },
+    "private": { "type": ["boolean", "null"] },
+    "source_id": { "type": ["string", "null"] },
+    "sender_type": { "type": ["string", "null"] },
+    "sender_id": { "type": ["integer", "null"] },
+    "sender": { "type": ["object", "null"] },
+    "attachment": { "type": ["object", "null"] },
+    "created_at": { "type": ["integer", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

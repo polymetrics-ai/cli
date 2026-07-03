@@ -1,0 +1,75 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/conversations/102/messages",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": {
+        "labels": [],
+        "additional_attributes": {},
+        "contact": {
+          "payload": []
+        },
+        "assignee": {
+          "id": 1,
+          "account_id": 1,
+          "availability_status": "online",
+          "auto_offline": true,
+          "confirmed": true,
+          "email": "agent1@fixture.example",
+          "available_name": "Fixture Agent",
+          "name": "Fixture Agent",
+          "role": "agent",
+          "thumbnail": "",
+          "custom_role_id": null
+        },
+        "agent_last_seen_at": null,
+        "assignee_last_seen_at": null
+      },
+      "payload": [
+        {
+          "id": 1002,
+          "content": "Fixture message 1002 for conversation 102",
+          "account_id": 1,
+          "inbox_id": 1,
+          "conversation_id": 102,
+          "message_type": 1,
+          "created_at": 1767226702,
+          "updated_at": "1767226702",
+          "private": false,
+          "status": "sent",
+          "source_id": null,
+          "content_type": "text",
+          "content_attributes": {},
+          "sender_type": "Contact",
+          "sender_id": 102,
+          "external_source_ids": {},
+          "additional_attributes": {},
+          "processed_message_content": null,
+          "sentiment": null,
+          "conversation": null,
+          "attachment": null,
+          "sender": {
+            "additional_attributes": {},
+            "availability_status": "offline",
+            "email": "contact102@fixture.example",
+            "id": 102,
+            "name": "Fixture Contact 102",
+            "phone_number": null,
+            "blocked": false,
+            "identifier": null,
+            "thumbnail": "",
+            "custom_attributes": {},
+            "last_activity_at": 1767226702,
+            "created_at": 1767226702
+          }
+        }
+      ]
+    }
+  }
+}

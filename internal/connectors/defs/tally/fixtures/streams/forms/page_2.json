@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms",
+    "query": {
+      "limit": "100",
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "form_fixture_101",
+          "name": "Fixture Form 101",
+          "workspaceId": "workspace_fixture_1",
+          "status": "PUBLISHED",
+          "numberOfSubmissions": 202,
+          "isClosed": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "page": 2,
+      "limit": 100,
+      "total": 101,
+      "hasMore": false
+    }
+  }
+}

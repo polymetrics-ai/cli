@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "submissions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "submitted_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "formId": { "type": ["string", "null"] },
+    "form_id": { "type": ["string", "null"], "description": "Stamped by fan_out; the form this submission belongs to." },
+    "isCompleted": { "type": ["boolean", "null"] },
+    "submittedAt": { "type": ["string", "null"], "format": "date-time" },
+    "submitted_at": { "type": ["string", "null"], "format": "date-time", "description": "Copy of submittedAt used as the incremental cursor field." },
+    "previewUrl": { "type": ["string", "null"] },
+    "pdfUrl": { "type": ["string", "null"] },
+    "responses": { "type": ["array", "null"] }
+  }
+}

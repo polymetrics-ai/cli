@@ -1,0 +1,18 @@
+{
+  "record": {
+    "source_id": "fixture-source-id-1",
+    "inbox_id": 1,
+    "contact_id": 42,
+    "status": "open"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations",
+    "body": {
+      "source_id": "fixture-source-id-1",
+      "inbox_id": 1,
+      "contact_id": 42,
+      "status": "open"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/agents" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "account_id": 1,
+        "availability_status": "online",
+        "auto_offline": true,
+        "confirmed": true,
+        "email": "agent1@fixture.example",
+        "available_name": "Fixture Agent One",
+        "name": "Fixture Agent One",
+        "role": "agent",
+        "thumbnail": "",
+        "custom_role_id": null
+      },
+      {
+        "id": 2,
+        "account_id": 1,
+        "availability_status": "busy",
+        "auto_offline": false,
+        "confirmed": true,
+        "email": "agent2@fixture.example",
+        "available_name": "Fixture Agent Two",
+        "name": "Fixture Agent Two",
+        "role": "administrator",
+        "thumbnail": "",
+        "custom_role_id": null
+      }
+    ]
+  }
+}

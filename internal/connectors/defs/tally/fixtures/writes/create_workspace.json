@@ -1,0 +1,23 @@
+{
+  "record": {
+    "name": "Fixture Workspace 2"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/workspaces",
+    "body": {
+      "name": "Fixture Workspace 2"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "workspace_fixture_2",
+      "name": "Fixture Workspace 2",
+      "index": 1,
+      "createdByUserId": "user_fixture_1",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

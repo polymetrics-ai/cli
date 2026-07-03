@@ -1,0 +1,18 @@
+{
+  "record": {
+    "title": "fixture-label",
+    "description": "A fixture label for conformance testing",
+    "color": "#1f93ff",
+    "show_on_sidebar": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/labels",
+    "body": {
+      "title": "fixture-label",
+      "description": "A fixture label for conformance testing",
+      "color": "#1f93ff",
+      "show_on_sidebar": true
+    }
+  }
+}

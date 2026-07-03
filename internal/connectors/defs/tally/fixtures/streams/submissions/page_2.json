@@ -1,0 +1,2132 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/form_fixture_1/submissions",
+    "query": {
+      "limit": "100",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "limit": 100,
+      "hasMore": true,
+      "totalNumberOfSubmissionsPerFilter": {
+        "all": 101,
+        "completed": 101,
+        "partial": 0
+      },
+      "questions": [
+        {
+          "id": "question_fixture_1",
+          "type": "INPUT_TEXT",
+          "title": "Name"
+        }
+      ],
+      "submissions": [
+        {
+          "id": "submission_fixture_1",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-01T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_1?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_1.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_1_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_2",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-02T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_2?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_2.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_2_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_3",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-03T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_3?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_3.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_3_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_4",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-04T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_4?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_4.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_4_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_5",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-05T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_5?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_5.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_5_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_6",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-06T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_6?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_6.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_6_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_7",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-07T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_7?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_7.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_7_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_8",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-08T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_8?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_8.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_8_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_9",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-09T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_9?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_9.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_9_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_10",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-010T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_10?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_10.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_10_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_11",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-011T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_11?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_11.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_11_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_12",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-012T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_12?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_12.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_12_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_13",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-013T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_13?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_13.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_13_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_14",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-014T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_14?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_14.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_14_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_15",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-015T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_15?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_15.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_15_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_16",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-016T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_16?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_16.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_16_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_17",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-017T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_17?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_17.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_17_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_18",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-018T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_18?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_18.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_18_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_19",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-019T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_19?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_19.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_19_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_20",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-020T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_20?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_20.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_20_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_21",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-021T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_21?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_21.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_21_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_22",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-022T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_22?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_22.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_22_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_23",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-023T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_23?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_23.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_23_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_24",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-024T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_24?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_24.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_24_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_25",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-025T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_25?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_25.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_25_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_26",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-026T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_26?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_26.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_26_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_27",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-027T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_27?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_27.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_27_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_28",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-028T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_28?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_28.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_28_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_29",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-029T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_29?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_29.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_29_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_30",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-030T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_30?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_30.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_30_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_31",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-031T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_31?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_31.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_31_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_32",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-032T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_32?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_32.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_32_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_33",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-033T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_33?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_33.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_33_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_34",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-034T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_34?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_34.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_34_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_35",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-035T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_35?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_35.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_35_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_36",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-036T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_36?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_36.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_36_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_37",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-037T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_37?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_37.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_37_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_38",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-038T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_38?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_38.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_38_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_39",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-039T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_39?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_39.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_39_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_40",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-040T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_40?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_40.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_40_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_41",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-041T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_41?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_41.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_41_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_42",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-042T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_42?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_42.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_42_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_43",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-043T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_43?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_43.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_43_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_44",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-044T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_44?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_44.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_44_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_45",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-045T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_45?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_45.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_45_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_46",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-046T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_46?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_46.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_46_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_47",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-047T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_47?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_47.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_47_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_48",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-048T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_48?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_48.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_48_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_49",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-049T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_49?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_49.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_49_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_50",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-050T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_50?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_50.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_50_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_51",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-051T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_51?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_51.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_51_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_52",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-052T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_52?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_52.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_52_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_53",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-053T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_53?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_53.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_53_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_54",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-054T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_54?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_54.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_54_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_55",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-055T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_55?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_55.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_55_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_56",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-056T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_56?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_56.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_56_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_57",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-057T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_57?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_57.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_57_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_58",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-058T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_58?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_58.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_58_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_59",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-059T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_59?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_59.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_59_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_60",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-060T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_60?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_60.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_60_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_61",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-061T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_61?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_61.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_61_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_62",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-062T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_62?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_62.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_62_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_63",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-063T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_63?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_63.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_63_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_64",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-064T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_64?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_64.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_64_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_65",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-065T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_65?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_65.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_65_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_66",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-066T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_66?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_66.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_66_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_67",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-067T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_67?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_67.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_67_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_68",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-068T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_68?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_68.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_68_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_69",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-069T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_69?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_69.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_69_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_70",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-070T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_70?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_70.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_70_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_71",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-071T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_71?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_71.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_71_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_72",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-072T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_72?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_72.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_72_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_73",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-073T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_73?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_73.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_73_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_74",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-074T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_74?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_74.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_74_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_75",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-075T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_75?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_75.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_75_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_76",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-076T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_76?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_76.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_76_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_77",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-077T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_77?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_77.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_77_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_78",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-078T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_78?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_78.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_78_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_79",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-079T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_79?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_79.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_79_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_80",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-080T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_80?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_80.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_80_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_81",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-081T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_81?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_81.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_81_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_82",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-082T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_82?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_82.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_82_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_83",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-083T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_83?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_83.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_83_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_84",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-084T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_84?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_84.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_84_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_85",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-085T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_85?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_85.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_85_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_86",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-086T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_86?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_86.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_86_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_87",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-087T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_87?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_87.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_87_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_88",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-088T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_88?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_88.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_88_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_89",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-089T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_89?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_89.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_89_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_90",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-090T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_90?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_90.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_90_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_91",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-091T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_91?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_91.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_91_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_92",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-092T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_92?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_92.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_92_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_93",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-093T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_93?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_93.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_93_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_94",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-094T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_94?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_94.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_94_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_95",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-095T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_95?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_95.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_95_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_96",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-096T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_96?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_96.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_96_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_97",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-097T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_97?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_97.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_97_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_98",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-098T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_98?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_98.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_98_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_99",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-099T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_99?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_99.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_99_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "submission_fixture_100",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-0100T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_100?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_100.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_100_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

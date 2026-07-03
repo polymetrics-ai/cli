@@ -1,0 +1,13 @@
+{
+  "record": {
+    "conversation_id": 101,
+    "status": "resolved"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/101/toggle_status",
+    "body": {
+      "status": "resolved"
+    }
+  }
+}

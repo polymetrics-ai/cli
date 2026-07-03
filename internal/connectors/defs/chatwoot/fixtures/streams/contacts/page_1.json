@@ -1,0 +1,455 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": {
+        "count": 15,
+        "current_page": "1"
+      },
+      "payload": [
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact1@fixture.example",
+          "id": 1,
+          "name": "Fixture Contact 1",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225601,
+          "created_at": 1767225601,
+          "contact_inboxes": [
+            {
+              "source_id": "src-1",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact2@fixture.example",
+          "id": 2,
+          "name": "Fixture Contact 2",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225602,
+          "created_at": 1767225602,
+          "contact_inboxes": [
+            {
+              "source_id": "src-2",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact3@fixture.example",
+          "id": 3,
+          "name": "Fixture Contact 3",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225603,
+          "created_at": 1767225603,
+          "contact_inboxes": [
+            {
+              "source_id": "src-3",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact4@fixture.example",
+          "id": 4,
+          "name": "Fixture Contact 4",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225604,
+          "created_at": 1767225604,
+          "contact_inboxes": [
+            {
+              "source_id": "src-4",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact5@fixture.example",
+          "id": 5,
+          "name": "Fixture Contact 5",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225605,
+          "created_at": 1767225605,
+          "contact_inboxes": [
+            {
+              "source_id": "src-5",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact6@fixture.example",
+          "id": 6,
+          "name": "Fixture Contact 6",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225606,
+          "created_at": 1767225606,
+          "contact_inboxes": [
+            {
+              "source_id": "src-6",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact7@fixture.example",
+          "id": 7,
+          "name": "Fixture Contact 7",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225607,
+          "created_at": 1767225607,
+          "contact_inboxes": [
+            {
+              "source_id": "src-7",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact8@fixture.example",
+          "id": 8,
+          "name": "Fixture Contact 8",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225608,
+          "created_at": 1767225608,
+          "contact_inboxes": [
+            {
+              "source_id": "src-8",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact9@fixture.example",
+          "id": 9,
+          "name": "Fixture Contact 9",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225609,
+          "created_at": 1767225609,
+          "contact_inboxes": [
+            {
+              "source_id": "src-9",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact10@fixture.example",
+          "id": 10,
+          "name": "Fixture Contact 10",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225610,
+          "created_at": 1767225610,
+          "contact_inboxes": [
+            {
+              "source_id": "src-10",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact11@fixture.example",
+          "id": 11,
+          "name": "Fixture Contact 11",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225611,
+          "created_at": 1767225611,
+          "contact_inboxes": [
+            {
+              "source_id": "src-11",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact12@fixture.example",
+          "id": 12,
+          "name": "Fixture Contact 12",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225612,
+          "created_at": 1767225612,
+          "contact_inboxes": [
+            {
+              "source_id": "src-12",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact13@fixture.example",
+          "id": 13,
+          "name": "Fixture Contact 13",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225613,
+          "created_at": 1767225613,
+          "contact_inboxes": [
+            {
+              "source_id": "src-13",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact14@fixture.example",
+          "id": 14,
+          "name": "Fixture Contact 14",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225614,
+          "created_at": 1767225614,
+          "contact_inboxes": [
+            {
+              "source_id": "src-14",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        },
+        {
+          "additional_attributes": {
+            "city": "Fixture City",
+            "country": "Fixtureland",
+            "country_code": "FX",
+            "created_at_ip": "127.0.0.1"
+          },
+          "availability_status": "offline",
+          "email": "contact15@fixture.example",
+          "id": 15,
+          "name": "Fixture Contact 15",
+          "phone_number": null,
+          "blocked": false,
+          "identifier": null,
+          "thumbnail": "",
+          "custom_attributes": {},
+          "last_activity_at": 1767225615,
+          "created_at": 1767225615,
+          "contact_inboxes": [
+            {
+              "source_id": "src-15",
+              "inbox": {
+                "id": 1,
+                "name": "Fixture Inbox",
+                "channel_type": "Channel::Api"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

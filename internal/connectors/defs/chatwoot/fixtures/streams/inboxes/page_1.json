@@ -1,0 +1,45 @@
+{
+  "request": { "method": "GET", "path": "/inboxes" },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": [
+        {
+          "id": 1,
+          "name": "Fixture Support Inbox",
+          "website_url": null,
+          "channel_type": "Channel::Api",
+          "avatar_url": null,
+          "widget_color": null,
+          "website_token": null,
+          "enable_auto_assignment": true,
+          "web_widget_script": null,
+          "welcome_title": null,
+          "welcome_tagline": null,
+          "greeting_enabled": false,
+          "greeting_message": null,
+          "channel_id": 1,
+          "working_hours_enabled": false,
+          "enable_email_collect": true,
+          "csat_survey_enabled": false,
+          "auto_assignment_config": {},
+          "out_of_office_message": null,
+          "working_hours": [],
+          "timezone": "UTC",
+          "callback_webhook_url": "https://example.com/webhook",
+          "allow_messages_after_resolved": true,
+          "lock_to_single_conversation": false,
+          "sender_name_type": "friendly",
+          "business_name": null,
+          "hmac_mandatory": false,
+          "selected_feature_flags": [],
+          "reply_time": "in_a_few_minutes",
+          "messaging_service_sid": null,
+          "phone_number": null,
+          "medium": null,
+          "provider": null
+        }
+      ]
+    }
+  }
+}
