@@ -57,7 +57,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	case "help", "man":
 		err = runHelp(rest, stdout)
 	case "connectors":
-		err = runConnectors(rest, stdout, jsonOut)
+		err = runConnectors(ctx, root, rest, stdout, jsonOut)
 	case "credentials":
 		err = withApp(root, func(a *app.App) error { return runCredentials(ctx, a, rest, stdout, jsonOut) })
 	case "connections":
@@ -153,12 +153,14 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	return nil
 }
 
-func runConnectors(args []string, stdout io.Writer, jsonOut bool) error {
+func runConnectors(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	registry := appRegistry()
 	if len(args) == 0 {
 		return errUsage
 	}
 	switch args[0] {
+	case "certify":
+		return runCertify(ctx, root, args[1:], stdout, jsonOut)
 	case "list":
 		flags := parseFlags(args[1:])
 		if flags.first("all") != "" {
