@@ -84,6 +84,7 @@ func stravaRuntimeConfig(baseURL, tokenURL string, extra map[string]string) conn
 		"base_url":   baseURL,
 		"token_url":  tokenURL,
 		"athlete_id": "17831421",
+		"client_id":  "client-id-fixture",
 	}
 	for k, v := range extra {
 		cfg[k] = v
@@ -91,7 +92,6 @@ func stravaRuntimeConfig(baseURL, tokenURL string, extra map[string]string) conn
 	return connectors.RuntimeConfig{
 		Config: cfg,
 		Secrets: map[string]string{
-			"client_id":     "client-id-fixture",
 			"client_secret": "client-secret-fixture",
 			"refresh_token": "refresh-token-fixture",
 		},

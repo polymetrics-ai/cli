@@ -6,8 +6,7 @@
   "properties": {
     "client_id": {
       "type": "string",
-      "x-secret": true,
-      "description": "Strava OAuth 2.0 client ID for the refresh-token grant. Used only in the token-request form; never logged."
+      "description": "Strava OAuth 2.0 client ID for the refresh-token grant. Plain config, not a secret (matching legacy's cfg.Config[\"client_id\"] read, strava.go:319) — Strava client IDs are public identifiers, not credentials. Used only in the token-request form; never logged."
     },
     "client_secret": {
       "type": "string",

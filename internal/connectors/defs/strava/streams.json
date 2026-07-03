@@ -7,7 +7,7 @@
         "mode": "custom",
         "hook": "strava",
         "token_url": "{{ config.token_url }}",
-        "client_id": "{{ secrets.client_id }}",
+        "client_id": "{{ config.client_id }}",
         "client_secret": "{{ secrets.client_secret }}",
         "token": "{{ secrets.refresh_token }}"
       }
