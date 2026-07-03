@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "cn_fixture_1",
+    "comment": "fixture void"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/credit_notes/cn_fixture_1/void"
+  }
+}

@@ -1,14 +1,14 @@
 {
   "name": "gmail",
   "display_name": "Gmail",
-  "description": "Reads Gmail messages, threads, drafts, and labels via the Google OAuth 2.0 refresh-token grant.",
+  "description": "Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases, delegates, forwarding addresses, and mailbox profile, and writes approved reverse-ETL mutations (send/insert/import/modify/trash/delete messages and threads; draft and label lifecycle; filter, send-as, delegate, and forwarding-address management; vacation/language/IMAP/POP/auto-forwarding settings) via the Google OAuth 2.0 refresh-token grant.",
   "integration_type": "api",
   "docs_url": "https://developers.google.com/gmail/api/reference/rest",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,8 +17,9 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Gmail API read of message/thread/draft/label metadata",
-    "approval": "none; read-only, no reverse-ETL write surface"
+    "read": "external Gmail API read of message/thread/draft/label/history/filter/send-as/delegate/forwarding-address/profile metadata",
+    "write": "external Gmail API mutation, including sending real outbound email, permanently deleting messages/threads/drafts, granting mailbox delegation, and changing account-wide forwarding/vacation/IMAP/POP settings",
+    "approval": "reverse ETL plan approval required before writes; several actions (send_message, send_draft, delete_message, delete_thread, delete_draft, create_delegate, update_auto_forwarding) warrant elevated operator scrutiny -- see docs.md Write actions & risks"
   },
   "conformance": {
     "skip_dynamic": true,

@@ -1,0 +1,7 @@
+{
+  "record": { "issue_number": 1, "name": "bug" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/1/labels/bug"
+  }
+}

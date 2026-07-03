@@ -14,4 +14,5 @@ import (
 	_ "polymetrics.ai/internal/connectors/native/dynamodb"
 	_ "polymetrics.ai/internal/connectors/native/faker"
 	_ "polymetrics.ai/internal/connectors/native/postgres"
+	_ "polymetrics.ai/internal/connectors/native/tally-prime"
 )

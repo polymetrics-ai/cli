@@ -1,0 +1,12 @@
+{
+  "record": {
+    "commit_sha": "6dcb09b5b57875f334f61aebed695e2e4193db5",
+    "body": "Fixture commit comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/commits/6dcb09b5b57875f334f61aebed695e2e4193db5/comments",
+    "body": { "body": "Fixture commit comment" }
+  },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

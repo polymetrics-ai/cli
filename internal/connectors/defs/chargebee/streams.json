@@ -206,6 +206,724 @@
         "start_config_key": "start_date"
       },
       "schema": "schemas/items.json"
+    },
+    {
+      "name": "item_prices",
+      "path": "/item_prices",
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.item_price.id }}",
+        "name": "{{ record.item_price.name }}",
+        "item_id": "{{ record.item_price.item_id }}",
+        "item_family_id": "{{ record.item_price.item_family_id }}",
+        "item_type": "{{ record.item_price.item_type }}",
+        "pricing_model": "{{ record.item_price.pricing_model }}",
+        "price": "{{ record.item_price.price }}",
+        "currency_code": "{{ record.item_price.currency_code }}",
+        "period": "{{ record.item_price.period }}",
+        "period_unit": "{{ record.item_price.period_unit }}",
+        "status": "{{ record.item_price.status }}",
+        "free_quantity": "{{ record.item_price.free_quantity }}",
+        "is_taxable": "{{ record.item_price.is_taxable }}",
+        "created_at": "{{ record.item_price.created_at }}",
+        "updated_at": "{{ record.item_price.updated_at }}",
+        "deleted": "{{ record.item_price.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/item_prices.json"
+    },
+    {
+      "name": "item_families",
+      "path": "/item_families",
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.item_family.id }}",
+        "name": "{{ record.item_family.name }}",
+        "description": "{{ record.item_family.description }}",
+        "status": "{{ record.item_family.status }}",
+        "created_at": "{{ record.item_family.created_at }}",
+        "updated_at": "{{ record.item_family.updated_at }}",
+        "deleted": "{{ record.item_family.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/item_families.json"
+    },
+    {
+      "name": "coupons",
+      "path": "/coupons",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.coupon.id }}",
+        "name": "{{ record.coupon.name }}",
+        "discount_type": "{{ record.coupon.discount_type }}",
+        "discount_percentage": "{{ record.coupon.discount_percentage }}",
+        "discount_amount": "{{ record.coupon.discount_amount }}",
+        "currency_code": "{{ record.coupon.currency_code }}",
+        "duration_type": "{{ record.coupon.duration_type }}",
+        "valid_till": "{{ record.coupon.valid_till }}",
+        "status": "{{ record.coupon.status }}",
+        "apply_on": "{{ record.coupon.apply_on }}",
+        "created_at": "{{ record.coupon.created_at }}",
+        "updated_at": "{{ record.coupon.updated_at }}",
+        "redemptions": "{{ record.coupon.redemptions }}",
+        "deleted": "{{ record.coupon.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/coupons.json"
+    },
+    {
+      "name": "coupon_codes",
+      "path": "/coupon_codes",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "code": "{{ record.coupon_code.code }}",
+        "coupon_id": "{{ record.coupon_code.coupon_id }}",
+        "coupon_set_id": "{{ record.coupon_code.coupon_set_id }}",
+        "coupon_set_name": "{{ record.coupon_code.coupon_set_name }}",
+        "status": "{{ record.coupon_code.status }}"
+      },
+      "schema": "schemas/coupon_codes.json"
+    },
+    {
+      "name": "coupon_sets",
+      "path": "/coupon_sets",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.coupon_set.id }}",
+        "coupon_id": "{{ record.coupon_set.coupon_id }}",
+        "name": "{{ record.coupon_set.name }}",
+        "total_count": "{{ record.coupon_set.total_count }}",
+        "redeemed_count": "{{ record.coupon_set.redeemed_count }}",
+        "archived_count": "{{ record.coupon_set.archived_count }}"
+      },
+      "schema": "schemas/coupon_sets.json"
+    },
+    {
+      "name": "credit_notes",
+      "path": "/credit_notes",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.credit_note.id }}",
+        "customer_id": "{{ record.credit_note.customer_id }}",
+        "subscription_id": "{{ record.credit_note.subscription_id }}",
+        "reference_invoice_id": "{{ record.credit_note.reference_invoice_id }}",
+        "type": "{{ record.credit_note.type }}",
+        "status": "{{ record.credit_note.status }}",
+        "currency_code": "{{ record.credit_note.currency_code }}",
+        "total": "{{ record.credit_note.total }}",
+        "amount_allocated": "{{ record.credit_note.amount_allocated }}",
+        "amount_refunded": "{{ record.credit_note.amount_refunded }}",
+        "amount_available": "{{ record.credit_note.amount_available }}",
+        "date": "{{ record.credit_note.date }}",
+        "voided_at": "{{ record.credit_note.voided_at }}",
+        "updated_at": "{{ record.credit_note.updated_at }}",
+        "deleted": "{{ record.credit_note.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/credit_notes.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/transactions",
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.transaction.id }}",
+        "customer_id": "{{ record.transaction.customer_id }}",
+        "subscription_id": "{{ record.transaction.subscription_id }}",
+        "payment_source_id": "{{ record.transaction.payment_source_id }}",
+        "payment_method": "{{ record.transaction.payment_method }}",
+        "gateway": "{{ record.transaction.gateway }}",
+        "type": "{{ record.transaction.type }}",
+        "date": "{{ record.transaction.date }}",
+        "currency_code": "{{ record.transaction.currency_code }}",
+        "amount": "{{ record.transaction.amount }}",
+        "status": "{{ record.transaction.status }}",
+        "updated_at": "{{ record.transaction.updated_at }}",
+        "deleted": "{{ record.transaction.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "orders",
+      "path": "/orders",
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.order.id }}",
+        "document_number": "{{ record.order.document_number }}",
+        "invoice_id": "{{ record.order.invoice_id }}",
+        "subscription_id": "{{ record.order.subscription_id }}",
+        "customer_id": "{{ record.order.customer_id }}",
+        "status": "{{ record.order.status }}",
+        "order_type": "{{ record.order.order_type }}",
+        "price_type": "{{ record.order.price_type }}",
+        "total": "{{ record.order.total }}",
+        "currency_code": "{{ record.order.currency_code }}",
+        "created_at": "{{ record.order.created_at }}",
+        "updated_at": "{{ record.order.updated_at }}",
+        "deleted": "{{ record.order.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "quotes",
+      "path": "/quotes",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.quote.id }}",
+        "name": "{{ record.quote.name }}",
+        "customer_id": "{{ record.quote.customer_id }}",
+        "subscription_id": "{{ record.quote.subscription_id }}",
+        "invoice_id": "{{ record.quote.invoice_id }}",
+        "status": "{{ record.quote.status }}",
+        "operation_type": "{{ record.quote.operation_type }}",
+        "price_type": "{{ record.quote.price_type }}",
+        "currency_code": "{{ record.quote.currency_code }}",
+        "total": "{{ record.quote.total }}",
+        "valid_till": "{{ record.quote.valid_till }}",
+        "date": "{{ record.quote.date }}",
+        "updated_at": "{{ record.quote.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/quotes.json"
+    },
+    {
+      "name": "payment_sources",
+      "path": "/payment_sources",
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.payment_source.id }}",
+        "customer_id": "{{ record.payment_source.customer_id }}",
+        "type": "{{ record.payment_source.type }}",
+        "reference_id": "{{ record.payment_source.reference_id }}",
+        "status": "{{ record.payment_source.status }}",
+        "gateway": "{{ record.payment_source.gateway }}",
+        "gateway_account_id": "{{ record.payment_source.gateway_account_id }}",
+        "created_at": "{{ record.payment_source.created_at }}",
+        "updated_at": "{{ record.payment_source.updated_at }}",
+        "deleted": "{{ record.payment_source.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/payment_sources.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:occurred_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.event.id }}",
+        "occurred_at": "{{ record.event.occurred_at }}",
+        "source": "{{ record.event.source }}",
+        "event_type": "{{ record.event.event_type }}",
+        "api_version": "{{ record.event.api_version }}"
+      },
+      "incremental": {
+        "cursor_field": "occurred_at",
+        "request_param": "occurred_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "hosted_pages",
+      "path": "/hosted_pages",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.hosted_page.id }}",
+        "type": "{{ record.hosted_page.type }}",
+        "url": "{{ record.hosted_page.url }}",
+        "state": "{{ record.hosted_page.state }}",
+        "created_at": "{{ record.hosted_page.created_at }}",
+        "expires_at": "{{ record.hosted_page.expires_at }}",
+        "updated_at": "{{ record.hosted_page.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/hosted_pages.json"
+    },
+    {
+      "name": "virtual_bank_accounts",
+      "path": "/virtual_bank_accounts",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.virtual_bank_account.id }}",
+        "customer_id": "{{ record.virtual_bank_account.customer_id }}",
+        "email": "{{ record.virtual_bank_account.email }}",
+        "bank_name": "{{ record.virtual_bank_account.bank_name }}",
+        "account_number": "{{ record.virtual_bank_account.account_number }}",
+        "gateway": "{{ record.virtual_bank_account.gateway }}",
+        "gateway_account_id": "{{ record.virtual_bank_account.gateway_account_id }}",
+        "created_at": "{{ record.virtual_bank_account.created_at }}",
+        "updated_at": "{{ record.virtual_bank_account.updated_at }}",
+        "deleted": "{{ record.virtual_bank_account.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/virtual_bank_accounts.json"
+    },
+    {
+      "name": "unbilled_charges",
+      "path": "/unbilled_charges",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.unbilled_charge.id }}",
+        "customer_id": "{{ record.unbilled_charge.customer_id }}",
+        "subscription_id": "{{ record.unbilled_charge.subscription_id }}",
+        "date_from": "{{ record.unbilled_charge.date_from }}",
+        "date_to": "{{ record.unbilled_charge.date_to }}",
+        "amount": "{{ record.unbilled_charge.amount }}",
+        "currency_code": "{{ record.unbilled_charge.currency_code }}",
+        "entity_type": "{{ record.unbilled_charge.entity_type }}",
+        "entity_id": "{{ record.unbilled_charge.entity_id }}",
+        "is_voided": "{{ record.unbilled_charge.is_voided }}"
+      },
+      "schema": "schemas/unbilled_charges.json"
+    },
+    {
+      "name": "ramps",
+      "path": "/ramps",
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.ramp.id }}",
+        "subscription_id": "{{ record.ramp.subscription_id }}",
+        "description": "{{ record.ramp.description }}",
+        "effective_from": "{{ record.ramp.effective_from }}",
+        "status": "{{ record.ramp.status }}",
+        "created_at": "{{ record.ramp.created_at }}",
+        "updated_at": "{{ record.ramp.updated_at }}",
+        "deleted": "{{ record.ramp.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/ramps.json"
+    },
+    {
+      "name": "gifts",
+      "path": "/gifts",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.gift.id }}",
+        "status": "{{ record.gift.status }}",
+        "scheduled_at": "{{ record.gift.scheduled_at }}",
+        "auto_claim": "{{ record.gift.auto_claim }}",
+        "no_expiry": "{{ record.gift.no_expiry }}",
+        "claim_expiry_date": "{{ record.gift.claim_expiry_date }}",
+        "updated_at": "{{ record.gift.updated_at }}"
+      },
+      "schema": "schemas/gifts.json"
+    },
+    {
+      "name": "alerts",
+      "path": "/alerts",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.alert.id }}",
+        "type": "{{ record.alert.type }}",
+        "name": "{{ record.alert.name }}",
+        "description": "{{ record.alert.description }}",
+        "metered_feature_id": "{{ record.alert.metered_feature_id }}",
+        "subscription_id": "{{ record.alert.subscription_id }}",
+        "status": "{{ record.alert.status }}",
+        "created_at": "{{ record.alert.created_at }}",
+        "updated_at": "{{ record.alert.updated_at }}"
+      },
+      "schema": "schemas/alerts.json"
+    },
+    {
+      "name": "comments",
+      "path": "/comments",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment.id }}",
+        "entity_type": "{{ record.comment.entity_type }}",
+        "entity_id": "{{ record.comment.entity_id }}",
+        "added_by": "{{ record.comment.added_by }}",
+        "notes": "{{ record.comment.notes }}",
+        "type": "{{ record.comment.type }}",
+        "created_at": "{{ record.comment.created_at }}"
+      },
+      "schema": "schemas/comments.json"
+    },
+    {
+      "name": "promotional_credits",
+      "path": "/promotional_credits",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.promotional_credit.id }}",
+        "customer_id": "{{ record.promotional_credit.customer_id }}",
+        "type": "{{ record.promotional_credit.type }}",
+        "amount": "{{ record.promotional_credit.amount }}",
+        "currency_code": "{{ record.promotional_credit.currency_code }}",
+        "description": "{{ record.promotional_credit.description }}",
+        "credit_type": "{{ record.promotional_credit.credit_type }}",
+        "closing_balance": "{{ record.promotional_credit.closing_balance }}",
+        "created_at": "{{ record.promotional_credit.created_at }}"
+      },
+      "schema": "schemas/promotional_credits.json"
+    },
+    {
+      "name": "features",
+      "path": "/features",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.feature.id }}",
+        "name": "{{ record.feature.name }}",
+        "description": "{{ record.feature.description }}",
+        "status": "{{ record.feature.status }}",
+        "type": "{{ record.feature.type }}",
+        "unit": "{{ record.feature.unit }}",
+        "created_at": "{{ record.feature.created_at }}",
+        "updated_at": "{{ record.feature.updated_at }}"
+      },
+      "schema": "schemas/features.json"
+    },
+    {
+      "name": "entitlements",
+      "path": "/entitlements",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.entitlement.id }}",
+        "entity_id": "{{ record.entitlement.entity_id }}",
+        "entity_type": "{{ record.entitlement.entity_type }}",
+        "feature_id": "{{ record.entitlement.feature_id }}",
+        "feature_name": "{{ record.entitlement.feature_name }}",
+        "value": "{{ record.entitlement.value }}",
+        "name": "{{ record.entitlement.name }}"
+      },
+      "schema": "schemas/entitlements.json"
+    },
+    {
+      "name": "differential_prices",
+      "path": "/differential_prices",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.differential_price.id }}",
+        "item_price_id": "{{ record.differential_price.item_price_id }}",
+        "parent_item_id": "{{ record.differential_price.parent_item_id }}",
+        "price": "{{ record.differential_price.price }}",
+        "currency_code": "{{ record.differential_price.currency_code }}",
+        "status": "{{ record.differential_price.status }}",
+        "created_at": "{{ record.differential_price.created_at }}",
+        "updated_at": "{{ record.differential_price.updated_at }}",
+        "deleted": "{{ record.differential_price.deleted }}"
+      },
+      "schema": "schemas/differential_prices.json"
+    },
+    {
+      "name": "price_variants",
+      "path": "/price_variants",
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.price_variant.id }}",
+        "name": "{{ record.price_variant.name }}",
+        "variant_group": "{{ record.price_variant.variant_group }}",
+        "description": "{{ record.price_variant.description }}",
+        "status": "{{ record.price_variant.status }}",
+        "created_at": "{{ record.price_variant.created_at }}",
+        "updated_at": "{{ record.price_variant.updated_at }}",
+        "deleted": "{{ record.price_variant.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/price_variants.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": {
+        "limit": "100",
+        "sort_by[asc]": {
+          "template": "{{ incremental.lower_bound | const:updated_at }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.product.id }}",
+        "name": "{{ record.product.name }}",
+        "external_name": "{{ record.product.external_name }}",
+        "description": "{{ record.product.description }}",
+        "has_variant": "{{ record.product.has_variant }}",
+        "status": "{{ record.product.status }}",
+        "shippable": "{{ record.product.shippable }}",
+        "sku": "{{ record.product.sku }}",
+        "created_at": "{{ record.product.created_at }}",
+        "updated_at": "{{ record.product.updated_at }}",
+        "deleted": "{{ record.product.deleted }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_at[after]",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "webhook_endpoints",
+      "path": "/webhook_endpoints",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.webhook_endpoint.id }}",
+        "name": "{{ record.webhook_endpoint.name }}",
+        "url": "{{ record.webhook_endpoint.url }}",
+        "disabled": "{{ record.webhook_endpoint.disabled }}",
+        "primary_url": "{{ record.webhook_endpoint.primary_url }}",
+        "api_version": "{{ record.webhook_endpoint.api_version }}"
+      },
+      "schema": "schemas/webhook_endpoints.json"
+    },
+    {
+      "name": "ledger_operations",
+      "path": "/ledger_operations",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "id": "{{ record.ledger_operation.id }}",
+        "type": "{{ record.ledger_operation.type }}",
+        "amount": "{{ record.ledger_operation.amount }}",
+        "start_balance": "{{ record.ledger_operation.start_balance }}",
+        "end_balance": "{{ record.ledger_operation.end_balance }}",
+        "subscription_id": "{{ record.ledger_operation.subscription_id }}",
+        "unit_id": "{{ record.ledger_operation.unit_id }}",
+        "unit_type": "{{ record.ledger_operation.unit_type }}",
+        "created_at": "{{ record.ledger_operation.created_at }}",
+        "modified_at": "{{ record.ledger_operation.modified_at }}"
+      },
+      "schema": "schemas/ledger_operations.json"
+    },
+    {
+      "name": "ledger_account_balances",
+      "path": "/ledger_account_balances",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "list"
+      },
+      "computed_fields": {
+        "subscription_id": "{{ record.ledger_account_balance.subscription_id }}",
+        "unit_id": "{{ record.ledger_account_balance.unit_id }}",
+        "unit_type": "{{ record.ledger_account_balance.unit_type }}",
+        "modified_at": "{{ record.ledger_account_balance.modified_at }}"
+      },
+      "schema": "schemas/ledger_account_balances.json"
     }
   ]
 }

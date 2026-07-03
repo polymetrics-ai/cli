@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "qr_codes",
+  "type": "object",
+  "x-primary-key": ["qrcode_id"],
+  "required": ["qrcode_id"],
+  "properties": {
+    "qrcode_id": { "type": "string" },
+    "group_guid": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "destination": { "type": ["object", "null"] },
+    "is_customized": { "type": ["boolean", "null"] },
+    "qr_code_type": { "type": ["string", "null"] },
+    "bitlink_id": { "type": ["string", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "created_by": { "type": ["string", "null"] },
+    "expiration_at": { "type": ["string", "null"] },
+    "created": { "type": ["string", "null"] },
+    "modified": { "type": ["string", "null"] }
+  }
+}

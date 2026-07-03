@@ -12,12 +12,10 @@ package paritytest_strava
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"sort"
-	"strconv"
 	"strings"
 	"sync/atomic"
 	"testing"

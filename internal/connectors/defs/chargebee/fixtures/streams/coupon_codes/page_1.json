@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coupon_codes",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "coupon_code": {
+            "code": "FIXTURE10",
+            "coupon_id": "coupon_fixture_1",
+            "coupon_set_id": "cset_fixture_1",
+            "coupon_set_name": "Fixture Coupon Set",
+            "status": "not_redeemed"
+          }
+        }
+      ]
+    }
+  }
+}

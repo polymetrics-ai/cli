@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/users/me/profile" },
+  "response": {
+    "status": 200,
+    "body": {
+      "emailAddress": "fixture-user@example.com",
+      "messagesTotal": 1234,
+      "threadsTotal": 567,
+      "historyId": "2002"
+    }
+  }
+}

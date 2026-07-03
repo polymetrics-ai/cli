@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/users/me/settings/forwardingAddresses" },
+  "response": {
+    "status": 200,
+    "body": {
+      "forwardingAddresses": [
+        { "forwardingEmail": "fixture-forward-1@example.com", "verificationStatus": "accepted" },
+        { "forwardingEmail": "fixture-forward-2@example.com", "verificationStatus": "pending" }
+      ]
+    }
+  }
+}

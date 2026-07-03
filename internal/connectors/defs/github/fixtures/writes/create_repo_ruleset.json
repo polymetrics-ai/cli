@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture ruleset", "target": "branch", "enforcement": "active" },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/rulesets",
+    "body": { "name": "Fixture ruleset", "target": "branch", "enforcement": "active" }
+  },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

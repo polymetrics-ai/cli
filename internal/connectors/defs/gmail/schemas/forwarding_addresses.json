@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "forwarding_addresses",
+  "type": "object",
+  "x-primary-key": ["forwarding_email"],
+  "required": ["forwarding_email"],
+  "properties": {
+    "forwarding_email": { "type": "string", "description": "Renamed from raw forwardingEmail; also this stream's primary key (Gmail's ForwardingAddress resource has no separate id field)." },
+    "verification_status": { "type": ["string", "null"] }
+  }
+}

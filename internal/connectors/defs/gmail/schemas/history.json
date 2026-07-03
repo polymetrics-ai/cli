@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "history",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "id",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string", "description": "The mailbox sequence ID (historyId). Google publishes it as a uint64-formatted string; the incremental cursor is compared/ordered as the string this API itself emits (matches Gmail's own startHistoryId contract)." },
+    "messages_added": { "type": ["array", "null"], "description": "Raw HistoryMessageAdded[] entries added in this history record (each carries a nested message.id/threadId)." },
+    "messages_deleted": { "type": ["array", "null"], "description": "Raw HistoryMessageDeleted[] entries removed (not trashed) in this history record." },
+    "labels_added": { "type": ["array", "null"], "description": "Raw HistoryLabelAdded[] entries: labels added to messages in this history record." },
+    "labels_removed": { "type": ["array", "null"], "description": "Raw HistoryLabelRemoved[] entries: labels removed from messages in this history record." }
+  }
+}

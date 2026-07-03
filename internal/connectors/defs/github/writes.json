@@ -920,6 +920,839 @@
         }
       },
       "risk": "writes a commit that removes a file from the repository"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["config"],
+        "properties": {
+          "name": { "type": "string" },
+          "config": {
+            "type": "object",
+            "required": ["url"],
+            "properties": {
+              "url": { "type": "string" },
+              "content_type": { "type": "string", "enum": ["json", "form"] },
+              "secret": { "type": "string" },
+              "insecure_ssl": { "type": "string" }
+            }
+          },
+          "events": { "type": "array", "items": { "type": "string" } },
+          "active": { "type": "boolean" }
+        }
+      },
+      "risk": "registers an outbound webhook that will receive repository event payloads"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}",
+      "path_fields": ["hook_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["hook_id"],
+        "minProperties": 2,
+        "properties": {
+          "hook_id": { "type": "integer" },
+          "config": {
+            "type": "object",
+            "properties": {
+              "url": { "type": "string" },
+              "content_type": { "type": "string" },
+              "secret": { "type": "string" },
+              "insecure_ssl": { "type": "string" }
+            }
+          },
+          "events": { "type": "array", "items": { "type": "string" } },
+          "add_events": { "type": "array", "items": { "type": "string" } },
+          "remove_events": { "type": "array", "items": { "type": "string" } },
+          "active": { "type": "boolean" }
+        }
+      },
+      "risk": "changes an existing webhook's target URL, secret, or event subscriptions"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}",
+      "path_fields": ["hook_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["hook_id"],
+        "properties": { "hook_id": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "removes a webhook; the target will stop receiving repository event payloads"
+    },
+    {
+      "name": "create_deploy_key",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/keys",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["key"],
+        "properties": {
+          "title": { "type": "string" },
+          "key": { "type": "string" },
+          "read_only": { "type": "boolean" }
+        }
+      },
+      "risk": "grants a new SSH public key deploy access to the repository"
+    },
+    {
+      "name": "delete_deploy_key",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/keys/{{ record.key_id }}",
+      "path_fields": ["key_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["key_id"],
+        "properties": { "key_id": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "revokes an SSH deploy key's access to the repository"
+    },
+    {
+      "name": "create_or_update_environment",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}",
+      "path_fields": ["environment_name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["environment_name"],
+        "properties": {
+          "environment_name": { "type": "string" },
+          "wait_timer": { "type": "integer" },
+          "prevent_self_review": { "type": "boolean" },
+          "reviewers": { "type": "array" },
+          "deployment_branch_policy": { "type": "object" }
+        }
+      },
+      "risk": "creates or changes a deployment environment's protection rules and reviewers"
+    },
+    {
+      "name": "delete_environment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}",
+      "path_fields": ["environment_name"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["environment_name"],
+        "properties": { "environment_name": { "type": "string" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "removes a deployment environment and its protection rules"
+    },
+    {
+      "name": "create_commit_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/commits/{{ record.commit_sha }}/comments",
+      "path_fields": ["commit_sha"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["commit_sha", "body"],
+        "properties": {
+          "commit_sha": { "type": "string" },
+          "body": { "type": "string" },
+          "path": { "type": "string" },
+          "position": { "type": "integer" },
+          "line": { "type": "integer" }
+        }
+      },
+      "risk": "creates a user-visible comment attached to a specific commit"
+    },
+    {
+      "name": "update_commit_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}",
+      "path_fields": ["comment_id"],
+      "body_type": "json",
+      "body_fields": ["body"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["comment_id", "body"],
+        "properties": {
+          "comment_id": { "type": "integer" },
+          "body": { "type": "string" }
+        }
+      },
+      "risk": "changes the text of an existing commit comment"
+    },
+    {
+      "name": "delete_commit_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}",
+      "path_fields": ["comment_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["comment_id"],
+        "properties": { "comment_id": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "removes a commit comment"
+    },
+    {
+      "name": "update_issue_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}",
+      "path_fields": ["comment_id"],
+      "body_type": "json",
+      "body_fields": ["body"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["comment_id", "body"],
+        "properties": {
+          "comment_id": { "type": "integer" },
+          "body": { "type": "string" }
+        }
+      },
+      "risk": "changes the text of an existing issue or pull request comment"
+    },
+    {
+      "name": "delete_issue_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}",
+      "path_fields": ["comment_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["comment_id"],
+        "properties": { "comment_id": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "removes an issue or pull request comment"
+    },
+    {
+      "name": "lock_issue",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/lock",
+      "path_fields": ["issue_number"],
+      "body_type": "json",
+      "body_fields": ["lock_reason"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue_number"],
+        "properties": {
+          "issue_number": { "type": "integer" },
+          "lock_reason": {
+            "type": "string",
+            "enum": ["off-topic", "too heated", "resolved", "spam"]
+          }
+        }
+      },
+      "risk": "prevents further comments from non-collaborators on an issue or pull request"
+    },
+    {
+      "name": "unlock_issue",
+      "kind": "update",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/lock",
+      "path_fields": ["issue_number"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue_number"],
+        "properties": { "issue_number": { "type": "integer" } }
+      },
+      "risk": "reopens an issue or pull request to comments from non-collaborators"
+    },
+    {
+      "name": "set_issue_labels",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels",
+      "path_fields": ["issue_number"],
+      "body_type": "json",
+      "body_fields": ["labels"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue_number"],
+        "properties": {
+          "issue_number": { "type": "integer" },
+          "labels": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "replaces every label on an issue or pull request, removing any not listed"
+    },
+    {
+      "name": "add_issue_labels",
+      "kind": "update",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels",
+      "path_fields": ["issue_number"],
+      "body_type": "json",
+      "body_fields": ["labels"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue_number", "labels"],
+        "properties": {
+          "issue_number": { "type": "integer" },
+          "labels": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "adds labels to an issue or pull request without removing existing ones"
+    },
+    {
+      "name": "remove_issue_label",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels/{{ record.name }}",
+      "path_fields": ["issue_number", "name"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue_number", "name"],
+        "properties": {
+          "issue_number": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "removes a single label from an issue or pull request"
+    },
+    {
+      "name": "add_issue_assignees",
+      "kind": "update",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/assignees",
+      "path_fields": ["issue_number"],
+      "body_type": "json",
+      "body_fields": ["assignees"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue_number", "assignees"],
+        "properties": {
+          "issue_number": { "type": "integer" },
+          "assignees": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "assigns additional GitHub users to an issue or pull request and may notify them"
+    },
+    {
+      "name": "remove_issue_assignees",
+      "kind": "update",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/assignees",
+      "path_fields": ["issue_number"],
+      "body_type": "json",
+      "body_fields": ["assignees"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue_number", "assignees"],
+        "properties": {
+          "issue_number": { "type": "integer" },
+          "assignees": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "removes assignees from an issue or pull request"
+    },
+    {
+      "name": "create_review_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/comments",
+      "path_fields": ["pull_number"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["pull_number", "body", "commit_id", "path"],
+        "properties": {
+          "pull_number": { "type": "integer" },
+          "body": { "type": "string" },
+          "commit_id": { "type": "string" },
+          "path": { "type": "string" },
+          "side": { "type": "string", "enum": ["LEFT", "RIGHT"] },
+          "line": { "type": "integer" },
+          "start_line": { "type": "integer" },
+          "start_side": { "type": "string", "enum": ["LEFT", "RIGHT"] },
+          "in_reply_to": { "type": "integer" }
+        }
+      },
+      "risk": "creates a user-visible inline review comment on a pull request diff"
+    },
+    {
+      "name": "update_review_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}",
+      "path_fields": ["comment_id"],
+      "body_type": "json",
+      "body_fields": ["body"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["comment_id", "body"],
+        "properties": {
+          "comment_id": { "type": "integer" },
+          "body": { "type": "string" }
+        }
+      },
+      "risk": "changes the text of an existing pull request review comment"
+    },
+    {
+      "name": "delete_review_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}",
+      "path_fields": ["comment_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["comment_id"],
+        "properties": { "comment_id": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "removes a pull request review comment"
+    },
+    {
+      "name": "submit_pull_request_review",
+      "kind": "update",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}/events",
+      "path_fields": ["pull_number", "review_id"],
+      "body_type": "json",
+      "body_fields": ["body", "event"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["pull_number", "review_id", "event"],
+        "properties": {
+          "pull_number": { "type": "integer" },
+          "review_id": { "type": "integer" },
+          "body": { "type": "string" },
+          "event": {
+            "type": "string",
+            "enum": ["APPROVE", "REQUEST_CHANGES", "COMMENT"]
+          }
+        }
+      },
+      "risk": "submits a pending pull request review, which may approve or request changes"
+    },
+    {
+      "name": "dismiss_pull_request_review",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}/dismissals",
+      "path_fields": ["pull_number", "review_id"],
+      "body_type": "json",
+      "body_fields": ["message", "event"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["pull_number", "review_id", "message"],
+        "properties": {
+          "pull_number": { "type": "integer" },
+          "review_id": { "type": "integer" },
+          "message": { "type": "string" },
+          "event": { "type": "string", "enum": ["DISMISS"] }
+        }
+      },
+      "risk": "dismisses an existing pull request review, clearing its approval status"
+    },
+    {
+      "name": "update_pull_request_branch",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/update-branch",
+      "path_fields": ["pull_number"],
+      "body_type": "json",
+      "body_fields": ["expected_head_sha"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["pull_number"],
+        "properties": {
+          "pull_number": { "type": "integer" },
+          "expected_head_sha": { "type": "string" }
+        }
+      },
+      "risk": "merges the base branch into the pull request's head branch, adding a merge commit"
+    },
+    {
+      "name": "update_release_asset",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/assets/{{ record.asset_id }}",
+      "path_fields": ["asset_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["asset_id"],
+        "minProperties": 2,
+        "properties": {
+          "asset_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "label": { "type": "string" },
+          "state": { "type": "string" }
+        }
+      },
+      "risk": "changes a release asset's file name or label"
+    },
+    {
+      "name": "delete_release_asset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/assets/{{ record.asset_id }}",
+      "path_fields": ["asset_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["asset_id"],
+        "properties": { "asset_id": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "removes a downloadable asset from a published release"
+    },
+    {
+      "name": "replace_repo_topics",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/topics",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["names"],
+        "properties": {
+          "names": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "replaces the repository's entire topic list, removing any topic not listed"
+    },
+    {
+      "name": "add_collaborator",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/collaborators/{{ record.username }}",
+      "path_fields": ["username"],
+      "body_type": "json",
+      "body_fields": ["permission"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["username"],
+        "properties": {
+          "username": { "type": "string" },
+          "permission": {
+            "type": "string",
+            "enum": ["pull", "triage", "push", "maintain", "admin"]
+          }
+        }
+      },
+      "risk": "grants a GitHub user access to the repository and may send an invitation email"
+    },
+    {
+      "name": "remove_collaborator",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/collaborators/{{ record.username }}",
+      "path_fields": ["username"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["username"],
+        "properties": { "username": { "type": "string" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "revokes a collaborator's access to the repository"
+    },
+    {
+      "name": "create_ref",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/refs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ref", "sha"],
+        "properties": {
+          "ref": {
+            "type": "string",
+            "description": "Fully-qualified ref name, e.g. refs/heads/my-branch or refs/tags/v1.0.0."
+          },
+          "sha": { "type": "string" }
+        }
+      },
+      "risk": "creates a new branch or tag ref pointing at the given commit SHA"
+    },
+    {
+      "name": "update_ref",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}",
+      "path_fields": ["ref"],
+      "body_type": "json",
+      "body_fields": ["sha", "force"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ref", "sha"],
+        "properties": {
+          "ref": {
+            "type": "string",
+            "description": "Ref name relative to refs/, e.g. heads/my-branch (matches GitHub's git/refs/{ref} path convention)."
+          },
+          "sha": { "type": "string" },
+          "force": { "type": "boolean" }
+        }
+      },
+      "risk": "moves an existing branch or tag ref to a different commit SHA, potentially discarding history"
+    },
+    {
+      "name": "delete_ref",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}",
+      "path_fields": ["ref"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ref"],
+        "properties": { "ref": { "type": "string" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404, 422] },
+      "risk": "permanently deletes a branch or tag ref",
+      "confirm": "destructive"
+    },
+    {
+      "name": "merge_branch",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/merges",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["base", "head"],
+        "properties": {
+          "base": { "type": "string" },
+          "head": { "type": "string" },
+          "commit_message": { "type": "string" }
+        }
+      },
+      "risk": "creates a merge commit combining the head ref into the base branch"
+    },
+    {
+      "name": "update_code_scanning_alert",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts/{{ record.alert_number }}",
+      "path_fields": ["alert_number"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["alert_number", "state"],
+        "properties": {
+          "alert_number": { "type": "integer" },
+          "state": { "type": "string", "enum": ["open", "dismissed"] },
+          "dismissed_reason": {
+            "type": "string",
+            "enum": ["false positive", "won't fix", "used in tests"]
+          },
+          "dismissed_comment": { "type": "string" }
+        }
+      },
+      "risk": "changes a code scanning alert's triage state, which can suppress a real security finding"
+    },
+    {
+      "name": "update_dependabot_alert",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependabot/alerts/{{ record.alert_number }}",
+      "path_fields": ["alert_number"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["alert_number", "state"],
+        "properties": {
+          "alert_number": { "type": "integer" },
+          "state": { "type": "string", "enum": ["dismissed", "open"] },
+          "dismissed_reason": {
+            "type": "string",
+            "enum": ["fix_started", "inaccurate", "no_bandwidth", "not_used", "tolerable_risk"]
+          },
+          "dismissed_comment": { "type": "string" }
+        }
+      },
+      "risk": "changes a dependabot alert's triage state, which can suppress a real vulnerability finding"
+    },
+    {
+      "name": "create_deployment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/deployments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ref"],
+        "properties": {
+          "ref": { "type": "string" },
+          "task": { "type": "string" },
+          "auto_merge": { "type": "boolean" },
+          "required_contexts": { "type": "array", "items": { "type": "string" } },
+          "payload": { "type": "object" },
+          "environment": { "type": "string" },
+          "description": { "type": "string" },
+          "transient_environment": { "type": "boolean" },
+          "production_environment": { "type": "boolean" }
+        }
+      },
+      "risk": "records a new deployment and may trigger CI/CD deployment automation"
+    },
+    {
+      "name": "create_fork",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/forks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "organization": { "type": "string" },
+          "name": { "type": "string" },
+          "default_branch_only": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new repository forked from this one, under the caller's account or a target organization"
+    },
+    {
+      "name": "create_repo_ruleset",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/rulesets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "enforcement"],
+        "properties": {
+          "name": { "type": "string" },
+          "target": { "type": "string", "enum": ["branch", "tag", "push"] },
+          "enforcement": { "type": "string", "enum": ["disabled", "active", "evaluate"] },
+          "bypass_actors": { "type": "array" },
+          "conditions": { "type": "object" },
+          "rules": { "type": "array" }
+        }
+      },
+      "risk": "creates a repository ruleset that can block pushes, merges, or deletions repo-wide once active"
+    },
+    {
+      "name": "update_repo_ruleset",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{ record.ruleset_id }}",
+      "path_fields": ["ruleset_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ruleset_id"],
+        "minProperties": 2,
+        "properties": {
+          "ruleset_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "target": { "type": "string", "enum": ["branch", "tag", "push"] },
+          "enforcement": { "type": "string", "enum": ["disabled", "active", "evaluate"] },
+          "bypass_actors": { "type": "array" },
+          "conditions": { "type": "object" },
+          "rules": { "type": "array" }
+        }
+      },
+      "risk": "changes an existing repository ruleset's enforcement or rule set, which can block pushes, merges, or deletions repo-wide"
+    },
+    {
+      "name": "delete_repo_ruleset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{ record.ruleset_id }}",
+      "path_fields": ["ruleset_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ruleset_id"],
+        "properties": { "ruleset_id": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "removes a repository ruleset, lifting any push/merge/deletion restrictions it enforced"
+    },
+    {
+      "name": "update_secret_scanning_alert",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/alerts/{{ record.alert_number }}",
+      "path_fields": ["alert_number"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["alert_number", "state"],
+        "properties": {
+          "alert_number": { "type": "integer" },
+          "state": { "type": "string", "enum": ["open", "resolved"] },
+          "resolution": {
+            "type": "string",
+            "enum": ["false_positive", "wont_fix", "revoked", "used_in_tests"]
+          },
+          "resolution_comment": { "type": "string" }
+        }
+      },
+      "risk": "changes a secret scanning alert's triage state, which can suppress a real leaked-credential finding"
     }
   ]
 }

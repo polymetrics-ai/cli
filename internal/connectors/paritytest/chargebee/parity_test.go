@@ -534,19 +534,71 @@ func TestParityChargebee_ErrorPathNon2xx(t *testing.T) {
 
 // --- write parity: chargebee is read-only; both sides must reject Write identically ---
 
-func TestParityChargebee_WriteUnsupported(t *testing.T) {
-	bundle := loadChargebeeBundle(t)
-
+// TestParityChargebee_LegacyWriteStillUnsupported pins legacy's own
+// behavior: chargebee.Connector.Write always returns
+// connectors.ErrUnsupportedOperation regardless of what this bundle now
+// supports (legacy is frozen, unchanged, until the wave6 registry flip).
+func TestParityChargebee_LegacyWriteStillUnsupported(t *testing.T) {
 	legacy := chargebee.New()
 	_, legacyErr := legacy.Write(context.Background(), connectors.WriteRequest{Action: "create_customer"}, nil)
 	if legacyErr == nil {
 		t.Fatal("legacy Write = nil error, want ErrUnsupportedOperation (test fixture bug)")
 	}
+}
 
-	eng := engine.New(bundle, nil)
-	_, engErr := eng.Write(context.Background(), connectors.WriteRequest{Action: "create_customer"}, nil)
-	if engErr == nil {
-		t.Fatal("engine Write = nil error, want an error (bundle declares no writes.json / capabilities.write=false)")
+// TestParityChargebee_CreateCustomerWriteSupported is a Pass B capability-
+// expansion test (NOT a legacy parity assertion — legacy chargebee has never
+// supported writes, see TestParityChargebee_LegacyWriteStillUnsupported
+// immediately above): this bundle's Pass B full-surface expansion
+// (api_surface.json reviewed_at 2026-07-03) added 36 write actions,
+// including create_customer, and metadata.json.capabilities.write flipped to
+// true. This drives an actual create_customer write through engine.Write
+// against an httptest.Server and asserts the request shape (method/path/
+// form-encoded body) matches Chargebee's documented POST /customers
+// contract, replacing the retired TestParityChargebee_WriteUnsupported (which
+// asserted the now-superseded read-only behavior).
+func TestParityChargebee_CreateCustomerWriteSupported(t *testing.T) {
+	bundle := loadChargebeeBundle(t)
+
+	var gotMethod, gotPath string
+	var gotBody url.Values
+	mux := http.NewServeMux()
+	mux.HandleFunc("/customers", func(w http.ResponseWriter, r *http.Request) {
+		gotMethod = r.Method
+		gotPath = r.URL.Path
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("parse form: %v", err)
+		}
+		gotBody = r.PostForm
+		writeJSON(w, `{"customer":{"id":"cus_new_1","email":"fixture@example.com"}}`)
+	})
+	srv := httptest.NewServer(mux)
+	t.Cleanup(srv.Close)
+
+	eng := engine.New(withChargebeeBaseURL(bundle, srv.URL), nil)
+	result, err := eng.Write(context.Background(), connectors.WriteRequest{
+		Action: "create_customer",
+		Config: chargebeeRuntimeConfig(srv.URL, nil),
+	}, []connectors.Record{
+		{"email": "fixture@example.com", "first_name": "Fixture"},
+	})
+	if err != nil {
+		t.Fatalf("engine Write: %v", err)
+	}
+	if result.RecordsWritten != 1 {
+		t.Fatalf("RecordsWritten = %d, want 1 (result = %+v)", result.RecordsWritten, result)
+	}
+	if gotMethod != http.MethodPost {
+		t.Fatalf("request method = %q, want POST", gotMethod)
+	}
+	if gotPath != "/customers" {
+		t.Fatalf("request path = %q, want /customers", gotPath)
+	}
+	if got := gotBody.Get("email"); got != "fixture@example.com" {
+		t.Fatalf("form field email = %q, want fixture@example.com", got)
+	}
+	if got := gotBody.Get("first_name"); got != "Fixture" {
+		t.Fatalf("form field first_name = %q, want Fixture", got)
 	}
 }
 
@@ -559,6 +611,17 @@ func TestParityChargebee_WriteUnsupported(t *testing.T) {
 // "same stream set" parity claim here, not connectors.ManifestOf (which
 // would silently fall back to a zero-stream default for legacy and produce
 // a false failure unrelated to the migration's actual correctness).
+//
+// Pass B full-surface expansion (api_surface.json reviewed_at 2026-07-03)
+// widened this bundle from the wave1-pilot's exact 5-stream legacy parity
+// set to 32 streams covering Chargebee's full documented Product Catalog 2.0
+// surface; legacy (internal/connectors/chargebee) is frozen at its original
+// 5 streams until the wave6 registry flip. Parity for the ORIGINAL 5 streams
+// is therefore asserted as "the engine's surface is a superset containing
+// every legacy stream with an identical name/primary-key/cursor-fields
+// shape" rather than exact set equality — the additional 27 streams are new
+// capability-expansion coverage, not a legacy behavior this test claims to
+// pin.
 func TestParityChargebee_CatalogSurface(t *testing.T) {
 	bundle := loadChargebeeBundle(t)
 
@@ -573,9 +636,19 @@ func TestParityChargebee_CatalogSurface(t *testing.T) {
 	}
 
 	wantStreams := manifestStreamSurface(legacyCat.Streams)
-	gotStreams := manifestStreamSurface(engCat.Streams)
-	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("stream surface = %+v, want %+v (legacy)", gotStreams, wantStreams)
+	gotAll := manifestStreamSurface(engCat.Streams)
+	gotByName := make(map[string]streamSurface, len(gotAll))
+	for _, s := range gotAll {
+		gotByName[s.Name] = s
+	}
+	for _, want := range wantStreams {
+		got, ok := gotByName[want.Name]
+		if !ok {
+			t.Fatalf("engine stream surface missing legacy stream %q; full engine surface = %+v", want.Name, gotAll)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("stream %q surface = %+v, want %+v (legacy)", want.Name, got, want)
+		}
 	}
 }
 
@@ -595,26 +668,34 @@ func manifestStreamSurface(streams []connectors.Stream) []streamSurface {
 }
 
 // TestParityChargebee_BundleLoadsAndValidates is a smoke guard: the bundle
-// must load cleanly via engine.LoadAll(defs.FS) and declare exactly the 5
-// legacy streams by name, with no write actions (chargebee is read-only).
+// must load cleanly via engine.LoadAll(defs.FS) and declare AT LEAST the 5
+// original legacy streams by name (superset, not exact-set, per the Pass B
+// full-surface expansion — see TestParityChargebee_CatalogSurface). Chargebee
+// gained write capability in that same expansion (api_surface.json
+// reviewed_at 2026-07-03: 36 write actions covering the core
+// create/update/delete/void/cancel triad for its primary business objects),
+// so this bundle is no longer read-only; the read-only assertion this test
+// used to carry is retired, not silently dropped — see docs.md's "Write
+// actions & risks" section for what changed and why.
 func TestParityChargebee_BundleLoadsAndValidates(t *testing.T) {
 	bundle := loadChargebeeBundle(t)
 
-	wantStreams := []string{"customers", "invoices", "items", "plans", "subscriptions"}
-	gotStreams := make([]string, 0, len(bundle.Streams))
+	wantLegacyStreams := []string{"customers", "invoices", "items", "plans", "subscriptions"}
+	gotStreams := make(map[string]bool, len(bundle.Streams))
 	for _, s := range bundle.Streams {
-		gotStreams = append(gotStreams, s.Name)
+		gotStreams[s.Name] = true
 	}
-	sort.Strings(gotStreams)
-	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("bundle streams = %v, want %v", gotStreams, wantStreams)
+	for _, want := range wantLegacyStreams {
+		if !gotStreams[want] {
+			t.Fatalf("bundle streams = %v, missing legacy stream %q", bundle.Streams, want)
+		}
 	}
 
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (chargebee is read-only)", bundle.Writes)
+	if len(bundle.Writes) == 0 {
+		t.Fatal("bundle write actions = none, want the Pass B write-action set (chargebee gained write capability)")
 	}
-	if bundle.Metadata.Capabilities.Write {
-		t.Fatal("bundle metadata.capabilities.write = true, want false (read-only connector)")
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true (chargebee gained write capability in Pass B)")
 	}
 }
 

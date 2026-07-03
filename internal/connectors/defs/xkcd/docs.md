@@ -7,6 +7,20 @@ for a specific comic). This bundle is engine-vs-legacy parity-tested against
 `internal/connectors/xkcd` (the hand-written connector it migrates); the legacy package stays
 registered and unchanged until the wave6 registry flip.
 
+**Pass B full-surface expansion (2026-07-03)**: re-verified against the live docs page
+(`https://xkcd.com/json.html`) and live JSON responses (`/info.0.json`, `/614/info.0.json`) —
+xkcd's entire documented JSON interface is exactly the two endpoint shapes already implemented
+as the `latest`/`comic` streams below. There is no additional list/search/index JSON endpoint to
+add as a stream (the JSON API has no comic-enumeration capability at all — a caller must already
+know a comic number to fetch it) and no mutation endpoint of any kind to add as a
+`writes.json` action (xkcd is a static, unauthenticated, publicly-cached site: no accounts, no
+user-owned data, no documented write path — nothing to express, not a scope cut). `api_surface.json`
+was updated to record this closed-surface finding explicitly rather than leaving a generic "Pass B
+capability expansion" placeholder; every endpoint is `covered_by` a stream (zero `excluded`
+entries needed, since there is no undocumented/skipped endpoint left over). No new streams, no
+`writes.json`, no hook additions were needed — the bundle was already at full documented-surface
+coverage.
+
 ## Auth setup
 
 No credentials are required: the public XKCD JSON API has no authentication. `base_url` defaults

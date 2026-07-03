@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/promotional_credits",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "promotional_credit": {
+            "id": "pc_fixture_1",
+            "customer_id": "cus_fixture_1",
+            "type": "increment",
+            "amount": 1000,
+            "currency_code": "USD",
+            "description": "Fixture promotional credit",
+            "credit_type": "general",
+            "closing_balance": 1000,
+            "created_at": 1767225600
+          }
+        }
+      ]
+    }
+  }
+}

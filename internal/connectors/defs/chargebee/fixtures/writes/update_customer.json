@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "cus_fixture_1",
+    "email": "updated-fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/cus_fixture_1"
+  }
+}

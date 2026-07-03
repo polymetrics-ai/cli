@@ -1,0 +1,10 @@
+{
+  "record": {
+    "type": "adjustment",
+    "customer_id": "cus_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/credit_notes"
+  }
+}

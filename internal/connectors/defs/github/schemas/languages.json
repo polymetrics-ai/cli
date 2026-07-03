@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "languages",
+  "type": "object",
+  "description": "GitHub's /languages endpoint returns a single JSON object keyed by language name with byte-count values (e.g. {\"Go\": 123456, \"Shell\": 890}), an arbitrary/dynamic key set (not a fixed set of named properties) — this stream declares projection:passthrough so every language key is preserved verbatim rather than dropped by schema-mode's fixed-property projection (records.keyed_object does not apply here since the values are bare integers, not objects). One record per repository.",
+  "x-primary-key": ["repository"],
+  "properties": {
+    "repository": {
+      "type": "string",
+      "description": "Config-derived per-record marker field (\"owner/repo\"); the only statically-declared property. All other emitted fields are the dynamic per-language byte counts, passed through verbatim."
+    }
+  }
+}

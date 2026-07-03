@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/users/me/settings/sendAs" },
+  "response": {
+    "status": 200,
+    "body": {
+      "sendAs": [
+        {
+          "sendAsEmail": "fixture-primary@example.com",
+          "displayName": "Fixture Primary",
+          "replyToAddress": "",
+          "signature": "",
+          "isPrimary": true,
+          "isDefault": true,
+          "treatAsAlias": false,
+          "verificationStatus": "accepted"
+        },
+        {
+          "sendAsEmail": "fixture-alias@example.com",
+          "displayName": "Fixture Alias",
+          "replyToAddress": "fixture-reply@example.com",
+          "signature": "<p>Fixture signature</p>",
+          "isPrimary": false,
+          "isDefault": false,
+          "treatAsAlias": true,
+          "verificationStatus": "pending"
+        }
+      ]
+    }
+  }
+}

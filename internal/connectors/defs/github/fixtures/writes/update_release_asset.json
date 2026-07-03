@@ -1,0 +1,8 @@
+{
+  "record": { "asset_id": 1, "name": "fixture-asset.zip", "label": "Fixture asset" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/releases/assets/1",
+    "body": { "name": "fixture-asset.zip", "label": "Fixture asset" }
+  }
+}

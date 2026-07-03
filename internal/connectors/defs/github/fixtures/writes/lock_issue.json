@@ -1,0 +1,8 @@
+{
+  "record": { "issue_number": 1, "lock_reason": "off-topic" },
+  "expect": {
+    "method": "PUT",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/1/lock",
+    "body": { "lock_reason": "off-topic" }
+  }
+}

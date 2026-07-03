@@ -1,0 +1,8 @@
+{
+  "record": { "comment_id": 1, "body": "Updated fixture commit comment" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/comments/1",
+    "body": { "body": "Updated fixture commit comment" }
+  }
+}

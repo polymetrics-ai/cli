@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "repo_rulesets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "repository": { "type": "string" },
+    "id": { "type": "integer" },
+    "name": { "type": "string" },
+    "target": { "type": ["string", "null"] },
+    "source_type": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "enforcement": { "type": "string" },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

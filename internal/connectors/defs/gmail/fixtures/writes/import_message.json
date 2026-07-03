@@ -1,0 +1,18 @@
+{
+  "record": {
+    "raw": "Zml4dHVyZS1yYXctbWVzc2FnZS1ib2R5",
+    "labelIds": ["INBOX"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/messages/import",
+    "body": {
+      "raw": "Zml4dHVyZS1yYXctbWVzc2FnZS1ib2R5",
+      "labelIds": ["INBOX"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "msg_fixture_imported_1", "threadId": "thread_fixture_imported_1" }
+  }
+}

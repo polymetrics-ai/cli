@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "order_fixture_1",
+    "tracking_id": "TRK-FIXTURE-1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orders/order_fixture_1"
+  }
+}

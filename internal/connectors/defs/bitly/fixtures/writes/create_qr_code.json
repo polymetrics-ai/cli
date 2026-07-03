@@ -1,0 +1,20 @@
+{
+  "record": {
+    "group_guid": "grp_fixture_1",
+    "title": "Fixture QR Code",
+    "destination": { "bitlink_id": "bit.ly/fixture1" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/qr-codes",
+    "body": {
+      "group_guid": "grp_fixture_1",
+      "title": "Fixture QR Code",
+      "destination": { "bitlink_id": "bit.ly/fixture1" }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "qrcode_id": "qr_fixture_1" }
+  }
+}

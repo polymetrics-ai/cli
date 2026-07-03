@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/price_variants",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "price_variant": {
+            "id": "pv_fixture_1",
+            "name": "Fixture Price Variant",
+            "variant_group": "region",
+            "description": "Fixture price variant",
+            "status": "active",
+            "created_at": 1767225600,
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

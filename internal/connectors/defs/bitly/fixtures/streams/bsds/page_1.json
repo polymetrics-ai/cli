@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/bsds" },
+  "response": {
+    "status": 200,
+    "body": {
+      "bsds": ["bit.ly", "fixture.link"]
+    }
+  }
+}

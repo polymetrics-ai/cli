@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/item_families",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "item_family": {
+            "id": "fam_fixture_1",
+            "name": "Fixture Family",
+            "description": "Fixture item family",
+            "status": "active",
+            "created_at": 1767225600,
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

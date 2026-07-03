@@ -1,0 +1,7 @@
+{
+  "record": { "ref": "heads/fixture-branch" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/git/refs/heads/fixture-branch"
+  }
+}

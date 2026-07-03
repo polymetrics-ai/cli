@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/entitlements",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "entitlement": {
+            "id": "ent_fixture_1",
+            "entity_id": "item_fixture_1",
+            "entity_type": "item",
+            "feature_id": "feature_fixture_1",
+            "feature_name": "Fixture Feature",
+            "value": "true",
+            "name": "Enabled"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/groups/synthetic-conformance-value/tags" },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": ["fixture-tag-1", "fixture-tag-2"]
+    }
+  }
+}

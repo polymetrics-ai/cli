@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "web",
+    "config": { "url": "https://example.com/fixture-webhook", "content_type": "json" },
+    "events": ["push"],
+    "active": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/hooks",
+    "body": {
+      "name": "web",
+      "config": { "url": "https://example.com/fixture-webhook", "content_type": "json" },
+      "events": ["push"],
+      "active": true
+    }
+  },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

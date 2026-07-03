@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "comment_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/comments/comment_fixture_1/delete"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": "item_fixture_1",
+    "name": "Fixture Item",
+    "type": "plan",
+    "item_family_id": "fam_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/items"
+  }
+}

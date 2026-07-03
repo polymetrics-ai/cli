@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "bsds",
+  "type": "object",
+  "x-primary-key": ["account"],
+  "required": ["account"],
+  "properties": {
+    "account": { "type": "string" },
+    "bsds": { "type": ["array", "null"] }
+  }
+}

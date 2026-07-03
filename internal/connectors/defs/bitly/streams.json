@@ -31,6 +31,42 @@
       "schema": "schemas/campaigns.json"
     },
     {
+      "name": "channels",
+      "path": "/channels",
+      "records": { "path": "channels" },
+      "schema": "schemas/channels.json"
+    },
+    {
+      "name": "bsds",
+      "path": "/bsds",
+      "records": { "path": "" },
+      "computed_fields": {
+        "account": "self"
+      },
+      "schema": "schemas/bsds.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": { "path": "webhooks" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "qr_codes",
+      "path": "/qr-codes",
+      "records": { "path": "qr_codes" },
+      "schema": "schemas/qr_codes.json"
+    },
+    {
+      "name": "group_tags",
+      "path": "/groups/{{ config.group_guid }}/tags",
+      "records": { "path": "" },
+      "computed_fields": {
+        "group_guid": "{{ config.group_guid }}"
+      },
+      "schema": "schemas/group_tags.json"
+    },
+    {
       "name": "bitlinks",
       "path": "/groups/{{ config.group_guid }}/bitlinks",
       "query": { "size": "50" },

@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "coupon_sets",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "coupon_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "redeemed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "archived_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

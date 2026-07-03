@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "thread_fixture_1",
+    "addLabelIds": ["IMPORTANT"],
+    "removeLabelIds": ["UNREAD"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/threads/thread_fixture_1/modify",
+    "body": {
+      "addLabelIds": ["IMPORTANT"],
+      "removeLabelIds": ["UNREAD"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "thread_fixture_1" }
+  }
+}

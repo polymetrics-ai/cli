@@ -1,0 +1,11 @@
+{
+  "record": {
+    "customer_id": "cus_fixture_1",
+    "description": "Fixture credit grant",
+    "amount": 500
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/promotional_credits/add"
+  }
+}

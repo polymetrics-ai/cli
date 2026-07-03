@@ -1,0 +1,22 @@
+{
+  "record": {
+    "pull_number": 1,
+    "body": "Fixture review comment",
+    "commit_id": "6dcb09b5b57875f334f61aebed695e2e4193db5",
+    "path": "README.md",
+    "line": 1,
+    "side": "RIGHT"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/pulls/1/comments",
+    "body": {
+      "body": "Fixture review comment",
+      "commit_id": "6dcb09b5b57875f334f61aebed695e2e4193db5",
+      "path": "README.md",
+      "line": 1,
+      "side": "RIGHT"
+    }
+  },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

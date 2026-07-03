@@ -77,6 +77,85 @@
         "threads_unread": "{{ record.threadsUnread }}"
       },
       "schema": "schemas/labels.json"
+    },
+    {
+      "name": "history",
+      "path": "/users/{{ config.user_id }}/history",
+      "query": {
+        "maxResults": "{{ config.page_size }}",
+        "startHistoryId": { "template": "{{ config.start_history_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "history" },
+      "incremental": {
+        "cursor_field": "id",
+        "request_param": "startHistoryId",
+        "start_config_key": "start_history_id"
+      },
+      "computed_fields": {
+        "messages_added": "{{ record.messagesAdded }}",
+        "messages_deleted": "{{ record.messagesDeleted }}",
+        "labels_added": "{{ record.labelsAdded }}",
+        "labels_removed": "{{ record.labelsRemoved }}"
+      },
+      "schema": "schemas/history.json"
+    },
+    {
+      "name": "filters",
+      "path": "/users/{{ config.user_id }}/settings/filters",
+      "records": { "path": "filter" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/filters.json"
+    },
+    {
+      "name": "send_as",
+      "path": "/users/{{ config.user_id }}/settings/sendAs",
+      "records": { "path": "sendAs" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "send_as_email": "{{ record.sendAsEmail }}",
+        "display_name": "{{ record.displayName }}",
+        "reply_to_address": "{{ record.replyToAddress }}",
+        "is_primary": "{{ record.isPrimary }}",
+        "is_default": "{{ record.isDefault }}",
+        "treat_as_alias": "{{ record.treatAsAlias }}",
+        "verification_status": "{{ record.verificationStatus }}"
+      },
+      "schema": "schemas/send_as.json"
+    },
+    {
+      "name": "delegates",
+      "path": "/users/{{ config.user_id }}/settings/delegates",
+      "records": { "path": "delegates" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "delegate_email": "{{ record.delegateEmail }}",
+        "verification_status": "{{ record.verificationStatus }}"
+      },
+      "schema": "schemas/delegates.json"
+    },
+    {
+      "name": "forwarding_addresses",
+      "path": "/users/{{ config.user_id }}/settings/forwardingAddresses",
+      "records": { "path": "forwardingAddresses" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "forwarding_email": "{{ record.forwardingEmail }}",
+        "verification_status": "{{ record.verificationStatus }}"
+      },
+      "schema": "schemas/forwarding_addresses.json"
+    },
+    {
+      "name": "profile",
+      "path": "/users/{{ config.user_id }}/profile",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "email_address": "{{ record.emailAddress }}",
+        "messages_total": "{{ record.messagesTotal }}",
+        "threads_total": "{{ record.threadsTotal }}",
+        "history_id": "{{ record.historyId }}"
+      },
+      "schema": "schemas/profile.json"
     }
   ]
 }

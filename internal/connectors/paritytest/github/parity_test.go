@@ -138,6 +138,14 @@ func writeJSON(w http.ResponseWriter, body string) {
 func TestParityGithub_BundleLoadsAndValidates(t *testing.T) {
 	bundle := loadGithubBundle(t)
 
+	// wave1-pilot's original 19 streams / 25 writes (legacy github.go parity
+	// surface) MUST still all be present — Pass B full-surface expansion is
+	// additive-only, never a removal of a legacy-parity stream/action. The
+	// bundle's TOTAL surface is now much larger (Pass B added 14 streams/42
+	// write actions covering the rest of GitHub's repo-scoped REST API — see
+	// api_surface.json and docs.md), so this check asserts a SUPERSET, not
+	// exact equality (superseding the wave1-pilot-era exact-list assertion
+	// this replaced).
 	wantStreams := []string{
 		"branches", "collaborators", "commits", "contributors", "deployments",
 		"issue_comments", "issues", "labels", "milestones", "pull_request_review_comments",
@@ -149,8 +157,9 @@ func TestParityGithub_BundleLoadsAndValidates(t *testing.T) {
 		gotStreams = append(gotStreams, s.Name)
 	}
 	sort.Strings(gotStreams)
-	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("bundle streams = %v (%d), want %v (%d)", gotStreams, len(gotStreams), wantStreams, len(wantStreams))
+	assertSupersetOf(t, "bundle streams", gotStreams, wantStreams)
+	if len(gotStreams) < len(wantStreams) {
+		t.Fatalf("bundle streams = %v (%d), want at least the wave1-pilot %d", gotStreams, len(gotStreams), len(wantStreams))
 	}
 
 	wantWrites := []string{
@@ -167,12 +176,36 @@ func TestParityGithub_BundleLoadsAndValidates(t *testing.T) {
 		gotWrites = append(gotWrites, w.Name)
 	}
 	sort.Strings(gotWrites)
-	if !reflect.DeepEqual(gotWrites, wantWrites) {
-		t.Fatalf("bundle write actions = %v (%d), want %v (%d)", gotWrites, len(gotWrites), wantWrites, len(wantWrites))
+	assertSupersetOf(t, "bundle write actions", gotWrites, wantWrites)
+	if len(gotWrites) < len(wantWrites) {
+		t.Fatalf("bundle write actions = %v (%d), want at least the wave1-pilot %d", gotWrites, len(gotWrites), len(wantWrites))
 	}
 
 	if !bundle.Metadata.Capabilities.Write {
 		t.Fatal("bundle metadata.capabilities.write = false, want true")
+	}
+}
+
+// assertSupersetOf fails the test if any element of want is absent from got
+// (both pre-sorted). Used by TestParityGithub_BundleLoadsAndValidates and
+// TestParityGithub_ManifestSurface, both of which pin "every wave1-pilot
+// legacy-parity name is still present" rather than "the set is identical to
+// legacy's" now that Pass B's full-surface expansion adds many more
+// streams/writes on top of the original legacy-parity set.
+func assertSupersetOf(t *testing.T, label string, got, want []string) {
+	t.Helper()
+	gotSet := make(map[string]bool, len(got))
+	for _, g := range got {
+		gotSet[g] = true
+	}
+	var missing []string
+	for _, w := range want {
+		if !gotSet[w] {
+			missing = append(missing, w)
+		}
+	}
+	if len(missing) > 0 {
+		t.Fatalf("%s = %v is missing legacy-parity entries: %v", label, got, missing)
 	}
 }
 
@@ -992,6 +1025,12 @@ func TestParityGithub_WriteDeleteLabelNotFoundFailsOnBothSides(t *testing.T) {
 
 // --- manifest-surface parity ------------------------------------------------
 
+// TestParityGithub_ManifestSurface asserts the engine bundle's manifest is a
+// SUPERSET of legacy's (every legacy-parity stream/write name is still
+// present), not an exact match — Pass B full-surface expansion intentionally
+// adds many streams/writes beyond legacy's own manifest (legacy is frozen at
+// its wave1-pilot 19 streams/25 writes; this bundle now covers the rest of
+// GitHub's repo-scoped REST API on top of that, see api_surface.json).
 func TestParityGithub_ManifestSurface(t *testing.T) {
 	bundle := loadGithubBundle(t)
 
@@ -1001,15 +1040,11 @@ func TestParityGithub_ManifestSurface(t *testing.T) {
 
 	wantStreams := manifestStreamNames(legacyManifest.Streams)
 	gotStreams := manifestStreamNames(engManifest.Streams)
-	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("stream names = %v, want %v (legacy)", gotStreams, wantStreams)
-	}
+	assertSupersetOf(t, "manifest stream names", gotStreams, wantStreams)
 
 	wantWrites := writeActionNames(legacyManifest.WriteActions)
 	gotWrites := writeActionNames(engManifest.WriteActions)
-	if !reflect.DeepEqual(gotWrites, wantWrites) {
-		t.Fatalf("write action names = %v, want %v (legacy)", gotWrites, wantWrites)
-	}
+	assertSupersetOf(t, "manifest write action names", gotWrites, wantWrites)
 }
 
 func manifestStreamNames(streams []connectors.Stream) []string {

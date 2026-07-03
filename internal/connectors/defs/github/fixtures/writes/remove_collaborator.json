@@ -1,0 +1,7 @@
+{
+  "record": { "username": "fixture-collaborator" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/collaborators/fixture-collaborator"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "guid": "whk_fixture_1",
+    "is_active": false
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/webhooks/whk_fixture_1",
+    "body": {
+      "is_active": false
+    }
+  }
+}

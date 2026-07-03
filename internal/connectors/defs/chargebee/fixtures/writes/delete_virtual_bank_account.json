@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "vba_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/virtual_bank_accounts/vba_fixture_1/delete"
+  }
+}

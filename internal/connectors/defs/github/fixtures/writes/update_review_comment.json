@@ -1,0 +1,8 @@
+{
+  "record": { "comment_id": 1, "body": "Updated fixture review comment" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/pulls/comments/1",
+    "body": { "body": "Updated fixture review comment" }
+  }
+}

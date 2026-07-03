@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "credit_notes",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subscription_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference_invoice_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currency_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "amount_allocated": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "amount_refunded": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "amount_available": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "date": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Unix seconds."
+    },
+    "voided_at": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Unix seconds."
+    },
+    "updated_at": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Unix seconds. Note: Chargebee's /credit_notes list endpoint does not support sort_by[asc]=updated_at (only date); updated_at[after] filtering still works for incremental correctness, ordering within a page is not guaranteed."
+    },
+    "deleted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "updated_at"
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "customer_id": "cus_fixture_1",
+    "card[number]": "4111111111111111",
+    "card[expiry_month]": 12,
+    "card[expiry_year]": 2030,
+    "card[cvv]": "123"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payment_sources/create_card"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hosted_pages",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "hosted_page": {
+            "id": "hp_fixture_1",
+            "type": "checkout_new",
+            "url": "https://fixture.chargebee.com/pages/v3/fixture1",
+            "state": "succeeded",
+            "created_at": 1767225600,
+            "expires_at": 1767229200,
+            "updated_at": 1767225601
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/item_prices",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "item_price": {
+            "id": "ip_fixture_1",
+            "name": "Fixture Item Price",
+            "item_id": "item_fixture_1",
+            "item_family_id": "fam_fixture_1",
+            "item_type": "plan",
+            "pricing_model": "flat_fee",
+            "price": 2900,
+            "currency_code": "USD",
+            "period": 1,
+            "period_unit": "month",
+            "status": "active",
+            "free_quantity": 0,
+            "is_taxable": true,
+            "created_at": 1767225600,
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

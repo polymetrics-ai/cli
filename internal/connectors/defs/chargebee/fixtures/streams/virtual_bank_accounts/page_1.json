@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/virtual_bank_accounts",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "virtual_bank_account": {
+            "id": "vba_fixture_1",
+            "customer_id": "cus_fixture_1",
+            "email": "fixture1@example.com",
+            "bank_name": "Fixture Bank",
+            "account_number": "0000001234",
+            "gateway": "chargebee",
+            "gateway_account_id": "gw_fixture_1",
+            "created_at": 1767225600,
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

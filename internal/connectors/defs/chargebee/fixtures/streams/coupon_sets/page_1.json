@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coupon_sets",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "coupon_set": {
+            "id": "cset_fixture_1",
+            "coupon_id": "coupon_fixture_1",
+            "name": "Fixture Coupon Set",
+            "total_count": 10,
+            "redeemed_count": 1,
+            "archived_count": 0
+          }
+        }
+      ]
+    }
+  }
+}

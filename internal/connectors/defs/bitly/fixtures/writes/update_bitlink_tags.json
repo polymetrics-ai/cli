@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "bit.ly/fixture1",
+    "tags": ["fixture", "campaign-2026"]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/bitlinks/bit.ly/fixture1/tags",
+    "body": {
+      "tags": ["fixture", "campaign-2026"]
+    }
+  }
+}

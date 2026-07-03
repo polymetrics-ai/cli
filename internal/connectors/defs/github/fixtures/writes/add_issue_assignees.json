@@ -1,0 +1,9 @@
+{
+  "record": { "issue_number": 1, "assignees": ["octocat"] },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/1/assignees",
+    "body": { "assignees": ["octocat"] }
+  },
+  "response": { "status": 201, "body": { "number": 1 } }
+}

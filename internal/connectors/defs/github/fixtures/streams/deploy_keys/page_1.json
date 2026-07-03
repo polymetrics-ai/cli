@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/keys",
+    "query": { "page": "1", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "key": "ssh-rsa AAAAB3NzaC1yc2EA-fixture-key",
+        "url": "https://api.github.com/repos/octocat/hello-world/keys/1",
+        "title": "Fixture deploy key",
+        "verified": true,
+        "created_at": "2026-01-01T00:00:00Z",
+        "read_only": true,
+        "added_by": null,
+        "last_used": null,
+        "enabled": true
+      }
+    ]
+  }
+}

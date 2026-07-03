@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/credit_notes",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "credit_note": {
+            "id": "cn_fixture_1",
+            "customer_id": "cus_fixture_1",
+            "subscription_id": "sub_fixture_1",
+            "reference_invoice_id": "inv_fixture_1",
+            "type": "refundable",
+            "status": "closed",
+            "currency_code": "USD",
+            "total": 500,
+            "amount_allocated": 0,
+            "amount_refunded": 500,
+            "amount_available": 0,
+            "date": 1767225600,
+            "voided_at": null,
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

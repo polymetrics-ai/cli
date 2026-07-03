@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/dependabot/alerts",
+    "query": { "page": "1", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "number": 1,
+        "state": "open",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z",
+        "url": "https://api.github.com/repos/octocat/hello-world/dependabot/alerts/1",
+        "html_url": "https://github.com/octocat/hello-world/security/dependabot/1",
+        "dismissed_at": null,
+        "dismissed_by": null,
+        "dismissed_reason": null,
+        "dismissed_comment": null,
+        "fixed_at": null,
+        "auto_dismissed_at": null,
+        "dependency": {
+          "package": { "name": "left-pad", "ecosystem": "npm" },
+          "manifest_path": "package.json"
+        }
+      }
+    ]
+  }
+}

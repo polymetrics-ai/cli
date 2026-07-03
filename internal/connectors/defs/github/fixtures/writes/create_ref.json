@@ -1,0 +1,9 @@
+{
+  "record": { "ref": "refs/heads/fixture-branch", "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5" },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/git/refs",
+    "body": { "ref": "refs/heads/fixture-branch", "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5" }
+  },
+  "response": { "status": 201, "body": { "ref": "refs/heads/fixture-branch" } }
+}

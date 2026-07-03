@@ -1,0 +1,7 @@
+{
+  "record": { "id": "draft_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/synthetic-conformance-value/drafts/draft_fixture_1"
+  }
+}

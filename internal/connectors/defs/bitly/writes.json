@@ -1,0 +1,378 @@
+{
+  "actions": [
+    {
+      "name": "create_bitlink",
+      "kind": "create",
+      "method": "POST",
+      "path": "/bitlinks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["long_url"],
+        "properties": {
+          "long_url": { "type": "string" },
+          "domain": { "type": "string" },
+          "group_guid": { "type": "string" },
+          "title": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "deeplinks": { "type": "array" }
+        }
+      },
+      "risk": "creates a new publicly-resolvable short link; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_bitlink",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/bitlinks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "archived": { "type": "boolean" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "deeplinks": { "type": "array" },
+          "long_url": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing bitlink's metadata or redirect destination; changing long_url redirects all future traffic on that short link and consumes an encode-limit unit"
+    },
+    {
+      "name": "delete_bitlink",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/bitlinks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a bitlink; any traffic still hitting the short URL starts failing to resolve"
+    },
+    {
+      "name": "update_bitlink_tags",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/bitlinks/{{ record.id }}/tags",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["tags"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "tags"],
+        "properties": {
+          "id": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "replaces the full tag set on a bitlink; overwrites any tags not included in the submitted list"
+    },
+    {
+      "name": "delete_bitlink_tags",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/bitlinks/{{ record.id }}/tags",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["tags"],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "tags"],
+        "properties": {
+          "id": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "removes the named tags from a bitlink; irreversible without re-adding them via update_bitlink_tags"
+    },
+    {
+      "name": "create_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/campaigns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["group_guid"],
+        "properties": {
+          "group_guid": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "channel_guids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new campaign container in the target group; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_campaign",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/campaigns/{{ record.guid }}",
+      "path_fields": ["guid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["guid"],
+        "properties": {
+          "guid": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "channel_guids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "mutates an existing campaign's name, description, or associated channels"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/groups/{{ record.guid }}",
+      "path_fields": ["guid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["guid"],
+        "properties": {
+          "guid": { "type": "string" },
+          "name": { "type": "string" },
+          "organization_guid": { "type": "string" }
+        }
+      },
+      "risk": "renames or re-parents an existing group; a visible change for every member of that group"
+    },
+    {
+      "name": "update_group_preferences",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/groups/{{ record.group_guid }}/preferences",
+      "path_fields": ["group_guid"],
+      "body_type": "json",
+      "body_fields": ["domain_preference"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["group_guid", "domain_preference"],
+        "properties": {
+          "group_guid": { "type": "string" },
+          "domain_preference": { "type": "string" }
+        }
+      },
+      "risk": "changes the default branded short domain new bitlinks in this group are created with"
+    },
+    {
+      "name": "create_channel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "group_guid": { "type": "string" },
+          "campaign_guid": { "type": "string" }
+        }
+      },
+      "risk": "creates a new channel container; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_channel",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/channels/{{ record.guid }}",
+      "path_fields": ["guid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["guid"],
+        "properties": {
+          "guid": { "type": "string" },
+          "name": { "type": "string" },
+          "campaign_guid": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing channel's name or campaign association"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["group_guid", "event", "url"],
+        "properties": {
+          "group_guid": { "type": "string" },
+          "campaign_guid": { "type": "string" },
+          "event": { "type": "string" },
+          "url": { "type": "string" },
+          "is_active": { "type": "boolean" }
+        }
+      },
+      "risk": "registers a new outbound webhook that will POST live event data (clicks/scans) to an external URL of the caller's choosing; verify the target endpoint before enabling"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/webhooks/{{ record.guid }}",
+      "path_fields": ["guid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["guid"],
+        "properties": {
+          "guid": { "type": "string" },
+          "url": { "type": "string" },
+          "event": { "type": "string" },
+          "is_active": { "type": "boolean" }
+        }
+      },
+      "risk": "mutates an existing webhook's target URL, event type, or active state; a changed url redirects future event deliveries to a different endpoint"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.guid }}",
+      "path_fields": ["guid"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["guid"],
+        "properties": {
+          "guid": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately"
+    },
+    {
+      "name": "create_custom_bitlink",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom_bitlinks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["custom_bitlink", "bitlink_id"],
+        "properties": {
+          "custom_bitlink": { "type": "string" },
+          "bitlink_id": { "type": "string" }
+        }
+      },
+      "risk": "claims a custom keyword/back-half on a branded short domain and points it at a bitlink; consumes a finite custom-bitlink allocation on the domain"
+    },
+    {
+      "name": "update_custom_bitlink",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/custom_bitlinks/{{ record.custom_bitlink }}",
+      "path_fields": ["custom_bitlink"],
+      "body_type": "json",
+      "body_fields": ["bitlink_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["custom_bitlink", "bitlink_id"],
+        "properties": {
+          "custom_bitlink": { "type": "string" },
+          "bitlink_id": { "type": "string" }
+        }
+      },
+      "risk": "re-points an existing custom keyword at a different bitlink; redirects all future traffic hitting that custom URL to the new destination"
+    },
+    {
+      "name": "create_qr_code",
+      "kind": "create",
+      "method": "POST",
+      "path": "/qr-codes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["group_guid", "destination"],
+        "properties": {
+          "group_guid": { "type": "string" },
+          "title": { "type": "string" },
+          "destination": { "type": "object" }
+        }
+      },
+      "risk": "creates a new QR code resource pointed at a bitlink or long_url; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_qr_code",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/qr-codes/{{ record.qrcode_id }}",
+      "path_fields": ["qrcode_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["qrcode_id"],
+        "properties": {
+          "qrcode_id": { "type": "string" },
+          "title": { "type": "string" },
+          "destination": { "type": "object" }
+        }
+      },
+      "risk": "mutates an existing QR code's title or destination; changing destination redirects anyone scanning an already-printed/distributed code"
+    },
+    {
+      "name": "delete_qr_code",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/qr-codes/{{ record.qrcode_id }}",
+      "path_fields": ["qrcode_id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["qrcode_id"],
+        "properties": {
+          "qrcode_id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a QR code resource; any already-printed/distributed copy of the code stops resolving"
+    }
+  ]
+}

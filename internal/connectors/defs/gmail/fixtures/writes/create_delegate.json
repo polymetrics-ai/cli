@@ -1,0 +1,12 @@
+{
+  "record": { "delegateEmail": "fixture-new-delegate@example.com" },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/settings/delegates",
+    "body": { "delegateEmail": "fixture-new-delegate@example.com" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "delegateEmail": "fixture-new-delegate@example.com", "verificationStatus": "pending" }
+  }
+}

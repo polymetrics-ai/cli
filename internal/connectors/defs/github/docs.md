@@ -1,23 +1,75 @@
 # Overview
 
-GitHub is the wave1-pilot Tier-2 (AuthHook + WriteHook) migration of `internal/connectors/github`
-(the largest, highest-risk legacy connector: 1980+352+295+85 = ~2712 loc across
-`github.go`/`streams.go`/`auth.go`/`manifest.go`, 19 read streams, 25 write actions — the only pilot
-with real writes). It reads GitHub repository, issue, pull request, code, release, collaboration,
-and Actions data, and writes approved reverse-ETL actions through the GitHub REST API. This bundle
-is engine-vs-legacy parity-tested against `internal/connectors/github` (read-only reference); the
-legacy package stays registered and unchanged until wave6's registry flip.
+GitHub started as the wave1-pilot Tier-2 (AuthHook + WriteHook) migration of
+`internal/connectors/github` (the largest, highest-risk legacy connector: 1980+352+295+85 = ~2712
+loc across `github.go`/`streams.go`/`auth.go`/`manifest.go`, 19 read streams, 25 write actions — the
+only pilot with real writes), then underwent a **Pass B full-surface expansion** (this pass): every
+repository-scoped endpoint in GitHub's published OpenAPI description (500 operations under
+`/repos/{owner}/{repo}/...`, `docs/github/rest-api-description`) was reviewed and mapped to either a
+stream, a write action, or a documented exclusion in `api_surface.json` — no blanket
+`out_of_scope` bucket. The bundle now reads GitHub repository, issue, pull request, code, release,
+collaboration, Actions, webhook, deploy-key, environment, fork, invitation, issue-event, and security
+(code scanning / Dependabot / secret scanning / security-advisory) data, plus repository rulesets and
+autolinks, and writes 67 approved reverse-ETL actions through the GitHub REST API. This bundle is
+engine-vs-legacy parity-tested against `internal/connectors/github` (read-only reference, frozen at
+its own 19-stream/25-write surface); the legacy package stays registered and unchanged until wave6's
+registry flip — parity tests now assert the bundle is a **superset** of legacy's surface, not an
+exact match, since Pass B intentionally adds streams/writes legacy never had.
 
-Declarative bundle: `metadata.json`, `spec.json`, `streams.json` (19 streams), `writes.json` (25
+Declarative bundle: `metadata.json`, `spec.json`, `streams.json` (33 streams), `writes.json` (67
 actions), `schemas/*.json`, `fixtures/**`, this file. Go escape hatch:
 `internal/connectors/hooks/github/hooks.go` implements exactly 2 hook interfaces (the Tier-2 cap):
 `AuthHook` (github_app JWT -> installation-token exchange) and `WriteHook` (compound multi-request
-write actions a single declarative action cannot express).
+write actions a single declarative action cannot express). None of the 42 write actions Pass B added
+need a hook — every one of them is a single-request declarative action — so `hooks.go` is unchanged
+at exactly 400 lines (see the STANDING EXCEPTION note in Known limits, also unchanged).
 
 Note: PLAN.md/SPEC.md's per-connector row cites "16 actions"; the legacy source
-(`github.go:1759` `githubWriteActionSpecs`) actually enumerates 25 distinct write actions. This
-bundle implements the full 25 for capability parity (the task mandate), not the 16 the planning doc
-cites — flagged for the P-12 conventions/planning-doc correction pass.
+(`github.go:1759` `githubWriteActionSpecs`) actually enumerates 25 distinct write actions. The
+wave1-pilot bundle implemented the full 25 for capability parity (the task mandate at the time), not
+the 16 the planning doc cited — flagged for the P-12 conventions/planning-doc correction pass. Pass B
+adds 42 more on top of that 25 (67 total; see "Write actions & risks" below).
+
+## Pass B full-surface expansion (this pass)
+
+`api_surface.json` was rewritten from a 63-entry "wave1-pilot scope, everything else `out_of_scope`"
+manifest into a full enumeration of the connector's natural surface: every one of the 500
+`/repos/{owner}/{repo}/...` operations in GitHub REST API v3 1.1.4's published OpenAPI description.
+Org-level, user-level, enterprise-level, and gist/GraphQL surfaces remain out of scope — this
+connector's `spec.json` configures a single `owner`+`repo` identity, not an org or user identity, so
+org/user-scoped resources (teams, org secrets, gists, enterprise admin, etc.) have no config surface
+to hang off of without a distinct, separate scope-widening change.
+
+**New streams (14)**: `commit_comments`, `deploy_keys`, `webhooks`, `environments`, `forks`,
+`invitations`, `issue_events`, `code_scanning_alerts`, `dependabot_alerts`,
+`secret_scanning_alerts`, `security_advisories`, `repo_rulesets`, `autolinks`, `languages`.
+
+**New write actions (42)**: `create_webhook`/`update_webhook`/`delete_webhook`,
+`create_deploy_key`/`delete_deploy_key`, `create_or_update_environment`/`delete_environment`,
+`create_commit_comment`/`update_commit_comment`/`delete_commit_comment`,
+`update_issue_comment`/`delete_issue_comment`, `lock_issue`/`unlock_issue`,
+`set_issue_labels`/`add_issue_labels`/`remove_issue_label`,
+`add_issue_assignees`/`remove_issue_assignees`,
+`create_review_comment`/`update_review_comment`/`delete_review_comment`,
+`submit_pull_request_review`/`dismiss_pull_request_review`, `update_pull_request_branch`,
+`update_release_asset`/`delete_release_asset`, `replace_repo_topics`,
+`add_collaborator`/`remove_collaborator`, `create_ref`/`update_ref`/`delete_ref`, `merge_branch`,
+`update_code_scanning_alert`/`update_dependabot_alert`/`update_secret_scanning_alert`,
+`create_deployment`, `create_fork`,
+`create_repo_ruleset`/`update_repo_ruleset`/`delete_repo_ruleset`.
+
+**Exclusion category breakdown** (all 402 excluded endpoints carry a real category + reason, closed
+vocabulary, no blanket bucket): `requires_elevated_scope` (168 — Actions/Dependabot/environment
+secrets and variables, branch protection, org-scoped resources surfaced under the repo path,
+security-feature toggles, CodeQL/code-quality/traffic analytics requiring elevated scopes),
+`out_of_scope` (143 — narrow preview features like sub-issues/issue-field-values/Codespaces,
+caller-chosen-path/ref/SHA lookups with no bulk enumeration, CI-provider-credential-conventional
+endpoints like commit statuses and check runs), `duplicate_of` (67 — single-resource detail GETs
+whose data is already covered by the corresponding list stream, or an action that's a narrower
+variant of one already implemented), `binary_payload` (10 — zip/tarball/SBOM/SARIF/raw-asset-upload
+endpoints), `non_data_endpoint` (8 — boolean checks, pings, generators with no persisted record),
+`destructive_admin` (5 — repo/branch/deployment deletion, ownership transfer), `deprecated` (1 — the
+legacy repository events timeline). See `api_surface.json` for the full per-endpoint mapping.
 
 ## Auth setup
 
@@ -150,6 +202,38 @@ default (`githubDefaultMaxPages = 1`) reads only ONE page unless a caller explic
   query-param pagination, not RFC 5988 Link-header following, so `page_number` (not `link_header`)
   is the byte-accurate parity choice despite GitHub's REST API also supporting Link headers.
 
+### Pass B streams (14 new, this pass)
+
+All 14 use the same `page_number` pagination as the legacy-parity streams (`page`/`per_page: 100`,
+short-page stop) except `languages`, which declares `pagination: {type: none}` (GitHub's
+`/languages` endpoint returns exactly one object, never paginated).
+
+- `commit_comments`, `deploy_keys`, `webhooks`, `forks`, `invitations`, `issue_events`,
+  `repo_rulesets`, `autolinks`: plain array responses, `records.path: "."`, same shape as the
+  legacy-parity streams.
+- `environments` is an envelope response (`{"total_count": N, "environments": [...]}`) —
+  `records.path: "environments"` names the envelope array key, same convention as
+  `workflows`/`workflow_runs`/`workflow_artifacts`.
+- `code_scanning_alerts`, `dependabot_alerts`, `secret_scanning_alerts`, `security_advisories`
+  declare `incremental.cursor_field: updated_at` (client-side surface parity only — no
+  `request_param`, matching the `pull_requests`/`releases`/`milestones` precedent of declaring the
+  cursor field for manifest/sync-mode purposes without a server-side filter, since none of these
+  four alert/advisory list endpoints document a since-style incremental query parameter).
+  `secret_scanning_alerts`' schema deliberately does NOT project the API's own `secret` field (the
+  actual leaked-credential value GitHub echoes back) — schema-mode projection already drops any
+  undeclared field by default, and this omission is intentional, not an oversight: a record is what
+  flows to a destination warehouse, and a leaked secret has no business landing there.
+- `languages` is a single-object-per-repository stream whose body is a raw `{"Go": 123, ...}` map
+  keyed by an arbitrary, dynamic language name (not a fixed property set) — it declares
+  `projection: "passthrough"` (conventions.md §3) so every language key survives verbatim; only the
+  `repository` marker field is statically declared in `schemas/languages.json`.
+- `repo_rulesets`'s stream covers ruleset LIST/detail data (name/target/enforcement/source); the
+  full `rules[]`/`conditions`/`bypass_actors` nested structures returned by GitHub are passed through
+  raw only via `create_repo_ruleset`/`update_repo_ruleset`'s write-side `record_schema` (loosely
+  typed as `object`/`array` there, not decomposed field-by-field) — the read-side schema stays
+  intentionally narrower (the summary fields most consumers need), matching the same "read schema
+  narrower than write schema" shape `repository`'s own PATCH-equivalent settings surface has.
+
 ## Write actions & risks
 
 All 25 legacy write actions (`github.go:1759+` `githubWriteActionSpecs`) are implemented — 21
@@ -180,6 +264,58 @@ Every write action carries the exact legacy `Risk` prose (github.go's `githubWri
 `merge_pull_request` is the highest-risk action (irreversibly changes repository history unless
 branch protection blocks the merge); `dispatch_workflow`/`rerun_workflow_run` start or repeat CI/CD
 automation.
+
+### Pass B write actions (42 new, this pass)
+
+All 42 are purely declarative — none needed a `WriteHook` (every one of them is genuinely a single
+HTTP request): `create_webhook`/`update_webhook`/`delete_webhook`,
+`create_deploy_key`/`delete_deploy_key`, `create_or_update_environment`/`delete_environment`,
+`create_commit_comment`/`update_commit_comment`/`delete_commit_comment`,
+`update_issue_comment`/`delete_issue_comment`, `lock_issue`/`unlock_issue`,
+`set_issue_labels`/`add_issue_labels`/`remove_issue_label`,
+`add_issue_assignees`/`remove_issue_assignees`,
+`create_review_comment`/`update_review_comment`/`delete_review_comment`,
+`submit_pull_request_review`/`dismiss_pull_request_review`, `update_pull_request_branch`,
+`update_release_asset`/`delete_release_asset`, `replace_repo_topics`,
+`add_collaborator`/`remove_collaborator`, `create_ref`/`update_ref`/`delete_ref`, `merge_branch`,
+`update_code_scanning_alert`/`update_dependabot_alert`/`update_secret_scanning_alert`,
+`create_deployment`, `create_fork`,
+`create_repo_ruleset`/`update_repo_ruleset`/`delete_repo_ruleset`.
+
+- `delete_webhook`/`delete_deploy_key`/`delete_environment`/`delete_commit_comment`/
+  `delete_issue_comment`/`remove_issue_label`/`delete_review_comment`/`delete_release_asset`/
+  `remove_collaborator`/`delete_repo_ruleset` all declare `delete.missing_ok_status: [404]` (an
+  already-deleted resource counts as written, not failed) — unlike the 4 wave1-pilot `delete_*`
+  actions above, these are NEW actions with no legacy behavior to stay byte-parity with, so the
+  engine's idempotent-delete leniency (conventions.md §3) is the correct default here, not a
+  deviation from anything. `delete_ref` additionally declares `missing_ok_status: [404, 422]` —
+  GitHub's git/refs delete returns 422 (not 404) for a ref that doesn't exist under certain
+  ref-name shapes.
+- `update_ref`/`delete_ref`'s `ref` path field genuinely contains a literal `/` (GitHub's own
+  convention: `heads/my-branch`, `tags/v1.0.0`) — `InterpolatePath`'s default per-segment urlencoding
+  turns this into a percent-encoded `%2F` on the wire, which both Go's own `net/http` server (used by
+  this bundle's fixture replay/parity harness) and GitHub's real API decode back into a literal `/`
+  for path routing — this is standard percent-decoding behavior, not a workaround, so no deviation is
+  recorded for it.
+- `create_ref` intentionally does NOT reproduce a convenience default for `sha` (create-a-branch-off-
+  HEAD); the caller supplies the full 40-character commit SHA explicitly, matching GitHub's own API
+  contract (`sha` is a required field on the create-ref request body).
+- `merge_branch` is GitHub's plain two-ref merge-commit endpoint (POST `/merges`) — distinct from
+  `merge_pull_request` (which merges an existing pull request via its `pull_number`) and from
+  `update_pull_request_branch` (which merges the base INTO a PR's head to resolve a stale/behind PR,
+  POST `/pulls/{pull_number}/update-branch`); all three create a merge commit but target different
+  ref pairs and are not interchangeable.
+- `create_repo_ruleset`/`update_repo_ruleset`'s `rules`/`conditions`/`bypass_actors` fields are typed
+  loosely (`"type": "array"`/`"type": "object"` with no nested property decomposition) in
+  `record_schema` — GitHub's ruleset rule shapes are a large, evolving `oneOf` union (branch naming
+  patterns, required status checks, required signatures, merge-queue settings, etc.); validating the
+  full union would require `anyOf`/`oneOf` support the engine's draft-07 subset does not have (see
+  the parity-deviation ledger's stripe item 1 precedent for the same subset limitation) — a caller
+  supplies a well-formed rules array per GitHub's own docs, and GitHub's API is the final validator.
+- `add_issue_assignees`/`remove_issue_assignees` both hit the identical `/assignees` endpoint (POST
+  to add, DELETE to remove — DELETE-with-body, matching `delete_file`'s established DELETE-with-body
+  precedent above) — this is GitHub's own REST convention (an unusual but real, documented shape),
+  not a bundle-specific oddity.
 
 ## Known limits
 
@@ -280,9 +416,26 @@ automation.
   construction passes record fields through verbatim). This bundle's `content` field is the
   pre-encoded (GitHub API's actual wire shape) form only — a caller must supply already-base64
   content, matching GitHub's real contents API contract directly.
-- Full GitHub REST surface (orgs, teams, projects v2, notifications, code scanning, dependabot,
-  secrets administration, webhooks, GraphQL) is out of scope; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, ...}` entries.
+- **SUPERSEDED (Pass B full-surface expansion, this pass)**: this bullet previously read "Full
+  GitHub REST surface (orgs, teams, projects v2, notifications, code scanning, dependabot, secrets
+  administration, webhooks, GraphQL) is out of scope" — that blanket framing is no longer accurate.
+  Webhooks, code scanning, and dependabot are now real streams/writes (see "Pass B streams"/"Pass B
+  write actions" above). Org-level, user-level, enterprise-level, gist, and GraphQL surfaces remain
+  genuinely out of scope (this connector's `spec.json` has no org/user identity to hang those
+  resources off), each with its own specific category+reason in `api_surface.json`
+  (`requires_elevated_scope` for org-scoped resources surfaced under the repo path,
+  `out_of_scope` for narrow preview features and caller-chosen-parameter lookups with no bulk
+  enumeration) — see `api_surface.json`'s `scope` field and the "Pass B full-surface expansion"
+  section above for the full breakdown, not a single blanket bucket.
+- **Parity-test methodology changed from exact-equality to superset (Pass B)**:
+  `paritytest/github/parity_test.go`'s `TestParityGithub_BundleLoadsAndValidates` and
+  `TestParityGithub_ManifestSurface` asserted `reflect.DeepEqual` against legacy's exact 19
+  streams/25 writes at wave1-pilot time. Both now assert the bundle's stream/write name set is a
+  SUPERSET containing every legacy-parity name (via a shared `assertSupersetOf` helper), since Pass B
+  intentionally adds streams/writes legacy never had — an exact-equality assertion would have to be
+  deleted or perpetually rewritten on every future capability addition, which superset-checking
+  avoids while still catching an accidental regression (a legacy-parity stream/write silently
+  dropped).
 - **STANDING EXCEPTION — `hooks/github/hooks.go` stays at exactly 400 lines (the Tier-2 hard
   ceiling), zero headroom, evaluated and NOT reduced this pass** (S3 engine mini-wave item 3, carried
   minor: "github hooks.go sits exactly AT the 400-line hard ceiling — reduce ONLY if achievable

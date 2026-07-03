@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ledger_account_balances",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "ledger_account_balance": {
+            "subscription_id": "sub_fixture_1",
+            "unit_id": "unit_fixture_1",
+            "unit_type": "credit_unit",
+            "modified_at": 1767225601
+          }
+        }
+      ]
+    }
+  }
+}

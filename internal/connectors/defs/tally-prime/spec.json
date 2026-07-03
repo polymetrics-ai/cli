@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TallyPrime connection config",
+  "type": "object",
+  "required": ["gateway_url", "company"],
+  "properties": {
+    "gateway_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "http://localhost:9000",
+      "description": "Base URL of the locally-running TallyPrime Gateway Server that accepts TDL Export/Collection envelope requests over HTTP POST. TallyPrime listens on port 9000 by default; this is never a public internet address — the gateway is a loopback/LAN-only service, matching TallyPrime's own security model."
+    },
+    "company": {
+      "type": "string",
+      "description": "Exact TallyPrime company name to scope every request to (sent as SVCURRENTCOMPANY in STATICVARIABLES). TallyPrime resolves masters/vouchers relative to the active company context, so this is required."
+    },
+    "envelope_format": {
+      "type": "string",
+      "enum": ["json", "xml"],
+      "default": "json",
+      "description": "Envelope body/response encoding. json selects TallyPrime 7.0+'s native JSON export mode (SVEXPORTFORMAT=$$SysName:UTF8JSON); xml is the universally-supported fallback (SVEXPORTFORMAT=$$SysName:XML) for TallyPrime releases before native JSON export shipped."
+    },
+    "from_date": {
+      "type": "string",
+      "description": "Optional SVFROMDATE (YYYYMMDD) lower bound applied to the vouchers stream. Ignored by the master streams (companies/ledgers/groups/stock_items), which are always exported in full."
+    },
+    "to_date": {
+      "type": "string",
+      "description": "Optional SVTODATE (YYYYMMDD) upper bound applied to the vouchers stream. Ignored by the master streams."
+    },
+    "http_timeout_seconds": {
+      "type": "string",
+      "default": "30",
+      "description": "Timeout in seconds for each envelope POST to the local Gateway Server."
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["fixture"],
+      "description": "Set to fixture to short-circuit all network access and use canned catalog/rows (test/conformance harness use only; never set in production config)."
+    }
+  }
+}

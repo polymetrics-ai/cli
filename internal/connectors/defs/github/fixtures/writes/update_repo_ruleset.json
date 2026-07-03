@@ -1,0 +1,8 @@
+{
+  "record": { "ruleset_id": 1, "enforcement": "evaluate" },
+  "expect": {
+    "method": "PUT",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/rulesets/1",
+    "body": { "enforcement": "evaluate" }
+  }
+}

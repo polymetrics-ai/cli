@@ -1,0 +1,22 @@
+{
+  "record": {
+    "group_guid": "grp_fixture_1",
+    "event": "bitlink.click",
+    "url": "https://example.com/fixture/webhook",
+    "is_active": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "group_guid": "grp_fixture_1",
+      "event": "bitlink.click",
+      "url": "https://example.com/fixture/webhook",
+      "is_active": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "guid": "whk_fixture_1" }
+  }
+}

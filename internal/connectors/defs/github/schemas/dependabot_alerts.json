@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "dependabot_alerts",
+  "type": "object",
+  "x-primary-key": ["number"],
+  "x-cursor-field": "updated_at",
+  "required": ["number"],
+  "properties": {
+    "repository": { "type": "string" },
+    "number": { "type": "integer" },
+    "state": { "type": "string" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "url": { "type": "string" },
+    "html_url": { "type": "string" },
+    "dismissed_at": { "type": ["string", "null"] },
+    "dismissed_by_login": { "type": ["string", "null"] },
+    "dismissed_reason": { "type": ["string", "null"] },
+    "dismissed_comment": { "type": ["string", "null"] },
+    "fixed_at": { "type": ["string", "null"] },
+    "auto_dismissed_at": { "type": ["string", "null"] },
+    "package_name": { "type": ["string", "null"] },
+    "package_ecosystem": { "type": ["string", "null"] }
+  }
+}

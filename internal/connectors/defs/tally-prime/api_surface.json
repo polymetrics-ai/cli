@@ -1,0 +1,7 @@
+{
+  "api": "TallyPrime TDL Export/Collection envelope gateway over local HTTP POST (XML or native JSON body) — not a REST resource surface",
+  "docs": "https://help.tallysolutions.com/tally-prime-integration-using-json-1/",
+  "reviewed_at": "2026-07-03",
+  "scope": "This is a Tier-3 local-gateway connector (capabilities.dynamic_schema: true, no streams.json — see docs.md): it speaks TallyPrime's TDL Export/Collection RPC envelope, a single HTTP POST endpoint (the Gateway Server root, default http://localhost:9000) whose behavior is entirely determined by an ENVELOPE/HEADER/BODY request document (TALLYREQUEST=Export, TYPE=Collection, ID=<collection name>, STATICVARIABLES incl. SVEXPORTFORMAT/SVCURRENTCOMPANY/SVFROMDATE/SVTODATE), not a set of distinct REST resources/paths a covered_by.stream entry could resolve against. There is exactly one wire endpoint; every logical object (companies, ledgers, groups, stock_items, vouchers) is a different envelope BODY posted to that same endpoint, matching the quarantine.json NON_REST finding (local TDL envelope gateway, POST to a locally-running TallyPrime on port 9000, XML or JSON envelope encodings) verbatim. This api_surface.json intentionally has zero endpoints entries, matching the Tier-3 minimal-surface pattern for non-REST/no-static-stream connectors (design §B.7, see native/postgres's and native/amazon-sqs's identical zero-endpoint precedent) — there is nothing REST-shaped for either covered_by or excluded to describe once no streams.json exists to reference.",
+  "endpoints": []
+}

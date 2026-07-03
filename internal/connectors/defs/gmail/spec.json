@@ -33,8 +33,8 @@
     },
     "scopes": {
       "type": "string",
-      "default": "https://www.googleapis.com/auth/gmail.readonly",
-      "description": "OAuth scope requested on the token-refresh grant."
+      "default": "https://mail.google.com/",
+      "description": "OAuth scope requested on the token-refresh grant. Pass B widens the default from the wave1-pilot read-only gmail.readonly scope to the full https://mail.google.com/ scope, since this bundle now declares mutating write actions (send/modify/trash/delete/settings) that gmail.readonly cannot authorize; narrow this back to a read-only scope string if only the streams in this bundle are ever used."
     },
     "user_id": {
       "type": "string",
@@ -44,7 +44,7 @@
     "start_date": {
       "type": "string",
       "format": "date-time",
-      "description": "RFC3339 lower bound; translated to a Gmail search query 'after:<unix-seconds>' filter. Not a true incremental cursor: list endpoints are newest-first and publish no cursor field, matching legacy."
+      "description": "RFC3339 lower bound; translated to a Gmail search query 'after:<unix-seconds>' filter. Not a true incremental cursor: messages/threads/drafts list endpoints are newest-first and publish no cursor field, matching legacy."
     },
     "include_spam_and_trash": {
       "type": "string",
@@ -55,6 +55,10 @@
       "type": "string",
       "default": "100",
       "description": "Records per page (1-500, maxResults)."
+    },
+    "start_history_id": {
+      "type": "string",
+      "description": "Gmail historyId lower bound for the history stream's incremental sync (users.history.list's required startHistoryId). Unlike messages/threads/drafts, history genuinely publishes a server-recognized, monotonically-increasing cursor (historyId) -- see Streams notes in docs.md. Obtain an initial value from any message/thread/label/profile record's historyId field."
     }
   }
 }

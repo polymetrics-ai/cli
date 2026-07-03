@@ -1,0 +1,18 @@
+{
+  "record": {
+    "accessWindow": "allMail",
+    "disposition": "archive"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/synthetic-conformance-value/settings/pop",
+    "body": {
+      "accessWindow": "allMail",
+      "disposition": "archive"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "accessWindow": "allMail", "disposition": "archive" }
+  }
+}

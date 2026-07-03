@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/quotes",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "quote": {
+            "id": "quote_fixture_1",
+            "name": "Fixture Quote",
+            "customer_id": "cus_fixture_1",
+            "subscription_id": null,
+            "invoice_id": null,
+            "status": "open",
+            "operation_type": "create_subscription_for_items",
+            "price_type": "tax_exclusive",
+            "currency_code": "USD",
+            "total": 2900,
+            "valid_till": 1767830400,
+            "date": 1767225600,
+            "updated_at": 1767225601
+          }
+        }
+      ]
+    }
+  }
+}

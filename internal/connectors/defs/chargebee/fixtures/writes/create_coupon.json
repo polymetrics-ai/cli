@@ -1,0 +1,11 @@
+{
+  "record": {
+    "id": "coupon_fixture_1",
+    "name": "Fixture Coupon",
+    "apply_on": "invoice_amount"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/coupons/create_for_items"
+  }
+}

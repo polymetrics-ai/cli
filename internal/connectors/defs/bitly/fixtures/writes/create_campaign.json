@@ -1,0 +1,22 @@
+{
+  "record": {
+    "group_guid": "grp_fixture_1",
+    "name": "Fixture Campaign",
+    "description": "conformance fixture campaign",
+    "channel_guids": ["chn_fixture_1"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns",
+    "body": {
+      "group_guid": "grp_fixture_1",
+      "name": "Fixture Campaign",
+      "description": "conformance fixture campaign",
+      "channel_guids": ["chn_fixture_1"]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "guid": "cmp_fixture_1" }
+  }
+}

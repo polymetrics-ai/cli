@@ -1,66 +1,3932 @@
 {
   "api": "GitHub REST API (https://api.github.com)",
   "docs": "https://docs.github.com/en/rest",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave1-pilot migration: the 19 legacy-parity read streams and 24 legacy-parity write actions (internal/connectors/github's full stream/write surface) only; the full GitHub REST surface (orgs, teams, projects v2, gists, gists comments, notifications, GraphQL, code scanning, dependabot, secrets, webhooks, apps management, etc.) is out of scope until Pass B capability expansion.",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion: every repository-scoped endpoint (/repos/{owner}/{repo}/...) in GitHub REST API v3 1.1.4 is enumerated below (500 real operations, plus 2 close_issue/close_pull_request rows documenting write-action reuse of the update_issue/update_pull_request endpoint, plus the github_app AuthHook token-exchange endpoint). Org-level, user-level, enterprise-level, and Enterprise Cloud/Server admin surfaces (orgs/*, teams/*, enterprise-*, user/*, gists/*, GraphQL) remain out of scope: this connector is configured with a single owner+repo (spec.json), not an org or user identity, so org/user-scoped resources have no natural config surface to hang off of without a scope-widening spec.json change (a distinct follow-on, not this pass).",
   "endpoints": [
-    { "method": "GET", "path": "/repos/{owner}/{repo}", "covered_by": { "stream": "repository" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/issues", "covered_by": { "stream": "issues" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/pulls", "covered_by": { "stream": "pull_requests" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/branches", "covered_by": { "stream": "branches" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/commits", "covered_by": { "stream": "commits" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/tags", "covered_by": { "stream": "tags" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/releases", "covered_by": { "stream": "releases" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/labels", "covered_by": { "stream": "labels" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/milestones", "covered_by": { "stream": "milestones" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/issues/comments", "covered_by": { "stream": "issue_comments" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/pulls/comments", "covered_by": { "stream": "pull_request_review_comments" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/collaborators", "covered_by": { "stream": "collaborators" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/contributors", "covered_by": { "stream": "contributors" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/stargazers", "covered_by": { "stream": "stargazers" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/subscribers", "covered_by": { "stream": "subscribers" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/actions/workflows", "covered_by": { "stream": "workflows" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/actions/runs", "covered_by": { "stream": "workflow_runs" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/actions/artifacts", "covered_by": { "stream": "workflow_artifacts" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/deployments", "covered_by": { "stream": "deployments" } },
-
-    { "method": "POST", "path": "/repos/{owner}/{repo}/issues", "covered_by": { "write": "create_issue" } },
-    { "method": "PATCH", "path": "/repos/{owner}/{repo}/issues/{issue_number}", "covered_by": { "write": "update_issue" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/issues/{issue_number}/comments", "covered_by": { "write": "comment_issue" } },
-    { "method": "PATCH", "path": "/repos/{owner}/{repo}/issues/{issue_number} (close)", "covered_by": { "write": "close_issue" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/pulls", "covered_by": { "write": "create_pull_request" } },
-    { "method": "PATCH", "path": "/repos/{owner}/{repo}/pulls/{pull_number}", "covered_by": { "write": "update_pull_request" } },
-    { "method": "PATCH", "path": "/repos/{owner}/{repo}/pulls/{pull_number} (close)", "covered_by": { "write": "close_pull_request" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "covered_by": { "write": "request_reviewers" } },
-    { "method": "PUT", "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge", "covered_by": { "write": "merge_pull_request" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/labels", "covered_by": { "write": "create_label" } },
-    { "method": "PATCH", "path": "/repos/{owner}/{repo}/labels/{name}", "covered_by": { "write": "update_label" } },
-    { "method": "DELETE", "path": "/repos/{owner}/{repo}/labels/{name}", "covered_by": { "write": "delete_label" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/milestones", "covered_by": { "write": "create_milestone" } },
-    { "method": "PATCH", "path": "/repos/{owner}/{repo}/milestones/{milestone_number}", "covered_by": { "write": "update_milestone" } },
-    { "method": "DELETE", "path": "/repos/{owner}/{repo}/milestones/{milestone_number}", "covered_by": { "write": "delete_milestone" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/releases", "covered_by": { "write": "create_release" } },
-    { "method": "PATCH", "path": "/repos/{owner}/{repo}/releases/{release_id}", "covered_by": { "write": "update_release" } },
-    { "method": "DELETE", "path": "/repos/{owner}/{repo}/releases/{release_id}", "covered_by": { "write": "delete_release" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches", "covered_by": { "write": "dispatch_workflow" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun", "covered_by": { "write": "rerun_workflow_run" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/cancel", "covered_by": { "write": "cancel_workflow_run" } },
-    { "method": "DELETE", "path": "/repos/{owner}/{repo}/actions/runs/{run_id}", "covered_by": { "write": "delete_workflow_run" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews", "covered_by": { "write": "create_pull_request_review" } },
-    { "method": "PUT", "path": "/repos/{owner}/{repo}/contents/{path}", "covered_by": { "write": "create_or_update_file" } },
-    { "method": "DELETE", "path": "/repos/{owner}/{repo}/contents/{path}", "covered_by": { "write": "delete_file" } },
-
-    { "method": "POST", "path": "/app/installations/{installation_id}/access_tokens", "excluded": { "category": "non_data_endpoint", "reason": "auth token-exchange endpoint used internally by the github_app AuthHook, not a syncable data stream or a directly caller-invoked write action" } },
-
-    { "method": "GET", "path": "/orgs/{org}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/orgs/{org}/teams", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/projects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/notifications", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/code-scanning/alerts", "excluded": { "category": "requires_elevated_scope", "reason": "Pass B capability expansion; requires elevated security-events scope" } },
-    { "method": "GET", "path": "/repos/{owner}/{repo}/dependabot/alerts", "excluded": { "category": "requires_elevated_scope", "reason": "Pass B capability expansion; requires elevated security-events scope" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion; repository secret administration is out of scope for a reverse-ETL connector" } },
-    { "method": "POST", "path": "/repos/{owner}/{repo}/hooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/graphql", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; GraphQL query/POST-body reads are a distinct escape-hatch pattern (see docs/migration/conventions.md monday note), not exercised by legacy github" } },
-    { "method": "DELETE", "path": "/repos/{owner}/{repo}", "excluded": { "category": "destructive_admin", "reason": "repository deletion is not a legacy github write action and is out of scope" } }
+    {
+      "method": "POST",
+      "path": "/app/installations/{installation_id}/access_tokens",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "auth token-exchange endpoint used internally by the github_app AuthHook, not a syncable data stream or a directly caller-invoked write action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "repository deletion is never a reverse-ETL action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}",
+      "covered_by": {
+        "stream": "repository"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "full repository settings PATCH (visibility, default branch, has_issues/wiki/pages toggles, etc.) is repo-admin configuration, not reverse-ETL record data; narrower settings writes (topics, environments, webhooks, rulesets, branch protection) are each covered individually where a real write action exists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/artifacts",
+      "covered_by": {
+        "stream": "workflow_artifacts"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single artifact detail/delete; the workflow_artifacts stream already covers the list data, and per-id deletion of build artifacts is a low-value cleanup action not modeled as a write this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single artifact detail/delete; the workflow_artifacts stream already covers the list data, and per-id deletion of build artifacts is a low-value cleanup action not modeled as a write this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a zip archive of the artifact's contents, not JSON record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions cache retention/storage-limit configuration is repo-admin CI/CD settings, not syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions cache retention/storage-limit configuration is repo-admin CI/CD settings, not syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/cache/storage-limit",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions cache retention/storage-limit configuration is repo-admin CI/CD settings, not syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/cache/storage-limit",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions cache retention/storage-limit configuration is repo-admin CI/CD settings, not syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/cache/usage",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions cache retention/storage-limit configuration is repo-admin CI/CD settings, not syncable data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/actions/caches",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Actions cache entries are ephemeral CI/CD build-cache internals, not durable business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/caches",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Actions cache entries are ephemeral CI/CD build-cache internals, not durable business data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/actions/caches/{cache_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Actions cache entries are ephemeral CI/CD build-cache internals, not durable business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/concurrency_groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Actions concurrency-group state is transient CI/CD runtime metadata, not durable business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Actions concurrency-group state is transient CI/CD runtime metadata, not durable business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-job detail/log/rerun requires a workflow_run_id + job_id drill-down the declarative dialect has no per-parent enumeration for beyond workflow_runs itself; workflow_runs/workflow_artifacts already cover the run-level data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-job detail/log/rerun requires a workflow_run_id + job_id drill-down the declarative dialect has no per-parent enumeration for beyond workflow_runs itself; workflow_runs/workflow_artifacts already cover the run-level data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-job detail/log/rerun requires a workflow_run_id + job_id drill-down the declarative dialect has no per-parent enumeration for beyond workflow_runs itself; workflow_runs/workflow_artifacts already cover the run-level data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "OIDC subject-claim customization is repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "OIDC subject-claim customization is repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/organization-secrets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists ORGANIZATION-level secrets/variables inherited by the repo; org-scoped resource surfaced under a repo path, requires org admin scope and is organization (not repository) data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/organization-variables",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists ORGANIZATION-level secrets/variables inherited by the repo; org-scoped resource surfaced under a repo path, requires org admin scope and is organization (not repository) data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/permissions/access",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/permissions/access",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/permissions/workflow",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/permissions/workflow",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions permissions/allowed-actions/default-workflow-permissions are repo-admin CI/CD security configuration, not syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runners",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runners/downloads",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runners/generate-jitconfig",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runners/registration-token",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runners/remove-token",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "self-hosted runner registration/management requires repo-admin scope and controls CI/CD compute infrastructure, not data records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs",
+      "covered_by": {
+        "stream": "workflow_runs"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}",
+      "covered_by": {
+        "write": "delete_workflow_run"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single workflow-run detail is already covered in aggregate by the workflow_runs stream (list); a per-id detail GET adds no data the list page doesn't already include"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deployment-approval review for a workflow run is a repo-admin CI/CD gate action, not a data record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approve",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deployment-approval review for a workflow run is a repo-admin CI/CD gate action, not a data record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-run artifact listing is already covered in aggregate by the workflow_artifacts stream (workflow_run_id computed field ties artifacts back to their run)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "individual workflow-run-attempt drill-down; workflow_runs already covers run-level data, attempt-level detail is CI/CD debugging granularity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-attempt job listing is CI/CD execution detail, not a syncable business record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a zip archive of job logs, not JSON record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/cancel",
+      "covered_by": {
+        "write": "cancel_workflow_run"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-run concurrency-group state is transient CI/CD runtime metadata"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom deployment-gate review callback is a repo-admin CI/CD integration action, not a general-purpose write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "cancel_workflow_run write already covers the ordinary cancel path; force-cancel is a narrow escalation of the same action for runs that failed to stop, not independently exposed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-run job listing is CI/CD execution detail, not a syncable business record; job status is already reflected in the parent workflow_run's own status/conclusion fields"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes CI/CD build logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a zip archive of workflow run logs, not JSON record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reviewing pending deployment-environment approvals is a repo-admin CI/CD gate action, not a general-purpose write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reviewing pending deployment-environment approvals is a repo-admin CI/CD gate action, not a general-purpose write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun",
+      "covered_by": {
+        "write": "rerun_workflow_run"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "rerun_workflow_run write already covers re-running a run; rerunning only failed jobs is a narrower variant of the same action, not independently exposed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-run billable-minute usage is CI/CD cost telemetry, not business record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/secrets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "repository Actions secrets are encrypted write-only credential material (GitHub never returns secret values); listing/managing them is repo-admin CI/CD configuration, not syncable or writeable record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/secrets/public-key",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "repository Actions secrets are encrypted write-only credential material (GitHub never returns secret values); listing/managing them is repo-admin CI/CD configuration, not syncable or writeable record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "repository Actions secrets are encrypted write-only credential material (GitHub never returns secret values); listing/managing them is repo-admin CI/CD configuration, not syncable or writeable record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "repository Actions secrets are encrypted write-only credential material (GitHub never returns secret values); listing/managing them is repo-admin CI/CD configuration, not syncable or writeable record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "repository Actions secrets are encrypted write-only credential material (GitHub never returns secret values); listing/managing them is repo-admin CI/CD configuration, not syncable or writeable record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/variables",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions CI/CD variables are repo-admin build configuration, not general business data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/variables",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions CI/CD variables are repo-admin build configuration, not general business data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions CI/CD variables are repo-admin build configuration, not general business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions CI/CD variables are repo-admin build configuration, not general business data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Actions CI/CD variables are repo-admin build configuration, not general business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/workflows",
+      "covered_by": {
+        "stream": "workflows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single workflow detail is already covered in aggregate by the workflows stream (list)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "enabling/disabling a workflow file is repo-admin CI/CD configuration, not a reverse-ETL record mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches",
+      "covered_by": {
+        "write": "dispatch_workflow"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "enabling/disabling a workflow file is repo-admin CI/CD configuration, not a reverse-ETL record mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-workflow run listing is already covered in aggregate by the workflow_runs stream (every run carries its own workflow_id)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-workflow billable-minute usage is CI/CD cost telemetry, not business record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/activity",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the repository activity feed (pushes/merges/force-pushes) overlaps with data already covered by the commits and pull_requests streams; not modeled as its own separate untyped stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/organization-secrets",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/organization-variables",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/secrets",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/secrets/public-key",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/variables",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/agents/variables",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/agents/variables/{name}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/variables/{name}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/agents/variables/{name}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/assignees",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the assignable-user list is derivable from the collaborators stream (assignees are always a subset of collaborators); not modeled as its own stream to avoid a near-duplicate record set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/assignees/{assignee}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "a boolean existence check (\"can this user be assigned\"), not a data record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/attestations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "artifact attestation (supply-chain provenance) is a narrow security feature requiring elevated scope; out of scope for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/attestations/{subject_digest}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "artifact attestation (supply-chain provenance) is a narrow security feature requiring elevated scope; out of scope for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/autolinks",
+      "covered_by": {
+        "stream": "autolinks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/autolinks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "autolink references are low-churn repo configuration rarely mutated via reverse ETL; the autolinks stream covers the read side"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "see create-autolink exclusion; no autolink write actions are implemented this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single autolink detail is already covered in aggregate by the autolinks stream (list)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/automated-security-fixes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin security-feature toggle, not a data record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/automated-security-fixes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin security-feature toggle, not a data record"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/automated-security-fixes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin security-feature toggle, not a data record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches",
+      "covered_by": {
+        "stream": "branches"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single branch detail is already covered in aggregate by the branches stream (list)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "branch protection rules (required reviews, status checks, signature requirements, push restrictions) are repo-admin governance configuration requiring elevated admin scope, not reverse-ETL record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/branches/{branch}/rename",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "renaming a branch rewrites every ref/URL that points at it repo-wide; a disruptive admin operation, not an ordinary reverse-ETL write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/check-runs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "check runs are created/queried per-commit-SHA by CI providers (not GitHub's own UI actors); this connector has no per-commit enumeration surface to list check runs across a repo, and creating them requires an installed check-provider GitHub App identity, not a general repository credential"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "check runs are created/queried per-commit-SHA by CI providers (not GitHub's own UI actors); this connector has no per-commit enumeration surface to list check runs across a repo, and creating them requires an installed check-provider GitHub App identity, not a general repository credential"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "check runs are created/queried per-commit-SHA by CI providers (not GitHub's own UI actors); this connector has no per-commit enumeration surface to list check runs across a repo, and creating them requires an installed check-provider GitHub App identity, not a general repository credential"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/annotations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "check runs are created/queried per-commit-SHA by CI providers (not GitHub's own UI actors); this connector has no per-commit enumeration surface to list check runs across a repo, and creating them requires an installed check-provider GitHub App identity, not a general repository credential"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "check runs are created/queried per-commit-SHA by CI providers (not GitHub's own UI actors); this connector has no per-commit enumeration surface to list check runs across a repo, and creating them requires an installed check-provider GitHub App identity, not a general repository credential"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/check-suites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same as check-runs: check suites are created/managed per-commit by CI-provider GitHub Apps, not general repository credentials, and have no repo-wide list endpoint"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/check-suites/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same as check-runs: check suites are created/managed per-commit by CI-provider GitHub Apps, not general repository credentials, and have no repo-wide list endpoint"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same as check-runs: check suites are created/managed per-commit by CI-provider GitHub Apps, not general repository credentials, and have no repo-wide list endpoint"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same as check-runs: check suites are created/managed per-commit by CI-provider GitHub Apps, not general repository credentials, and have no repo-wide list endpoint"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same as check-runs: check suites are created/managed per-commit by CI-provider GitHub Apps, not general repository credentials, and have no repo-wide list endpoint"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-quality/findings",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "GitHub code quality (CodeQL-adjacent static analysis) findings/setup require the security-events scope and org-level enablement; narrow preview feature, out of scope for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "GitHub code quality (CodeQL-adjacent static analysis) findings/setup require the security-events scope and org-level enablement; narrow preview feature, out of scope for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-quality/setup",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "GitHub code quality (CodeQL-adjacent static analysis) findings/setup require the security-events scope and org-level enablement; narrow preview feature, out of scope for this pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/code-quality/setup",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "GitHub code quality (CodeQL-adjacent static analysis) findings/setup require the security-events scope and org-level enablement; narrow preview feature, out of scope for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/alerts",
+      "covered_by": {
+        "stream": "code_scanning_alerts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single alert detail is already covered in aggregate by the code_scanning_alerts stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
+      "covered_by": {
+        "write": "update_code_scanning_alert"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Copilot Autofix suggestion generation/commit is a narrow AI-assisted remediation feature requiring security-events write scope, not general reverse-ETL data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Copilot Autofix suggestion generation/commit is a narrow AI-assisted remediation feature requiring security-events write scope, not general reverse-ETL data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Copilot Autofix suggestion generation/commit is a narrow AI-assisted remediation feature requiring security-events write scope, not general reverse-ETL data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-alert instance/location detail is finer-grained than the alert-level record the code_scanning_alerts stream already syncs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/analyses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw CodeQL/SARIF analysis run metadata requires security-events scope; the code_scanning_alerts stream already syncs the triaged alert data analysts act on"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw CodeQL/SARIF analysis run metadata requires security-events scope; the code_scanning_alerts stream already syncs the triaged alert data analysts act on"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw CodeQL/SARIF analysis run metadata requires security-events scope; the code_scanning_alerts stream already syncs the triaged alert data analysts act on"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "CodeQL database/variant-analysis management is a specialized security-research workflow requiring security-events scope, not general repository data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "CodeQL database/variant-analysis management is a specialized security-research workflow requiring security-events scope, not general repository data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "CodeQL database/variant-analysis management is a specialized security-research workflow requiring security-events scope, not general repository data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "CodeQL database/variant-analysis management is a specialized security-research workflow requiring security-events scope, not general repository data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "CodeQL database/variant-analysis management is a specialized security-research workflow requiring security-events scope, not general repository data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "CodeQL database/variant-analysis management is a specialized security-research workflow requiring security-events scope, not general repository data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/default-setup",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "enabling/configuring CodeQL default setup is repo-admin security configuration, not a data record"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/code-scanning/default-setup",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "enabling/configuring CodeQL default setup is repo-admin security configuration, not a data record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/code-scanning/sarifs",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "SARIF upload is a gzip-compressed binary payload upload, not a JSON write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "SARIF upload processing-status check is a transient upload-job poll, not durable record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-security-configuration",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "repo-level code-security feature configuration (which security products are enabled) is repo-admin settings, not syncable business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/codeowners/errors",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "a CODEOWNERS file syntax-validation helper, not a data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/codespaces",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/codespaces",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/codespaces/devcontainers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/codespaces/machines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/codespaces/new",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/codespaces/permissions_check",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/codespaces/secrets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/codespaces/secrets/public-key",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codespaces are ephemeral per-developer cloud dev environments (compute/billing resources), not repository business data; out of scope for a data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/collaborators",
+      "covered_by": {
+        "stream": "collaborators"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/collaborators/{username}",
+      "covered_by": {
+        "write": "remove_collaborator"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/collaborators/{username}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a boolean collaborator-membership check; membership data is already covered in aggregate by the collaborators stream (list)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/collaborators/{username}",
+      "covered_by": {
+        "write": "add_collaborator"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/collaborators/{username}/permission",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-user permission level is already present as a field on each record of the collaborators stream (list)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/comments",
+      "covered_by": {
+        "stream": "commit_comments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_commit_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/comments/{comment_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single commit-comment detail is already covered in aggregate by the commit_comments stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/comments/{comment_id}",
+      "covered_by": {
+        "write": "update_commit_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits",
+      "covered_by": {
+        "stream": "commits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-commit branch-membership lookup requires iterating every commit in the repo with no bulk enumeration; the commits/branches streams already cover the underlying data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits/{commit_sha}/comments",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-commit comment listing is already covered in aggregate by the commit_comments stream (every comment carries its own commit_id)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/commits/{commit_sha}/comments",
+      "covered_by": {
+        "write": "create_commit_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits/{commit_sha}/pulls",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-commit associated-PR lookup requires iterating every commit in the repo with no bulk enumeration; the pull_requests stream already covers PR data directly"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits/{ref}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single commit detail is already covered in aggregate by the commits stream (list)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-ref check-run listing requires iterating every commit/ref in the repo with no bulk enumeration endpoint; out of scope for a declarative list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits/{ref}/check-suites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-ref check-suite listing requires iterating every commit/ref in the repo with no bulk enumeration endpoint; out of scope for a declarative list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits/{ref}/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-ref commit-status lookup requires iterating every commit/ref in the repo with no bulk enumeration; typically populated by external CI providers via their own status-posting credential, not synced by this connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits/{ref}/statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-ref commit-status lookup requires iterating every commit/ref in the repo with no bulk enumeration; typically populated by external CI providers via their own status-posting credential, not synced by this connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/community/profile",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a derived community-health scorecard (has-README/LICENSE/etc. booleans), not primary repository data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/compare/{basehead}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "arbitrary two-ref diff/comparison is an ad hoc query (requires a caller-chosen basehead pair with no enumerable parameter space), not a listable resource"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/contents/{path}",
+      "covered_by": {
+        "write": "delete_file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/contents/{path}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reading file/directory contents requires a caller-chosen path with no enumerable parameter space (not a listable resource); the write side (create/update/delete file) is already covered by create_or_update_file/delete_file"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/contents/{path}",
+      "covered_by": {
+        "write": "create_or_update_file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/contributors",
+      "covered_by": {
+        "stream": "contributors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/copilot/cloud-agent/configuration",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Copilot cloud coding-agent configuration is an IDE/agent-tooling setting, not repository business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/dependabot/alerts",
+      "covered_by": {
+        "stream": "dependabot_alerts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single alert detail is already covered in aggregate by the dependabot_alerts stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
+      "covered_by": {
+        "write": "update_dependabot_alert"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/dependabot/secrets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Dependabot secrets are encrypted write-only credential material (GitHub never returns secret values); managing them is repo-admin CI/CD configuration, not syncable or writeable record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/dependabot/secrets/public-key",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Dependabot secrets are encrypted write-only credential material (GitHub never returns secret values); managing them is repo-admin CI/CD configuration, not syncable or writeable record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Dependabot secrets are encrypted write-only credential material (GitHub never returns secret values); managing them is repo-admin CI/CD configuration, not syncable or writeable record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Dependabot secrets are encrypted write-only credential material (GitHub never returns secret values); managing them is repo-admin CI/CD configuration, not syncable or writeable record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Dependabot secrets are encrypted write-only credential material (GitHub never returns secret values); managing them is repo-admin CI/CD configuration, not syncable or writeable record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "arbitrary two-ref dependency diff is an ad hoc query with no enumerable parameter space, not a listable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/dependency-graph/sbom",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "SBOM export/report generation returns a large SPDX/CycloneDX document export, not an incrementally-syncable record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "SBOM export/report generation returns a large SPDX/CycloneDX document export, not an incrementally-syncable record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/dependency-graph/sbom/generate-report",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "SBOM export/report generation returns a large SPDX/CycloneDX document export, not an incrementally-syncable record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/dependency-graph/snapshots",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "dependency-graph snapshot submission is a CI-tooling integration action (build-tool dependency reporting), not a general reverse-ETL write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/deployments",
+      "covered_by": {
+        "stream": "deployments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/deployments",
+      "covered_by": {
+        "write": "create_deployment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deployment deletion is only permitted on inactive deployments and rewrites deployment history; not an ordinary reverse-ETL action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single deployment detail is already covered in aggregate by the deployments stream (list)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-deployment status-history listing; deployments stream already carries each deployment's current state"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deployment status updates are posted by CI/CD deployment tooling using its own integration credential, not a general reverse-ETL write this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single deployment-status detail; see the statuses list exclusion above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/dispatches",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "repository_dispatch is a fire-and-forget custom CI event trigger with a caller-defined event_type/payload contract; dispatch_workflow already covers the standard Actions-trigger write path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments",
+      "covered_by": {
+        "stream": "environments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}",
+      "covered_by": {
+        "write": "delete_environment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single environment detail is already covered in aggregate by the environments stream (list)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}",
+      "covered_by": {
+        "write": "create_or_update_environment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment deployment branch-policy management is repo-admin CI/CD governance configuration nested under create_or_update_environment's own deployment_branch_policy field for the common case"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment deployment branch-policy management is repo-admin CI/CD governance configuration nested under create_or_update_environment's own deployment_branch_policy field for the common case"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment deployment branch-policy management is repo-admin CI/CD governance configuration nested under create_or_update_environment's own deployment_branch_policy field for the common case"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment deployment branch-policy management is repo-admin CI/CD governance configuration nested under create_or_update_environment's own deployment_branch_policy field for the common case"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment deployment branch-policy management is repo-admin CI/CD governance configuration nested under create_or_update_environment's own deployment_branch_policy field for the common case"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom deployment protection rule (third-party gate app) registration is repo-admin CI/CD governance configuration, not general record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom deployment protection rule (third-party gate app) registration is repo-admin CI/CD governance configuration, not general record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom deployment protection rule (third-party gate app) registration is repo-admin CI/CD governance configuration, not general record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom deployment protection rule (third-party gate app) registration is repo-admin CI/CD governance configuration, not general record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom deployment protection rule (third-party gate app) registration is repo-admin CI/CD governance configuration, not general record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment Actions secrets are encrypted write-only credential material (GitHub never returns secret values); managing them is repo-admin CI/CD configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment Actions secrets are encrypted write-only credential material (GitHub never returns secret values); managing them is repo-admin CI/CD configuration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment Actions secrets are encrypted write-only credential material (GitHub never returns secret values); managing them is repo-admin CI/CD configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment Actions secrets are encrypted write-only credential material (GitHub never returns secret values); managing them is repo-admin CI/CD configuration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment Actions secrets are encrypted write-only credential material (GitHub never returns secret values); managing them is repo-admin CI/CD configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment Actions variables are repo-admin CI/CD build configuration, not general business data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment Actions variables are repo-admin CI/CD build configuration, not general business data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment Actions variables are repo-admin CI/CD build configuration, not general business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment Actions variables are repo-admin CI/CD build configuration, not general business data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-environment Actions variables are repo-admin CI/CD build configuration, not general business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/events",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "GitHub's public repository timeline events feed is a legacy/deprecated activity API GitHub recommends against relying on for new integrations; issue_events/commits/pull_requests streams already cover the underlying activity with typed, stable shapes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/forks",
+      "covered_by": {
+        "stream": "forks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/forks",
+      "covered_by": {
+        "write": "create_fork"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/git/blobs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "raw git blob creation is a low-level git plumbing primitive (arbitrary binary/text content addressed by SHA) used internally by create_or_update_file's higher-level contents API; not independently exposed as a reverse-ETL action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "raw git blob content requires a caller-known SHA with no enumerable listing endpoint; not a listable resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/git/commits",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "low-level git commit-object creation (tree+parents) is a git plumbing primitive; create_ref plus create_or_update_file already cover the practical branch/file-write path most reverse-ETL callers need"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/git/commits/{commit_sha}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "raw git commit-object detail duplicates the richer commits stream's per-commit record (same underlying commit, GitHub API-decorated shape)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/git/matching-refs/{ref}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "ref-prefix matching duplicates data already covered by the branches and tags streams (refs/heads/* and refs/tags/* respectively)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/git/ref/{ref}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-ref lookup requires a caller-known ref with no bulk listing endpoint; branches/tags streams already enumerate the practical ref set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/git/refs",
+      "covered_by": {
+        "write": "create_ref"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/git/refs/{ref}",
+      "covered_by": {
+        "write": "delete_ref"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/git/refs/{ref}",
+      "covered_by": {
+        "write": "update_ref"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/git/tags",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "low-level annotated-tag-object creation; create_ref already covers creating the refs/tags/* pointer reverse-ETL callers need"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "raw annotated-tag-object detail requires a caller-known SHA with no enumerable listing; the tags stream already covers tag data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/git/trees",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "low-level git tree-object creation is a git plumbing primitive; create_or_update_file's higher-level contents API covers the practical single-file-write path most reverse-ETL callers need"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "raw git tree listing requires a caller-known SHA with no enumerable listing endpoint; not a listable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/hash-algorithm",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns a single string flag (the repo's git object hash algorithm, sha1 or sha256), not a data record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/hooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/hooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single webhook detail is already covered in aggregate by the webhooks stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "webhook config is already a field on each record of the webhooks stream (config_url computed field); the dedicated config sub-resource GET/PATCH is a narrower view of the same data update_webhook already covers"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "webhook config is already a field on each record of the webhooks stream (config_url computed field); the dedicated config sub-resource GET/PATCH is a narrower view of the same data update_webhook already covers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "webhook delivery attempt history is transient debugging telemetry, not durable business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "webhook delivery attempt history is transient debugging telemetry, not durable business data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "redelivering a past webhook payload is a debugging/troubleshooting action, not a general reverse-ETL write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/pings",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "sends a test ping event with no meaningful response payload; a connectivity check, not a data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/tests",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "re-sends the most recent push event for testing; a debugging helper, not a data mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/immutable-releases",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin release-protection toggle, not a data record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/immutable-releases",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin release-protection toggle, not a data record"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/immutable-releases",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin release-protection toggle, not a data record"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the source-repository import wizard (migrating a repo's history from another VCS host) is a one-time, rarely-used onboarding flow, not ongoing syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the source-repository import wizard (migrating a repo's history from another VCS host) is a one-time, rarely-used onboarding flow, not ongoing syncable data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the source-repository import wizard (migrating a repo's history from another VCS host) is a one-time, rarely-used onboarding flow, not ongoing syncable data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the source-repository import wizard (migrating a repo's history from another VCS host) is a one-time, rarely-used onboarding flow, not ongoing syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/import/authors",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the source-repository import wizard (migrating a repo's history from another VCS host) is a one-time, rarely-used onboarding flow, not ongoing syncable data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/import/authors/{author_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the source-repository import wizard (migrating a repo's history from another VCS host) is a one-time, rarely-used onboarding flow, not ongoing syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/import/large_files",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the source-repository import wizard (migrating a repo's history from another VCS host) is a one-time, rarely-used onboarding flow, not ongoing syncable data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/import/lfs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the source-repository import wizard (migrating a repo's history from another VCS host) is a one-time, rarely-used onboarding flow, not ongoing syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/installation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns the GitHub App installation object for the CALLING app's own installation on this repo; only meaningful when authenticated as a GitHub App (this connector's github_app auth path already derives installation_id directly from config, not by querying this endpoint)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/interaction-limits",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "temporary interaction-restriction (limiting who can comment) is repo-admin moderation configuration, not business record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/interaction-limits",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "temporary interaction-restriction (limiting who can comment) is repo-admin moderation configuration, not business record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/interaction-limits",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "temporary interaction-restriction (limiting who can comment) is repo-admin moderation configuration, not business record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "temporary interaction-restriction (limiting who can comment) is repo-admin moderation configuration, not business record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "temporary interaction-restriction (limiting who can comment) is repo-admin moderation configuration, not business record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "temporary interaction-restriction (limiting who can comment) is repo-admin moderation configuration, not business record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/invitations",
+      "covered_by": {
+        "stream": "invitations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "canceling a pending collaborator invitation is a rare admin action not yet modeled as a write; the invitations stream covers the read side"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "changing a pending invitation's permission level is a rare admin action not yet modeled as a write; the invitations stream covers the read side"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issue-types",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Issue Types is an organization-level taxonomy feature (configured org-wide) surfaced read-only under the repo path; requires org admin scope to configure and is organization, not repository, data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues",
+      "covered_by": {
+        "stream": "issues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues",
+      "covered_by": {
+        "write": "create_issue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/comments",
+      "covered_by": {
+        "stream": "issue_comments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_issue_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single issue-comment detail is already covered in aggregate by the issue_comments stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
+      "covered_by": {
+        "write": "update_issue_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pinning a comment is a lightweight UI-highlight action, not a structured business record mutation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pinning a comment is a lightweight UI-highlight action, not a structured business record mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/events",
+      "covered_by": {
+        "stream": "issue_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/events/{event_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single issue-event detail is already covered in aggregate by the issue_events stream (list)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single issue detail is already covered in aggregate by the issues stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}",
+      "covered_by": {
+        "write": "update_issue"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number} (close)",
+      "covered_by": {
+        "write": "close_issue"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees",
+      "covered_by": {
+        "write": "remove_issue_assignees"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees",
+      "covered_by": {
+        "write": "add_issue_assignees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "a boolean existence check (\"can this user be assigned to this issue\"), not a data record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/comments",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-issue comment listing is already covered in aggregate by the issue_comments stream (every comment carries its own issue reference)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/comments",
+      "covered_by": {
+        "write": "comment_issue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "issue-to-issue \"blocked by\"/\"blocking\" dependency links are a newer, narrow GitHub Issues metadata feature layered on top of sub_issues; out of scope for this pass alongside sub_issues/issue-field-values"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "issue-to-issue \"blocked by\"/\"blocking\" dependency links are a newer, narrow GitHub Issues metadata feature layered on top of sub_issues; out of scope for this pass alongside sub_issues/issue-field-values"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "issue-to-issue \"blocked by\"/\"blocking\" dependency links are a newer, narrow GitHub Issues metadata feature layered on top of sub_issues; out of scope for this pass alongside sub_issues/issue-field-values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "issue-to-issue \"blocked by\"/\"blocking\" dependency links are a newer, narrow GitHub Issues metadata feature layered on top of sub_issues; out of scope for this pass alongside sub_issues/issue-field-values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/events",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-issue event listing is already covered in aggregate by the issue_events stream (every event carries its own issue reference)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom issue-field values are an organization-configured Issue Types/Projects-adjacent metadata extension requiring org-level field definitions; narrow preview feature, out of scope for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom issue-field values are an organization-configured Issue Types/Projects-adjacent metadata extension requiring org-level field definitions; narrow preview feature, out of scope for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom issue-field values are an organization-configured Issue Types/Projects-adjacent metadata extension requiring org-level field definitions; narrow preview feature, out of scope for this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom issue-field values are an organization-configured Issue Types/Projects-adjacent metadata extension requiring org-level field definitions; narrow preview feature, out of scope for this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "\"remove all labels\" is equivalent to set_issue_labels with an empty labels array; not independently exposed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "an issue's labels are already present as the labels field on each record of the issues stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels",
+      "covered_by": {
+        "write": "add_issue_labels"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels",
+      "covered_by": {
+        "write": "set_issue_labels"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
+      "covered_by": {
+        "write": "remove_issue_label"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/lock",
+      "covered_by": {
+        "write": "unlock_issue"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/lock",
+      "covered_by": {
+        "write": "lock_issue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "parent-issue lookup is part of the newer sub_issues hierarchy feature, out of scope alongside sub_issues/dependencies for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sub-issue hierarchy management is a newer, narrow GitHub Issues metadata feature (Projects-adjacent task decomposition); out of scope for this pass, which prioritizes the core issues/labels/comments/events surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sub-issue hierarchy management is a newer, narrow GitHub Issues metadata feature (Projects-adjacent task decomposition); out of scope for this pass, which prioritizes the core issues/labels/comments/events surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sub-issue hierarchy management is a newer, narrow GitHub Issues metadata feature (Projects-adjacent task decomposition); out of scope for this pass, which prioritizes the core issues/labels/comments/events surface"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sub-issue hierarchy management is a newer, narrow GitHub Issues metadata feature (Projects-adjacent task decomposition); out of scope for this pass, which prioritizes the core issues/labels/comments/events surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/timeline",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the issue timeline is a combined view over issue_events + issue_comments + cross-referenced commits, all already available as separate typed streams; not modeled as its own merged/untyped stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/keys",
+      "covered_by": {
+        "stream": "deploy_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/keys",
+      "covered_by": {
+        "write": "create_deploy_key"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/keys/{key_id}",
+      "covered_by": {
+        "write": "delete_deploy_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/keys/{key_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single deploy-key detail is already covered in aggregate by the deploy_keys stream (list)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/labels",
+      "covered_by": {
+        "stream": "labels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/labels",
+      "covered_by": {
+        "write": "create_label"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/labels/{name}",
+      "covered_by": {
+        "write": "delete_label"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/labels/{name}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single label detail is already covered in aggregate by the labels stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/labels/{name}",
+      "covered_by": {
+        "write": "update_label"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/languages",
+      "covered_by": {
+        "stream": "languages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/license",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the detected SPDX license is already present as the license field on the repository stream's own record; a dedicated sub-resource stream would duplicate that same data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/merge-upstream",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "syncing a fork with its upstream parent is a fork-maintenance action distinct from the general-purpose merge_branch write already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/merges",
+      "covered_by": {
+        "write": "merge_branch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/milestones",
+      "covered_by": {
+        "stream": "milestones"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/milestones",
+      "covered_by": {
+        "write": "create_milestone"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/milestones/{milestone_number}",
+      "covered_by": {
+        "write": "delete_milestone"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/milestones/{milestone_number}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single milestone detail is already covered in aggregate by the milestones stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/milestones/{milestone_number}",
+      "covered_by": {
+        "write": "update_milestone"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/milestones/{milestone_number}/labels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "labels used across a milestone's issues is a derived aggregate view, not primary milestone data; the labels stream already covers all repository labels directly"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/notifications",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the authenticated user's own notification inbox for this repo is per-caller-identity state, not repository business data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/notifications",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "marking notifications read is a per-caller-identity UI action, not a repository data mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/pages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/pages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pages/builds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pages/builds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pages/builds/latest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pages/builds/{build_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pages/deployments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pages/health",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitHub Pages site configuration/build/deployment management is a narrow static-hosting feature, not general repository business data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin security-feature toggle, not a data record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin security-feature toggle, not a data record"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin security-feature toggle, not a data record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/properties/values",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom repository properties are an organization-defined metadata schema (property keys configured org-wide); requires org admin scope to have meaning, not general repository data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/properties/values",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom repository properties are an organization-defined metadata schema (property keys configured org-wide); requires org admin scope to have meaning, not general repository data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls",
+      "covered_by": {
+        "stream": "pull_requests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls",
+      "covered_by": {
+        "write": "create_pull_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/comments",
+      "covered_by": {
+        "stream": "pull_request_review_comments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_review_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single review-comment detail is already covered in aggregate by the pull_request_review_comments stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}",
+      "covered_by": {
+        "write": "update_review_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single pull request detail is already covered in aggregate by the pull_requests stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
+      "covered_by": {
+        "write": "update_pull_request"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number} (close)",
+      "covered_by": {
+        "write": "close_pull_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/codespaces",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creating a Codespace from a pull request is the same ephemeral dev-environment feature as the repo-level codespaces/* exclusions above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-PR review-comment listing is already covered in aggregate by the pull_request_review_comments stream (every comment carries its own pull_request_url)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments",
+      "covered_by": {
+        "write": "create_review_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a threaded reply is create_review_comment with in_reply_to set; not an independently modeled action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/commits",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-PR commit listing requires a per-pull_number drill-down with no repo-wide bulk enumeration; the commits stream already covers repository commit data directly"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/files",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-PR changed-file listing (diffs/patches) requires a per-pull_number drill-down with no repo-wide bulk enumeration; large diff payloads are not a good fit for this connector's flat record-stream model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "a boolean \"has this PR been merged\" check (204/404 status, no body); the pull_requests stream's merged/merged_at fields already carry this"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
+      "covered_by": {
+        "write": "merge_pull_request"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "withdrawing a review request is a narrow admin action not yet modeled as a write; request_reviewers already covers the add path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "requested reviewers are already present as a field on the pull_requests stream's own record (requested_reviewers/requested_teams)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+      "covered_by": {
+        "write": "request_reviewers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-PR review listing requires a per-pull_number drill-down with no repo-wide bulk enumeration endpoint; out of scope for a declarative list stream (the write side is fully covered: create/submit/dismiss/delete-pending review)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews",
+      "covered_by": {
+        "write": "create_pull_request_review"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-review comment listing is a narrower view of data the pull_request_review_comments stream already covers repo-wide"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals",
+      "covered_by": {
+        "write": "dismiss_pull_request_review"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events",
+      "covered_by": {
+        "write": "submit_pull_request_review"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/update-branch",
+      "covered_by": {
+        "write": "update_pull_request_branch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/readme",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns the README file's base64-encoded content, functionally identical to a get-content call on a caller-known path (contents/{path}, itself out of scope for the same caller-chosen-path reason)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/readme/{dir}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns the README file's base64-encoded content, functionally identical to a get-content call on a caller-known path (contents/{path}, itself out of scope for the same caller-chosen-path reason)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases",
+      "covered_by": {
+        "stream": "releases"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/releases",
+      "covered_by": {
+        "write": "create_release"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
+      "covered_by": {
+        "write": "delete_release_asset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single release-asset detail requires a caller-known asset_id with no repo-wide bulk enumeration endpoint of its own outside a specific release; update_release_asset/delete_release_asset already cover the write side"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
+      "covered_by": {
+        "write": "update_release_asset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/releases/generate-notes",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "a text-generation preview helper (drafts release notes from commits/PRs), not a data record or persisted mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases/latest",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "\"most recent release\" is derivable from the releases stream (list) by sorting on published_at/created_at"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases/tags/{tag}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "release lookup by tag name is already covered in aggregate by the releases stream (list); every record carries its own tag_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/releases/{release_id}",
+      "covered_by": {
+        "write": "delete_release"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases/{release_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single release detail is already covered in aggregate by the releases stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/releases/{release_id}",
+      "covered_by": {
+        "write": "update_release"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-release asset listing requires a per-release_id drill-down with no repo-wide bulk enumeration; update_release_asset/delete_release_asset already cover the practical write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "uploads raw binary file content as the request body (Content-Type set to the asset's own media type, not application/json); the dialect's write actions are JSON-body only, with no multipart/raw-binary body_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji reactions (thumbs up/down, laugh, etc.) on comments/issues/releases are lightweight social signals, not structured business records this connector's stream/write surface targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/rules/branches/{branch}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the effective-rules-for-a-branch view is a derived evaluation over the same rulesets the repo_rulesets stream already syncs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/rulesets",
+      "covered_by": {
+        "stream": "repo_rulesets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/rulesets",
+      "covered_by": {
+        "write": "create_repo_ruleset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/rulesets/rule-suites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "rule-suite evaluation logs (a record of each time a ruleset evaluated a push/PR) are audit-trail telemetry, not primary configuration data; the repo_rulesets stream already covers the ruleset definitions themselves"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "rule-suite evaluation logs (a record of each time a ruleset evaluated a push/PR) are audit-trail telemetry, not primary configuration data; the repo_rulesets stream already covers the ruleset definitions themselves"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}",
+      "covered_by": {
+        "write": "delete_repo_ruleset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single ruleset detail is already covered in aggregate by the repo_rulesets stream (list)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}",
+      "covered_by": {
+        "write": "update_repo_ruleset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ruleset version-history is an audit trail of past configuration edits, not current-state business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ruleset version-history is an audit trail of past configuration edits, not current-state business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/secret-scanning/alerts",
+      "covered_by": {
+        "stream": "secret_scanning_alerts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single alert detail is already covered in aggregate by the secret_scanning_alerts stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
+      "covered_by": {
+        "write": "update_secret_scanning_alert"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-alert file/line location detail is finer-grained than the alert-level record the secret_scanning_alerts stream already syncs, and risks exposing more precise secret-adjacent context"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "approving a push-protection bypass for a detected secret is a security-sensitive exception-granting action requiring elevated review authority, not a general reverse-ETL write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/secret-scanning/scan-history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "scan-job run history is operational telemetry about the scanner itself, not repository business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/security-advisories",
+      "covered_by": {
+        "stream": "security_advisories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/security-advisories",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "publishing a NEW repository security advisory is a security-team authoring workflow requiring elevated repository-advisory write scope beyond ordinary reverse-ETL credentials; update_repository_advisory-equivalent triage (state/summary edits) is covered, initial creation is not"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/security-advisories/reports",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "submitting a private vulnerability report is an external-researcher disclosure workflow, not a reverse-ETL data write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single advisory detail is already covered in aggregate by the security_advisories stream (list)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "full advisory editing (summary, CVSS, credits, CWEs) is a security-team authoring workflow requiring elevated repository-advisory write scope; no corresponding write action is implemented this pass (see create-advisory exclusion above)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "requesting a CVE identifier assignment is a narrow security-team authoring action requiring elevated scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creating a temporary private fork for advisory remediation work is a narrow security-team workflow action requiring elevated scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/stargazers",
+      "covered_by": {
+        "stream": "stargazers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/stats/code_frequency",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a derived, cached statistical aggregate (additions/deletions per week, or commits by hour-of-week) computed asynchronously by GitHub (may return 202 while computing); low business-data value relative to the commits stream it is derived from"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/stats/commit_activity",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a derived, cached statistical aggregate computed asynchronously by GitHub (may return 202 while computing) rather than a directly-queryable resource; the commits/contributors streams already sync the underlying primary data these aggregates are derived from"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/stats/contributors",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a derived, cached statistical aggregate computed asynchronously by GitHub (may return 202 while computing) rather than a directly-queryable resource; the commits/contributors streams already sync the underlying primary data these aggregates are derived from"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/stats/participation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a derived, cached statistical aggregate computed asynchronously by GitHub (may return 202 while computing) rather than a directly-queryable resource; the commits/contributors streams already sync the underlying primary data these aggregates are derived from"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/stats/punch_card",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a derived, cached statistical aggregate (additions/deletions per week, or commits by hour-of-week) computed asynchronously by GitHub (may return 202 while computing); low business-data value relative to the commits stream it is derived from"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/statuses/{sha}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "posting a commit status is conventionally done by CI providers using their own dedicated integration credential against a specific commit SHA, not a general reverse-ETL write this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/subscribers",
+      "covered_by": {
+        "stream": "subscribers"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/subscription",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the authenticated caller's own watch/subscription state for this repo is per-caller-identity preference, not repository business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/subscription",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the authenticated caller's own watch/subscription state for this repo is per-caller-identity preference, not repository business data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/subscription",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the authenticated caller's own watch/subscription state for this repo is per-caller-identity preference, not repository business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/tarball/{ref}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a compressed source-code archive, not JSON record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/teams",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "teams with repository access are an organization-level construct (team membership managed org-wide); requires org read scope, not general repository data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/topics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "topics are already present as the topics field on the repository stream's own record; replace_repo_topics covers the write side"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/topics",
+      "covered_by": {
+        "write": "replace_repo_topics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/traffic/clones",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "traffic analytics (clones, views, popular paths/referrers) require push access and are a niche analytics feature separate from this connector's core data/collaboration surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/traffic/popular/paths",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "traffic analytics (clones, views, popular paths/referrers) require push access and are a niche analytics feature separate from this connector's core data/collaboration surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/traffic/popular/referrers",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "traffic analytics (clones, views, popular paths/referrers) require push access and are a niche analytics feature separate from this connector's core data/collaboration surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/traffic/views",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "traffic analytics (clones, views, popular paths/referrers) require push access and are a niche analytics feature separate from this connector's core data/collaboration surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/transfer",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "transferring repository ownership is an irreversible, high-blast-radius admin action, never a reverse-ETL write"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin Dependabot-alerts toggle, not a data record; the dependabot_alerts stream covers the actual alert data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin Dependabot-alerts toggle, not a data record; the dependabot_alerts stream covers the actual alert data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "boolean repo-admin Dependabot-alerts toggle, not a data record; the dependabot_alerts stream covers the actual alert data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/zipball/{ref}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a compressed source-code archive, not JSON record data"
+      }
+    }
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "filters",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string", "description": "Server-assigned filter ID." },
+    "action": { "type": ["object", "null"], "description": "Raw FilterAction object (addLabelIds/removeLabelIds/forward)." },
+    "criteria": { "type": ["object", "null"], "description": "Raw FilterCriteria object (from/to/subject/query/negatedQuery/hasAttachment/excludeChats/size/sizeComparison)." }
+  }
+}

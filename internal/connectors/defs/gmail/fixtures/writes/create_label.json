@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture Label",
+    "labelListVisibility": "labelShow",
+    "messageListVisibility": "show"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/labels",
+    "body": {
+      "name": "Fixture Label",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "label_fixture_created_1", "name": "Fixture Label", "type": "user" }
+  }
+}

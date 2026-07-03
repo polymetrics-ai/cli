@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/webhook_endpoints",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "webhook_endpoint": {
+            "id": "wh_fixture_1",
+            "name": "Fixture Webhook",
+            "url": "https://fixture.example.com/webhooks/chargebee",
+            "disabled": false,
+            "primary_url": true,
+            "api_version": "v2"
+          }
+        }
+      ]
+    }
+  }
+}

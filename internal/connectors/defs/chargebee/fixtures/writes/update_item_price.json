@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "ip_fixture_1",
+    "name": "Updated Fixture Item Price"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/item_prices/ip_fixture_1"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "label_fixture_1",
+    "messageListVisibility": "hide"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/users/synthetic-conformance-value/labels/label_fixture_1",
+    "body": {
+      "messageListVisibility": "hide"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "label_fixture_1", "name": "Fixture Label", "type": "user", "messageListVisibility": "hide" }
+  }
+}

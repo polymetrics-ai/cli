@@ -1,0 +1,9 @@
+{
+  "record": { "issue_number": 1, "assignees": ["octocat"] },
+  "expect": {
+    "method": "DELETE",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/1/assignees",
+    "body": { "assignees": ["octocat"] }
+  },
+  "response": { "status": 200, "body": { "number": 1 } }
+}

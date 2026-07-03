@@ -1,0 +1,8 @@
+{
+  "record": { "issue_number": 1, "labels": ["bug", "urgent"] },
+  "expect": {
+    "method": "PUT",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/1/labels",
+    "body": { "labels": ["bug", "urgent"] }
+  }
+}

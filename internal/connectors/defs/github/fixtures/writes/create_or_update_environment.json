@@ -1,0 +1,13 @@
+{
+  "record": {
+    "environment_name": "production",
+    "wait_timer": 0,
+    "prevent_self_review": false
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/environments/production",
+    "body": { "wait_timer": 0, "prevent_self_review": false }
+  },
+  "response": { "status": 200, "body": { "id": 1, "name": "production" } }
+}

@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/channels" },
+  "response": {
+    "status": 200,
+    "body": {
+      "channels": [
+        {
+          "guid": "chn_fixture_1",
+          "name": "Fixture Channel",
+          "group_guid": "grp_fixture_1",
+          "campaign_guid": "cmp_fixture_1",
+          "bitlinks": [],
+          "created": "2026-01-01T00:00:00+0000",
+          "modified": "2026-01-02T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

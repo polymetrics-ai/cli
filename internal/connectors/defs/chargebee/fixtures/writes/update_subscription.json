@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "sub_fixture_1",
+    "po_number": "PO-FIXTURE-1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/sub_fixture_1/update_for_items"
+  }
+}

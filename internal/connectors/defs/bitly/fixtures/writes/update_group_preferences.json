@@ -1,0 +1,13 @@
+{
+  "record": {
+    "group_guid": "grp_fixture_1",
+    "domain_preference": "bit.ly"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/groups/grp_fixture_1/preferences",
+    "body": {
+      "domain_preference": "bit.ly"
+    }
+  }
+}

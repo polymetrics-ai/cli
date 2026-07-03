@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "cus_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/cus_fixture_1/delete"
+  }
+}

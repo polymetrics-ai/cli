@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "order": {
+            "id": "order_fixture_1",
+            "document_number": "1",
+            "invoice_id": "inv_fixture_1",
+            "subscription_id": "sub_fixture_1",
+            "customer_id": "cus_fixture_1",
+            "status": "complete",
+            "order_type": "manual",
+            "price_type": "tax_exclusive",
+            "total": 2900,
+            "currency_code": "USD",
+            "created_at": 1767225600,
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

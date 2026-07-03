@@ -1,10 +1,19 @@
 # Overview
 
-Chargebee is a wave1-pilot Tier-1 declarative migration (PLAN.md P-6, SPEC.md §5.4). It reads
-Chargebee customers, subscriptions, invoices, plans, and items through the Chargebee v2 REST API.
-This bundle is engine-vs-legacy parity-tested against `internal/connectors/chargebee` (the
-hand-written connector it migrates); the legacy package stays registered and unchanged until
-wave6's registry flip. Chargebee is read-only in both legacy and this bundle (no `writes.json`).
+Chargebee started as a wave1-pilot Tier-1 declarative migration (PLAN.md P-6, SPEC.md §5.4) and was
+expanded to full API-surface coverage in Pass B (api_surface.json `reviewed_at: 2026-07-03`). It
+reads 32 Chargebee resources (customers, subscriptions, invoices, plans, items, item prices, item
+families, coupons, coupon codes/sets, credit notes, transactions, orders, quotes, payment sources,
+events, hosted pages, virtual bank accounts, unbilled charges, ramps, gifts, alerts, comments,
+promotional credits, features, entitlements, differential prices, price variants, products, webhook
+endpoints, ledger operations, and ledger account balances) and writes 36 actions (the core
+create/update/delete/void/cancel triad for its primary business objects) through the Chargebee v2
+REST API (Product Catalog 2.0). The original 5 streams (`customers`, `subscriptions`, `invoices`,
+`plans`, `items`) remain engine-vs-legacy parity-tested against `internal/connectors/chargebee` (the
+hand-written connector this bundle originally migrated); the legacy package stays registered and
+unchanged until wave6's registry flip, and is frozen at its original 5-stream, read-only surface —
+it never gained the 27 additional streams or any write capability. See
+`docs/migration/conventions.md` §8 for the Pass B review rules this expansion followed.
 
 ## Auth setup
 
@@ -20,26 +29,56 @@ implies for an operator migrating a legacy-shaped config).
 
 ## Streams notes
 
-All 5 streams (`customers`, `subscriptions`, `invoices`, `plans`, `items`) share the same shape:
-`GET` against the Chargebee list endpoint, records at the top-level `list` array, each element
-wrapped in a single-key resource envelope (e.g. `{"customer": {...}}`). Pagination follows
-Chargebee's `offset`/`next_offset` convention (`pagination.type: cursor` with `cursor_param: offset`
-and `token_path: next_offset`): the next page's `offset` query value is read verbatim from the
-previous response body's `next_offset` field, and pagination stops when `next_offset` is absent —
-identical to legacy's `harvest()` loop (chargebee.go:148-196). Every request sends `limit=100`
-(matches legacy's default `page_size`) via each stream's static `query: {"limit": "100"}`.
-Incremental reads send `updated_at[after]` as a Unix-seconds value (`param_format: unix_seconds`),
-computed either from the sync's persisted cursor or, on a fresh sync, from the RFC3339 `start_date`
-config value — identical to legacy `incrementalLowerBound`/`formatParam`. Primary key is `["id"]`
-and the incremental cursor field is `["updated_at"]` across every stream, matching legacy's
-`chargebeeStreams()` catalog uniformly. **RESOLVED — `sort_by[asc]=updated_at` is now reproduced**:
-legacy also sends `sort_by[asc]=updated_at` alongside `updated_at[after]` on every incremental
-request (`chargebee.go:152-154`), never on a full-refresh read; this bundle now expresses that via
-the `incremental.lower_bound` query-var dialect (S3 engine mini-wave item 1) — see "Known limits"
-below for the fix and `paritytest/chargebee/parity_test.go`'s
+Every stream shares the same base shape: `GET` against the Chargebee list endpoint, records at the
+top-level `list` array, each element wrapped in a single-key resource envelope (e.g.
+`{"customer": {...}}`, `{"item_price": {...}}`). Pagination follows Chargebee's `offset`/
+`next_offset` convention uniformly across all 32 streams (`base.pagination.type: cursor` with
+`cursor_param: offset` and `token_path: next_offset`): the next page's `offset` query value is read
+verbatim from the previous response body's `next_offset` field, and pagination stops when
+`next_offset` is absent. Every request sends `limit=100` via each stream's static
+`query: {"limit": "100"}`.
+
+**The original 5 legacy-parity streams** (`customers`, `subscriptions`, `invoices`, `plans`,
+`items`) match legacy's `harvest()` loop (chargebee.go:148-196) exactly, including
+`sort_by[asc]=updated_at` sent alongside `updated_at[after]` on every incremental request
+(`chargebee.go:151-155`), expressed via the `incremental.lower_bound` query-var dialect (S3 engine
+mini-wave item 1) — see "Known limits" below and `paritytest/chargebee/parity_test.go`'s
 `TestParityChargebee_SortByAscSentOnIncrementalFromState`/
 `TestParityChargebee_SortByAscSentOnIncrementalFromStartDate`/
 `TestParityChargebee_SortByAscOmittedOnFullSync`.
+
+**The 27 Pass B streams** were added directly from Chargebee's official OpenAPI spec
+(`chargebee_api_v2_pc_v2_spec.json`, https://github.com/chargebee/openapi) rather than a legacy
+connector (Chargebee's legacy Go package only ever implemented the original 5), so there is no
+parity claim for them — only a documented-API-contract claim. Incremental coverage per stream
+follows the truth table in conventions.md §8 rule 2 (`request_param` iff the API's own list endpoint
+accepts an `updated_at`/`occurred_at` filter parameter, confirmed against the OpenAPI spec's
+per-endpoint `parameters` list for every stream added):
+
+- **Incremental via `updated_at[after]`** (server-side filter confirmed in the OpenAPI spec):
+  `item_prices`, `item_families`, `credit_notes`, `transactions`, `orders`, `quotes`,
+  `payment_sources`, `hosted_pages`, `virtual_bank_accounts`, `ramps`, `price_variants`, `products`.
+  Of these, `coupons`/`credit_notes`/`quotes` support `updated_at[after]` filtering but their list
+  endpoints do NOT accept `sort_by[asc]=updated_at` (only `created_at`/`date` sorting is offered —
+  confirmed via the spec's per-endpoint `sort_by.properties.asc.enum`); the `sort_by[asc]` query
+  key is therefore omitted entirely for those 3 streams' `query` blocks (declaring it would be a
+  request Chargebee's own API rejects). Incremental filtering still returns exactly the records at
+  or after the lower bound in both cases — only the ordering GUARANTEE within a page differs (a
+  `sort_by`-less incremental page is not guaranteed strictly ascending by `updated_at`, but every
+  record `>=` the lower bound is still returned across the full paginated read).
+- **Incremental via `occurred_at[after]`** (Chargebee's events log has no `updated_at`, only an
+  immutable `occurred_at`): `events`.
+- **No incremental block** (the OpenAPI spec's list endpoint accepts no time-based filter parameter
+  at all — confirmed absent from that endpoint's `parameters`): `coupon_codes`, `coupon_sets`,
+  `unbilled_charges`, `gifts`, `alerts`, `comments`, `promotional_credits`, `features`,
+  `entitlements`, `differential_prices`, `webhook_endpoints`, `ledger_operations`,
+  `ledger_account_balances`. These are full-refresh-only streams; `x-cursor-field` is likewise
+  absent from their schemas (conventions.md §8 rule 2: "neither → no incremental block").
+
+**Non-standard primary keys**: `coupon_codes`' primary key is `["code"]` (Chargebee's own natural
+key for that resource — coupon codes have no separate `id` field); `ledger_account_balances` has no
+`id` field at all in the API response, so its primary key is the composite
+`["subscription_id", "unit_id", "unit_type"]` the API itself uses to identify a balance row.
 
 **Envelope unwrap via per-field `computed_fields`** (conventions.md §2 schema-as-projection):
 Chargebee wraps every list item in a single-key resource envelope, so plain schema projection
@@ -58,16 +97,78 @@ type instead of being stringified). Schemas declare the real wire type
 
 ## Write actions & risks
 
-None — Chargebee is exposed as a read-only source connector in both legacy
-(`chargebee.go:258-260`'s `Write` returns `connectors.ErrUnsupportedOperation`) and this bundle
-(`metadata.json`'s `capabilities.write: false`, no `writes.json` file at all, matching the
-searxng read-only-variant pattern in conventions.md §1).
+Pass B added write capability (`metadata.json`'s `capabilities.write` is now `true`); legacy
+(`chargebee.go:258-260`'s `Write` still returns `connectors.ErrUnsupportedOperation` and is
+unaffected by this bundle's expansion — see
+`paritytest/chargebee/parity_test.go`'s `TestParityChargebee_LegacyWriteStillUnsupported`, which
+pins that legacy behavior stays frozen, and `TestParityChargebee_CreateCustomerWriteSupported`,
+which exercises the new capability end-to-end. 36 actions cover the core create/update/delete/
+void/cancel triad for Chargebee's primary business objects, all `body_type: form` (matches every
+mutation endpoint's documented `application/x-www-form-urlencoded` content type):
+
+- **Customers**: `create_customer`, `update_customer`, `delete_customer`.
+- **Items catalog**: `create_item`/`update_item`/`delete_item`, `create_item_price`/
+  `update_item_price`/`delete_item_price`, `create_item_family`/`update_item_family`/
+  `delete_item_family`.
+- **Subscriptions**: `create_subscription` (POST `/customers/{id}/subscription_for_items`),
+  `update_subscription` (POST `/subscriptions/{id}/update_for_items`), `cancel_subscription`
+  (POST `/subscriptions/{id}/cancel_for_items` — irreversible; risk-flagged).
+- **Billing documents**: `create_credit_note`/`void_credit_note`, `create_coupon`/`update_coupon`/
+  `delete_coupon` (coupon creation/update route through Chargebee's Product-Catalog-2.0
+  `create_for_items`/`update_for_items` endpoints — there is no plain `POST /coupons`),
+  `create_order`/`update_order`/`cancel_order`, `void_invoice`, `collect_payment_for_invoice`
+  (attempts to charge a payment method — risk-flagged).
+- **Payments**: `create_card_payment_source` (carries raw card data via nested `card[...]`
+  form fields — Chargebee's own form-encoding convention for the `card` object parameter;
+  `write.go`'s `buildForm` sends record keys verbatim as form field names, so the record schema
+  declares the bracketed key names directly, e.g. `"card[number]"`), `delete_payment_source`,
+  `create_virtual_bank_account`/`delete_virtual_bank_account`.
+- **Other**: `create_webhook_endpoint`/`update_webhook_endpoint`/`delete_webhook_endpoint`,
+  `create_comment`/`delete_comment`, `add_promotional_credit`/`deduct_promotional_credit` (direct
+  financial-credit effect — risk-flagged).
+
+Every `delete`-kind action declares `delete.missing_ok_status: [404]` (an already-deleted record is
+treated as successfully written, not failed), matching conventions.md §3's delete semantics.
+Deliberately NOT covered as writes (see api_surface.json for the full, itemized exclusion list):
+hard-deletes of invoices/credit notes/subscriptions (void/cancel are the safer, already-covered
+reversible alternatives), quote/estimate/hosted-page checkout workflows (multi-step, no persisted
+side effect until converted), invoice/credit-note payment-application and dunning-control actions,
+and narrow catalog/packaging sub-resource management (differential prices, item entitlements,
+price-variant attributes) beyond the core CRUD triads — breadth-first Pass B scope prioritizes real
+business-object CRUD over exotic operational/admin actions.
 
 ## Known limits
 
+- **Pass B full-surface expansion (this revision)**: `api_surface.json` was rewritten from the
+  wave1-pilot's minimal-honest 13-endpoint manifest to a full enumeration of Chargebee's
+  official Product-Catalog-2.0 OpenAPI spec (428 endpoints total, including the legacy `/plans`
+  PC1.0 endpoint carried from the pre-Pass-B bundle). Every endpoint is `covered_by` a stream/write
+  action XOR `excluded` with one of the closed-vocabulary categories
+  (`destructive_admin`/`requires_elevated_scope`/`binary_payload`/`deprecated`/`non_data_endpoint`/
+  `duplicate_of`/`out_of_scope`) and a specific, non-boilerplate reason — see `api_surface.json`'s
+  `scope` field for the full breakdown. Notably excluded, with reasons: PDF/e-invoice generation and
+  async bulk-export jobs (`binary_payload`); site/currency/custom-field configuration
+  (`non_data_endpoint`); omnichannel/app-store billing, Product-Catalog-2.0 migration tooling, and
+  multi-business-entity transfers, all gated behind add-ons most sites don't have enabled
+  (`requires_elevated_scope`); the deprecated `/cards` endpoint (superseded by `payment_sources`)
+  and short-lived payment tokens (`deprecated`/`duplicate_of`); irreversible hard-deletes and
+  sandbox-only time-machine clock control, each with an already-covered safer alternative
+  (`destructive_admin`); and compound checkout/quote/estimate workflows plus narrow catalog/
+  packaging sub-resource management beyond the core CRUD triads (`out_of_scope`).
+- **Chargebee's Product Catalog 1.0 vs 2.0**: the `plans` stream (legacy parity) reads the PC1.0
+  `/plans` endpoint, which is NOT part of Chargebee's current public OpenAPI spec — it remains live
+  for backward compatibility on sites that have not migrated to Product Catalog 2.0, but is
+  undocumented in the current API reference. The 27 Pass B streams instead cover Chargebee's current
+  PC2.0 surface (`items`/`item_prices`/`item_families` replace the PC1.0 `plans`/`addons` model for
+  any site that has migrated). A site still on PC1.0 will return data for `plans` but likely empty
+  or errored results for `item_prices`/`item_families`/`differential_prices`/`price_variants`
+  (PC2.0-only concepts); this is an accurate reflection of Chargebee's own dual-catalog-version
+  reality, not a bundle defect.
 - Full Chargebee API surface (coupons, credit notes, addons, hosted pages, events, webhooks) is out
   of scope for wave1-pilot; see `api_surface.json`'s `excluded: {category: out_of_scope, reason:
   "Pass B capability expansion"}` entries. Only the 5 legacy-parity streams are implemented.
+  **SUPERSEDED by the Pass B full-surface expansion above** — kept for historical trace continuity;
+  coupons/credit_notes/hosted_pages/events/webhook_endpoints are now implemented streams.
 - **RESOLVED — computed_fields envelope unwrap now preserves native numeric/boolean types.**
   Previously (pre gap-loop-cycle-1), every schema field derived via a `computed_fields` envelope
   unwrap was stringified by `engine.Interpolate` regardless of the raw JSON value's real type,

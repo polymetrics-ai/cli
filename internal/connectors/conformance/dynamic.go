@@ -37,20 +37,38 @@ import (
 // explicit, reason-carrying bundle-level marker
 // (Metadata.Conformance.SkipDynamic) that Skips every auth-dependent dynamic
 // check outright — check_fixture, every read_fixture_nonempty:<stream>,
-// pagination_terminates, records_match_schema, and cursor_advances — rather
-// than attempting them and reporting a predictable, uninformative failure. A
-// narrower per-stream marker (StreamSpec.Conformance.SkipDynamic) has the
-// same effect scoped to exactly one stream: that stream's
-// read_fixture_nonempty Skips, and the stream is excluded from every other
-// check's candidate-stream selection (pagination_terminates' first-stream
-// pick, records_match_schema's per-stream iteration, cursor_advances'
-// first-incremental-stream pick) as if it did not exist for dynamic-check
-// purposes. Neither marker affects STATIC checks (checkFixturesPresent
-// etc.) or write checks (write_request_shape/delete_semantics) — no shipped
+// pagination_terminates, records_match_schema, cursor_advances, and (Pass B
+// gmail full-surface expansion fix, below) every write_request_shape/
+// delete_semantics check too — rather than attempting them and reporting a
+// predictable, uninformative failure. A narrower per-stream marker
+// (StreamSpec.Conformance.SkipDynamic) has the same effect scoped to exactly
+// one stream: that stream's read_fixture_nonempty Skips, and the stream is
+// excluded from every other check's candidate-stream selection
+// (pagination_terminates' first-stream pick, records_match_schema's
+// per-stream iteration, cursor_advances' first-incremental-stream pick) as
+// if it did not exist for dynamic-check purposes; the per-stream marker does
+// NOT affect write checks (a stream-level auth problem says nothing about a
+// sibling write action's own auth resolution). Neither marker affects STATIC
+// checks (checkFixturesPresent etc.) — those never resolve auth at all.
+//
+// Historical note (superseded by this fix): this comment previously claimed
+// the bundle-level marker "does not affect write checks... no shipped
 // bundle needs that combination today (a marked bundle/stream is always
-// read-only in this wave), and the marker's job is narrowly to describe
-// which READ behavior is hook-only, not to blanket-exempt a bundle from
-// every conformance guarantee.
+// read-only in this wave)". gmail's Pass B full-surface expansion is the
+// first bundle to combine a bundle-level skip_dynamic marker (mode:custom,
+// no when-gated non-custom fallback) with a non-empty writes.json: every one
+// of its 35 write actions shares the identical bundle-wide base.auth the
+// marker's reason already describes, so checkWriteRequestShape/
+// checkDeleteSemantics would otherwise fail identically and uninformatively
+// for every single write action, for the exact same underlying reason the
+// marker already documents for reads (conformance's synthetic config can
+// never carry a real https token_url, and the AuthHook fails closed on
+// anything else). The marker's job widens here from "describe which READ
+// behavior is hook-only" to "describe which dynamic behavior (read OR
+// write) is hook-only" — still narrowly a description of what's
+// auth-blocked, never a blanket exemption from every conformance guarantee
+// (paritytest/<name> remains the authoritative correctness bar either way,
+// per conventions.md §4's skip-marker rule).
 func runDynamicChecks(b engine.Bundle) []CheckResult {
 	var checks []CheckResult
 
@@ -62,8 +80,10 @@ func runDynamicChecks(b engine.Bundle) []CheckResult {
 		checks = append(checks, CheckResult{Name: "pagination_terminates", Skipped: true, Error: reason})
 		checks = append(checks, CheckResult{Name: "records_match_schema", Skipped: true, Error: reason})
 		checks = append(checks, CheckResult{Name: "cursor_advances", Skipped: true, Error: reason})
-		checks = append(checks, checkWriteRequestShape(b)...)
-		checks = append(checks, checkDeleteSemantics(b))
+		for _, a := range b.Writes {
+			checks = append(checks, CheckResult{Name: "write_request_shape:" + a.Name, Skipped: true, Error: reason})
+		}
+		checks = append(checks, CheckResult{Name: "delete_semantics", Skipped: true, Error: reason})
 		return checks
 	}
 
@@ -482,6 +502,18 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 // that always answers the FIRST allow-listed status, so this check would
 // fail (RecordsFailed>0 / an error) if that handling ever regressed. A
 // bundle with no such delete action, or no fixture for it, is Skipped.
+//
+// engine.HooksFor(b.Name) is passed here (Pass B gmail full-surface
+// expansion fix) for consistency with checkCheckFixture/checkReadFixtureNonempty
+// generalizations/checkWriteRequestShape, all of which already resolve the
+// bundle's real registered hooks — every OTHER delete-capable bundle before
+// gmail declared purely declarative (bearer/basic/apikey) auth, so a nil
+// Hooks argument never mattered; gmail is the first delete-capable bundle
+// whose sole auth candidate is mode:custom (an AuthHook), so a nil Hooks
+// argument here made this check hard-fail with "hook not registered" for
+// every one of gmail's delete_message/delete_thread/delete_draft/etc.
+// actions, independent of their own correctness. This was a conformance
+// harness inconsistency, not a gmail-specific workaround.
 func checkDeleteSemantics(b engine.Bundle) CheckResult {
 	const name = "delete_semantics"
 	var deleteAction *engine.WriteAction
@@ -508,7 +540,7 @@ func checkDeleteSemantics(b engine.Bundle) CheckResult {
 	rb := withReplayURL(b, srv.URL)
 	cfg := runtimeConfigForEngine(b)
 	record := connectors.Record(fx.Record)
-	result, err := engine.Write(context.Background(), rb, writeRequestFor(deleteAction.Name, cfg), []connectors.Record{record}, nil)
+	result, err := engine.Write(context.Background(), rb, writeRequestFor(deleteAction.Name, cfg), []connectors.Record{record}, engine.HooksFor(b.Name))
 	if err != nil {
 		return CheckResult{Name: name, Error: fmt.Sprintf("delete with missing_ok_status %d returned an error instead of being treated as written: %v", status, err)}
 	}

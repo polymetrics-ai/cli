@@ -469,30 +469,50 @@ func TestParityGmail_TokenEndpointFailureSurfacesAsAuthError(t *testing.T) {
 	}
 }
 
-// --- write parity: both sides reject writes (read-only connector) ---
+// --- write parity: legacy stays read-only; the engine bundle now writes (Pass B) ---
 
+// TestParityGmail_WriteUnsupportedOnBothSides was renamed in spirit by the
+// Pass B full-surface expansion but keeps its original name for git-blame
+// continuity: legacy internal/connectors/gmail remains permanently read-only
+// (gmail.go:191-192's ErrUnsupportedOperation is never going to change,
+// since the legacy package is frozen reference code until wave6's registry
+// flip), while the ENGINE-BACKED bundle now declares capabilities.write:
+// true and 35 write actions (writes.json). This is an intentional,
+// documented capability divergence between legacy and the migrated bundle
+// (docs.md "Overview"/"Write actions & risks") — the two sides are no
+// longer expected to agree on write support, only legacy's own read-only
+// behavior is pinned here.
 func TestParityGmail_WriteUnsupportedOnBothSides(t *testing.T) {
 	bundle := loadGmailBundle(t)
 
 	legacy := gmail.New()
 	if _, err := legacy.Write(context.Background(), connectors.WriteRequest{}, nil); err == nil {
-		t.Fatal("legacy Write succeeded, want ErrUnsupportedOperation (test fixture bug)")
+		t.Fatal("legacy Write succeeded, want ErrUnsupportedOperation (test fixture bug; legacy internal/connectors/gmail is frozen read-only reference code)")
 	}
 
-	eng := engine.New(bundle, engine.HooksFor("gmail"))
-	if _, err := eng.Write(context.Background(), connectors.WriteRequest{}, nil); err == nil {
-		t.Fatal("engine Write succeeded, want an error (gmail bundle declares capabilities.write: false, no writes.json)")
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true (Pass B full-surface expansion declares 35 write actions)")
 	}
-	if bundle.Metadata.Capabilities.Write {
-		t.Fatal("bundle metadata.capabilities.write = true, want false (gmail is read-only)")
+	if len(bundle.Writes) == 0 {
+		t.Fatal("bundle write actions = 0, want 35 (Pass B full-surface expansion writes.json)")
 	}
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (gmail is read-only, no writes.json)", bundle.Writes)
+	if len(bundle.Writes) != 35 {
+		t.Fatalf("bundle write actions = %d, want 35", len(bundle.Writes))
 	}
 }
 
 // --- manifest-surface parity ---
 
+// TestParityGmail_ManifestSurface pins the ENGINE bundle's own stream/write
+// manifest surface directly (Pass B full-surface expansion): legacy's
+// Catalog() only ever described the original wave1-pilot 4-stream,
+// read-only surface and is no longer a meaningful parity oracle for the
+// bundle's now-much-larger surface (10 streams, 35 write actions) — legacy
+// itself was never extended to describe history/filters/send_as/delegates/
+// forwarding_addresses/profile or any write action, since it is frozen
+// reference code. The 4 original streams' primary keys are still asserted
+// against legacy's Catalog() below for continuity; the 6 new streams and
+// all 35 write actions are asserted directly against the bundle.
 func TestParityGmail_ManifestSurface(t *testing.T) {
 	bundle := loadGmailBundle(t)
 
@@ -504,14 +524,48 @@ func TestParityGmail_ManifestSurface(t *testing.T) {
 	eng := engine.New(bundle, engine.HooksFor("gmail"))
 	engManifest := connectors.ManifestOf(eng)
 
-	wantStreams := gmailManifestStreamSurface(legacyCatalog.Streams)
 	gotStreams := gmailManifestStreamSurface(engManifest.Streams)
+	wantStreams := []gmailStreamSurface{
+		{Name: "delegates", PrimaryKey: []string{"delegate_email"}},
+		{Name: "drafts", PrimaryKey: []string{"id"}},
+		{Name: "filters", PrimaryKey: []string{"id"}},
+		{Name: "forwarding_addresses", PrimaryKey: []string{"forwarding_email"}},
+		{Name: "history", PrimaryKey: []string{"id"}},
+		{Name: "labels", PrimaryKey: []string{"id"}},
+		{Name: "messages", PrimaryKey: []string{"id"}},
+		{Name: "profile", PrimaryKey: []string{"email_address"}},
+		{Name: "send_as", PrimaryKey: []string{"send_as_email"}},
+		{Name: "threads", PrimaryKey: []string{"id"}},
+	}
 	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("stream surface = %+v, want %+v (legacy Catalog())", gotStreams, wantStreams)
+		t.Fatalf("stream surface = %+v, want %+v", gotStreams, wantStreams)
 	}
 
-	if len(engManifest.WriteActions) != 0 {
-		t.Fatalf("engine write actions = %v, want none (gmail is read-only)", engManifest.WriteActions)
+	// The 4 original wave1-pilot streams' primary keys still match legacy's
+	// own Catalog() exactly (continuity check, not a full-surface one).
+	legacyStreams := gmailManifestStreamSurface(legacyCatalog.Streams)
+	legacyByName := make(map[string]gmailStreamSurface, len(legacyStreams))
+	for _, s := range legacyStreams {
+		legacyByName[s.Name] = s
+	}
+	for _, name := range []string{"drafts", "labels", "messages", "threads"} {
+		legacyStream, ok := legacyByName[name]
+		if !ok {
+			t.Fatalf("legacy Catalog() missing expected original stream %q", name)
+		}
+		var engStream gmailStreamSurface
+		for _, s := range gotStreams {
+			if s.Name == name {
+				engStream = s
+			}
+		}
+		if !reflect.DeepEqual(engStream, legacyStream) {
+			t.Fatalf("stream %q surface = %+v, want %+v (legacy Catalog())", name, engStream, legacyStream)
+		}
+	}
+
+	if len(engManifest.WriteActions) != 35 {
+		t.Fatalf("engine write actions = %d, want 35 (Pass B full-surface expansion)", len(engManifest.WriteActions))
 	}
 }
 
@@ -531,10 +585,21 @@ func gmailManifestStreamSurface(streams []connectors.Stream) []gmailStreamSurfac
 
 // --- bundle load smoke guard ---
 
+// TestParityGmail_BundleLoadsAndValidates pins the Pass B full-surface
+// expansion's bundle shape: 10 streams (up from the wave1-pilot's original
+// 4), capabilities.write: true, and 35 write actions. Only the "history"
+// stream declares an incremental block — messages/threads/drafts/labels are
+// still full_refresh-only (legacy's own doc comment, streams.go:31-34,
+// documents no publishable cursor field on THOSE 4 list endpoints; history
+// is a genuinely different, cursor-bearing endpoint Gmail added specifically
+// for incremental sync, see docs.md Streams notes).
 func TestParityGmail_BundleLoadsAndValidates(t *testing.T) {
 	bundle := loadGmailBundle(t)
 
-	wantStreams := []string{"drafts", "labels", "messages", "threads"}
+	wantStreams := []string{
+		"delegates", "drafts", "filters", "forwarding_addresses", "history",
+		"labels", "messages", "profile", "send_as", "threads",
+	}
 	gotStreams := make([]string, 0, len(bundle.Streams))
 	for _, s := range bundle.Streams {
 		gotStreams = append(gotStreams, s.Name)
@@ -544,15 +609,17 @@ func TestParityGmail_BundleLoadsAndValidates(t *testing.T) {
 		t.Fatalf("bundle streams = %v, want %v", gotStreams, wantStreams)
 	}
 
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (gmail is read-only, no writes.json)", bundle.Writes)
+	if len(bundle.Writes) != 35 {
+		t.Fatalf("bundle write actions = %d, want 35 (Pass B full-surface expansion)", len(bundle.Writes))
 	}
-	if bundle.Metadata.Capabilities.Write {
-		t.Fatal("bundle metadata.capabilities.write = true, want false (gmail has no mutation API)")
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true (Pass B full-surface expansion)")
 	}
+	wantIncremental := map[string]bool{"history": true}
 	for _, s := range bundle.Streams {
-		if s.Incremental != nil {
-			t.Errorf("stream %q declares an incremental block, want none (legacy publishes no cursor field, streams.go:31-34)", s.Name)
+		hasIncremental := s.Incremental != nil
+		if hasIncremental != wantIncremental[s.Name] {
+			t.Errorf("stream %q incremental block present = %v, want %v", s.Name, hasIncremental, wantIncremental[s.Name])
 		}
 	}
 }

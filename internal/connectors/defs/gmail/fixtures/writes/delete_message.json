@@ -1,0 +1,7 @@
+{
+  "record": { "id": "msg_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/synthetic-conformance-value/messages/msg_fixture_1"
+  }
+}

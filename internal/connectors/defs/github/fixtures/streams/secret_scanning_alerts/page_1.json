@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/secret-scanning/alerts",
+    "query": { "page": "1", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "number": 1,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z",
+        "url": "https://api.github.com/repos/octocat/hello-world/secret-scanning/alerts/1",
+        "html_url": "https://github.com/octocat/hello-world/security/secret-scanning/1",
+        "state": "open",
+        "resolution": null,
+        "resolved_at": null,
+        "resolved_by": null,
+        "secret_type": "fixture_token_placeholder",
+        "secret_type_display_name": "Fixture Token Placeholder",
+        "push_protection_bypassed": false,
+        "validity": "active"
+      }
+    ]
+  }
+}

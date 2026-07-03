@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invitations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "repository": { "type": "string" },
+    "id": { "type": "integer" },
+    "node_id": { "type": "string" },
+    "invitee_login": { "type": ["string", "null"] },
+    "inviter_login": { "type": ["string", "null"] },
+    "permissions": { "type": "string" },
+    "created_at": { "type": "string" },
+    "expired": { "type": ["boolean", "null"] },
+    "url": { "type": "string" },
+    "html_url": { "type": "string" }
+  }
+}

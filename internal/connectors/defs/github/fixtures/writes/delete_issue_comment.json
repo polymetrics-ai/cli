@@ -1,0 +1,7 @@
+{
+  "record": { "comment_id": 1 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/comments/1"
+  }
+}

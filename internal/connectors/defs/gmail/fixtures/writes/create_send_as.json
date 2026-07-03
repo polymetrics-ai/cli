@@ -1,0 +1,18 @@
+{
+  "record": {
+    "sendAsEmail": "fixture-new-alias@example.com",
+    "displayName": "Fixture New Alias"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/settings/sendAs",
+    "body": {
+      "sendAsEmail": "fixture-new-alias@example.com",
+      "displayName": "Fixture New Alias"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "sendAsEmail": "fixture-new-alias@example.com", "verificationStatus": "pending" }
+  }
+}

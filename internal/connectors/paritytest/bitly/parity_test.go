@@ -433,10 +433,22 @@ func TestParityBitly_ErrorPathParity(t *testing.T) {
 
 // --- bundle load smoke guard ---
 
+// TestParityBitly_BundleLoadsAndValidates is a bundle-shape smoke guard, not
+// a legacy-parity assertion: the wave1-pilot bundle was read-only (4 streams,
+// no writes.json), matching legacy exactly. Pass B (full-surface capability
+// expansion, docs/migration/orchestration-plan.md) intentionally grew the
+// bundle beyond legacy's own surface — legacy itself never implemented any
+// mutation, so there is no legacy write behavior to stay parity-tested
+// against for the new write actions (see bitly's docs.md Overview). This
+// guard is updated to assert the Pass B stream/write set instead of
+// re-asserting the now-superseded wave1 counts.
 func TestParityBitly_BundleLoadsAndValidates(t *testing.T) {
 	bundle := loadBitlyBundle(t)
 
-	wantStreams := map[string]bool{"organizations": true, "groups": true, "campaigns": true, "bitlinks": true}
+	wantStreams := map[string]bool{
+		"organizations": true, "groups": true, "campaigns": true, "channels": true,
+		"bsds": true, "webhooks": true, "qr_codes": true, "group_tags": true, "bitlinks": true,
+	}
 	if len(bundle.Streams) != len(wantStreams) {
 		t.Fatalf("bundle streams = %d, want %d", len(bundle.Streams), len(wantStreams))
 	}
@@ -446,10 +458,25 @@ func TestParityBitly_BundleLoadsAndValidates(t *testing.T) {
 		}
 	}
 
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (bitly is read-only, no writes.json)", bundle.Writes)
+	wantWrites := map[string]bool{
+		"create_bitlink": true, "update_bitlink": true, "delete_bitlink": true,
+		"update_bitlink_tags": true, "delete_bitlink_tags": true,
+		"create_campaign": true, "update_campaign": true,
+		"update_group": true, "update_group_preferences": true,
+		"create_channel": true, "update_channel": true,
+		"create_webhook": true, "update_webhook": true, "delete_webhook": true,
+		"create_custom_bitlink": true, "update_custom_bitlink": true,
+		"create_qr_code": true, "update_qr_code": true, "delete_qr_code": true,
 	}
-	if bundle.Metadata.Capabilities.Write {
-		t.Fatal("bundle metadata.capabilities.write = true, want false (bitly has no mutation API)")
+	if len(bundle.Writes) != len(wantWrites) {
+		t.Fatalf("bundle write actions = %d, want %d", len(bundle.Writes), len(wantWrites))
+	}
+	for _, w := range bundle.Writes {
+		if !wantWrites[w.Name] {
+			t.Fatalf("unexpected bundle write action %q", w.Name)
+		}
+	}
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true (Pass B added mutation writes)")
 	}
 }

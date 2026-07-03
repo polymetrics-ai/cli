@@ -1,21 +1,3364 @@
 {
-  "api": "Chargebee API v2 (https://{site}.chargebee.com/api/v2)",
-  "docs": "https://apidocs.chargebee.com/docs/api/versioning",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave1-pilot migration: the 5 legacy-parity read streams only; the full Chargebee surface (coupons, credit notes, addons, hosted pages, events, webhooks, write endpoints, etc.) is out of scope until Pass B. Chargebee is a read-only connector in both legacy and this bundle.",
+  "api": "Chargebee API v2, Product Catalog 2.0 (https://{site}.chargebee.com/api/v2)",
+  "docs": "https://apidocs.chargebee.com/docs/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion. Source of truth: the official Chargebee OpenAPI spec (chargebee_api_v2_pc_v2_spec.json, https://github.com/chargebee/openapi, info.version 2026-06-12), which enumerates every endpoint on Chargebee's Product Catalog 2.0 API surface (427 operations across ~120 resource paths) plus the legacy Product Catalog 1.0 /plans list endpoint kept from the pre-Pass-B bundle for parity (retired from the current public OpenAPI spec but still live on Chargebee sites that have not migrated to Product Catalog 2.0). Every endpoint below is covered_by a stream/write action XOR excluded with a real category and reason (no blanket out_of_scope bucket): 32 GET list/detail endpoints are implemented as streams, 36 POST/DELETE mutations as write actions. Exclusions favor breadth of real business resources over: binary/PDF/e-invoice generation and async bulk export/file-upload jobs (binary_payload); site/account configuration, currency, custom-field, and migration metadata snapshots (non_data_endpoint); add-on/beta-gated surfaces such as omnichannel/app-store billing, Product-Catalog-2.0 migration tooling, multi-business-entity transfers, and metered grant-blocks (requires_elevated_scope); a resource explicitly marked obsoleted by Chargebee's own docs, or a short-lived tokenization artifact fully superseded once redeemed into a durable record (deprecated / duplicate_of); irreversible hard-deletes and sandbox-only clock control with a safer, already-covered alternative (destructive_admin); and compound multi-step checkout/quote/estimate workflows, subscription/invoice/credit-note operational side-actions (dunning, proration, refund application), and narrow catalog/packaging sub-resource management beyond the core CRUD triads (out_of_scope, each with its own specific reason, not a shared boilerplate string).",
   "endpoints": [
-    { "method": "GET", "path": "/v2/customers", "covered_by": { "stream": "customers" } },
-    { "method": "GET", "path": "/v2/subscriptions", "covered_by": { "stream": "subscriptions" } },
-    { "method": "GET", "path": "/v2/invoices", "covered_by": { "stream": "invoices" } },
-    { "method": "GET", "path": "/v2/plans", "covered_by": { "stream": "plans" } },
-    { "method": "GET", "path": "/v2/items", "covered_by": { "stream": "items" } },
-    { "method": "GET", "path": "/v2/item_prices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/coupons", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/credit_notes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/transactions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/events", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/webhook_endpoints", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v2/addresses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer billing/shipping address is a singleton sub-object addressed via the customer record, not an independently listable/creatable resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/addresses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer billing/shipping address is a singleton sub-object addressed via the customer record, not an independently listable/creatable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/alerts",
+      "covered_by": {
+        "stream": "alerts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/alerts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "usage-alert threshold configuration is a narrow metered-billing admin action; alerts is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/plans",
+      "covered_by": {
+        "stream": "plans"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/alerts/{alert-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "usage-alert threshold configuration is a narrow metered-billing admin action; alerts is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/alerts/{alert-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "usage-alert threshold configuration is a narrow metered-billing admin action; alerts is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/alerts/{alert-id}/alert_statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "usage-alert threshold configuration is a narrow metered-billing admin action; alerts is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/alerts/{alert-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "usage-alert threshold configuration is a narrow metered-billing admin action; alerts is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/attached_items/{attached-item-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "addon-attachment-rule management is a narrow catalog-configuration sub-action, not core item CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/attached_items/{attached-item-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "addon-attachment-rule management is a narrow catalog-configuration sub-action, not core item CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/attached_items/{attached-item-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "addon-attachment-rule management is a narrow catalog-configuration sub-action, not core item CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/batch/usage_events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metered-usage event ingestion/reporting is a distinct high-volume telemetry write path, not a business-object record mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/business_entities/transfers",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/business_entities/transfers",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cards/{customer-id}",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Chargebee's own docs mark this obsoleted by the Retrieve a payment source API; payment_sources covers the identical data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/comments",
+      "covered_by": {
+        "stream": "comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/comments",
+      "covered_by": {
+        "write": "create_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/comments/{comment-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/comments/{comment-id}/delete",
+      "covered_by": {
+        "write": "delete_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/configurations",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/coupon_codes",
+      "covered_by": {
+        "stream": "coupon_codes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/coupon_codes/{coupon-code-code}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk coupon-code/coupon-set management (archiving, batch code generation) is a narrower admin workflow than the core coupon CRUD covered as streams+writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupon_codes/{coupon-code-code}/archive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk coupon-code/coupon-set management (archiving, batch code generation) is a narrower admin workflow than the core coupon CRUD covered as streams+writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/coupon_sets",
+      "covered_by": {
+        "stream": "coupon_sets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupon_sets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk coupon-code/coupon-set management (archiving, batch code generation) is a narrower admin workflow than the core coupon CRUD covered as streams+writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/coupon_sets/{coupon-set-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk coupon-code/coupon-set management (archiving, batch code generation) is a narrower admin workflow than the core coupon CRUD covered as streams+writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupon_sets/{coupon-set-id}/add_coupon_codes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk coupon-code/coupon-set management (archiving, batch code generation) is a narrower admin workflow than the core coupon CRUD covered as streams+writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupon_sets/{coupon-set-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk coupon-code/coupon-set management (archiving, batch code generation) is a narrower admin workflow than the core coupon CRUD covered as streams+writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupon_sets/{coupon-set-id}/delete_unused_coupon_codes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk coupon-code/coupon-set management (archiving, batch code generation) is a narrower admin workflow than the core coupon CRUD covered as streams+writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupon_sets/{coupon-set-id}/update",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk coupon-code/coupon-set management (archiving, batch code generation) is a narrower admin workflow than the core coupon CRUD covered as streams+writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/coupons",
+      "covered_by": {
+        "stream": "coupons"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupons/copy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "coupon lifecycle side-action (copy/unarchive) beyond plain create/update/delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupons/create_for_items",
+      "covered_by": {
+        "write": "create_coupon"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/coupons/{coupon-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupons/{coupon-id}/delete",
+      "covered_by": {
+        "write": "delete_coupon"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupons/{coupon-id}/unarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "coupon lifecycle side-action (copy/unarchive) beyond plain create/update/delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/coupons/{coupon-id}/update_for_items",
+      "covered_by": {
+        "write": "update_coupon"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/credit_notes",
+      "covered_by": {
+        "stream": "credit_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/credit_notes",
+      "covered_by": {
+        "write": "create_credit_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/credit_notes/import_credit_note",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "historical-data import path for credit notes, distinct from the standard create; not modeled as a record-shaped write in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/credit_notes/{credit-note-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/credit_notes/{credit-note-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hard-delete of a credit note is a rare, high-risk accounting-integrity action; void_credit_note is the documented, reversible-in-audit-trail alternative already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/credit_notes/{credit-note-id}/download_einvoice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/credit_notes/{credit-note-id}/pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/credit_notes/{credit-note-id}/record_refund",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "credit-note refund/tax-withheld operational action beyond plain void; Pass B breadth-first scope covers the core CRUD+void triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/credit_notes/{credit-note-id}/refund",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "credit-note refund/tax-withheld operational action beyond plain void; Pass B breadth-first scope covers the core CRUD+void triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/credit_notes/{credit-note-id}/remove_tax_withheld_refund",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "credit-note refund/tax-withheld operational action beyond plain void; Pass B breadth-first scope covers the core CRUD+void triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/credit_notes/{credit-note-id}/resend_einvoice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/credit_notes/{credit-note-id}/send_einvoice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/credit_notes/{credit-note-id}/void",
+      "covered_by": {
+        "write": "void_credit_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/csv_tax_rules",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/currencies",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/currencies/list",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/currencies/{site-currency-id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site currency configuration, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/currencies/{site-currency-id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site currency configuration, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/currencies/{site-currency-id}/add_schedule",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site currency configuration, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/currencies/{site-currency-id}/remove_schedule",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site currency configuration, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/custom_field_configs",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/custom_field_configs/retrieve",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/merge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/move",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}",
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/add_contact",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/assign_payment_role",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/change_billing_date",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/clear_personal_data",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible PII-erasure mutation with no corresponding read-back object; unsuitable as an ETL write primitive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/collect_payment",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer-id}/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/copy_card",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/create_subscription_for_items_estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/create_subscription_quote_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/credit_card",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer-id}/customer_entitlements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/delete",
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/delete_card",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/delete_contact",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/delete_relationship",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer-id}/hierarchy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer-id}/hierarchy_detail",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/import_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer-id}/payment_vouchers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/record_excess_payment",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/relationships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/subscription_for_items",
+      "covered_by": {
+        "write": "create_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/switch_gateway",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer-id}/upcoming_invoices_estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/update_billing_info",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/update_contact",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/update_hierarchy_settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer-id}/update_payment_method",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "customer sub-resource/lifecycle action (contacts, account hierarchy, payment-method/gateway plumbing, billing-date/merge/move) beyond the core create/update/delete triad covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/differential_prices",
+      "covered_by": {
+        "stream": "differential_prices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/differential_prices/{differential-price-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-parent-item price override is a narrow catalog-configuration sub-action; differential_prices is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/differential_prices/{differential-price-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-parent-item price override is a narrow catalog-configuration sub-action; differential_prices is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/differential_prices/{differential-price-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-parent-item price override is a narrow catalog-configuration sub-action; differential_prices is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/entitlements",
+      "covered_by": {
+        "stream": "entitlements"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/entitlements",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "feature-entitlement/differential-pricing/product-catalog-variant management is gated behind Chargebee's Product Catalog 2.0 packaging add-ons not enabled on every site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/estimates/create_invoice_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/estimates/create_subscription_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/estimates/gift_subscription_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/estimates/payment_schedules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/estimates/update_subscription_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/events/{event-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/attached_items",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/coupons",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/credit_notes",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/customers",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/deferred_revenue",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/differential_prices",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/invoices",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/item_families",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/item_prices",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/items",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/orders",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/price_variants",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/revenue_recognition",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/subscriptions",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/exports/transactions",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/exports/{export-id}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/features",
+      "covered_by": {
+        "stream": "features"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/features",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "feature-entitlement/differential-pricing/product-catalog-variant management is gated behind Chargebee's Product Catalog 2.0 packaging add-ons not enabled on every site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/features/{feature-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature lifecycle sub-action (activate/archive/reactivate/entitlement assignment) beyond the features list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/features/{feature-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature lifecycle sub-action (activate/archive/reactivate/entitlement assignment) beyond the features list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/features/{feature-id}/activate_command",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature lifecycle sub-action (activate/archive/reactivate/entitlement assignment) beyond the features list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/features/{feature-id}/archive_command",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature lifecycle sub-action (activate/archive/reactivate/entitlement assignment) beyond the features list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/features/{feature-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature lifecycle sub-action (activate/archive/reactivate/entitlement assignment) beyond the features list stream already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/features/{feature-id}/item_entitlements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature lifecycle sub-action (activate/archive/reactivate/entitlement assignment) beyond the features list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/features/{feature-id}/item_entitlements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature lifecycle sub-action (activate/archive/reactivate/entitlement assignment) beyond the features list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/features/{feature-id}/reactivate_command",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature lifecycle sub-action (activate/archive/reactivate/entitlement assignment) beyond the features list stream already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/full_exports/status",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/gifts",
+      "covered_by": {
+        "stream": "gifts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gifts/create_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gift-subscription lifecycle action (create/claim/cancel/update) is a narrow promotional workflow layered on subscriptions; gifts is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/gifts/{gift-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gift-subscription lifecycle action (create/claim/cancel/update) is a narrow promotional workflow layered on subscriptions; gifts is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gifts/{gift-id}/cancel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gift-subscription lifecycle action (create/claim/cancel/update) is a narrow promotional workflow layered on subscriptions; gifts is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gifts/{gift-id}/claim",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gift-subscription lifecycle action (create/claim/cancel/update) is a narrow promotional workflow layered on subscriptions; gifts is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gifts/{gift-id}/update_gift",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gift-subscription lifecycle action (create/claim/cancel/update) is a narrow promotional workflow layered on subscriptions; gifts is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/grant_blocks",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/hosted_pages",
+      "covered_by": {
+        "stream": "hosted_pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/accept_quote",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/checkout_existing_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/checkout_gift_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/checkout_new_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/checkout_one_time_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/claim_gift",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/collect_now",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/extend_subscription",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/manage_payment_sources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/pre_cancel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/retrieve_agreement_pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/view_voucher",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/hosted_pages/{hosted-page-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/hosted_pages/{hosted-page-id}/acknowledge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/in_app_subscriptions/{in-app-subscription-app-id}/import_receipt",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/in_app_subscriptions/{in-app-subscription-app-id}/import_subscription",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/in_app_subscriptions/{in-app-subscription-app-id}/process_purchase_command",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/in_app_subscriptions/{in-app-subscription-app-id}/retrieve",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/create_for_charge_items_and_charges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "compound ad-hoc/imported invoice creation (charge-items assembly or historical-data import) beyond the standard invoice lifecycle; not modeled as a record-shaped write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/import_invoice",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "compound ad-hoc/imported invoice creation (charge-items assembly or historical-data import) beyond the standard invoice lifecycle; not modeled as a record-shaped write in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices/payment_reference_numbers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices/{invoice-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/add_charge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/add_charge_item",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/apply_credits",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/apply_payment_schedule_scheme",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/apply_payments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/close",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/collect_payment",
+      "covered_by": {
+        "write": "collect_payment_for_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hard-delete of an invoice is a rare, high-risk accounting-integrity action; void_invoice is the documented, reversible-in-audit-trail alternative already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/delete_line_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices/{invoice-id}/download_einvoice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/pause_dunning",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices/{invoice-id}/payment_schedules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices/{invoice-id}/payment_vouchers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices/{invoice-id}/payments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/record_payment",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/record_refund",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/record_tax_withheld",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/refund",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/remove_credit_note",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/remove_payment",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/remove_tax_withheld",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/resend_einvoice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/resume_dunning",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/send_einvoice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/stop_dunning",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/sync_usages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/update_details",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/void",
+      "covered_by": {
+        "write": "void_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice-id}/write_off",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoice payment/dunning/line-item operational action beyond plain void/collect_payment; Pass B breadth-first scope covers the core CRUD+void+collect triad only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/item_families",
+      "covered_by": {
+        "stream": "item_families"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/item_families",
+      "covered_by": {
+        "write": "create_item_family"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/item_families/{item-family-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/item_families/{item-family-id}",
+      "covered_by": {
+        "write": "update_item_family"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/item_families/{item-family-id}/delete",
+      "covered_by": {
+        "write": "delete_item_family"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/item_prices",
+      "covered_by": {
+        "stream": "item_prices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/item_prices",
+      "covered_by": {
+        "write": "create_item_price"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/item_prices/{item-price-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/item_prices/{item-price-id}",
+      "covered_by": {
+        "write": "update_item_price"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/item_prices/{item-price-id}/applicable_item_prices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "catalog-applicability lookup sub-resource, informational only, already implied by the item_prices/items streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/item_prices/{item-price-id}/applicable_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "catalog-applicability lookup sub-resource, informational only, already implied by the item_prices/items streams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/item_prices/{item-price-id}/delete",
+      "covered_by": {
+        "write": "delete_item_price"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/item_prices/{item-price-id}/differential_prices",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "feature-entitlement/differential-pricing/product-catalog-variant management is gated behind Chargebee's Product Catalog 2.0 packaging add-ons not enabled on every site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/items",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/items",
+      "covered_by": {
+        "write": "create_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/items/{item-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/items/{item-id}",
+      "covered_by": {
+        "write": "update_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/items/{item-id}/attached_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "addon-attachment-rule management is a narrow catalog-configuration sub-action, not core item CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/items/{item-id}/attached_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "addon-attachment-rule management is a narrow catalog-configuration sub-action, not core item CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/items/{item-id}/delete",
+      "covered_by": {
+        "write": "delete_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/items/{item-id}/item_entitlements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/items/{item-id}/item_entitlements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/ledger_account_balances",
+      "covered_by": {
+        "stream": "ledger_account_balances"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/ledger_operations",
+      "covered_by": {
+        "stream": "ledger_operations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/ledger_operations/authorize",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/ledger_operations/capture",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/ledger_operations/capture_authorization",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/ledger_operations/release_authorization",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/ledger_operations/{ledger-operation-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/non_subscriptions/{non-subscription-app-id}/one_time_purchase",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/offer_events",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/offer_fulfillments",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/offer_fulfillments/{offer-fulfillment-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/offer_fulfillments/{offer-fulfillment-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/omnichannel_one_time_orders",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/omnichannel_one_time_orders/{omnichannel-one-time-order-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/omnichannel_subscription_items/{omnichannel-subscription-item-id}/scheduled_changes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/omnichannel_subscriptions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/omnichannel_subscriptions/{omnichannel-subscription-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/omnichannel_subscriptions/{omnichannel-subscription-id}/move",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/omnichannel_subscriptions/{omnichannel-subscription-id}/omnichannel_transactions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders",
+      "covered_by": {
+        "write": "create_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/import_order",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "historical-data import / hard-delete path for orders, distinct from the standard create/update/cancel triad covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders/{order-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order-id}",
+      "covered_by": {
+        "write": "update_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order-id}/assign_order_number",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "order fulfillment/shipping-workflow side-action beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD+cancel triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order-id}/cancel",
+      "covered_by": {
+        "write": "cancel_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order-id}/create_refundable_credit_note",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "order fulfillment/shipping-workflow side-action beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD+cancel triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "historical-data import / hard-delete path for orders, distinct from the standard create/update/cancel triad covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order-id}/reopen",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "order fulfillment/shipping-workflow side-action beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD+cancel triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order-id}/resend",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "order fulfillment/shipping-workflow side-action beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD+cancel triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_intents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway payment-intent (3DS/SCA authorization handshake) is a transient checkout-flow object, not a durable business-data record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payment_intents/{payment-intent-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway payment-intent (3DS/SCA authorization handshake) is a transient checkout-flow object, not a durable business-data record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_intents/{payment-intent-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway payment-intent (3DS/SCA authorization handshake) is a transient checkout-flow object, not a durable business-data record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_schedule_schemes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "payment-schedule-scheme configuration is a narrow installment-billing admin object, not core CRUD covered in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payment_schedule_schemes/{payment-schedule-scheme-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "payment-schedule-scheme configuration is a narrow installment-billing admin object, not core CRUD covered in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_schedule_schemes/{payment-schedule-scheme-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "payment-schedule-scheme configuration is a narrow installment-billing admin object, not core CRUD covered in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payment_sources",
+      "covered_by": {
+        "stream": "payment_sources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/create_bank_account",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/create_card",
+      "covered_by": {
+        "write": "create_card_payment_source"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/create_using_payment_intent",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/create_using_permanent_token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/create_using_temp_token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/create_using_token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/create_voucher_payment_source",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payment_sources/{cust-payment-source-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/{cust-payment-source-id}/delete",
+      "covered_by": {
+        "write": "delete_payment_source"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/{cust-payment-source-id}/delete_local",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/{cust-payment-source-id}/export_payment_source",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/{cust-payment-source-id}/switch_gateway_account",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/{cust-payment-source-id}/update_bank_account",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/{cust-payment-source-id}/update_card",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_sources/{cust-payment-source-id}/verify_bank_account",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-specific payment-source creation/verification/export variant (bank account, voucher, permanent/temp/gateway token exchange) beyond the representative create_card_payment_source/delete_payment_source pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payment_vouchers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "offline-payment voucher generation is a narrow regional-payment-method admin workflow, not core CRUD covered in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payment_vouchers/{payment-voucher-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "offline-payment voucher generation is a narrow regional-payment-method admin workflow, not core CRUD covered in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pc2_migration_item_families",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migration_item_families",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pc2_migration_item_families/{pc2-migration-item-family-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migration_item_families/{pc2-migration-item-family-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migration_item_families/{pc2-migration-item-family-id}/delete",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pc2_migration_item_prices",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pc2_migration_item_prices/{pc2-migration-item-price-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migration_item_prices/{pc2-migration-item-price-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migration_item_prices/{pc2-migration-item-price-id}/delete",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pc2_migration_items",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migration_items",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pc2_migration_items/applicable_items",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pc2_migration_items/{pc2-migration-item-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migration_items/{pc2-migration-item-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migration_items/{pc2-migration-item-id}/delete",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migrations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pc2_migrations/{pc2-migration-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migrations/{pc2-migration-id}/contact_support",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pc2_migrations/{pc2-migration-id}/initiate",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/personalized_offers",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/portal_sessions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/portal_sessions/{portal-session-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/portal_sessions/{portal-session-id}/activate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/portal_sessions/{portal-session-id}/logout",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/price_variants",
+      "covered_by": {
+        "stream": "price_variants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/price_variants",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "price-variant (multi-currency/attribute pricing dimension) mutation is a narrow catalog-configuration action; price_variants is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/price_variants/{price-variant-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "price-variant (multi-currency/attribute pricing dimension) mutation is a narrow catalog-configuration action; price_variants is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/price_variants/{price-variant-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "price-variant (multi-currency/attribute pricing dimension) mutation is a narrow catalog-configuration action; price_variants is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/price_variants/{price-variant-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "price-variant (multi-currency/attribute pricing dimension) mutation is a narrow catalog-configuration action; price_variants is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pricing_page_sessions/create_for_existing_subscription",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/pricing_page_sessions/create_for_new_subscription",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "hosted-page/portal/pricing-page session is a short-lived, browser-redirect checkout artifact generated per end-user visit, not a durable business-data write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/products",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "feature-entitlement/differential-pricing/product-catalog-variant management is gated behind Chargebee's Product Catalog 2.0 packaging add-ons not enabled on every site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/products/{product-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-variant option/SKU management sub-action beyond the products list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/products/{product-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-variant option/SKU management sub-action beyond the products list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/products/{product-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-variant option/SKU management sub-action beyond the products list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/products/{product-id}/update_options",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-variant option/SKU management sub-action beyond the products list stream already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/products/{product-id}/variants",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-variant option/SKU management sub-action beyond the products list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/products/{product-id}/variants",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-variant option/SKU management sub-action beyond the products list stream already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/promotional_credits",
+      "covered_by": {
+        "stream": "promotional_credits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/promotional_credits/add",
+      "covered_by": {
+        "write": "add_promotional_credit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/promotional_credits/deduct",
+      "covered_by": {
+        "write": "deduct_promotional_credit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/promotional_credits/set",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "absolute-balance-set variant beyond the representative add/deduct pair already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/promotional_credits/{account-credit-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/promotional_grants",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "promotional-grant issuance is a narrow marketing-credit admin action layered on promotional_credits, which is covered as a stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/purchases",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/purchases/estimate",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/quotes",
+      "covered_by": {
+        "stream": "quotes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/quotes/create_for_charge_items_and_charges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/quotes/update_subscription_quote_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/quotes/{quote-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/quotes/{quote-id}/convert",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/quotes/{quote-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/quotes/{quote-id}/edit_create_subscription_quote_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/quotes/{quote-id}/edit_for_charge_items_and_charges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/quotes/{quote-id}/edit_update_subscription_quote_for_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/quotes/{quote-id}/extend_expiry_date",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/quotes/{quote-id}/pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/quotes/{quote-id}/quote_line_groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/quotes/{quote-id}/update_status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/ramps",
+      "covered_by": {
+        "stream": "ramps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/ramps/{ramp-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription price-ramp scheduling mutation is a narrow contract-pricing admin action; ramps is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/ramps/{ramp-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription price-ramp scheduling mutation is a narrow contract-pricing admin action; ramps is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/ramps/{ramp-id}/update",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription price-ramp scheduling mutation is a narrow contract-pricing admin action; ramps is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recorded_purchases",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recorded_purchases/{recorded-purchase-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/resource_migrations/retrieve_latest",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/rules/{rule-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "gated behind a Chargebee add-on/beta feature (omnichannel/app-store billing, PC 2.0 migration tooling, multi-business-entity, or metered-credits grant-blocks) not enabled on a typical site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/site_migration_details",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/site_pc_meta_records",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "site/account configuration or migration metadata snapshot, not a syncable business-data object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/add_charge_at_term_end",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/advance_invoice_estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/alert_statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/applicable_alerts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/cancel_for_items",
+      "covered_by": {
+        "write": "cancel_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/cancel_subscription_for_items_estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/change_term_end",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/change_term_end_estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/charge_future_renewals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/contract_terms",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/create_ramp",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/delete",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible hard-delete that cascades to permanently erase the subscription's invoices, credit notes, transactions, and usages after a short grace period; cancel_subscription (already covered) is Chargebee's documented reversible alternative for stopping renewals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/delete_usage",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/discounts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/edit_advance_invoice_schedule",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/entitlement_overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature-entitlement override management is a narrow metering/packaging admin action, not core subscription CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/entitlement_overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature-entitlement override management is a narrow metering/packaging admin action, not core subscription CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/import_contract_term",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/import_unbilled_charges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/move",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/override_billing_profile",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/pause",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/pause_subscription_estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/reactivate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/regenerate_invoice",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/regenerate_invoice_estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/remove_advance_invoice_schedule",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/remove_coupons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/remove_scheduled_cancellation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/remove_scheduled_changes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/remove_scheduled_pause",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/remove_scheduled_resumption",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/renewal_estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/resume",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/resume_subscription_estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/retrieve_advance_invoice_schedule",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/retrieve_with_scheduled_changes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/scheduled_changes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/subscription_entitlements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read-only sub-resource of a parent already covered by its own list stream (the underlying data is reachable as a nested field on the parent invoice/subscription/item record); not modeled as an independent stream in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/subscription_entitlements/set_availability",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature-entitlement toggle is a narrow metering/packaging admin action, not core subscription CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/update_for_items",
+      "covered_by": {
+        "write": "update_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/update_scheduled_changes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscription-lifecycle side-effect action (billing/proration/dunning-timing mutation) beyond plain create/update/cancel; Pass B breadth-first scope covers the core CRUD triad only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/usage_charges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metered-usage event ingestion/reporting is a distinct high-volume telemetry write path, not a business-object record mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/usage_summary",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metered-usage event ingestion/reporting is a distinct high-volume telemetry write path, not a business-object record mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription-id}/usages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "usage-based metering event ingestion is a distinct, high-volume telemetry write, not a subscription record mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription-id}/usages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "usage-based metering event ingestion is a distinct, high-volume telemetry write, not a subscription record mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/time_machines/{time-machine-name}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "test-site-only simulated-clock control (advance/reset a sandbox site's time); not a production data or write endpoint"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/time_machines/{time-machine-name}/start_afresh",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "test-site-only simulated-clock control (advance/reset a sandbox site's time); not a production data or write endpoint"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/time_machines/{time-machine-name}/travel_forward",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "test-site-only simulated-clock control (advance/reset a sandbox site's time); not a production data or write endpoint"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/tokens/create_for_card",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "short-lived (minutes-scale TTL), single-use tokenization artifact that is consumed into a payment_sources record; nothing durable to sync once redeemed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/tokens/create_using_temp_token",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "short-lived (minutes-scale TTL), single-use tokenization artifact that is consumed into a payment_sources record; nothing durable to sync once redeemed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tokens/{cb-token-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "short-lived (minutes-scale TTL), single-use tokenization artifact that is consumed into a payment_sources record; nothing durable to sync once redeemed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/transactions",
+      "covered_by": {
+        "stream": "transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transactions/create_authorization",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/transactions/{transaction-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transactions/{transaction-id}/delete_offline_transaction",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transactions/{transaction-id}/reconcile",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transactions/{transaction-id}/record_refund",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transactions/{transaction-id}/refund",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transactions/{transaction-id}/void",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "gateway-settlement/ledger operational action (authorize/capture/refund/reconcile/void); transactions and ledger_operations are read via their list streams, and mutating gateway settlement state is out of scope for a breadth-first Pass B"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/unbilled_charges",
+      "covered_by": {
+        "stream": "unbilled_charges"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/unbilled_charges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unbilled-charge creation/invoicing/deletion is a narrow metered-billing admin workflow; unbilled_charges is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/unbilled_charges/invoice_now_estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "quote/estimate generation is a multi-step pricing-preview workflow (no persisted billing side effect until converted); not modeled as a plain stream/write in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/unbilled_charges/invoice_unbilled_charges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unbilled-charge creation/invoicing/deletion is a narrow metered-billing admin workflow; unbilled_charges is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/unbilled_charges/{unbilled-charge-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unbilled-charge creation/invoicing/deletion is a narrow metered-billing admin workflow; unbilled_charges is covered read-only via its list stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/usage_events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metered-usage event ingestion/reporting is a distinct high-volume telemetry write path, not a business-object record mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/usage_files/upload_url",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usage_files/{usage-file-id}/processing_status",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "asynchronous bulk-export/file-upload job that produces an out-of-band binary/CSV artifact, not a directly syncable JSON record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metered-usage event ingestion/reporting is a distinct high-volume telemetry write path, not a business-object record mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/usages/pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns or triggers generation of a binary PDF/e-invoice document, not a JSON record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/variants/{product-variant-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-variant option/SKU management sub-action beyond the products list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/variants/{product-variant-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-variant option/SKU management sub-action beyond the products list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/variants/{product-variant-id}/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-variant option/SKU management sub-action beyond the products list stream already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_bank_accounts",
+      "covered_by": {
+        "stream": "virtual_bank_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/virtual_bank_accounts",
+      "covered_by": {
+        "write": "create_virtual_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/virtual_bank_accounts/create_using_permanent_token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "alternate virtual-bank-account creation/local-delete variant beyond the representative create/delete pair covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_bank_accounts/{virtual-bank-account-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "alternate virtual-bank-account creation/local-delete variant beyond the representative create/delete pair covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/virtual_bank_accounts/{virtual-bank-account-id}/delete",
+      "covered_by": {
+        "write": "delete_virtual_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/virtual_bank_accounts/{virtual-bank-account-id}/delete_local",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "alternate virtual-bank-account creation/local-delete variant beyond the representative create/delete pair covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhook_endpoints",
+      "covered_by": {
+        "stream": "webhook_endpoints"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhook_endpoints",
+      "covered_by": {
+        "write": "create_webhook_endpoint"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhook_endpoints/{webhook-endpoint-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource detail GET returning the identical shape already covered by that resource's list stream (customers/coupons/credit_notes/events/invoices/item_families/item_prices/items/orders/promotional_credits/subscriptions/webhook_endpoints/comments respectively)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhook_endpoints/{webhook-endpoint-id}",
+      "covered_by": {
+        "write": "update_webhook_endpoint"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhook_endpoints/{webhook-endpoint-id}/delete",
+      "covered_by": {
+        "write": "delete_webhook_endpoint"
+      }
+    }
   ]
 }

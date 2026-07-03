@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/forks",
+    "query": { "page": "1", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 2,
+        "node_id": "MDEwOlJlcG9zaXRvcnky",
+        "name": "hello-world",
+        "full_name": "fixture-user/hello-world",
+        "owner": { "login": "fixture-user", "id": 99 },
+        "private": false,
+        "html_url": "https://github.com/fixture-user/hello-world",
+        "default_branch": "main",
+        "forks_count": 0,
+        "stargazers_count": 0,
+        "watchers_count": 0,
+        "open_issues_count": 0,
+        "created_at": "2026-01-03T00:00:00Z",
+        "updated_at": "2026-01-03T00:00:00Z",
+        "pushed_at": "2026-01-03T00:00:00Z"
+      }
+    ]
+  }
+}

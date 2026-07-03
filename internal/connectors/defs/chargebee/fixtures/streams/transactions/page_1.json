@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/transactions",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "transaction": {
+            "id": "txn_fixture_1",
+            "customer_id": "cus_fixture_1",
+            "subscription_id": "sub_fixture_1",
+            "payment_source_id": "pm_fixture_1",
+            "payment_method": "card",
+            "gateway": "chargebee",
+            "type": "payment",
+            "date": 1767225600,
+            "currency_code": "USD",
+            "amount": 2900,
+            "status": "success",
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}
