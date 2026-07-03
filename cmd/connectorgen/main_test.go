@@ -52,6 +52,48 @@ func TestValidate_WhenClauseEqualityAndMembershipAgainstSpecKnownKeyPasses(t *te
 	}
 }
 
+// TestValidate_FanOutBundlePassesCleanly proves a well-formed fan_out block
+// (S4 engine mini-wave item 2) — including a "{{ fanout.id }}" reference in
+// stream.Path — passes connectorgen validate with zero findings.
+func TestValidate_FanOutBundlePassesCleanly(t *testing.T) {
+	fsys := singleBundleFS(t, "testdata/valid-extra", "fanout-valid")
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for a well-formed fan_out block, got %+v", report.Findings)
+	}
+}
+
+// TestValidate_KeyedObjectBundlePassesCleanly proves a well-formed
+// records.keyed_object/key_field block (S4 engine mini-wave item 3) passes
+// connectorgen validate with zero findings.
+func TestValidate_KeyedObjectBundlePassesCleanly(t *testing.T) {
+	fsys := singleBundleFS(t, "testdata/valid-extra", "keyed-object-valid")
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for a well-formed records.keyed_object block, got %+v", report.Findings)
+	}
+}
+
+// TestValidate_OAuth2ExtraParamsBundlePassesCleanly proves a well-formed
+// oauth2_client_credentials auth.extra_params block (S4 engine mini-wave item
+// 4) passes connectorgen validate with zero findings.
+func TestValidate_OAuth2ExtraParamsBundlePassesCleanly(t *testing.T) {
+	fsys := singleBundleFS(t, "testdata/valid-extra", "oauth2-extra-params-valid")
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for a well-formed oauth2_client_credentials extra_params block, got %+v", report.Findings)
+	}
+}
+
 // TestValidate_EmptyTreeIsFine mirrors the loader contract: an empty defs/
 // tree (no bundle directories) passes with a zero connector count, so wave0's
 // bundle-less internal/connectors/defs/ tree does not fail CI.
@@ -104,6 +146,13 @@ func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {
 		// ruleInterpolationUnresolved finding, the same rule
 		// auth-field-unknown-spec-key already exercises for base.auth.
 		{"check-query-unknown-spec-key", ruleInterpolationUnresolved},
+		// S4 engine mini-wave item 2: fan_out.ids_from.request.path gets the
+		// same static ResolveCheck treatment as an ordinary stream.Path.
+		{"fanout-request-path-unknown-spec-key", ruleInterpolationUnresolved},
+		// S4 engine mini-wave item 4: oauth2_client_credentials auth.extra_params
+		// values get the same static ResolveCheck treatment as token_url/
+		// client_id/client_secret/scopes.
+		{"oauth2-extra-params-unknown-spec-key", ruleInterpolationUnresolved},
 	}
 
 	seenRules := map[string]bool{}

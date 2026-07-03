@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
 	"sync"
 	"testing"
 	"time"
@@ -576,6 +577,66 @@ func TestFormatParamRFC3339PassesThroughVerbatimUnaffected(t *testing.T) {
 	}
 	if got != "2026-03-01T12:00:00Z" {
 		t.Fatalf("formatParam(rfc3339, rfc3339) = %q, want verbatim passthrough", got)
+	}
+}
+
+// --- S4 engine mini-wave item 5: date-only lower bounds (marketstack) ------
+//
+// parseLowerBoundTime accepted only all-digits (Unix seconds) or strict
+// RFC3339. Marketstack's real wire cursor value for its date param_format
+// streams (eod/splits/dividends) is a bare YYYY-MM-DD string with no
+// time/offset component at all — neither shape parses it. Tried order:
+// digits -> RFC3339 -> date-only, so no shape masks another (a valid RFC3339
+// string is never all-digits; a valid date-only string is never
+// RFC3339-parseable).
+
+func TestParseLowerBoundTimeAcceptsDateOnly(t *testing.T) {
+	got, err := parseLowerBoundTime("2026-01-02")
+	if err != nil {
+		t.Fatalf("parseLowerBoundTime(date-only) error = %v, want a bare YYYY-MM-DD value to parse", err)
+	}
+	want := time.Date(2026, 1, 2, 0, 0, 0, 0, time.UTC)
+	if !got.Equal(want) {
+		t.Fatalf("parseLowerBoundTime(date-only) = %v, want %v (midnight UTC that date)", got, want)
+	}
+}
+
+func TestFormatParamDateAcceptsDateOnlyLowerBound(t *testing.T) {
+	got, err := formatParam("2026-01-02", "date")
+	if err != nil {
+		t.Fatalf("formatParam(date-only, date) error = %v", err)
+	}
+	if got != "2026-01-02" {
+		t.Fatalf("formatParam(date-only, date) = %q, want round-trip to the same date-only string %q", got, "2026-01-02")
+	}
+}
+
+func TestFormatParamUnixSecondsAcceptsDateOnlyLowerBound(t *testing.T) {
+	got, err := formatParam("2026-01-02", "unix_seconds")
+	if err != nil {
+		t.Fatalf("formatParam(date-only, unix_seconds) error = %v", err)
+	}
+	want := time.Date(2026, 1, 2, 0, 0, 0, 0, time.UTC).Unix()
+	if got != strconv.FormatInt(want, 10) {
+		t.Fatalf("formatParam(date-only, unix_seconds) = %q, want %d", got, want)
+	}
+}
+
+func TestFormatParamGithubDateRangeAcceptsDateOnlyLowerBound(t *testing.T) {
+	got, err := formatParam("2026-01-02", "github_date_range")
+	if err != nil {
+		t.Fatalf("formatParam(date-only, github_date_range) error = %v", err)
+	}
+	if got != ">=2026-01-02T00:00:00Z" {
+		t.Fatalf("formatParam(date-only, github_date_range) = %q, want %q", got, ">=2026-01-02T00:00:00Z")
+	}
+}
+
+func TestParseLowerBoundTimeRejectsMalformedDateOnly(t *testing.T) {
+	for _, bad := range []string{"2026-13-40", "2026/01/02", "not-a-date"} {
+		if _, err := parseLowerBoundTime(bad); err == nil {
+			t.Fatalf("parseLowerBoundTime(%q) error = nil, want an error (malformed value must never silently misparse)", bad)
+		}
 	}
 }
 
@@ -1571,7 +1632,7 @@ func TestReadMaxPagesHardStopsRequestCount(t *testing.T) {
 	b := newTestBundle(t, srv, StreamSpec{
 		Records: RecordsSpec{Path: "data"},
 		Pagination: &PaginationSpec{
-			Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 2,
+			Type: "page_number", PageParam: "pageno", StartPage: intPtr(1), PageSize: 2, MaxPages: 2,
 		},
 	})
 
@@ -1605,7 +1666,7 @@ func TestReadMaxPagesZeroIsUnbounded(t *testing.T) {
 	b := newTestBundle(t, srv, StreamSpec{
 		Records: RecordsSpec{Path: "data"},
 		Pagination: &PaginationSpec{
-			Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 0,
+			Type: "page_number", PageParam: "pageno", StartPage: intPtr(1), PageSize: 2, MaxPages: 0,
 		},
 	})
 
@@ -1658,13 +1719,13 @@ func TestReadMaxPagesStreamLevelOverridesBase(t *testing.T) {
 	b := newTestBundle(t, srv, StreamSpec{
 		Records: RecordsSpec{Path: "data"},
 		Pagination: &PaginationSpec{
-			Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 3,
+			Type: "page_number", PageParam: "pageno", StartPage: intPtr(1), PageSize: 2, MaxPages: 3,
 		},
 	})
 	// Base declares MaxPages=1; if the stream-level override did not win, the
 	// engine would stop after only 1 request instead of the stream's 3.
 	b.HTTP.Pagination = &PaginationSpec{
-		Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 1,
+		Type: "page_number", PageParam: "pageno", StartPage: intPtr(1), PageSize: 2, MaxPages: 1,
 	}
 
 	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
@@ -2082,5 +2143,410 @@ func TestReadHeaderOptionalOmittedNoSpecOnBundle(t *testing.T) {
 	}
 	if sawHeader {
 		t.Fatalf("X-Custom header present, want omitted (no spec on bundle: preserve prior omit-on-absent-config behavior)")
+	}
+}
+
+// --- S4 engine mini-wave item 2: sub-resource fan-out -----------------------
+
+// TestReadFanOutConfigKeyRunsOncePerID proves the config_key + query_param
+// shape (appfollow's app_collection_ids -> apps_id): the CSV config value is
+// split into 2 ids, the declarative read sequence runs once per id (both
+// hitting the SAME stream path), the id is sent as a query param on every
+// request of its sub-sequence, and stamp_field writes the id onto every
+// emitted record.
+func TestReadFanOutConfigKeyRunsOncePerID(t *testing.T) {
+	var gotIDs []string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		id := r.URL.Query().Get("apps_id")
+		gotIDs = append(gotIDs, id)
+		_, _ = w.Write([]byte(`{"data":[{"id":"rec-` + id + `","name":"n"}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		FanOut: &FanOutSpec{
+			IDsFrom:    FanOutIDsFrom{ConfigKey: "app_collection_ids"},
+			Into:       FanOutInto{QueryParam: "apps_id"},
+			StampField: "app_id",
+		},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"app_collection_ids": "111,222"}}}
+	records, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(gotIDs) != 2 || gotIDs[0] != "111" || gotIDs[1] != "222" {
+		t.Fatalf("gotIDs = %v, want [111 222] (once per configured id, in order)", gotIDs)
+	}
+	if len(records) != 2 {
+		t.Fatalf("got %d records, want 2 (one per id sub-sequence)", len(records))
+	}
+	if records[0]["app_id"] != "111" || records[1]["app_id"] != "222" {
+		t.Fatalf("records = %+v, want app_id stamped from the fan-out id", records)
+	}
+}
+
+// TestReadFanOutConfigKeyPathVarInterpolatesFanoutID proves the path_var form:
+// {{ fanout.id }} in stream.Path resolves to the current fan-out id.
+func TestReadFanOutConfigKeyPathVarInterpolatesFanoutID(t *testing.T) {
+	var gotPaths []string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotPaths = append(gotPaths, r.URL.Path)
+		_, _ = w.Write([]byte(`{"data":[{"id":"1","name":"n"}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Path:    "/projects/{{ fanout.id }}/tasks",
+		Records: RecordsSpec{Path: "data"},
+		FanOut: &FanOutSpec{
+			IDsFrom:    FanOutIDsFrom{ConfigKey: "project_ids"},
+			Into:       FanOutInto{PathVar: "parent_id"},
+			StampField: "project_id",
+		},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"project_ids": "a,b"}}}
+	records, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	want := []string{"/projects/a/tasks", "/projects/b/tasks"}
+	if len(gotPaths) != 2 || gotPaths[0] != want[0] || gotPaths[1] != want[1] {
+		t.Fatalf("gotPaths = %v, want %v", gotPaths, want)
+	}
+	if len(records) != 2 || records[0]["project_id"] != "a" || records[1]["project_id"] != "b" {
+		t.Fatalf("records = %+v, want project_id stamped a/b", records)
+	}
+}
+
+// TestReadFanOutRequestIDsPreliminaryPaginatedRequest proves the
+// ids_from.request form: a preliminary GET is issued (paginated to
+// exhaustion using the stream's OWN pagination spec) BEFORE any per-id
+// sub-sequence starts, and the extracted id_field values drive the fan-out.
+func TestReadFanOutRequestIDsPreliminaryPaginatedRequest(t *testing.T) {
+	var seq []string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/projects" && r.URL.Query().Get("page") == "" || r.URL.Path == "/projects" && r.URL.Query().Get("page") == "1":
+			seq = append(seq, "list-page-1")
+			_, _ = w.Write([]byte(`{"data":[{"id":"p1"},{"id":"p2"}]}`))
+		case r.URL.Path == "/projects" && r.URL.Query().Get("page") == "2":
+			seq = append(seq, "list-page-2")
+			_, _ = w.Write([]byte(`{"data":[{"id":"p3"}]}`))
+		case r.URL.Path == "/projects/p1/tasks":
+			seq = append(seq, "tasks-p1")
+			_, _ = w.Write([]byte(`{"data":[{"id":"t1"}]}`))
+		case r.URL.Path == "/projects/p2/tasks":
+			seq = append(seq, "tasks-p2")
+			_, _ = w.Write([]byte(`{"data":[{"id":"t2"}]}`))
+		case r.URL.Path == "/projects/p3/tasks":
+			seq = append(seq, "tasks-p3")
+			_, _ = w.Write([]byte(`{"data":[{"id":"t3"}]}`))
+		default:
+			t.Fatalf("unexpected request: %s %s", r.URL.Path, r.URL.RawQuery)
+		}
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Path:       "/projects/{{ fanout.id }}/tasks",
+		Records:    RecordsSpec{Path: "data"},
+		Pagination: &PaginationSpec{Type: "page_number", PageParam: "page", PageSize: 2},
+		FanOut: &FanOutSpec{
+			IDsFrom: FanOutIDsFrom{Request: &FanOutIDsRequest{
+				Path:        "/projects",
+				RecordsPath: "data",
+				IDField:     "id",
+			}},
+			Into:       FanOutInto{PathVar: "parent_id"},
+			StampField: "project_id",
+		},
+	})
+	// The child stream's own pagination (page_number, page_size 2) would make
+	// each per-id tasks sub-sequence request 2 pages if it ever saw a full
+	// page — but the id-listing pass has NOTHING to do with the child
+	// stream's pagination being reused for the CHILD requests below (this
+	// test's per-id tasks responses are always short/1-record, so the child
+	// sub-sequences stop after page 1 regardless).
+
+	req := connectors.ReadRequest{Stream: "widgets"}
+	records, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	wantSeq := []string{"list-page-1", "list-page-2", "tasks-p1", "tasks-p2", "tasks-p3"}
+	if len(seq) != len(wantSeq) {
+		t.Fatalf("seq = %v, want %v", seq, wantSeq)
+	}
+	for i := range wantSeq {
+		if seq[i] != wantSeq[i] {
+			t.Fatalf("seq = %v, want %v (id-listing must fully exhaust BEFORE any per-id sub-sequence starts)", seq, wantSeq)
+		}
+	}
+	if len(records) != 3 {
+		t.Fatalf("got %d records, want 3 (one task per project)", len(records))
+	}
+}
+
+// TestReadFanOutEachIDSequenceOwnPagination proves each id's sub-sequence
+// paginates independently: id A's sequence needs 2 pages, id B's needs 1.
+func TestReadFanOutEachIDSequenceOwnPagination(t *testing.T) {
+	pageHitsByID := map[string]int{}
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		id := r.URL.Query().Get("apps_id")
+		page := r.URL.Query().Get("page")
+		pageHitsByID[id+":"+page]++
+		switch {
+		case id == "A" && (page == "" || page == "1"):
+			_, _ = w.Write([]byte(`{"data":[{"id":"1"},{"id":"2"}]}`))
+		case id == "A" && page == "2":
+			_, _ = w.Write([]byte(`{"data":[{"id":"3"}]}`)) // short page: stop
+		case id == "B" && (page == "" || page == "1"):
+			_, _ = w.Write([]byte(`{"data":[{"id":"1"}]}`)) // short page: stop
+		default:
+			t.Fatalf("unexpected request id=%q page=%q", id, page)
+		}
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records:    RecordsSpec{Path: "data"},
+		Pagination: &PaginationSpec{Type: "page_number", PageParam: "page", PageSize: 2},
+		FanOut: &FanOutSpec{
+			IDsFrom: FanOutIDsFrom{ConfigKey: "ids"},
+			Into:    FanOutInto{QueryParam: "apps_id"},
+		},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"ids": "A,B"}}}
+	records, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if pageHitsByID["A:1"] != 1 || pageHitsByID["A:2"] != 1 {
+		t.Fatalf("pageHitsByID = %v, want id A to fetch exactly page 1 and page 2 once each", pageHitsByID)
+	}
+	if pageHitsByID["B:1"] != 1 {
+		t.Fatalf("pageHitsByID = %v, want id B to fetch exactly page 1 once", pageHitsByID)
+	}
+	if len(records) != 4 {
+		t.Fatalf("got %d records, want 4 (3 from id A across 2 pages + 1 from id B)", len(records))
+	}
+}
+
+// TestReadFanOutEmptyIDListEmitsNothing proves an empty CSV config value
+// resolves to zero fan-out ids: no request is ever issued and Read returns
+// no error (an empty configured id list, e.g. no apps configured yet, is not
+// itself a failure).
+func TestReadFanOutEmptyIDListEmitsNothing(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		FanOut: &FanOutSpec{
+			IDsFrom: FanOutIDsFrom{ConfigKey: "app_collection_ids"},
+			Into:    FanOutInto{QueryParam: "apps_id"},
+		},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"app_collection_ids": ""}}}
+	records, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v (an empty fan-out id list must never error)", err)
+	}
+	if hits != 0 {
+		t.Fatalf("hits = %d, want 0 (no requests when the id list resolves empty)", hits)
+	}
+	if len(records) != 0 {
+		t.Fatalf("records = %+v, want none", records)
+	}
+}
+
+// TestReadFanOutMissingIDsFromIsReadError proves a fan_out block declaring
+// NEITHER config_key nor request is a read-time error (mirroring cursor
+// pagination's mutual-exclusivity error shape), not a silent no-op.
+func TestReadFanOutMissingIDsFromIsReadError(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		t.Fatalf("no request should ever be issued: %s", r.URL.String())
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		FanOut:  &FanOutSpec{Into: FanOutInto{QueryParam: "apps_id"}},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err == nil {
+		t.Fatalf("Read: want error when fan_out.ids_from declares neither config_key nor request")
+	}
+}
+
+// TestReadFanOutBothIDsFromFormsIsReadError proves declaring BOTH config_key
+// and request is also a read-time error, not a silently-picks-one shape.
+func TestReadFanOutBothIDsFromFormsIsReadError(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		t.Fatalf("no request should ever be issued: %s", r.URL.String())
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		FanOut: &FanOutSpec{
+			IDsFrom: FanOutIDsFrom{
+				ConfigKey: "ids",
+				Request:   &FanOutIDsRequest{Path: "/x", RecordsPath: "data", IDField: "id"},
+			},
+			Into: FanOutInto{QueryParam: "apps_id"},
+		},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"ids": "1"}}}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err == nil {
+		t.Fatalf("Read: want error when fan_out.ids_from declares BOTH config_key and request")
+	}
+}
+
+// TestReadFanOutConfigKeyIDsAreTrimmed proves the CSV split trims whitespace
+// and drops empty entries (e.g. a trailing comma or accidental spaces).
+func TestReadFanOutConfigKeyIDsAreTrimmed(t *testing.T) {
+	var gotIDs []string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotIDs = append(gotIDs, r.URL.Query().Get("apps_id"))
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		FanOut: &FanOutSpec{
+			IDsFrom: FanOutIDsFrom{ConfigKey: "ids"},
+			Into:    FanOutInto{QueryParam: "apps_id"},
+		},
+	})
+
+	req := connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{"ids": " 111 , 222,,333 "}}}
+	if _, err := readAll(t, context.Background(), b, req, nil); err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	want := []string{"111", "222", "333"}
+	if len(gotIDs) != len(want) {
+		t.Fatalf("gotIDs = %v, want %v", gotIDs, want)
+	}
+	for i := range want {
+		if gotIDs[i] != want[i] {
+			t.Fatalf("gotIDs = %v, want %v", gotIDs, want)
+		}
+	}
+}
+
+// --- S4 engine mini-wave item 3: keyed-object flatten -----------------------
+
+// TestRecordsAtKeyedObjectFlattensEachValue proves each value of the JSON
+// object at path becomes its own record (appfigures' products/mine shape:
+// {"111":{...},"222":{...}}).
+func TestRecordsAtKeyedObjectFlattensEachValue(t *testing.T) {
+	body := []byte(`{"products":{"111":{"name":"a"},"222":{"name":"b"}}}`)
+	records, err := recordsAtKeyed(body, "products", "")
+	if err != nil {
+		t.Fatalf("recordsAtKeyed: %v", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("got %d records, want 2", len(records))
+	}
+	names := map[string]bool{}
+	for _, r := range records {
+		names[fmt.Sprint(r["name"])] = true
+	}
+	if !names["a"] || !names["b"] {
+		t.Fatalf("records = %+v, want values a and b both present", records)
+	}
+}
+
+// TestRecordsAtKeyedObjectStampsKeyField proves the map key is stamped onto
+// keyField before projection.
+func TestRecordsAtKeyedObjectStampsKeyField(t *testing.T) {
+	body := []byte(`{"products":{"111":{"name":"a"},"222":{"name":"b"}}}`)
+	records, err := recordsAtKeyed(body, "products", "product_id")
+	if err != nil {
+		t.Fatalf("recordsAtKeyed: %v", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("got %d records, want 2", len(records))
+	}
+	byID := map[string]connsdk.Record{}
+	for _, r := range records {
+		byID[fmt.Sprint(r["product_id"])] = r
+	}
+	if byID["111"]["name"] != "a" || byID["222"]["name"] != "b" {
+		t.Fatalf("records = %+v, want product_id stamped 111/222", records)
+	}
+}
+
+// TestRecordsAtKeyedObjectSortedByKeyForDeterminism proves emission order is
+// sorted ascending by key (map iteration is random in Go; parity/test
+// stability requires deterministic order).
+func TestRecordsAtKeyedObjectSortedByKeyForDeterminism(t *testing.T) {
+	body := []byte(`{"products":{"c":{"n":3},"a":{"n":1},"b":{"n":2}}}`)
+	records, err := recordsAtKeyed(body, "products", "key")
+	if err != nil {
+		t.Fatalf("recordsAtKeyed: %v", err)
+	}
+	want := []string{"a", "b", "c"}
+	if len(records) != len(want) {
+		t.Fatalf("got %d records, want %d", len(records), len(want))
+	}
+	for i, k := range want {
+		if fmt.Sprint(records[i]["key"]) != k {
+			t.Fatalf("records[%d][key] = %v, want %q (sorted ascending)", i, records[i]["key"], k)
+		}
+	}
+}
+
+// TestRecordsAtKeyedObjectSkipsNonObjectValues proves a value that is a
+// scalar/array is dropped, not a crash/error.
+func TestRecordsAtKeyedObjectSkipsNonObjectValues(t *testing.T) {
+	body := []byte(`{"products":{"a":{"n":1},"b":"not an object","c":[1,2,3],"d":null}}`)
+	records, err := recordsAtKeyed(body, "products", "key")
+	if err != nil {
+		t.Fatalf("recordsAtKeyed: %v", err)
+	}
+	if len(records) != 1 {
+		t.Fatalf("got %d records, want 1 (only key %q is an object)", len(records), "a")
+	}
+	if fmt.Sprint(records[0]["key"]) != "a" {
+		t.Fatalf("records[0][key] = %v, want %q", records[0]["key"], "a")
+	}
+}
+
+// TestRecordsAtKeyedObjectEmptyObjectYieldsNoRecords proves an empty object
+// at path yields zero records, not an error.
+func TestRecordsAtKeyedObjectEmptyObjectYieldsNoRecords(t *testing.T) {
+	body := []byte(`{"products":{}}`)
+	records, err := recordsAtKeyed(body, "products", "")
+	if err != nil {
+		t.Fatalf("recordsAtKeyed: %v", err)
+	}
+	if len(records) != 0 {
+		t.Fatalf("got %d records, want 0", len(records))
+	}
+}
+
+// TestReadKeyedObjectStreamEmitsFlattenedProjectedRecords proves the full
+// Read() path wires records.keyed_object/key_field through extractRecords,
+// including projection and computed_fields on the exploded records.
+func TestReadKeyedObjectStreamEmitsFlattenedProjectedRecords(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"111":{"name":"widget-a"},"222":{"name":"widget-b"}}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: ".", KeyedObject: true, KeyField: "id"},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("got %d records, want 2", len(records))
+	}
+	if records[0]["id"] != "111" || records[0]["name"] != "widget-a" {
+		t.Fatalf("records[0] = %+v, want id=111 name=widget-a", records[0])
+	}
+	if records[1]["id"] != "222" || records[1]["name"] != "widget-b" {
+		t.Fatalf("records[1] = %+v, want id=222 name=widget-b", records[1])
 	}
 }

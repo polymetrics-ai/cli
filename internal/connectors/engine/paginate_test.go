@@ -38,6 +38,11 @@ func requester(baseURL string) *connsdk.Requester {
 	return &connsdk.Requester{BaseURL: baseURL}
 }
 
+// intPtr returns a pointer to v — used throughout this file to populate
+// PaginationSpec.StartPage (S4 engine mini-wave item 1: *int distinguishes an
+// explicit 0 start page from an absent/unset one, which a plain int cannot).
+func intPtr(v int) *int { return &v }
+
 // setBaseHost sets the SSRF guard's expected origin (scheme+host) on an
 // SSRF-guarded paginator from a base URL string, mirroring how read.go
 // derives it from requester.BaseURL before the first Harvest call.
@@ -238,7 +243,7 @@ func TestNewPaginatorPageNumberShortPageStop(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2}, 2, "data")
+	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "pageno", StartPage: intPtr(1), PageSize: 2}, 2, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -261,7 +266,7 @@ func TestNewPaginatorPageNumberMaxPagesStop(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "pageno", StartPage: 1, PageSize: 2, MaxPages: 1}, 2, "data")
+	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "pageno", StartPage: intPtr(1), PageSize: 2, MaxPages: 1}, 2, "data")
 	if err != nil {
 		t.Fatalf("newPaginator() error = %v", err)
 	}
@@ -279,6 +284,99 @@ func TestNewPaginatorPageNumberMaxPagesStop(t *testing.T) {
 	}
 	if hits.count("pageno=2") != 0 {
 		t.Fatalf("page 2 should never be requested when max_pages=1")
+	}
+}
+
+// TestNewPaginatorPageNumberExplicitZeroStartHonored (S4 engine mini-wave item
+// 1): algolia/auth0/beamer/braze/clickup-api/concord/customerly/dolibarr/
+// harness/hubplanner-shaped APIs paginate from page 0. Before this fix, a
+// plain `int` StartPage==0 was indistinguishable from an unset/absent
+// start_page, so newPaginator (and connsdk.PageNumberPaginator.Start()) both
+// unconditionally coerced it to 1 — the first page ever requested was wrong.
+func TestNewPaginatorPageNumberExplicitZeroStartHonored(t *testing.T) {
+	hits := newHitCounter()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		page := r.URL.Query().Get("page")
+		hits.record(page)
+		switch page {
+		case "0":
+			_, _ = w.Write([]byte(`{"data":[{"id":1},{"id":2}]}`))
+		case "1":
+			_, _ = w.Write([]byte(`{"data":[{"id":3}]}`))
+		default:
+			t.Fatalf("unexpected page: %q", page)
+		}
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "page", StartPage: intPtr(0), PageSize: 2}, 2, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	records, err := collectPages(t, requester(srv.URL), p, "data")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if hits.count("0") != 1 {
+		t.Fatalf("page=0 fetched %d times, want exactly 1 (explicit 0 start must be honored, not coerced to 1)", hits.count("0"))
+	}
+	if len(records) != 3 {
+		t.Fatalf("got %d records, want 3 (page 0 full, page 1 short stops)", len(records))
+	}
+}
+
+// TestNewPaginatorPageNumberUnsetStartDefaultsToOne is the regression guard:
+// a bundle that never declares start_page at all (nil StartPage, the
+// zero-value/absent case) must keep defaulting to page 1, exactly as every
+// pre-existing page_number bundle relies on.
+func TestNewPaginatorPageNumberUnsetStartDefaultsToOne(t *testing.T) {
+	hits := newHitCounter()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		page := r.URL.Query().Get("page")
+		hits.record(page)
+		if page != "1" {
+			t.Fatalf("unexpected page: %q, want default start page 1", page)
+		}
+		_, _ = w.Write([]byte(`{"data":[{"id":1}]}`))
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "page", PageSize: 2}, 2, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	if _, err := collectPages(t, requester(srv.URL), p, "data"); err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if hits.count("1") != 1 {
+		t.Fatalf("page=1 fetched %d times, want exactly 1 (nil StartPage must default to 1)", hits.count("1"))
+	}
+}
+
+// TestNewPaginatorPageNumberExplicitOneStillOne pins that an explicit
+// start_page:1 (the common, non-zero case) is completely unaffected by the
+// pointer-typed StartPage change.
+func TestNewPaginatorPageNumberExplicitOneStillOne(t *testing.T) {
+	hits := newHitCounter()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		page := r.URL.Query().Get("page")
+		hits.record(page)
+		if page != "1" {
+			t.Fatalf("unexpected page: %q, want 1", page)
+		}
+		_, _ = w.Write([]byte(`{"data":[{"id":1}]}`))
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "page_number", PageParam: "page", StartPage: intPtr(1), PageSize: 2}, 2, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	if _, err := collectPages(t, requester(srv.URL), p, "data"); err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if hits.count("1") != 1 {
+		t.Fatalf("page=1 fetched %d times, want exactly 1", hits.count("1"))
 	}
 }
 

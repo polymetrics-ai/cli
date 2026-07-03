@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
@@ -130,12 +131,43 @@ func buildOAuth2ClientCredentials(spec AuthSpec, vars Vars) (connsdk.Authenticat
 		scopes = strings.Fields(resolved)
 	}
 
+	extraParams, err := resolveExtraParams(spec.ExtraParams, vars)
+	if err != nil {
+		return nil, err
+	}
+
 	return &connsdk.OAuth2ClientCredentials{
 		TokenURL:     tokenURL,
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
 		Scopes:       scopes,
+		ExtraParams:  extraParams,
 	}, nil
+}
+
+// resolveExtraParams resolves every AuthSpec.ExtraParams entry (S4 engine
+// mini-wave item 4) against vars, hard-erroring on an unresolved
+// config/secrets key exactly like every other AuthSpec field — an
+// extra_params value is never silently dropped on absence, unlike
+// stream.Query's opt-in omit_when_absent/default dialect (that tolerance is
+// deliberately NOT extended here: a mis-configured audience/subject param
+// should fail loudly, matching ClientID/ClientSecret's own behavior, not
+// silently omit a param a real OAuth2 provider may require). A nil/empty
+// map returns a nil url.Values (connsdk.OAuth2ClientCredentials.ExtraParams
+// ranges over a nil map with zero iterations, so this is a true no-op).
+func resolveExtraParams(params map[string]string, vars Vars) (url.Values, error) {
+	if len(params) == 0 {
+		return nil, nil
+	}
+	out := url.Values{}
+	for k, tmpl := range params {
+		val, err := Interpolate(tmpl, vars)
+		if err != nil {
+			return nil, fmt.Errorf("oauth2_client_credentials: extra_params %q: %w", k, err)
+		}
+		out.Set(k, val)
+	}
+	return out, nil
 }
 
 // buildCustomAuth resolves an AuthHook for spec.Hook via h. A nil Hooks, or

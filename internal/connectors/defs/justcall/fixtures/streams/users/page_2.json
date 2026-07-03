@@ -1,7 +1,10 @@
 {
   "request": {
     "method": "GET",
-    "path": "/v2.1/users"
+    "path": "/v2.1/users",
+    "query": {
+      "page": "1"
+    }
   },
   "response": {
     "status": 200,

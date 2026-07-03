@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -51,15 +52,11 @@ func newPaginator(spec PaginationSpec, pageSize int, recordsPath string) (connsd
 		return &linkHeaderPaginator{allowCrossHost: spec.AllowCrossHost}, nil
 
 	case "page_number":
-		start := spec.StartPage
-		if start == 0 {
-			start = 1
-		}
-		return &connsdk.PageNumberPaginator{
-			PageParam: spec.PageParam,
-			SizeParam: spec.SizeParam,
-			StartPage: start,
-			PageSize:  size,
+		return &pageNumberPaginator{
+			pageParam: spec.PageParam,
+			sizeParam: spec.SizeParam,
+			startPage: startPageOrDefault(spec.StartPage),
+			pageSize:  size,
 		}, nil
 
 	case "offset_limit":
@@ -136,6 +133,65 @@ type nonePaginator struct{}
 func (p *nonePaginator) Start() *connsdk.NextPage { return &connsdk.NextPage{} }
 
 func (p *nonePaginator) Next(*connsdk.Response, int) *connsdk.NextPage { return nil }
+
+// startPageOrDefault returns the effective start page for a page_number
+// paginator (S4 engine mini-wave item 1): a nil StartPage (never declared in
+// streams.json) defaults to 1, matching every pre-existing bundle's implicit
+// assumption; a non-nil pointer — INCLUDING one pointing at 0 — is honored
+// verbatim, since only the pointer's nil-ness (not its pointee's value)
+// signals "unset".
+func startPageOrDefault(startPage *int) int {
+	if startPage == nil {
+		return 1
+	}
+	return *startPage
+}
+
+// pageNumberPaginator is an engine-local reimplementation of
+// connsdk.PageNumberPaginator's exact Start/Next shape (S4 engine mini-wave
+// item 1), differing in exactly one respect: it honors an explicitly-0
+// startPage instead of unconditionally coercing 0 to 1
+// (connsdk.PageNumberPaginator.Start() does `p.page = p.StartPage; if
+// p.page == 0 { p.page = 1 }`, which cannot distinguish "explicitly 0" from
+// "the Go zero value because it was never set" — exactly the ambiguity a
+// pointer-typed PaginationSpec.StartPage now resolves one layer up).
+// connsdk itself is intentionally not modified (out of scope; every other
+// connsdk.PageNumberPaginator caller, all legacy Go connectors, keeps its
+// existing 1-coercion behavior unchanged).
+type pageNumberPaginator struct {
+	pageParam string
+	sizeParam string
+	startPage int
+	pageSize  int
+	page      int
+}
+
+func (p *pageNumberPaginator) Start() *connsdk.NextPage {
+	p.page = p.startPage
+	return &connsdk.NextPage{Query: pageNumberQuery(p.pageParam, p.page, p.sizeParam, p.pageSize)}
+}
+
+func (p *pageNumberPaginator) Next(_ *connsdk.Response, recordCount int) *connsdk.NextPage {
+	if p.pageSize <= 0 || recordCount < p.pageSize {
+		return nil
+	}
+	p.page++
+	return &connsdk.NextPage{Query: pageNumberQuery(p.pageParam, p.page, p.sizeParam, p.pageSize)}
+}
+
+// pageNumberQuery mirrors connsdk.paginate.go's unexported pageQuery helper
+// exactly (duplicated here since that helper is unexported and connsdk is
+// read-only in this task).
+func pageNumberQuery(pageParam string, page int, sizeParam string, size int) url.Values {
+	q := url.Values{}
+	if pageParam != "" {
+		q.Set(pageParam, strconv.Itoa(page))
+	}
+	if sizeParam != "" && size > 0 {
+		q.Set(sizeParam, strconv.Itoa(size))
+	}
+	return q
+}
 
 // lastRecordCursor implements the stripe starting_after/has_more pagination
 // shape (today hand-written at internal/connectors/stripe/stripe.go:147):

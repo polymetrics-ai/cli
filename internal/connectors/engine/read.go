@@ -1,10 +1,13 @@
 package engine
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/url"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -64,6 +67,180 @@ func ReadWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 }
 
 func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error) error {
+	if stream.FanOut != nil {
+		return readFanOut(ctx, b, stream, req, rt, h, emit)
+	}
+	return readOneSequence(ctx, b, stream, req, rt, h, emit, fanoutContext{})
+}
+
+// fanoutContext carries the current fan-out id (if any) into a single
+// request/pagination/incremental sequence (S4 engine mini-wave item 2):
+// zero-valued (id == "") for an ordinary, non-fan-out stream read, so
+// readOneSequence's behavior is byte-for-byte identical to the pre-fan-out
+// implementation when a stream declares no fan_out block at all.
+type fanoutContext struct {
+	id         string
+	queryParam string // FanOutInto.QueryParam, "" when unused
+	stampField string // FanOutSpec.StampField, "" when unset
+}
+
+// readFanOut resolves the fan-out id list EXACTLY ONCE (config CSV or one
+// preliminary paginated request), then runs the ENTIRE declarative
+// request/pagination/incremental/filter/project/computed_fields/hook
+// sequence unchanged, once per id, via readOneSequence. Pagination,
+// incremental state, MaxPages, and rate-limiting are independent PER id
+// sub-sequence — the fan-out itself introduces no shared page-count/cursor
+// state across ids, mirroring how every quarantined connector's own
+// per-parent-id harvest loop behaves.
+func readFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error) error {
+	fo := stream.FanOut
+	ids, err := resolveFanOutIDs(ctx, b, stream, req, rt)
+	if err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+
+	for _, id := range ids {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		fc := fanoutContext{id: id, queryParam: fo.Into.QueryParam, stampField: fo.StampField}
+		if err := readOneSequence(ctx, b, stream, req, rt, h, emit, fc); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// resolveFanOutIDs resolves stream.FanOut.IDsFrom's id list, exactly one of
+// two mutually-exclusive forms: ConfigKey (a comma-separated config value,
+// trimmed and empty-entries-dropped) or Request (one preliminary GET,
+// paginated to exhaustion using the stream's OWN effective pagination spec,
+// extracting IDField off every record found at RecordsPath). Declaring
+// both, or neither, is a read-time error — mirroring
+// PaginationSpec.token_path/last_record_field's identical mutual-exclusivity
+// error shape (paginate.go's newCursorPaginator).
+func resolveFanOutIDs(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime) ([]string, error) {
+	fo := stream.FanOut
+	hasConfigKey := fo.IDsFrom.ConfigKey != ""
+	hasRequest := fo.IDsFrom.Request != nil
+
+	switch {
+	case hasConfigKey && hasRequest:
+		return nil, fmt.Errorf("fan_out: ids_from: config_key and request are mutually exclusive")
+	case hasConfigKey:
+		raw := req.Config.Config[fo.IDsFrom.ConfigKey]
+		return splitTrimmedCSV(raw), nil
+	case hasRequest:
+		return fanOutIDsFromRequest(ctx, b, stream, req, rt, fo.IDsFrom.Request)
+	default:
+		return nil, fmt.Errorf("fan_out: ids_from: exactly one of config_key or request is required")
+	}
+}
+
+// splitTrimmedCSV splits a comma-separated config value into a trimmed,
+// empty-entry-dropped id list — an empty/whitespace-only input yields a nil
+// (zero-length) slice, not an error: an empty configured id list (e.g. no
+// sub-resources configured yet) is a legitimate "emit nothing" outcome, not
+// a failure.
+func splitTrimmedCSV(raw string) []string {
+	if strings.TrimSpace(raw) == "" {
+		return nil
+	}
+	var out []string
+	for _, part := range strings.Split(raw, ",") {
+		if trimmed := strings.TrimSpace(part); trimmed != "" {
+			out = append(out, trimmed)
+		}
+	}
+	return out
+}
+
+// fanOutIDsFromRequest issues the preliminary id-listing GET declared by
+// spec, paginated to exhaustion via the CHILD stream's own effective
+// pagination spec (base or stream-level override — the id-listing request
+// has no pagination block of its own; it reuses the surrounding stream's,
+// exactly like the surrounding stream's own per-page requests do), and
+// extracts spec.IDField off every record found at spec.RecordsPath.
+func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, spec *FanOutIDsRequest) ([]string, error) {
+	pag := stream.Pagination
+	if pag == nil {
+		pag = b.HTTP.Pagination
+	}
+	pageSize := defaultPageSize
+	if pag != nil && pag.PageSize > 0 {
+		pageSize = pag.PageSize
+	}
+	var specForPaginator PaginationSpec
+	if pag != nil {
+		specForPaginator = *pag
+	}
+	paginator, err := newPaginator(specForPaginator, pageSize, spec.RecordsPath)
+	if err != nil {
+		return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
+	}
+	if setter, ok := paginator.(baseHostSetter); ok {
+		scheme, host := requesterOrigin(rt.Requester.BaseURL)
+		setter.setBaseOrigin(scheme, host)
+	}
+
+	var ids []string
+	page := paginator.Start()
+	for pageNum := 0; page != nil; pageNum++ {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+		if specForPaginator.MaxPages > 0 && pageNum >= specForPaginator.MaxPages {
+			break
+		}
+
+		var reqPath string
+		if page.URL != "" {
+			reqPath = page.URL
+		} else {
+			resolved, err := InterpolatePath(spec.Path, requestVars(req.Config, nil, ""))
+			if err != nil {
+				return nil, fmt.Errorf("fan_out: ids_from.request: resolve path: %w", err)
+			}
+			reqPath = resolved
+		}
+
+		resp, err := rt.Requester.Do(ctx, "GET", reqPath, page.Query, nil)
+		if err != nil {
+			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
+		}
+		records, err := connsdk.RecordsAt(resp.Body, spec.RecordsPath)
+		if err != nil {
+			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
+		}
+		for _, rec := range records {
+			v, present := rec[spec.IDField]
+			if !present || v == nil {
+				continue
+			}
+			ids = append(ids, stringify(v))
+		}
+
+		page = paginator.Next(resp, len(records))
+	}
+	if guard, ok := paginator.(interface{ Err() error }); ok {
+		if err := guard.Err(); err != nil {
+			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
+		}
+	}
+	return ids, nil
+}
+
+// readOneSequence runs ONE full declarative request/pagination/incremental/
+// filter/project/computed_fields/hook sequence for stream — the entire body
+// of the pre-fan-out readDeclarative, unchanged in every respect except for
+// two additions gated on fc.id != "" (S4 engine mini-wave item 2): (1) the
+// path/query Vars carry fc.id as "{{ fanout.id }}" and, when fc.queryParam is
+// set, that param is added to every page's query; (2) fc.stampField, when
+// set, is written onto every emitted record after projection/
+// computed_fields — implemented as an ENGINE-added computed field the
+// bundle author never declares twice, applied via the exact same
+// applyComputedFields code path as any other computed_fields entry.
+func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error, fc fanoutContext) error {
 	schema := b.Schemas[stream.Name]
 
 	pag := stream.Pagination
@@ -91,6 +268,9 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	if err != nil {
 		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
+	if fc.id != "" && fc.queryParam != "" {
+		baseQuery = cloneAndSetQuery(baseQuery, fc.queryParam, fc.id)
+	}
 
 	rateLimit := b.HTTP.RateLimit
 	rl := newRateLimiter(rateLimit, rt.Requester.Sleep)
@@ -101,6 +281,9 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 
 	maxPages := specForPaginator.MaxPages
+
+	pathVars := requestVars(req.Config, nil, "")
+	pathVars.FanoutID = fc.id
 
 	page := paginator.Start()
 	for pageNum := 0; page != nil; pageNum++ {
@@ -133,7 +316,7 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			// (urlencode-by-default) instead of being sent literally — a
 			// paginator-supplied absolute URL (page.URL, above) is already
 			// fully resolved and must NOT be re-interpolated.
-			resolved, err := InterpolatePath(stream.Path, requestVars(req.Config, nil, ""))
+			resolved, err := InterpolatePath(stream.Path, pathVars)
 			if err != nil {
 				return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: fmt.Errorf("resolve stream path: %w", err)}
 			}
@@ -147,7 +330,7 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Class: class, Hint: hint, Err: err}
 		}
 
-		rawRecords, err := connsdk.RecordsAt(resp.Body, recordsPathOf(stream.Records))
+		rawRecords, err := extractRecords(resp.Body, stream.Records)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
@@ -168,6 +351,9 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			projected := projectRecord(raw, schema, stream.Projection)
 			if err := applyComputedFields(projected, raw, req.Config.Config, stream.ComputedFields); err != nil {
 				return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+			}
+			if fc.id != "" && fc.stampField != "" {
+				projected[fc.stampField] = fc.id
 			}
 
 			out := connectors.Record(projected)
@@ -197,6 +383,20 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 
 	return nil
+}
+
+// cloneAndSetQuery returns a copy of base with key set to value — used to
+// add the fan-out id as a query param onto baseQuery without mutating a
+// url.Values a caller might otherwise still hold a reference to.
+func cloneAndSetQuery(base url.Values, key, value string) url.Values {
+	out := url.Values{}
+	for k, vs := range base {
+		for _, v := range vs {
+			out.Add(k, v)
+		}
+	}
+	out.Set(key, value)
+	return out
 }
 
 // findStream resolves name against b.Streams. An empty name is only valid
@@ -559,11 +759,30 @@ func formatParam(value, format string) (string, error) {
 	}
 }
 
-// parseLowerBoundTime parses value as either a bare Unix-seconds digits
-// string (the app-persisted cursor shape for a numeric cursor field, B1) or
-// an RFC3339 timestamp (the shape used when the lower bound comes from a
-// string cursor field or a config start_date). Digits-only values are tried
-// first since RFC3339 values are never all-digits.
+// dateOnlyLayout is the bare YYYY-MM-DD layout (S4 engine mini-wave item 5):
+// marketstack's real wire cursor value for its "date" param_format streams
+// (eod/splits/dividends) is this shape with no time/offset component at all
+// — matches Go's time.DateOnly constant value, spelled out here since this
+// package's minimum Go version predates that constant's introduction being
+// guaranteed available everywhere this repo builds.
+const dateOnlyLayout = "2006-01-02"
+
+// parseLowerBoundTime parses value as one of three shapes, tried in this
+// order so no shape masks another (a valid RFC3339 string is never
+// all-digits; a valid bare-date string is never RFC3339-parseable — RFC3339
+// always requires at least a "T" time-of-day separator):
+//  1. a bare Unix-seconds digits string (the app-persisted cursor shape for
+//     a numeric cursor field, B1);
+//  2. a full RFC3339 timestamp (a string cursor field, or a config
+//     start_date);
+//  3. a bare YYYY-MM-DD date-only string (S4 engine mini-wave item 5:
+//     marketstack's real wire cursor shape for its "date" param_format
+//     streams — no time/offset component at all), parsed as midnight UTC
+//     that date.
+//
+// This applies uniformly across every param_format that calls
+// parseLowerBoundTime (unix_seconds/date/github_date_range), not just
+// "date" — a date-only lower bound is equally valid input for any of them.
 func parseLowerBoundTime(value string) (time.Time, error) {
 	if isAllDigits(value) {
 		secs, err := strconv.ParseInt(value, 10, 64)
@@ -572,11 +791,13 @@ func parseLowerBoundTime(value string) (time.Time, error) {
 		}
 		return time.Unix(secs, 0).UTC(), nil
 	}
-	t, err := time.Parse(time.RFC3339, value)
-	if err != nil {
-		return time.Time{}, fmt.Errorf("invalid RFC3339 value %q: %w", value, err)
+	if t, err := time.Parse(time.RFC3339, value); err == nil {
+		return t, nil
 	}
-	return t, nil
+	if t, err := time.Parse(dateOnlyLayout, value); err == nil {
+		return t.UTC(), nil
+	}
+	return time.Time{}, fmt.Errorf("invalid RFC3339 or date-only (YYYY-MM-DD) value %q", value)
 }
 
 // isAllDigits reports whether s is non-empty and consists only of ASCII
@@ -604,6 +825,113 @@ func isAllDigits(s string) bool {
 // empty path (equivalent to ".") for streams that only set single_object.
 func recordsPathOf(spec RecordsSpec) string {
 	return spec.Path
+}
+
+// extractRecords extracts records from a page body per spec: connsdk's
+// ordinary array/single-object extraction (RecordsAt), or — when
+// spec.KeyedObject is set (S4 engine mini-wave item 3: appfigures/
+// alpha-vantage/exchange-rates-shaped APIs whose list endpoint returns a
+// JSON OBJECT keyed by an arbitrary id rather than an array) — the
+// keyed-object flatten (recordsAtKeyed) instead.
+func extractRecords(body []byte, spec RecordsSpec) ([]connsdk.Record, error) {
+	if spec.KeyedObject {
+		return recordsAtKeyed(body, recordsPathOf(spec), spec.KeyField)
+	}
+	return connsdk.RecordsAt(body, recordsPathOf(spec))
+}
+
+// recordsAtKeyed selects the JSON object found at path in body and explodes
+// EACH VALUE into its own connsdk.Record — {"111":{...},"222":{...}} becomes
+// 2 records — instead of connsdk.RecordsAt's ordinary behavior of returning
+// a bare object as ONE record. A value that does not itself decode as a JSON
+// object (a scalar, array, or null) is silently skipped, mirroring
+// RecordsAt's own tolerance for non-object array elements. When keyField is
+// non-empty, the source map key is stamped onto that field of the record
+// BEFORE it is returned, so it participates in ordinary schema projection/
+// computed_fields like any other raw field. Records are emitted in
+// ascending sorted-key order for deterministic output — Go map iteration
+// order is randomized, and parity/test stability requires a fixed order.
+//
+// path selects the object using the SAME dotted-path convention
+// connsdk.RecordsAt uses ("" or "." selects the root); connsdk itself is not
+// modified (read-only in this task), so this is an engine-local
+// reimplementation of connsdk's decode+selectPath plumbing rather than an
+// exported connsdk addition.
+func recordsAtKeyed(body []byte, path, keyField string) ([]connsdk.Record, error) {
+	root, err := decodeJSONKeyed(body)
+	if err != nil {
+		return nil, err
+	}
+	node := selectPathKeyed(root, path)
+	obj, ok := node.(map[string]any)
+	if !ok {
+		if node == nil {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("engine: keyed_object: value at path %q is not a JSON object", path)
+	}
+
+	keys := make([]string, 0, len(obj))
+	for k := range obj {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	out := make([]connsdk.Record, 0, len(keys))
+	for _, k := range keys {
+		valObj, ok := obj[k].(map[string]any)
+		if !ok {
+			continue
+		}
+		rec := make(map[string]any, len(valObj)+1)
+		for f, v := range valObj {
+			rec[f] = v
+		}
+		if keyField != "" {
+			rec[keyField] = k
+		}
+		out = append(out, connsdk.Record(rec))
+	}
+	return out, nil
+}
+
+// decodeJSONKeyed decodes body into a generic value, preserving numbers as
+// json.Number — an engine-local duplicate of connsdk/extract.go's unexported
+// decodeJSON (connsdk is read-only in this task, and that helper is not
+// exported).
+func decodeJSONKeyed(body []byte) (any, error) {
+	dec := json.NewDecoder(bytes.NewReader(body))
+	dec.UseNumber()
+	var v any
+	if err := dec.Decode(&v); err != nil {
+		return nil, fmt.Errorf("engine: decode json: %w", err)
+	}
+	return v, nil
+}
+
+// selectPathKeyed walks a decoded JSON value along a dotted path — an
+// engine-local duplicate of connsdk/extract.go's unexported selectPath
+// (same read-only-connsdk rationale as decodeJSONKeyed).
+func selectPathKeyed(root any, path string) any {
+	path = strings.TrimSpace(path)
+	if path == "" || path == "." {
+		return root
+	}
+	cur := root
+	for _, seg := range strings.Split(path, ".") {
+		if seg == "" {
+			continue
+		}
+		obj, ok := cur.(map[string]any)
+		if !ok {
+			return nil
+		}
+		cur, ok = obj[seg]
+		if !ok {
+			return nil
+		}
+	}
+	return cur
 }
 
 // passesFilter applies filter.field_absent / filter.field_equals to a raw

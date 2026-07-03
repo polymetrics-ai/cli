@@ -133,6 +133,17 @@ type AuthSpec struct {
 	ClientID     string `json:"client_id,omitempty"`
 	ClientSecret string `json:"client_secret,omitempty"`
 	Scopes       string `json:"scopes,omitempty"`
+	// ExtraParams (S4 engine mini-wave item 4: auth0's audience form param,
+	// box's box_subject_type/box_subject_id) are additional templated
+	// key->value form params sent on every oauth2_client_credentials token
+	// request, alongside grant_type/client_id/client_secret/scope. Each
+	// value is resolved via ordinary Interpolate against the same Vars as
+	// every other AuthSpec field — a hard error on an unresolved
+	// config/secrets key, exactly like ClientID/ClientSecret (never silently
+	// dropped). connsdk.OAuth2ClientCredentials already exposes an
+	// ExtraParams url.Values field; this is the engine-side dialect that
+	// populates it (connsdk itself needed no change).
+	ExtraParams map[string]string `json:"extra_params,omitempty"`
 
 	Hook string `json:"hook,omitempty"` // custom: hook name resolved via hooks registry
 	When string `json:"when,omitempty"` // condition over config values
@@ -146,7 +157,16 @@ type PaginationSpec struct {
 
 	SizeParam string `json:"size_param,omitempty"`
 	PageParam string `json:"page_param,omitempty"`
-	StartPage int    `json:"start_page,omitempty"`
+	// StartPage is a pointer (S4 engine mini-wave item 1) so an EXPLICIT
+	// "start_page": 0 (algolia/auth0/beamer/braze/clickup-api/concord/
+	// customerly/dolibarr/harness/hubplanner-shaped genuinely 0-indexed
+	// APIs) is distinguishable from an absent/omitted start_page — a plain
+	// Go int cannot represent that distinction, since JSON-unmarshaling a
+	// missing key produces the exact same zero value as an explicit 0.
+	// nil means "not declared", defaulting to page 1 (newPaginator); a
+	// non-nil pointer to 0 must be honored as the literal first page
+	// number, never coerced.
+	StartPage *int `json:"start_page,omitempty"`
 
 	LimitParam  string `json:"limit_param,omitempty"`
 	OffsetParam string `json:"offset_param,omitempty"`
@@ -194,6 +214,61 @@ type StreamSpec struct {
 	Projection     string                `json:"projection,omitempty"` // "schema" (default) | "passthrough"
 	SchemaRef      string                `json:"schema"`
 	Conformance    *ConformanceMarker    `json:"conformance,omitempty"`
+	FanOut         *FanOutSpec           `json:"fan_out,omitempty"`
+}
+
+// FanOutSpec declares a sub-resource fan-out read (S4 engine mini-wave item
+// 2: appfollow/bigmailer/breezy-hr/campayn/eventzilla/everhour/finnworlds/
+// k6-cloud/metricool/cisco-meraki/configcat and 15+ quarantined/partial
+// connectors whose real read is "list N parent ids, then repeat the WHOLE
+// per-stream request/pagination/incremental sequence once per id, stamping
+// the parent id onto every child record"). IDsFrom resolves the id list
+// exactly ONCE per Read() call (before the first sub-sequence starts); Into
+// decides how each resolved id is threaded into every request of its
+// sub-sequence; StampField, when set, writes the id onto every emitted
+// record of that sub-sequence (post-projection, alongside computed_fields).
+type FanOutSpec struct {
+	IDsFrom    FanOutIDsFrom `json:"ids_from"`
+	Into       FanOutInto    `json:"into"`
+	StampField string        `json:"stamp_field,omitempty"`
+}
+
+// FanOutIDsFrom is EXACTLY ONE of ConfigKey (a config value holding a
+// comma-separated id list, e.g. appfollow's app_collection_ids) or Request (a
+// preliminary GET, fully paginated to exhaustion using the stream's OWN base
+// pagination spec, whose extracted records yield one id per record at
+// IDField) — declaring both, or neither, is a read-time error (newFanOutIDs),
+// mirroring cursor pagination's token_path/last_record_field mutual
+// exclusivity (bundle.go's own PaginationSpec doc comment).
+type FanOutIDsFrom struct {
+	ConfigKey string            `json:"config_key,omitempty"`
+	Request   *FanOutIDsRequest `json:"request,omitempty"`
+}
+
+// FanOutIDsRequest is the preliminary "list every parent id" request: Path is
+// interpolated exactly like a stream's own Path (config/secrets templates,
+// urlencoded-by-default path segments); RecordsPath is the dotted path
+// (RecordsSpec.Path semantics) where the id records live in each page's
+// body; IDField names the field on each extracted record holding the id
+// value. Paginated with the stream's own effective pagination spec (base or
+// stream-level override) — a fan-out id-listing request is not itself
+// declared with its own pagination block; it reuses the child stream's.
+type FanOutIDsRequest struct {
+	Path        string `json:"path"`
+	RecordsPath string `json:"records_path"`
+	IDField     string `json:"id_field"`
+}
+
+// FanOutInto is EXACTLY ONE of QueryParam (the resolved id is added as a
+// query parameter on every request of that id's sub-sequence — appfollow's
+// apps_id=<id>) or PathVar (the resolved id becomes referenceable in the
+// stream's own Path template as "{{ fanout.id }}" — declaring PathVar does
+// NOT change what string is substituted for the literal name "fanout.id";
+// PathVar exists so a future dialect could support multiple named fan-out
+// vars, but today only "{{ fanout.id }}" is ever resolved).
+type FanOutInto struct {
+	QueryParam string `json:"query_param,omitempty"`
+	PathVar    string `json:"path_var,omitempty"`
 }
 
 // QueryParam is one stream.Query entry (gap-loop cycle-1 item 3,
@@ -254,6 +329,23 @@ type RecordsSpec struct {
 	Path         string      `json:"path"` // dotted path; "." = body root
 	SingleObject bool        `json:"single_object,omitempty"`
 	Filter       *FilterSpec `json:"filter,omitempty"`
+
+	// KeyedObject (S4 engine mini-wave item 3: appfigures/alpha-vantage/
+	// exchange-rates-shaped APIs) treats the JSON OBJECT found at Path as a
+	// map of arbitrary-id -> record, exploding EACH VALUE into its own
+	// record — e.g. {"111": {...}, "222": {...}} becomes 2 records — instead
+	// of the ordinary RecordsAt behavior of treating a bare object as ONE
+	// record (the whole object passed through verbatim). Mutually exclusive
+	// with SingleObject in practice (SingleObject makes no sense once the
+	// object's VALUES are the records, not the object itself), though the
+	// loader does not enforce that in wave0 (mirrors FilterSpec's own
+	// documented-but-unenforced mutual exclusivity).
+	KeyedObject bool `json:"keyed_object,omitempty"`
+	// KeyField, when set, stamps the source object's key (map key, e.g.
+	// "111") onto that field of the exploded record BEFORE projection — so
+	// it participates in schema projection/computed_fields exactly like any
+	// other raw field. Ignored when KeyedObject is false.
+	KeyField string `json:"key_field,omitempty"`
 }
 
 // FilterSpec is one of field_absent / field_equals (mutually exclusive by

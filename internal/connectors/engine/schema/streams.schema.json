@@ -31,6 +31,7 @@
               "client_id": { "type": "string" },
               "client_secret": { "type": "string" },
               "scopes": { "type": "string" },
+              "extra_params": { "type": "object" },
               "hook": { "type": "string" },
               "when": { "type": "string" }
             }
@@ -105,6 +106,8 @@
             "properties": {
               "path": { "type": "string" },
               "single_object": { "type": "boolean" },
+              "keyed_object": { "type": "boolean" },
+              "key_field": { "type": "string" },
               "filter": {
                 "type": "object",
                 "additionalProperties": false,
@@ -155,6 +158,39 @@
             "properties": {
               "skip_dynamic": { "type": "boolean" },
               "reason": { "type": "string" }
+            }
+          },
+          "fan_out": {
+            "type": "object",
+            "required": ["ids_from", "into"],
+            "additionalProperties": false,
+            "properties": {
+              "ids_from": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "config_key": { "type": "string" },
+                  "request": {
+                    "type": "object",
+                    "required": ["path", "records_path", "id_field"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "path": { "type": "string" },
+                      "records_path": { "type": "string" },
+                      "id_field": { "type": "string" }
+                    }
+                  }
+                }
+              },
+              "into": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "query_param": { "type": "string" },
+                  "path_var": { "type": "string" }
+                }
+              },
+              "stamp_field": { "type": "string" }
             }
           }
         }

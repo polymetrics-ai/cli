@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -30,6 +31,18 @@ type Vars struct {
 	// at its zero value "", so "{{ incremental.lower_bound }}" resolves empty
 	// (never a hard error) anywhere outside stream.Query resolution too.
 	IncrementalLowerBound string
+
+	// FanoutID is the current sub-resource fan-out id (S4 engine mini-wave
+	// item 2) — "" outside a fan_out-driven sequence, or on the (non-fan-out)
+	// zero-id sub-sequence readOneSequence always runs for an ordinary
+	// stream. Populated only by readOneSequence's path-resolution Vars
+	// (read.go); unlike IncrementalLowerBound, an empty FanoutID is a HARD
+	// ERROR when referenced (never absent-tolerant), since "{{ fanout.id }}"
+	// only ever appears in a stream.Path that fan_out.into.path_var declares
+	// — a stream path resolving with a missing fan-out id would silently
+	// request the wrong (literal "{{ fanout.id }}"-shaped, or worse,
+	// parent-less) resource instead of failing loudly.
+	FanoutID string
 }
 
 // templatePattern matches a single {{ ... }} expression, capturing its inner
@@ -222,8 +235,30 @@ func resolveRefValue(ref string, vars Vars) (any, error) {
 		return resolveRecordPathValue(vars.Record, segs[1:])
 	case "incremental":
 		return resolveIncrementalRef(key, vars)
+	case "fanout":
+		return resolveFanoutRef(key, vars)
 	default:
 		return nil, fmt.Errorf("interpolate: unknown namespace %q in reference %q", namespace, ref)
+	}
+}
+
+// resolveFanoutRef resolves a "fanout.<key>" reference (S4 engine mini-wave
+// item 2). Today the only supported key is "id": vars.FanoutID. Unlike
+// resolveIncrementalRef's "lower_bound" (deliberately absent-tolerant so it
+// composes with omit_when_absent/default), an empty FanoutID is a HARD
+// ERROR — "{{ fanout.id }}" only ever appears in a stream.Path a fan_out
+// block itself declares, so a missing id here means readOneSequence was
+// invoked incorrectly (a real bug), not a legitimate "value not configured"
+// case a bundle author needs to tolerate.
+func resolveFanoutRef(key string, vars Vars) (any, error) {
+	switch key {
+	case "id":
+		if vars.FanoutID == "" {
+			return nil, &unresolvedKeyError{Namespace: "fanout", Key: key}
+		}
+		return vars.FanoutID, nil
+	default:
+		return nil, fmt.Errorf("interpolate: unknown fanout reference %q", key)
 	}
 }
 
@@ -625,6 +660,13 @@ var knownIncrementalKeys = map[string]bool{
 	"lower_bound": true,
 }
 
+// knownFanoutKeys is the set of "fanout.<key>" references ResolveCheck
+// accepts statically (S4 engine mini-wave item 2) — today exactly one,
+// mirroring resolveFanoutRef's runtime support.
+var knownFanoutKeys = map[string]bool{
+	"id": true,
+}
+
 // checkNamespaceRef statically validates a single dotted reference (e.g.
 // "config.repository", "incremental.lower_bound", "cursor") against specKeys,
 // shared by ResolveCheck (plain interpolation templates) and
@@ -634,9 +676,10 @@ var knownIncrementalKeys = map[string]bool{
 // are accepted without a specKeys check (not spec-declared surfaces).
 // "incremental.<key>" is checked against knownIncrementalKeys instead of
 // specKeys (it is an engine-provided pseudo-namespace, not a spec.json
-// property). "config.<key>" must be a declared spec.json property. Any other
-// namespace, or a bare single-segment reference other than "cursor", is a
-// validate-time error.
+// property), and "fanout.<key>" (S4 engine mini-wave item 2) is likewise
+// checked against knownFanoutKeys. "config.<key>" must be a declared
+// spec.json property. Any other namespace, or a bare single-segment
+// reference other than "cursor", is a validate-time error.
 func checkNamespaceRef(ref string, specKeys map[string]bool) error {
 	if ref == "cursor" {
 		return nil
@@ -656,6 +699,10 @@ func checkNamespaceRef(ref string, specKeys map[string]bool) error {
 	case "incremental":
 		if !knownIncrementalKeys[key] {
 			return fmt.Errorf("resolve check: unknown incremental key %q referenced as %q", key, ref)
+		}
+	case "fanout":
+		if !knownFanoutKeys[key] {
+			return fmt.Errorf("resolve check: unknown fanout key %q referenced as %q", key, ref)
 		}
 	default:
 		return fmt.Errorf("resolve check: unknown namespace %q in reference %q", namespace, ref)
@@ -722,6 +769,20 @@ func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
 		}
 		if err := ResolveCheck(f.tmpl, specKeys); err != nil {
 			return fmt.Errorf("auth spec (mode %q) field %q: %w", spec.Mode, f.name, err)
+		}
+	}
+	// extra_params (S4 engine mini-wave item 4): every value gets the same
+	// static ResolveCheck coverage as token_url/client_id/client_secret/
+	// scopes above. Sorted key iteration keeps the error message
+	// deterministic across runs (map iteration order is randomized).
+	extraKeys := make([]string, 0, len(spec.ExtraParams))
+	for k := range spec.ExtraParams {
+		extraKeys = append(extraKeys, k)
+	}
+	sort.Strings(extraKeys)
+	for _, k := range extraKeys {
+		if err := ResolveCheck(spec.ExtraParams[k], specKeys); err != nil {
+			return fmt.Errorf("auth spec (mode %q) field %q: %w", spec.Mode, "extra_params."+k, err)
 		}
 	}
 	if spec.When != "" {

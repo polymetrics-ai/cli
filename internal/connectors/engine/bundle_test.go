@@ -881,3 +881,266 @@ func TestBundleLoadStillAcceptsFreeFormMapKeys(t *testing.T) {
 		t.Fatalf("Streams = %+v, want 1", b.Streams)
 	}
 }
+
+// TestLoadStreamsPageNumberStartPageZeroRoundTrips (S4 engine mini-wave item
+// 1): streams.json's stream-level "start_page": 0 must decode into a non-nil
+// *int pointing at 0 — not a nil pointer (which newPaginator/legacy would
+// read as "absent, default to 1"). This is what makes an explicit 0 start
+// distinguishable from an omitted start_page at every layer between the JSON
+// file and the paginator.
+func TestLoadStreamsPageNumberStartPageZeroRoundTrips(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/ping" }
+		},
+		"streams": [
+			{
+				"name": "widgets",
+				"path": "/widgets",
+				"pagination": { "type": "page_number", "page_param": "page", "start_page": 0, "page_size": 10 },
+				"records": { "path": "data" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if len(b.Streams) != 1 {
+		t.Fatalf("Streams = %+v, want 1", b.Streams)
+	}
+	pag := b.Streams[0].Pagination
+	if pag == nil {
+		t.Fatalf("Streams[0].Pagination is nil, want a decoded pagination block")
+	}
+	if pag.StartPage == nil {
+		t.Fatalf("Streams[0].Pagination.StartPage is nil, want a pointer to 0 (explicit start_page:0 must not decode as absent)")
+	}
+	if *pag.StartPage != 0 {
+		t.Fatalf("*Streams[0].Pagination.StartPage = %d, want 0", *pag.StartPage)
+	}
+}
+
+// TestLoadStreamsPageNumberStartPageAbsentIsNilPointer pins the companion
+// case: a pagination block that never mentions start_page at all must decode
+// to a nil pointer (not a pointer to the JSON zero value), preserving the
+// "absent -> default to 1" behavior for every bundle that predates this
+// change.
+func TestLoadStreamsPageNumberStartPageAbsentIsNilPointer(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/ping" }
+		},
+		"streams": [
+			{
+				"name": "widgets",
+				"path": "/widgets",
+				"pagination": { "type": "page_number", "page_param": "page", "page_size": 10 },
+				"records": { "path": "data" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Streams[0].Pagination.StartPage != nil {
+		t.Fatalf("Streams[0].Pagination.StartPage = %v, want nil (start_page never declared)", *b.Streams[0].Pagination.StartPage)
+	}
+}
+
+// --- S4 engine mini-wave item 2: sub-resource fan-out -----------------------
+
+// TestLoadStreamsFanOutConfigKeyRoundTrips pins the config_key + query_param
+// shape (appfollow's app_collection_ids -> apps_id).
+func TestLoadStreamsFanOutConfigKeyRoundTrips(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/ping" }
+		},
+		"streams": [
+			{
+				"name": "app_lists",
+				"path": "/account/apps/app",
+				"records": { "path": "data" },
+				"schema": "schemas/widgets.json",
+				"fan_out": {
+					"ids_from": { "config_key": "app_collection_ids" },
+					"into": { "query_param": "apps_id" },
+					"stamp_field": "app_id"
+				}
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	fo := b.Streams[0].FanOut
+	if fo == nil {
+		t.Fatalf("Streams[0].FanOut is nil, want a decoded fan_out block")
+	}
+	if fo.IDsFrom.ConfigKey != "app_collection_ids" {
+		t.Fatalf("FanOut.IDsFrom.ConfigKey = %q, want %q", fo.IDsFrom.ConfigKey, "app_collection_ids")
+	}
+	if fo.IDsFrom.Request != nil {
+		t.Fatalf("FanOut.IDsFrom.Request = %+v, want nil (config_key form)", fo.IDsFrom.Request)
+	}
+	if fo.Into.QueryParam != "apps_id" {
+		t.Fatalf("FanOut.Into.QueryParam = %q, want %q", fo.Into.QueryParam, "apps_id")
+	}
+	if fo.StampField != "app_id" {
+		t.Fatalf("FanOut.StampField = %q, want %q", fo.StampField, "app_id")
+	}
+}
+
+// TestLoadStreamsFanOutRequestFormRoundTrips pins the preliminary-request +
+// path_var shape.
+func TestLoadStreamsFanOutRequestFormRoundTrips(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/ping" }
+		},
+		"streams": [
+			{
+				"name": "tasks",
+				"path": "/projects/{{ fanout.id }}/tasks",
+				"records": { "path": "data" },
+				"schema": "schemas/widgets.json",
+				"fan_out": {
+					"ids_from": { "request": { "path": "/projects", "records_path": "data", "id_field": "id" } },
+					"into": { "path_var": "parent_id" },
+					"stamp_field": "project_id"
+				}
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	fo := b.Streams[0].FanOut
+	if fo == nil {
+		t.Fatalf("Streams[0].FanOut is nil, want a decoded fan_out block")
+	}
+	if fo.IDsFrom.ConfigKey != "" {
+		t.Fatalf("FanOut.IDsFrom.ConfigKey = %q, want empty (request form)", fo.IDsFrom.ConfigKey)
+	}
+	if fo.IDsFrom.Request == nil {
+		t.Fatalf("FanOut.IDsFrom.Request is nil, want a decoded request block")
+	}
+	if fo.IDsFrom.Request.Path != "/projects" || fo.IDsFrom.Request.RecordsPath != "data" || fo.IDsFrom.Request.IDField != "id" {
+		t.Fatalf("FanOut.IDsFrom.Request = %+v, want Path=/projects RecordsPath=data IDField=id", fo.IDsFrom.Request)
+	}
+	if fo.Into.PathVar != "parent_id" {
+		t.Fatalf("FanOut.Into.PathVar = %q, want %q", fo.Into.PathVar, "parent_id")
+	}
+}
+
+// TestLoadStreamsWithoutFanOutIsNilPointer pins the zero-impact case: an
+// ordinary stream declaring no fan_out block at all decodes to a nil
+// *FanOutSpec, not a zero-valued non-nil struct.
+func TestLoadStreamsWithoutFanOutIsNilPointer(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Streams[0].FanOut != nil {
+		t.Fatalf("Streams[0].FanOut = %+v, want nil", b.Streams[0].FanOut)
+	}
+}
+
+// TestLoadStreamsFanOutRejectsUnknownKey proves the meta-schema's
+// additionalProperties:false on fan_out/ids_from/into rejects a typo'd key
+// rather than silently dropping it (the exact hardening-ledger.md class of
+// defect this repo's meta-schemas are disciplined about).
+func TestLoadStreamsFanOutRejectsUnknownKey(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/ping" }
+		},
+		"streams": [
+			{
+				"name": "app_lists",
+				"path": "/account/apps/app",
+				"records": { "path": "data" },
+				"schema": "schemas/widgets.json",
+				"fan_out": {
+					"ids_from": { "config_key": "app_collection_ids" },
+					"into": { "query_param": "apps_id" },
+					"stamp_field": "app_id",
+					"unexpected_key": true
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected an error for unknown fan_out key %q, got nil", "unexpected_key")
+	}
+}
+
+// --- S4 engine mini-wave item 3: keyed-object flatten -----------------------
+
+// TestLoadStreamsRecordsKeyedObjectRoundTrips proves records.keyed_object and
+// records.key_field decode onto RecordsSpec.
+func TestLoadStreamsRecordsKeyedObjectRoundTrips(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/ping" }
+		},
+		"streams": [
+			{
+				"name": "widgets",
+				"path": "/widgets",
+				"records": { "path": "products", "keyed_object": true, "key_field": "product_id" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	rec := b.Streams[0].Records
+	if !rec.KeyedObject {
+		t.Fatalf("Records.KeyedObject = false, want true")
+	}
+	if rec.KeyField != "product_id" {
+		t.Fatalf("Records.KeyField = %q, want %q", rec.KeyField, "product_id")
+	}
+}
+
+// TestLoadStreamsRecordsWithoutKeyedObjectDefaultsFalse pins the zero-impact
+// case: a records block that never mentions keyed_object decodes to false.
+func TestLoadStreamsRecordsWithoutKeyedObjectDefaultsFalse(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Streams[0].Records.KeyedObject {
+		t.Fatalf("Records.KeyedObject = true, want false (never declared)")
+	}
+}

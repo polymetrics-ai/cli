@@ -1,0 +1,9 @@
+{
+  "api": "Keyed Object Valid API v1",
+  "docs": "https://example.invalid/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "products endpoint only",
+  "endpoints": [
+    { "method": "GET", "path": "/products/mine", "covered_by": { "stream": "products" } }
+  ]
+}

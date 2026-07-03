@@ -378,3 +378,123 @@ func contains(s, substr string) bool {
 		return false
 	})()
 }
+
+// --- S4 engine mini-wave item 4: OAuth2 extra params -------------------------
+
+// TestBuildOAuth2ClientCredentialsExtraParamsWiredIntoTokenRequest proves
+// AuthSpec.ExtraParams flows into connsdk.OAuth2ClientCredentials.ExtraParams
+// (auth0's audience form param — connsdk already has an ExtraParams field;
+// the gap was purely that AuthSpec had nothing to populate it from).
+func TestBuildOAuth2ClientCredentialsExtraParamsWiredIntoTokenRequest(t *testing.T) {
+	spec := AuthSpec{
+		Mode:         "oauth2_client_credentials",
+		TokenURL:     "{{ config.token_url }}",
+		ClientID:     "{{ config.client_id }}",
+		ClientSecret: "{{ secrets.client_secret }}",
+		ExtraParams:  map[string]string{"audience": "{{ config.audience }}"},
+	}
+	vars := authVars(cfgWith(
+		map[string]string{"token_url": "https://example.invalid/token", "client_id": "cid", "audience": "https://api.example.com/"},
+		map[string]string{"client_secret": "csecret"},
+	))
+
+	auth, err := buildOAuth2ClientCredentials(spec, vars)
+	if err != nil {
+		t.Fatalf("buildOAuth2ClientCredentials() error = %v", err)
+	}
+	oauth2, ok := auth.(*connsdk.OAuth2ClientCredentials)
+	if !ok {
+		t.Fatalf("buildOAuth2ClientCredentials() returned %T, want *connsdk.OAuth2ClientCredentials", auth)
+	}
+	if got := oauth2.ExtraParams.Get("audience"); got != "https://api.example.com/" {
+		t.Fatalf("ExtraParams[audience] = %q, want %q", got, "https://api.example.com/")
+	}
+}
+
+// TestBuildOAuth2ClientCredentialsExtraParamsTemplatedFromConfig proves an
+// extra_params value can be a DERIVED template (not just a bare config
+// reference), e.g. auth0's own audience-derived-from-base_url convention.
+func TestBuildOAuth2ClientCredentialsExtraParamsTemplatedFromConfig(t *testing.T) {
+	spec := AuthSpec{
+		Mode:         "oauth2_client_credentials",
+		TokenURL:     "{{ config.token_url }}",
+		ClientID:     "{{ config.client_id }}",
+		ClientSecret: "{{ secrets.client_secret }}",
+		ExtraParams:  map[string]string{"audience": "{{ config.base_url }}/api/v2/"},
+	}
+	vars := authVars(cfgWith(
+		map[string]string{"token_url": "https://example.invalid/token", "client_id": "cid", "base_url": "https://acme.auth0.com"},
+		map[string]string{"client_secret": "csecret"},
+	))
+
+	auth, err := buildOAuth2ClientCredentials(spec, vars)
+	if err != nil {
+		t.Fatalf("buildOAuth2ClientCredentials() error = %v", err)
+	}
+	oauth2 := auth.(*connsdk.OAuth2ClientCredentials)
+	if got := oauth2.ExtraParams.Get("audience"); got != "https://acme.auth0.com/api/v2/" {
+		t.Fatalf("ExtraParams[audience] = %q, want %q", got, "https://acme.auth0.com/api/v2/")
+	}
+}
+
+// TestBuildOAuth2ClientCredentialsExtraParamsUnresolvedKeyErrors proves an
+// extra_params value referencing an undeclared/absent config key hard-errors
+// exactly like ClientID/ClientSecret do — never silently dropped.
+func TestBuildOAuth2ClientCredentialsExtraParamsUnresolvedKeyErrors(t *testing.T) {
+	spec := AuthSpec{
+		Mode:         "oauth2_client_credentials",
+		TokenURL:     "{{ config.token_url }}",
+		ClientID:     "{{ config.client_id }}",
+		ClientSecret: "{{ secrets.client_secret }}",
+		ExtraParams:  map[string]string{"audience": "{{ config.missing_key }}"},
+	}
+	vars := authVars(cfgWith(
+		map[string]string{"token_url": "https://example.invalid/token", "client_id": "cid"},
+		map[string]string{"client_secret": "csecret"},
+	))
+
+	_, err := buildOAuth2ClientCredentials(spec, vars)
+	if err == nil {
+		t.Fatalf("buildOAuth2ClientCredentials() error = nil, want error for unresolved extra_params key")
+	}
+}
+
+// TestReadOAuth2ClientCredentialsExtraParamsSentOnTokenRequest is the full
+// integration proof: a real token-exchange round trip against an httptest
+// token endpoint, asserting the form-encoded request body carries the
+// resolved audience value.
+func TestReadOAuth2ClientCredentialsExtraParamsSentOnTokenRequest(t *testing.T) {
+	var gotAudience string
+	tokenSrv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		gotAudience = r.PostForm.Get("audience")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"access_token":"tok-abc","token_type":"bearer","expires_in":3600}`))
+	}))
+	defer tokenSrv.Close()
+
+	spec := AuthSpec{
+		Mode:         "oauth2_client_credentials",
+		TokenURL:     "{{ config.token_url }}",
+		ClientID:     "{{ config.client_id }}",
+		ClientSecret: "{{ secrets.client_secret }}",
+		ExtraParams:  map[string]string{"audience": "{{ config.audience }}"},
+	}
+	cfg := cfgWith(
+		map[string]string{"token_url": tokenSrv.URL, "client_id": "cid", "audience": "https://api.example.com/"},
+		map[string]string{"client_secret": "csecret"},
+	)
+
+	auth, err := selectAuth(context.Background(), cfg, []AuthSpec{spec}, nil)
+	if err != nil {
+		t.Fatalf("selectAuth() error = %v", err)
+	}
+	req, _ := http.NewRequest(http.MethodGet, "https://api.example.com/x", nil)
+	applyToRequest(t, auth, req)
+
+	if gotAudience != "https://api.example.com/" {
+		t.Fatalf("token request audience form param = %q, want %q", gotAudience, "https://api.example.com/")
+	}
+}

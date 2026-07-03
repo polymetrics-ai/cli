@@ -596,6 +596,30 @@ func TestResolveCheckAcceptsIncrementalLowerBoundReference(t *testing.T) {
 	}
 }
 
+// TestResolveCheckAcceptsFanoutIDReference proves ResolveCheck statically
+// accepts "{{ fanout.id }}" (S4 engine mini-wave item 2): a stream.Path
+// referencing it (the fan_out.into.path_var shape) must pass static
+// validation exactly like incremental.lower_bound does — it is an
+// engine-provided pseudo-namespace, not a spec.json property, so it is
+// checked against a known-key set rather than specKeys. An unknown key under
+// the "fanout" namespace (a typo, e.g. "fanout.idx") is still a
+// validate-time error naming the offending reference.
+func TestResolveCheckAcceptsFanoutIDReference(t *testing.T) {
+	specKeys := map[string]bool{"base_url": true}
+
+	if err := ResolveCheck("/projects/{{ fanout.id }}/tasks", specKeys); err != nil {
+		t.Fatalf("ResolveCheck: unexpected error for fanout.id reference: %v", err)
+	}
+
+	err := ResolveCheck("{{ fanout.idx }}", specKeys)
+	if err == nil {
+		t.Fatalf("ResolveCheck: expected validation finding for unknown fanout key (typo)")
+	}
+	if !strings.Contains(err.Error(), "idx") {
+		t.Fatalf("error %q does not name the offending key", err.Error())
+	}
+}
+
 // --- ResolveCheckWhen: full when-grammar (==, in, truthiness) static parsing
 // (S3 engine mini-wave item 2, wave1-pilot SUMMARY.md carried queue /
 // REVIEW-A.md re-review R1/R3): ResolveCheck's bare namespace.key-only
@@ -784,6 +808,38 @@ func TestResolveCheckAuthFieldsValidatesAllTemplatedFields(t *testing.T) {
 		err := ResolveCheckAuthSpec(spec, specKeys)
 		if err == nil {
 			t.Fatalf("expected validation finding for unknown spec key in when template")
+		}
+	})
+
+	// S4 engine mini-wave item 4: extra_params values get the SAME static
+	// ResolveCheck coverage as token_url/client_id/client_secret/scopes.
+	t.Run("oauth2_client_credentials: extra_params values checked", func(t *testing.T) {
+		spec := AuthSpec{
+			Mode:         "oauth2_client_credentials",
+			TokenURL:     "{{ config.base_url }}",
+			ClientID:     "{{ config.user }}",
+			ClientSecret: "{{ secrets.client_secret }}",
+			ExtraParams:  map[string]string{"audience": "{{ config.audience_typo }}"},
+		}
+		err := ResolveCheckAuthSpec(spec, specKeys)
+		if err == nil {
+			t.Fatalf("expected validation finding for unknown spec key in extra_params value template")
+		}
+		if !strings.Contains(err.Error(), "audience_typo") {
+			t.Fatalf("error %q does not name the offending key", err.Error())
+		}
+	})
+
+	t.Run("oauth2_client_credentials: extra_params known keys pass", func(t *testing.T) {
+		spec := AuthSpec{
+			Mode:         "oauth2_client_credentials",
+			TokenURL:     "{{ config.base_url }}",
+			ClientID:     "{{ config.user }}",
+			ClientSecret: "{{ secrets.client_secret }}",
+			ExtraParams:  map[string]string{"audience": "{{ config.base_url }}/api/v2/"},
+		}
+		if err := ResolveCheckAuthSpec(spec, specKeys); err != nil {
+			t.Fatalf("unexpected error: %v", err)
 		}
 	})
 }

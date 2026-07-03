@@ -337,6 +337,13 @@ func checkInterpolations(b engine.Bundle) []Finding {
 		for _, v := range s.ComputedFields {
 			check("streams.json", v)
 		}
+		// S4 engine mini-wave item 2: fan_out.ids_from.request.path is a
+		// request path template exactly like s.Path — it must get the same
+		// static ResolveCheck coverage (an undeclared spec key here would
+		// otherwise only fail the first time the stream is actually read).
+		if s.FanOut != nil && s.FanOut.IDsFrom.Request != nil {
+			check("streams.json", s.FanOut.IDsFrom.Request.Path)
+		}
 	}
 	for _, w := range b.Writes {
 		check("writes.json", w.Path)

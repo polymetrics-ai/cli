@@ -278,6 +278,34 @@ corner case is explicitly parity-tested (not just each candidate in isolation) t
 itself, not just that each mode individually works. Any dual/multi-candidate `auth` list must carry
 an equivalent both-present parity test asserting which candidate actually wins.
 
+**`oauth2_client_credentials` extra token-request form params — `auth[].extra_params`** (S4 engine
+mini-wave item 4: auth0's M2M client-credentials exchange always includes an `audience` form
+parameter alongside the standard `grant_type`/`client_id`/`client_secret`/`scope`; box's
+`box_subject_type`/`box_subject_id` token-scoping params are the same shape):
+
+```json
+{
+  "mode": "oauth2_client_credentials",
+  "token_url": "{{ config.base_url }}/oauth/token",
+  "client_id": "{{ config.client_id }}",
+  "client_secret": "{{ secrets.client_secret }}",
+  "extra_params": { "audience": "{{ config.base_url }}/api/v2/" }
+}
+```
+
+Each `extra_params` value is an ordinary `{{ }}` template resolved via `Interpolate` against the
+same Vars every other `AuthSpec` field uses (config/secrets) — an unresolved key HARD ERRORS exactly
+like `client_id`/`client_secret` do; this is deliberately NOT given `stream.Query`'s
+`omit_when_absent`/`default` tolerance, since a misconfigured audience/subject param should fail
+loudly rather than silently omit a value a real OAuth2 provider may require. `connsdk.
+OAuth2ClientCredentials` already exposed an `ExtraParams url.Values` field before this
+increment — the gap was purely that `AuthSpec` had nothing to populate it from;
+`buildOAuth2ClientCredentials` (engine/auth.go) now resolves `extra_params` and wires it through, no
+connsdk change needed. `ResolveCheckAuthSpec` validates every `extra_params` value template
+statically, exactly like `token_url`/`client_id`/`client_secret`/`scopes` — this flows into
+`connectorgen validate` for free via the existing `engine.ResolveCheckAuthSpec(a, specKeys)` call in
+`checkInterpolations`, no `cmd/connectorgen/validate.go` change was needed.
+
 **Pagination — 6 types + none** (`bundle.go`'s `PaginationSpec`, `paginate.go`'s `newPaginator`):
 
 | `type` | Fields used | When to use |
@@ -307,10 +335,36 @@ time the stream is actually read. `MaxPages` is a hard request-count cap enforce
 that page number; `MaxPages <= 0` (absent/zero) is unbounded. Stream-level `pagination` replaces
 the base-level spec **wholesale** (no field-by-field merge) when present.
 
+**`page_number`'s `start_page` supports an explicit 0-indexed start** (S4 engine mini-wave item 1:
+algolia/auth0/beamer/braze/clickup-api/concord/customerly/dolibarr/harness/hubplanner and more —
+each genuinely paginates from page 0, not 1). `PaginationSpec.StartPage` is `*int`, not a plain
+`int`, specifically so `"start_page": 0` is distinguishable at the Go layer from an omitted
+`start_page` key (both would otherwise decode to the same zero value). `newPaginator`'s
+`page_number` case builds an engine-local `pageNumberPaginator` (NOT `connsdk.PageNumberPaginator`
+— that type is unchanged and still coerces a zero `StartPage` field to 1, since connsdk is
+read-only and every legacy Go connector still constructs it directly with an ordinary `int`);
+`startPageOrDefault` maps a nil pointer to 1 (the historical default for every bundle that never
+declares `start_page`) and returns a non-nil pointer's value verbatim, including 0. JSON
+representation is unaffected — `"start_page": 0` was already schema-valid (`"type": "integer"`);
+only the Go-side unset-vs-zero ambiguity needed fixing.
+
 **`param_format`** (`incremental.param_format`, applied by `read.go`'s `formatParam` to the
 RFC3339 lower-bound value before sending it as `request_param`): `rfc3339` (default; send
 verbatim), `unix_seconds`, `date` (`2006-01-02`), `github_date_range` (`>=<value>`, a
 lower-bound-only GitHub search qualifier).
+
+**`parseLowerBoundTime` accepts a bare `YYYY-MM-DD` date-only input, alongside digits/RFC3339**
+(S4 engine mini-wave item 5: marketstack's `eod`/`splits`/`dividends` streams' real wire cursor
+value for `param_format: date` is a bare date string with no time/offset component at all — neither
+the all-digits Unix-seconds shape nor strict RFC3339 parses it). `parseLowerBoundTime` (used by
+every `param_format` that needs to parse a timestamp — `unix_seconds`/`date`/`github_date_range`,
+not `date` alone) now tries three shapes in a fixed order: all-digits (Unix seconds) first, then
+strict RFC3339, then bare `YYYY-MM-DD` (parsed as midnight UTC that date) last. The order is
+unambiguous — a valid RFC3339 string always contains a `T` time-of-day separator (never all-digits,
+never date-only-parseable), and a valid date-only string can never itself parse as RFC3339 — so no
+input shape is ever misclassified as another. A malformed value (`"2026-13-40"`,
+`"2026/01/02"`) still hard-errors at every stage; this is a strictly additive third fallback, not a
+loosening of the existing two shapes.
 
 **`{{ incremental.lower_bound }}` in `stream.Query`** (S3 engine mini-wave item 1, wave1-pilot
 SUMMARY.md carried queue / REVIEW-A.md re-review R2 ACCEPT-WITH-QUEUE): exposes the RESOLVED,
@@ -454,6 +508,78 @@ truly cannot filter server-side — prefer `request_param` whenever the API supp
 **Projection**: `stream.projection` is `"schema"` (default: only schema-declared properties
 survive) or `"passthrough"` (every raw field survives, unfiltered). `computed_fields` are always
 applied after projection regardless of mode.
+
+**Sub-resource fan-out — `stream.fan_out`** (S4 engine mini-wave item 2: appfollow/bigmailer/
+breezy-hr/campayn/eventzilla/everhour/finnworlds/k6-cloud/metricool/cisco-meraki/configcat and 15+
+quarantined/partial connectors whose real read is "list N parent ids, then repeat the WHOLE
+per-stream request/pagination/incremental sequence once per id, stamping the parent id onto every
+child record" — this is the one legitimate Tier-2 `StreamHook` trigger this dialect addition
+retires for every bundle it now covers):
+
+```json
+"fan_out": {
+  "ids_from": { "config_key": "app_collection_ids" },
+  "into": { "query_param": "apps_id" },
+  "stamp_field": "app_id"
+}
+```
+
+`ids_from` is EXACTLY ONE of `config_key` (a comma-separated config value, split/trimmed/
+empty-entries-dropped — appfollow's `app_collection_ids`) or `request` (one preliminary GET, fully
+paginated to exhaustion using the CHILD STREAM'S OWN effective pagination spec — base or
+stream-level override, the id-listing request declares no pagination block of its own —
+extracting `id_field` off every record found at `records_path`):
+
+```json
+"fan_out": {
+  "ids_from": { "request": { "path": "/projects", "records_path": "data", "id_field": "id" } },
+  "into": { "path_var": "parent_id" },
+  "stamp_field": "project_id"
+}
+```
+
+Declaring both `config_key` and `request`, or neither, is a **read-time** error (mirroring cursor
+pagination's `token_path`/`last_record_field` mutual exclusivity) — `connectorgen validate` does
+not check this (same reasoning as pagination specs above: no field/rule references `FanOutSpec`).
+`into` is EXACTLY ONE of `query_param` (the resolved id is added as a query parameter on every
+request of that id's sub-sequence) or `path_var` (the resolved id becomes referenceable in the
+stream's own `path` as `"{{ fanout.id }}"` — a new engine pseudo-namespace, resolved via
+`interpolate.go`'s `resolveFanoutRef`; unlike `incremental.lower_bound`, an unresolved `fanout.id`
+reference is a HARD ERROR, never absent-tolerant, since it only ever appears inside a fan_out-driven
+path and a missing id there is a real bug). `stamp_field`, when set, writes the current fan-out id
+onto that field of every emitted record AFTER projection/`computed_fields`, exactly once per
+sub-sequence — the bundle author never declares it as a `computed_fields` entry themselves.
+Resolution happens ONCE per `Read()` call, before any per-id sub-sequence starts; each id then runs
+the identical declarative request/pagination/incremental/filter/project/computed_fields/hook
+sequence an ordinary (non-fan-out) stream runs — pagination, incremental state, `MaxPages`, and
+rate-limiting are all independent PER id (a fresh paginator + fresh base query per id), never shared
+across the fan-out. `connectorgen validate`'s `checkInterpolations` walks
+`fan_out.ids_from.request.path` with the same `ResolveCheck` coverage `stream.path` gets; `fanout.id`
+is checked against a `knownFanoutKeys` set (mirroring `knownIncrementalKeys`) rather than
+`specKeys`, since it is an engine-provided pseudo-namespace, not a spec.json property.
+
+**Keyed-object flatten — `records.keyed_object`/`records.key_field`** (S4 engine mini-wave item 3:
+appfigures' `products`/`sales`/`ratings`/`categories` streams and similar APIs whose list endpoint
+returns a JSON OBJECT keyed by an arbitrary id — `{"111": {...}, "222": {...}}` — rather than an
+array):
+
+```json
+"records": { "path": "products", "keyed_object": true, "key_field": "product_id" }
+```
+
+`records.path` still selects where the object lives in the page body (the SAME dotted-path
+convention `connsdk.RecordsAt` uses elsewhere); `keyed_object: true` explodes EACH VALUE of that
+object into its own record — `connsdk.RecordsAt`'s ordinary behavior of returning a bare object as
+ONE whole-object record does not apply once this flag is set. A value that is not itself a JSON
+object (a scalar, array, or null) is silently skipped, mirroring `RecordsAt`'s own tolerance for
+non-object array elements. `key_field`, when set, stamps the source map key onto that field of the
+exploded record BEFORE projection, so it participates in ordinary schema projection/computed_fields
+like any other raw field. Records are emitted in ascending sorted-key order for deterministic
+output (Go map iteration order is randomized). Implemented as an engine-local `recordsAtKeyed`
+(read.go) reimplementing connsdk's unexported decode+selectPath plumbing rather than an exported
+connsdk addition — connsdk itself needed no change. No `connectorgen validate` rule was added (no
+templated field on `RecordsSpec` to statically check); the positive-control corpus case
+(`keyed-object-valid`) proves the shape loads and validates cleanly instead.
 
 **`MaxPages` hard cap**: see the pagination table above; this is the only page-count bound the
 engine enforces on the declarative read path (a short/empty final page from the paginator is the
