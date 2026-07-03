@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/segments/list", "query": { "page": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "segments": [
+        {
+          "id": "segment_fixture_1",
+          "name": "Fixture Segment One",
+          "analytics_tracking_enabled": true,
+          "tags": ["fixture"]
+        },
+        {
+          "id": "segment_fixture_2",
+          "name": "Fixture Segment Two",
+          "analytics_tracking_enabled": false,
+          "tags": []
+        }
+      ]
+    }
+  }
+}

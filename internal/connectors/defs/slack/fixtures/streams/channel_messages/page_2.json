@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/conversations.history", "query": { "limit": "2", "channel": "synthetic-conformance-value", "cursor": "PAGE2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "messages": [
+        { "ts": "1700000200.000100", "type": "message", "user": "U1", "text": "Fixture message 3", "team": "T_FIXTURE" }
+      ],
+      "response_metadata": { "next_cursor": "" }
+    }
+  }
+}

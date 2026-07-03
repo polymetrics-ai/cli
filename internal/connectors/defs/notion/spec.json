@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Notion Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.notion.com/v1",
+      "description": "Notion API base URL override for tests or proxies. Defaults to https://api.notion.com/v1."
+    },
+    "token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Notion integration token, sent as Bearer auth. Never logged."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional hard cap on the number of pages read per stream, consumed by hooks/notion/hooks.go's StreamHook -- NOT a declarative streams.json field (pagination is entirely hook-driven since POST /search's body cursor has no declarative equivalent; see docs.md Known limits). Permissive parse: empty, \"all\", \"unlimited\", or any non-positive-integer string means unbounded."
+    }
+  }
+}

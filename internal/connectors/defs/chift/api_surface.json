@@ -1,0 +1,17 @@
+{
+  "api": "Chift API (https://api.chift.eu)",
+  "docs": "https://docs.chift.eu/",
+  "reviewed_at": "2026-07-03",
+  "scope": "L-size fresh migration: the 3 legacy-parity read streams only; Chift's full financial-integration surface (invoices, payments, products, webhooks per-connector sub-APIs) is out of scope until Pass B, matching legacy's own read-only core-stream scoping",
+  "endpoints": [
+    { "method": "POST", "path": "/token", "excluded": { "category": "non_data_endpoint", "reason": "session-token exchange, not a syncable object stream; implemented via the chift AuthHook" } },
+    { "method": "GET", "path": "/consumers", "covered_by": { "stream": "consumers" } },
+    { "method": "GET", "path": "/connections", "covered_by": { "stream": "connections" } },
+    { "method": "GET", "path": "/syncs", "covered_by": { "stream": "syncs" } },
+    { "method": "GET", "path": "/consumers/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy itself never fanned out over per-consumer detail" } },
+    { "method": "POST", "path": "/consumers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only" } },
+    { "method": "GET", "path": "/accounting/{connectionId}/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; per-connector sub-API surface" } },
+    { "method": "GET", "path": "/commerce/{connectionId}/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; per-connector sub-API surface" } },
+    { "method": "GET", "path": "/pos/{connectionId}/payments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; per-connector sub-API surface" } }
+  ]
+}

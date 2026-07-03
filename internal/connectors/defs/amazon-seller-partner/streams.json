@@ -1,0 +1,89 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "custom", "hook": "amazon-seller-partner" }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/orders/v0/orders",
+      "query": {
+        "MarketplaceIds": "{{ config.marketplace_id }}",
+        "CreatedAfter": "{{ config.replication_start_date }}",
+        "MaxResultsPerPage": "1"
+      }
+    },
+    "error_map": [
+      { "status": 401, "hint": "amazon-seller-partner LWA credentials are missing or invalid; re-run pm credentials add amazon-seller-partner" },
+      { "status": 403, "hint": "amazon-seller-partner credentials lack access for this marketplace/resource" },
+      { "status": 429, "class": "rate_limited", "hint": "amazon-seller-partner (SP-API) rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "orders",
+      "path": "/orders/v0/orders",
+      "query": {
+        "MarketplaceIds": "{{ config.marketplace_id }}",
+        "MaxResultsPerPage": "{{ config.page_size }}"
+      },
+      "records": { "path": "payload.Orders" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "NextToken",
+        "token_path": "payload.NextToken"
+      },
+      "incremental": {
+        "cursor_field": "LastUpdateDate",
+        "request_param": "LastUpdatedAfter",
+        "param_format": "rfc3339",
+        "start_config_key": "replication_start_date"
+      },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "inventory_summaries",
+      "path": "/fba/inventory/v1/summaries",
+      "query": {
+        "granularityType": "Marketplace",
+        "granularityId": "{{ config.marketplace_id }}",
+        "marketplaceIds": "{{ config.marketplace_id }}",
+        "details": "true"
+      },
+      "records": { "path": "payload.inventorySummaries" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "pagination.nextToken"
+      },
+      "incremental": {
+        "cursor_field": "lastUpdatedTime",
+        "request_param": "startDateTime",
+        "param_format": "rfc3339",
+        "start_config_key": "replication_start_date"
+      },
+      "schema": "schemas/inventory_summaries.json"
+    },
+    {
+      "name": "financial_event_groups",
+      "path": "/finances/v0/financialEventGroups",
+      "query": {
+        "MaxResultsPerPage": "{{ config.page_size }}"
+      },
+      "records": { "path": "payload.FinancialEventGroupList" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "NextToken",
+        "token_path": "payload.NextToken"
+      },
+      "incremental": {
+        "cursor_field": "FinancialEventGroupEnd",
+        "request_param": "FinancialEventGroupStartedAfter",
+        "param_format": "rfc3339",
+        "start_config_key": "replication_start_date"
+      },
+      "schema": "schemas/financial_event_groups.json"
+    }
+  ]
+}

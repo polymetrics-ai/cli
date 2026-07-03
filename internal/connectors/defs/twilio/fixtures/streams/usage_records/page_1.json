@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-secret/Usage/Records.json",
+    "query": {
+      "PageSize": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "usage_records": [
+        {
+          "account_sid": "AC_fixture",
+          "category": "sms-outbound",
+          "description": "SMS - Outbound",
+          "start_date": "2026-01-01",
+          "end_date": "2026-01-31",
+          "count": "2",
+          "count_unit": "messages",
+          "usage": "2",
+          "usage_unit": "messages",
+          "price": "-0.015",
+          "price_unit": "USD"
+        }
+      ],
+      "next_page_uri": null,
+      "page": 0,
+      "page_size": 50
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "open-exchange-rates",
+  "display_name": "Open Exchange Rates",
+  "description": "Reads Open Exchange Rates account usage/plan status through the Open Exchange Rates JSON API (read-only). Live/historical/currencies rate-map streams remain quarantined (ENGINE_GAP).",
+  "integration_type": "api",
+  "docs_url": "https://docs.openexchangerates.org/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1
+  },
+  "risk": {
+    "read": "external Open Exchange Rates API read of account usage/plan status",
+    "approval": "none; read-only"
+  }
+}

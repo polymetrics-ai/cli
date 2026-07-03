@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": "integer" },
+    "createdAt": { "type": ["string", "null"] },
+    "lastModifiedAt": { "type": ["string", "null"] },
+    "productType": { "type": ["object", "null"] },
+    "masterData": { "type": ["object", "null"] }
+  }
+}

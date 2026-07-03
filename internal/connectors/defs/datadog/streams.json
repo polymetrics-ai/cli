@@ -16,10 +16,59 @@
   },
   "streams": [
     {
+      "name": "monitors",
+      "path": "/api/v1/monitor",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "page_size",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "records": { "path": "." },
+      "incremental": { "cursor_field": "modified" },
+      "schema": "schemas/monitors.json"
+    },
+    {
       "name": "dashboards",
       "path": "/api/v1/dashboard",
       "records": { "path": "dashboards" },
       "schema": "schemas/dashboards.json"
+    },
+    {
+      "name": "users",
+      "path": "/api/v2/users",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page[number]",
+        "size_param": "page[size]",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "email": "{{ record.attributes.email }}",
+        "handle": "{{ record.attributes.handle }}",
+        "status": "{{ record.attributes.status }}",
+        "disabled": "{{ record.attributes.disabled }}",
+        "verified": "{{ record.attributes.verified }}",
+        "created_at": "{{ record.attributes.created_at }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "slo",
+      "path": "/api/v1/slo",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "page_size",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/slo.json"
     },
     {
       "name": "downtimes",

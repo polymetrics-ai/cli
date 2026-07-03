@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/ratings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "2026-01-01": {
+        "date": "2026-01-01",
+        "stars": 4.5,
+        "breakdown": "5:10,4:2,3:1,2:0,1:0",
+        "average": 4.5
+      },
+      "2026-01-02": {
+        "date": "2026-01-02",
+        "stars": 4.2,
+        "breakdown": "5:8,4:3,3:1,2:0,1:0",
+        "average": 4.2
+      }
+    }
+  }
+}

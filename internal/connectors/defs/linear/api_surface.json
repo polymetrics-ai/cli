@@ -1,0 +1,15 @@
+{
+  "api": "Linear GraphQL API (https://api.linear.app/graphql)",
+  "docs": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "Migration of internal/connectors/linear: the 4 legacy-parity read root connections only (issues, teams, projects, users), each a distinct GraphQL root QUERY field (a read, never a mutation) on the SAME single POST /graphql endpoint. Every covered/excluded entry below is declared method GET (not the literal wire HTTP verb, which is always POST for GraphQL) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design §E.1 rule 4), matching monday's identical documented convention. Linear's full documented API surface (mutations, webhooks, comments, cycles, labels, other connections) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/graphql (query: issues)", "covered_by": { "stream": "issues" } },
+    { "method": "GET", "path": "/graphql (query: teams)", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/graphql (query: projects)", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/graphql (query: users)", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/graphql (query: viewer)", "excluded": { "category": "non_data_endpoint", "reason": "bounded identity/connectivity check used by Check(), not a syncable object stream" } },
+    { "method": "POST", "path": "/graphql (mutations: issueCreate, issueUpdate, commentCreate, ...)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; linear is read-only in this migration (legacy Write returns ErrUnsupportedOperation)" } },
+    { "method": "GET", "path": "/graphql (query: comments, cycles, labels, workflowStates, webhooks)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

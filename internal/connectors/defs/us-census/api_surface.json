@@ -1,0 +1,9 @@
+{
+  "api": "US Census Bureau API (https://api.census.gov)",
+  "docs": "https://www.census.gov/data/developers/guidance/api-user-guide.html",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-2 auth-hook/StreamHook migration: legacy exposes exactly one caller-configured dataset query endpoint (query_path/query_params are entirely operator-supplied at connection-config time, not per-stream); the full catalog of published Census datasets (ACS, CBP, decennial, etc.) is not separately enumerated by legacy and is out of scope here for the same reason -- there is no fixed per-dataset endpoint list to cover",
+  "endpoints": [
+    { "method": "GET", "path": "/{query_path}", "covered_by": { "stream": "query" } }
+  ]
+}

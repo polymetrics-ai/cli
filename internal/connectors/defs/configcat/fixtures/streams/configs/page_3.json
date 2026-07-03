@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/v1/products/prod_fixture_2/configs" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "configId": "config_fixture_2",
+        "name": "Fixture Config 2",
+        "description": "fixture config",
+        "order": 0,
+        "evaluationVersion": "v2",
+        "migratedConfigId": null,
+        "product": { "productId": "prod_fixture_2" }
+      }
+    ]
+  }
+}

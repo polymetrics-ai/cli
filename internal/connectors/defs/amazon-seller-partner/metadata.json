@@ -1,0 +1,26 @@
+{
+  "name": "amazon-seller-partner",
+  "display_name": "Amazon Seller Partner",
+  "description": "Reads Amazon Selling Partner API orders, FBA inventory summaries, and financial event groups via Login with Amazon (LWA) authentication.",
+  "integration_type": "api",
+  "docs_url": "https://developer-docs.amazon.com/sp-api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Amazon Selling Partner API read of order, inventory, and financial data"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by internal/connectors/paritytest/amazon-seller-partner (the AuthHook's real LWA refresh_token-grant path, x-amz-access-token header, and full read/pagination/incremental behavior against a real test SP-API server) -- conformance's synthetic config has no real lwa_token_url and cannot exercise mode:custom auth at all (the hook would POST to the literal string \"synthetic-conformance-value\"), so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

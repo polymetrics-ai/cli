@@ -1,0 +1,23 @@
+{
+  "name": "braze",
+  "display_name": "Braze",
+  "description": "Reads Braze campaigns, Canvases, and segments through the Braze REST API list-export endpoints. The events (custom event names) stream is not modeled by this bundle; see docs.md Known limits.",
+  "integration_type": "api",
+  "docs_url": "https://www.braze.com/docs/api/basics/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Braze API read of campaign, Canvas, and segment metadata",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

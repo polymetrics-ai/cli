@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_2/contacts", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "contact_fixture_2",
+          "brand_id": "brand_fixture_2",
+          "email": "contact2@example.com",
+          "unsubscribe_all": true,
+          "num_soft_bounces": 1,
+          "num_hard_bounces": 0,
+          "num_complaints": 0,
+          "created": 1767225602
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

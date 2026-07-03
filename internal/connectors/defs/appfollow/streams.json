@@ -24,6 +24,28 @@
       "path": "/account/apps",
       "records": { "path": "apps" },
       "schema": "schemas/app_collections.json"
+    },
+    {
+      "name": "app_lists",
+      "path": "/account/apps/app",
+      "records": { "path": "apps_app" },
+      "fan_out": {
+        "ids_from": { "config_key": "app_collection_ids" },
+        "into": { "query_param": "apps_id" },
+        "stamp_field": "app_collection_id"
+      },
+      "schema": "schemas/app_lists.json"
+    },
+    {
+      "name": "ratings",
+      "path": "/meta/ratings",
+      "records": { "path": "ratings.list" },
+      "fan_out": {
+        "ids_from": { "config_key": "ext_ids" },
+        "into": { "query_param": "ext_id" },
+        "stamp_field": "ext_id"
+      },
+      "schema": "schemas/ratings.json"
     }
   ]
 }

@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/auth.test" },
+  "response": {
+    "status": 200,
+    "body": { "ok": true, "url": "https://fixture-workspace.slack.com/", "team": "Fixture Workspace", "user": "fixture-bot", "team_id": "T_FIXTURE", "user_id": "U_FIXTURE" }
+  }
+}

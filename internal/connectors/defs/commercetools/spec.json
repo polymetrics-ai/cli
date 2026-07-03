@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "commercetools Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "base_url", "token_url", "project_key"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "commercetools OAuth2 client-credentials client id. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "commercetools OAuth2 client-credentials client secret. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "commercetools API base URL, e.g. https://api.<region>.<host>.commercetools.com. Required: legacy derives this from region and host config values, but that cross-key derivation has no engine mechanism today (see docs.md Known limits), so this bundle requires the fully-formed URL instead."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "commercetools OAuth2 token endpoint, e.g. https://auth.<region>.<host>.commercetools.com/oauth/token. Required for the same reason base_url is required (see docs.md Known limits)."
+    },
+    "project_key": {
+      "type": "string",
+      "description": "commercetools project key; every stream path is scoped to this project."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 100,
+      "description": "Records requested per page (limit query param)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

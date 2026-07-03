@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/company/synthetic-conformance-value/query",
+    "query": { "query": "SELECT * FROM Payment STARTPOSITION 3 MAXRESULTS 2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "QueryResponse": {
+        "Payment": [
+          { "Id": "3", "CustomerRef": { "value": "1", "name": "Fixture Customer 1" }, "TotalAmt": 75.0, "TxnDate": "2026-01-03" }
+        ]
+      }
+    }
+  }
+}

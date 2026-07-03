@@ -1,0 +1,27 @@
+{
+  "name": "microsoft-teams",
+  "display_name": "Microsoft Teams",
+  "description": "Reads Microsoft Teams users, groups, channels, and device-usage reports through the Microsoft Graph REST API using an OAuth2 client-credentials grant. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://learn.microsoft.com/en-us/graph/api/overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Microsoft Graph API read of tenant users/groups/channels/device-usage data",
+    "approval": "none; read-only source connector"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "Every stream is StreamHook-handled (hooks/microsoft-teams/hooks.go ports legacy's @odata.nextLink absolute-URL pagination loop verbatim; the engine's declarative next_url_path pagination reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all -- see docs.md's Streams notes and docs/migration/quarantine.json's microsoft-teams ENGINE_GAP entry). hook-covered; proven live by internal/connectors/paritytest/microsoft-teams (TestParityMicrosoftTeams_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-teams/hooks_test.go."
+  }
+}

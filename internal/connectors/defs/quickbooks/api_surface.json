@@ -1,0 +1,19 @@
+{
+  "api": "QuickBooks Online v3 Query API (https://quickbooks.api.intuit.com/v3)",
+  "docs": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-2 migration: the 5 legacy-parity read entities only (Customer, Invoice, Payment, Account, Vendor) via the shared v3/company/{realmId}/query endpoint; legacy quickbooks is read-only (Write always returns ErrUnsupportedOperation) and the full QuickBooks Accounting API surface (Bill, Estimate, Item, TimeActivity, JournalEntry, attachments, reports, batch, CDC) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/company/{realmId}/query?query=SELECT * FROM Customer STARTPOSITION <n> MAXRESULTS <size>", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/v3/company/{realmId}/query?query=SELECT * FROM Invoice STARTPOSITION <n> MAXRESULTS <size>", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/v3/company/{realmId}/query?query=SELECT * FROM Payment STARTPOSITION <n> MAXRESULTS <size>", "covered_by": { "stream": "payments" } },
+    { "method": "GET", "path": "/v3/company/{realmId}/query?query=SELECT * FROM Account STARTPOSITION <n> MAXRESULTS <size>", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/v3/company/{realmId}/query?query=SELECT * FROM Vendor STARTPOSITION <n> MAXRESULTS <size>", "covered_by": { "stream": "vendors" } },
+    { "method": "GET", "path": "/v3/company/{realmId}/query?query=SELECT * FROM Bill|Estimate|Item|TimeActivity|JournalEntry ...", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v3/company/{realmId}/batch", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/company/{realmId}/cdc", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/company/{realmId}/reports/*", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v3/company/{realmId}/upload", "excluded": { "category": "binary_payload", "reason": "attachment bytes are not a syncable record stream" } },
+    { "method": "GET", "path": "/v3/company/{realmId}/companyinfo/{realmId}", "excluded": { "category": "non_data_endpoint", "reason": "company metadata, not a syncable record stream" } }
+  ]
+}

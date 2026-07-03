@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/",
+    "query": { "domain": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

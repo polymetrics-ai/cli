@@ -3,7 +3,7 @@
     "method": "GET",
     "path": "/team/synthetic-conformance-value/task",
     "query": {
-      "page": "2",
+      "page": "1",
       "archived": "synthetic-conformance-value",
       "include_closed": "synthetic-conformance-value"
     }

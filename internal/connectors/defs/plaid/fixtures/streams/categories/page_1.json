@@ -1,0 +1,12 @@
+{
+  "request": { "method": "POST", "path": "/categories/get" },
+  "response": {
+    "status": 200,
+    "body": {
+      "categories": [
+        { "category_id": "10000000", "group": "transfer", "hierarchy": ["Transfer", "Debit"] },
+        { "category_id": "20000000", "group": "food_and_drink", "hierarchy": ["Food and Drink", "Restaurants"] }
+      ]
+    }
+  }
+}

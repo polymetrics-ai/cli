@@ -1,7 +1,7 @@
 {
   "name": "appfollow",
   "display_name": "Appfollow",
-  "description": "Reads AppFollow account users and app collections through the AppFollow REST API v2. Per-app-collection app lists and per-app rating breakdowns are not modeled by this bundle; see docs.md Known limits.",
+  "description": "Reads AppFollow account users, app collections, per-collection app lists, and per-app rating breakdowns through the AppFollow REST API v2 (config-list-driven fan-out for app_lists/ratings).",
   "integration_type": "api",
   "docs_url": "https://appfollow.docs.apiary.io/",
   "release_stage": "ga",

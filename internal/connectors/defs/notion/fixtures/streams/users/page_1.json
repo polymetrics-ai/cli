@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "results": [
+        { "object": "user", "id": "user_fixture_1", "name": "Fixture User 1", "type": "person", "avatar_url": null, "person": { "email": "fixture1@example.com" } },
+        { "object": "user", "id": "user_fixture_2", "name": "Fixture User 2", "type": "bot", "avatar_url": null, "bot": {} }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

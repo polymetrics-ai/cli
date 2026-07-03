@@ -15,6 +15,11 @@
       "default": "https://api.meraki.com/api/v1",
       "description": "Cisco Meraki API base URL override for tests or proxies."
     },
+    "page_size": {
+      "type": "integer",
+      "default": 1000,
+      "description": "Records requested per page (perPage query param). Meraki caps this at 1000."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

@@ -1,0 +1,23 @@
+{
+  "name": "dolibarr",
+  "display_name": "Dolibarr",
+  "description": "Reads Dolibarr ERP/CRM third parties, contacts, products, customer invoices, and orders through the Dolibarr REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.dolibarr.org/webservices.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Dolibarr instance read of ERP/CRM business data",
+    "approval": "none; read-only"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/conversations.list", "query": { "limit": "2", "cursor": "PAGE2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "channels": [
+        { "id": "C3", "name": "engineering", "is_channel": true, "is_group": false, "is_private": true, "is_archived": false, "is_general": false, "created": 1700000200, "creator": "U1", "num_members": 8, "topic": { "value": "Eng talk" }, "purpose": { "value": "" } }
+      ],
+      "response_metadata": { "next_cursor": "" }
+    }
+  }
+}

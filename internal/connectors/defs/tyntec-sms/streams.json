@@ -13,7 +13,7 @@
       "page_size": 100,
       "max_pages": 1
     },
-    "check": { "method": "GET", "path": "sms/v1/messages" },
+    "check": { "method": "GET", "path": "sms/v1/messages", "query": { "limit": "1", "page": "1" } },
     "error_map": [
       { "status": 401, "hint": "tyntec-sms api_key is missing or invalid; re-run pm credentials add tyntec-sms" },
       { "status": 429, "class": "rate_limited", "hint": "tyntec rate limit exceeded; the connector will retry with backoff" }

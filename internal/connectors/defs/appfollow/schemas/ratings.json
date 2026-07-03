@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ratings",
+  "type": "object",
+  "x-primary-key": ["ext_id", "date", "country"],
+  "required": ["ext_id", "date"],
+  "properties": {
+    "ext_id": { "type": "string" },
+    "store": { "type": ["string", "null"] },
+    "date": { "type": "string" },
+    "country": { "type": ["string", "null"] },
+    "version": { "type": ["string", "null"] },
+    "rating": { "type": ["number", "null"] },
+    "stars1": { "type": ["integer", "null"] },
+    "stars2": { "type": ["integer", "null"] },
+    "stars3": { "type": ["integer", "null"] },
+    "stars4": { "type": ["integer", "null"] },
+    "stars5": { "type": ["integer", "null"] },
+    "stars_total": { "type": ["integer", "null"] }
+  }
+}

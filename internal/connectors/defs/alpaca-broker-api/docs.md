@@ -54,8 +54,9 @@ None. This connector is `capabilities.write: false`; no `writes.json` is shipped
 
 ## Known limits
 
-- Trading/order/position, funding/transfer, and account-status-event endpoints are out of scope for
-  this wave; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability
-  expansion"}` entries. Only the 5 legacy-parity read streams are implemented.
+- Trading/order/position, funding/transfer, journal, and account-status-event endpoints are out of
+  scope for this migration; see `api_surface.json`'s `excluded: {category: out_of_scope, reason:
+  "Pass B capability expansion"}` entries. Only the 5 legacy-parity read streams are implemented.
+  `POST /v1/journals` is separately excluded as `destructive_admin` (moves funds between accounts).
 - See the "Streams notes" section above for the `accounts` stream's pagination-stop parity deviation
   and the dropped (non-functioning) `created_at` cursor-field catalog hint.

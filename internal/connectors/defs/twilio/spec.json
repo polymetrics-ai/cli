@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Twilio Connection Specification",
+  "type": "object",
+  "required": ["account_sid", "auth_token"],
+  "properties": {
+    "account_sid": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Twilio Account SID. Used as the HTTP Basic auth username and to scope every account-relative resource path; never logged."
+    },
+    "auth_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Twilio Auth Token. Used only as the HTTP Basic auth password; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.twilio.com/2010-04-01",
+      "description": "Twilio REST API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per page (1-1000, PageSize)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

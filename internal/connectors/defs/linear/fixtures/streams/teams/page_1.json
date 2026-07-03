@@ -1,0 +1,24 @@
+{
+  "request": { "method": "POST", "path": "/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "teams": {
+          "nodes": [
+            {
+              "id": "team_fixture_1",
+              "key": "T1",
+              "name": "Fixture team 1",
+              "description": "fixture record",
+              "private": false,
+              "createdAt": "2026-01-01T00:00:00.000Z",
+              "updatedAt": "2026-01-02T00:00:00.000Z"
+            }
+          ],
+          "pageInfo": { "hasNextPage": false, "endCursor": "cursor_fixture_2" }
+        }
+      }
+    }
+  }
+}

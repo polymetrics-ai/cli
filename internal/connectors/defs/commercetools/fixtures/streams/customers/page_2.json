@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/customers",
+    "query": { "limit": "synthetic-conformance-value", "offset": "2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 2,
+      "offset": 2,
+      "count": 1,
+      "total": 3,
+      "results": [
+        {
+          "id": "cust_fixture_3",
+          "version": 1,
+          "createdAt": "2026-01-03T00:00:00.000Z",
+          "lastModifiedAt": "2026-01-03T00:00:00.000Z",
+          "email": "fixture3@example.com",
+          "firstName": "Fixture",
+          "lastName": "Three",
+          "isEmailVerified": false,
+          "customerNumber": "1000003",
+          "addresses": [],
+          "authenticationMode": "Password"
+        }
+      ]
+    }
+  }
+}

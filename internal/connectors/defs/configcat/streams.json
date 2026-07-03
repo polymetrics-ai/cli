@@ -1,0 +1,92 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}", "when": "{{ config.username }}" },
+      { "mode": "basic", "username": "{{ secrets.username }}", "password": "{{ secrets.password }}", "when": "{{ secrets.username }}" },
+      { "mode": "basic", "username": "", "password": "{{ secrets.password }}" }
+    ],
+    "check": { "method": "GET", "path": "/v1/organizations" },
+    "error_map": [
+      { "status": 401, "hint": "configcat username/password is missing or invalid; re-run pm credentials add configcat" },
+      { "status": 403, "hint": "configcat account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "configcat rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "organizations",
+      "path": "/v1/organizations",
+      "records": { "path": "" },
+      "computed_fields": {
+        "organization_id": "{{ record.organizationId }}"
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "products",
+      "path": "/v1/products",
+      "records": { "path": "" },
+      "computed_fields": {
+        "product_id": "{{ record.productId }}",
+        "organization_id": "{{ record.organization.organizationId }}",
+        "reason_required": "{{ record.reasonRequired }}",
+        "approve_required": "{{ record.approveRequired }}"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "configs",
+      "path": "/v1/products/{{ fanout.id }}/configs",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/products", "records_path": "", "id_field": "productId" }
+        },
+        "into": { "path_var": "product_id" },
+        "stamp_field": "product_id"
+      },
+      "computed_fields": {
+        "config_id": "{{ record.configId }}",
+        "evaluation_version": "{{ record.evaluationVersion }}",
+        "migrated_config_id": "{{ record.migratedConfigId }}"
+      },
+      "schema": "schemas/configs.json"
+    },
+    {
+      "name": "environments",
+      "path": "/v1/products/{{ fanout.id }}/environments",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/products", "records_path": "", "id_field": "productId" }
+        },
+        "into": { "path_var": "product_id" },
+        "stamp_field": "product_id"
+      },
+      "computed_fields": {
+        "environment_id": "{{ record.environmentId }}",
+        "reason_required": "{{ record.reasonRequired }}",
+        "approve_required": "{{ record.approveRequired }}"
+      },
+      "schema": "schemas/environments.json"
+    },
+    {
+      "name": "tags",
+      "path": "/v1/products/{{ fanout.id }}/tags",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/products", "records_path": "", "id_field": "productId" }
+        },
+        "into": { "path_var": "product_id" },
+        "stamp_field": "product_id"
+      },
+      "computed_fields": {
+        "tag_id": "{{ record.tagId }}"
+      },
+      "schema": "schemas/tags.json"
+    }
+  ]
+}

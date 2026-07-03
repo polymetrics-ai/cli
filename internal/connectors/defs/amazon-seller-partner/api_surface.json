@@ -1,0 +1,19 @@
+{
+  "api": "Amazon Selling Partner API (SP-API), https://sellingpartnerapi-na.amazon.com",
+  "docs": "https://developer-docs.amazon.com/sp-api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Fresh migration at legacy capability parity: the 3 legacy-parity read streams only (Orders v0, FBA Inventory v1, Finances v0 event groups); feeds/reports/listings/pricing/catalog/notifications APIs are out of scope until Pass B capability expansion.",
+  "endpoints": [
+    { "method": "GET", "path": "/orders/v0/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/fba/inventory/v1/summaries", "covered_by": { "stream": "inventory_summaries" } },
+    { "method": "GET", "path": "/finances/v0/financialEventGroups", "covered_by": { "stream": "financial_event_groups" } },
+    { "method": "GET", "path": "/orders/v0/orders/{orderId}/orderItems", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/finances/v0/financialEvents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/catalog/2022-04-01/items", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/listings/2021-08-01/items/{sellerId}/{sku}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/listings/2021-08-01/items/{sellerId}/{sku}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/reports/2021-06-30/reports", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/feeds/2021-06-30/feeds", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/notifications/v1/subscriptions/{notificationType}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

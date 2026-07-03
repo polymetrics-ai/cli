@@ -32,6 +32,17 @@
       "schema": "schemas/forms.json"
     },
     {
+      "name": "responses",
+      "path": "/forms/{{ fanout.id }}/responses",
+      "records": { "path": "items" },
+      "fan_out": {
+        "ids_from": { "config_key": "form_ids" },
+        "into": { "path_var": "form_id" },
+        "stamp_field": "form_id"
+      },
+      "schema": "schemas/responses.json"
+    },
+    {
       "name": "workspaces",
       "path": "/workspaces",
       "records": { "path": "items" },

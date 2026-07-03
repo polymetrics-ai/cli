@@ -2,10 +2,10 @@
   "api": "Breezy HR v3 REST API (https://api.breezy.hr/v3)",
   "docs": "https://developer.breezy.hr/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: positions and pipelines are single-request-sequence Tier-1 endpoints; candidates is a per-position sub-resource fan-out read (one HTTP request per position id, discovered by first paginating positions) that the declarative dialect has no primitive for — see docs.md Known limits.",
+  "scope": "wave2 fan-out gap-close: all 3 legacy streams are now migrated. candidates is a per-position sub-resource fan-out read expressed via the engine's fan_out dialect (S4 engine mini-wave item 2): it lists every position id (GET /positions, paginated) then repeats GET /position/{id}/candidates once per position, stamping position_id onto every record — closing the ENGINE_GAP that previously blocked this stream.",
   "endpoints": [
     { "method": "GET", "path": "/company/{company_id}/positions", "covered_by": { "stream": "positions" } },
     { "method": "GET", "path": "/company/{company_id}/pipelines", "covered_by": { "stream": "pipelines" } },
-    { "method": "GET", "path": "/company/{company_id}/position/{position_id}/candidates", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out: legacy issues one request per position id discovered from a prior full positions read and stamps the enclosing position_id onto each candidate row — a StreamHook-shaped multi-request traversal the declarative dialect cannot express (ENGINE_GAP); Tier-2 hooks are out of scope for this wave" } }
+    { "method": "GET", "path": "/company/{company_id}/position/{position_id}/candidates", "covered_by": { "stream": "candidates" } }
   ]
 }

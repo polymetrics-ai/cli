@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/data/categories"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "6014": {
+        "id": 6014,
+        "name": "Games",
+        "store": "apple",
+        "device": "iphone",
+        "subtype": "free"
+      },
+      "6015": {
+        "id": 6015,
+        "name": "Business",
+        "store": "apple",
+        "device": "iphone",
+        "subtype": "free"
+      }
+    }
+  }
+}

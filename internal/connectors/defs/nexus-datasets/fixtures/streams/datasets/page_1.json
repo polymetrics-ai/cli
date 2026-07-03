@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/datasets/synthetic-conformance-value", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "records": [
+        {
+          "id": "rec_fixture_1",
+          "raw_data": { "order_id": "ord_fixture_1", "amount": 1000, "status": "confirmed" },
+          "raw_data_string": "{\"order_id\":\"ord_fixture_1\",\"amount\":1000,\"status\":\"confirmed\"}",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "rec_fixture_2",
+          "raw_data": { "order_id": "ord_fixture_2", "amount": 2000, "status": "confirmed" },
+          "raw_data_string": "{\"order_id\":\"ord_fixture_2\",\"amount\":2000,\"status\":\"confirmed\"}",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

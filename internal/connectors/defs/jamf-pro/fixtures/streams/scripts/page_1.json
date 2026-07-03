@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/scripts",
+    "query": { "page": "0", "page-size": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "totalCount": 1,
+      "results": [
+        {
+          "id": "1",
+          "name": "Fixture Script 1",
+          "info": "fixture info",
+          "notes": "fixture notes",
+          "priority": "1",
+          "categoryId": "1",
+          "categoryName": "Fixtures",
+          "osRequirements": "13"
+        }
+      ]
+    }
+  }
+}

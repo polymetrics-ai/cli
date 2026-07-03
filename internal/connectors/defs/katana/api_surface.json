@@ -1,17 +1,18 @@
 {
-  "api": "Katana MRP (Cloud Inventory) REST API v1",
-  "docs": "https://docs.katanamrp.com/api/",
+  "api": "Katana MRP (Cloud Inventory) API v1 (https://api.katanamrp.com/v1)",
+  "docs": "https://developer.katanamrp.com/reference/introduction",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out: the 5 legacy-parity read streams only (products, materials, variants, sales_orders, customers); Katana is read-only for pm (no reverse-ETL writes implemented)",
+  "scope": "Migration wave: the 5 legacy-parity read streams only, matching internal/connectors/katana's exact endpoint set. The full Katana surface (bill of materials, purchase orders, stock, webhooks, etc.) is out of scope until Pass B capability expansion.",
   "endpoints": [
-    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
-    { "method": "GET", "path": "/materials", "covered_by": { "stream": "materials" } },
-    { "method": "GET", "path": "/variants", "covered_by": { "stream": "variants" } },
-    { "method": "GET", "path": "/sales_orders", "covered_by": { "stream": "sales_orders" } },
-    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
-    { "method": "POST", "path": "/sales_orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy internal/connectors/katana" } },
-    { "method": "GET", "path": "/purchase_orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy internal/connectors/katana" } },
-    { "method": "GET", "path": "/stocktakes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy internal/connectors/katana" } },
-    { "method": "GET", "path": "/webhooks", "excluded": { "category": "non_data_endpoint", "reason": "webhook subscription management, not a syncable object stream" } }
+    { "method": "GET", "path": "/v1/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/v1/materials", "covered_by": { "stream": "materials" } },
+    { "method": "GET", "path": "/v1/variants", "covered_by": { "stream": "variants" } },
+    { "method": "GET", "path": "/v1/sales_orders", "covered_by": { "stream": "sales_orders" } },
+    { "method": "GET", "path": "/v1/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/v1/bom_rows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/purchase_orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/stocktakes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy katana is read-only, no write actions implemented" } }
   ]
 }

@@ -19,6 +19,10 @@
       "default": "200",
       "description": "Records per page (1-200)."
     },
+    "form_ids": {
+      "type": "string",
+      "description": "Comma-separated list of Typeform form ids to fan out over for the responses stream (one GET /forms/{form_id}/responses request per id, form_id stamped onto every emitted record). Required for responses."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

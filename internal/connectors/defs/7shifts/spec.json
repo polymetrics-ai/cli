@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "7shifts Connection Specification",
+  "type": "object",
+  "required": ["access_token", "company_id"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "7shifts API access token. Used only for Bearer auth (Authorization: Bearer <access_token>); never logged."
+    },
+    "company_id": {
+      "type": "string",
+      "description": "7shifts company id; substituted into every company-scoped stream path (/v2/company/{{ config.company_id }}/...). Not used by the top-level companies stream."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.7shifts.com",
+      "description": "7shifts API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only records modified at or after this date are read on a fresh sync (sent as modified_since, a date-only YYYY-MM-DD value)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

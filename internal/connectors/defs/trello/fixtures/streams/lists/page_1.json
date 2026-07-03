@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/boards/synthetic-conformance-value/lists"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "list_fixture_1",
+        "name": "To Do",
+        "closed": false,
+        "idBoard": "synthetic-conformance-value",
+        "pos": 16384,
+        "subscribed": false
+      },
+      {
+        "id": "list_fixture_2",
+        "name": "Done",
+        "closed": false,
+        "idBoard": "synthetic-conformance-value",
+        "pos": 32768,
+        "subscribed": false
+      }
+    ]
+  }
+}

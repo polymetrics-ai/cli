@@ -1,0 +1,13 @@
+{
+  "api": "Metricool API (https://app.metricool.com/api)",
+  "docs": "https://help.metricool.com/en/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Unquarantine (fan_out engine mini-wave) migration of internal/connectors/metricool at legacy capability parity: all 5 legacy read streams (brands, instagram_posts, facebook_posts, linkedin_posts, tiktok_posts). Legacy metricool is read-only.",
+  "endpoints": [
+    { "method": "GET", "path": "/admin/simpleProfiles", "covered_by": { "stream": "brands" } },
+    { "method": "GET", "path": "/stats/instagram/posts", "covered_by": { "stream": "instagram_posts" } },
+    { "method": "GET", "path": "/stats/facebook/posts", "covered_by": { "stream": "facebook_posts" } },
+    { "method": "GET", "path": "/stats/linkedin/posts", "covered_by": { "stream": "linkedin_posts" } },
+    { "method": "GET", "path": "/v2/analytics/posts/tiktok", "covered_by": { "stream": "tiktok_posts" } }
+  ]
+}

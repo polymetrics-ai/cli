@@ -1,0 +1,58 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "wasabi-stats-api",
+        "value": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "v1/stats",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "default": "" }
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "wasabi-stats-api api_key is missing or invalid; re-run pm credentials add wasabi-stats-api"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "Wasabi Stats API rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "bucket_stats",
+      "path": "v1/stats",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/bucket_stats.json"
+    },
+    {
+      "name": "account_stats",
+      "path": "v1/accounts",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/account_stats.json"
+    }
+  ]
+}

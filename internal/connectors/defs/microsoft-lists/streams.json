@@ -1,0 +1,77 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "scopes": "{{ config.scope }}",
+        "when": "{{ config.token_url }}"
+      },
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.login_base_url }}/{{ secrets.tenant_id }}/oauth2/v2.0/token",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "scopes": "{{ config.scope }}"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/sites/{{ config.site_id }}/lists"
+    },
+    "error_map": [
+      { "status": 401, "hint": "microsoft-lists client_id/client_secret/tenant_id are missing or invalid; re-run pm credentials add microsoft-lists" },
+      { "status": 403, "hint": "microsoft-lists application lacks Graph API permissions for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "microsoft-lists rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "lists",
+      "path": "/sites/{{ config.site_id }}/lists",
+      "records": { "path": "value" },
+      "schema": "schemas/lists.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
+      }
+    },
+    {
+      "name": "list_items",
+      "path": "/sites/{{ config.site_id }}/lists/{{ config.list_id }}/items",
+      "records": { "path": "value" },
+      "schema": "schemas/list_items.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
+      }
+    },
+    {
+      "name": "columns",
+      "path": "/sites/{{ config.site_id }}/lists/{{ config.list_id }}/columns",
+      "records": { "path": "value" },
+      "schema": "schemas/columns.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
+      }
+    },
+    {
+      "name": "content_types",
+      "path": "/sites/{{ config.site_id }}/lists/{{ config.list_id }}/contentTypes",
+      "records": { "path": "value" },
+      "schema": "schemas/content_types.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
+      }
+    }
+  ]
+}

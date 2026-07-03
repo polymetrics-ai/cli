@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "forms",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "list_id": { "type": ["string", "null"] },
+    "contact_list_id": { "type": ["string", "null"] },
+    "form_title": { "type": ["string", "null"] },
+    "form_type": { "type": ["string", "null"] },
+    "form_html": { "type": ["string", "null"] },
+    "signup_count": { "type": ["string", "null"] }
+  }
+}

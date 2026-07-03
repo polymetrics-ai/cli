@@ -1,0 +1,12 @@
+{
+  "api": "CoinGecko REST API v3 (https://api.coingecko.com/api/v3, pro: https://pro-api.coingecko.com/api/v3)",
+  "docs": "https://docs.coingecko.com/reference/introduction",
+  "reviewed_at": "2026-07-03",
+  "scope": "Unblock pass: 1 of 3 legacy-parity read streams (coin); market_chart and history remain blocked (ENGINE_GAP, see docs.md Known limits) after re-review against the new dialect (fan_out, keyed_object, start_page:0, extra_params, date-only bounds) -- none of those additions cover either gap. Full CoinGecko API surface (search, exchanges, derivatives, NFTs, on-chain) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/coins/{id}", "covered_by": { "stream": "coin" } },
+    { "method": "GET", "path": "/coins/{id}/market_chart", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: zips 3 parallel [timestamp,value] arrays (prices/market_caps/total_volumes) into one record per timestamp; the dialect has no array-zip/parallel-array-join primitive. See docs.md Known limits." } },
+    { "method": "GET", "path": "/coins/{id}/history", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: legacy issues one independent GET request per calendar day between start_date and end_date (the date query param IS the loop variable, not a next-page/cursor token); the dialect's pagination types all advance from response state, incremental issues exactly one request per read with a server-side lower-bound filter, and fan_out requires a discoverable/configured id list -- none can express 'N independent single-day requests over a client-computed date range'. See docs.md Known limits." } },
+    { "method": "GET", "path": "/ping", "excluded": { "category": "non_data_endpoint", "reason": "connectivity probe only, used as the check request" } }
+  ]
+}

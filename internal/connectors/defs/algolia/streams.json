@@ -17,6 +17,29 @@
   },
   "streams": [
     {
+      "name": "indices",
+      "path": "/1/indexes",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 0,
+        "page_size": 100,
+        "max_pages": 100
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "data_size": "{{ record.dataSize }}",
+        "file_size": "{{ record.fileSize }}",
+        "last_build_time_s": "{{ record.lastBuildTimeS }}",
+        "number_of_pending_tasks": "{{ record.numberOfPendingTasks }}",
+        "pending_task": "{{ record.pendingTask }}"
+      },
+      "schema": "schemas/indices.json"
+    },
+    {
       "name": "api_keys",
       "path": "/1/keys",
       "records": { "path": "keys" },

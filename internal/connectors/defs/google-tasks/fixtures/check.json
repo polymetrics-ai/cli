@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/@me/lists",
+    "query": { "maxResults": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "items": [] }
+  }
+}

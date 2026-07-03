@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/@me/lists"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "tasks#taskLists",
+      "items": [
+        {
+          "kind": "tasks#taskList",
+          "id": "list_fixture_1",
+          "etag": "etag_1",
+          "title": "Fixture list 1",
+          "updated": "2026-01-01T00:00:00.000Z",
+          "selfLink": "https://tasks.googleapis.com/tasks/v1/users/@me/lists/list_fixture_1"
+        },
+        {
+          "kind": "tasks#taskList",
+          "id": "list_fixture_2",
+          "etag": "etag_2",
+          "title": "Fixture list 2",
+          "updated": "2026-01-02T00:00:00.000Z",
+          "selfLink": "https://tasks.googleapis.com/tasks/v1/users/@me/lists/list_fixture_2"
+        }
+      ]
+    }
+  }
+}

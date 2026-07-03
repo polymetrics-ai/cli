@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "responses",
+  "type": "object",
+  "x-primary-key": ["response_id"],
+  "x-cursor-field": "submitted_at",
+  "required": ["response_id"],
+  "properties": {
+    "response_id": { "type": "string" },
+    "form_id": { "type": ["string", "null"] },
+    "token": { "type": ["string", "null"] },
+    "landing_id": { "type": ["string", "null"] },
+    "landed_at": { "type": ["string", "null"] },
+    "submitted_at": { "type": ["string", "null"] },
+    "answers": { "type": ["array", "null"] },
+    "hidden": { "type": ["object", "null"] },
+    "calculated": { "type": ["object", "null"] },
+    "metadata": { "type": ["object", "null"] }
+  }
+}

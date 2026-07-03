@@ -4,29 +4,44 @@ Auth0 is a declarative-HTTP bundle migrated from `internal/connectors/auth0` (th
 legacy connector, which stays registered and unchanged until wave6's registry flip). It reads
 Auth0 users, clients, connections, roles, and organizations from the Auth0 Management API v2. It is
 a read-only source in both legacy and this bundle (`capabilities.write: false`, no `writes.json`).
-Status: **partial** — see Known limits for two typed `ENGINE_GAP` blockers that keep this bundle
-short of full legacy parity.
+Both of legacy's previously-blocking `ENGINE_GAP`s are now closed: 0-indexed pagination
+(`start_page: 0`, S4 engine mini-wave item 1) and the M2M `audience` token-request parameter
+(`auth[].extra_params`, S4 engine mini-wave item 4) are both expressible in this dialect now. This
+bundle has full stream and auth-mode parity with legacy.
 
 ## Auth setup
 
-Provide a Management API access token via the `access_token` secret; it is used directly as a
-Bearer token (`{"mode": "bearer", "token": "{{ secrets.access_token }}"}`). `base_url` (your tenant
-domain, e.g. `https://your-tenant.us.auth0.com`) is required with no default, matching legacy
-(`auth0BaseURL` requires it explicitly — the base is tenant-specific, never a fixed literal).
+Legacy accepts two credential shapes with `access_token` taking priority whenever both are
+configured (dual-auth ordering is load-bearing, conventions.md §3) — this bundle's `base.auth`
+candidate list reproduces that exact precedence:
 
-**Not implemented in this bundle**: legacy also accepts M2M `client_id`/`client_secret` credentials
-and performs an OAuth2 client-credentials exchange against `<base_url>/oauth/token`, always
-including an `audience` form parameter (explicit `audience` config, or derived as
-`<base_url>/api/v2/` when unset) so the issued token is scoped to the Management API. The engine's
-`oauth2_client_credentials` `AuthSpec` (`internal/connectors/engine/bundle.go`) exposes only
-`token_url`/`client_id`/`client_secret`/`scopes` — there is no `audience`/extra-token-param field,
-and `buildOAuth2ClientCredentials` (`internal/connectors/engine/auth.go`) never sets
-`connsdk.OAuth2ClientCredentials.ExtraParams` from any bundle-declared value. Auth0's token endpoint
-requires `audience` to scope the returned token to the Management API; requesting a token without
-it would either fail outright or (if the tenant has an unrelated default audience configured) issue
-a token that gets 401s on every Management API call — a real, request-level divergence from legacy,
-not a cosmetic one, so this is not approximated: the M2M auth candidate is simply not declared. Only
-the `access_token` bearer path is implemented. See the `AUTH_COMPLEX`/`ENGINE_GAP` blocker below.
+1. **`access_token` secret** (bearer, first candidate): used directly as a Bearer token
+   (`{"mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}"}`).
+2. **M2M `client_id`/`client_secret` secrets** (`oauth2_client_credentials`, fallback candidate,
+   `when: "{{ secrets.client_id }}"`): performs an OAuth2 client-credentials exchange against
+   `{{ config.base_url }}/oauth/token`, always including the `audience` config value as the
+   `extra_params.audience` token-request form parameter (Auth0 requires this to scope the issued
+   token to the Management API) — matching legacy's `authenticator`'s M2M branch and its
+   `<base_url>/api/v2/`-by-convention audience exactly, modulo the one narrowing noted below.
+
+`base_url` (your tenant domain, e.g. `https://your-tenant.us.auth0.com`) is required with no
+default, matching legacy (`auth0BaseURL` requires it explicitly — the base is tenant-specific,
+never a fixed literal).
+
+**Narrowed from legacy: `audience` has no derived default.** Legacy defaults `audience` to
+`<base_url>/api/v2/` when the config value is unset (`authenticator`'s `if audience == ""`
+branch). The engine's `extra_params` dialect resolves each value via ordinary `Interpolate` with NO
+`omit_when_absent`/`default` tolerance (conventions.md §3: "a misconfigured audience/subject param
+should fail loudly rather than silently omit a value a real OAuth2 provider may require"), and
+`audience` is a function of ANOTHER config value (`base_url`), not a fixed literal — exactly the
+"DERIVED default" case conventions.md's `spec.json` `"default"` materialization section says to
+either require explicitly or express via a computed-field-style mechanism the dialect doesn't yet
+have for base-URL-shaped construction. This bundle takes the documented "require it explicitly"
+path: `audience` must be set when using the M2M auth candidate (typically `<base_url>/api/v2/`,
+matching legacy's own default value — operators just set it explicitly instead of relying on
+derivation). This never changes emitted record data for any configuration legacy itself would
+accept; it only requires one more explicit config value than legacy did. Documented parity
+deviation, ACCEPTABLE.
 
 ## Streams notes
 
@@ -56,28 +71,10 @@ None. Auth0 is a read-only source.
 
 ## Known limits
 
-- **`ENGINE_GAP` (blocking, M2M client-credentials auth)**: see Auth setup above — the
-  `oauth2_client_credentials` `AuthSpec` has no way to express Auth0's mandatory `audience` token
-  request parameter. Only the `access_token` bearer credential path is implemented; the M2M
-  `client_id`+`client_secret` path from legacy (`auth0.go`'s `authenticator`, taking priority when
-  no `access_token` is set) is not portable to this bundle without an engine change (adding an
-  `audience`/`extra_params`-style field to `AuthSpec` and wiring it into
-  `buildOAuth2ClientCredentials`'s `connsdk.OAuth2ClientCredentials.ExtraParams`).
-- **`ENGINE_GAP` (blocking, zero-indexed pagination)**: Auth0's Management API list endpoints are
-  0-indexed (`page=0` is the first page; legacy's `harvest` starts its loop at `page := 0`). The
-  engine's `page_number` paginator forces `start := 1` whenever `PaginationSpec.StartPage == 0`
-  (both `internal/connectors/engine/paginate.go`'s `newPaginator` and
-  `internal/connectors/connsdk/paginate.go`'s `PageNumberPaginator.Start()` independently treat an
-  explicit `"start_page": 0` identically to "unset," since Go's JSON-unmarshaled zero value for an
-  `int` cannot be distinguished from an omitted field) — there is no way to declare a genuinely
-  0-indexed first page. Requesting `page=1` first instead of `page=0` would silently skip Auth0's
-  actual first page of every resource on every sync, a real data-loss divergence, not an
-  approximation; this bundle therefore declares the honest `start_page: 1` (the engine's real
-  runtime behavior) rather than a misleading `start_page: 0` that the engine does not honor, and
-  files this as a blocker instead of silently dropping the first page. (Two other migrated bundles,
-  `algolia` and `beamer`, currently declare `"start_page": 0`; per this same code-read that value is
-  inert there too and both should be flagged/repaired in a follow-up pass — not fixed here, out of
-  this connector's assigned scope.)
+- **`audience` has no derived default** — see Auth setup above. Documented parity deviation,
+  ACCEPTABLE: operators using the M2M auth candidate must set `audience` explicitly (typically
+  `<base_url>/api/v2/`, legacy's own default value) rather than relying on derivation from
+  `base_url`; never changes emitted data for any configuration legacy itself would accept.
 - Only the 5 legacy-parity streams are implemented; the broader Management API surface (rules,
   actions, hooks, logs, tenant settings, device credentials) is out of scope for this wave — see
   `api_surface.json`'s `excluded` entries.

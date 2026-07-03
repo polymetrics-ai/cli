@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/issues/1/occurrences",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 101,
+          "target": "host-1.example.com",
+          "port": 443,
+          "age": "1 day",
+          "extra_info": { "path": "/" },
+          "snoozed": false,
+          "snooze_reason": "",
+          "snooze_until": ""
+        },
+        {
+          "id": 102,
+          "target": "host-1.example.com",
+          "port": 8443,
+          "age": "2 days",
+          "extra_info": { "path": "/admin" },
+          "snoozed": false,
+          "snooze_reason": "",
+          "snooze_until": ""
+        }
+      ]
+    }
+  }
+}

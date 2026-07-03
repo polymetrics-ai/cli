@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/customers",
+    "query": { "limit": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "limit": 1, "offset": 0, "count": 0, "total": 0, "results": [] }
+  }
+}

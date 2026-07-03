@@ -10,7 +10,11 @@
       }
     ],
     "pagination": {
-      "type": "none"
+      "type": "page_number",
+      "page_param": "pageIndex",
+      "size_param": "pageSize",
+      "start_page": 0,
+      "page_size": 50
     },
     "check": {
       "method": "GET",
@@ -37,8 +41,7 @@
       "name": "organizations",
       "path": "/ng/api/organizations",
       "query": {
-        "accountIdentifier": "{{ config.account_id }}",
-        "pageSize": "{{ config.page_size }}"
+        "accountIdentifier": "{{ config.account_id }}"
       },
       "records": {
         "path": "data.content"
@@ -55,8 +58,7 @@
       "name": "projects",
       "path": "/ng/api/projects",
       "query": {
-        "accountIdentifier": "{{ config.account_id }}",
-        "pageSize": "{{ config.page_size }}"
+        "accountIdentifier": "{{ config.account_id }}"
       },
       "records": {
         "path": "data.content"
@@ -76,8 +78,7 @@
       "name": "services",
       "path": "/ng/api/servicesV2",
       "query": {
-        "accountIdentifier": "{{ config.account_id }}",
-        "pageSize": "{{ config.page_size }}"
+        "accountIdentifier": "{{ config.account_id }}"
       },
       "records": {
         "path": "data.content"
@@ -97,8 +98,7 @@
       "name": "connectors",
       "path": "/ng/api/connectors",
       "query": {
-        "accountIdentifier": "{{ config.account_id }}",
-        "pageSize": "{{ config.page_size }}"
+        "accountIdentifier": "{{ config.account_id }}"
       },
       "records": {
         "path": "data.content"
@@ -117,8 +117,7 @@
       "name": "pipelines",
       "path": "/pipeline/api/pipelines/list",
       "query": {
-        "accountIdentifier": "{{ config.account_id }}",
-        "pageSize": "{{ config.page_size }}"
+        "accountIdentifier": "{{ config.account_id }}"
       },
       "records": {
         "path": "data.content"

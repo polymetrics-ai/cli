@@ -39,13 +39,20 @@ false`, no `writes.json`).
   sequence), and there is no "loop N times, changing the request path each time" primitive at all.
   This is a named `ENGINE_GAP`: reproducing it correctly (including the weekend-skip and
   366-day cap) requires a `StreamHook`, forbidden in this JSON-only wave.
-- **`symbols` is not ported (blocked, ENGINE_GAP).** The `/symbols` response body is a
-  `{"symbols": {"USD": "United States Dollar", "EUR": "Euro", ...}}` map; legacy explodes this
-  into one `{code, name}` record per map key (sorted for determinism). The declarative
-  `records.path` extraction (`connsdk.RecordsAt`) supports only an array-of-objects shape or a
-  single-object passthrough (`single_object: true`) — there is no "treat each key of this object
-  as a separate record" mode. Expressing this correctly needs either a new engine records-mode or
-  a `StreamHook`; both are out of scope for this wave.
+- **`symbols` is still not ported (blocked, ENGINE_GAP) — the S4 `keyed_object` primitive does not
+  cover this exact shape.** The `/symbols` response body is a `{"symbols": {"USD": "United States
+  Dollar", "EUR": "Euro", ...}}` map; legacy explodes this into one `{code, name}` record per map
+  key (sorted for determinism). The engine's `records.keyed_object`/`key_field` flatten (S4 engine
+  mini-wave item 3, docs/migration/conventions.md §3 — added specifically to close appfigures'
+  `{"111": {...}, "222": {...}}` map-of-OBJECTS shape) was evaluated and does NOT close this gap:
+  `read.go`'s `recordsAtKeyed` requires every map VALUE to itself decode as a JSON object
+  (`obj[k].(map[string]any)`) and silently SKIPS any key whose value is not an object — confirmed
+  empirically (a `{"USD":"United States Dollar"}`-shaped body run through `recordsAtKeyed` emits
+  zero records, since every value is a bare JSON string, not `{...}`). Exchange Rates' `/symbols`
+  is a map of code → scalar display-name STRING, not a map of code → object — a narrower shape
+  `keyed_object` does not support. Expressing this correctly still needs either a scalar-valued
+  keyed-object mode (an engine extension distinct from the one that shipped) or a `StreamHook`;
+  both remain out of scope for this wave.
 - `rate_limit` is not declared on `streams.json`'s `base` block: legacy enforces no client-side
   rate limiting, so none is added here (matches legacy's actual behavior).
 - The `latest` stream's `rates` field is passed through as-is (whatever shape the API returns); a

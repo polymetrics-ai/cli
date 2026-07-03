@@ -1,7 +1,7 @@
 {
   "name": "breezy-hr",
   "display_name": "Breezy HR",
-  "description": "Reads Breezy HR positions and hiring pipelines through the Breezy v3 REST API. Per-position candidates are not modeled by this bundle; see docs.md Known limits.",
+  "description": "Reads Breezy HR positions, hiring pipelines, and per-position candidates through the Breezy v3 REST API.",
   "integration_type": "api",
   "docs_url": "https://developer.breezy.hr/",
   "release_stage": "ga",

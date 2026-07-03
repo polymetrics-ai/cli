@@ -1,0 +1,920 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time/leaverequests",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "succeeded": true,
+      "totalPages": 2,
+      "pageNumber": 1,
+      "data": [
+        {
+          "id": "lr_fixture_1",
+          "employeeId": "emp_fixture_1",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_2",
+          "employeeId": "emp_fixture_2",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_3",
+          "employeeId": "emp_fixture_3",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_4",
+          "employeeId": "emp_fixture_4",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_5",
+          "employeeId": "emp_fixture_5",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_6",
+          "employeeId": "emp_fixture_6",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_7",
+          "employeeId": "emp_fixture_7",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_8",
+          "employeeId": "emp_fixture_8",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_9",
+          "employeeId": "emp_fixture_9",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_10",
+          "employeeId": "emp_fixture_10",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_11",
+          "employeeId": "emp_fixture_11",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_12",
+          "employeeId": "emp_fixture_12",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_13",
+          "employeeId": "emp_fixture_13",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_14",
+          "employeeId": "emp_fixture_14",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_15",
+          "employeeId": "emp_fixture_15",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_16",
+          "employeeId": "emp_fixture_16",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_17",
+          "employeeId": "emp_fixture_17",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_18",
+          "employeeId": "emp_fixture_18",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_19",
+          "employeeId": "emp_fixture_19",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_20",
+          "employeeId": "emp_fixture_20",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_21",
+          "employeeId": "emp_fixture_21",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_22",
+          "employeeId": "emp_fixture_22",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_23",
+          "employeeId": "emp_fixture_23",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_24",
+          "employeeId": "emp_fixture_24",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_25",
+          "employeeId": "emp_fixture_25",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_26",
+          "employeeId": "emp_fixture_26",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_27",
+          "employeeId": "emp_fixture_27",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_28",
+          "employeeId": "emp_fixture_28",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_29",
+          "employeeId": "emp_fixture_29",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_30",
+          "employeeId": "emp_fixture_30",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_31",
+          "employeeId": "emp_fixture_31",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_32",
+          "employeeId": "emp_fixture_32",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_33",
+          "employeeId": "emp_fixture_33",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_34",
+          "employeeId": "emp_fixture_34",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_35",
+          "employeeId": "emp_fixture_35",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_36",
+          "employeeId": "emp_fixture_36",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_37",
+          "employeeId": "emp_fixture_37",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_38",
+          "employeeId": "emp_fixture_38",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_39",
+          "employeeId": "emp_fixture_39",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_40",
+          "employeeId": "emp_fixture_40",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_41",
+          "employeeId": "emp_fixture_41",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_42",
+          "employeeId": "emp_fixture_42",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_43",
+          "employeeId": "emp_fixture_43",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_44",
+          "employeeId": "emp_fixture_44",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_45",
+          "employeeId": "emp_fixture_45",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_46",
+          "employeeId": "emp_fixture_46",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_47",
+          "employeeId": "emp_fixture_47",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_48",
+          "employeeId": "emp_fixture_48",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_49",
+          "employeeId": "emp_fixture_49",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_50",
+          "employeeId": "emp_fixture_50",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_51",
+          "employeeId": "emp_fixture_51",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_52",
+          "employeeId": "emp_fixture_52",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_53",
+          "employeeId": "emp_fixture_53",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_54",
+          "employeeId": "emp_fixture_54",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_55",
+          "employeeId": "emp_fixture_55",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_56",
+          "employeeId": "emp_fixture_56",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_57",
+          "employeeId": "emp_fixture_57",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_58",
+          "employeeId": "emp_fixture_58",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_59",
+          "employeeId": "emp_fixture_59",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_60",
+          "employeeId": "emp_fixture_60",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_61",
+          "employeeId": "emp_fixture_61",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_62",
+          "employeeId": "emp_fixture_62",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_63",
+          "employeeId": "emp_fixture_63",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_64",
+          "employeeId": "emp_fixture_64",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_65",
+          "employeeId": "emp_fixture_65",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_66",
+          "employeeId": "emp_fixture_66",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_67",
+          "employeeId": "emp_fixture_67",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_68",
+          "employeeId": "emp_fixture_68",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_69",
+          "employeeId": "emp_fixture_69",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_70",
+          "employeeId": "emp_fixture_70",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_71",
+          "employeeId": "emp_fixture_71",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_72",
+          "employeeId": "emp_fixture_72",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_73",
+          "employeeId": "emp_fixture_73",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_74",
+          "employeeId": "emp_fixture_74",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_75",
+          "employeeId": "emp_fixture_75",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_76",
+          "employeeId": "emp_fixture_76",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_77",
+          "employeeId": "emp_fixture_77",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_78",
+          "employeeId": "emp_fixture_78",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_79",
+          "employeeId": "emp_fixture_79",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_80",
+          "employeeId": "emp_fixture_80",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_81",
+          "employeeId": "emp_fixture_81",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_82",
+          "employeeId": "emp_fixture_82",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_83",
+          "employeeId": "emp_fixture_83",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_84",
+          "employeeId": "emp_fixture_84",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_85",
+          "employeeId": "emp_fixture_85",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_86",
+          "employeeId": "emp_fixture_86",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_87",
+          "employeeId": "emp_fixture_87",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_88",
+          "employeeId": "emp_fixture_88",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_89",
+          "employeeId": "emp_fixture_89",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_90",
+          "employeeId": "emp_fixture_90",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_91",
+          "employeeId": "emp_fixture_91",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_92",
+          "employeeId": "emp_fixture_92",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_93",
+          "employeeId": "emp_fixture_93",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_94",
+          "employeeId": "emp_fixture_94",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_95",
+          "employeeId": "emp_fixture_95",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_96",
+          "employeeId": "emp_fixture_96",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_97",
+          "employeeId": "emp_fixture_97",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_98",
+          "employeeId": "emp_fixture_98",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_99",
+          "employeeId": "emp_fixture_99",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        },
+        {
+          "id": "lr_fixture_100",
+          "employeeId": "emp_fixture_100",
+          "leaveTypeId": "lt_fixture_1",
+          "fromDate": "2026-01-01",
+          "toDate": "2026-01-02",
+          "status": "Approved",
+          "dayCount": 1
+        }
+      ]
+    }
+  }
+}

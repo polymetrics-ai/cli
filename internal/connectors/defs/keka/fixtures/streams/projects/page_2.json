@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/psa/projects",
+    "query": {
+      "pageNumber": "2",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "succeeded": true,
+      "totalPages": 2,
+      "pageNumber": 2,
+      "data": [
+        {
+          "id": "proj_fixture_101",
+          "name": "Fixture Project 101",
+          "code": "PROJ101",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "google-tasks",
+  "display_name": "Google Tasks",
+  "description": "Reads Google task lists and tasks through the Google Tasks REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.google.com/tasks/reference/rest",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Google Tasks API read of the authenticated user's task lists and tasks"
+  }
+}

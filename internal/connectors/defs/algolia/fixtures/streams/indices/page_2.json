@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/1/indexes",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "name": "fixture_index_101",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-02T00:00:00Z",
+          "entries": 1010,
+          "dataSize": 103424,
+          "fileSize": 206848,
+          "lastBuildTimeS": 101,
+          "numberOfPendingTasks": 0,
+          "pendingTask": false,
+          "primary": null,
+          "replicas": []
+        },
+        {
+          "name": "fixture_index_102",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-02T00:00:00Z",
+          "entries": 1020,
+          "dataSize": 104448,
+          "fileSize": 208896,
+          "lastBuildTimeS": 102,
+          "numberOfPendingTasks": 0,
+          "pendingTask": false,
+          "primary": null,
+          "replicas": []
+        }
+      ],
+      "nbPages": 2
+    }
+  }
+}

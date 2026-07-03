@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/position/pos_fixture_2/candidates",
+    "query": { "sort": "updated_date", "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "cand_fixture_2",
+        "name": "Fixture Candidate 2",
+        "email_address": "candidate2@example.com",
+        "phone_number": "+15550101",
+        "headline": "Product Manager",
+        "origin": "referral",
+        "stage": { "name": "Interview" },
+        "creation_date": "2026-01-03T00:00:00Z",
+        "updated_date": "2026-01-04T00:00:00Z"
+      }
+    ]
+  }
+}

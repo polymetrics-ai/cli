@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/usage.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "data": {
+        "app_id": "oer_fixture",
+        "status": "active",
+        "plan": { "name": "Free" },
+        "usage": {
+          "requests": 10,
+          "requests_quota": 1000,
+          "requests_remaining": 990,
+          "days_elapsed": 1,
+          "days_remaining": 29,
+          "daily_average": 10
+        }
+      }
+    }
+  }
+}

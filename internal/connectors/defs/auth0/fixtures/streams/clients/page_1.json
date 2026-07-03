@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/api/v2/clients", "query": { "page": "1", "per_page": "50", "include_totals": "true" } },
+  "request": { "method": "GET", "path": "/api/v2/clients", "query": { "page": "0", "per_page": "50", "include_totals": "true" } },
   "response": {
     "status": 200,
     "body": {

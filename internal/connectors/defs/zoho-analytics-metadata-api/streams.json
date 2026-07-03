@@ -1,0 +1,55 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "ZANALYTICS-ORGID": "{{ config.org_id }}"
+    },
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "zoho-analytics-metadata-api",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.refresh_token }}"
+      }
+    ],
+    "pagination": { "type": "none" },
+    "check": {
+      "method": "GET",
+      "path": "/workspaces"
+    },
+    "error_map": [
+      { "status": 401, "hint": "zoho-analytics-metadata-api OAuth refresh grant failed or access token expired; re-run pm credentials add zoho-analytics-metadata-api" },
+      { "status": 403, "hint": "zoho-analytics-metadata-api account lacks access for this request/scope" },
+      { "status": 429, "class": "rate_limited", "hint": "zoho-analytics-metadata-api API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "workspaces",
+      "path": "/workspaces",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "created_time": "{{ record.createdTime }}"
+      },
+      "schema": "schemas/workspaces.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "views",
+      "path": "/views",
+      "records": { "path": "data" },
+      "schema": "schemas/views.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tables",
+      "path": "/tables",
+      "records": { "path": "data" },
+      "schema": "schemas/tables.json",
+      "projection": "passthrough"
+    }
+  ]
+}

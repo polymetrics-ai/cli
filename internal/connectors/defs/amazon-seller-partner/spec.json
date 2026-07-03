@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Amazon Seller Partner Connection Specification",
+  "type": "object",
+  "required": ["lwa_app_id", "lwa_client_secret", "refresh_token", "replication_start_date"],
+  "properties": {
+    "lwa_app_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Login with Amazon (LWA) application client ID, used as client_id in the refresh_token token exchange. Never logged."
+    },
+    "lwa_client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Login with Amazon (LWA) application client secret, used as client_secret in the refresh_token token exchange. Never logged."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived LWA refresh_token exchanged for a short-lived access_token on every Check/Read. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://sellingpartnerapi-na.amazon.com",
+      "description": "SP-API base URL. Defaults to the North America endpoint, matching legacy's spDefaultBaseURL/spDefaultBaseURL fallback. Legacy also derives this from a 'region' enum (NA/EU/FE and country codes) at runtime; this bundle requires the resolved base_url directly for non-NA regions since the engine's spec-default mechanism only materializes one fixed literal, not a region-derived choice between three URLs (documented scope narrowing, see docs.md). Set to https://sellingpartnerapi-eu.amazon.com or https://sellingpartnerapi-fe.amazon.com for EU/FE sellers."
+    },
+    "lwa_token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.amazon.com/auth/o2/token",
+      "description": "Login with Amazon token exchange endpoint override (matches legacy's lwaDefaultTokenURL default)."
+    },
+    "marketplace_id": {
+      "type": "string",
+      "default": "ATVPDKIKX0DER",
+      "description": "Amazon marketplace ID sent on Orders/FBA Inventory requests. Defaults to the US marketplace, matching legacy's defaultMarketplaceID."
+    },
+    "replication_start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound for time-windowed streams (orders, inventory_summaries, financial_event_groups) on a fresh sync with no incremental cursor yet, sent as LastUpdatedAfter/startDateTime/FinancialEventGroupStartedAfter respectively. REQUIRED here (unlike legacy): legacy's orders/financial_event_groups always compute a moving 'now minus 2 years' fallback (spDefaultCreatedAfter, re-evaluated via time.Now() on every call) when this is unset, which the engine's static spec.json/stream.Query default mechanisms cannot express (both bake a single fixed literal at bundle-author time, never a value relative to the current wall-clock time) — documented scope narrowing, see docs.md. Legacy's inventory_summaries never applies a fallback at all (it simply omits startDateTime when unset); requiring this field here is a strictly narrower config surface for that stream too, not a behavior change for any input where the field was already set."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page for orders/financial_event_groups (1-100), matching legacy's spDefaultPageSize/spMaxPageSize. Not used by inventory_summaries (legacy's inventoryBaseQuery never sends a page-size param)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages to read; 0, all, or unlimited exhausts the stream, matching legacy's spMaxPages."
+    }
+  }
+}

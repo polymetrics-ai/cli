@@ -29,6 +29,28 @@
         "symbol": "{{ record.related }}"
       },
       "schema": "schemas/market_news.json"
+    },
+    {
+      "name": "company_profile",
+      "path": "/stock/profile2",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "query_param": "symbol" },
+        "stamp_field": "ticker"
+      },
+      "schema": "schemas/company_profile.json"
+    },
+    {
+      "name": "stock_recommendations",
+      "path": "/stock/recommendation",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "query_param": "symbol" },
+        "stamp_field": "symbol"
+      },
+      "schema": "schemas/stock_recommendations.json"
     }
   ]
 }

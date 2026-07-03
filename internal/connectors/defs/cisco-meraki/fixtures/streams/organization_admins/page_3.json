@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/org_2/admins",
+    "query": { "perPage": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "admin_fixture_2",
+        "name": "Fixture Admin 2",
+        "email": "fixture2@example.com",
+        "orgAccess": "read-only",
+        "authenticationMethod": "Email",
+        "accountStatus": "ok",
+        "twoFactorAuthEnabled": true,
+        "hasApiKey": true,
+        "lastActive": "2026-01-02T00:00:00Z",
+        "tags": [],
+        "networks": ["N_fixture_2"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "api": "Dolibarr REST API (module/webservice dependent; {base_url}/api/index.php)",
+  "docs": "https://www.dolibarr.org/webservices.html",
+  "reviewed_at": "2026-07-03",
+  "scope": "unblock (S4 engine mini-wave page_number start_page:0): the 5 legacy-parity read streams only; the full Dolibarr surface (users, projects, warehouses/stock, bank accounts, expense reports, and any write/mutation endpoints) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/thirdparties", "covered_by": { "stream": "thirdparties" } },
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/projects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/thirdparties", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/thirdparties/{id}", "excluded": { "category": "destructive_admin", "reason": "account/data-deleting mutation, not a read stream" } }
+  ]
+}

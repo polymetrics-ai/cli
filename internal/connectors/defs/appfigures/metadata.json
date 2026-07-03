@@ -1,7 +1,7 @@
 {
   "name": "appfigures",
   "display_name": "Appfigures",
-  "description": "Reads Appfigures app-store reviews through the Appfigures v2 REST API (page-number pagination). Products, sales, ratings, and category reports are not modeled by this bundle; see docs.md Known limits.",
+  "description": "Reads Appfigures app-store reviews, products, sales/ratings reports, and store categories through the Appfigures v2 REST API (page-number pagination for reviews; keyed-object flatten for products/sales/ratings/categories).",
   "integration_type": "api",
   "docs_url": "https://docs.appfigures.com/",
   "release_stage": "ga",

@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Infor Nexus Datasets Connection Specification",
+  "type": "object",
+  "required": ["base_url", "dataset_name", "access_key_id", "user_id", "secret_key", "api_key"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Infor Nexus Data API (v3.1) base URL, e.g. https://mingle-portal.inforcloudsuite.com/TENANT/ns/api/v3.1. No default: legacy requires the caller to supply the tenant-scoped host."
+    },
+    "dataset_name": {
+      "type": "string",
+      "description": "Name of the configured Infor Nexus export dataset to read (path-escaped into /datasets/{dataset_name})."
+    },
+    "access_key_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Infor Nexus HMAC access key id. Sent verbatim on the X-Infor-AccessKeyId header and as the credential prefix of the signed Authorization header; never logged."
+    },
+    "user_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Infor Nexus user id. Sent verbatim on the X-Infor-UserId header; never logged."
+    },
+    "secret_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Infor Nexus HMAC secret key. Used only to compute the HMAC-SHA256 request signature (never sent on the wire itself, never logged)."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Infor Nexus Data API key. Sent verbatim on the X-Infor-ApiKey header; never logged."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound for the modifiedSince query filter on the first sync (superseded by the persisted incremental cursor on subsequent syncs)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000, limit query param)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Hard cap on pages read per sync; 0, \"all\", or \"unlimited\" means unbounded."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to \"fixture\" to emit deterministic canned records with no network access (test/conformance-harness affordance only, never set in production)."
+    }
+  }
+}

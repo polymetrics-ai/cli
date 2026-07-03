@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ConfigCat Connection Specification",
+  "type": "object",
+  "required": ["password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "ConfigCat Public Management API Basic auth username (not secret)."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "ConfigCat Public Management API Basic auth password. Used only for Basic auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.configcat.com",
+      "description": "ConfigCat API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

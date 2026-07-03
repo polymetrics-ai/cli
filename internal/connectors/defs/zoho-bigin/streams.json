@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "zoho-bigin",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.client_refresh_token }}"
+      }
+    ],
+    "pagination": { "type": "none" },
+    "check": {
+      "method": "GET",
+      "path": "/Pipelines"
+    },
+    "error_map": [
+      { "status": 401, "hint": "zoho-bigin OAuth refresh grant failed or access token expired; re-run pm credentials add zoho-bigin" },
+      { "status": 403, "hint": "zoho-bigin account lacks access for this request/scope" },
+      { "status": 429, "class": "rate_limited", "hint": "zoho-bigin API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "pipelines",
+      "path": "/Pipelines",
+      "records": { "path": "data" },
+      "schema": "schemas/pipelines.json"
+    },
+    {
+      "name": "records",
+      "path": "/{{ config.module_name }}",
+      "records": { "path": "data" },
+      "schema": "schemas/records.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "fields",
+      "path": "/settings/fields",
+      "records": { "path": "fields" },
+      "schema": "schemas/fields.json",
+      "projection": "passthrough"
+    }
+  ]
+}

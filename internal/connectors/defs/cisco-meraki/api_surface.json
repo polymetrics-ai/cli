@@ -2,11 +2,11 @@
   "api": "Cisco Meraki Dashboard API v1 (https://api.meraki.com/api/v1)",
   "docs": "https://developer.cisco.com/meraki/api-v1/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: only the 'organizations' stream is Tier-1 expressible; the 3 organization-scoped legacy streams (organization_networks, organization_devices, organization_admins) require a list-organizations-then-fan-out-per-organization read pattern this dialect cannot express declaratively (see docs.md and the reported ENGINE_GAP blocker) and are NOT implemented in this bundle — legacy internal/connectors/cisco-meraki remains authoritative for those 3 streams.",
+  "scope": "Full legacy capability-parity migration: all 4 legacy streams (organizations, organization_networks, organization_devices, organization_admins). The 3 organization-scoped streams use the engine's stream.fan_out dialect (ids_from.request against /organizations, into.path_var) to reproduce legacy's list-organizations-then-fan-out-per-organization read pattern declaratively. Legacy is read-only with no reverse-ETL write target; this bundle stays read-only too.",
   "endpoints": [
     { "method": "GET", "path": "/organizations", "covered_by": { "stream": "organizations" } },
-    { "method": "GET", "path": "/organizations/{organizationId}/networks", "excluded": { "category": "out_of_scope", "reason": "org-scoped sub-resource fan-out read (list organizations, then read this endpoint per organization id) has no Tier-1 declarative expression in this dialect; ENGINE_GAP blocker reported, legacy stays authoritative for this stream" } },
-    { "method": "GET", "path": "/organizations/{organizationId}/devices", "excluded": { "category": "out_of_scope", "reason": "org-scoped sub-resource fan-out read (list organizations, then read this endpoint per organization id) has no Tier-1 declarative expression in this dialect; ENGINE_GAP blocker reported, legacy stays authoritative for this stream" } },
-    { "method": "GET", "path": "/organizations/{organizationId}/admins", "excluded": { "category": "out_of_scope", "reason": "org-scoped sub-resource fan-out read (list organizations, then read this endpoint per organization id) has no Tier-1 declarative expression in this dialect; ENGINE_GAP blocker reported, legacy stays authoritative for this stream" } }
+    { "method": "GET", "path": "/organizations/{organizationId}/networks", "covered_by": { "stream": "organization_networks" } },
+    { "method": "GET", "path": "/organizations/{organizationId}/devices", "covered_by": { "stream": "organization_devices" } },
+    { "method": "GET", "path": "/organizations/{organizationId}/admins", "covered_by": { "stream": "organization_admins" } }
   ]
 }

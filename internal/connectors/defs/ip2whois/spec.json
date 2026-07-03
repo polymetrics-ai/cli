@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IP2WHOIS Connection Specification",
+  "type": "object",
+  "required": ["api_key", "domains"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "IP2WHOIS API key, sent as the 'key' query parameter on every lookup. Never logged."
+    },
+    "domains": {
+      "type": "string",
+      "description": "Comma-separated list of domains to look up (one WHOIS lookup per domain). A single domain is a length-1 list."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.ip2whois.com/v2",
+      "description": "IP2WHOIS API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

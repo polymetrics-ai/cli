@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "scopes": "{{ config.scope }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "size",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/bank-accounts", "query": { "page": "1", "size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "kyriba client_id/client_secret are missing or invalid; re-run pm credentials add kyriba" },
+      { "status": 403, "hint": "kyriba tenant lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "kyriba rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "bank_accounts",
+      "path": "/bank-accounts",
+      "records": { "path": "data" },
+      "schema": "schemas/bank_accounts.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/transactions",
+      "records": { "path": "data" },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "statements",
+      "path": "/statements",
+      "records": { "path": "data" },
+      "schema": "schemas/statements.json"
+    },
+    {
+      "name": "payments",
+      "path": "/payments",
+      "records": { "path": "data" },
+      "schema": "schemas/payments.json"
+    }
+  ]
+}

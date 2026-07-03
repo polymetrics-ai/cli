@@ -1,0 +1,23 @@
+{
+  "name": "beamer",
+  "display_name": "Beamer",
+  "description": "Reads Beamer NPS survey responses, announcement posts, feature requests, and comments through the Beamer REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://www.getbeamer.com/api/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Beamer API read of NPS feedback, posts, feature requests, and comments",
+    "approval": "none; read-only source connector"
+  }
+}

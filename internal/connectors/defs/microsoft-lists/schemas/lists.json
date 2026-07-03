@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_modified_date_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "display_name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "web_url": { "type": ["string", "null"] },
+    "list_template": { "type": ["string", "null"] },
+    "created_date_time": { "type": ["string", "null"] },
+    "last_modified_date_time": { "type": ["string", "null"] },
+    "etag": { "type": ["string", "null"] }
+  }
+}

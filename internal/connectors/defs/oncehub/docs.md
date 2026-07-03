@@ -76,3 +76,9 @@ None. OnceHub is a read-only source connector (`capabilities.write: false`); thi
   `req.State["cursor"]` onto fixture-mode records — not part of the live API shape. This bundle's
   schemas and fixtures target the live record shape only; the engine's own conformance/fixture-replay
   harness provides the credential-free test affordance legacy's fixture mode was built for.
+- `base.pagination`'s `page_size` field was removed (F6, REVIEW.md): the `link_header` paginator
+  constructor (`engine/paginate.go`'s `newPaginator`) never reads `PaginationSpec.PageSize` for
+  the `link_header` case (only `page_number`/`offset_limit` do) — it was declared-but-dead, exactly
+  the same class of issue stripe's `docs.md` documents as RESOLVED for its own
+  `limit_param`/`page_size` fields. The actual `limit` value sent on every request is
+  `config.page_size` (templated in each stream's own `query.limit`), unaffected by this removal.

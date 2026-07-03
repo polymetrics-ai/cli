@@ -1,0 +1,12 @@
+{
+  "api": "Beamer REST API v0 (https://api.getbeamer.com/v0)",
+  "docs": "https://www.getbeamer.com/api/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "the 4 legacy-parity read streams only (nps, posts, feature_requests, comments); Beamer is a read-only feedback/changelog surface with no reverse-ETL write target, matching legacy",
+  "endpoints": [
+    { "method": "GET", "path": "/v0/nps", "covered_by": { "stream": "nps" } },
+    { "method": "GET", "path": "/v0/posts", "covered_by": { "stream": "posts" } },
+    { "method": "GET", "path": "/v0/feature-requests", "covered_by": { "stream": "feature_requests" } },
+    { "method": "GET", "path": "/v0/comments", "covered_by": { "stream": "comments" } }
+  ]
+}

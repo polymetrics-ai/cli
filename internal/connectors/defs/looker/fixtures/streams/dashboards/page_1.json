@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/dashboards", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "1", "title": "Fixture Dashboard One", "folder_id": "1" },
+      { "id": "2", "title": "Fixture Dashboard Two", "folder_id": "2" }
+    ]
+  }
+}

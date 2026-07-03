@@ -1,0 +1,22 @@
+{
+  "name": "7shifts",
+  "display_name": "7shifts",
+  "description": "Reads 7shifts companies, locations, departments, roles, users, shifts, and time punches through the 7shifts v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.7shifts.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external 7shifts API read of scheduling, roster, and time-clock data"
+  }
+}

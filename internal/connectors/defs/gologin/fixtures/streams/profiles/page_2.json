@@ -1,11 +1,28 @@
 {
-  "request": { "method": "GET", "path": "/browser/v2", "query": { "page": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/browser/v2",
+    "query": {
+      "page": "2"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "profiles": [
-        { "id": "profile_fixture_31", "name": "Fixture Profile 31", "notes": "fixture record", "role": "owner", "os": "win", "browserType": "chrome", "folderName": "Fixtures", "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-31T00:00:00Z" }
-      ]
+        {
+          "id": "profile_fixture_31",
+          "name": "Fixture Profile 31",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "mac",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:31Z"
+        }
+      ],
+      "allProfilesCount": 31
     }
   }
 }

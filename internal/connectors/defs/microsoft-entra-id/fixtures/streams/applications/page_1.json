@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/applications", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_application_1", "appId": "app-fixture-1", "displayName": "Fixture Application 1", "description": "Internal tool", "signInAudience": "AzureADMyOrg", "publisherDomain": "example.com", "createdDateTime": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

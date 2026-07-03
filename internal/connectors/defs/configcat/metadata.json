@@ -1,0 +1,23 @@
+{
+  "name": "configcat",
+  "display_name": "ConfigCat",
+  "description": "Reads ConfigCat organizations, products, configs, environments, and tags through the ConfigCat Public Management API.",
+  "integration_type": "api",
+  "docs_url": "https://api.configcat.com/docs/",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 0
+  },
+  "risk": {
+    "read": "external ConfigCat Public Management API read of organization, product, config, environment, and tag metadata",
+    "approval": "none; read-only source connector"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "chift",
+  "display_name": "Chift",
+  "description": "Reads Chift consumers, connections, and syncs through the Chift REST API using a session-token (client credentials) exchange.",
+  "integration_type": "api",
+  "docs_url": "https://docs.chift.eu/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Chift API read of consumer/connection/sync integration metadata",
+    "approval": "none; read-only"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "sole auth candidate is mode:custom (hook: chift, no when-gated non-custom fallback); the AuthHook's token exchange POSTs to {{ config.base_url }}/token, but conformance's dynamic replay only overrides engine.Bundle.HTTP.URL (the stream/check request base), never cfg.Config[\"base_url\"] itself (which stays the synthetic non-URL placeholder value) — the hook has no reachable replay target, matching gmail's identical documented shape. Hook-covered; proven by internal/connectors/hooks/chift/hooks_test.go (TestAuthenticator_MintsSessionTokenAndSetsBearer asserts the JSON POST body shape and resulting Bearer header end-to-end against a real httptest.Server)."
+  }
+}

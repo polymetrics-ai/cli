@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/psa/clients",
+    "query": {
+      "pageNumber": "2",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "succeeded": true,
+      "totalPages": 2,
+      "pageNumber": 2,
+      "data": [
+        {
+          "id": "client_fixture_101",
+          "name": "Fixture Client 101",
+          "code": "CODE101",
+          "isActive": true
+        }
+      ]
+    }
+  }
+}

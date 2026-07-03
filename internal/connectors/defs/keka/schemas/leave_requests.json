@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "leave_requests",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "employeeId": { "type": ["string", "null"] },
+    "leaveTypeId": { "type": ["string", "null"] },
+    "fromDate": { "type": ["string", "null"] },
+    "toDate": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "dayCount": { "type": ["number", "null"] }
+  }
+}

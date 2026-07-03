@@ -1,0 +1,28 @@
+{
+  "request": { "method": "POST", "path": "/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "projects": {
+          "nodes": [
+            {
+              "id": "proj_fixture_1",
+              "name": "Fixture project 1",
+              "description": "fixture record",
+              "state": "started",
+              "progress": 0.5,
+              "url": "https://linear.app/example/project/1",
+              "createdAt": "2026-01-01T00:00:00.000Z",
+              "updatedAt": "2026-01-02T00:00:00.000Z",
+              "startedAt": "2026-01-01T00:00:00.000Z",
+              "completedAt": null,
+              "canceledAt": null
+            }
+          ],
+          "pageInfo": { "hasNextPage": false, "endCursor": "cursor_fixture_2" }
+        }
+      }
+    }
+  }
+}

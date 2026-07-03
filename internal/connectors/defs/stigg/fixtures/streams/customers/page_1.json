@@ -1,0 +1,7 @@
+{
+  "data": {
+    "customers": [
+      { "id": "customer_fixture_1", "refId": "fixture-customer-1", "displayName": "Fixture Customer 1", "status": "ACTIVE" }
+    ]
+  }
+}

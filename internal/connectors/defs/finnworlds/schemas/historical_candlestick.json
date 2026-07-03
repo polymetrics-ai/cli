@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "historical_candlestick",
+  "type": "object",
+  "x-primary-key": ["ticker", "date"],
+  "x-cursor-field": "date",
+  "required": ["ticker", "date"],
+  "properties": {
+    "ticker": { "type": "string" },
+    "date": { "type": "string" },
+    "open": { "type": ["string", "null"] },
+    "high": { "type": ["string", "null"] },
+    "low": { "type": ["string", "null"] },
+    "close": { "type": ["string", "null"] },
+    "adjusted_close": { "type": ["string", "null"] },
+    "trade_volume": { "type": ["string", "null"] },
+    "opentime": { "type": ["integer", "null"] },
+    "closetime": { "type": ["integer", "null"] }
+  }
+}

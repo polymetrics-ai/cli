@@ -1,0 +1,15 @@
+{
+  "api": "Microsoft Graph API v1.0 (https://graph.microsoft.com/v1.0)",
+  "docs": "https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "AUTH_COMPLEX quarantine repair: the 3 legacy-parity read streams only (messages, mail_folders, events); Outlook is read-only in legacy (no write allow-list), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/me/messages", "covered_by": { "stream": "messages" } },
+    { "method": "GET", "path": "/me/mailFolders", "covered_by": { "stream": "mail_folders" } },
+    { "method": "GET", "path": "/me/events", "covered_by": { "stream": "events" } },
+    { "method": "POST", "path": "/me/sendMail", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/me/messages/{id}/reply", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/me/messages/{id}", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/me/events", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Navan Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Navan OAuth2 client-credentials client ID. Used only for the token exchange; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Navan OAuth2 client-credentials client secret. Used only for the token exchange; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.navan.com",
+      "description": "Navan API base URL override; the OAuth2 token endpoint (ta-auth/oauth/token) is derived from this same host, matching legacy's derivation. Defaults to production."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound sent as the createdFrom filter; only bookings created at or after this time are read. Optional; omitted entirely on a full sync with no prior cursor."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

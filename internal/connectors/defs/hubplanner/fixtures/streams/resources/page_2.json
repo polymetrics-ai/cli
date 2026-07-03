@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resource",
+    "query": { "page": "1", "limit": "200" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "resource_fixture_3",
+        "firstName": "Fixture3",
+        "lastName": "Example",
+        "email": "fixture3@example.com",
+        "status": "STATUS_ACTIVE",
+        "role": "member",
+        "type": "REGULAR",
+        "note": "fixture record",
+        "createdDate": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

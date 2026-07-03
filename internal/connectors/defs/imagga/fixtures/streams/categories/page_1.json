@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/categories/personal_photos",
+    "query": { "image_url": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "categories": [
+          { "confidence": 70.0, "name": { "en": "pets animals" } }
+        ]
+      },
+      "status": { "type": "success" }
+    }
+  }
+}

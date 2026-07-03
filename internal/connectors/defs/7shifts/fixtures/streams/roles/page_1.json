@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/v2/company/synthetic-conformance-value/roles", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 301,
+          "company_id": 1,
+          "location_id": 101,
+          "department_id": 201,
+          "name": "Fixture Role 1",
+          "color": "#ff0000",
+          "created": "2026-01-01T00:00:00+00:00",
+          "modified": "2026-01-01T00:00:00+00:00"
+        }
+      ],
+      "meta": { "cursor": { "next": null } }
+    }
+  }
+}

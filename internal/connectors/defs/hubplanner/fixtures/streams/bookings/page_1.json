@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/booking",
+    "query": { "page": "0", "limit": "200" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "booking_fixture_1",
+        "resource": "resource_fixture_1",
+        "project": "project_fixture_1",
+        "start": "2026-01-01T00:00:00Z",
+        "end": "2026-01-08T00:00:00Z",
+        "state": "BOOKING_APPROVED",
+        "category": "billable",
+        "note": "fixture record"
+      }
+    ]
+  }
+}

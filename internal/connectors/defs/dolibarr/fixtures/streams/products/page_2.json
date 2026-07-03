@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": {
+      "sortfield": "t.rowid",
+      "sortorder": "ASC",
+      "limit": "100",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "101",
+        "ref": "PROD101",
+        "label": "Fixture Product 101",
+        "type": "0",
+        "price": "100.00",
+        "price_ttc": "120.00",
+        "tva_tx": "20.00",
+        "status": "1",
+        "status_buy": "1",
+        "stock_reel": "10",
+        "date_creation": 1767225600,
+        "date_modification": 1767225701
+      }
+    ]
+  }
+}

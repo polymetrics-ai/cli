@@ -15,6 +15,10 @@
       "default": "https://api.finage.co.uk",
       "description": "Finage API base URL override for tests or proxies."
     },
+    "symbols": {
+      "type": "string",
+      "description": "Comma- or whitespace-separated stock ticker symbols to fan out over for the market_news stream (one GET /news/market/{symbol} request per symbol). Required for that stream only; the other 4 streams do not reference it."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

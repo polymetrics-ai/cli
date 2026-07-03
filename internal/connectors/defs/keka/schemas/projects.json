@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "projects",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "code": { "type": ["string", "null"] },
+    "clientId": { "type": ["string", "null"] },
+    "billingType": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] }
+  }
+}

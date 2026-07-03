@@ -1,0 +1,60 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "strava",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.refresh_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/athlete" },
+    "error_map": [
+      { "status": 401, "hint": "strava refresh-token exchange failed or access token expired; re-run pm credentials add strava" },
+      { "status": 403, "hint": "strava account lacks access/scope for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "strava API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "activities",
+      "path": "/athlete/activities",
+      "records": { "path": "." },
+      "schema": "schemas/activities.json"
+    },
+    {
+      "name": "athlete",
+      "path": "/athlete",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/athlete.json"
+    },
+    {
+      "name": "athlete_stats",
+      "path": "/athletes/{{ config.athlete_id }}/stats",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ config.athlete_id }}"
+      },
+      "schema": "schemas/athlete_stats.json"
+    },
+    {
+      "name": "clubs",
+      "path": "/athlete/clubs",
+      "records": { "path": "." },
+      "schema": "schemas/clubs.json"
+    }
+  ]
+}

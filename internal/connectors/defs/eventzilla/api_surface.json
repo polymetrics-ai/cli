@@ -2,12 +2,12 @@
   "api": "Eventzilla v2 REST API (https://www.eventzilla.net/api/)",
   "docs": "https://www.eventzilla.net/api/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: 3 of legacy's 5 streams (events, categories, users) are declarative Tier-1 parity. The remaining 2 legacy streams (attendees, tickets) are per-event sub-resource fan-out reads (list events, then GET /events/{event_id}/<child> for every discovered event id) — a documented Tier-2 StreamHook trigger (docs/migration/conventions.md §1's 'sub-resource fan-out reads' example) that this JSON-only wave cannot express; see docs.md's Known limits and this connector's reported blocker.",
+  "scope": "gap-close: all 5 legacy streams are now migrated. attendees and tickets are per-event sub-resource fan-out reads (list events, then GET /events/{event_id}/<child> for every discovered event id) expressed via the engine's fan_out dialect (S4 engine mini-wave item 2, docs/migration/conventions.md §3) — the ENGINE_GAP that previously blocked both streams (docs/migration/status.json's partial[] entry) is closed.",
   "endpoints": [
     { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } },
     { "method": "GET", "path": "/categories", "covered_by": { "stream": "categories" } },
     { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/events/{event_id}/attendees", "excluded": { "category": "out_of_scope", "reason": "per-event sub-resource fan-out (list events, then fetch attendees per event id) requires a Tier-2 StreamHook; not expressible in this JSON-only wave. Follow-up wave: add hooks/eventzilla/hooks.go implementing StreamHook for this stream." } },
-    { "method": "GET", "path": "/events/{event_id}/tickets", "excluded": { "category": "out_of_scope", "reason": "per-event sub-resource fan-out (list events, then fetch ticket types per event id) requires a Tier-2 StreamHook; not expressible in this JSON-only wave. Follow-up wave: add hooks/eventzilla/hooks.go implementing StreamHook for this stream." } }
+    { "method": "GET", "path": "/events/{event_id}/attendees", "covered_by": { "stream": "attendees" } },
+    { "method": "GET", "path": "/events/{event_id}/tickets", "covered_by": { "stream": "tickets" } }
   ]
 }

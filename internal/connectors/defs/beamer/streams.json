@@ -1,0 +1,53 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}/v0",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "maxResults",
+      "start_page": 0,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/nps", "query": { "page": "0", "maxResults": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "beamer api_key is missing or invalid; re-run pm credentials add beamer" },
+      { "status": 429, "class": "rate_limited", "hint": "beamer rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "nps",
+      "path": "/nps",
+      "records": { "path": "." },
+      "incremental": {
+        "cursor_field": "date",
+        "request_param": "dateFrom",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/nps.json"
+    },
+    {
+      "name": "posts",
+      "path": "/posts",
+      "records": { "path": "." },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "feature_requests",
+      "path": "/feature-requests",
+      "records": { "path": "." },
+      "schema": "schemas/feature_requests.json"
+    },
+    {
+      "name": "comments",
+      "path": "/comments",
+      "records": { "path": "." },
+      "schema": "schemas/comments.json"
+    }
+  ]
+}

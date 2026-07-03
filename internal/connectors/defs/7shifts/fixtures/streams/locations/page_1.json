@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/v2/company/synthetic-conformance-value/locations", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 101,
+          "company_id": 1,
+          "name": "Fixture Location 1",
+          "address": "1 Fixture St",
+          "city": "Austin",
+          "state": "TX",
+          "country": "US",
+          "timezone": "America/Chicago",
+          "created": "2026-01-01T00:00:00+00:00",
+          "modified": "2026-01-01T00:00:00+00:00"
+        }
+      ],
+      "meta": { "cursor": { "next": null } }
+    }
+  }
+}

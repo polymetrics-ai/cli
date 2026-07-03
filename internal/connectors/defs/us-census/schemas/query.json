@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "US Census query row",
+  "description": "Legacy's catalog declares only 'name'/'estab' as illustrative Fields, but the real record shape is fully dynamic: every emitted field name is lower-cased directly from the header row of the API's array-of-arrays response, itself a function of the caller-supplied query_params 'get=' qualifier. additionalProperties is intentionally true to allow any caller-driven column through unfiltered (StreamHook uses projection: passthrough).",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "properties": {
+    "name": { "type": "string", "description": "Present for the common 'get=NAME,...' shape; not guaranteed for every possible query_params qualifier." },
+    "estab": { "type": "string", "description": "Present for the common 'get=...,ESTAB' shape; not guaranteed for every possible query_params qualifier." }
+  },
+  "additionalProperties": true
+}

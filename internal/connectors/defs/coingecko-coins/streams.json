@@ -1,0 +1,29 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "x-cg-pro-api-key", "value": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" },
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "/ping" },
+    "error_map": [
+      { "status": 401, "hint": "coingecko-coins api_key is invalid; re-run pm credentials add coingecko-coins or omit it for public unauthenticated access" },
+      { "status": 429, "class": "rate_limited", "hint": "coingecko-coins rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "coin",
+      "path": "/coins/{{ config.coin_id }}",
+      "query": {
+        "localization": "false",
+        "tickers": "false",
+        "community_data": "false",
+        "developer_data": "false"
+      },
+      "records": { "path": "." },
+      "schema": "schemas/coin.json"
+    }
+  ]
+}

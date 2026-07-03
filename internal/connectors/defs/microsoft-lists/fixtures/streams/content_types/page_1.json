@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/sites/synthetic-conformance-value/lists/synthetic-conformance-value/contentTypes", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "0x0100FIXTURE", "name": "Item", "description": "Base content type", "group": "Custom Content Types", "hidden": false, "readOnly": false, "sealed": false }
+      ]
+    }
+  }
+}

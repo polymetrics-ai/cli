@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "users_fixture_101",
+          "type": "user",
+          "name": "Fixture user 101",
+          "login": "fixture101@example.com",
+          "status": "active",
+          "language": "en",
+          "timezone": "America/Los_Angeles",
+          "created_at": "2026-01-01T00:00:00-08:00",
+          "modified_at": "2026-01-02T00:00:00-08:00"
+        }
+      ],
+      "offset": 100,
+      "limit": 100,
+      "total_count": 101
+    }
+  }
+}

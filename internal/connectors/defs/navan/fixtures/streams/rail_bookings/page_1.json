@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/v1/bookings", "query": { "bookingType": "RAIL", "page": "0", "size": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "uuid": "bk_fixture_r1",
+          "bookingId": "BK-R001",
+          "bookingType": "RAIL",
+          "bookingStatus": "CONFIRMED",
+          "bookingMethod": "ONLINE",
+          "approvalStatus": "APPROVED",
+          "confirmationNumber": "CONFR001",
+          "currency": "USD",
+          "grandTotal": 45,
+          "basePrice": 40,
+          "bookingFee": 5,
+          "destination": "SFO",
+          "startDate": "2026-01-01T00:00:00.000Z",
+          "endDate": "2026-01-01T00:00:00.000Z",
+          "created": "2026-01-01T00:00:00.000Z",
+          "lastModified": "2026-01-01T00:00:00.000Z",
+          "domestic": true,
+          "expensed": false
+        }
+      ]
+    }
+  }
+}

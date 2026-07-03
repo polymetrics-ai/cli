@@ -1,7 +1,7 @@
 {
   "name": "campayn",
   "display_name": "Campayn",
-  "description": "Reads Campayn subscriber lists, email campaigns, and calendar reports through the Campayn REST API. List-scoped substreams (signup forms, contacts) are not yet migrated (see docs.md Known limits).",
+  "description": "Reads Campayn subscriber lists, signup forms, contacts, email campaigns, and calendar reports through the Campayn REST API.",
   "integration_type": "api",
   "docs_url": "https://github.com/nebojsac/Campayn-API",
   "release_stage": "beta",

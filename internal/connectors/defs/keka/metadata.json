@@ -1,0 +1,26 @@
+{
+  "name": "keka",
+  "display_name": "Keka",
+  "description": "Reads Keka HRIS employees, attendance, leave types, leave requests, clients, and projects through the Keka REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.keka.com/reference/introduction",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Keka HRIS/PSA API read of employee, attendance, leave, and client/project data"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); the AuthHook's real token exchange target is config.token_url, a config key wholly separate from base_url (unlike github's hook, whose token endpoint IS relative to base_url) -- conformance's synthetic non-secret config sets token_url to the literal string \"synthetic-conformance-value\", never the replay server's own address, so the hook's real HTTP POST can never land on the replay server; every auth-resolving dynamic check would otherwise fail identically and uninformatively. Hook-covered, proven live by internal/connectors/paritytest/keka (the AuthHook's real grant_type=kekaapi + api_key token exchange, run against a shared httptest token server, RAW record parity against legacy)."
+  }
+}

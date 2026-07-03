@@ -1,0 +1,7 @@
+{
+  "data": {
+    "subscriptions": [
+      { "id": "subscription_fixture_1", "refId": "fixture-subscription-1", "customerId": "customer_fixture_1", "status": "ACTIVE" }
+    ]
+  }
+}

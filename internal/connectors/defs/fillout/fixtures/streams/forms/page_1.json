@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/forms" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "formId": "fillout_form_fixture_1", "name": "Fixture Form 1" },
+      { "formId": "fillout_form_fixture_2", "name": "Fixture Form 2" }
+    ]
+  }
+}

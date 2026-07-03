@@ -2,11 +2,11 @@
   "api": "AppFollow REST API v2 (https://api.appfollow.io/api/v2)",
   "docs": "https://appfollow.docs.apiary.io/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: users and app_collections are single-request Tier-1 endpoints; app_lists and ratings are per-config-list sub-resource fan-out reads (one HTTP request per configured collection/ext_id) that the declarative dialect has no primitive for — see docs.md Known limits.",
+  "scope": "wave2 gap-loop repair: all 4 legacy-parity streams now migrated (users, app_collections, app_lists, ratings) following the S4 engine mini-wave's stream.fan_out primitive.",
   "endpoints": [
     { "method": "GET", "path": "/api/v2/account/users", "covered_by": { "stream": "users" } },
     { "method": "GET", "path": "/api/v2/account/apps", "covered_by": { "stream": "app_collections" } },
-    { "method": "GET", "path": "/api/v2/account/apps/app", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out: legacy issues one request per configured app_collection_ids entry (or discovers ids from account/apps first) and stamps the enclosing collection id onto each row — a StreamHook-shaped multi-request traversal the declarative dialect cannot express (ENGINE_GAP); Tier-2 hooks are out of scope for this wave" } },
-    { "method": "GET", "path": "/api/v2/meta/ratings", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out: legacy issues one request per configured ext_ids entry and flattens ratings.list rows with the enclosing ext_id/store stamped on — same ENGINE_GAP as app_lists" } }
+    { "method": "GET", "path": "/api/v2/account/apps/app", "covered_by": { "stream": "app_lists" } },
+    { "method": "GET", "path": "/api/v2/meta/ratings", "covered_by": { "stream": "ratings" } }
   ]
 }

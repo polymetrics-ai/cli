@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "workspaces",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "workspaceId": { "type": ["string", "null"], "description": "Raw Zoho Analytics workspace id field. Preferred source for id/name coalesce in legacy; see docs.md Known limits." },
+    "workspaceName": { "type": ["string", "null"] },
+    "createdTime": { "type": ["string", "null"] },
+    "created_time": { "type": ["string", "null"] }
+  }
+}

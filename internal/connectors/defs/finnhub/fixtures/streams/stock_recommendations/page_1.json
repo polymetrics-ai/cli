@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stock/recommendation",
+    "query": { "symbol": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "synthetic-conformance-value",
+        "period": "2026-01-01",
+        "buy": 10,
+        "hold": 5,
+        "sell": 1,
+        "strongBuy": 8,
+        "strongSell": 0
+      },
+      {
+        "symbol": "synthetic-conformance-value",
+        "period": "2025-12-01",
+        "buy": 9,
+        "hold": 6,
+        "sell": 1,
+        "strongBuy": 7,
+        "strongSell": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/customers",
+    "query": { "limit": "synthetic-conformance-value", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 2,
+      "offset": 0,
+      "count": 2,
+      "total": 3,
+      "results": [
+        {
+          "id": "cust_fixture_1",
+          "version": 1,
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "lastModifiedAt": "2026-01-01T00:00:00.000Z",
+          "email": "fixture1@example.com",
+          "firstName": "Fixture",
+          "lastName": "One",
+          "isEmailVerified": false,
+          "customerNumber": "1000001",
+          "addresses": [],
+          "authenticationMode": "Password"
+        },
+        {
+          "id": "cust_fixture_2",
+          "version": 1,
+          "createdAt": "2026-01-02T00:00:00.000Z",
+          "lastModifiedAt": "2026-01-02T00:00:00.000Z",
+          "email": "fixture2@example.com",
+          "firstName": "Fixture",
+          "lastName": "Two",
+          "isEmailVerified": true,
+          "customerNumber": "1000002",
+          "addresses": [],
+          "authenticationMode": "Password"
+        }
+      ]
+    }
+  }
+}

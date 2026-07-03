@@ -1,0 +1,26 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept-Encoding": "deflate, gzip"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "X-CMC_PRO_API_KEY", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/v1/fiat/map", "query": { "start": "1", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "coinmarketcap api_key is missing or invalid; re-run pm credentials add coinmarketcap" },
+      { "status": 403, "hint": "coinmarketcap plan lacks access for this endpoint" },
+      { "status": 429, "class": "rate_limited", "hint": "coinmarketcap rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "global_metrics",
+      "path": "/v1/global-metrics/quotes/latest",
+      "records": { "path": "data" },
+      "schema": "schemas/global_metrics.json"
+    }
+  ]
+}

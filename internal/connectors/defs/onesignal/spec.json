@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OneSignal Connection Specification",
+  "type": "object",
+  "required": ["user_auth_key"],
+  "properties": {
+    "user_auth_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "OneSignal user/organization auth key, sent as 'Authorization: Basic <user_auth_key>'. Authenticates the account-level apps stream. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://onesignal.com/api/v1",
+      "description": "OneSignal REST API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

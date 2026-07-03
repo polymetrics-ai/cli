@@ -1,0 +1,23 @@
+{
+  "name": "twilio",
+  "display_name": "Twilio",
+  "description": "Reads Twilio messages, calls, recordings, conferences, and usage records through the Twilio REST API (2010-04-01).",
+  "integration_type": "api",
+  "docs_url": "https://www.twilio.com/docs/usage/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Twilio API read of message/call/recording/conference/usage data",
+    "approval": "none; read-only source connector"
+  }
+}

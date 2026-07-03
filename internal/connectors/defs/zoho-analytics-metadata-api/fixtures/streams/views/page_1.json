@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/views" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "viewId": "view_fixture_1", "viewName": "Revenue Summary" },
+        { "viewId": "view_fixture_2", "viewName": "Pipeline Overview" }
+      ]
+    }
+  }
+}

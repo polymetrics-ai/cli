@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/feature-requests", "query": { "page": "0", "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "fr_fixture_1",
+        "date": "2026-01-01T00:00:00Z",
+        "title": "Fixture Feature Request 1",
+        "content": "Fixture content 1",
+        "status": "open",
+        "votesCount": 5,
+        "commentsCount": 2,
+        "userId": "user_1",
+        "userEmail": "fixture1@example.com",
+        "url": "https://app.example.com/feature-requests/1"
+      },
+      {
+        "id": "fr_fixture_2",
+        "date": "2026-01-02T00:00:00Z",
+        "title": "Fixture Feature Request 2",
+        "content": "Fixture content 2",
+        "status": "planned",
+        "votesCount": 10,
+        "commentsCount": 4,
+        "userId": "user_2",
+        "userEmail": "fixture2@example.com",
+        "url": "https://app.example.com/feature-requests/2"
+      }
+    ]
+  }
+}

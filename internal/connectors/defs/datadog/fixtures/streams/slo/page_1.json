@@ -1,0 +1,817 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/slo",
+    "query": {
+      "page": "0",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "slo-fixture-1",
+          "name": "Fixture SLO 1",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225601,
+          "modified_at": 1767225601
+        },
+        {
+          "id": "slo-fixture-2",
+          "name": "Fixture SLO 2",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225602,
+          "modified_at": 1767225602
+        },
+        {
+          "id": "slo-fixture-3",
+          "name": "Fixture SLO 3",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225603,
+          "modified_at": 1767225603
+        },
+        {
+          "id": "slo-fixture-4",
+          "name": "Fixture SLO 4",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225604,
+          "modified_at": 1767225604
+        },
+        {
+          "id": "slo-fixture-5",
+          "name": "Fixture SLO 5",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225605,
+          "modified_at": 1767225605
+        },
+        {
+          "id": "slo-fixture-6",
+          "name": "Fixture SLO 6",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225606,
+          "modified_at": 1767225606
+        },
+        {
+          "id": "slo-fixture-7",
+          "name": "Fixture SLO 7",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225607,
+          "modified_at": 1767225607
+        },
+        {
+          "id": "slo-fixture-8",
+          "name": "Fixture SLO 8",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225608,
+          "modified_at": 1767225608
+        },
+        {
+          "id": "slo-fixture-9",
+          "name": "Fixture SLO 9",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225609,
+          "modified_at": 1767225609
+        },
+        {
+          "id": "slo-fixture-10",
+          "name": "Fixture SLO 10",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225610,
+          "modified_at": 1767225610
+        },
+        {
+          "id": "slo-fixture-11",
+          "name": "Fixture SLO 11",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225611,
+          "modified_at": 1767225611
+        },
+        {
+          "id": "slo-fixture-12",
+          "name": "Fixture SLO 12",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225612,
+          "modified_at": 1767225612
+        },
+        {
+          "id": "slo-fixture-13",
+          "name": "Fixture SLO 13",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225613,
+          "modified_at": 1767225613
+        },
+        {
+          "id": "slo-fixture-14",
+          "name": "Fixture SLO 14",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225614,
+          "modified_at": 1767225614
+        },
+        {
+          "id": "slo-fixture-15",
+          "name": "Fixture SLO 15",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225615,
+          "modified_at": 1767225615
+        },
+        {
+          "id": "slo-fixture-16",
+          "name": "Fixture SLO 16",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225616,
+          "modified_at": 1767225616
+        },
+        {
+          "id": "slo-fixture-17",
+          "name": "Fixture SLO 17",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225617,
+          "modified_at": 1767225617
+        },
+        {
+          "id": "slo-fixture-18",
+          "name": "Fixture SLO 18",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225618,
+          "modified_at": 1767225618
+        },
+        {
+          "id": "slo-fixture-19",
+          "name": "Fixture SLO 19",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225619,
+          "modified_at": 1767225619
+        },
+        {
+          "id": "slo-fixture-20",
+          "name": "Fixture SLO 20",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225620,
+          "modified_at": 1767225620
+        },
+        {
+          "id": "slo-fixture-21",
+          "name": "Fixture SLO 21",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225621,
+          "modified_at": 1767225621
+        },
+        {
+          "id": "slo-fixture-22",
+          "name": "Fixture SLO 22",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225622,
+          "modified_at": 1767225622
+        },
+        {
+          "id": "slo-fixture-23",
+          "name": "Fixture SLO 23",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225623,
+          "modified_at": 1767225623
+        },
+        {
+          "id": "slo-fixture-24",
+          "name": "Fixture SLO 24",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225624,
+          "modified_at": 1767225624
+        },
+        {
+          "id": "slo-fixture-25",
+          "name": "Fixture SLO 25",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225625,
+          "modified_at": 1767225625
+        },
+        {
+          "id": "slo-fixture-26",
+          "name": "Fixture SLO 26",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225626,
+          "modified_at": 1767225626
+        },
+        {
+          "id": "slo-fixture-27",
+          "name": "Fixture SLO 27",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225627,
+          "modified_at": 1767225627
+        },
+        {
+          "id": "slo-fixture-28",
+          "name": "Fixture SLO 28",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225628,
+          "modified_at": 1767225628
+        },
+        {
+          "id": "slo-fixture-29",
+          "name": "Fixture SLO 29",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225629,
+          "modified_at": 1767225629
+        },
+        {
+          "id": "slo-fixture-30",
+          "name": "Fixture SLO 30",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225630,
+          "modified_at": 1767225630
+        },
+        {
+          "id": "slo-fixture-31",
+          "name": "Fixture SLO 31",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225631,
+          "modified_at": 1767225631
+        },
+        {
+          "id": "slo-fixture-32",
+          "name": "Fixture SLO 32",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225632,
+          "modified_at": 1767225632
+        },
+        {
+          "id": "slo-fixture-33",
+          "name": "Fixture SLO 33",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225633,
+          "modified_at": 1767225633
+        },
+        {
+          "id": "slo-fixture-34",
+          "name": "Fixture SLO 34",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225634,
+          "modified_at": 1767225634
+        },
+        {
+          "id": "slo-fixture-35",
+          "name": "Fixture SLO 35",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225635,
+          "modified_at": 1767225635
+        },
+        {
+          "id": "slo-fixture-36",
+          "name": "Fixture SLO 36",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225636,
+          "modified_at": 1767225636
+        },
+        {
+          "id": "slo-fixture-37",
+          "name": "Fixture SLO 37",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225637,
+          "modified_at": 1767225637
+        },
+        {
+          "id": "slo-fixture-38",
+          "name": "Fixture SLO 38",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225638,
+          "modified_at": 1767225638
+        },
+        {
+          "id": "slo-fixture-39",
+          "name": "Fixture SLO 39",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225639,
+          "modified_at": 1767225639
+        },
+        {
+          "id": "slo-fixture-40",
+          "name": "Fixture SLO 40",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225640,
+          "modified_at": 1767225640
+        },
+        {
+          "id": "slo-fixture-41",
+          "name": "Fixture SLO 41",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225641,
+          "modified_at": 1767225641
+        },
+        {
+          "id": "slo-fixture-42",
+          "name": "Fixture SLO 42",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225642,
+          "modified_at": 1767225642
+        },
+        {
+          "id": "slo-fixture-43",
+          "name": "Fixture SLO 43",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225643,
+          "modified_at": 1767225643
+        },
+        {
+          "id": "slo-fixture-44",
+          "name": "Fixture SLO 44",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225644,
+          "modified_at": 1767225644
+        },
+        {
+          "id": "slo-fixture-45",
+          "name": "Fixture SLO 45",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225645,
+          "modified_at": 1767225645
+        },
+        {
+          "id": "slo-fixture-46",
+          "name": "Fixture SLO 46",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225646,
+          "modified_at": 1767225646
+        },
+        {
+          "id": "slo-fixture-47",
+          "name": "Fixture SLO 47",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225647,
+          "modified_at": 1767225647
+        },
+        {
+          "id": "slo-fixture-48",
+          "name": "Fixture SLO 48",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225648,
+          "modified_at": 1767225648
+        },
+        {
+          "id": "slo-fixture-49",
+          "name": "Fixture SLO 49",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225649,
+          "modified_at": 1767225649
+        },
+        {
+          "id": "slo-fixture-50",
+          "name": "Fixture SLO 50",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225650,
+          "modified_at": 1767225650
+        },
+        {
+          "id": "slo-fixture-51",
+          "name": "Fixture SLO 51",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225651,
+          "modified_at": 1767225651
+        },
+        {
+          "id": "slo-fixture-52",
+          "name": "Fixture SLO 52",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225652,
+          "modified_at": 1767225652
+        },
+        {
+          "id": "slo-fixture-53",
+          "name": "Fixture SLO 53",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225653,
+          "modified_at": 1767225653
+        },
+        {
+          "id": "slo-fixture-54",
+          "name": "Fixture SLO 54",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225654,
+          "modified_at": 1767225654
+        },
+        {
+          "id": "slo-fixture-55",
+          "name": "Fixture SLO 55",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225655,
+          "modified_at": 1767225655
+        },
+        {
+          "id": "slo-fixture-56",
+          "name": "Fixture SLO 56",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225656,
+          "modified_at": 1767225656
+        },
+        {
+          "id": "slo-fixture-57",
+          "name": "Fixture SLO 57",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225657,
+          "modified_at": 1767225657
+        },
+        {
+          "id": "slo-fixture-58",
+          "name": "Fixture SLO 58",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225658,
+          "modified_at": 1767225658
+        },
+        {
+          "id": "slo-fixture-59",
+          "name": "Fixture SLO 59",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225659,
+          "modified_at": 1767225659
+        },
+        {
+          "id": "slo-fixture-60",
+          "name": "Fixture SLO 60",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225660,
+          "modified_at": 1767225660
+        },
+        {
+          "id": "slo-fixture-61",
+          "name": "Fixture SLO 61",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225661,
+          "modified_at": 1767225661
+        },
+        {
+          "id": "slo-fixture-62",
+          "name": "Fixture SLO 62",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225662,
+          "modified_at": 1767225662
+        },
+        {
+          "id": "slo-fixture-63",
+          "name": "Fixture SLO 63",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225663,
+          "modified_at": 1767225663
+        },
+        {
+          "id": "slo-fixture-64",
+          "name": "Fixture SLO 64",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225664,
+          "modified_at": 1767225664
+        },
+        {
+          "id": "slo-fixture-65",
+          "name": "Fixture SLO 65",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225665,
+          "modified_at": 1767225665
+        },
+        {
+          "id": "slo-fixture-66",
+          "name": "Fixture SLO 66",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225666,
+          "modified_at": 1767225666
+        },
+        {
+          "id": "slo-fixture-67",
+          "name": "Fixture SLO 67",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225667,
+          "modified_at": 1767225667
+        },
+        {
+          "id": "slo-fixture-68",
+          "name": "Fixture SLO 68",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225668,
+          "modified_at": 1767225668
+        },
+        {
+          "id": "slo-fixture-69",
+          "name": "Fixture SLO 69",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225669,
+          "modified_at": 1767225669
+        },
+        {
+          "id": "slo-fixture-70",
+          "name": "Fixture SLO 70",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225670,
+          "modified_at": 1767225670
+        },
+        {
+          "id": "slo-fixture-71",
+          "name": "Fixture SLO 71",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225671,
+          "modified_at": 1767225671
+        },
+        {
+          "id": "slo-fixture-72",
+          "name": "Fixture SLO 72",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225672,
+          "modified_at": 1767225672
+        },
+        {
+          "id": "slo-fixture-73",
+          "name": "Fixture SLO 73",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225673,
+          "modified_at": 1767225673
+        },
+        {
+          "id": "slo-fixture-74",
+          "name": "Fixture SLO 74",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225674,
+          "modified_at": 1767225674
+        },
+        {
+          "id": "slo-fixture-75",
+          "name": "Fixture SLO 75",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225675,
+          "modified_at": 1767225675
+        },
+        {
+          "id": "slo-fixture-76",
+          "name": "Fixture SLO 76",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225676,
+          "modified_at": 1767225676
+        },
+        {
+          "id": "slo-fixture-77",
+          "name": "Fixture SLO 77",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225677,
+          "modified_at": 1767225677
+        },
+        {
+          "id": "slo-fixture-78",
+          "name": "Fixture SLO 78",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225678,
+          "modified_at": 1767225678
+        },
+        {
+          "id": "slo-fixture-79",
+          "name": "Fixture SLO 79",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225679,
+          "modified_at": 1767225679
+        },
+        {
+          "id": "slo-fixture-80",
+          "name": "Fixture SLO 80",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225680,
+          "modified_at": 1767225680
+        },
+        {
+          "id": "slo-fixture-81",
+          "name": "Fixture SLO 81",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225681,
+          "modified_at": 1767225681
+        },
+        {
+          "id": "slo-fixture-82",
+          "name": "Fixture SLO 82",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225682,
+          "modified_at": 1767225682
+        },
+        {
+          "id": "slo-fixture-83",
+          "name": "Fixture SLO 83",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225683,
+          "modified_at": 1767225683
+        },
+        {
+          "id": "slo-fixture-84",
+          "name": "Fixture SLO 84",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225684,
+          "modified_at": 1767225684
+        },
+        {
+          "id": "slo-fixture-85",
+          "name": "Fixture SLO 85",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225685,
+          "modified_at": 1767225685
+        },
+        {
+          "id": "slo-fixture-86",
+          "name": "Fixture SLO 86",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225686,
+          "modified_at": 1767225686
+        },
+        {
+          "id": "slo-fixture-87",
+          "name": "Fixture SLO 87",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225687,
+          "modified_at": 1767225687
+        },
+        {
+          "id": "slo-fixture-88",
+          "name": "Fixture SLO 88",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225688,
+          "modified_at": 1767225688
+        },
+        {
+          "id": "slo-fixture-89",
+          "name": "Fixture SLO 89",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225689,
+          "modified_at": 1767225689
+        },
+        {
+          "id": "slo-fixture-90",
+          "name": "Fixture SLO 90",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225690,
+          "modified_at": 1767225690
+        },
+        {
+          "id": "slo-fixture-91",
+          "name": "Fixture SLO 91",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225691,
+          "modified_at": 1767225691
+        },
+        {
+          "id": "slo-fixture-92",
+          "name": "Fixture SLO 92",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225692,
+          "modified_at": 1767225692
+        },
+        {
+          "id": "slo-fixture-93",
+          "name": "Fixture SLO 93",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225693,
+          "modified_at": 1767225693
+        },
+        {
+          "id": "slo-fixture-94",
+          "name": "Fixture SLO 94",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225694,
+          "modified_at": 1767225694
+        },
+        {
+          "id": "slo-fixture-95",
+          "name": "Fixture SLO 95",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225695,
+          "modified_at": 1767225695
+        },
+        {
+          "id": "slo-fixture-96",
+          "name": "Fixture SLO 96",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225696,
+          "modified_at": 1767225696
+        },
+        {
+          "id": "slo-fixture-97",
+          "name": "Fixture SLO 97",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225697,
+          "modified_at": 1767225697
+        },
+        {
+          "id": "slo-fixture-98",
+          "name": "Fixture SLO 98",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225698,
+          "modified_at": 1767225698
+        },
+        {
+          "id": "slo-fixture-99",
+          "name": "Fixture SLO 99",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225699,
+          "modified_at": 1767225699
+        },
+        {
+          "id": "slo-fixture-100",
+          "name": "Fixture SLO 100",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225700,
+          "modified_at": 1767225700
+        }
+      ]
+    }
+  }
+}

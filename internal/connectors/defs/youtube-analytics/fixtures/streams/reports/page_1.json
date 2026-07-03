@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs/synthetic-conformance-value/reports",
+    "query": {
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reports": [
+        {
+          "id": "report_fixture_1",
+          "jobId": "job_fixture_1",
+          "startTime": "2026-01-01T00:00:00Z",
+          "endTime": "2026-01-02T00:00:00Z",
+          "createTime": "2026-01-02T01:00:00Z",
+          "jobExpireTime": "2026-04-01T00:00:00Z",
+          "downloadUrl": "https://youtubereporting.googleapis.com/v1/media/report_fixture_1"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "financial_event_groups",
+  "type": "object",
+  "x-primary-key": ["FinancialEventGroupId"],
+  "x-cursor-field": "FinancialEventGroupEnd",
+  "required": ["FinancialEventGroupId"],
+  "properties": {
+    "FinancialEventGroupId": { "type": "string" },
+    "ProcessingStatus": { "type": ["string", "null"] },
+    "FundTransferStatus": { "type": ["string", "null"] },
+    "OriginalTotal": { "type": ["object", "null"] },
+    "ConvertedTotal": { "type": ["object", "null"] },
+    "FundTransferDate": { "type": ["string", "null"] },
+    "TraceId": { "type": ["string", "null"] },
+    "AccountTail": { "type": ["string", "null"] },
+    "BeginningBalance": { "type": ["object", "null"] },
+    "FinancialEventGroupStart": { "type": ["string", "null"] },
+    "FinancialEventGroupEnd": { "type": ["string", "null"] }
+  }
+}

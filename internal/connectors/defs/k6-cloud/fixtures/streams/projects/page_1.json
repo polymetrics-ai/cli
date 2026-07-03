@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/organizations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "organizations": [
+        {
+          "id": 1,
+          "name": "Fixture Org 1",
+          "description": "fixture organization",
+          "owner_id": 1,
+          "billing_address": "1 Fixture St",
+          "billing_country": "US",
+          "billing_email": "billing1@example.com",
+          "vat_number": "",
+          "is_default": true,
+          "is_saml_org": false,
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "name": "Fixture Org 2",
+          "description": "fixture organization",
+          "owner_id": 2,
+          "billing_address": "2 Fixture St",
+          "billing_country": "US",
+          "billing_email": "billing2@example.com",
+          "vat_number": "",
+          "is_default": false,
+          "is_saml_org": false,
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/v2/company/synthetic-conformance-value/users", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 401,
+          "company_id": 1,
+          "first_name": "Fixture",
+          "last_name": "User One",
+          "email": "fixture1@example.com",
+          "type": "employee",
+          "active": true,
+          "hire_date": "2026-01-01",
+          "created": "2026-01-01T00:00:00+00:00",
+          "modified": "2026-01-01T00:00:00+00:00"
+        }
+      ],
+      "meta": { "cursor": { "next": null } }
+    }
+  }
+}

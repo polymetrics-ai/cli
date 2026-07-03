@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orders",
+  "type": "object",
+  "x-primary-key": ["AmazonOrderId"],
+  "x-cursor-field": "LastUpdateDate",
+  "required": ["AmazonOrderId"],
+  "properties": {
+    "AmazonOrderId": { "type": "string" },
+    "SellerOrderId": { "type": ["string", "null"] },
+    "PurchaseDate": { "type": ["string", "null"] },
+    "LastUpdateDate": { "type": ["string", "null"] },
+    "OrderStatus": { "type": ["string", "null"] },
+    "FulfillmentChannel": { "type": ["string", "null"] },
+    "SalesChannel": { "type": ["string", "null"] },
+    "OrderType": { "type": ["string", "null"] },
+    "NumberOfItemsShipped": { "type": ["integer", "null"] },
+    "NumberOfItemsUnshipped": { "type": ["integer", "null"] },
+    "MarketplaceId": { "type": ["string", "null"] },
+    "OrderTotal": { "type": ["object", "null"] },
+    "IsBusinessOrder": { "type": ["boolean", "null"] },
+    "IsPrime": { "type": ["boolean", "null"] }
+  }
+}

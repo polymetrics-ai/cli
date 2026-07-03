@@ -1,0 +1,27 @@
+{
+  "name": "microsoft-lists",
+  "display_name": "Microsoft Lists",
+  "description": "Reads SharePoint/Microsoft Lists, list items, columns, and content types from a site through the Microsoft Graph API using an OAuth2 client-credentials grant. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://learn.microsoft.com/en-us/graph/api/resources/list",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Microsoft Graph API read of a SharePoint site's lists/list items/columns/content types",
+    "approval": "none; read-only source connector"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "Every stream is StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL pagination loop verbatim; the engine's declarative next_url_path pagination reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all — see docs.md's Streams notes and docs/migration/quarantine.json's microsoft-lists ENGINE_GAP entry). hook-covered; proven live by internal/connectors/paritytest/microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
+  }
+}

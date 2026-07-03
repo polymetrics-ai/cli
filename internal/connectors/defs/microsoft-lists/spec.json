@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Lists Connection Specification",
+  "type": "object",
+  "required": ["site_id"],
+  "properties": {
+    "site_id": {
+      "type": "string",
+      "description": "SharePoint site ID (or hostname:path pair) whose lists are read; used in every request path."
+    },
+    "list_id": {
+      "type": "string",
+      "description": "SharePoint list ID; required only for the list_items/columns/content_types streams (the list whose items/columns/content types are read)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://graph.microsoft.com/v1.0",
+      "description": "Microsoft Graph REST API base URL override for tests or proxies. Defaults to https://graph.microsoft.com/v1.0."
+    },
+    "login_base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://login.microsoftonline.com",
+      "description": "Azure AD login base URL override for tests or proxies; combined with tenant_id to derive the OAuth2 token endpoint."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full OAuth2 token endpoint override. When set, takes priority over the derived login_base_url/tenant_id endpoint (see docs.md Known limits for the dual-candidate auth mechanism used to express this)."
+    },
+    "scope": {
+      "type": "string",
+      "default": "https://graph.microsoft.com/.default",
+      "description": "OAuth2 client-credentials scope. Defaults to the static Graph application-permission scope."
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Azure AD application (client) ID for OAuth2 client-credentials. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Azure AD application client secret for OAuth2 client-credentials. Never logged."
+    },
+    "tenant_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Azure AD tenant ID (GUID or verified domain) used to derive the OAuth2 token endpoint. Marked secret to match legacy, which reads it from Secrets."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records requested per @odata.nextLink page (1-200), sent as the $top query parameter on the first request of each stream."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional hard cap on the number of @odata.nextLink pages read per stream, consumed by hooks/microsoft-lists/hooks.go's StreamHook — NOT a declarative streams.json field (pagination is entirely hook-driven since next_url_path cannot address the literal \"@odata.nextLink\" key; see docs.md Known limits). Permissive parse: empty, \"all\", or \"unlimited\" means unbounded."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

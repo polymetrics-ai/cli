@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stocksplits",
+    "query": { "ticker": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "output": {
+          "stocksplits": [
+            {
+              "ticker": "synthetic-conformance-value",
+              "date": "2026-01-01",
+              "stock_split": "2:1"
+            },
+            {
+              "ticker": "synthetic-conformance-value",
+              "date": "2026-01-02",
+              "stock_split": "3:1"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

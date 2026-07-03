@@ -6,8 +6,7 @@
       { "mode": "api_key_header", "header": "API-Key", "value": "{{ secrets.api_key }}" }
     ],
     "pagination": {
-      "type": "link_header",
-      "page_size": 100
+      "type": "link_header"
     },
     "check": { "method": "GET", "path": "/v2/users", "query": { "limit": "1" } },
     "error_map": [

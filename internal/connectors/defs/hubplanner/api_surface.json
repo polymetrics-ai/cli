@@ -1,0 +1,15 @@
+{
+  "api": "Hubplanner API v1 (https://api.hubplanner.com/v1)",
+  "docs": "https://github.com/hubplanner/API",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave3 unblock: the 7 legacy-parity read streams only; Hubplanner's full documented surface (timesheets, custom fields, teams, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/resource", "covered_by": { "stream": "resources" } },
+    { "method": "GET", "path": "/project", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/client", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/event", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/holiday", "covered_by": { "stream": "holidays" } },
+    { "method": "GET", "path": "/booking", "covered_by": { "stream": "bookings" } },
+    { "method": "GET", "path": "/billingrate", "covered_by": { "stream": "billing_rates" } }
+  ]
+}

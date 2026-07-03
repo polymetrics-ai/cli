@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/hris/employees", "query": { "pageNumber": "1", "pageSize": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "succeeded": true, "totalPages": 1, "pageNumber": 1, "data": [] }
+  }
+}

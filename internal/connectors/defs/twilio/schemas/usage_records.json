@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "usage_records",
+  "type": "object",
+  "x-primary-key": ["category"],
+  "x-cursor-field": "start_date",
+  "required": ["category"],
+  "properties": {
+    "account_sid": { "type": ["string", "null"] },
+    "category": { "type": "string" },
+    "description": { "type": ["string", "null"] },
+    "start_date": { "type": ["string", "null"] },
+    "end_date": { "type": ["string", "null"] },
+    "count": { "type": ["string", "null"] },
+    "count_unit": { "type": ["string", "null"] },
+    "usage": { "type": ["string", "null"] },
+    "usage_unit": { "type": ["string", "null"] },
+    "price": { "type": ["string", "null"] },
+    "price_unit": { "type": ["string", "null"] }
+  }
+}

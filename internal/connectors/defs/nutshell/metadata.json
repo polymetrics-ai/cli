@@ -1,0 +1,23 @@
+{
+  "name": "nutshell",
+  "display_name": "Nutshell",
+  "description": "Reads Nutshell CRM accounts, contacts, leads, activities, and users through the Nutshell REST API.",
+  "integration_type": "api",
+  "docs_url": "https://app.nutshell.com/rest/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 500
+  },
+  "risk": {
+    "read": "external Nutshell CRM read of account/contact/lead/activity data",
+    "approval": "none; read-only"
+  }
+}

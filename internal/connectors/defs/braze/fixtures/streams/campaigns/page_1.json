@@ -1,0 +1,917 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns/list",
+    "query": {
+      "page": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "campaigns": [
+        {
+          "id": "campaign_fixture_1",
+          "name": "Fixture Campaign 1",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:01Z"
+        },
+        {
+          "id": "campaign_fixture_2",
+          "name": "Fixture Campaign 2",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:02Z"
+        },
+        {
+          "id": "campaign_fixture_3",
+          "name": "Fixture Campaign 3",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:03Z"
+        },
+        {
+          "id": "campaign_fixture_4",
+          "name": "Fixture Campaign 4",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:04Z"
+        },
+        {
+          "id": "campaign_fixture_5",
+          "name": "Fixture Campaign 5",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:05Z"
+        },
+        {
+          "id": "campaign_fixture_6",
+          "name": "Fixture Campaign 6",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:06Z"
+        },
+        {
+          "id": "campaign_fixture_7",
+          "name": "Fixture Campaign 7",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:07Z"
+        },
+        {
+          "id": "campaign_fixture_8",
+          "name": "Fixture Campaign 8",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:08Z"
+        },
+        {
+          "id": "campaign_fixture_9",
+          "name": "Fixture Campaign 9",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:09Z"
+        },
+        {
+          "id": "campaign_fixture_10",
+          "name": "Fixture Campaign 10",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:10Z"
+        },
+        {
+          "id": "campaign_fixture_11",
+          "name": "Fixture Campaign 11",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:11Z"
+        },
+        {
+          "id": "campaign_fixture_12",
+          "name": "Fixture Campaign 12",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:12Z"
+        },
+        {
+          "id": "campaign_fixture_13",
+          "name": "Fixture Campaign 13",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:13Z"
+        },
+        {
+          "id": "campaign_fixture_14",
+          "name": "Fixture Campaign 14",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:14Z"
+        },
+        {
+          "id": "campaign_fixture_15",
+          "name": "Fixture Campaign 15",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:15Z"
+        },
+        {
+          "id": "campaign_fixture_16",
+          "name": "Fixture Campaign 16",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:16Z"
+        },
+        {
+          "id": "campaign_fixture_17",
+          "name": "Fixture Campaign 17",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:17Z"
+        },
+        {
+          "id": "campaign_fixture_18",
+          "name": "Fixture Campaign 18",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:18Z"
+        },
+        {
+          "id": "campaign_fixture_19",
+          "name": "Fixture Campaign 19",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:19Z"
+        },
+        {
+          "id": "campaign_fixture_20",
+          "name": "Fixture Campaign 20",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:20Z"
+        },
+        {
+          "id": "campaign_fixture_21",
+          "name": "Fixture Campaign 21",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:21Z"
+        },
+        {
+          "id": "campaign_fixture_22",
+          "name": "Fixture Campaign 22",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:22Z"
+        },
+        {
+          "id": "campaign_fixture_23",
+          "name": "Fixture Campaign 23",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:23Z"
+        },
+        {
+          "id": "campaign_fixture_24",
+          "name": "Fixture Campaign 24",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:24Z"
+        },
+        {
+          "id": "campaign_fixture_25",
+          "name": "Fixture Campaign 25",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:25Z"
+        },
+        {
+          "id": "campaign_fixture_26",
+          "name": "Fixture Campaign 26",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:26Z"
+        },
+        {
+          "id": "campaign_fixture_27",
+          "name": "Fixture Campaign 27",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:27Z"
+        },
+        {
+          "id": "campaign_fixture_28",
+          "name": "Fixture Campaign 28",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:28Z"
+        },
+        {
+          "id": "campaign_fixture_29",
+          "name": "Fixture Campaign 29",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:29Z"
+        },
+        {
+          "id": "campaign_fixture_30",
+          "name": "Fixture Campaign 30",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:30Z"
+        },
+        {
+          "id": "campaign_fixture_31",
+          "name": "Fixture Campaign 31",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:31Z"
+        },
+        {
+          "id": "campaign_fixture_32",
+          "name": "Fixture Campaign 32",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:32Z"
+        },
+        {
+          "id": "campaign_fixture_33",
+          "name": "Fixture Campaign 33",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:33Z"
+        },
+        {
+          "id": "campaign_fixture_34",
+          "name": "Fixture Campaign 34",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:34Z"
+        },
+        {
+          "id": "campaign_fixture_35",
+          "name": "Fixture Campaign 35",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:35Z"
+        },
+        {
+          "id": "campaign_fixture_36",
+          "name": "Fixture Campaign 36",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:36Z"
+        },
+        {
+          "id": "campaign_fixture_37",
+          "name": "Fixture Campaign 37",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:37Z"
+        },
+        {
+          "id": "campaign_fixture_38",
+          "name": "Fixture Campaign 38",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:38Z"
+        },
+        {
+          "id": "campaign_fixture_39",
+          "name": "Fixture Campaign 39",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:39Z"
+        },
+        {
+          "id": "campaign_fixture_40",
+          "name": "Fixture Campaign 40",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:40Z"
+        },
+        {
+          "id": "campaign_fixture_41",
+          "name": "Fixture Campaign 41",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:41Z"
+        },
+        {
+          "id": "campaign_fixture_42",
+          "name": "Fixture Campaign 42",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:42Z"
+        },
+        {
+          "id": "campaign_fixture_43",
+          "name": "Fixture Campaign 43",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:43Z"
+        },
+        {
+          "id": "campaign_fixture_44",
+          "name": "Fixture Campaign 44",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:44Z"
+        },
+        {
+          "id": "campaign_fixture_45",
+          "name": "Fixture Campaign 45",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:45Z"
+        },
+        {
+          "id": "campaign_fixture_46",
+          "name": "Fixture Campaign 46",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:46Z"
+        },
+        {
+          "id": "campaign_fixture_47",
+          "name": "Fixture Campaign 47",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:47Z"
+        },
+        {
+          "id": "campaign_fixture_48",
+          "name": "Fixture Campaign 48",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:48Z"
+        },
+        {
+          "id": "campaign_fixture_49",
+          "name": "Fixture Campaign 49",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:49Z"
+        },
+        {
+          "id": "campaign_fixture_50",
+          "name": "Fixture Campaign 50",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:50Z"
+        },
+        {
+          "id": "campaign_fixture_51",
+          "name": "Fixture Campaign 51",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:51Z"
+        },
+        {
+          "id": "campaign_fixture_52",
+          "name": "Fixture Campaign 52",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:52Z"
+        },
+        {
+          "id": "campaign_fixture_53",
+          "name": "Fixture Campaign 53",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:53Z"
+        },
+        {
+          "id": "campaign_fixture_54",
+          "name": "Fixture Campaign 54",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:54Z"
+        },
+        {
+          "id": "campaign_fixture_55",
+          "name": "Fixture Campaign 55",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:55Z"
+        },
+        {
+          "id": "campaign_fixture_56",
+          "name": "Fixture Campaign 56",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:56Z"
+        },
+        {
+          "id": "campaign_fixture_57",
+          "name": "Fixture Campaign 57",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:57Z"
+        },
+        {
+          "id": "campaign_fixture_58",
+          "name": "Fixture Campaign 58",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:58Z"
+        },
+        {
+          "id": "campaign_fixture_59",
+          "name": "Fixture Campaign 59",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:59Z"
+        },
+        {
+          "id": "campaign_fixture_60",
+          "name": "Fixture Campaign 60",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "campaign_fixture_61",
+          "name": "Fixture Campaign 61",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:01Z"
+        },
+        {
+          "id": "campaign_fixture_62",
+          "name": "Fixture Campaign 62",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:02Z"
+        },
+        {
+          "id": "campaign_fixture_63",
+          "name": "Fixture Campaign 63",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:03Z"
+        },
+        {
+          "id": "campaign_fixture_64",
+          "name": "Fixture Campaign 64",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:04Z"
+        },
+        {
+          "id": "campaign_fixture_65",
+          "name": "Fixture Campaign 65",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:05Z"
+        },
+        {
+          "id": "campaign_fixture_66",
+          "name": "Fixture Campaign 66",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:06Z"
+        },
+        {
+          "id": "campaign_fixture_67",
+          "name": "Fixture Campaign 67",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:07Z"
+        },
+        {
+          "id": "campaign_fixture_68",
+          "name": "Fixture Campaign 68",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:08Z"
+        },
+        {
+          "id": "campaign_fixture_69",
+          "name": "Fixture Campaign 69",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:09Z"
+        },
+        {
+          "id": "campaign_fixture_70",
+          "name": "Fixture Campaign 70",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:10Z"
+        },
+        {
+          "id": "campaign_fixture_71",
+          "name": "Fixture Campaign 71",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:11Z"
+        },
+        {
+          "id": "campaign_fixture_72",
+          "name": "Fixture Campaign 72",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:12Z"
+        },
+        {
+          "id": "campaign_fixture_73",
+          "name": "Fixture Campaign 73",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:13Z"
+        },
+        {
+          "id": "campaign_fixture_74",
+          "name": "Fixture Campaign 74",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:14Z"
+        },
+        {
+          "id": "campaign_fixture_75",
+          "name": "Fixture Campaign 75",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:15Z"
+        },
+        {
+          "id": "campaign_fixture_76",
+          "name": "Fixture Campaign 76",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:16Z"
+        },
+        {
+          "id": "campaign_fixture_77",
+          "name": "Fixture Campaign 77",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:17Z"
+        },
+        {
+          "id": "campaign_fixture_78",
+          "name": "Fixture Campaign 78",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:18Z"
+        },
+        {
+          "id": "campaign_fixture_79",
+          "name": "Fixture Campaign 79",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:19Z"
+        },
+        {
+          "id": "campaign_fixture_80",
+          "name": "Fixture Campaign 80",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:20Z"
+        },
+        {
+          "id": "campaign_fixture_81",
+          "name": "Fixture Campaign 81",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:21Z"
+        },
+        {
+          "id": "campaign_fixture_82",
+          "name": "Fixture Campaign 82",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:22Z"
+        },
+        {
+          "id": "campaign_fixture_83",
+          "name": "Fixture Campaign 83",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:23Z"
+        },
+        {
+          "id": "campaign_fixture_84",
+          "name": "Fixture Campaign 84",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:24Z"
+        },
+        {
+          "id": "campaign_fixture_85",
+          "name": "Fixture Campaign 85",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:25Z"
+        },
+        {
+          "id": "campaign_fixture_86",
+          "name": "Fixture Campaign 86",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:26Z"
+        },
+        {
+          "id": "campaign_fixture_87",
+          "name": "Fixture Campaign 87",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:27Z"
+        },
+        {
+          "id": "campaign_fixture_88",
+          "name": "Fixture Campaign 88",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:28Z"
+        },
+        {
+          "id": "campaign_fixture_89",
+          "name": "Fixture Campaign 89",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:29Z"
+        },
+        {
+          "id": "campaign_fixture_90",
+          "name": "Fixture Campaign 90",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:30Z"
+        },
+        {
+          "id": "campaign_fixture_91",
+          "name": "Fixture Campaign 91",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:31Z"
+        },
+        {
+          "id": "campaign_fixture_92",
+          "name": "Fixture Campaign 92",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:32Z"
+        },
+        {
+          "id": "campaign_fixture_93",
+          "name": "Fixture Campaign 93",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:33Z"
+        },
+        {
+          "id": "campaign_fixture_94",
+          "name": "Fixture Campaign 94",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:34Z"
+        },
+        {
+          "id": "campaign_fixture_95",
+          "name": "Fixture Campaign 95",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:35Z"
+        },
+        {
+          "id": "campaign_fixture_96",
+          "name": "Fixture Campaign 96",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:36Z"
+        },
+        {
+          "id": "campaign_fixture_97",
+          "name": "Fixture Campaign 97",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:37Z"
+        },
+        {
+          "id": "campaign_fixture_98",
+          "name": "Fixture Campaign 98",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:38Z"
+        },
+        {
+          "id": "campaign_fixture_99",
+          "name": "Fixture Campaign 99",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:39Z"
+        },
+        {
+          "id": "campaign_fixture_100",
+          "name": "Fixture Campaign 100",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:40Z"
+        }
+      ]
+    }
+  }
+}

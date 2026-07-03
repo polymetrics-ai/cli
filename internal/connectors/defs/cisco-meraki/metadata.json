@@ -1,7 +1,7 @@
 {
   "name": "cisco-meraki",
   "display_name": "Cisco Meraki",
-  "description": "Reads Cisco Meraki organizations from the Meraki Dashboard API v1. Organization-scoped streams (networks, devices, admins) require a list-organizations-then-fan-out read pattern the current declarative dialect cannot express; see docs.md and the reported blocker.",
+  "description": "Reads Cisco Meraki organizations, networks, devices, and admins from the Meraki Dashboard API v1.",
   "integration_type": "api",
   "docs_url": "https://developer.cisco.com/meraki/api-v1/",
   "release_stage": "beta",
@@ -17,6 +17,6 @@
     "read_page_size": 1000
   },
   "risk": {
-    "read": "external Cisco Meraki Dashboard API read of organization metadata"
+    "read": "external Cisco Meraki Dashboard API read of organization, network, device, and admin configuration/state"
   }
 }

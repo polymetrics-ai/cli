@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/lists.json" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "list_fixture_1", "list_name": "Fixture Newsletter", "contact_count": 42, "tags": "newsletter,active" },
+      { "id": "list_fixture_2", "list_name": "Fixture Promo", "contact_count": 7, "tags": "promo" }
+    ]
+  }
+}

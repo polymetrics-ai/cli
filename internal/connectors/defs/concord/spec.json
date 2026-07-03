@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Concord Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Concord API key, sent as the X-API-KEY header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.concordnow.com/api/rest/1",
+      "description": "Concord API base URL. Defaults to the production environment; override with https://uat.concordnow.com/api/rest/1 for UAT, or a test/proxy URL."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Concord organization id; required for the organization-scoped streams (agreements, folders, reports)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (limit query param; 1-1000)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

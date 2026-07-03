@@ -1,0 +1,7 @@
+{
+  "request": { "method": "POST", "path": "/categories/get" },
+  "response": {
+    "status": 200,
+    "body": { "categories": [] }
+  }
+}

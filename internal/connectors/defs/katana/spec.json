@@ -7,23 +7,13 @@
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "Katana API key, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+      "description": "Katana API key. Used only for Bearer auth; never logged."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
       "default": "https://api.katanamrp.com/v1",
       "description": "Katana API base URL override for tests or proxies."
-    },
-    "page_size": {
-      "type": "string",
-      "default": "50",
-      "description": "Records per page (1-250)."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
     },
     "mode": {
       "type": "string",

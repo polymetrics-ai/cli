@@ -1,7 +1,7 @@
 {
   "name": "everhour",
   "display_name": "Everhour",
-  "description": "Reads Everhour projects, clients, team members, and team time records through the Everhour REST API. The legacy tasks substream (one request per project) is not yet ported; see docs.md Known limits.",
+  "description": "Reads Everhour projects, clients, team members, team time records, and per-project tasks through the Everhour REST API.",
   "integration_type": "api",
   "docs_url": "https://everhour.docs.apiary.io/",
   "release_stage": "beta",
@@ -17,7 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Everhour API read of project, client, member, and time data",
+    "read": "external Everhour API read of project, client, member, time, and task data",
     "approval": "none; read-only"
   }
 }

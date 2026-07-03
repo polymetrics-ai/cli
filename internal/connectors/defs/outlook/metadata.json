@@ -1,0 +1,27 @@
+{
+  "name": "outlook",
+  "display_name": "Outlook",
+  "description": "Reads Outlook messages, mail folders, and calendar events through Microsoft Graph using an OAuth 2.0 refresh-token grant.",
+  "integration_type": "api",
+  "docs_url": "https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Microsoft Graph API read of the authenticated mailbox's messages, mail folders, and calendar events",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback) AND every stream is StreamHook-handled (hooks/outlook/hooks.go ports legacy's @odata.nextLink absolute-URL pagination loop verbatim -- the engine's declarative next_url pagination type reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all, see docs.md's Streams notes and docs/migration/quarantine.json's outlook AUTH_COMPLEX entry). Both are hook-covered; proven live by internal/connectors/paritytest/outlook and internal/connectors/hooks/outlook/hooks_test.go -- conformance's synthetic config has no real token_url/refresh_token round-trip and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively."
+  }
+}

@@ -14,6 +14,14 @@
       "format": "uri",
       "default": "https://api.appfollow.io/api/v2",
       "description": "AppFollow API base URL override for tests or proxies."
+    },
+    "app_collection_ids": {
+      "type": "string",
+      "description": "Comma-separated list of AppFollow app collection ids to fan out over for the app_lists stream (one GET /account/apps/app request per id, forwarded as apps_id). Required for app_lists; legacy's auto-discovery fallback (listing /account/apps when unset) is not modeled here — see docs.md Known limits."
+    },
+    "ext_ids": {
+      "type": "string",
+      "description": "Comma-separated list of AppFollow app external ids (ext_id) to fan out over for the ratings stream (one GET /meta/ratings request per id, forwarded as ext_id). Required for ratings."
     }
   }
 }

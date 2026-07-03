@@ -1,0 +1,23 @@
+{
+  "name": "trello",
+  "display_name": "Trello",
+  "description": "Reads Trello boards, lists, and checklists through the Trello REST API. Cards and actions are blocked (see docs.md Known limits).",
+  "integration_type": "api",
+  "docs_url": "https://developer.atlassian.com/cloud/trello/rest/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Trello API read of board/list/checklist data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

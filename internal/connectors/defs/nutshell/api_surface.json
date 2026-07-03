@@ -1,0 +1,18 @@
+{
+  "api": "Nutshell REST API (https://app.nutshell.com/rest/)",
+  "docs": "https://app.nutshell.com/rest/",
+  "reviewed_at": "2026-07-03",
+  "scope": "unblock (S4 engine mini-wave page_number start_page:0): the 5 legacy-parity read streams only; the full Nutshell surface (tasks, emails, products, custom fields, and any write/mutation endpoints) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/leads", "covered_by": { "stream": "leads" } },
+    { "method": "GET", "path": "/activities", "covered_by": { "stream": "activities" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/tasks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/emails", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/accounts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/accounts/{id}", "excluded": { "category": "destructive_admin", "reason": "account/data-deleting mutation, not a read stream" } }
+  ]
+}

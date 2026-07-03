@@ -1,16 +1,14 @@
 # Overview
 
-Imagga is a wave2 fan-out declarative-HTTP migration, **PARTIAL**: only the account-scoped
-`usage` stream is ported at Tier 1. Legacy's 4 per-image detection streams (`tags`, `categories`,
-`colors`, `faces_detections`) each issue **one HTTP request per configured image URL**
-(`imaggaImages`, `imagga.go:243-261`, iterated in `Read`, `imagga.go:126-135`) — a client-side,
-config-driven multi-request fan-out the declarative engine dialect has no mechanism to express
-(pagination follows a server-provided next-page signal; there is no "iterate this stream once per
-comma-separated config value" primitive). This is documented as an `ENGINE_GAP` blocker below and
-in `api_surface.json`; the legacy connector at `internal/connectors/imagga`
-(`imagga.go`/`streams.go`) stays authoritative for those 4 streams until a Tier-2 `StreamHook`
-closes the gap in a follow-up wave. The `usage` stream itself has no such fan-out (a single
-account-scoped request, no image), so it is fully ported here.
+Imagga is a wave2 fan-out declarative-HTTP migration, **PARTIAL** (gap-closure pass): the
+account-scoped `usage` stream plus 2 of legacy's 4 per-image detection streams (`tags`,
+`categories`) are now ported at Tier 1, using the S4 engine mini-wave's `stream.fan_out` primitive
+(`docs/migration/conventions.md` §3) to express legacy's client-side, config-driven "one request
+per configured image URL" fan-out (`imaggaImages`, `imagga.go:243-261`, iterated in `Read`,
+`imagga.go:126-135`). The remaining 2 detection streams (`colors`, `faces_detections`) are each
+blocked by a SEPARATE, narrower gap that `fan_out` does not close — see Known limits. The legacy
+connector at `internal/connectors/imagga` (`imagga.go`/`streams.go`) stays authoritative for those
+2 streams until a follow-up wave closes the remaining gaps.
 
 ## Auth setup
 
@@ -24,16 +22,42 @@ is not exercised differently on either side).
 
 ## Streams notes
 
-`usage` is the only ported stream: `GET /usage` returns a single object at the `result` key
-(`records.path: "result"`, `single_object: true`), matching legacy's `usageRecords` mapper
-(`streams.go:221-233`) which flattens the account-scoped result object into one record. This
-bundle uses typed `computed_fields` (bare `{{ record.<path> }}` references) to rename
-`result.total` → `requests` and copy `monthly_processed`/`monthly_limit`/`daily_processed`
-verbatim, preserving their native integer type (per conventions.md's typed-extraction rule); the
-static-literal `period: "current"` computed field stamps legacy's synthetic single-row marker
-(legacy's `usageRecords` hardcodes `"period": "current"` identically, `streams.go:227`). `usage`
-is full-refresh only, matching legacy (no `CursorFields` published for this stream in
-`streams.go:65-69`).
+`usage` (`GET /usage`) returns a single object at the `result` key (`records.path: "result"`,
+`single_object: true`), matching legacy's `usageRecords` mapper (`streams.go:221-233`) which
+flattens the account-scoped result object into one record. This bundle uses typed
+`computed_fields` (bare `{{ record.<path> }}` references) to rename `result.total` → `requests`
+and copy `monthly_processed`/`monthly_limit`/`daily_processed` verbatim, preserving their native
+integer type (per conventions.md's typed-extraction rule); the static-literal `period: "current"`
+computed field stamps legacy's synthetic single-row marker (legacy's `usageRecords` hardcodes
+`"period": "current"` identically, `streams.go:227`). `usage` is full-refresh only, matching
+legacy (no `CursorFields` published for this stream in `streams.go:65-69`).
+
+`tags` (`GET /tags`) and `categories` (`GET /categories/personal_photos`) are per-image detection
+endpoints: legacy issues one request per configured image URL and fans each response's nested
+result array out into records (`readOne`+`tagsRecords`/`categoriesRecords`,
+`imagga.go:141-168`/`streams.go:124-158`). This is now expressed via `fan_out`:
+`ids_from.config_key: "image_urls"` splits the comma-separated `image_urls` config value
+(matching legacy's `imaggaImages` primary path) into one id per configured image;
+`into.query_param: "image_url"` adds each resolved image URL as the `image_url` query parameter
+on that sub-sequence's single request (matching legacy's `readOne`'s `query.Set("image_url",
+image)`); `stamp_field: "image_url"` writes the same URL onto every emitted record (matching
+legacy's `imageURL` parameter threaded through both mappers). `records.path: "result.tags"` /
+`"result.categories"` selects the nested array directly (an ordinary dotted-path array
+extraction — `connsdk.RecordsAt` fans it into one record per element with no special-casing
+needed). Each raw tag/category's localized name object (`{"en": "..."}`) is flattened via
+`computed_fields`' dotted-path record resolution: `"tag": "{{ record.tag.en }}"` /
+`"category": "{{ record.name.en }}"`, matching legacy's `localizedName` helper
+(`streams.go:206-215`) exactly for the common case where an English name is present. `confidence`
+uses a bare `{{ record.confidence }}` reference (typed extraction, preserving its native number
+type). Neither stream is incremental, matching legacy (no `CursorFields` for either).
+
+`image_urls`'s `spec.json` `"default"` is Imagga's own sample image
+(`https://imagga.com/static/images/categorization/child-476506_640.jpg`, matching legacy's
+`imaggaDefaultImage`, `imagga.go:33`) — when the caller omits `image_urls` entirely, the engine's
+`spec.json` default-materialization (conventions.md §3) fills it in before `fan_out` resolves ids,
+reproducing legacy's "no image configured → analyze the sample image" fallback for that case. See
+Known limits for the one input shape this does NOT reproduce (legacy's SECOND fallback key,
+`img_for_detection`).
 
 ## Write actions & risks
 
@@ -44,44 +68,57 @@ doc: "Imagga is a read-only analysis API with no reverse-ETL surface"); `capabil
 
 ## Known limits
 
-- **`ENGINE_GAP` — the 4 per-image detection streams (`tags`, `categories`, `colors`,
-  `faces_detections`) are NOT ported.** Legacy's `Read` iterates every configured image URL
-  (`imaggaImages`, sourced from the comma-separated `image_urls` config, the single
-  `img_for_detection` config, or a hardcoded sample-image fallback, `imagga.go:243-261`) and issues
-  one request per image (`readOne`, `imagga.go:141-168`), fanning each response's nested result
-  array (`result.tags`/`result.categories`/`result.colors[_scope]`/`result.faces`) out into
-  records stamped with that image's URL. The declarative dialect's `records.path` extraction
-  (`connsdk.RecordsAt`) DOES support fanning ONE response's array into multiple records (this
-  bundle's own `usage` stream and every other Tier-1 goldens' list streams rely on exactly this),
-  so the nested-array-flattening half of legacy's behavior is not the blocker. The blocker is
-  strictly the OUTER fan-out: no `PaginationSpec` type follows a client-side, config-driven list of
-  distinct request parameter values (pagination follows a server-emitted next-page signal —
-  `token_path`/`last_record_field`/`next_url`/`Link` header/offset — never a config value split on
-  a delimiter), and `stream.Query`'s optional-query dialect (conventions.md §3) has no "repeat this
-  request once per list element" primitive either. A single-fixed-image workaround (declaring one
-  static `image_url` config value and reading it as an ordinary single-request stream) was
-  considered and rejected: it would silently drop legacy's accepted multi-image `image_urls`
-  config input to a single image, an accepted-input-behavior change the conventions.md §5 meta-rule
-  forbids — this is exactly the `StreamHook` interface's documented purpose ("sub-resource fan-out
-  reads", conventions.md §1's Tier-2 table), so it is reported here as a blocker rather than
-  faked. A follow-up Tier-2 wave should add `internal/connectors/hooks/imagga/hooks.go` implementing
-  `StreamHook.ReadStream` for these 4 streams, iterating the configured image list and emitting
-  each response's flattened records — the schema/PK shape below is the target parity contract for
-  that hook to satisfy.
-  - `tags`: primary key `["image_url", "tag"]`, fields `image_url`/`tag`/`confidence`
-    (`streams.go:73-79`, `tagsRecords`, `streams.go:124-140`).
-  - `categories`: primary key `["image_url", "category"]`, fields
-    `image_url`/`category`/`confidence` (`streams.go:81-87`, `categoriesRecords`,
-    `streams.go:142-158`).
-  - `colors`: primary key `["image_url", "html_code", "color_scope"]`, fields
-    `image_url`/`color_scope`/`html_code`/`closest_palette_color`/`percent`/`r`/`g`/`b`
-    (`streams.go:89-100`, `colorsRecords`, `streams.go:160-192` — three color-scope groups:
-    `overall`/`foreground`/`background`).
-  - `faces_detections`: primary key `["image_url", "face_index"]`, fields
-    `image_url`/`face_index`/`confidence`/`x1`/`y1`/`x2`/`y2` (`streams.go:102-112`,
-    `facesRecords`, `streams.go:194-218`).
+- **`colors` is NOT ported (`ENGINE_GAP`).** Legacy's `colorsRecords` (`streams.go:160-192`) reads
+  THREE sibling arrays nested under `result.colors` (`overall_colors`, `foreground_colors`,
+  `background_colors`) and unions them into one record stream, tagging each with its
+  `color_scope` label. The dialect's `records.path` extraction (`connsdk.RecordsAt`) selects
+  exactly ONE dotted path per stream and fans that ONE array (or object) into records — there is
+  no primitive to union multiple sibling arrays from the same page body into a single record
+  stream, and `keyed_object` (S4 engine mini-wave item 3) explodes ONE object's VALUES, not
+  several named array fields. Splitting `colors` into 3 separate streams (one per scope) was
+  considered and rejected: it would change the stream catalog shape callers see (3 new stream
+  names replacing 1), a bigger accepted-input/catalog-shape change than the meta-rule's parity bar
+  allows for a same-named migrated stream. This is a genuine Tier-2 `StreamHook` trigger (or a new
+  `records` dialect primitive), out of scope for this Tier-1-only gap-closure pass. Target parity
+  contract for a follow-up hook: primary key `["image_url", "html_code", "color_scope"]`, fields
+  `image_url`/`color_scope`/`html_code`/`closest_palette_color`/`percent`/`r`/`g`/`b`
+  (`streams.go:89-100`).
+- **`faces_detections` is NOT ported (`ENGINE_GAP`).** Legacy's `facesRecords`
+  (`streams.go:194-218`) derives `face_index` — a component of the stream's primary key
+  (`["image_url", "face_index"]`) — from the record's 0-based POSITION within the raw
+  `result.faces[]` array (`for i, raw := range faces`), not from any field value on the record
+  itself. `computed_fields`/`records` extraction resolve every field from the record's own
+  content (or a config/fan-out reference); neither has an array-index accessor, and no other field
+  on a raw Imagga face object (`confidence`, `coordinates`) is a usable stable identifier on its
+  own (two faces can share identical coordinates in principle). Fabricating an alternative key
+  (e.g. hashing `coordinates`) would silently diverge from legacy's actual PK derivation for any
+  input with duplicate coordinate sets — the meta-rule (conventions.md §5) forbids this as a
+  silent behavior change. This is a genuine Tier-2 `StreamHook` trigger (or a new dialect
+  primitive exposing array position), out of scope for this Tier-1-only gap-closure pass. Target
+  parity contract for a follow-up hook: primary key `["image_url", "face_index"]`, fields
+  `image_url`/`face_index`/`confidence`/`x1`/`y1`/`x2`/`y2` (`streams.go:102-112`).
+- **`img_for_detection`'s single-image fallback config key is not modeled (ACCEPTABLE, documented
+  scope narrowing).** Legacy's `imaggaImages` (`imagga.go:243-261`) checks THREE sources in order:
+  `image_urls` (comma-separated, primary), then `img_for_detection` (a single-image fallback key),
+  then a hardcoded sample image. `fan_out.ids_from.config_key` reads exactly one named config key
+  with no fallback chain to a second key. This bundle declares `image_urls` only (legacy's
+  primary, first-checked key) plus its `spec.json` `"default"` (reproducing legacy's THIRD
+  fallback, the hardcoded sample image, for the "nothing configured at all" case — see Streams
+  notes). A caller who previously configured Imagga via `img_for_detection` alone (never setting
+  `image_urls`) would need to migrate that config key name to `image_urls`; this is a documented
+  config-surface narrowing, not a data-shape change for any caller using the canonical
+  `image_urls` key or relying on the no-config default.
+- **An explicit empty-string `image_urls` does not fall back to the default sample image
+  (ACCEPTABLE, documented deviation).** The engine's `spec.json` default-materialization only
+  fills a key that is genuinely ABSENT from `RuntimeConfig.Config`; an explicit empty string is
+  preserved as-is, never overridden (conventions.md §3's `default` semantics), whereas legacy's
+  `imaggaImages` treats a whitespace-only `image_urls` the same as an absent one and falls through
+  to `img_for_detection`/the sample image. A caller who explicitly sets `image_urls: ""` (rather
+  than omitting the key) sees zero fan-out ids (and therefore zero emitted records) here, versus
+  legacy's sample-image fallback — a narrow corner case, not the common "key omitted entirely"
+  path this bundle does reproduce exactly.
 - **Legacy's fixture-mode-only `fixture: true` marker is not modeled.** Legacy's `readFixture` path
   (only reached when `config.mode == "fixture"`) stamps a `fixture: true` field onto every
-  fixture-mode record (`imagga.go:205`). This bundle's `usage` schema and fixtures target the live
-  record shape only; the engine's own conformance/fixture-replay harness supplies the
-  credential-free test affordance legacy's fixture mode existed for.
+  fixture-mode record (`imagga.go:205`). This bundle's schemas and fixtures target the live record
+  shape only; the engine's own conformance/fixture-replay harness supplies the credential-free
+  test affordance legacy's fixture mode existed for.

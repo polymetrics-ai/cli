@@ -1,0 +1,62 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "key", "value": "{{ secrets.key }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/commodities" },
+    "error_map": [
+      { "status": 401, "hint": "finnworlds key is missing or invalid; re-run pm credentials add finnworlds" },
+      { "status": 403, "hint": "finnworlds key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "finnworlds rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "dividends",
+      "path": "/dividends",
+      "records": { "path": "result.output.dividends" },
+      "fan_out": {
+        "ids_from": { "config_key": "tickers" },
+        "into": { "query_param": "ticker" },
+        "stamp_field": "ticker"
+      },
+      "schema": "schemas/dividends.json"
+    },
+    {
+      "name": "stock_splits",
+      "path": "/stocksplits",
+      "records": { "path": "result.output.stocksplits" },
+      "fan_out": {
+        "ids_from": { "config_key": "tickers" },
+        "into": { "query_param": "ticker" },
+        "stamp_field": "ticker"
+      },
+      "schema": "schemas/stock_splits.json"
+    },
+    {
+      "name": "historical_candlestick",
+      "path": "/historicalcandlestick",
+      "records": { "path": "result.output" },
+      "fan_out": {
+        "ids_from": { "config_key": "tickers" },
+        "into": { "query_param": "ticker" },
+        "stamp_field": "ticker"
+      },
+      "schema": "schemas/historical_candlestick.json"
+    },
+    {
+      "name": "commodities",
+      "path": "/commodities",
+      "records": { "path": "result.output" },
+      "fan_out": {
+        "ids_from": { "config_key": "commodities" },
+        "into": { "query_param": "commodity_name" },
+        "stamp_field": "commodity_name"
+      },
+      "schema": "schemas/commodities.json"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "whois",
+  "type": "object",
+  "x-primary-key": ["domain"],
+  "x-cursor-field": "update_date",
+  "required": ["domain"],
+  "properties": {
+    "domain": { "type": "string" },
+    "domain_id": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "create_date": { "type": ["string", "null"] },
+    "update_date": { "type": ["string", "null"] },
+    "expire_date": { "type": ["string", "null"] },
+    "domain_age": { "type": ["integer", "null"] },
+    "whois_server": { "type": ["string", "null"] },
+    "registrar_iana_id": { "type": ["string", "null"] },
+    "registrar_name": { "type": ["string", "null"] },
+    "registrar_url": { "type": ["string", "null"] },
+    "registrant_name": { "type": ["string", "null"] },
+    "registrant_organization": { "type": ["string", "null"] },
+    "registrant_email": { "type": ["string", "null"] },
+    "registrant_country": { "type": ["string", "null"] },
+    "admin_name": { "type": ["string", "null"] },
+    "admin_email": { "type": ["string", "null"] },
+    "tech_name": { "type": ["string", "null"] },
+    "tech_email": { "type": ["string", "null"] },
+    "billing_name": { "type": ["string", "null"] },
+    "billing_email": { "type": ["string", "null"] },
+    "nameservers": { "type": ["string", "null"], "description": "Comma-joined nameserver list via the join:, filter (computed_fields), matching legacy's joinNameservers output exactly." }
+  }
+}

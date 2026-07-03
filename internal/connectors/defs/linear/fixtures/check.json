@@ -1,0 +1,3 @@
+{
+  "response": { "status": 200, "body": { "data": { "viewer": { "id": "user_fixture_1" } } } }
+}

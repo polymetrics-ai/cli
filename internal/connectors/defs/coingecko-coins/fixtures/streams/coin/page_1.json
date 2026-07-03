@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coins/synthetic-conformance-value",
+    "query": {
+      "localization": "false",
+      "tickers": "false",
+      "community_data": "false",
+      "developer_data": "false"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "bitcoin",
+      "symbol": "btc",
+      "name": "Bitcoin",
+      "market_cap_rank": 1,
+      "hashing_algorithm": "SHA-256",
+      "categories": ["Cryptocurrency", "Layer 1 (L1)"],
+      "market_data": {
+        "current_price": { "usd": 42000.5 },
+        "market_cap": { "usd": 800000000000 },
+        "total_volume": { "usd": 25000000000 }
+      },
+      "last_updated": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

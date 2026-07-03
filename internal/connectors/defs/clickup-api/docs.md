@@ -60,23 +60,16 @@ DATA-identical to legacy in the overwhelmingly common case, diverging only in em
 COUNT (never emitted RECORD data) for a final page landing on an exact multiple of the declared
 threshold.
 
-**`start_page` is declared `1`, NOT ClickUp's real 0-indexed first page — an `ENGINE_GAP`,
-documented rather than silently worked around.** Legacy's own loop is `for page := 0; page <
-clickupMaxPages; page++` — ClickUp's task list endpoint is genuinely 0-indexed (`page=0` is the
-real first page). `PaginationSpec.StartPage` is a plain Go `int`; `engine/paginate.go`'s
-`newPaginator` (`start := spec.StartPage; if start == 0 { start = 1 }`) unconditionally coerces an
-explicit `"start_page": 0` to `1`, because the zero value cannot be distinguished from "never set."
-Declaring `start_page: 0` here would therefore silently make every live read of `tasks` begin at
-ClickUp's real SECOND page, permanently skipping every task on the actual first page — an
-accepted-input EMITTED-DATA change the conventions.md §5 meta-rule forbids, confirmed directly
-against the paginator's own `Start()` behavior (not merely inferred from source). This is the
-identical, already-recurring gap documented in `algolia`'s, `datadog`'s, and `auth0`'s `docs.md`
-(≥3 occurrences — conventions.md §6's `ENGINE_GAP` mini-wave threshold). Per `auth0`'s established
-precedent, this bundle declares the HONEST `start_page: 1` (the engine's real runtime behavior)
-rather than a misleading `start_page: 0` the engine silently does not honor, and files this as a
-blocker rather than shipping a first-page-skipping approximation. **The `tasks` stream's live
-pagination is therefore not migrated to full parity in this wave** — every other stream (`teams`,
-`spaces`, `folders`, `lists`) is unaffected (none paginate) and is fully migrated.
+**`start_page` is declared `0`, matching ClickUp's real 0-indexed first page.** Legacy's own loop
+is `for page := 0; page < clickupMaxPages; page++` — ClickUp's task list endpoint is genuinely
+0-indexed (`page=0` is the real first page). This was originally blocked by an `ENGINE_GAP`
+(`PaginationSpec.StartPage` was a plain Go `int`, and `engine/paginate.go`'s `newPaginator`
+unconditionally coerced an explicit `"start_page": 0` to `1`, since the zero value could not be
+distinguished from "never set" — the identical gap class documented in `algolia`'s and `datadog`'s
+`docs.md`). That gap is now closed (S4 engine mini-wave item 1): `PaginationSpec.StartPage` is a
+`*int`, so an explicit `start_page: 0` is honored verbatim rather than coerced, and this bundle now
+reads `tasks` starting from ClickUp's real first page — full read parity for every stream in this
+bundle (`teams`, `spaces`, `folders`, `lists`, `tasks`).
 
 `tasks`'s incremental cursor is `date_updated` with `client_filtered: true` (ClickUp's real task
 list endpoint exposes no server-side updated-since filter parameter — legacy's own `Read`/
@@ -108,14 +101,6 @@ ships no `writes.json`, matching legacy's `Write` returning `connectors.ErrUnsup
   records identical to legacy; an operator who previously relied on `"1"`/`"yes"` must switch to
   the literal `"true"` string. This is a documented config-surface narrowing, not a data-shape
   regression for any `"true"`/`"false"`/absent input.
-- **`ENGINE_GAP`: `tasks` reads from ClickUp's real page 1 (`start_page: 1`), not page 0.**
-  ClickUp's task list endpoint is genuinely 0-indexed; the engine's `page_number` paginator cannot
-  express an explicit `start_page: 0` (see Streams notes above for the full mechanical explanation
-  and the ≥3-occurrence precedent in `algolia`/`datadog`/`auth0`). Until a follow-up engine
-  increment adds a way to distinguish "start_page unset" from "start_page explicitly 0" (e.g. a
-  pointer/explicit-presence field or documented sentinel), this bundle's `tasks` stream — and ONLY
-  this stream — is not migrated to full read parity: it always skips ClickUp's real first page of
-  tasks. `teams`/`spaces`/`folders`/`lists` are unaffected and fully migrated.
 - **`tasks` pagination has no `last_page`-boolean stop signal wired.** The engine's `page_number`
   paginator type supports only a short-page stop threshold (no `stop_path`, which is exclusive to
   the `cursor` pagination type in this dialect) — see Streams notes above for why this is

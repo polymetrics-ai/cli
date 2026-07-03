@@ -1,0 +1,15 @@
+{
+  "api": "Serpstat JSON-RPC-over-HTTP API v4 (https://api.serpstat.com/v4)",
+  "docs": "https://api.serpstat.com/api-docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-2 auth-hook migration: the 2 legacy-parity read streams only (domain_keywords via SerpstatDomainProcedure.getKeywords, domain_competitors via SerpstatDomainProcedure.getCompetitors), both distinct JSON-RPC 'method' values POSTed to the SAME single /v4 endpoint; Serpstat's much larger documented JSON-RPC surface (backlinks, rank tracker, site audit, and dozens of other SerpstatDomainProcedure/SerpstatKeywordProcedure/SerpstatBacklinksProcedure methods) is out of scope until Pass B. Every covered/excluded entry below is declared method GET (not the literal wire HTTP verb, which is always POST for this JSON-RPC transport) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design SS E.1 rule 4) -- every JSON-RPC method used here is a read (getKeywords/getCompetitors), never a mutation; Serpstat has no write/mutation JSON-RPC methods at all in the legacy-covered surface.",
+  "endpoints": [
+    { "method": "GET", "path": "/v4 (method: SerpstatDomainProcedure.getKeywords)", "covered_by": { "stream": "domain_keywords" } },
+    { "method": "GET", "path": "/v4 (method: SerpstatDomainProcedure.getCompetitors)", "covered_by": { "stream": "domain_competitors" } },
+    { "method": "GET", "path": "/v4 (method: SerpstatDomainProcedure.getDomainsInfo)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v4 (method: SerpstatKeywordProcedure.getKeywordsInfo)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v4 (method: SerpstatBacklinksProcedure.getSummary)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v4 (method: SerpstatRankTrackerProcedure.*)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v4 (method: SerpstatSiteAuditProcedure.*)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "api": "Keka HRIS/Time/PSA REST API",
+  "docs": "https://developers.keka.com/reference/introduction",
+  "reviewed_at": "2026-07-03",
+  "scope": "Migration wave: the 6 legacy-parity read streams only, matching internal/connectors/keka's exact endpoint set (HRIS employees, Time attendance/leave, PSA clients/projects). The full Keka surface (payroll, performance, recruitment, expenses, webhooks, etc.) is out of scope until Pass B capability expansion.",
+  "endpoints": [
+    { "method": "GET", "path": "/hris/employees", "covered_by": { "stream": "employees" } },
+    { "method": "GET", "path": "/time/attendance", "covered_by": { "stream": "attendance" } },
+    { "method": "GET", "path": "/time/leavetypes", "covered_by": { "stream": "leave_types" } },
+    { "method": "GET", "path": "/time/leaverequests", "covered_by": { "stream": "leave_requests" } },
+    { "method": "GET", "path": "/psa/clients", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/psa/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/hris/payroll", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/performance/reviews", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/recruitment/candidates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/expense/claims", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/hris/employees", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy keka is read-only, no write actions implemented" } }
+  ]
+}

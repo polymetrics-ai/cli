@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/admin/simpleProfiles",
+    "query": { "userId": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "label": "Fixture Brand 1",
+        "title": "Fixture Brand 1",
+        "userId": 9999,
+        "url": "https://example.com/brand1",
+        "timezone": "UTC"
+      },
+      {
+        "id": 2,
+        "label": "Fixture Brand 2",
+        "title": "Fixture Brand 2",
+        "userId": 9999,
+        "url": "https://example.com/brand2",
+        "timezone": "UTC"
+      }
+    ]
+  }
+}

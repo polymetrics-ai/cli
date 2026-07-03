@@ -1,0 +1,10 @@
+{
+  "api": "Wasabi Stats API (https://stats.wasabisys.com)",
+  "docs": "https://wasabi-support.zendesk.com/hc/en-us/articles/360033854451-How-do-I-access-my-usage-statistics-via-the-Stats-API-",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave-quarantine-repair migration: the 2 legacy-parity read streams only (bucket_stats, account_stats); legacy is read-only (Write always returns ErrUnsupportedOperation) and any broader Wasabi Stats API surface beyond these 2 documented endpoints is out of scope for this pass",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/stats", "covered_by": { "stream": "bucket_stats" } },
+    { "method": "GET", "path": "/v1/accounts", "covered_by": { "stream": "account_stats" } }
+  ]
+}

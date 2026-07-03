@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Slack Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://slack.com/api",
+      "description": "Slack Web API base URL override for tests or proxies."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Slack API token (xoxb- bot token or a direct API token), sent as a Bearer Authorization header. Provide either api_token or access_token; api_token takes precedence when both are set."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Slack OAuth access token (xoxb-/xoxp-), sent as a Bearer Authorization header. Provide either api_token or access_token."
+    },
+    "channel_id": {
+      "type": "string",
+      "description": "Slack channel ID to read history from. Required only for the channel_messages stream."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "200",
+      "description": "Records per page (1-1000, Slack's limit param)."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional hard cap on the number of pages read per stream, consumed by hooks/slack/hooks.go's StreamHook. Permissive parse: empty, \"all\", or \"unlimited\" means unbounded; a positive integer string caps the page count at that value."
+    }
+  }
+}

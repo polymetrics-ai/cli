@@ -1,7 +1,7 @@
 {
   "name": "finnhub",
   "display_name": "Finnhub",
-  "description": "Reads Finnhub stock symbols and market news through the Finnhub REST API.",
+  "description": "Reads Finnhub stock symbols, market news, per-symbol company profiles, and per-symbol analyst recommendation trends through the Finnhub REST API.",
   "integration_type": "api",
   "docs_url": "https://finnhub.io/docs/api",
   "release_stage": "ga",

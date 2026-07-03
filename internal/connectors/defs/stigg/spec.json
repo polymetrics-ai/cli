@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stigg Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Stigg server API key, sent as a Bearer token on every GraphQL POST request. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.stigg.io",
+      "description": "Stigg GraphQL-over-HTTP base URL override for tests or proxies. MUST use http or https; the hook fails closed on any other scheme or a missing host (mirrors legacy's baseURL validation)."
+    }
+  }
+}

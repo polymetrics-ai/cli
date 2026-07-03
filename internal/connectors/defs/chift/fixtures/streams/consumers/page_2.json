@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/consumers",
+    "query": {
+      "size": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "consumerid": "con_fixture_101",
+        "name": "Fixture Consumer 101",
+        "email": "fixture101@example.com",
+        "phone": "",
+        "redirect_url": "https://example.com/redirect",
+        "active": true,
+        "created_on": "2026-01-01T00:00:00Z"
+      },
+      {
+        "consumerid": "con_fixture_102",
+        "name": "Fixture Consumer 102",
+        "email": "fixture102@example.com",
+        "phone": "",
+        "redirect_url": "https://example.com/redirect",
+        "active": true,
+        "created_on": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

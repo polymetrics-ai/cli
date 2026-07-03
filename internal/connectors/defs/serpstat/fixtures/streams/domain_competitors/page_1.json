@@ -1,0 +1,8 @@
+{
+  "result": {
+    "data": [
+      { "domain": "fixture-competitor-one.example.com", "visibility": 12.34 },
+      { "domain": "fixture-competitor-two.example.com", "visibility": 8.9 }
+    ]
+  }
+}

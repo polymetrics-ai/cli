@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/sales"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "2026-01-01": {
+        "date": "2026-01-01",
+        "downloads": 100,
+        "updates": 5,
+        "revenue": "50.00",
+        "returns": 1,
+        "net_downloads": 99,
+        "promos": 0
+      },
+      "2026-01-02": {
+        "date": "2026-01-02",
+        "downloads": 120,
+        "updates": 6,
+        "revenue": "60.00",
+        "returns": 0,
+        "net_downloads": 120,
+        "promos": 2
+      }
+    }
+  }
+}

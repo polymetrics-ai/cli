@@ -1,0 +1,13 @@
+{
+  "api": "Box REST API 2.0 (https://api.box.com/2.0)",
+  "docs": "https://developer.box.com/reference/",
+  "reviewed_at": "2026-07-03",
+  "scope": "the 4 legacy-parity read streams only (users, groups, collections, folder_items); Box's manifest-only upstream source is read-only, matching legacy",
+  "endpoints": [
+    { "method": "GET", "path": "/2.0/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/2.0/groups", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/2.0/collections", "covered_by": { "stream": "collections" } },
+    { "method": "GET", "path": "/2.0/folders/{folder_id}/items", "covered_by": { "stream": "folder_items" } },
+    { "method": "POST", "path": "/oauth2/token", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 client-credentials token exchange, not a syncable object stream" } }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sales_orders",
+    "query": {
+      "page": "2",
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 51,
+          "order_no": "SO-51",
+          "customer_id": 51,
+          "status": "NOT_SHIPPED",
+          "currency": "USD",
+          "total": 5100.0,
+          "total_in_base_currency": 5100.0,
+          "order_created_date": "2026-01-01T00:00:00.000Z",
+          "delivery_date": "2026-01-05T00:00:00.000Z",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

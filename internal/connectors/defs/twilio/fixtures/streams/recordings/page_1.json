@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-secret/Recordings.json",
+    "query": {
+      "PageSize": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "recordings": [
+        {
+          "sid": "RE_fixture_1",
+          "account_sid": "AC_fixture",
+          "call_sid": "CA_fixture_1",
+          "date_created": "Mon, 01 Jan 2026 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2026 00:00:00 +0000",
+          "start_time": "Mon, 01 Jan 2026 00:00:00 +0000",
+          "duration": "30",
+          "status": "completed",
+          "channels": 1,
+          "source": "DialVerb",
+          "price": "-0.0025",
+          "price_unit": "USD"
+        }
+      ],
+      "next_page_uri": null,
+      "page": 0,
+      "page_size": 50
+    }
+  }
+}

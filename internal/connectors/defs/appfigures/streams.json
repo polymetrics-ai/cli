@@ -31,6 +31,46 @@
       },
       "records": { "path": "reviews" },
       "schema": "schemas/reviews.json"
+    },
+    {
+      "name": "products",
+      "path": "/products/mine",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "sales",
+      "path": "/reports/sales",
+      "pagination": { "type": "none" },
+      "query": {
+        "store": { "template": "{{ config.search_store }}", "omit_when_absent": true },
+        "group_by": { "template": "{{ config.group_by }}", "omit_when_absent": true },
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/sales.json"
+    },
+    {
+      "name": "ratings",
+      "path": "/reports/ratings",
+      "pagination": { "type": "none" },
+      "query": {
+        "store": { "template": "{{ config.search_store }}", "omit_when_absent": true },
+        "group_by": { "template": "{{ config.group_by }}", "omit_when_absent": true },
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/ratings.json"
+    },
+    {
+      "name": "categories",
+      "path": "/data/categories",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/categories.json"
     }
   ]
 }

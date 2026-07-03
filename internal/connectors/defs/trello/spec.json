@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Trello Connection Specification",
+  "type": "object",
+  "required": ["key", "token"],
+  "properties": {
+    "key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Trello API key, sent as the 'key' query parameter on every request. Never logged."
+    },
+    "token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Trello API token, sent as the 'token' query parameter on every request. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.trello.com/1",
+      "description": "Trello API base URL override for tests or proxies."
+    },
+    "board_ids": {
+      "type": "string",
+      "description": "Comma-separated list of Trello board IDs to scope the lists/checklists streams to. Required for those two streams (no auto-discovery fallback here; see docs.md Known limits) — the boards stream itself is unaffected and always lists every board the authenticated member can access."
+    }
+  }
+}

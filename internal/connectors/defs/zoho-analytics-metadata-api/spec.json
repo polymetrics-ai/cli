@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zoho Analytics Metadata API Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "refresh_token"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zoho OAuth 2.0 client ID for the refresh-token grant. Used only in the token-request form; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zoho OAuth 2.0 client secret. Used only in the token-request form; never logged."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived Zoho OAuth 2.0 refresh token. Exchanged for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is out of scope (credentials layer already owns it)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://analyticsapi.zoho.com/restapi/v2",
+      "description": "Zoho Analytics Metadata API base URL override for tests or region-specific data centers (e.g. https://analyticsapi.zoho.eu/restapi/v2)."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://accounts.zoho.com/oauth/v2/token",
+      "description": "Zoho OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a non-https or unparseable value to prevent exfiltrating the refresh token to an attacker-chosen endpoint."
+    },
+    "org_id": {
+      "type": "string",
+      "description": "Optional Zoho Analytics organization ID; sent as the ZANALYTICS-ORGID header on every request when set."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

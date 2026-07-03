@@ -1,0 +1,13 @@
+{
+  "api": "Concord REST API v1 (https://api.concordnow.com/api/rest/1)",
+  "docs": "https://api.concordnow.com/api/rest/1/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "the 5 legacy-parity read streams only (agreements, user_organizations, folders, reports, tags); Concord is read-only upstream in legacy (full-refresh only), matching this bundle",
+  "endpoints": [
+    { "method": "GET", "path": "/organizations/{org}/agreements", "covered_by": { "stream": "agreements" } },
+    { "method": "GET", "path": "/user/me/organizations", "covered_by": { "stream": "user_organizations" } },
+    { "method": "GET", "path": "/organizations/{org}/folders", "covered_by": { "stream": "folders" } },
+    { "method": "GET", "path": "/organizations/{org}/reports", "covered_by": { "stream": "reports" } },
+    { "method": "GET", "path": "/tags", "covered_by": { "stream": "tags" } }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stats/instagram/posts",
+    "query": {
+      "userId": "synthetic-conformance-value",
+      "blogId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "postId": "post_1",
+        "type": "image",
+        "publishDate": "2026-01-01T00:00:00",
+        "text": "Fixture Instagram post 1",
+        "interactions": 10,
+        "impressions": 100,
+        "reach": 90,
+        "likes": 5,
+        "comments": 1,
+        "saved": 2,
+        "url": "https://instagram.com/p/fixture1"
+      },
+      {
+        "postId": "post_2",
+        "type": "video",
+        "publishDate": "2026-01-02T00:00:00",
+        "text": "Fixture Instagram post 2",
+        "interactions": 20,
+        "impressions": 200,
+        "reach": 180,
+        "likes": 10,
+        "comments": 2,
+        "saved": 4,
+        "url": "https://instagram.com/p/fixture2"
+      }
+    ]
+  }
+}

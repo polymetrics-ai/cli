@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HoorayHR Connection Specification",
+  "type": "object",
+  "required": ["hoorayhrusername", "hoorayhrpassword"],
+  "properties": {
+    "hoorayhrusername": {
+      "type": "string",
+      "description": "HoorayHR account email address, used as the username in the session-token login exchange."
+    },
+    "hoorayhrpassword": {
+      "type": "string",
+      "x-secret": true,
+      "description": "HoorayHR account password. Used only in the /authentication login exchange body; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.hooray.nl",
+      "description": "HoorayHR API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

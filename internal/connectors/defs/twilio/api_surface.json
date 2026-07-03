@@ -1,0 +1,18 @@
+{
+  "api": "Twilio REST API 2010-04-01 (https://api.twilio.com/2010-04-01)",
+  "docs": "https://www.twilio.com/docs/usage/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-2 StreamHook migration: the 5 legacy-parity read streams only (messages, calls, recordings, conferences, usage_records); legacy twilio is read-only (Write always returns ErrUnsupportedOperation) and the full Twilio API surface (sending messages, placing calls, TaskRouter, Verify, Sync, Video, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/Accounts/{AccountSid}/Messages.json", "covered_by": { "stream": "messages" } },
+    { "method": "GET", "path": "/Accounts/{AccountSid}/Calls.json", "covered_by": { "stream": "calls" } },
+    { "method": "GET", "path": "/Accounts/{AccountSid}/Recordings.json", "covered_by": { "stream": "recordings" } },
+    { "method": "GET", "path": "/Accounts/{AccountSid}/Conferences.json", "covered_by": { "stream": "conferences" } },
+    { "method": "GET", "path": "/Accounts/{AccountSid}/Usage/Records.json", "covered_by": { "stream": "usage_records" } },
+    { "method": "POST", "path": "/Accounts/{AccountSid}/Messages.json", "excluded": { "category": "destructive_admin", "reason": "sends an SMS/MMS message; side-effecting, inappropriate for a generic reverse-ETL source" } },
+    { "method": "POST", "path": "/Accounts/{AccountSid}/Calls.json", "excluded": { "category": "destructive_admin", "reason": "places an outbound call; side-effecting, inappropriate for a generic reverse-ETL source" } },
+    { "method": "GET", "path": "/Accounts/{AccountSid}.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/Accounts/{AccountSid}/Recordings/{Sid}.mp3", "excluded": { "category": "binary_payload", "reason": "recording audio bytes are not a syncable record stream" } }
+  ]
+}

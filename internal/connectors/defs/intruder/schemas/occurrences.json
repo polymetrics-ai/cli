@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "occurrences",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "issue_id": { "type": ["string", "integer", "null"] },
+    "target": { "type": ["string", "null"] },
+    "port": { "type": ["integer", "null"] },
+    "age": { "type": ["string", "null"] },
+    "extra_info": { "type": ["object", "null"] },
+    "snoozed": { "type": ["boolean", "null"] },
+    "snooze_reason": { "type": ["string", "null"] },
+    "snooze_until": { "type": ["string", "null"] }
+  }
+}

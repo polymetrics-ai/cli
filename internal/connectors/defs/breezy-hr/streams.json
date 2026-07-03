@@ -40,6 +40,31 @@
         "id": "{{ record._id }}"
       },
       "schema": "schemas/pipelines.json"
+    },
+    {
+      "name": "candidates",
+      "path": "/position/{{ fanout.id }}/candidates",
+      "query": { "sort": "updated_date" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/positions", "records_path": "", "id_field": "_id" }
+        },
+        "into": { "path_var": "position_id" },
+        "stamp_field": "position_id"
+      },
+      "computed_fields": {
+        "id": "{{ record._id }}",
+        "stage": "{{ record.stage.name }}"
+      },
+      "schema": "schemas/candidates.json"
     }
   ]
 }

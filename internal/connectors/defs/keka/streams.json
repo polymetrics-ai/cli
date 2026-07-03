@@ -1,0 +1,60 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "custom", "hook": "keka" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "pageNumber",
+      "size_param": "pageSize",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/hris/employees", "query": { "pageNumber": "1", "pageSize": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "keka client credentials are missing or invalid; re-run pm credentials add keka" },
+      { "status": 403, "hint": "keka account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "keka rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "employees",
+      "path": "/hris/employees",
+      "records": { "path": "data" },
+      "schema": "schemas/employees.json"
+    },
+    {
+      "name": "attendance",
+      "path": "/time/attendance",
+      "records": { "path": "data" },
+      "schema": "schemas/attendance.json"
+    },
+    {
+      "name": "leave_types",
+      "path": "/time/leavetypes",
+      "records": { "path": "data" },
+      "schema": "schemas/leave_types.json"
+    },
+    {
+      "name": "leave_requests",
+      "path": "/time/leaverequests",
+      "records": { "path": "data" },
+      "schema": "schemas/leave_requests.json"
+    },
+    {
+      "name": "clients",
+      "path": "/psa/clients",
+      "records": { "path": "data" },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "projects",
+      "path": "/psa/projects",
+      "records": { "path": "data" },
+      "schema": "schemas/projects.json"
+    }
+  ]
+}

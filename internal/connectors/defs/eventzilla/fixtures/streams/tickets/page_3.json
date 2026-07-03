@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/events/2/tickets", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tickets": [
+        {
+          "id": 202,
+          "event_id": 2,
+          "title": "VIP Pass",
+          "ticket_type": "vip",
+          "price": 50.0,
+          "quantity_total": 50,
+          "is_visible": true,
+          "sales_start_date": "2025-12-15",
+          "sales_end_date": "2026-01-15"
+        }
+      ]
+    }
+  }
+}

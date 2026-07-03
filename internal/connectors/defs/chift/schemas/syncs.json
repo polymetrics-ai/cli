@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "syncs",
+  "type": "object",
+  "x-primary-key": ["syncid"],
+  "required": ["syncid"],
+  "properties": {
+    "syncid": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "consumerid": { "type": ["string", "null"] },
+    "created_on": { "type": ["string", "null"] },
+    "updated_on": { "type": ["string", "null"] }
+  }
+}

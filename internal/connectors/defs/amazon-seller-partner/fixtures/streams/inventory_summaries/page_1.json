@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/inventory/v1/summaries",
+    "query": {
+      "granularityType": "Marketplace",
+      "granularityId": "synthetic-conformance-value",
+      "marketplaceIds": "synthetic-conformance-value",
+      "details": "true",
+      "startDateTime": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "nextToken": "INV_PAGE2_FIXTURE" },
+      "payload": {
+        "inventorySummaries": [
+          {
+            "sellerSku": "SKU-fixture-1",
+            "fnSku": "X00FIXTURE1",
+            "asin": "B00FIXTURE1",
+            "condition": "NewItem",
+            "productName": "Fixture Product 1",
+            "totalQuantity": 10,
+            "lastUpdatedTime": "2026-01-01T00:00:00Z",
+            "inventoryDetails": { "fulfillableQuantity": 10 }
+          },
+          {
+            "sellerSku": "SKU-fixture-2",
+            "fnSku": "X00FIXTURE2",
+            "asin": "B00FIXTURE2",
+            "condition": "NewItem",
+            "productName": "Fixture Product 2",
+            "totalQuantity": 20,
+            "lastUpdatedTime": "2026-01-02T00:00:00Z",
+            "inventoryDetails": { "fulfillableQuantity": 20 }
+          }
+        ]
+      }
+    }
+  }
+}

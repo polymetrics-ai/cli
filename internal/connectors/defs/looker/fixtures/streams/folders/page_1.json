@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/folders", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "1", "name": "Fixture Folder One" },
+      { "id": "2", "name": "Fixture Folder Two" }
+    ]
+  }
+}

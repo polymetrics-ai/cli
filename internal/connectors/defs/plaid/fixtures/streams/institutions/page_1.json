@@ -1,0 +1,13 @@
+{
+  "request": { "method": "POST", "path": "/institutions/get" },
+  "response": {
+    "status": 200,
+    "body": {
+      "institutions": [
+        { "institution_id": "ins_fixture_1", "name": "Fixture Bank One", "country_codes": ["US"] },
+        { "institution_id": "ins_fixture_2", "name": "Fixture Bank Two", "country_codes": ["US", "CA"] }
+      ],
+      "total": 3
+    }
+  }
+}

@@ -27,6 +27,9 @@
       "computed_fields": {
         "id": "{{ record.id }}",
         "name": "{{ record.name }}",
+        "sku": "{{ record.sku }}",
+        "email": "{{ record.email }}",
+        "status": "{{ record.status }}",
         "updated_at": "{{ record.updated_at }}"
       },
       "schema": "schemas/products.json"
@@ -38,6 +41,9 @@
       "computed_fields": {
         "id": "{{ record.id }}",
         "name": "{{ record.name }}",
+        "sku": "{{ record.sku }}",
+        "email": "{{ record.email }}",
+        "status": "{{ record.status }}",
         "updated_at": "{{ record.updated_at }}"
       },
       "schema": "schemas/orders.json"
@@ -49,6 +55,9 @@
       "computed_fields": {
         "id": "{{ record.id }}",
         "name": "{{ record.name }}",
+        "sku": "{{ record.sku }}",
+        "email": "{{ record.email }}",
+        "status": "{{ record.status }}",
         "updated_at": "{{ record.updated_at }}"
       },
       "schema": "schemas/customers.json"
@@ -60,6 +69,9 @@
       "computed_fields": {
         "id": "{{ record.id }}",
         "name": "{{ record.name }}",
+        "sku": "{{ record.sku }}",
+        "email": "{{ record.email }}",
+        "status": "{{ record.status }}",
         "updated_at": "{{ record.updated_at }}"
       },
       "schema": "schemas/categories.json"

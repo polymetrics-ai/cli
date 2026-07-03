@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "sortfield": "t.rowid",
+      "sortorder": "ASC",
+      "limit": "100",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "101",
+        "socid": "1",
+        "lastname": "Lastname101",
+        "firstname": "Firstname101",
+        "email": "contact101@example.com",
+        "phone_pro": "+15550100",
+        "phone_mobile": "+15550101",
+        "town": "San Francisco",
+        "zip": "94105",
+        "country_code": "US",
+        "statut": "1",
+        "date_creation": 1767225600,
+        "date_modification": 1767225701
+      }
+    ]
+  }
+}

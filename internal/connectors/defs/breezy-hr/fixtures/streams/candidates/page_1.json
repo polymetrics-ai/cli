@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/positions", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "pos_fixture_1",
+        "name": "Fixture Position 1",
+        "type": { "name": "Full-Time" },
+        "state": "published",
+        "creation_date": "2026-01-01T00:00:00Z",
+        "updated_date": "2026-01-02T00:00:00Z"
+      },
+      {
+        "_id": "pos_fixture_2",
+        "name": "Fixture Position 2",
+        "type": { "name": "Full-Time" },
+        "state": "published",
+        "creation_date": "2026-01-01T00:00:00Z",
+        "updated_date": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

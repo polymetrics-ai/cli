@@ -1,0 +1,12 @@
+{
+  "api": "Open Exchange Rates JSON API (https://openexchangerates.org/api)",
+  "docs": "https://docs.openexchangerates.org/",
+  "reviewed_at": "2026-07-03",
+  "scope": "unblock (partial): only the usage stream is expressible declaratively; latest/historical/currencies remain quarantined for a keyed_object scalar-value gap (see docs.md Known limits)",
+  "endpoints": [
+    { "method": "GET", "path": "/usage.json", "covered_by": { "stream": "usage" } },
+    { "method": "GET", "path": "/latest.json", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: records.keyed_object only explodes object-valued maps; rates is a scalar-valued (CCY->number) map, so every currency is silently skipped (read.go recordsAtKeyed's valObj type-assertion continue branch) rather than emitted as one record per currency" } },
+    { "method": "GET", "path": "/historical/{date}.json", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same scalar-valued keyed_object gap as latest.json, plus the per-date request loop itself (a StreamHook-shaped fan-out over a date range, not a config-driven fan_out id list) has no declarative equivalent" } },
+    { "method": "GET", "path": "/currencies.json", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same scalar-valued keyed_object gap (currency code -> display name string, not an object)" } }
+  ]
+}

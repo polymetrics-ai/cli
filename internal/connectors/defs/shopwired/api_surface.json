@@ -1,17 +1,17 @@
 {
-  "api": "ShopWired REST API (https://www.shopwired.com/api)",
+  "api": "ShopWired REST API (https://api.shopwired.co.uk)",
   "docs": "https://www.shopwired.com/api",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (products, orders, customers, categories); the full ShopWired surface (product variations, options, extras, webhooks, order creation) is out of scope until Pass B. ShopWired is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "scope": "Fresh migration at legacy capability parity: the 4 legacy read streams only (products, orders, customers, categories); legacy shopwired is read-only (Write always returns ErrUnsupportedOperation) and the full ShopWired API surface (webhooks, discounts, gift cards, shipping, store settings) is out of scope until Pass B",
   "endpoints": [
     { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
     { "method": "GET", "path": "/orders", "covered_by": { "stream": "orders" } },
     { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
     { "method": "GET", "path": "/categories", "covered_by": { "stream": "categories" } },
-    { "method": "POST", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented product creation; Pass B capability expansion" } },
-    { "method": "PUT", "path": "/orders/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented order updates; Pass B capability expansion" } },
-    { "method": "GET", "path": "/product-variations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/product-options", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "POST", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/products/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/orders/{id}/fulfil", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/discounts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
   ]
 }

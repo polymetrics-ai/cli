@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/me/messages" },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_message_1", "subject": "Fixture message 1", "receivedDateTime": "2026-01-01T00:00:00Z", "lastModifiedDateTime": "2026-01-01T00:00:00Z", "webLink": "https://outlook.office.com/mail/fixture_message_1" },
+        { "id": "fixture_message_2", "subject": "Fixture message 2", "receivedDateTime": "2026-01-02T00:00:00Z", "lastModifiedDateTime": "2026-01-02T00:00:00Z", "webLink": "https://outlook.office.com/mail/fixture_message_2" }
+      ]
+    }
+  }
+}

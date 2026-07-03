@@ -40,6 +40,32 @@
       "path": "/users",
       "records": { "path": "users" },
       "schema": "schemas/users.json"
+    },
+    {
+      "name": "attendees",
+      "path": "/events/{{ fanout.id }}/attendees",
+      "records": { "path": "attendees" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/events", "records_path": "events", "id_field": "id" }
+        },
+        "into": { "path_var": "event_id" },
+        "stamp_field": "event_id"
+      },
+      "schema": "schemas/attendees.json"
+    },
+    {
+      "name": "tickets",
+      "path": "/events/{{ fanout.id }}/tickets",
+      "records": { "path": "tickets" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/events", "records_path": "events", "id_field": "id" }
+        },
+        "into": { "path_var": "event_id" },
+        "stamp_field": "event_id"
+      },
+      "schema": "schemas/tickets.json"
     }
   ]
 }

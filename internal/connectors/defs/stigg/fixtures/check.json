@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/graphql",
+    "body": { "query": "query PolymetricsCheck { products { id } }" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "products": [] } }
+  }
+}

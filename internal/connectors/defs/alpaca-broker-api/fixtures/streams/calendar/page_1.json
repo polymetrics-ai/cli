@@ -9,6 +9,13 @@
         "close": "16:00",
         "session_open": "0700",
         "session_close": "1900"
+      },
+      {
+        "date": "2026-01-02",
+        "open": "09:30",
+        "close": "16:00",
+        "session_open": "0700",
+        "session_close": "1900"
       }
     ]
   }

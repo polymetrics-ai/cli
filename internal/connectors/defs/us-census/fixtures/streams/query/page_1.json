@@ -1,0 +1,10 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": [["NAME", "ESTAB"], ["United States", "1"]]
+  }
+}

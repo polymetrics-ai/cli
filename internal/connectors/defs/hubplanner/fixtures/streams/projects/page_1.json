@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/project",
+    "query": { "page": "0", "limit": "200" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "project_fixture_1",
+        "name": "Fixture Project 1",
+        "status": "ACTIVE",
+        "projectCode": "PRJ-1",
+        "budgetHours": 100,
+        "budgetCashAmount": 1000,
+        "budgetCurrency": "USD",
+        "note": "fixture record",
+        "createdDate": "2026-01-01T00:00:00Z",
+        "updatedDate": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

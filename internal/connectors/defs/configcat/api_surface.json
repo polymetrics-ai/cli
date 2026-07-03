@@ -1,0 +1,13 @@
+{
+  "api": "ConfigCat Public Management API (https://api.configcat.com)",
+  "docs": "https://api.configcat.com/docs/",
+  "reviewed_at": "2026-07-03",
+  "scope": "the 5 legacy-parity read streams only (organizations, products, configs, environments, tags); ConfigCat's Public Management API exposes no reverse-ETL write target used by legacy, matching this bundle",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/organizations", "covered_by": { "stream": "organizations" } },
+    { "method": "GET", "path": "/v1/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/v1/products/{productId}/configs", "covered_by": { "stream": "configs" } },
+    { "method": "GET", "path": "/v1/products/{productId}/environments", "covered_by": { "stream": "environments" } },
+    { "method": "GET", "path": "/v1/products/{productId}/tags", "covered_by": { "stream": "tags" } }
+  ]
+}

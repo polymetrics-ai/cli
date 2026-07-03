@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/dividends",
+    "query": { "ticker": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "output": {
+          "dividends": [
+            {
+              "ticker": "synthetic-conformance-value",
+              "date": "2026-01-01",
+              "dividend_rate": "0.10"
+            },
+            {
+              "ticker": "synthetic-conformance-value",
+              "date": "2026-01-02",
+              "dividend_rate": "0.12"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

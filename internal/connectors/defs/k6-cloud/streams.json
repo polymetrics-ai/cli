@@ -34,6 +34,34 @@
         "page_size": 32
       },
       "schema": "schemas/k6_tests.json"
+    },
+    {
+      "name": "projects",
+      "path": "/v3/organizations/{{ fanout.id }}/projects",
+      "query": {
+        "page_size": { "template": "{{ config.page_size }}", "default": "32" }
+      },
+      "records": { "path": "projects" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 32
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v3/organizations",
+            "records_path": "organizations",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "organization_id"
+        }
+      },
+      "schema": "schemas/projects.json"
     }
   ]
 }

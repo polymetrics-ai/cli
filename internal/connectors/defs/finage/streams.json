@@ -43,6 +43,18 @@
       "query": { "limit": "1000", "period": "annual" },
       "records": { "path": "" },
       "schema": "schemas/delisted_companies.json"
+    },
+    {
+      "name": "market_news",
+      "path": "/news/market/{{ fanout.id }}",
+      "query": { "limit": "30" },
+      "records": { "path": "news" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "path_var": "symbol" },
+        "stamp_field": "symbol"
+      },
+      "schema": "schemas/market_news.json"
     }
   ]
 }

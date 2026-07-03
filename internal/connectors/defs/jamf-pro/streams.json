@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "custom", "hook": "jamf-pro" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page-size",
+      "start_page": 0,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/v1/buildings", "query": { "page": "0", "page-size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "jamf-pro username/password is missing or invalid; re-run pm credentials add jamf-pro" },
+      { "status": 403, "hint": "jamf-pro credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "jamf-pro rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "buildings",
+      "path": "/v1/buildings",
+      "records": { "path": "results" },
+      "schema": "schemas/buildings.json"
+    },
+    {
+      "name": "departments",
+      "path": "/v1/departments",
+      "records": { "path": "results" },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "categories",
+      "path": "/v1/categories",
+      "records": { "path": "results" },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "scripts",
+      "path": "/v1/scripts",
+      "records": { "path": "results" },
+      "schema": "schemas/scripts.json"
+    }
+  ]
+}

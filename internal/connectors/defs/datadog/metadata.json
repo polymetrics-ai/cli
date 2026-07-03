@@ -1,7 +1,7 @@
 {
   "name": "datadog",
   "display_name": "Datadog",
-  "description": "Reads Datadog dashboards and scheduled downtimes through the Datadog REST API. Monitors, users, and SLOs are NOT migrated in this wave (see docs.md Known limits, ENGINE_GAP).",
+  "description": "Reads Datadog monitors, dashboards, users, SLOs, and scheduled downtimes through the Datadog REST API.",
   "integration_type": "api",
   "docs_url": "https://docs.datadoghq.com/api/latest/",
   "release_stage": "ga",

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs",
+    "query": {
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "jobs": [
+        {
+          "id": "job_fixture_1",
+          "reportTypeId": "channel_basic_a3",
+          "name": "Fixture Job One",
+          "createTime": "2026-01-01T00:00:00Z",
+          "expireTime": "2026-04-01T00:00:00Z",
+          "systemManaged": false
+        },
+        {
+          "id": "job_fixture_2",
+          "reportTypeId": "channel_demographics_a1",
+          "name": "Fixture Job Two",
+          "createTime": "2026-01-02T00:00:00Z",
+          "expireTime": "2026-04-02T00:00:00Z",
+          "systemManaged": false
+        }
+      ],
+      "nextPageToken": "page2token"
+    }
+  }
+}

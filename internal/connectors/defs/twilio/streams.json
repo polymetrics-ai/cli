@@ -1,0 +1,76 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.account_sid }}",
+        "password": "{{ secrets.auth_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages.json"
+    },
+    "error_map": [
+      { "status": 401, "hint": "twilio account_sid/auth_token is missing or invalid; re-run pm credentials add twilio" },
+      { "status": 429, "class": "rate_limited", "hint": "twilio rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "messages",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages.json",
+      "records": { "path": "messages" },
+      "schema": "schemas/messages.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (legacy's next_page_uri body-cursor pagination is a HOST-RELATIVE URL -- e.g. '/2010-04-01/Accounts/AC.../Messages.json?Page=1' -- which the engine's declarative next_url pagination type cannot express: engine/paginate.go's checkOrigin fail-closed SSRF guard hard-rejects any next-page URL with an empty Host, same ENGINE_GAP as docs/migration/quarantine.json's rootly/safetyculture entries; see docs.md's Streams notes). hook-covered, proven live by internal/connectors/paritytest/twilio (TestParityTwilio_MessagesTwoPagePagination) and internal/connectors/hooks/twilio/hooks_test.go"
+      }
+    },
+    {
+      "name": "calls",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls.json",
+      "records": { "path": "calls" },
+      "schema": "schemas/calls.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (same host-relative next_page_uri ENGINE_GAP as messages; see docs.md's Streams notes). hook-covered, proven live by internal/connectors/paritytest/twilio and internal/connectors/hooks/twilio/hooks_test.go"
+      }
+    },
+    {
+      "name": "recordings",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings.json",
+      "records": { "path": "recordings" },
+      "schema": "schemas/recordings.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (same host-relative next_page_uri ENGINE_GAP as messages; see docs.md's Streams notes). hook-covered, proven live by internal/connectors/paritytest/twilio and internal/connectors/hooks/twilio/hooks_test.go"
+      }
+    },
+    {
+      "name": "conferences",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences.json",
+      "records": { "path": "conferences" },
+      "schema": "schemas/conferences.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (same host-relative next_page_uri ENGINE_GAP as messages; see docs.md's Streams notes). hook-covered, proven live by internal/connectors/paritytest/twilio and internal/connectors/hooks/twilio/hooks_test.go"
+      }
+    },
+    {
+      "name": "usage_records",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Records.json",
+      "records": { "path": "usage_records" },
+      "schema": "schemas/usage_records.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (same host-relative next_page_uri ENGINE_GAP as messages; see docs.md's Streams notes). hook-covered, proven live by internal/connectors/paritytest/twilio and internal/connectors/hooks/twilio/hooks_test.go"
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "messages",
+  "type": "object",
+  "x-primary-key": ["sid"],
+  "x-cursor-field": "date_sent",
+  "required": ["sid"],
+  "properties": {
+    "sid": { "type": "string" },
+    "account_sid": { "type": ["string", "null"] },
+    "messaging_service_sid": { "type": ["string", "null"] },
+    "date_created": { "type": ["string", "null"] },
+    "date_sent": { "type": ["string", "null"] },
+    "date_updated": { "type": ["string", "null"] },
+    "from": { "type": ["string", "null"] },
+    "to": { "type": ["string", "null"] },
+    "body": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "direction": { "type": ["string", "null"] },
+    "num_segments": { "type": ["string", "null"] },
+    "num_media": { "type": ["string", "null"] },
+    "price": { "type": ["string", "null"] },
+    "price_unit": { "type": ["string", "null"] },
+    "error_code": { "type": ["string", "null"] },
+    "error_message": { "type": ["string", "null"] }
+  }
+}

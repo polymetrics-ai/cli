@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QuickBooks Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "refresh_token", "realm_id"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Intuit Developer app Client ID, obtained from the app's Keys tab. Used only in the token-refresh request form; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Intuit Developer app Client Secret, obtained from the app's Keys tab. Used only in the token-refresh request form; never logged."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived QuickBooks OAuth 2.0 refresh token (valid up to ~100 days), exchanged for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is out of scope for this connector (credentials layer already owns it)."
+    },
+    "realm_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "QuickBooks company (Realm) ID that scopes every Query API request. Treated as secret-adjacent (identifies a specific company) and validated as a path-safe segment (no '/', '?', '#', or '..')."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://quickbooks.api.intuit.com",
+      "description": "QuickBooks Online Accounting API base URL override for tests or proxies. Use https://sandbox-quickbooks.api.intuit.com for a sandbox company."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://oauth2.bearer.token.intuit.com/oauth2/v1/tokens/bearer",
+      "description": "Intuit OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a non-https or unparseable value to prevent exfiltrating the refresh token/client secret to an attacker-chosen endpoint."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "1000",
+      "description": "Records per page (1-1000, Query API MAXRESULTS)."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional hard cap on the number of pages read per stream, consumed by hooks/quickbooks/hooks.go's StreamHook. Permissive parse: empty, \"all\", or \"unlimited\" means unbounded; a positive integer string caps the page count at that value."
+    },
+    "sandbox": {
+      "type": "string",
+      "default": "false",
+      "description": "Documents whether this realm is a sandbox company (informational only in this pass; base_url is the operative environment switch -- see Known limits)."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound for the earliest record to replicate. Not wired as a server-side incremental filter this pass (see Known limits) -- retained as forward-compatible config surface, matching legacy's own unused field."
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "page[limit]": "500",
+      "page[page]": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "id": 501,
+          "entityType": "Contact",
+          "name": "Fixture Contact 501",
+          "description": "fixture contact 501",
+          "htmlUrl": "https://example.com",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:21+0000"
+        }
+      ]
+    }
+  }
+}

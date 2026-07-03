@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Jamf Pro Connection Specification",
+  "type": "object",
+  "required": ["base_url", "username", "password"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Jamf Pro API base URL, e.g. https://<subdomain>.jamfcloud.com/api. Required (not derived from a bare subdomain) — see docs.md Known limits."
+    },
+    "username": {
+      "type": "string",
+      "description": "Jamf Pro API username, sent as the HTTP Basic username on the token exchange."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Jamf Pro API password, sent as the HTTP Basic password on the token exchange (POST /v1/auth/token). Never logged."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-2000)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/groups", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "groups_fixture_1",
+          "type": "group",
+          "name": "Fixture group 1",
+          "group_type": "managed_group",
+          "created_at": "2026-01-01T00:00:00-08:00",
+          "modified_at": "2026-01-02T00:00:00-08:00"
+        },
+        {
+          "id": "groups_fixture_2",
+          "type": "group",
+          "name": "Fixture group 2",
+          "group_type": "managed_group",
+          "created_at": "2026-01-01T00:00:00-08:00",
+          "modified_at": "2026-01-02T00:00:00-08:00"
+        }
+      ],
+      "offset": 0,
+      "limit": 100,
+      "total_count": 2
+    }
+  }
+}

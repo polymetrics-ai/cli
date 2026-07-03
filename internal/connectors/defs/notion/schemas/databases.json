@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "databases",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_edited_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "created_time": { "type": ["string", "null"] },
+    "last_edited_time": { "type": ["string", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "in_trash": { "type": ["boolean", "null"] },
+    "url": { "type": ["string", "null"] },
+    "parent": { "type": ["object", "null"] },
+    "title": { "type": ["array", "null"] }
+  }
+}

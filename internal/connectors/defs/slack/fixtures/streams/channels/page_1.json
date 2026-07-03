@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/conversations.list", "query": { "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "channels": [
+        { "id": "C1", "name": "general", "is_channel": true, "is_group": false, "is_private": false, "is_archived": false, "is_general": true, "created": 1700000000, "creator": "U1", "num_members": 5, "topic": { "value": "General discussion" }, "purpose": { "value": "Company-wide announcements" } },
+        { "id": "C2", "name": "random", "is_channel": true, "is_group": false, "is_private": false, "is_archived": false, "is_general": false, "created": 1700000100, "creator": "U2", "num_members": 3, "topic": { "value": "" }, "purpose": { "value": "" } }
+      ],
+      "response_metadata": { "next_cursor": "PAGE2" }
+    }
+  }
+}

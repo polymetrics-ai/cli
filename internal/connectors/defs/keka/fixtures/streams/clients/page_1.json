@@ -1,0 +1,620 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/psa/clients",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "succeeded": true,
+      "totalPages": 2,
+      "pageNumber": 1,
+      "data": [
+        {
+          "id": "client_fixture_1",
+          "name": "Fixture Client 1",
+          "code": "CODE1",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_2",
+          "name": "Fixture Client 2",
+          "code": "CODE2",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_3",
+          "name": "Fixture Client 3",
+          "code": "CODE3",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_4",
+          "name": "Fixture Client 4",
+          "code": "CODE4",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_5",
+          "name": "Fixture Client 5",
+          "code": "CODE5",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_6",
+          "name": "Fixture Client 6",
+          "code": "CODE6",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_7",
+          "name": "Fixture Client 7",
+          "code": "CODE7",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_8",
+          "name": "Fixture Client 8",
+          "code": "CODE8",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_9",
+          "name": "Fixture Client 9",
+          "code": "CODE9",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_10",
+          "name": "Fixture Client 10",
+          "code": "CODE10",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_11",
+          "name": "Fixture Client 11",
+          "code": "CODE11",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_12",
+          "name": "Fixture Client 12",
+          "code": "CODE12",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_13",
+          "name": "Fixture Client 13",
+          "code": "CODE13",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_14",
+          "name": "Fixture Client 14",
+          "code": "CODE14",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_15",
+          "name": "Fixture Client 15",
+          "code": "CODE15",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_16",
+          "name": "Fixture Client 16",
+          "code": "CODE16",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_17",
+          "name": "Fixture Client 17",
+          "code": "CODE17",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_18",
+          "name": "Fixture Client 18",
+          "code": "CODE18",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_19",
+          "name": "Fixture Client 19",
+          "code": "CODE19",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_20",
+          "name": "Fixture Client 20",
+          "code": "CODE20",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_21",
+          "name": "Fixture Client 21",
+          "code": "CODE21",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_22",
+          "name": "Fixture Client 22",
+          "code": "CODE22",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_23",
+          "name": "Fixture Client 23",
+          "code": "CODE23",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_24",
+          "name": "Fixture Client 24",
+          "code": "CODE24",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_25",
+          "name": "Fixture Client 25",
+          "code": "CODE25",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_26",
+          "name": "Fixture Client 26",
+          "code": "CODE26",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_27",
+          "name": "Fixture Client 27",
+          "code": "CODE27",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_28",
+          "name": "Fixture Client 28",
+          "code": "CODE28",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_29",
+          "name": "Fixture Client 29",
+          "code": "CODE29",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_30",
+          "name": "Fixture Client 30",
+          "code": "CODE30",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_31",
+          "name": "Fixture Client 31",
+          "code": "CODE31",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_32",
+          "name": "Fixture Client 32",
+          "code": "CODE32",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_33",
+          "name": "Fixture Client 33",
+          "code": "CODE33",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_34",
+          "name": "Fixture Client 34",
+          "code": "CODE34",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_35",
+          "name": "Fixture Client 35",
+          "code": "CODE35",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_36",
+          "name": "Fixture Client 36",
+          "code": "CODE36",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_37",
+          "name": "Fixture Client 37",
+          "code": "CODE37",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_38",
+          "name": "Fixture Client 38",
+          "code": "CODE38",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_39",
+          "name": "Fixture Client 39",
+          "code": "CODE39",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_40",
+          "name": "Fixture Client 40",
+          "code": "CODE40",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_41",
+          "name": "Fixture Client 41",
+          "code": "CODE41",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_42",
+          "name": "Fixture Client 42",
+          "code": "CODE42",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_43",
+          "name": "Fixture Client 43",
+          "code": "CODE43",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_44",
+          "name": "Fixture Client 44",
+          "code": "CODE44",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_45",
+          "name": "Fixture Client 45",
+          "code": "CODE45",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_46",
+          "name": "Fixture Client 46",
+          "code": "CODE46",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_47",
+          "name": "Fixture Client 47",
+          "code": "CODE47",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_48",
+          "name": "Fixture Client 48",
+          "code": "CODE48",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_49",
+          "name": "Fixture Client 49",
+          "code": "CODE49",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_50",
+          "name": "Fixture Client 50",
+          "code": "CODE50",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_51",
+          "name": "Fixture Client 51",
+          "code": "CODE51",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_52",
+          "name": "Fixture Client 52",
+          "code": "CODE52",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_53",
+          "name": "Fixture Client 53",
+          "code": "CODE53",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_54",
+          "name": "Fixture Client 54",
+          "code": "CODE54",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_55",
+          "name": "Fixture Client 55",
+          "code": "CODE55",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_56",
+          "name": "Fixture Client 56",
+          "code": "CODE56",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_57",
+          "name": "Fixture Client 57",
+          "code": "CODE57",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_58",
+          "name": "Fixture Client 58",
+          "code": "CODE58",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_59",
+          "name": "Fixture Client 59",
+          "code": "CODE59",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_60",
+          "name": "Fixture Client 60",
+          "code": "CODE60",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_61",
+          "name": "Fixture Client 61",
+          "code": "CODE61",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_62",
+          "name": "Fixture Client 62",
+          "code": "CODE62",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_63",
+          "name": "Fixture Client 63",
+          "code": "CODE63",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_64",
+          "name": "Fixture Client 64",
+          "code": "CODE64",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_65",
+          "name": "Fixture Client 65",
+          "code": "CODE65",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_66",
+          "name": "Fixture Client 66",
+          "code": "CODE66",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_67",
+          "name": "Fixture Client 67",
+          "code": "CODE67",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_68",
+          "name": "Fixture Client 68",
+          "code": "CODE68",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_69",
+          "name": "Fixture Client 69",
+          "code": "CODE69",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_70",
+          "name": "Fixture Client 70",
+          "code": "CODE70",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_71",
+          "name": "Fixture Client 71",
+          "code": "CODE71",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_72",
+          "name": "Fixture Client 72",
+          "code": "CODE72",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_73",
+          "name": "Fixture Client 73",
+          "code": "CODE73",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_74",
+          "name": "Fixture Client 74",
+          "code": "CODE74",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_75",
+          "name": "Fixture Client 75",
+          "code": "CODE75",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_76",
+          "name": "Fixture Client 76",
+          "code": "CODE76",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_77",
+          "name": "Fixture Client 77",
+          "code": "CODE77",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_78",
+          "name": "Fixture Client 78",
+          "code": "CODE78",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_79",
+          "name": "Fixture Client 79",
+          "code": "CODE79",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_80",
+          "name": "Fixture Client 80",
+          "code": "CODE80",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_81",
+          "name": "Fixture Client 81",
+          "code": "CODE81",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_82",
+          "name": "Fixture Client 82",
+          "code": "CODE82",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_83",
+          "name": "Fixture Client 83",
+          "code": "CODE83",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_84",
+          "name": "Fixture Client 84",
+          "code": "CODE84",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_85",
+          "name": "Fixture Client 85",
+          "code": "CODE85",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_86",
+          "name": "Fixture Client 86",
+          "code": "CODE86",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_87",
+          "name": "Fixture Client 87",
+          "code": "CODE87",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_88",
+          "name": "Fixture Client 88",
+          "code": "CODE88",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_89",
+          "name": "Fixture Client 89",
+          "code": "CODE89",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_90",
+          "name": "Fixture Client 90",
+          "code": "CODE90",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_91",
+          "name": "Fixture Client 91",
+          "code": "CODE91",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_92",
+          "name": "Fixture Client 92",
+          "code": "CODE92",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_93",
+          "name": "Fixture Client 93",
+          "code": "CODE93",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_94",
+          "name": "Fixture Client 94",
+          "code": "CODE94",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_95",
+          "name": "Fixture Client 95",
+          "code": "CODE95",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_96",
+          "name": "Fixture Client 96",
+          "code": "CODE96",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_97",
+          "name": "Fixture Client 97",
+          "code": "CODE97",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_98",
+          "name": "Fixture Client 98",
+          "code": "CODE98",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_99",
+          "name": "Fixture Client 99",
+          "code": "CODE99",
+          "isActive": true
+        },
+        {
+          "id": "client_fixture_100",
+          "name": "Fixture Client 100",
+          "code": "CODE100",
+          "isActive": true
+        }
+      ]
+    }
+  }
+}

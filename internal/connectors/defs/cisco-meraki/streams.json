@@ -8,7 +8,7 @@
     "pagination": {
       "type": "link_header"
     },
-    "check": { "method": "GET", "path": "/organizations" },
+    "check": { "method": "GET", "path": "/organizations", "query": { "perPage": "1" } },
     "error_map": [
       { "status": 401, "hint": "cisco-meraki api_key is missing or invalid; re-run pm credentials add cisco-meraki" },
       { "status": 403, "hint": "cisco-meraki account lacks access for this request" },
@@ -19,9 +19,51 @@
     {
       "name": "organizations",
       "path": "/organizations",
-      "query": { "perPage": "1000" },
+      "query": { "perPage": "{{ config.page_size }}" },
       "records": { "path": "" },
       "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "organization_networks",
+      "path": "/organizations/{{ fanout.id }}/networks",
+      "query": { "perPage": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organizationId"
+      },
+      "schema": "schemas/organization_networks.json"
+    },
+    {
+      "name": "organization_devices",
+      "path": "/organizations/{{ fanout.id }}/devices",
+      "query": { "perPage": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organizationId"
+      },
+      "schema": "schemas/organization_devices.json"
+    },
+    {
+      "name": "organization_admins",
+      "path": "/organizations/{{ fanout.id }}/admins",
+      "query": { "perPage": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organizationId"
+      },
+      "schema": "schemas/organization_admins.json"
     }
   ]
 }

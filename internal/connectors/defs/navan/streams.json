@@ -1,0 +1,137 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.base_url }}/ta-auth/oauth/token",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "size",
+      "start_page": 0,
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/v1/bookings", "query": { "bookingType": "FLIGHT", "page": "0", "size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "navan client_id/client_secret are missing or invalid; re-run pm credentials add navan" },
+      { "status": 403, "hint": "navan account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "navan rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "bookings",
+      "path": "/v1/bookings",
+      "query": { "bookingType": "FLIGHT" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "last_modified",
+        "request_param": "createdFrom",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "booking_id": "{{ record.bookingId }}",
+        "booking_type": "{{ record.bookingType }}",
+        "booking_status": "{{ record.bookingStatus }}",
+        "booking_method": "{{ record.bookingMethod }}",
+        "approval_status": "{{ record.approvalStatus }}",
+        "confirmation_number": "{{ record.confirmationNumber }}",
+        "grand_total": "{{ record.grandTotal }}",
+        "base_price": "{{ record.basePrice }}",
+        "booking_fee": "{{ record.bookingFee }}",
+        "start_date": "{{ record.startDate }}",
+        "end_date": "{{ record.endDate }}",
+        "last_modified": "{{ record.lastModified }}",
+        "cancelled_at": "{{ record.cancelledAt }}"
+      },
+      "schema": "schemas/bookings.json"
+    },
+    {
+      "name": "hotel_bookings",
+      "path": "/v1/bookings",
+      "query": { "bookingType": "HOTEL" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "last_modified",
+        "request_param": "createdFrom",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "booking_id": "{{ record.bookingId }}",
+        "booking_type": "{{ record.bookingType }}",
+        "booking_status": "{{ record.bookingStatus }}",
+        "booking_method": "{{ record.bookingMethod }}",
+        "approval_status": "{{ record.approvalStatus }}",
+        "confirmation_number": "{{ record.confirmationNumber }}",
+        "grand_total": "{{ record.grandTotal }}",
+        "base_price": "{{ record.basePrice }}",
+        "booking_fee": "{{ record.bookingFee }}",
+        "start_date": "{{ record.startDate }}",
+        "end_date": "{{ record.endDate }}",
+        "last_modified": "{{ record.lastModified }}",
+        "cancelled_at": "{{ record.cancelledAt }}"
+      },
+      "schema": "schemas/hotel_bookings.json"
+    },
+    {
+      "name": "car_bookings",
+      "path": "/v1/bookings",
+      "query": { "bookingType": "CAR" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "last_modified",
+        "request_param": "createdFrom",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "booking_id": "{{ record.bookingId }}",
+        "booking_type": "{{ record.bookingType }}",
+        "booking_status": "{{ record.bookingStatus }}",
+        "booking_method": "{{ record.bookingMethod }}",
+        "approval_status": "{{ record.approvalStatus }}",
+        "confirmation_number": "{{ record.confirmationNumber }}",
+        "grand_total": "{{ record.grandTotal }}",
+        "base_price": "{{ record.basePrice }}",
+        "booking_fee": "{{ record.bookingFee }}",
+        "start_date": "{{ record.startDate }}",
+        "end_date": "{{ record.endDate }}",
+        "last_modified": "{{ record.lastModified }}",
+        "cancelled_at": "{{ record.cancelledAt }}"
+      },
+      "schema": "schemas/car_bookings.json"
+    },
+    {
+      "name": "rail_bookings",
+      "path": "/v1/bookings",
+      "query": { "bookingType": "RAIL" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "last_modified",
+        "request_param": "createdFrom",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "booking_id": "{{ record.bookingId }}",
+        "booking_type": "{{ record.bookingType }}",
+        "booking_status": "{{ record.bookingStatus }}",
+        "booking_method": "{{ record.bookingMethod }}",
+        "approval_status": "{{ record.approvalStatus }}",
+        "confirmation_number": "{{ record.confirmationNumber }}",
+        "grand_total": "{{ record.grandTotal }}",
+        "base_price": "{{ record.basePrice }}",
+        "booking_fee": "{{ record.bookingFee }}",
+        "start_date": "{{ record.startDate }}",
+        "end_date": "{{ record.endDate }}",
+        "last_modified": "{{ record.lastModified }}",
+        "cancelled_at": "{{ record.cancelledAt }}"
+      },
+      "schema": "schemas/rail_bookings.json"
+    }
+  ]
+}

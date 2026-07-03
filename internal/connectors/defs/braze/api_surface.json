@@ -1,0 +1,17 @@
+{
+  "api": "Braze REST API (regional; https://www.braze.com/docs/api/basics/)",
+  "docs": "https://www.braze.com/docs/api/endpoints/export/",
+  "reviewed_at": "2026-07-03",
+  "scope": "legacy-parity read streams only (campaigns, canvases, segments); the events (custom event names) stream is out of scope for this bundle (see docs.md Known limits), and the full Braze API surface (messaging send endpoints, user data export/import, catalogs, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/campaigns/list", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/canvas/list", "covered_by": { "stream": "canvases" } },
+    { "method": "GET", "path": "/segments/list", "covered_by": { "stream": "segments" } },
+    { "method": "GET", "path": "/events/list", "excluded": { "category": "out_of_scope", "reason": "engine's declarative array extraction (connsdk.RecordsAt) only yields JSON-object array elements; Braze's events/list returns an array of bare event-name STRINGS, which RecordsAt silently drops rather than wrapping into a record the way legacy's decodeRecords does; see docs.md Known limits" } },
+    { "method": "POST", "path": "/messages/send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/campaigns/data_series", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/canvas/data_series", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/users/export/ids", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/catalogs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

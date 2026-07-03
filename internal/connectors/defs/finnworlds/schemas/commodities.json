@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "commodities",
+  "type": "object",
+  "x-primary-key": ["commodity_name", "datetime"],
+  "x-cursor-field": "datetime",
+  "required": ["commodity_name", "datetime"],
+  "properties": {
+    "commodity_name": { "type": "string" },
+    "datetime": { "type": "string" },
+    "commodity_price": { "type": ["string", "null"] },
+    "commodity_unit": { "type": ["string", "null"] },
+    "price_change_day": { "type": ["string", "null"] },
+    "percentage_day": { "type": ["string", "null"] },
+    "percentage_week": { "type": ["string", "null"] },
+    "percentage_month": { "type": ["string", "null"] },
+    "percentage_year": { "type": ["string", "null"] }
+  }
+}

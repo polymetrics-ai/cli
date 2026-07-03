@@ -1,0 +1,64 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "hoorayhr"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/users"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "hoorayhr hoorayhrusername/hoorayhrpassword is missing or invalid; re-run pm credentials add hoorayhr"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "hoorayhr rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/users",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "time_off",
+      "path": "/time-off",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/time_off.json"
+    },
+    {
+      "name": "leave_types",
+      "path": "/leave-types",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/leave_types.json"
+    },
+    {
+      "name": "sick_leaves",
+      "path": "/sick-leave",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/sick_leaves.json"
+    }
+  ]
+}

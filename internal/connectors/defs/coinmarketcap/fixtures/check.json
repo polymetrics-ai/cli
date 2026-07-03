@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/fiat/map", "query": { "start": "1", "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": { "timestamp": "2026-01-01T00:00:00.000Z", "error_code": 0, "error_message": null, "credit_count": 1 },
+      "data": [
+        { "id": 2781, "name": "United States Dollar", "sign": "$", "symbol": "USD" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "api": "IP2WHOIS API v2 (https://api.ip2whois.com/v2)",
+  "docs": "https://www.ip2whois.com/developers-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave3 unblock: the single domain-lookup endpoint, fanned out per configured domain (fan_out.ids_from.config_key) into a flattened whois stream and 4 per-role contact streams; the nameservers stream is not migrated (ENGINE_GAP, see docs.md Known limits)",
+  "endpoints": [
+    { "method": "GET", "path": "/v2 (domain lookup)", "covered_by": { "stream": "whois" } },
+    { "method": "GET", "path": "/v2 (domain lookup, registrant sub-object)", "covered_by": { "stream": "contacts_registrant" } },
+    { "method": "GET", "path": "/v2 (domain lookup, admin sub-object)", "covered_by": { "stream": "contacts_admin" } },
+    { "method": "GET", "path": "/v2 (domain lookup, tech sub-object)", "covered_by": { "stream": "contacts_tech" } },
+    { "method": "GET", "path": "/v2 (domain lookup, billing sub-object)", "covered_by": { "stream": "contacts_billing" } },
+    { "method": "GET", "path": "/v2 (domain lookup, nameservers[] array)", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: no declarative primitive fans a bare JSON array of scalar values into one record per element; see docs.md Known limits" } }
+  ]
+}

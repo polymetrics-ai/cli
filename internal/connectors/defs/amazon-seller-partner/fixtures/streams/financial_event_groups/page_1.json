@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/v0/financialEventGroups",
+    "query": {
+      "MaxResultsPerPage": "synthetic-conformance-value",
+      "FinancialEventGroupStartedAfter": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "FinancialEventGroupList": [
+          {
+            "FinancialEventGroupId": "feg-fixture-1",
+            "ProcessingStatus": "Closed",
+            "FundTransferStatus": "Successful",
+            "OriginalTotal": { "CurrencyCode": "USD", "CurrencyAmount": "100.00" },
+            "ConvertedTotal": { "CurrencyCode": "USD", "CurrencyAmount": "100.00" },
+            "FundTransferDate": "2026-01-01T00:00:00Z",
+            "TraceId": "trace-1",
+            "AccountTail": "1234",
+            "BeginningBalance": { "CurrencyCode": "USD", "CurrencyAmount": "0.00" },
+            "FinancialEventGroupStart": "2026-01-01T00:00:00Z",
+            "FinancialEventGroupEnd": "2026-01-01T00:00:00Z"
+          },
+          {
+            "FinancialEventGroupId": "feg-fixture-2",
+            "ProcessingStatus": "Closed",
+            "FundTransferStatus": "Successful",
+            "OriginalTotal": { "CurrencyCode": "USD", "CurrencyAmount": "200.00" },
+            "ConvertedTotal": { "CurrencyCode": "USD", "CurrencyAmount": "200.00" },
+            "FundTransferDate": "2026-01-02T00:00:00Z",
+            "TraceId": "trace-2",
+            "AccountTail": "1234",
+            "BeginningBalance": { "CurrencyCode": "USD", "CurrencyAmount": "100.00" },
+            "FinancialEventGroupStart": "2026-01-02T00:00:00Z",
+            "FinancialEventGroupEnd": "2026-01-02T00:00:00Z"
+          }
+        ],
+        "NextToken": "FEG_PAGE2_FIXTURE"
+      }
+    }
+  }
+}

@@ -2,12 +2,12 @@
   "api": "Everhour API (https://api.everhour.com)",
   "docs": "https://everhour.docs.apiary.io/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 declaratively-expressible legacy-parity read streams; the legacy tasks substream (one /projects/<id>/tasks request per project, a sub-resource fan-out read) needs a StreamHook, out of scope for this Tier-1-only wave",
+  "scope": "wave2 gap-loop unblock: all 5 legacy-parity read streams, including the tasks sub-resource fan-out (now expressible via the engine's fan_out dialect, S4 mini-wave item 2 — no Go hook needed)",
   "endpoints": [
     { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
     { "method": "GET", "path": "/clients", "covered_by": { "stream": "clients" } },
     { "method": "GET", "path": "/team/users", "covered_by": { "stream": "users" } },
     { "method": "GET", "path": "/team/time", "covered_by": { "stream": "time" } },
-    { "method": "GET", "path": "/projects/{id}/tasks", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out (one request per project id) requires a Tier-2 StreamHook; forbidden in this JSON-only wave, tracked as an ENGINE_GAP-adjacent blocker for a follow-up hooks wave" } }
+    { "method": "GET", "path": "/projects/{id}/tasks", "covered_by": { "stream": "tasks" } }
   ]
 }

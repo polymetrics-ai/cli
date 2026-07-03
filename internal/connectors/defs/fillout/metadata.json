@@ -1,0 +1,23 @@
+{
+  "name": "fillout",
+  "display_name": "Fillout",
+  "description": "Reads Fillout forms through the Fillout REST API. Read-only; question definitions and submissions remain on the legacy connector pending an engine fan_out fallback-mode gap (see docs.md Known limits).",
+  "integration_type": "api",
+  "docs_url": "https://www.fillout.com/help/fillout-rest-api",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Fillout API read of form metadata",
+    "approval": "none; read-only"
+  }
+}

@@ -20,8 +20,8 @@ silently omitted, per `docs/migration/conventions.md` §3's header decision tabl
 ## Streams notes
 
 `workspace` (`GET /workspace`) and `workflows` (`GET /workflows`) are top-level collections read
-directly; Captain Data returns each as a bare top-level JSON array (`records.path: ""`), matching
-legacy's `connsdk.RecordsAt(resp.Body, "")`.
+directly; Captain Data returns each as a bare top-level JSON array (or object, for `workspace`)
+(`records.path: ""`), matching legacy's `connsdk.RecordsAt(resp.Body, "")`.
 
 `jobs` and `job_results` are scoped by a parent uid supplied through config, exactly like legacy's
 `resolvePath`: `jobs`'s path is templated as `/workflows/{{ config.workflow_uid }}/jobs`, and
@@ -38,9 +38,9 @@ generic unresolved-config-key error instead of a connector-specific message.
 `cursor_param: cursor`, `token_path: paging.next`, and `stop_path: paging.have_next_page` —
 pagination continues only while `paging.have_next_page` is the literal string `"true"`
 (`stop_path`'s falsy-stops rule, `docs/migration/conventions.md` §3), exactly reproducing
-legacy's `hasNext != "true"` stop condition in `harvest` (`captain_data.go:192-197`), including
-legacy's defensive stop on an empty `paging.next` token (the engine's `tokenPathCursor` stops
-whenever the token itself is absent/empty, independent of `stop_path`).
+legacy's `hasNext != "true"` stop condition in `harvest` (`captain_data.go`'s cursor loop),
+including legacy's defensive stop on an empty `paging.next` token (the engine's `tokenPathCursor`
+stops whenever the token itself is absent/empty, independent of `stop_path`).
 
 `job_results`'s `data` field is a raw nested JSON object in both legacy (`item["data"]`, an
 `any`-typed map) and this bundle (`"data": {"type": ["object", "null"]}` — plain schema
@@ -57,8 +57,9 @@ None. Captain Data is read-only in legacy (no approved reverse-ETL action set ex
 
 ## Known limits
 
-- Only the 4 legacy-parity streams are implemented; any broader Captain Data v3 surface beyond
-  workspace/workflows/jobs/job_results is out of scope for this wave.
+- Only the 4 legacy-parity streams are implemented (workspace, workflows, jobs, job_results) —
+  full capability parity with legacy `internal/connectors/captain-data`; any broader Captain Data
+  v3 surface beyond these is out of scope for this wave.
 - `max_pages` is not exposed as config: `PaginationSpec.MaxPages` is a static JSON int with no
   config-driven override anywhere in the engine (the same `page_size`/`max_pages`-is-dead-config
   shape documented in `auth0`'s and `searxng`'s goldens), so it is intentionally not declared in

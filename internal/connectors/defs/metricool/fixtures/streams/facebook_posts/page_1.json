@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stats/facebook/posts",
+    "query": {
+      "userId": "synthetic-conformance-value",
+      "blogId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "postId": "post_1",
+        "type": "status",
+        "publishDate": "2026-01-01T00:00:00",
+        "text": "Fixture Facebook post 1",
+        "interactions": 15,
+        "impressions": 150,
+        "reach": 140,
+        "likes": 8,
+        "comments": 3,
+        "shares": 1,
+        "url": "https://facebook.com/fixture1"
+      },
+      {
+        "postId": "post_2",
+        "type": "photo",
+        "publishDate": "2026-01-02T00:00:00",
+        "text": "Fixture Facebook post 2",
+        "interactions": 25,
+        "impressions": 250,
+        "reach": 230,
+        "likes": 12,
+        "comments": 4,
+        "shares": 2,
+        "url": "https://facebook.com/fixture2"
+      }
+    ]
+  }
+}

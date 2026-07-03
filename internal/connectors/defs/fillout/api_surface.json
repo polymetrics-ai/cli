@@ -1,0 +1,11 @@
+{
+  "api": "Fillout REST API (https://api.fillout.com/v1/api)",
+  "docs": "https://www.fillout.com/help/fillout-rest-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "Partial migration (docs/migration/quarantine.json): only the forms stream is declarative Tier-1. questions and submissions require a per-form fan_out whose id list is EITHER the configured form_id OR discovered via GET /forms depending on runtime config -- the engine's fan_out.ids_from is a static, load-time choice between config_key and request (mutually exclusive, never a runtime fallback), so this conditional cannot be expressed without silently diverging from legacy for one of the two accepted input shapes. Those two streams remain on the legacy internal/connectors/fillout implementation.",
+  "endpoints": [
+    { "method": "GET", "path": "/forms", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/forms/{id}", "excluded": { "category": "out_of_scope", "reason": "questions stream blocked: ENGINE_GAP, fan_out.ids_from has no config_key-else-request fallback mode; see docs/migration/quarantine.json" } },
+    { "method": "GET", "path": "/forms/{id}/submissions", "excluded": { "category": "out_of_scope", "reason": "submissions stream blocked: ENGINE_GAP, fan_out.ids_from has no config_key-else-request fallback mode; see docs/migration/quarantine.json" } }
+  ]
+}

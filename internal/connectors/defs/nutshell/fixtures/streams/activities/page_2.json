@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/activities",
+    "query": {
+      "page[limit]": "500",
+      "page[page]": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "activities": [
+        {
+          "id": 501,
+          "entityType": "Activity",
+          "name": "Fixture Activity 501",
+          "description": "fixture activity 501",
+          "activityTypeId": 1,
+          "status": 0,
+          "isFlagged": false,
+          "logNote": "",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:21+0000"
+        }
+      ]
+    }
+  }
+}

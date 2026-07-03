@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/athlete" },
+  "response": {
+    "status": 200,
+    "body": { "id": 17831421, "username": "fixture_runner", "firstname": "Ada", "lastname": "Lovelace" }
+  }
+}

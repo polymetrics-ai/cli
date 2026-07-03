@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/sites/synthetic-conformance-value/lists/synthetic-conformance-value/items", "query": { "$top": "100", "$expand": "fields" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_item_1", "contentType": { "id": "0x0100FIXTURE" }, "webUrl": "https://contoso.sharepoint.com/lists/1/items/1", "createdDateTime": "2026-01-01T00:00:00Z", "lastModifiedDateTime": "2026-01-01T00:00:00Z", "eTag": "etag-item-1", "fields": { "Title": "Item 1" } }
+      ]
+    }
+  }
+}

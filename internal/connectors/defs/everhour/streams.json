@@ -36,6 +36,19 @@
       "path": "/team/time",
       "records": { "path": "" },
       "schema": "schemas/time.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/projects/{{ fanout.id }}/tasks",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/projects", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "schema": "schemas/tasks.json"
     }
   ]
 }

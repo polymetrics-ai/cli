@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tiktok_posts",
+  "type": "object",
+  "x-primary-key": ["blogId", "videoId"],
+  "x-cursor-field": "publishDate",
+  "required": ["blogId", "videoId"],
+  "properties": {
+    "blogId": { "type": "string" },
+    "videoId": { "type": ["string", "null"] },
+    "publishDate": { "type": ["string", "null"] },
+    "text": { "type": ["string", "null"] },
+    "views": { "type": ["number", "null"] },
+    "likes": { "type": ["number", "null"] },
+    "comments": { "type": ["number", "null"] },
+    "shares": { "type": ["number", "null"] },
+    "reach": { "type": ["number", "null"] },
+    "engagement": { "type": ["number", "null"] },
+    "url": { "type": ["string", "null"] }
+  }
+}

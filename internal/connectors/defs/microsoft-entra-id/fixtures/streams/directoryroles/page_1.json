@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/directoryRoles", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_role_1", "displayName": "Global Administrator", "description": "Can manage all aspects of the directory", "roleTemplateId": "role-template-fixture-1" }
+      ]
+    }
+  }
+}

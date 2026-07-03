@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reports",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "job_id": { "type": ["string", "null"] },
+    "start_time": { "type": ["string", "null"], "format": "date-time" },
+    "end_time": { "type": ["string", "null"], "format": "date-time" },
+    "create_time": { "type": ["string", "null"], "format": "date-time" },
+    "job_expire_time": { "type": ["string", "null"], "format": "date-time" },
+    "download_url": { "type": ["string", "null"] }
+  }
+}

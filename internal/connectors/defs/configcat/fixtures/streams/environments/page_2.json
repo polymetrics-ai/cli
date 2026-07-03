@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/v1/products/prod_fixture_1/environments" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "environmentId": "env_fixture_1",
+        "name": "Production",
+        "color": "panther",
+        "description": "fixture environment",
+        "order": 0,
+        "reasonRequired": false,
+        "approveRequired": false,
+        "product": { "productId": "prod_fixture_1" }
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "channel_messages",
+  "type": "object",
+  "x-primary-key": ["ts"],
+  "required": ["ts"],
+  "properties": {
+    "ts": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "subtype": { "type": ["string", "null"] },
+    "user": { "type": ["string", "null"] },
+    "text": { "type": ["string", "null"] },
+    "thread_ts": { "type": ["string", "null"] },
+    "reply_count": { "type": ["integer", "null"] },
+    "team": { "type": ["string", "null"] }
+  }
+}

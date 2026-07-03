@@ -31,6 +31,48 @@
       "query": { "limit": "100" },
       "records": { "path": "data" },
       "schema": "schemas/users.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/brands/{{ fanout.id }}/contacts",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "lists",
+      "path": "/brands/{{ fanout.id }}/lists",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "fields",
+      "path": "/brands/{{ fanout.id }}/fields",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/fields.json"
     }
   ]
 }

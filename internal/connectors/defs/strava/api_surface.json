@@ -1,0 +1,20 @@
+{
+  "api": "Strava API v3 (https://www.strava.com/api/v3)",
+  "docs": "https://developers.strava.com/docs/reference/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Fresh migration at legacy capability parity: the 4 legacy read streams only (activities, athlete, athlete_stats, clubs); legacy strava is read-only (no safe reverse-ETL writes; Write always returns ErrUnsupportedOperation) and the full Strava API surface (segments, routes, gear, uploads, streams/laps, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/athlete/activities", "covered_by": { "stream": "activities" } },
+    { "method": "GET", "path": "/athlete", "covered_by": { "stream": "athlete" } },
+    { "method": "GET", "path": "/athletes/{id}/stats", "covered_by": { "stream": "athlete_stats" } },
+    { "method": "GET", "path": "/athlete/clubs", "covered_by": { "stream": "clubs" } },
+    { "method": "GET", "path": "/activities/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/activities/{id}/streams", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/activities/{id}/laps", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/segments/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/routes/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/gear/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/uploads", "excluded": { "category": "out_of_scope", "reason": "no safe reverse-ETL write surface identified" } },
+    { "method": "POST", "path": "/push_subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "jamf-pro",
+  "display_name": "Jamf Pro",
+  "description": "Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf Pro REST API using Basic-credential token-exchange authentication.",
+  "integration_type": "api",
+  "docs_url": "https://developer.jamf.com/jamf-pro/reference/classic-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Jamf Pro API read of MDM configuration data (buildings, departments, categories, scripts)",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); the AuthHook's real token-exchange target is config.base_url + /v1/auth/token -- conformance's synthetic non-secret config sets base_url to the literal string \"synthetic-conformance-value\", never the replay server's own address (withReplayURL only overrides the bundle's HTTP.URL field used for stream/check request resolution, not RuntimeConfig.Config[\"base_url\"] the hook itself reads), so the hook's real HTTP POST can never land on the replay server; every auth-resolving dynamic check would otherwise fail identically and uninformatively trying to dial an invalid host. Hook-covered, proven by internal/connectors/hooks/jamf-pro/hooks_test.go (TestAuthenticator_ExchangesBasicForBearerAndCaches: Basic-credential token exchange against a real httptest server, Bearer-token reuse/caching across calls, and TestAuthenticator_RequiresBaseURLUsernamePassword's required-field coverage) plus the declarative pagination/records/schema shape below, which every OTHER goldens/pilot bundle's own conformance run already proves generically for page_number+start_page:0 streams (see hubplanner's identical pagination shape in the same wave)."
+  }
+}

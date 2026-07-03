@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wasabi account stats",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date",
+  "required": ["id"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Legacy fills this from the raw record's own 'id' field when present; when absent, legacy derives it as the first non-empty value of bucket, then date, then the literal stream name 'account_stats' (hooks/wasabi-stats-api/hooks.go's RecordHook ports this fallback verbatim). account_stats records have no 'bucket' field, so this effectively falls back to date, then the literal stream name, for this stream."
+    },
+    "date": { "type": ["string", "null"], "format": "date-time" },
+    "storage_bytes": { "type": ["integer", "null"] },
+    "object_count": { "type": ["integer", "null"] }
+  }
+}

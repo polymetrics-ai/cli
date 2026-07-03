@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "messages",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "received_date_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "subject": { "type": ["string", "null"] },
+    "received_date_time": { "type": ["string", "null"] },
+    "last_modified_date_time": { "type": ["string", "null"] },
+    "web_link": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "global_metrics",
+  "type": "object",
+  "x-primary-key": ["active_cryptocurrencies"],
+  "properties": {
+    "active_cryptocurrencies": { "type": ["integer", "null"] },
+    "total_cryptocurrencies": { "type": ["integer", "null"] },
+    "active_market_pairs": { "type": ["integer", "null"] },
+    "active_exchanges": { "type": ["integer", "null"] },
+    "total_exchanges": { "type": ["integer", "null"] },
+    "btc_dominance": { "type": ["number", "null"] },
+    "eth_dominance": { "type": ["number", "null"] },
+    "last_updated": { "type": ["string", "null"] },
+    "quote": { "type": ["object", "null"] }
+  }
+}

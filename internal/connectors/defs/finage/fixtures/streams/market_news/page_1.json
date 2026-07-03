@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/news/market/synthetic-conformance-value",
+    "query": { "limit": "30" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "symbol": "synthetic-conformance-value",
+      "news": [
+        {
+          "title": "Fixture headline one",
+          "url": "https://example.com/news/1",
+          "source": "Fixture Source",
+          "description": "Deterministic fixture market news description.",
+          "date": "2026-01-01"
+        },
+        {
+          "title": "Fixture headline two",
+          "url": "https://example.com/news/2",
+          "source": "Fixture Source",
+          "description": "Second deterministic fixture market news description.",
+          "date": "2026-01-02"
+        }
+      ]
+    }
+  }
+}

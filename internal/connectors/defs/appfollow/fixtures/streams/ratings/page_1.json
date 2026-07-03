@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/meta/ratings",
+    "query": {
+      "ext_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ratings": {
+        "ext_id": "synthetic-conformance-value",
+        "store": "ios",
+        "list": [
+          {
+            "date": "2026-01-01",
+            "country": "US",
+            "version": "1.0.0",
+            "rating": 4.5,
+            "stars1": 1,
+            "stars2": 1,
+            "stars3": 2,
+            "stars4": 5,
+            "stars5": 20,
+            "stars_total": 29
+          },
+          {
+            "date": "2026-01-02",
+            "country": "GB",
+            "version": "1.0.1",
+            "rating": 4.2,
+            "stars1": 0,
+            "stars2": 1,
+            "stars3": 1,
+            "stars4": 3,
+            "stars5": 10,
+            "stars_total": 15
+          }
+        ]
+      }
+    }
+  }
+}

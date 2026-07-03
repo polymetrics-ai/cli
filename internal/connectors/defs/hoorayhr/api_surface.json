@@ -1,0 +1,13 @@
+{
+  "api": "HoorayHR REST API (https://api.hooray.nl)",
+  "docs": "https://hoorayhr.io",
+  "reviewed_at": "2026-07-03",
+  "scope": "Full legacy capability-parity migration of internal/connectors/hoorayhr: users, time-off, leave-types, sick-leaves (all 4 legacy streams). Auth is a Tier-2 AuthHook (session-token exchange against /authentication); every stream read remains fully declarative. Legacy is read-only with no reverse-ETL write target; this bundle stays read-only too.",
+  "endpoints": [
+    { "method": "POST", "path": "/authentication", "excluded": { "category": "non_data_endpoint", "reason": "session-token login exchange, not a syncable object stream; implemented by the hoorayhr AuthHook (hooks/hoorayhr/hooks.go), exercised via check and every data read" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/time-off", "covered_by": { "stream": "time_off" } },
+    { "method": "GET", "path": "/leave-types", "covered_by": { "stream": "leave_types" } },
+    { "method": "GET", "path": "/sick-leave", "covered_by": { "stream": "sick_leaves" } }
+  ]
+}

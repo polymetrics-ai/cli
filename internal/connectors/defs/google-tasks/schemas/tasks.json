@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "required": ["id"],
+  "properties": {
+    "kind": { "type": ["string", "null"] },
+    "id": { "type": "string" },
+    "etag": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] },
+    "self_link": { "type": ["string", "null"] },
+    "parent": { "type": ["string", "null"] },
+    "position": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "due": { "type": ["string", "null"] },
+    "completed": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] },
+    "hidden": { "type": ["boolean", "null"] },
+    "tasklist_id": { "type": ["string", "null"] }
+  }
+}

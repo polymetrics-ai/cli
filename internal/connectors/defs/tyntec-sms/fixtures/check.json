@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/sms/v1/messages" },
+  "request": { "method": "GET", "path": "/sms/v1/messages", "query": { "limit": "1", "page": "1" } },
   "response": {
     "status": 200,
     "body": { "messages": [] }

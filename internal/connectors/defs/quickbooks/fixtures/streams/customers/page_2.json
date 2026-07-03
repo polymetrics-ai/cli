@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/company/synthetic-conformance-value/query",
+    "query": { "query": "SELECT * FROM Customer STARTPOSITION 3 MAXRESULTS 2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "QueryResponse": {
+        "Customer": [
+          { "Id": "3", "DisplayName": "Fixture Customer 3", "Active": true, "Balance": 300.0 }
+        ]
+      }
+    }
+  }
+}

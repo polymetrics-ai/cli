@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "US Census Connection Specification",
+  "type": "object",
+  "required": ["query_path", "query_params"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "US Census Bureau API key, sent as the 'key' query-string parameter on every request. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.census.gov",
+      "description": "US Census API base URL override for tests or proxies."
+    },
+    "query_path": {
+      "type": "string",
+      "description": "Dataset path segment appended to base_url, e.g. 'data/2019/cbp'. Matches legacy's config.query_path verbatim."
+    },
+    "query_params": {
+      "type": "string",
+      "description": "Raw URL-encoded query string appended to the request (e.g. 'get=NAME,ESTAB&for=us:*'). The 'get=' qualifier's comma-separated field list becomes the header row of the API's array-of-arrays response, which in turn becomes the emitted record field names -- matching legacy's fully dynamic, caller-driven schema."
+    }
+  }
+}

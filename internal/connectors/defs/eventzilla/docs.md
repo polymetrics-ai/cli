@@ -1,11 +1,14 @@
 # Overview
 
-Eventzilla is a wave2 fan-out declarative-HTTP migration. It reads Eventzilla events, categories,
-and users through the Eventzilla v2 REST API (`GET https://www.eventzillaapi.net/api/v2/...`).
-This bundle migrates 3 of the 5 streams `internal/connectors/eventzilla` (the hand-written
-connector) implements; the legacy package stays registered and unchanged until wave6's registry
-flip. Eventzilla is read-only: legacy exposes no reverse-ETL writes, so `capabilities.write` is
-`false` and this bundle ships no `writes.json`.
+Eventzilla is a fan-out declarative-HTTP migration. It reads Eventzilla events, categories,
+users, attendees, and ticket types through the Eventzilla v2 REST API (`GET
+https://www.eventzillaapi.net/api/v2/...`). This bundle now covers all 5 streams
+`internal/connectors/eventzilla` (the hand-written connector) implements; the legacy package stays
+registered and unchanged until wave6's registry flip. `attendees` and `tickets` — previously
+blocked (`ENGINE_GAP`; see `docs/migration/status.json`'s `partial[]` entry) — are now expressed
+via the engine's `fan_out` dialect (S4 engine mini-wave item 2). Eventzilla is read-only: legacy
+exposes no reverse-ETL writes, so `capabilities.write` is `false` and this bundle ships no
+`writes.json`.
 
 ## Auth setup
 
@@ -30,6 +33,21 @@ this bundle bakes in legacy's default rather than legacy's config-driven overrid
 `categories`' primary key is `["category"]` (the category name string itself), matching legacy's
 own `PrimaryKey: []string{"category"}` — Eventzilla's category list has no separate id field.
 
+`attendees` and `tickets` are per-event sub-resource fan-out reads, matching legacy's
+`readSubstream` (`eventzilla.go:141-160`) exactly: `fan_out.ids_from.request` issues a paginated
+`GET /events` sequence (reusing the `attendees`/`tickets` stream's own effective pagination — the
+base `offset_limit` block, since neither stream declares its own override), extracting `id_field:
+id` off every discovered event record; `into.path_var: "event_id"` threads each discovered event id
+into `/events/{{ fanout.id }}/attendees` (or `/tickets`); `stamp_field: "event_id"` writes it onto
+every emitted child record after projection — reproducing legacy's `stampParent` (which only fills
+`event_id` when the raw record itself omits it; the real Eventzilla API always sends `event_id` on
+every attendee/ticket record, so the fan-out stamp's unconditional overwrite lands on the exact
+same value legacy's raw record already carried — never a data change for any real API response).
+Both streams' `event_id` schema property is typed `["integer", "string"]`: the raw wire value is a
+JSON integer, but the fan_out engine's stamp always writes the fan-out id as a Go string (S4 engine
+mini-wave item 2, `read.go`'s `fc.id`) — see Known limits for why this is a documented, ACCEPTABLE
+parity deviation rather than a silent narrowing.
+
 ## Write actions & risks
 
 None. Eventzilla is a read-only source in legacy (`eventzilla.go`'s package doc: "Eventzilla
@@ -38,18 +56,16 @@ and no `writes.json` is shipped.
 
 ## Known limits
 
-- **`attendees` and `tickets` are NOT migrated in this wave — reported as a blocked capability, not
-  silently dropped.** Legacy implements both as per-event sub-resource fan-out reads
-  (`eventzilla.go`'s `readSubstream`): list every event via `/events`, then issue one additional
-  request per discovered event id to `/events/{event_id}/attendees` (or `/tickets`), stamping the
-  parent `event_id` onto every child record. This is one of `docs/migration/conventions.md` §1's
-  explicitly named Tier-2 `StreamHook` triggers ("sub-resource fan-out reads, e.g. issue → comments
-  per issue") — the declarative dialect has no mechanism to fan a list read out over another
-  stream's discovered ids, and this wave is JSON-only (no hooks packages permitted). Implementing
-  these 2 streams requires a follow-up wave to add `internal/connectors/hooks/eventzilla/hooks.go`
-  with a `StreamHook.ReadStream` override (see `api_surface.json`'s `excluded` entries for both
-  endpoints). `events`, `categories`, and `users` — the 3 streams with no sub-resource fan-out
-  requirement — are fully migrated at parity in this bundle.
+- **`attendees`/`tickets`'s `event_id` field is typed `["integer", "string"]`, not a bare
+  `integer`.** Legacy's raw Eventzilla API always sends `event_id` as a JSON integer on both
+  streams; the engine's `fan_out.stamp_field` mechanism always overwrites that field with the
+  fan-out id as a Go **string** (`read.go`'s `fc.id`), applied unconditionally after projection —
+  there is no dialect option to stamp a typed (non-string) value. This never changes the emitted
+  VALUE for any real Eventzilla response (the stamped string is the same event id legacy's own
+  `stampParent` fallback would have used, and the real API always already carries the matching
+  integer on the raw record, which the stamp simply overwrites with the string form of the same
+  id) — only the JSON **type** of the field differs from legacy's plain-integer schema. ACCEPTABLE
+  parity deviation (§5): documented here rather than silently narrowed.
 - **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes `page_size` (default
   100, capped at 100) and `max_pages` (0/all/unlimited = unbounded) as config-driven overrides
   (`eventzillaPageSize`/`eventzillaMaxPages` in `eventzilla.go`). The engine's `offset_limit`

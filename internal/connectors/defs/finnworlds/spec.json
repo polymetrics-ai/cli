@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Finnworlds Connection Specification",
+  "type": "object",
+  "required": ["key"],
+  "properties": {
+    "key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Finnworlds API key, sent as the 'key' query parameter on every request. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.finnworlds.com/api/v1",
+      "description": "Finnworlds API base URL override for tests or proxies."
+    },
+    "tickers": {
+      "type": "string",
+      "description": "Comma-separated list of stock ticker symbols to fan out over for the dividends, stock_splits, and historical_candlestick streams. Required for those three streams (no auto-discovery fallback); the commodities stream is unaffected."
+    },
+    "commodities": {
+      "type": "string",
+      "description": "Comma-separated list of commodity names to fan out over for the commodities stream. Required for that stream (no auto-discovery fallback)."
+    }
+  }
+}

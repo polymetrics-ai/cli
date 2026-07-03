@@ -36,6 +36,17 @@
       "path": "/targets",
       "records": { "path": "results" },
       "schema": "schemas/targets.json"
+    },
+    {
+      "name": "occurrences",
+      "path": "/issues/{{ fanout.id }}/occurrences",
+      "records": { "path": "results" },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/issues", "records_path": "results", "id_field": "id" } },
+        "into": { "path_var": "issue_id" },
+        "stamp_field": "issue_id"
+      },
+      "schema": "schemas/occurrences.json"
     }
   ]
 }

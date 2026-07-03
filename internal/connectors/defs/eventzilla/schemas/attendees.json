@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "attendees",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "event_id": { "type": ["integer", "string"], "description": "Stamped by the fan_out dialect from the enclosing event id discovered via the events listing (always a string on the stamped path); the raw API also sends this field as an integer, so both shapes are declared." },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "ticket_type": { "type": ["string", "null"] },
+    "refno": { "type": ["string", "null"] },
+    "transaction_amount": { "type": ["number", "null"] },
+    "transaction_status": { "type": ["string", "null"] },
+    "transaction_date": { "type": ["string", "null"] },
+    "is_attended": { "type": ["string", "null"] }
+  }
+}

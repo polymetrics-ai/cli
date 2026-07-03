@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/v2/company/synthetic-conformance-value/time_punches", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 601,
+          "company_id": 1,
+          "location_id": 101,
+          "department_id": 201,
+          "role_id": 301,
+          "user_id": 401,
+          "clocked_in": "2026-01-01T09:01:00+00:00",
+          "clocked_out": "2026-01-01T17:02:00+00:00",
+          "approved": true,
+          "created": "2026-01-01T00:00:00+00:00",
+          "modified": "2026-01-01T00:00:00+00:00"
+        }
+      ],
+      "meta": { "cursor": { "next": null } }
+    }
+  }
+}

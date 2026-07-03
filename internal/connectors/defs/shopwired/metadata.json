@@ -17,6 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external ShopWired API read of product, order, customer, and category data"
+    "read": "external ShopWired API read of product, order, customer, and category data",
+    "approval": "none; read-only, no reverse-ETL write surface"
   }
 }

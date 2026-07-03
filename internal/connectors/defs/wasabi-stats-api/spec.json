@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wasabi Stats API Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Wasabi Stats API credential. If this value contains exactly one ':' separator (a 'username:password'-shaped value), it is sent as HTTP Basic auth with the two split parts; otherwise it is sent as 'Authorization: Bearer <api_key>'. This runtime content-based branch is implemented in hooks/wasabi-stats-api/hooks.go (AuthHook), matching legacy's requester() exactly. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://stats.wasabisys.com",
+      "description": "Wasabi Stats API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound sent verbatim as the 'start_date' query parameter on Check and every stream read. Not a true incremental cursor: legacy sends this as a fixed filter on every request, never advancing it from a persisted state cursor."
+    }
+  }
+}

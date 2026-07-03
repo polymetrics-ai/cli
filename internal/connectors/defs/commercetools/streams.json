@@ -1,0 +1,53 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}"
+      }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100,
+      "max_pages": 100
+    },
+    "check": { "method": "GET", "path": "/{{ config.project_key }}/customers", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "commercetools client_id/client_secret is missing or invalid; re-run pm credentials add commercetools" },
+      { "status": 403, "hint": "commercetools account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "commercetools rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/{{ config.project_key }}/customers",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "orders",
+      "path": "/{{ config.project_key }}/orders",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "products",
+      "path": "/{{ config.project_key }}/products",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/products.json"
+    }
+  ]
+}

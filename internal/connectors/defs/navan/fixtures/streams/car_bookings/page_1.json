@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/v1/bookings", "query": { "bookingType": "CAR", "page": "0", "size": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "uuid": "bk_fixture_c1",
+          "bookingId": "BK-C001",
+          "bookingType": "CAR",
+          "bookingStatus": "CONFIRMED",
+          "bookingMethod": "ONLINE",
+          "approvalStatus": "APPROVED",
+          "confirmationNumber": "CONFC001",
+          "currency": "USD",
+          "grandTotal": 75,
+          "basePrice": 65,
+          "bookingFee": 10,
+          "destination": "SFO",
+          "startDate": "2026-01-01T00:00:00.000Z",
+          "endDate": "2026-01-02T00:00:00.000Z",
+          "created": "2026-01-01T00:00:00.000Z",
+          "lastModified": "2026-01-01T00:00:00.000Z",
+          "domestic": true,
+          "expensed": false
+        }
+      ]
+    }
+  }
+}

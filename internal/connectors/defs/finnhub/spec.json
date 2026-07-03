@@ -25,6 +25,10 @@
       "default": "general",
       "description": "News category for the market_news stream (default general)."
     },
+    "symbols": {
+      "type": "string",
+      "description": "Comma-, whitespace-, or semicolon-separated stock ticker symbols to fan out over for the company_profile and stock_recommendations streams (one request per symbol). Required for those two streams only; stock_symbols/market_news do not reference it. company_news is not implemented in this bundle (see docs.md Known limits), so this key does not drive it here."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/list",
+    "query": {
+      "sort": "last_update",
+      "sort_direction": "desc",
+      "page": "1",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "users": [
+          {
+            "user_id": 1051,
+            "crmhero_user_id": "usr_fixture_51",
+            "email": "fixture51@example.com",
+            "name": "Fixture User 51",
+            "username": "fixture_user_51",
+            "role": "user",
+            "country": "US",
+            "city": "San Francisco",
+            "timezone": "America/Los_Angeles",
+            "sub_active": true,
+            "sub_status": "active",
+            "create_date": "2026-01-01 00:00:00",
+            "last_update": "2026-01-01 00:01:00",
+            "first_seen_at": "2026-01-01 00:00:00",
+            "last_activity": "2026-01-01 00:00:00"
+          }
+        ]
+      }
+    }
+  }
+}

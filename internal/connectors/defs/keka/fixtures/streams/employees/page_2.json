@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/employees",
+    "query": {
+      "pageNumber": "2",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "succeeded": true,
+      "totalPages": 2,
+      "pageNumber": 2,
+      "data": [
+        {
+          "id": "emp_fixture_101",
+          "employeeNumber": "EMP101",
+          "firstName": "Fixture101",
+          "lastName": "User",
+          "displayName": "Fixture 101",
+          "email": "fixture101@example.com",
+          "jobTitle": "Engineer",
+          "department": "Engineering",
+          "employmentStatus": "active"
+        }
+      ]
+    }
+  }
+}

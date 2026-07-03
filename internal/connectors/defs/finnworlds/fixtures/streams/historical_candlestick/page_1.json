@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/historicalcandlestick",
+    "query": { "ticker": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "output": [
+          {
+            "ticker": "synthetic-conformance-value",
+            "date": "2026-01-01",
+            "open": "100.00",
+            "high": "110.00",
+            "low": "95.00",
+            "close": "105.00",
+            "adjusted_close": "105.00",
+            "trade_volume": "1000000",
+            "opentime": 1767225600,
+            "closetime": 1767312000
+          },
+          {
+            "ticker": "synthetic-conformance-value",
+            "date": "2026-01-02",
+            "open": "105.00",
+            "high": "115.00",
+            "low": "100.00",
+            "close": "112.00",
+            "adjusted_close": "112.00",
+            "trade_volume": "1200000",
+            "opentime": 1767312000,
+            "closetime": 1767398400
+          }
+        ]
+      }
+    }
+  }
+}

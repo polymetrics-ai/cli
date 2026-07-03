@@ -1,0 +1,27 @@
+{
+  "name": "nexus-datasets",
+  "display_name": "Infor Nexus Datasets",
+  "description": "Reads records from a configured Infor Nexus export dataset through the Infor Nexus Data API (v3.1) using HMAC-SHA256 request signing. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://docs.infor.com/inforos/nexus/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Infor Nexus dataset export read, HMAC-signed",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); the HMAC-SHA256 signature is computed over the live request method/path/timestamp and conformance's synthetic non-secret config can never populate a real secret_key/api_key, so every auth-resolving dynamic check would fail identically and uninformatively -- hook-covered, proven live by internal/connectors/hooks/nexus-datasets's own unit tests (the AuthHook's real HMAC signing path) and internal/connectors/nexus-datasets_test.go's pre-existing legacy parity coverage"
+  }
+}

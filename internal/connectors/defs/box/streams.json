@@ -1,0 +1,56 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "extra_params": {
+          "box_subject_type": "{{ config.box_subject_type }}",
+          "box_subject_id": "{{ config.box_subject_id }}"
+        }
+      }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/users", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "box client_id/client_secret are missing or invalid, or the token-scoping subject is misconfigured; re-run pm credentials add box" },
+      { "status": 403, "hint": "box subject lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "box rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "entries" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "records": { "path": "entries" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "collections",
+      "path": "/collections",
+      "records": { "path": "entries" },
+      "schema": "schemas/collections.json"
+    },
+    {
+      "name": "folder_items",
+      "path": "/folders/{{ config.folder_id }}/items",
+      "records": { "path": "entries" },
+      "schema": "schemas/folder_items.json"
+    }
+  ]
+}

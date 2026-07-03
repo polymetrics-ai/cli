@@ -1,0 +1,13 @@
+{
+  "api": "Kyriba tenant REST API v1 (https://api.kyriba.com/api/v1, tenant-overridable)",
+  "docs": "https://developer.kyriba.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Migration of internal/connectors/kyriba: the 4 legacy-parity read collection endpoints only (bank-accounts, transactions, statements, payments). Kyriba deployments vary by tenant; legacy itself keeps live support bounded to these documented-style v1 collection endpoints. Kyriba's full documented API surface (cash positioning, forecasting, exposures, admin/config endpoints, and any tenant-specific extensions) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/bank-accounts", "covered_by": { "stream": "bank_accounts" } },
+    { "method": "GET", "path": "/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/statements", "covered_by": { "stream": "statements" } },
+    { "method": "GET", "path": "/payments", "covered_by": { "stream": "payments" } },
+    { "method": "GET", "path": "/cash-positions, /forecasts, /exposures, and other tenant-specific v1 collections", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy" } }
+  ]
+}

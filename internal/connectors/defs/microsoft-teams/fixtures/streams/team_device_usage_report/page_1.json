@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/reports/getTeamsDeviceUsageUserDetail", "query": { "period": "D7", "$format": "application/json" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_team_device_usage_report_1", "userPrincipalName": "fixture+1@example.com", "lastActivityDate": "2026-01-01", "isDeleted": false, "usedWeb": true, "usedWindowsPhone": false, "usedAndroidPhone": false, "usedIOS": true, "usedMac": false, "reportPeriod": "D7" }
+      ]
+    }
+  }
+}

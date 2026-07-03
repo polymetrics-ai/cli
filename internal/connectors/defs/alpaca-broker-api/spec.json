@@ -17,12 +17,12 @@
       "type": "string",
       "format": "uri",
       "default": "https://broker-api.sandbox.alpaca.markets/v1",
-      "description": "Alpaca Broker API base URL. Defaults to the sandbox host, matching legacy's default when 'environment' is unset; override to https://broker-api.alpaca.markets/v1 for production. Legacy also derives this from an 'environment' enum (api/paper-api/broker-api.sandbox) at runtime; this bundle requires the resolved URL directly since the engine's spec-default mechanism only materializes a fixed literal, not an enum-derived value (documented scope narrowing, see docs.md)."
+      "description": "Alpaca Broker API base URL. Defaults to the sandbox host, matching legacy's default when its 'environment' config is unset. Set to https://broker-api.alpaca.markets/v1 for production. Legacy also derives this from an 'environment' enum (api/paper-api/broker-api.sandbox) at runtime; this bundle requires the resolved URL directly since the engine's spec-default mechanism only materializes one fixed literal, not an enum-derived choice between two URLs (documented scope narrowing, see docs.md)."
     },
     "limit": {
       "type": "string",
       "default": "20",
-      "description": "Records per page for the 'accounts' stream (matches legacy's page_token cursor limit)."
+      "description": "Records per page for the 'accounts' stream (matches legacy's page_token cursor limit, defaultLimit=20)."
     }
   }
 }

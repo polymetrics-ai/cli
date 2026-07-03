@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/v2/company/synthetic-conformance-value/departments", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 201,
+          "company_id": 1,
+          "location_id": 101,
+          "name": "Fixture Department 1",
+          "created": "2026-01-01T00:00:00+00:00",
+          "modified": "2026-01-01T00:00:00+00:00"
+        }
+      ],
+      "meta": { "cursor": { "next": null } }
+    }
+  }
+}

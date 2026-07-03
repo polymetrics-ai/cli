@@ -3,13 +3,21 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.base_url }}/oauth/token",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "extra_params": { "audience": "{{ config.audience }}" },
+        "when": "{{ secrets.client_id }}"
+      }
     ],
     "pagination": {
       "type": "page_number",
       "page_param": "page",
       "size_param": "per_page",
-      "start_page": 1,
+      "start_page": 0,
       "page_size": 50
     },
     "check": { "method": "GET", "path": "/api/v2/clients" },

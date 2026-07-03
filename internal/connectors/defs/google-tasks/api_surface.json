@@ -1,0 +1,10 @@
+{
+  "api": "Google Tasks API v1 (https://tasks.googleapis.com/tasks/v1)",
+  "docs": "https://developers.google.com/tasks/reference/rest",
+  "reviewed_at": "2026-07-03",
+  "scope": "Full legacy capability-parity migration of internal/connectors/google-tasks: tasklists (full parity) plus tasks (task-list-scoped fan_out, auto-discovered via the tasklists endpoint, reproducing legacy's collectTaskListIDs/readTasks fan-out read).",
+  "endpoints": [
+    { "method": "GET", "path": "/users/@me/lists", "covered_by": { "stream": "tasklists" } },
+    { "method": "GET", "path": "/lists/{tasklist}/tasks", "covered_by": { "stream": "tasks" } }
+  ]
+}

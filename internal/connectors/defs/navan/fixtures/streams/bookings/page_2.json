@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/v1/bookings", "query": { "bookingType": "FLIGHT", "page": "1", "size": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "uuid": "bk_fixture_3",
+          "bookingId": "BK-0003",
+          "bookingType": "FLIGHT",
+          "bookingStatus": "CONFIRMED",
+          "bookingMethod": "ONLINE",
+          "approvalStatus": "APPROVED",
+          "confirmationNumber": "CONF0003",
+          "currency": "USD",
+          "grandTotal": 300,
+          "basePrice": 270,
+          "bookingFee": 10,
+          "destination": "SFO",
+          "startDate": "2026-01-03T00:00:00.000Z",
+          "endDate": "2026-01-03T00:00:00.000Z",
+          "created": "2026-01-03T00:00:00.000Z",
+          "lastModified": "2026-01-03T00:00:00.000Z",
+          "domestic": true,
+          "expensed": false
+        }
+      ]
+    }
+  }
+}

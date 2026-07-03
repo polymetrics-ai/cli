@@ -86,38 +86,20 @@
  {
   "name": "basecamp",
   "blocker_type": "AUTH_COMPLEX",
-  "reason": "Legacy's primary, documented auth flow is a token-exchange OAuth2 refresh grant against Basecamp/37signals Launchpad (auth.go's oauthRefreshAuth), but Launchpad's token endpoint expects a NON-STANDARD form parameter shape: type=refresh (not the standard grant_type=refresh_token, and not client_crede",
-  "attempts": 1
- },
- {
-  "name": "beamer",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Beamer's pagination is genuinely 0-indexed (page=0,1,2,...; legacy's own beamer_test.go:27-35 asserts page=0 on the first request, errors on anything else). The engine's page_number paginator (connsdk/paginate.go PageNumberPaginator.Start(): `p.page = p.StartPage; if p.page == 0 { p.page = 1 }`) can",
-  "attempts": 1
- },
- {
-  "name": "box",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Box authenticates via OAuth2 client-credentials with two Box-specific extra token-request form params (box_subject_type=enterprise|user, box_subject_id=<enterprise or user id>) that scope the issued token \u2014 legacy's authenticator sets these on every token exchange (box.go's authenticator/boxSubject)",
-  "attempts": 1
- },
- {
-  "name": "braze",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Braze's campaigns/canvases/segments list-export endpoints paginate with a genuinely 0-based ?page= query param (legacy's harvest loop's first request is page=0; braze.go's harvest starts `for page := 0; ...`). The engine's page_number paginator cannot express a 0-based start page: both engine/pagina",
-  "attempts": 1
+  "reason": "Legacy exchanges a refresh token at Launchpad using type=refresh (not grant_type=refresh_token/client_credentials); oauth2_client_credentials hardcodes grant_type=client_credentials+client_id/secret (connsdk/auth.go:123); extra_params only ADDS keys, cannot rename grant_type or add refresh_token.",
+  "attempts": 2
  },
  {
   "name": "bunny-inc",
   "blocker_type": "AUTH_COMPLEX",
-  "reason": "Not an auth issue per se, but genuinely Tier-2/ENGINE_GAP: bunny-inc's legacy connector talks to a single per-tenant GraphQL endpoint (POST /graphql) with a query document + variables JSON body, and paginates via an in-body cursor (data.<field>.pageInfo.{endCursor,hasNextPage}) read from the POST re",
-  "attempts": 1
+  "reason": "Confirmed still blocked after repair attempt (S3/S4 engine mini-waves did not add this capability). bunny-inc's legacy connector talks to a single per-tenant GraphQL endpoint (POST /graphql) with a query-document + variables JSON body, and paginates via an in-body cursor (data.<field>.pageInfo.{endCursor,hasNextPage}) read from the POST response, not a query-string/header pagination scheme the engine's declarative dialect models. Evidence: internal/connectors/engine/read.go's readOneSequence (the entire declarative stream-read path) always issues rt.Requester.Do(ctx, method, reqPath, query, nil) \u2014 the body argument is hardcoded nil on every read; StreamSpec.Body (bundle.go's `json:\"body,omitempty\"` field, commented \"POST-body streams\") is declared in the Go type but never read anywhere in read.go, i.e. dead/unwired. body_type (json/form) exists only on the WRITE path (write.go's buildBody/DoForm), never on stream reads. None of PaginationSpec's 6 types (none/link_header/page_number/offset_limit/cursor/next_url, engine/bundle.go:156) can express a POST-body GraphQL cursor read at all -- cursor pagination only reads a next-token from a GET/POST response BODY it already issued with a query-string request, never re-encodes a cursor into a subsequent request's OWN body. A Tier-1 (declarative JSON) expression is impossible; this is exactly the kind of protocol mismatch (in-body cursor pagination for a POST-only GraphQL endpoint) conventions.md section 1 lists as a StreamHook-caliber Tier-2 trigger, but a StreamHook alone cannot fix it either -- it would need to reimplement the entire request/pagination sequence in Go, which is explicitly the retired anti-pattern conventions.md's fan_out addition targeted; a genuine Tier-3 native-package rewrite is disproportionate for a single-endpoint GraphQL source. ENGINE_GAP: the dialect needs a POST-body-with-in-body-cursor-pagination primitive (or a graphql pagination type) before this connector can migrate.",
+  "attempts": 2
  },
  {
   "name": "canny",
   "blocker_type": "ENGINE_GAP",
-  "reason": "Canny's documented API (developers.canny.io) requires every list endpoint to be called as POST with the secret apiKey AND pagination params (limit/skip) carried in a form-encoded request body \u2014 never a header or query string. The engine's declarative read path (internal/connectors/engine/read.go rea",
-  "attempts": 1
+  "reason": "Confirmed still blocked after repair attempt (S3/S4 engine mini-waves did not add this capability). Canny's documented API (developers.canny.io) requires every list endpoint to be called as POST with the secret apiKey AND pagination params (limit/skip) carried in a form-encoded request body -- never a header or query string (legacy canny.go's harvest: r.DoForm(ctx, http.MethodPost, endpoint.resource, nil, form) where form carries apiKey/limit/skip). Evidence: internal/connectors/engine/read.go's readOneSequence (the entire declarative stream-read path) always issues rt.Requester.Do(ctx, method, reqPath, query, nil) -- the body argument is hardcoded nil on every read, and it never calls connsdk.Requester.DoForm (http.go:187) at all; DoForm is only ever invoked from the WRITE path (write.go:211). StreamSpec.Body (bundle.go's `json:\"body,omitempty\"` field) is declared but never read in read.go -- dead/unwired for reads. Beyond the missing body-send mechanism, canny's own auth (the secret apiKey traveling in the POST form body, never a header/query param/Authorization scheme) doesn't match any of engine/auth.go's AuthSpec modes (none/bearer/basic/api_key_header/api_key_query/oauth2_client_credentials/custom) either -- api_key_query only ever adds the key to the query STRING (auth.go), never a form body. Pagination itself (limit/skip offset, PaginationSpec's offset_limit type) is otherwise expressible, but the secret and the offset/limit params are unreachable without a body-carrying request, so the gap is load-bearing, not cosmetic. ENGINE_GAP: the dialect needs a form-body-carries-auth-and-pagination-params primitive on the read path before this connector can migrate.",
+  "attempts": 2
  },
  {
   "name": "chift",
@@ -176,38 +158,32 @@
  {
   "name": "fastbill",
   "blocker_type": "ENGINE_GAP",
-  "reason": "FastBill's only endpoint (.../api/1.0/api.php) is a single POST with a JSON body carrying SERVICE (e.g. \"customer.get\") plus LIMIT/OFFSET pagination fields; records come back nested under RESPONSE.<COLLECTION>. The Tier-1 declarative read path (internal/connectors/engine/read.go:144, `rt.Requester.D",
-  "attempts": 1
+  "reason": "Confirmed still blocked after repair attempt (S4 engine mini-wave's fan_out/keyed_object/start_page:0/extra_params/date-only additions do not touch this gap). FastBill's only endpoint (.../api/1.0/api.php) is a single POST with a JSON body carrying SERVICE (e.g. \"customer.get\") plus LIMIT/OFFSET pagination fields; records come back nested under RESPONSE.<COLLECTION> (legacy: internal/connectors/fastbill/fastbill.go's harvest/serviceBody). Evidence: internal/connectors/engine/read.go's readOneSequence always issues rt.Requester.Do(ctx, method, reqPath, query, nil) -- the body argument is hardcoded nil on every declarative read, and StreamSpec.Body (bundle.go's `json:\"body,omitempty\"` field, commented \"POST-body streams\") is declared but never read anywhere in read.go -- dead/unwired. None of PaginationSpec's 6 types send pagination state via a request body (page_number/offset_limit only ever add query-string params). A Tier-1 expression is impossible without a body-carrying read primitive.",
+  "attempts": 2
  },
  {
   "name": "feishu",
   "blocker_type": "AUTH_COMPLEX",
-  "reason": "Feishu/Lark authenticates via a tenant_access_token EXCHANGE: app_id + app_secret are POSTed to open-apis/auth/v3/tenant_access_token/internal, which returns a token cached with a TTL (legacy: internal/connectors/feishu/auth.go's tenantTokenAuth, ~2h default, refreshed 60s before expiry) and then ap",
-  "attempts": 1
+  "reason": "Confirmed still blocked after repair attempt (S4 engine mini-wave's oauth2_client_credentials extra_params addition does not change this gap). Feishu/Lark authenticates via a tenant_access_token EXCHANGE: app_id + app_secret are POSTed as a JSON body to open-apis/auth/v3/tenant_access_token/internal, which returns {code, msg, tenant_access_token, expire} (a non-zero code is an API-level error even on HTTP 200); the token is cached with a TTL (legacy: internal/connectors/feishu/auth.go's tenantTokenAuth, ~2h default, refreshed 60s before expiry) and applied as a Bearer header. Evidence: engine/auth.go's only token-exchange auth mode is oauth2_client_credentials, whose connsdk.OAuth2ClientCredentials (connsdk/auth.go:122-138) hardcodes an application/x-www-form-urlencoded body with fixed field names grant_type/client_id/client_secret/scope (extra_params only ADDS keys, per S4, never renames these or switches encoding) and parses a standard access_token/expires_in JSON response -- incompatible with Feishu's JSON-body app_id/app_secret request and tenant_access_token/expire/code response shape on every axis (encoding, field names, response schema, and the code-in-200-body error convention). No other AuthSpec mode (none/bearer/basic/api_key_header/api_key_query/custom) fits either; mode custom would resolve via an AuthHook, which is a Tier-2 Go escape hatch, out of scope for a JSON-only bundle.",
+  "attempts": 2
  },
  {
   "name": "fillout",
   "blocker_type": "ENGINE_GAP",
-  "reason": "2 of Fillout's 3 streams (questions, submissions) require per-form sub-resource fan-out: the connector first resolves a list of form IDs (either the configured comma-separated form_id, or discovered via GET /forms), then issues one request PER form (GET /forms/{id} for questions; GET /forms/{id}/sub",
-  "attempts": 1
- },
- {
-  "name": "finnworlds",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "All 4 legacy streams (dividends, stock_splits, historical_candlestick, commodities) are fundamentally partition-fan-out streams: harvest() iterates a config list (tickers or commodities) and issues one independent HTTP GET per value, stitching the partition value onto each emitted record when the AP",
-  "attempts": 1
+  "reason": "PARTIAL (see internal/connectors/defs/fillout/): forms migrated to Tier-1 (no fan-out needed, GET /forms is a single unpaginated top-level array). questions and submissions remain quarantined -- confirmed still blocked after repair attempt now that fan_out exists (S4 engine mini-wave). Both require per-form sub-resource fan-out where legacy's resolveFormIDs (internal/connectors/fillout/fillout.go:259) uses the configured comma-separated form_id WHEN SET, else discovers every form id via GET /forms -- a runtime conditional fallback between two id sources. Evidence: FanOutIDsFrom (engine/bundle.go:243) and resolveFanOutIDs (engine/read.go:122-138) require declaring EXACTLY ONE of config_key or request at load time (both or neither is a read-time error) -- there is no combinator for \"config_key when present, else request\". Statically choosing request would silently return every form's data for a caller who set form_id to narrow scope (a legacy-accepted input emitting MORE records than legacy); statically choosing config_key would silently emit ZERO records for a caller who left form_id unset (legacy's other accepted, and most common, input, emitting FEWER records than legacy). Both diverge from legacy for a legacy-accepted input, which conventions.md section 5's meta-rule forbids as a silent workaround -- a narrower, fan_out-specific gap than the pre-S4 quarantine reason (which predated fan_out's existence entirely).",
+  "attempts": 2
  },
  {
   "name": "free-agent-connector",
   "blocker_type": "AUTH_COMPLEX",
-  "reason": "Legacy authenticates via OAuth2 grant_type=refresh_token against /token_endpoint, with HTTP Basic client-credential auth (client_id:client_secret) plus refresh_token in the form body, then caches/refreshes the resulting bearer access token (internal/connectors/free-agent-connector/free_agent_connect",
-  "attempts": 1
+  "reason": "RE-CONFIRMED after repair attempt now that fan_out/keyed_object/start_page:0/oauth2 extra_params/date-only bounds all exist (S4 engine mini-wave) -- none of those close this gap; it is purely an auth-mode gap. Legacy authenticates via OAuth2 grant_type=refresh_token against /token_endpoint, with the client authenticated via HTTP BASIC (client_id:client_secret, req.SetBasicAuth) rather than form-embedded credentials, plus refresh_token in the form body (internal/connectors/free-agent-connector/free_agent_connector.go:263-335). The engine's only declarative server-side-token-exchange auth mode, oauth2_client_credentials (engine/auth.go:100-146), performs solely a client-credentials grant (grant_type=client_credentials, client_id/client_secret always sent as FORM fields) and has no refresh_token-grant variant at all -- auth.go's mode switch (auth.go:64-108) recognizes exactly none/bearer/basic/api_key_header/api_key_query/oauth2_client_credentials/custom, with no 8th declarative mode for this grant type. This IS expressible via a Tier-2 custom AuthHook (docs/migration/conventions.md section 1's listed \"token-exchange auth\" trigger; internal/connectors/hooks/strava/hooks.go and hooks/gmail already port the near-identical refresh-token-grant shape) -- a hooks/free-agent-connector/hooks.go of ~90 lines adapting strava's pattern for HTTP Basic client auth would fully unblock this connector. This task's own scope is restricted to JSON+docs.md only (no Go hook files); the fresh, narrower blocker is therefore \"unblockable within a JSON-only migration pass,\" not \"unblockable by the engine\" -- a follow-up pass authorized to add internal/connectors/hooks/free-agent-connector/hooks.go (Tier-2, single AuthHook interface, well under the 300-line soft cap) should close this without any further engine change.",
+  "attempts": 2
  },
  {
   "name": "google-analytics-data-api",
   "blocker_type": "ENGINE_GAP",
-  "reason": "GA4 Data API has no REST list endpoints: every report is a POST /v1beta/properties/{id}:runReport call whose request body itself carries offset/limit pagination state and a dimension/metric query, and each response row is a positional dimensionValues/metricValues array projected against dimensionHea",
-  "attempts": 1
+  "reason": "RE-CONFIRMED after repair attempt now that fan_out/keyed_object/start_page:0/oauth2 extra_params/date-only bounds all exist (S4 engine mini-wave) -- none of those close this gap; it is a POST-body-read gap, structurally untouched by any of them. GA4 Data API has no REST list endpoints: every report is a POST /v1beta/properties/{id}:runReport call whose request body itself carries offset/limit pagination state and a dimension/metric query (internal/connectors/google-analytics-data-api/google_analytics_data_api.go:268-286), and each response row is a positional dimensionValues/metricValues array projected against dimensionHeaders/metricHeaders (report.go:57-70) -- neither shape has a Tier-1 equivalent. Confirmed by direct engine read: StreamSpec.Body (engine/bundle.go:209) is a DECLARED-BUT-DEAD JSON field -- grep across internal/connectors/engine/read.go shows every declarative read call (read.go:207, read.go:327) invokes rt.Requester.Do(ctx, method, path, query, nil) with a hard-coded nil body, so a bundle-declared \"body\" map is never sent regardless of what streams.json contains; there is no pagination type that advances an offset/limit INSIDE a request body (all 6 documented types + none read next-page state from query params, headers, or response body, never write it into a follow-up body); and RecordsSpec/keyed_object's positional-array-projected-against-a-parallel-header-array shape (GA4's dimensionValues[i] <-> dimensionHeaders[i].name) has no dialect equivalent either (keyed_object flattens a map keyed by id, not a positional index-matched pair of arrays). This is exactly the \"StreamHook whose real wire shape has no declarative equivalent for the replay server to match against at all\" case conventions.md section 4 names as the sanctioned skip-marker scenario -- but even the StreamHook escape hatch itself requires a Go hook file, which this task's JSON+docs.md-only scope forecloses. A follow-up pass authorized to add Go (either a StreamHook Tier-2 hook overriding the whole runReport-driven read, or a genuine Tier-1 dialect extension adding POST-body templating + positional row projection) is required; no further JSON-only repair attempt will change this outcome.",
+  "attempts": 2
  },
  {
   "name": "google-pagespeed-insights",
@@ -228,22 +204,10 @@
   "attempts": 1
  },
  {
-  "name": "hubplanner",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Legacy's pagination is genuinely 0-indexed: harvest() starts at page=0 and that first request returns real, distinct records (internal/connectors/hubplanner/hubplanner.go:134-165; hubplanner_test.go:18-72 explicitly serves different data on page=0 vs page=1 and asserts both pages are requested). The",
-  "attempts": 1
- },
- {
   "name": "ip2whois",
   "blocker_type": "ENGINE_GAP",
-  "reason": "Legacy performs one HTTP lookup per domain in a config-supplied comma-separated domain list (N requests per stream read from one config value) and fans each single-object lookup response out into 1 (whois), 0..4 (contacts), or 0..N (nameservers) output records. Neither 'iterate a delimited config li",
-  "attempts": 1
- },
- {
-  "name": "jamf-pro",
-  "blocker_type": "AUTH_COMPLEX",
-  "reason": "Jamf Pro's auth is a Basic-credential token exchange (POST username/password as HTTP Basic to /v1/auth/token, no request body) returning a custom JSON shape {\"token\":..., \"expires\":...}, then that token used as Bearer on every subsequent request. The engine's only declarative auth mode built for thi",
-  "attempts": 1
+  "reason": "UPDATED (wave3 unblock, superseding the prior reason below): the original per-domain-request-iteration + whole-object fan-out blocker is now solved by the fan_out dialect (fan_out.ids_from.config_key over the comma-separated domains config value) -- whois and 4 per-role contact streams (contacts_registrant/admin/tech/billing) are migrated to internal/connectors/defs/ip2whois (status: partial). Only the nameservers stream remains blocked: legacy's nameserverRecords fans the raw nameservers field -- a bare JSON array of SCALAR strings, not objects -- out into one record per nameserver ({domain, nameserver}). Neither connsdk.RecordsAt (keeps only array elements that decode as a JSON object; a bare string element is silently dropped) nor records.keyed_object (explodes a JSON object's VALUES, which must themselves be objects) fans a scalar-valued array into one record per element; joining into a single string instead would change record cardinality versus legacy's genuine 1-record-per-nameserver stream, an accepted-input data change. See internal/connectors/defs/ip2whois/docs.md Known limits and conventions.md's parity-deviation ledger entry 12. Superseded original reason: legacy performs one HTTP lookup per domain in a config-supplied comma-separated domain list (N requests per stream read from one config value) and fans each single-object lookup response out into 1 (whois), 0..4 (contacts), or 0..N (nameservers) output records. Neither 'iterate a delimited config list' nor 'fan a single response into N streams' had a declarative primitive at the time this connector was first quarantined.",
+  "attempts": 2
  },
  {
   "name": "less-annoying-crm",
@@ -302,20 +266,14 @@
  {
   "name": "mode",
   "blocker_type": "ENGINE_GAP",
-  "reason": "Mode's REST API is HAL+JSON with pagination via _links.next.href, and legacy's own package doc + test fixture confirm this href is commonly a RELATIVE path-with-query (e.g. \"/acme/spaces?page=2\"), which legacy resolves against base_url via its Requester (documented explicitly in mode.go: \"The href m",
-  "attempts": 1
+  "reason": "Confirmed still blocked after repair attempt (S4 engine mini-wave's fan_out/keyed_object/start_page:0/oauth2 extra_params/date-only additions do not touch this gap). Mode's REST API is HAL+JSON: list responses embed records under _embedded.<resource> and the next page is followed via _links.next.href (legacy internal/connectors/mode/mode.go's harvest loop, and its own mode_test.go's TestReadPaginatesAndAuthenticates fixture, which serves a RELATIVE next link, \"/acme/spaces?page=2\", and legacy's own doc comment: \"The href may be a relative path-with-query or an absolute URL; either is fed straight back to the Requester, which treats absolute URLs as-is and resolves relative ones against base_url\"). The engine's pagination.type: next_url paginator (engine/paginate.go's nextURL.Next -> checkOrigin) cannot follow this: checkOrigin parses the resolved next-page value with net/url and hard-rejects it whenever u.Host == \"\" (\"next URL ... has no host; rejecting (fail closed)\") -- confirmed directly: url.Parse(\"/acme/spaces?page=2\").Host is the empty string, so a purely relative href fails the same-origin SSRF guard on the very first follow attempt, before a second page is ever requested. This is a genuine same-host-absolute-URL-only limitation, not a config/fixture issue: engine/read.go's readOneSequence passes page.URL straight to rt.Requester.Do with no relative-to-base_url resolution step (unlike legacy's own connsdk.Requester, which does resolve a relative next-link against BaseURL). No other pagination type in PaginationSpec (none/link_header/page_number/offset_limit/cursor) reads a next-page URL from the response body at all, so there is no Tier-1 substitute shape either. A Tier-2 StreamHook could reimplement the relative-href follow directly, but this task's scope is restricted to JSON+docs.md only (no Go hook files); the fresh, narrower blocker is therefore \"the next_url paginator cannot resolve a relative href against base_url,\" distinct from (and more precise than) the original quarantine reason's framing.",
+  "attempts": 2
  },
  {
   "name": "my-hours",
   "blocker_type": "AUTH_COMPLEX",
-  "reason": "Legacy authenticates by POSTing email/password (custom body shape: email, password, grantType:\"password\", clientId:\"api\", plus an api-version header) to tokens/login and caching the returned accessToken as a Bearer token. This is a dynamic login-token-exchange, not a static credential. The engine's ",
-  "attempts": 1
- },
- {
-  "name": "navan",
-  "blocker_type": "ENGINE_GAP",
-  "reason": "Navan's /v1/bookings list endpoint uses genuinely 0-indexed page-increment pagination (legacy internal/connectors/navan/navan.go's harvest loop is `for page := 0; ...`, and its own test TestReadPaginatesAndAuthenticates asserts the FIRST request sent is literally page=0, with page=1 returning distin",
-  "attempts": 1
+  "reason": "Confirmed still blocked after repair attempt (S4 engine mini-wave's fan_out/keyed_object/start_page:0/oauth2 extra_params/date-only additions do not touch this gap; it is purely an auth-shape gap). Legacy authenticates by POSTing a JSON body {email, password, grantType:\"password\", clientId:\"api\"} plus a custom api-version header to tokens/login, and caches the returned {accessToken: \"...\"} field as a Bearer token (internal/connectors/my-hours/my-hours.go's loginAuthenticator.accessToken). The engine's only declarative server-side-token-exchange auth mode, oauth2_client_credentials (engine/auth.go:100-146, connsdk/auth.go's OAuth2ClientCredentials), is incompatible on every axis: it hardcodes a form-urlencoded (application/x-www-form-urlencoded) body with fixed field names grant_type=client_credentials/client_id/client_secret/scope (connsdk/auth.go:122-133) -- extra_params (S4) only ADDS keys to this form, it cannot rename grant_type to \"password\", switch the encoding to JSON, rename client_id/client_secret to email/password, or add a clientId literal field; it also has no mechanism to attach a custom header (api-version) to the token-exchange request itself; and it parses a fixed access_token (snake_case) response field (connsdk/auth.go:156), never the camelCase accessToken shape My Hours actually returns. No other AuthSpec mode (none/bearer/basic/api_key_header/api_key_query/custom) fits a dynamic login-token-exchange either; mode custom would resolve via a Tier-2 AuthHook (engine/auth.go's buildCustomAuth), which is a Go escape hatch this task's JSON+docs.md-only scope forecloses. A follow-up pass authorized to add internal/connectors/hooks/my-hours/hooks.go (Tier-2, single AuthHook interface, porting the existing loginAuthenticator almost verbatim) would fully unblock this connector.",
+  "attempts": 2
  },
  {
   "name": "notion",

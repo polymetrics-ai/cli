@@ -1,0 +1,13 @@
+{
+  "api": "CoinMarketCap Pro API v1 (https://pro-api.coinmarketcap.com)",
+  "docs": "https://coinmarketcap.com/api/documentation/v1/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Unblock pass: 1 of 5 legacy-parity read streams (global_metrics); map/listings_latest/categories/fiat remain blocked (ENGINE_GAP, see docs.md Known limits) after re-review against the new dialect (fan_out, keyed_object, start_page:0, extra_params, date-only bounds) -- none of those additions cover the pagination gap these 4 streams share. Full CoinMarketCap API surface (quotes/historical, OHLCV, exchange endpoints, DEX/on-chain) is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/global-metrics/quotes/latest", "covered_by": { "stream": "global_metrics" } },
+    { "method": "GET", "path": "/v1/cryptocurrency/map", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: 1-based start/limit pagination where start advances by pageSize each page (1, 1+pageSize, 1+2*pageSize, ...); neither dialect pagination type expresses this. See docs.md Known limits." } },
+    { "method": "GET", "path": "/v1/cryptocurrency/listings/latest", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same start/limit pagination shape as /v1/cryptocurrency/map. See docs.md Known limits." } },
+    { "method": "GET", "path": "/v1/cryptocurrency/categories", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same start/limit pagination shape as /v1/cryptocurrency/map. See docs.md Known limits." } },
+    { "method": "GET", "path": "/v1/fiat/map", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same start/limit pagination shape as /v1/cryptocurrency/map; used only as the check request in this bundle. See docs.md Known limits." } }
+  ]
+}

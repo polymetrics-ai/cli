@@ -30,6 +30,32 @@
       "path": "/reports/calendar.json",
       "records": { "path": "" },
       "schema": "schemas/reports.json"
+    },
+    {
+      "name": "forms",
+      "path": "/lists/{{ fanout.id }}/forms.json",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/lists.json", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "list_id" },
+        "stamp_field": "list_id"
+      },
+      "schema": "schemas/forms.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/lists/{{ fanout.id }}/contacts.json",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/lists.json", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "list_id" },
+        "stamp_field": "list_id"
+      },
+      "schema": "schemas/contacts.json"
     }
   ]
 }

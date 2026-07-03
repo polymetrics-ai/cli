@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/slo",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "slo-fixture-101",
+          "name": "Fixture SLO 101",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225701,
+          "modified_at": 1767225701
+        },
+        {
+          "id": "slo-fixture-102",
+          "name": "Fixture SLO 102",
+          "type": "metric",
+          "description": "fixture record",
+          "created_at": 1767225702,
+          "modified_at": 1767225702
+        }
+      ]
+    }
+  }
+}

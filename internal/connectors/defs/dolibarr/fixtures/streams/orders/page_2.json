@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders",
+    "query": {
+      "sortfield": "t.rowid",
+      "sortorder": "ASC",
+      "limit": "100",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "101",
+        "ref": "ORD101",
+        "socid": "1",
+        "total_ht": "100.00",
+        "total_tva": "20.00",
+        "total_ttc": "120.00",
+        "billed": "0",
+        "status": "1",
+        "date": 1767225600,
+        "date_creation": 1767225600,
+        "date_modification": 1767225701
+      }
+    ]
+  }
+}

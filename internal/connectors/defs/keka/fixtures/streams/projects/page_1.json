@@ -1,0 +1,820 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/psa/projects",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "succeeded": true,
+      "totalPages": 2,
+      "pageNumber": 1,
+      "data": [
+        {
+          "id": "proj_fixture_1",
+          "name": "Fixture Project 1",
+          "code": "PROJ1",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_2",
+          "name": "Fixture Project 2",
+          "code": "PROJ2",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_3",
+          "name": "Fixture Project 3",
+          "code": "PROJ3",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_4",
+          "name": "Fixture Project 4",
+          "code": "PROJ4",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_5",
+          "name": "Fixture Project 5",
+          "code": "PROJ5",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_6",
+          "name": "Fixture Project 6",
+          "code": "PROJ6",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_7",
+          "name": "Fixture Project 7",
+          "code": "PROJ7",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_8",
+          "name": "Fixture Project 8",
+          "code": "PROJ8",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_9",
+          "name": "Fixture Project 9",
+          "code": "PROJ9",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_10",
+          "name": "Fixture Project 10",
+          "code": "PROJ10",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_11",
+          "name": "Fixture Project 11",
+          "code": "PROJ11",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_12",
+          "name": "Fixture Project 12",
+          "code": "PROJ12",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_13",
+          "name": "Fixture Project 13",
+          "code": "PROJ13",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_14",
+          "name": "Fixture Project 14",
+          "code": "PROJ14",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_15",
+          "name": "Fixture Project 15",
+          "code": "PROJ15",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_16",
+          "name": "Fixture Project 16",
+          "code": "PROJ16",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_17",
+          "name": "Fixture Project 17",
+          "code": "PROJ17",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_18",
+          "name": "Fixture Project 18",
+          "code": "PROJ18",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_19",
+          "name": "Fixture Project 19",
+          "code": "PROJ19",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_20",
+          "name": "Fixture Project 20",
+          "code": "PROJ20",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_21",
+          "name": "Fixture Project 21",
+          "code": "PROJ21",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_22",
+          "name": "Fixture Project 22",
+          "code": "PROJ22",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_23",
+          "name": "Fixture Project 23",
+          "code": "PROJ23",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_24",
+          "name": "Fixture Project 24",
+          "code": "PROJ24",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_25",
+          "name": "Fixture Project 25",
+          "code": "PROJ25",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_26",
+          "name": "Fixture Project 26",
+          "code": "PROJ26",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_27",
+          "name": "Fixture Project 27",
+          "code": "PROJ27",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_28",
+          "name": "Fixture Project 28",
+          "code": "PROJ28",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_29",
+          "name": "Fixture Project 29",
+          "code": "PROJ29",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_30",
+          "name": "Fixture Project 30",
+          "code": "PROJ30",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_31",
+          "name": "Fixture Project 31",
+          "code": "PROJ31",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_32",
+          "name": "Fixture Project 32",
+          "code": "PROJ32",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_33",
+          "name": "Fixture Project 33",
+          "code": "PROJ33",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_34",
+          "name": "Fixture Project 34",
+          "code": "PROJ34",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_35",
+          "name": "Fixture Project 35",
+          "code": "PROJ35",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_36",
+          "name": "Fixture Project 36",
+          "code": "PROJ36",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_37",
+          "name": "Fixture Project 37",
+          "code": "PROJ37",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_38",
+          "name": "Fixture Project 38",
+          "code": "PROJ38",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_39",
+          "name": "Fixture Project 39",
+          "code": "PROJ39",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_40",
+          "name": "Fixture Project 40",
+          "code": "PROJ40",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_41",
+          "name": "Fixture Project 41",
+          "code": "PROJ41",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_42",
+          "name": "Fixture Project 42",
+          "code": "PROJ42",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_43",
+          "name": "Fixture Project 43",
+          "code": "PROJ43",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_44",
+          "name": "Fixture Project 44",
+          "code": "PROJ44",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_45",
+          "name": "Fixture Project 45",
+          "code": "PROJ45",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_46",
+          "name": "Fixture Project 46",
+          "code": "PROJ46",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_47",
+          "name": "Fixture Project 47",
+          "code": "PROJ47",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_48",
+          "name": "Fixture Project 48",
+          "code": "PROJ48",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_49",
+          "name": "Fixture Project 49",
+          "code": "PROJ49",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_50",
+          "name": "Fixture Project 50",
+          "code": "PROJ50",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_51",
+          "name": "Fixture Project 51",
+          "code": "PROJ51",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_52",
+          "name": "Fixture Project 52",
+          "code": "PROJ52",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_53",
+          "name": "Fixture Project 53",
+          "code": "PROJ53",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_54",
+          "name": "Fixture Project 54",
+          "code": "PROJ54",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_55",
+          "name": "Fixture Project 55",
+          "code": "PROJ55",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_56",
+          "name": "Fixture Project 56",
+          "code": "PROJ56",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_57",
+          "name": "Fixture Project 57",
+          "code": "PROJ57",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_58",
+          "name": "Fixture Project 58",
+          "code": "PROJ58",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_59",
+          "name": "Fixture Project 59",
+          "code": "PROJ59",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_60",
+          "name": "Fixture Project 60",
+          "code": "PROJ60",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_61",
+          "name": "Fixture Project 61",
+          "code": "PROJ61",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_62",
+          "name": "Fixture Project 62",
+          "code": "PROJ62",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_63",
+          "name": "Fixture Project 63",
+          "code": "PROJ63",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_64",
+          "name": "Fixture Project 64",
+          "code": "PROJ64",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_65",
+          "name": "Fixture Project 65",
+          "code": "PROJ65",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_66",
+          "name": "Fixture Project 66",
+          "code": "PROJ66",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_67",
+          "name": "Fixture Project 67",
+          "code": "PROJ67",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_68",
+          "name": "Fixture Project 68",
+          "code": "PROJ68",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_69",
+          "name": "Fixture Project 69",
+          "code": "PROJ69",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_70",
+          "name": "Fixture Project 70",
+          "code": "PROJ70",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_71",
+          "name": "Fixture Project 71",
+          "code": "PROJ71",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_72",
+          "name": "Fixture Project 72",
+          "code": "PROJ72",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_73",
+          "name": "Fixture Project 73",
+          "code": "PROJ73",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_74",
+          "name": "Fixture Project 74",
+          "code": "PROJ74",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_75",
+          "name": "Fixture Project 75",
+          "code": "PROJ75",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_76",
+          "name": "Fixture Project 76",
+          "code": "PROJ76",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_77",
+          "name": "Fixture Project 77",
+          "code": "PROJ77",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_78",
+          "name": "Fixture Project 78",
+          "code": "PROJ78",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_79",
+          "name": "Fixture Project 79",
+          "code": "PROJ79",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_80",
+          "name": "Fixture Project 80",
+          "code": "PROJ80",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_81",
+          "name": "Fixture Project 81",
+          "code": "PROJ81",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_82",
+          "name": "Fixture Project 82",
+          "code": "PROJ82",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_83",
+          "name": "Fixture Project 83",
+          "code": "PROJ83",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_84",
+          "name": "Fixture Project 84",
+          "code": "PROJ84",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_85",
+          "name": "Fixture Project 85",
+          "code": "PROJ85",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_86",
+          "name": "Fixture Project 86",
+          "code": "PROJ86",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_87",
+          "name": "Fixture Project 87",
+          "code": "PROJ87",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_88",
+          "name": "Fixture Project 88",
+          "code": "PROJ88",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_89",
+          "name": "Fixture Project 89",
+          "code": "PROJ89",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_90",
+          "name": "Fixture Project 90",
+          "code": "PROJ90",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_91",
+          "name": "Fixture Project 91",
+          "code": "PROJ91",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_92",
+          "name": "Fixture Project 92",
+          "code": "PROJ92",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_93",
+          "name": "Fixture Project 93",
+          "code": "PROJ93",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_94",
+          "name": "Fixture Project 94",
+          "code": "PROJ94",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_95",
+          "name": "Fixture Project 95",
+          "code": "PROJ95",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_96",
+          "name": "Fixture Project 96",
+          "code": "PROJ96",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_97",
+          "name": "Fixture Project 97",
+          "code": "PROJ97",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_98",
+          "name": "Fixture Project 98",
+          "code": "PROJ98",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_99",
+          "name": "Fixture Project 99",
+          "code": "PROJ99",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        },
+        {
+          "id": "proj_fixture_100",
+          "name": "Fixture Project 100",
+          "code": "PROJ100",
+          "clientId": "client_fixture_1",
+          "billingType": "FixedBid",
+          "status": "Active"
+        }
+      ]
+    }
+  }
+}

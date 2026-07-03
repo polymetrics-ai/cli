@@ -1,10 +1,566 @@
 {
-  "request": { "method": "GET", "path": "/materials", "query": { "page": "1", "limit": "50" } },
+  "request": {
+    "method": "GET",
+    "path": "/materials",
+    "query": {
+      "page": "1",
+      "limit": "50"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "data": [
-        { "id": 1, "name": "Fixture Material 1", "uom": "kg", "category_name": "Raw", "default_supplier_id": 5, "is_sellable": false, "additional_info": "fixture", "created_at": "2026-01-01T00:00:00.000Z", "updated_at": "2026-01-02T00:00:00.000Z" }
+        {
+          "id": 1,
+          "name": "Fixture Material 1",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 1,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "name": "Fixture Material 2",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 2,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 3,
+          "name": "Fixture Material 3",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 3,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 4,
+          "name": "Fixture Material 4",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 4,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 5,
+          "name": "Fixture Material 5",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 5,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 6,
+          "name": "Fixture Material 6",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 6,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 7,
+          "name": "Fixture Material 7",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 7,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 8,
+          "name": "Fixture Material 8",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 8,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 9,
+          "name": "Fixture Material 9",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 9,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 10,
+          "name": "Fixture Material 10",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 10,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 11,
+          "name": "Fixture Material 11",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 11,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 12,
+          "name": "Fixture Material 12",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 12,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 13,
+          "name": "Fixture Material 13",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 13,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 14,
+          "name": "Fixture Material 14",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 14,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 15,
+          "name": "Fixture Material 15",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 15,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 16,
+          "name": "Fixture Material 16",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 16,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 17,
+          "name": "Fixture Material 17",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 17,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 18,
+          "name": "Fixture Material 18",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 18,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 19,
+          "name": "Fixture Material 19",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 19,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 20,
+          "name": "Fixture Material 20",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 20,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 21,
+          "name": "Fixture Material 21",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 21,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 22,
+          "name": "Fixture Material 22",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 22,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 23,
+          "name": "Fixture Material 23",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 23,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 24,
+          "name": "Fixture Material 24",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 24,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 25,
+          "name": "Fixture Material 25",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 25,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 26,
+          "name": "Fixture Material 26",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 26,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 27,
+          "name": "Fixture Material 27",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 27,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 28,
+          "name": "Fixture Material 28",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 28,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 29,
+          "name": "Fixture Material 29",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 29,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 30,
+          "name": "Fixture Material 30",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 30,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 31,
+          "name": "Fixture Material 31",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 31,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 32,
+          "name": "Fixture Material 32",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 32,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 33,
+          "name": "Fixture Material 33",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 33,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 34,
+          "name": "Fixture Material 34",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 34,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 35,
+          "name": "Fixture Material 35",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 35,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 36,
+          "name": "Fixture Material 36",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 36,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 37,
+          "name": "Fixture Material 37",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 37,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 38,
+          "name": "Fixture Material 38",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 38,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 39,
+          "name": "Fixture Material 39",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 39,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 40,
+          "name": "Fixture Material 40",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 40,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 41,
+          "name": "Fixture Material 41",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 41,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 42,
+          "name": "Fixture Material 42",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 42,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 43,
+          "name": "Fixture Material 43",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 43,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 44,
+          "name": "Fixture Material 44",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 44,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 45,
+          "name": "Fixture Material 45",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 45,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 46,
+          "name": "Fixture Material 46",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 46,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 47,
+          "name": "Fixture Material 47",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 47,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 48,
+          "name": "Fixture Material 48",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 48,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 49,
+          "name": "Fixture Material 49",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 49,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 50,
+          "name": "Fixture Material 50",
+          "uom": "kg",
+          "category_name": "Fixtures",
+          "default_supplier_id": 50,
+          "is_sellable": false,
+          "additional_info": "fixture",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        }
       ]
     }
   }

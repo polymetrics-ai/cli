@@ -8,7 +8,9 @@
   "properties": {
     "id": { "type": ["string", "integer"] },
     "name": { "type": ["string", "null"] },
-    "status": { "type": ["string", "object", "null"] },
+    "sku": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
     "updated_at": { "type": ["string", "null"] }
   }
 }

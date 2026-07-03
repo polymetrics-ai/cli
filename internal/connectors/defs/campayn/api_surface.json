@@ -2,12 +2,12 @@
   "api": "Campayn REST API v1 (https://<sub_domain>.campayn.com/api/v1)",
   "docs": "https://github.com/nebojsac/Campayn-API",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 top-level legacy-parity read streams (lists, emails, reports) only; the list-scoped substreams (forms, contacts) require a per-list sub-resource fan-out read the Tier-1 declarative dialect cannot express (see docs.md Known limits) and are blocked pending a Tier-2 StreamHook in a follow-up wave",
+  "scope": "wave2 fan-out migration, completed: all 5 legacy streams (lists, emails, reports, forms, contacts) are now migrated; forms/contacts use the engine's fan_out dialect to reproduce legacy's per-list sub-resource fan-out read",
   "endpoints": [
     { "method": "GET", "path": "/lists.json", "covered_by": { "stream": "lists" } },
     { "method": "GET", "path": "/emails.json", "covered_by": { "stream": "emails" } },
     { "method": "GET", "path": "/reports/calendar.json", "covered_by": { "stream": "reports" } },
-    { "method": "GET", "path": "/lists/{id}/forms.json", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out over dynamically-listed lists; requires a Tier-2 StreamHook (list lists, then paginate per list, stamping list_id) the declarative dialect cannot express; blocked, see docs.md" } },
-    { "method": "GET", "path": "/lists/{id}/contacts.json", "excluded": { "category": "out_of_scope", "reason": "sub-resource fan-out over dynamically-listed lists; requires a Tier-2 StreamHook the declarative dialect cannot express; blocked, see docs.md" } }
+    { "method": "GET", "path": "/lists/{id}/forms.json", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/lists/{id}/contacts.json", "covered_by": { "stream": "contacts" } }
   ]
 }

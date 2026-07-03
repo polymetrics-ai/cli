@@ -1,7 +1,7 @@
 {
   "name": "finage",
   "display_name": "Finage",
-  "description": "Reads Finage US market data: most active stocks, top gainers and losers, sector performance, and delisted companies via the Finage REST API.",
+  "description": "Reads Finage US market data: most active stocks, top gainers and losers, sector performance, delisted companies, and per-symbol market news via the Finage REST API.",
   "integration_type": "api",
   "docs_url": "https://finage.co.uk/docs/api",
   "release_stage": "ga",

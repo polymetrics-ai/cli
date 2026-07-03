@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags",
+    "query": {
+      "page": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        {
+          "id": 1,
+          "name": "Fixture Tag 1",
+          "color": "#336699"
+        },
+        {
+          "id": 2,
+          "name": "Fixture Tag 2",
+          "color": "#993366"
+        }
+      ]
+    }
+  }
+}

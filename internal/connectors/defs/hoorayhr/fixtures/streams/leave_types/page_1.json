@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/leave-types"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Leave Type 1",
+        "icon": "beach",
+        "color": "#00aa00",
+        "budget": 25,
+        "default": false,
+        "unpaidLeave": false,
+        "leaveInDays": true,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      },
+      {
+        "id": 2,
+        "name": "Leave Type 2",
+        "icon": "medical",
+        "color": "#aa0000",
+        "budget": 10,
+        "default": false,
+        "unpaidLeave": false,
+        "leaveInDays": true,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

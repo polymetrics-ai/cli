@@ -1,0 +1,12 @@
+{
+  "api": "OneSignal REST API v1 (https://onesignal.com/api/v1)",
+  "docs": "https://documentation.onesignal.com/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "unblock (partial): only the account-level apps stream (user_auth_key auth) is expressible in a single-auth bundle; devices/notifications/outcomes remain quarantined for a per-stream-credential ENGINE_GAP (see docs.md Known limits)",
+  "endpoints": [
+    { "method": "GET", "path": "/apps", "covered_by": { "stream": "apps" } },
+    { "method": "GET", "path": "/players", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: requires app_api_key (fallback rest_api_key) auth in the SAME bundle as the apps stream's user_auth_key auth; the dialect's base.auth candidate list is bundle-wide (selectAuth evaluates the identical candidates for every stream), and StreamSpec has no auth/headers override field at all (engine/bundle.go), so two streams in one bundle cannot be pinned to two different, always-required credentials" } },
+    { "method": "GET", "path": "/notifications", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same per-stream-credential gap as /players (app_api_key/rest_api_key vs. apps' user_auth_key)" } },
+    { "method": "GET", "path": "/apps/{app_id}/outcomes", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same per-stream-credential gap as /players (app_api_key/rest_api_key vs. apps' user_auth_key)" } }
+  ]
+}

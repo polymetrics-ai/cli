@@ -15,6 +15,19 @@
         "shortable": false,
         "easy_to_borrow": false,
         "fractionable": true
+      },
+      {
+        "id": "asset_fixture_2",
+        "class": "us_equity",
+        "exchange": "NASDAQ",
+        "symbol": "FIX2",
+        "name": "Fixture Asset 2",
+        "status": "active",
+        "tradable": true,
+        "marginable": true,
+        "shortable": false,
+        "easy_to_borrow": false,
+        "fractionable": true
       }
     ]
   }

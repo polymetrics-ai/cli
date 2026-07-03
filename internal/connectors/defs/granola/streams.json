@@ -41,6 +41,29 @@
         "owner_email": "{{ record.owner.email }}"
       },
       "schema": "schemas/notes.json"
+    },
+    {
+      "name": "detailed_notes",
+      "path": "/notes/{{ fanout.id }}",
+      "query": {
+        "include": "transcript"
+      },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/notes",
+            "records_path": "notes",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "note_id" }
+      },
+      "computed_fields": {
+        "owner_name": "{{ record.owner.name }}",
+        "owner_email": "{{ record.owner.email }}"
+      },
+      "schema": "schemas/detailed_notes.json"
     }
   ]
 }

@@ -1,10 +1,12 @@
 # Overview
 
-Granola is a Tier-1 declarative-HTTP wave2 fan-out migration, **partial**: it reads Granola meeting
-notes list metadata through the Granola public API. This bundle migrates the `notes` stream of
-`internal/connectors/granola` (the hand-written connector); the legacy package stays registered and
-unchanged until wave6's registry flip. The legacy connector's second stream, `detailed_notes`, is
-**not** implemented in this bundle — see Known limits.
+Granola is a Tier-1 declarative-HTTP fan-out migration: it reads Granola meeting notes list
+metadata AND full per-note detail (summary, transcript, attendees, calendar event, folders) through
+the Granola public API. This bundle migrates both streams of `internal/connectors/granola` (the
+hand-written connector) — `notes` and `detailed_notes`; the legacy package stays registered and
+unchanged until wave6's registry flip. `detailed_notes`' sub-resource fan-out, previously blocked
+(`ENGINE_GAP`, no declarative fan-out mechanism), is now expressed via `streams.json`'s
+`fan_out.ids_from.request` dialect (S4 engine mini-wave item 2); see Streams notes.
 
 ## Auth setup
 
@@ -42,6 +44,42 @@ that silent divergence, this bundle narrows `start_date`'s accepted input to RFC
 bare-`YYYY-MM-DD` convenience is dropped (documented config-surface narrowing, matching the
 established pattern in other bundles' `start_date` fields, e.g. gitlab's).
 
+`detailed_notes` (`GET /notes/{id}`) fans out from the paginated `notes` list to a per-note detail
+fetch, assembling the richer record (`summary`, `transcript`, `attendees`, `calendar_event`,
+`folders`) from each individual response — legacy's `harvestDetailed`/`notesSeq`
+(`internal/connectors/granola/granola.go:172-257`). This bundle reproduces the shape with
+`stream.fan_out`: `ids_from.request` issues a preliminary, fully-paginated `GET /notes` listing
+(the SAME endpoint and pagination the `notes` stream itself reads — base's `cursor` pagination,
+since `detailed_notes` declares no stream-level override — extracting `id` off each record at
+`records_path: "notes"`); `into.path_var` makes the resolved note id referenceable in the stream's
+own `path` as `{{ fanout.id }}` (`/notes/{{ fanout.id }}`); the static query param
+`include=transcript` matches legacy's own detail-fetch query
+(`r.DoJSON(ctx, http.MethodGet, "notes/"+url.PathEscape(id), url.Values{"include":
+[]string{"transcript"}}, ...)`, `granola.go:184`). Pagination of the id-listing phase and the
+detail-fetch requests are independent, mirroring legacy's own per-note follow-up call.
+`owner_name`/`owner_email` are derived the same way as `notes`' identical computed_fields. No
+`stamp_field` is declared: unlike a stitched sub-resource (trello's boards→lists, google-tasks'
+tasklists→tasks), each `detailed_notes` record already carries its own real `id` from the detail
+response itself — there is no parent id to stamp onto it.
+
+**`detailed_notes` has no `incremental` block, unlike `notes`** (documented parity deviation,
+ACCEPTABLE per conventions.md §5's meta-rule; also see §8 rule 2's incremental truth table). Legacy
+applies `created_after` filtering only to the underlying LIST phase of `harvestDetailed` (the same
+`notesSeq` the `notes` stream itself walks) — the per-note detail GET carries no incremental filter
+of its own. The engine's `fan_out.ids_from.request` mechanism has no `query`/`incremental` field at
+all (`FanOutIDsRequest` is `path`/`records_path`/`id_field` only — see `bundle.go`); its preliminary
+id-listing request is not routed through `buildInitialQuery`, so there is no way to apply
+`created_after` to that phase declaratively. Meanwhile, `stream.Query`/`incremental` on
+`detailed_notes` itself would apply to the PER-NOTE DETAIL fetch instead (every per-id sub-sequence
+request runs through the stream's own `buildInitialQuery`) — sending `created_after` to
+`GET /notes/{id}` would be a genuinely wrong request shape, not what legacy does at all. Declaring
+`incremental` here was therefore rejected as an active-behavior-changing mistake, not merely
+omitted; `x-cursor-field: created_at` stays on the schema for downstream dedup/sort parity with
+legacy's published `CursorFields`, matching the §8 rule 2 "neither → no incremental block, keep
+`x-cursor-field` in schemas only" outcome for a mechanism the engine genuinely cannot reproduce
+faithfully. Every `detailed_notes` sync therefore re-lists and re-fetches every note on every run —
+see Known limits.
+
 ## Write actions & risks
 
 None. Granola is a read-only source in this connector (legacy `Capabilities.Write` is `false`); no
@@ -49,18 +87,19 @@ None. Granola is a read-only source in this connector (legacy `Capabilities.Writ
 
 ## Known limits
 
-- **`detailed_notes` is NOT implemented in this bundle** (blocked, not silently dropped). Legacy's
-  `harvestDetailed` fans out from the paginated `notes` list to a per-note `GET /notes/{id}` detail
-  fetch for every note, assembling the richer `detailed_notes` record (summary, transcript,
-  attendees, calendar_event, folders) from each individual detail response. This is a genuine
-  sub-resource-fan-out read — `conventions.md` §1 names this exact shape as a `StreamHook` (Tier 2)
-  trigger, not expressible in `streams.json`'s declarative dialect (there is no mechanism to issue a
-  second, per-record follow-up request keyed off a field from the first response). This wave's
-  mandate is Tier-1 JSON-only (no Go, no hooks); implementing `detailed_notes` correctly requires a
-  `hooks/granola/hooks.go` `StreamHook`, which is out of scope here and left for a follow-up hooks
-  wave. `api_surface.json` marks `GET /notes/{id}` `excluded: {category: out_of_scope}` accordingly.
-  This bundle's `notes` stream (list-view metadata only, no summary/transcript) is fully migrated
-  and at parity with legacy's own `notes` stream.
+- **`detailed_notes` has no incremental narrowing (documented parity deviation, ACCEPTABLE)**: as
+  explained in Streams notes, the engine's `fan_out.ids_from.request` id-listing phase has no
+  `query`/`incremental` field to carry `created_after` on, and applying `incremental` to the stream
+  itself would incorrectly send that filter to the per-note detail fetch instead of the listing
+  phase (not what legacy does). Every `detailed_notes` sync re-lists every note (via the same
+  `/notes` endpoint the `notes` stream reads, unfiltered) and re-fetches every note's detail on
+  every run, rather than narrowing to notes created since the last sync the way legacy's
+  `harvestDetailed` does. This never produces WRONG data (every note's current detail is always
+  re-emitted in full), only a strictly larger read volume per sync than legacy's incrementally
+  narrowed one — downstream dedup on `id`/`x-primary-key` still produces the correct final state.
+  Closing this fully would need either an engine extension to `fan_out.ids_from.request` (an
+  optional `query`/`incremental`-forwarding field for the listing phase specifically) or a
+  `StreamHook` (Tier 2); out of scope for this Tier-1 JSON-only pass.
 - `start_date`'s bare-`YYYY-MM-DD` convenience is dropped (see Streams notes above); only RFC3339 is
   accepted.
 - Full Granola API surface beyond `/notes` and `/notes/{id}` (if any) is out of scope for wave2.

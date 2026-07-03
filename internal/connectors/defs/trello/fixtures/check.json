@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/members/me",
+    "query": {
+      "fields": "id",
+      "token": "synthetic-conformance-secret"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "member_fixture_1", "username": "fixture_member" }
+  }
+}

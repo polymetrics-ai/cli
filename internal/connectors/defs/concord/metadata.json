@@ -1,0 +1,23 @@
+{
+  "name": "concord",
+  "display_name": "Concord",
+  "description": "Reads Concord agreements, user organizations, folders, reports, and tags through the Concord REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api.concordnow.com/api/rest/1/docs",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Concord API read of contract lifecycle management data (agreements, folders, reports, tags)",
+    "approval": "none; read-only source connector"
+  }
+}

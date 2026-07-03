@@ -1,0 +1,81 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Notion-Version": "2022-06-28"
+    },
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.token }}"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/users"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "notion access token is missing or invalid; re-run pm credentials add notion"
+      },
+      {
+        "status": 403,
+        "hint": "notion integration lacks access to this resource; share the database/page with the integration"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "notion rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "databases",
+      "path": "/search",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/databases.json",
+      "incremental": {
+        "cursor_field": "last_edited_time"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (POST /search body-carried start_cursor/filter pagination the declarative read path cannot express -- engine/read.go always issues a nil request body; see docs.md's Streams notes); hook-covered, proven live by internal/connectors/paritytest/notion (TestParityNotion_DatabasesSearchBodyCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
+      }
+    },
+    {
+      "name": "pages",
+      "path": "/search",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/pages.json",
+      "incremental": {
+        "cursor_field": "last_edited_time"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (POST /search body-carried start_cursor/filter pagination the declarative read path cannot express -- engine/read.go always issues a nil request body; see docs.md's Streams notes); hook-covered, proven live by internal/connectors/paritytest/notion (TestParityNotion_DatabasesSearchBodyCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
+      }
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/users.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Routed through the same StreamHook as databases/pages for a single consistent dispatch path across the bundle, even though GET /users' query-param start_cursor pagination is independently declarative-expressible (docs.md Known limits); hook-covered, proven live by internal/connectors/paritytest/notion (TestParityNotion_UsersQueryCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
+      }
+    }
+  ]
+}
