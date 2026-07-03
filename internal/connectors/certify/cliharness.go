@@ -5,16 +5,39 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/url"
 	"strings"
-
-	"polymetrics.ai/internal/cli"
 )
 
-// Harness drives the real CLI surface in-process (cli.Run) against an
-// ephemeral project root, per certification design §A "Execution model":
-// every stage is an in-process cli.Run([..., "--root", dir, "--json"], ...)
-// call whose exit code and envelope kind are asserted.
+// cliRunFunc matches internal/cli.Run's signature. certify cannot import
+// internal/cli directly: internal/cli/certify_cli.go wires `pm connectors
+// certify` back into this package, and Go forbids the resulting import
+// cycle (cli -> certify -> cli). Instead, cmd/pm/main.go — which already
+// imports both packages — calls SetCLIRunFunc(cli.Run) once at process
+// startup, and every in-process CLI invocation in this package (Harness.Run,
+// and transitively every certify stage) goes through the cliRun package
+// variable below. Tests that never call SetCLIRunFunc get a clear panic
+// naming the missing wiring rather than a nil-pointer dereference.
+type cliRunFunc func(args []string, stdout, stderr io.Writer) int
+
+var cliRun cliRunFunc
+
+// SetCLIRunFunc registers the real internal/cli.Run entrypoint (or a test
+// double) as this package's in-process CLI driver. Production callers
+// (cmd/pm/main.go) call this exactly once, before any certify.Runner /
+// certify.RunBatch / pm connectors certify invocation. Test packages that
+// exercise Harness/Runner directly (this package's own *_test.go files) rely
+// on TestMain having already called it once for the whole test binary.
+func SetCLIRunFunc(run func(args []string, stdout, stderr io.Writer) int) {
+	cliRun = run
+}
+
+// Harness drives the real CLI surface in-process (the cliRun function
+// registered via SetCLIRunFunc) against an ephemeral project root, per
+// certification design §A "Execution model": every stage is an in-process
+// cli.Run([..., "--root", dir, "--json"], ...) call whose exit code and
+// envelope kind are asserted.
 type Harness struct {
 	root    string
 	secrets []string
@@ -57,14 +80,20 @@ type CLIResult struct {
 }
 
 // Run injects --root (when the caller has not supplied one) so stages can
-// pass bare command args, executes cli.Run in-process, captures
-// stdout/stderr, parses the --json envelope when present, and computes a
-// secret-redacted argv string for report recording.
+// pass bare command args, executes the registered cliRun (see
+// SetCLIRunFunc) in-process, captures stdout/stderr, parses the --json
+// envelope when present, and computes a secret-redacted argv string for
+// report recording. Panics with a descriptive message if SetCLIRunFunc was
+// never called — this is a wiring bug, not a runtime condition callers
+// should handle.
 func (h *Harness) Run(args ...string) CLIResult {
+	if cliRun == nil {
+		panic("certify: cliRun is nil — call certify.SetCLIRunFunc(cli.Run) before driving the harness (see cmd/pm/main.go)")
+	}
 	full := h.withRoot(args)
 
 	var stdout, stderr bytes.Buffer
-	exitCode := cli.Run(full, &stdout, &stderr)
+	exitCode := cliRun(full, &stdout, &stderr)
 
 	res := CLIResult{
 		ExitCode:     exitCode,

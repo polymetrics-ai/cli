@@ -36,18 +36,44 @@ type SyncModeResult struct {
 	Reason         string `json:"reason,omitempty"`
 }
 
-// Capabilities mirrors the design §A "capabilities" object. Wave0 populates
-// check/catalog/read/sync_modes/resume/json_contract/secret_redaction only;
-// write_actions/flow/schedule/budget/leaks are later-phase fields and are
-// deliberately absent from this struct (DATA-MODEL.md §6).
+// ScheduleResult is Capabilities.Schedule (certification design §A report
+// artifact "schedule": {"result", "backend", "residue"}).
+type ScheduleResult struct {
+	Result  string `json:"result"`
+	Backend string `json:"backend,omitempty"`
+	Residue bool   `json:"residue"`
+	Reason  string `json:"reason,omitempty"`
+}
+
+// WriteActionResult is one entry of Capabilities.WriteActions (design §A
+// report artifact example: "create_issue": {"result", "cleanup", "verify",
+// "tag"}).
+type WriteActionResult struct {
+	Result  string `json:"result"`
+	Cleanup string `json:"cleanup,omitempty"`
+	Verify  string `json:"verify,omitempty"`
+	Tag     string `json:"tag,omitempty"`
+	Reason  string `json:"reason,omitempty"`
+}
+
+// Capabilities mirrors the design §A "capabilities" object. Flow/Schedule/
+// WriteActions are pointers/nil-able maps so a report produced before those
+// stages run (or that skips them) omits the keys entirely rather than
+// serializing a zero-value placeholder block, matching
+// TestReportMarshalJSONShape's absence assertion. Budget remains a
+// later-phase field, deliberately absent from this struct (DATA-MODEL.md
+// §6).
 type Capabilities struct {
-	Check           CapabilityResult          `json:"check"`
-	Catalog         CapabilityResult          `json:"catalog"`
-	Read            CapabilityResult          `json:"read"`
-	SyncModes       map[string]SyncModeResult `json:"sync_modes"`
-	Resume          CapabilityResult          `json:"resume"`
-	JSONContract    CapabilityResult          `json:"json_contract"`
-	SecretRedaction CapabilityResult          `json:"secret_redaction"`
+	Check           CapabilityResult             `json:"check"`
+	Catalog         CapabilityResult             `json:"catalog"`
+	Read            CapabilityResult             `json:"read"`
+	SyncModes       map[string]SyncModeResult    `json:"sync_modes"`
+	Resume          CapabilityResult             `json:"resume"`
+	JSONContract    CapabilityResult             `json:"json_contract"`
+	SecretRedaction CapabilityResult             `json:"secret_redaction"`
+	Flow            *CapabilityResult            `json:"flow,omitempty"`
+	Schedule        *ScheduleResult              `json:"schedule,omitempty"`
+	WriteActions    map[string]WriteActionResult `json:"write_actions,omitempty"`
 }
 
 // CLIStageInfo records the redacted invocation and outcome of one in-process
@@ -68,10 +94,33 @@ type StageResult struct {
 	CLI        CLIStageInfo `json:"cli"`
 }
 
+// Leak is one entry of Report.Leaks: a write-protocol tag that was
+// successfully created but never verified cleaned up (design §C "Create ok
+// + cleanup/verify fails -> leaked_resource: top-level leaks[]").
+type Leak struct {
+	Tag       string `json:"tag"`
+	Connector string `json:"connector"`
+	Action    string `json:"action,omitempty"`
+	Reason    string `json:"reason"`
+}
+
+// ExitCodeFor maps a completed Report to the certification design §A exit
+// code convention: 0 pass, 2 certification failures, 3 leaked resources
+// (dominates everything — checked first).
+func ExitCodeFor(rep Report) int {
+	if len(rep.Leaks) != 0 {
+		return 3
+	}
+	if !rep.Passed {
+		return 2
+	}
+	return 0
+}
+
 // Report is the CertificationReport artifact persisted at
 // .polymetrics/certifications/<connector>.json (certification design §A).
-// Wave0 populates the fields below; leaks/write_actions/flow/schedule/budget
-// remain empty/absent until later certify phases (DATA-MODEL.md §6).
+// Budget remains empty/absent until a later certify phase (DATA-MODEL.md
+// §6).
 type Report struct {
 	Kind          string    `json:"kind"`
 	SchemaVersion int       `json:"schema_version"`
@@ -84,6 +133,7 @@ type Report struct {
 
 	Capabilities Capabilities  `json:"capabilities"`
 	Stages       []StageResult `json:"stages"`
+	Leaks        []Leak        `json:"leaks,omitempty"`
 }
 
 // certificationsDirName / historyDirName are the fixed on-disk layout under

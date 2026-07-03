@@ -187,11 +187,31 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 	}
 
 	// Every stage that actually invokes the CLI recorded an argv string and
-	// exit code (json_contract meta-stage assertion, stages[].cli shape);
-	// fixture_conformance is the sole documented exception (skip-only, no
-	// CLI call — see noDefsBundleReason).
+	// exit code (json_contract meta-stage assertion, stages[].cli shape).
+	// fixture_conformance is a documented skip-only exception (no CLI call
+	// -- see noDefsBundleReason); flow_roundtrip/schedule_roundtrip
+	// (stages_glue.go) are aggregate meta-stages that summarize their own
+	// named sub-stages (flow_plan/flow_preview/flow_run/flow_status,
+	// schedule_create/schedule_list/schedule_install/schedule_remove) rather
+	// than issuing a CLI call of their own -- each of those sub-stages DOES
+	// carry its own CLI.ArgvRedacted, checked implicitly since they are
+	// themselves entries in rep.Stages.
+	metaStagesWithoutDirectCLICall := map[string]bool{
+		"fixture_conformance": true,
+		"flow_roundtrip":      true,
+		"schedule_roundtrip":  true,
+		// write stages 12-17 (stages_write.go) are skipped entirely in
+		// this test (Options.Write is false) — each records a documented
+		// skip with no CLI call, exactly like fixture_conformance above.
+		"write_plan_preview":   true,
+		"write_create":         true,
+		"write_verify":         true,
+		"write_cleanup":        true,
+		"cleanup_verify":       true,
+		"approval_idempotency": true,
+	}
 	for _, stage := range rep.Stages {
-		if stage.Name == "fixture_conformance" {
+		if metaStagesWithoutDirectCLICall[stage.Name] {
 			continue
 		}
 		if stage.CLI.ArgvRedacted == "" {

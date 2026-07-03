@@ -80,6 +80,18 @@ func LastWorkdir(r *Runner) string {
 	return r.lastWorkdir
 }
 
+// SabotageCleanupVerifyEntityStillPresent forces r's next Run call's
+// cleanup_verify stage (stage 16) to observe the tagged entity as still
+// present after cleanup, regardless of what cleanup actually did, for
+// self-test purposes only (see TestCleanupVerifyFailureRecordsLeak). It is
+// exported for use by certify_test but is not part of the certify.Runner's
+// real operating mode: it proves the design §A stage 16 failure semantics
+// ("entity gone -> failure -> leaked_resource on failure") fire correctly
+// even when the cleanup CLI call itself reported success.
+func SabotageCleanupVerifyEntityStillPresent(r *Runner) {
+	r.cleanupVerifySabotage = true
+}
+
 // capturedOutput is one CLI invocation's raw (UNREDACTED) stdout/stderr,
 // tagged with the stage that issued it, retained for finalizeSecretRedaction
 // to scan (M2, SECURITY-REVIEW.md: the prior implementation scanned only the
@@ -94,12 +106,18 @@ type capturedOutput struct {
 // runContext threads the harness, options, secret values, and per-run
 // bookkeeping through the stage functions below.
 type runContext struct {
-	ctx                context.Context
-	harness            *Harness
-	opts               Options
-	sabotage           *sabotage
-	stdoutLeakSabotage *stdoutLeakSabotage
-	root               string
+	ctx                   context.Context
+	harness               *Harness
+	opts                  Options
+	sabotage              *sabotage
+	stdoutLeakSabotage    *stdoutLeakSabotage
+	cleanupVerifySabotage bool
+	root                  string
+
+	// write carries stages 12-17's bookkeeping (plan id, approval token,
+	// tag, ledger handle) across stage boundaries; nil whenever
+	// write_plan_preview recorded a skip (Options.Write is false).
+	write *writeContext
 
 	// currentStage names the stage function presently executing, so run()
 	// can tag each captured CLI invocation with its owning stage without
@@ -177,12 +195,13 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	}
 
 	rc := &runContext{
-		ctx:                ctx,
-		harness:            NewHarness(root, WithSecrets(secretValues...)),
-		opts:               r.opts,
-		sabotage:           r.sabotage,
-		stdoutLeakSabotage: r.stdoutLeakSabotage,
-		root:               root,
+		ctx:                   ctx,
+		harness:               NewHarness(root, WithSecrets(secretValues...)),
+		opts:                  r.opts,
+		sabotage:              r.sabotage,
+		stdoutLeakSabotage:    r.stdoutLeakSabotage,
+		cleanupVerifySabotage: r.cleanupVerifySabotage,
+		root:                  root,
 	}
 
 	rep := Report{
@@ -209,6 +228,14 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 		stageResume,
 		stageIncrementalAppendDeduped,
 		stageQueryContract,
+		stageWritePlanPreview,
+		stageWriteCreate,
+		stageWriteVerify,
+		stageWriteCleanup,
+		stageCleanupVerify,
+		stageApprovalIdempotency,
+		stageFlowRoundtrip,
+		stageScheduleRoundtrip,
 	}
 
 	for _, stage := range stages {
@@ -995,6 +1022,14 @@ func allStagesPassed(stages []StageResult) bool {
 	for _, s := range stages {
 		if s.Name == "fixture_conformance" {
 			// A documented skip never fails the overall report.
+			continue
+		}
+		if !s.Passed && strings.HasPrefix(s.Error, "skipped: ") {
+			// A documented skip (e.g. Options.Write disabled, or no
+			// available write pairing) never fails the overall report,
+			// exactly like fixture_conformance above (design §A "no
+			// credential -> uncertified, never failed" applies analogously
+			// to an unavailable safe write path).
 			continue
 		}
 		if !s.Passed {

@@ -27,6 +27,7 @@ this index tracks status. Coordinator merges after each dispatch wave.
 | T/B-17 golden: postgres Tier-3 native + bundle + parity | red-confirmed → green | traces/waveF-b17-ledger.md | 20 (39 incl. subtests) |
 | T/B-15 golden: stripe bundle + parity | red-confirmed → green | traces/waveF-b15-ledger.md | 8 (12 incl. subtests) |
 | T/B-16 golden: searxng bundle + parity; registrygen skip-map | red-confirmed → green | traces/waveF-b16-ledger.md | 6 (registrygen regression test pre-existing green) |
+| glue: flow_roundtrip + schedule_roundtrip stages (18-19) + secret_redaction/json_contract meta-scan (20-21) | red-confirmed → green | traces/waveH-glue-ledger.md | 5 (9 incl. re-verified wave0 self-tests) |
 
 Wave A gate (coordinator, 2026-07-02): `go build ./...` ok · engine+certify tests ok · gofmt clean ·
 path guard clean (no tracked-file modifications outside plan). Noted deviations (agent-documented):
