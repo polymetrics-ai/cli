@@ -1,0 +1,27 @@
+{
+  "name": "google-forms",
+  "display_name": "Google Forms",
+  "description": "Reads Google Forms metadata, form items, and submitted responses through the Google Forms REST API using an OAuth 2.0 refresh-token grant.",
+  "integration_type": "api",
+  "docs_url": "https://developers.google.com/forms/api/reference/rest",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 5000
+  },
+  "risk": {
+    "read": "external Google Forms API read of form metadata, form items, and submitted responses",
+    "approval": "none; read-only source connector"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback -- identical shape to gmail's bundle); hook-covered, proven by internal/connectors/hooks/google-forms/hooks_test.go (the AuthHook's real OAuth2 refresh-grant path) -- conformance's synthetic config has no real https token_url and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

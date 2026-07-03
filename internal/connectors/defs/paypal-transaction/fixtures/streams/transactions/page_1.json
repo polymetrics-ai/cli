@@ -1,0 +1,1827 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/reporting/transactions",
+    "query": {
+      "start_date": "synthetic-conformance-value",
+      "end_date": "synthetic-conformance-value",
+      "fields": "all",
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "transaction_details": [
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-1",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.01"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-2",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.02"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-3",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.03"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-4",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.04"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-5",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.05"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-6",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.06"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-7",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.07"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-8",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.08"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-9",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.09"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-10",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.10"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-11",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.11"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-12",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.12"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-13",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.13"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-14",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.14"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-15",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.15"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-16",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.16"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-17",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.17"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-18",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.18"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-19",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.19"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-20",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.20"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-21",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.21"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-22",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.22"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-23",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.23"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-24",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.24"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-25",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.25"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-26",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.26"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-27",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.27"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-28",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.28"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-29",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.29"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-30",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.30"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-31",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.31"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-32",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.32"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-33",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.33"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-34",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.34"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-35",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.35"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-36",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.36"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-37",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.37"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-38",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.38"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-39",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.39"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-40",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.40"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-41",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.41"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-42",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.42"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-43",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.43"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-44",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.44"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-45",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.45"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-46",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.46"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-47",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.47"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-48",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.48"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-49",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.49"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-50",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.50"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-51",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.51"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-52",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.52"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-53",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.53"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-54",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.54"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-55",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.55"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-56",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.56"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-57",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.57"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-58",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.58"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-59",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.59"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-60",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.60"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-61",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.61"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-62",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.62"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-63",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.63"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-64",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.64"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-65",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.65"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-66",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.66"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-67",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.67"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-68",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.68"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-69",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.69"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-70",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.70"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-71",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.71"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-72",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.72"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-73",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.73"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-74",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.74"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-75",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.75"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-76",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.76"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-77",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.77"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-78",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.78"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-79",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.79"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-80",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.80"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-81",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.81"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-82",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.82"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-83",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.83"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-84",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.84"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-85",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.85"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-86",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.86"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-87",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.87"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-88",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.88"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-89",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.89"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-90",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.90"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-91",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.91"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-92",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.92"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-93",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.93"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-94",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.94"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-95",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.95"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-96",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.96"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-97",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.97"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-98",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.98"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-99",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.99"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        },
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-100",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.100"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        }
+      ],
+      "account_number": "fixture-account",
+      "start_date": "2026-01-01T00:00:00Z",
+      "end_date": "2026-01-02T00:00:00Z",
+      "last_refreshed_datetime": "2026-01-02T00:00:00Z",
+      "page": 1,
+      "total_items": 101,
+      "total_pages": 2
+    }
+  }
+}

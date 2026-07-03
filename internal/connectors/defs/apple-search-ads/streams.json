@@ -1,0 +1,132 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-AP-Context": "orgId={{ config.org_id }}"
+    },
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.token_refresh_endpoint }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "scopes": "searchadsorg"
+      }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 1000
+    },
+    "check": {
+      "method": "GET",
+      "path": "campaigns",
+      "query": {
+        "offset": "0",
+        "limit": "1"
+      }
+    },
+    "error_map": [
+      { "status": 401, "hint": "apple-search-ads client_id/client_secret is missing or invalid; re-run pm credentials add apple-search-ads" },
+      { "status": 403, "hint": "apple-search-ads credentials lack access for this org_id/resource" },
+      { "status": 429, "class": "rate_limited", "hint": "Apple Search Ads API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "campaigns",
+      "method": "GET",
+      "path": "campaigns",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "org_id": "{{ record.orgId }}",
+        "name": "{{ record.name }}",
+        "status": "{{ record.status }}",
+        "serving_status": "{{ record.servingStatus }}",
+        "display_status": "{{ record.displayStatus }}",
+        "ad_channel_type": "{{ record.adChannelType }}",
+        "supply_sources": "{{ record.supplySources }}",
+        "billing_event": "{{ record.billingEvent }}",
+        "daily_budget_amount": "{{ record.dailyBudgetAmount }}",
+        "budget_amount": "{{ record.budgetAmount }}",
+        "countries_or_regions": "{{ record.countriesOrRegions }}",
+        "creation_time": "{{ record.creationTime }}",
+        "modification_time": "{{ record.modificationTime }}",
+        "deleted": "{{ record.deleted }}"
+      },
+      "incremental": { "cursor_field": "modification_time", "param_format": "rfc3339" },
+      "schema": "schemas/campaigns.json",
+      "conformance": { "skip_dynamic": true, "reason": "hook-covered for consistency with adgroups/keywords/ads (all 4 streams dispatch through the same StreamHook); proven live by internal/connectors/hooks/apple-search-ads/hooks_test.go" }
+    },
+    {
+      "name": "adgroups",
+      "method": "POST",
+      "path": "adgroups/find",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "campaign_id": "{{ record.campaignId }}",
+        "name": "{{ record.name }}",
+        "status": "{{ record.status }}",
+        "serving_status": "{{ record.servingStatus }}",
+        "display_status": "{{ record.displayStatus }}",
+        "pricing_model": "{{ record.pricingModel }}",
+        "default_bid_amount": "{{ record.defaultBidAmount }}",
+        "cpa_goal": "{{ record.cpaGoal }}",
+        "start_time": "{{ record.startTime }}",
+        "end_time": "{{ record.endTime }}",
+        "creation_time": "{{ record.creationTime }}",
+        "modification_time": "{{ record.modificationTime }}",
+        "deleted": "{{ record.deleted }}"
+      },
+      "incremental": { "cursor_field": "modification_time", "param_format": "rfc3339" },
+      "schema": "schemas/adgroups.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (POST .../find with pagination carried in the JSON request body; StreamSpec.Body is declared but never read back out by the declarative read path); hook-covered, proven live by internal/connectors/hooks/apple-search-ads/hooks_test.go" }
+    },
+    {
+      "name": "keywords",
+      "method": "POST",
+      "path": "targetingkeywords/find",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "ad_group_id": "{{ record.adGroupId }}",
+        "campaign_id": "{{ record.campaignId }}",
+        "text": "{{ record.text }}",
+        "match_type": "{{ record.matchType }}",
+        "status": "{{ record.status }}",
+        "bid_amount": "{{ record.bidAmount }}",
+        "modification_time": "{{ record.modificationTime }}",
+        "deleted": "{{ record.deleted }}"
+      },
+      "incremental": { "cursor_field": "modification_time", "param_format": "rfc3339" },
+      "schema": "schemas/keywords.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (POST .../find with pagination carried in the JSON request body; StreamSpec.Body is declared but never read back out by the declarative read path); hook-covered, proven live by internal/connectors/hooks/apple-search-ads/hooks_test.go" }
+    },
+    {
+      "name": "ads",
+      "method": "POST",
+      "path": "ads/find",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "ad_group_id": "{{ record.adGroupId }}",
+        "campaign_id": "{{ record.campaignId }}",
+        "name": "{{ record.name }}",
+        "creative_id": "{{ record.creativeId }}",
+        "creative_type": "{{ record.creativeType }}",
+        "status": "{{ record.status }}",
+        "serving_status": "{{ record.servingStatus }}",
+        "creation_time": "{{ record.creationTime }}",
+        "modification_time": "{{ record.modificationTime }}",
+        "deleted": "{{ record.deleted }}"
+      },
+      "incremental": { "cursor_field": "modification_time", "param_format": "rfc3339" },
+      "schema": "schemas/ads.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (POST .../find with pagination carried in the JSON request body; StreamSpec.Body is declared but never read back out by the declarative read path); hook-covered, proven live by internal/connectors/hooks/apple-search-ads/hooks_test.go" }
+    }
+  ]
+}

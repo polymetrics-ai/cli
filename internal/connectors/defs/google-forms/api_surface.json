@@ -1,0 +1,17 @@
+{
+  "api": "Google Forms API v1 (https://forms.googleapis.com/v1)",
+  "docs": "https://developers.google.com/forms/api/reference/rest",
+  "reviewed_at": "2026-07-03",
+  "scope": "Full legacy-parity migration: the 3 legacy read streams (forms, form_items, responses). Legacy is read-only (no reverse-ETL write path); the full Forms API surface (forms.create, batchUpdate, watches) is out of scope until Pass B capability expansion.",
+  "endpoints": [
+    { "method": "GET", "path": "/forms/{formId}", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/forms/{formId}", "covered_by": { "stream": "form_items" } },
+    { "method": "GET", "path": "/forms/{formId}/responses", "covered_by": { "stream": "responses" } },
+    { "method": "GET", "path": "/forms/{formId}/responses/{responseId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; the responses stream already lists every response" } },
+    { "method": "POST", "path": "/forms", "excluded": { "category": "requires_elevated_scope", "reason": "form creation requires a broader write scope than a read-only source connector needs" } },
+    { "method": "POST", "path": "/forms/{formId}:batchUpdate", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/forms/{formId}/watches", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/forms/{formId}/watches", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/forms/{formId}/watches/{watchId}", "excluded": { "category": "destructive_admin", "reason": "watch deletion is a destructive admin action, not a syncable read/write record" } }
+  ]
+}

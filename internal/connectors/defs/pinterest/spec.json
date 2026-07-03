@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pinterest Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "refresh_token"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pinterest OAuth 2.0 client ID for the refresh-token grant. Sent only as HTTP Basic auth on the token request; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pinterest OAuth 2.0 client secret. Sent only as HTTP Basic auth on the token request; never logged."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived Pinterest OAuth 2.0 refresh token. Exchanged for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is out of scope for this connector (credentials layer already owns it)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.pinterest.com/v5",
+      "description": "Pinterest API v5 base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.pinterest.com/v5/oauth/token",
+      "description": "Pinterest OAuth 2.0 token endpoint override. MUST be http(s) with a host; the hook fails closed on an invalid value to prevent exfiltrating the refresh token/client secret to an attacker-chosen endpoint."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Pinterest ad account ID. Required only for the account-scoped streams (campaigns, ad_groups, audiences), whose resource path substitutes it; not required for ad_accounts/boards."
+    },
+    "page_size": {
+      "type": "string",
+      "description": "Records per page (1-250). Omitted entirely when unset, letting the Pinterest API apply its own default (matches legacy's page_size=0-means-unset behavior)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

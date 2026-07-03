@@ -1,0 +1,41 @@
+{
+  "request": { "method": "GET", "path": "/organizations", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request_status": "SUCCESS",
+      "organizations": [
+        {
+          "sub_request_status": "SUCCESS",
+          "organization": {
+            "id": "org_fixture_1",
+            "name": "Fixture Organization 1",
+            "type": "ENTERPRISE",
+            "country": "US",
+            "address_line_1": "1 Fixture Way",
+            "locality": "Santa Monica",
+            "administrative_district_level_1": "CA",
+            "postal_code": "90401",
+            "created_at": "2025-12-31T00:00:00.000Z",
+            "updated_at": "2026-01-01T00:00:00.000Z"
+          }
+        },
+        {
+          "sub_request_status": "SUCCESS",
+          "organization": {
+            "id": "org_fixture_2",
+            "name": "Fixture Organization 2",
+            "type": "ENTERPRISE",
+            "country": "US",
+            "address_line_1": "2 Fixture Way",
+            "locality": "Santa Monica",
+            "administrative_district_level_1": "CA",
+            "postal_code": "90401",
+            "created_at": "2025-12-31T00:00:00.000Z",
+            "updated_at": "2026-01-01T00:00:00.000Z"
+          }
+        }
+      ]
+    }
+  }
+}

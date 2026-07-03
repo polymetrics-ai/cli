@@ -364,5 +364,23 @@
   "blocker_type": "AUTH_COMPLEX",
   "reason": "OAuth2 refresh_token grant pre-request (hook needed, gmail pattern)",
   "attempts": 2
+ },
+ {
+  "name": "freightview",
+  "blocker_type": "ENGINE_GAP",
+  "reason": "wave3 residual re-block (see ws4ewqk4q output for fresh typed reason)",
+  "attempts": 2
+ },
+ {
+  "name": "google-calendar",
+  "blocker_type": "ENGINE_GAP",
+  "reason": "wave3 residual re-block (see ws4ewqk4q output for fresh typed reason)",
+  "attempts": 2
+ },
+ {
+  "name": "google-classroom",
+  "blocker_type": "ENGINE_GAP",
+  "reason": "wave3 residual re-block (see ws4ewqk4q output for fresh typed reason)",
+  "attempts": 2
  }
 ]

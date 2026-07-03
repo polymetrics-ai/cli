@@ -1,0 +1,20 @@
+{
+  "api": "Google Blogger API v3 (https://www.googleapis.com/blogger/v3)",
+  "docs": "https://developers.google.com/blogger/docs/3.0/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "Migration of the 4 legacy-parity read streams only (blogs, posts, pages, comments), matching internal/connectors/blogger's exact routing table. Blogger's full documented API surface (page/post insert-update-delete, blog user info, page views, comment moderation) is out of scope until Pass B capability expansion; legacy itself is also read-only (Write always returns ErrUnsupportedOperation).",
+  "endpoints": [
+    { "method": "GET", "path": "/blogs/{blogId}", "covered_by": { "stream": "blogs" } },
+    { "method": "GET", "path": "/blogs/{blogId}/posts", "covered_by": { "stream": "posts" } },
+    { "method": "GET", "path": "/blogs/{blogId}/pages", "covered_by": { "stream": "pages" } },
+    { "method": "GET", "path": "/blogs/{blogId}/comments", "covered_by": { "stream": "comments" } },
+    { "method": "GET", "path": "/blogs/byurl", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not read by legacy" } },
+    { "method": "GET", "path": "/blogs/{blogId}/posts/{postId}", "excluded": { "category": "duplicate_of", "reason": "single-post fetch is a narrower case of the posts stream already covered" } },
+    { "method": "POST", "path": "/blogs/{blogId}/posts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; blogger is read-only in this migration (legacy Write returns ErrUnsupportedOperation)" } },
+    { "method": "PUT", "path": "/blogs/{blogId}/posts/{postId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; blogger is read-only in this migration" } },
+    { "method": "DELETE", "path": "/blogs/{blogId}/posts/{postId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; blogger is read-only in this migration" } },
+    { "method": "GET", "path": "/blogs/{blogId}/pageviews", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not read by legacy" } },
+    { "method": "GET", "path": "/blogs/{blogId}/comments/{commentId}", "excluded": { "category": "duplicate_of", "reason": "single-comment fetch is a narrower case of the comments stream already covered" } },
+    { "method": "POST", "path": "/blogs/{blogId}/comments/{commentId}?moderate=true", "excluded": { "category": "requires_elevated_scope", "reason": "comment moderation requires elevated blog-admin scope; out of scope, not read by legacy" } }
+  ]
+}

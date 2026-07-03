@@ -1,0 +1,30 @@
+{
+ "lxl": [
+  "amazon-ads",
+  "apple-search-ads",
+  "bing-ads",
+  "blogger",
+  "bugsnag",
+  "ebay-fulfillment",
+  "eventbrite",
+  "freightview",
+  "google-calendar",
+  "google-classroom",
+  "google-forms",
+  "google-search-console",
+  "linkedin-pages",
+  "paypal-transaction",
+  "pinterest",
+  "salesloft",
+  "snapchat-marketing",
+  "uptick"
+ ],
+ "gap": [
+  "alpha-vantage",
+  "apify-dataset",
+  "yahoo-finance-price"
+ ],
+ "hooks": [
+  "akeneo"
+ ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "follower_statistics",
+  "type": "object",
+  "x-primary-key": ["org_id"],
+  "required": ["org_id"],
+  "properties": {
+    "org_id": { "type": "string" },
+    "organizationalEntity": { "type": ["string", "null"] },
+    "followerCountsByAssociationType": { "type": ["array", "null"] },
+    "followerCountsBySeniority": { "type": ["array", "null"] },
+    "followerCountsByIndustry": { "type": ["array", "null"] },
+    "followerCountsByFunction": { "type": ["array", "null"] },
+    "followerCountsByStaffCountRange": { "type": ["array", "null"] },
+    "followerCountsByRegion": { "type": ["array", "null"] },
+    "followerCountsByCountry": { "type": ["array", "null"] },
+    "followerGains": { "type": ["object", "null"] }
+  }
+}

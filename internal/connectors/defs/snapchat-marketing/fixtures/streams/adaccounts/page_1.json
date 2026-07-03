@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/organizations/synthetic-conformance-value/adaccounts", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request_status": "SUCCESS",
+      "adaccounts": [
+        {
+          "sub_request_status": "SUCCESS",
+          "adaccount": {
+            "id": "adacc_fixture_1",
+            "name": "Fixture Ad Account 1",
+            "type": "PARTNER",
+            "status": "ACTIVE",
+            "organization_id": "org_fixture_1",
+            "currency": "USD",
+            "timezone": "America/Los_Angeles",
+            "advertiser": "Fixture Advertiser",
+            "created_at": "2025-12-31T00:00:00.000Z",
+            "updated_at": "2026-01-01T00:00:00.000Z"
+          }
+        }
+      ]
+    }
+  }
+}

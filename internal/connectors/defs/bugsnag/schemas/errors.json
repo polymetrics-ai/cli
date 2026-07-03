@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "errors",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_seen",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "project_id": { "type": ["string", "null"] },
+    "error_class": { "type": ["string", "null"] },
+    "message": { "type": ["string", "null"] },
+    "context": { "type": ["string", "null"] },
+    "severity": { "type": ["string", "null"] },
+    "original_severity": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "first_seen": { "type": ["string", "null"], "format": "date-time" },
+    "last_seen": { "type": ["string", "null"], "format": "date-time" },
+    "events_count": { "type": ["integer", "null"] },
+    "comment_count": { "type": ["integer", "null"] },
+    "url": { "type": ["string", "null"] }
+  }
+}

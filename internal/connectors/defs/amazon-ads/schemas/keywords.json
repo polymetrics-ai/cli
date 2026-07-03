@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "keywords",
+  "type": "object",
+  "x-primary-key": ["keyword_id"],
+  "required": ["keyword_id"],
+  "properties": {
+    "keyword_id": { "type": "integer" },
+    "campaign_id": { "type": ["integer", "null"] },
+    "ad_group_id": { "type": ["integer", "null"] },
+    "keyword_text": { "type": ["string", "null"] },
+    "match_type": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "bid": { "type": ["number", "null"] }
+  }
+}

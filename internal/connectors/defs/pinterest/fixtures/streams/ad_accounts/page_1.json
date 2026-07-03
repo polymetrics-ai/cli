@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/ad_accounts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "act_fixture_1",
+          "name": "Fixture Ad Account One",
+          "owner": { "username": "fixture_user" },
+          "country": "US",
+          "currency": "USD"
+        },
+        {
+          "id": "act_fixture_2",
+          "name": "Fixture Ad Account Two",
+          "owner": { "username": "fixture_user" },
+          "country": "US",
+          "currency": "USD"
+        }
+      ],
+      "bookmark": "fixture-bookmark-page2"
+    }
+  }
+}

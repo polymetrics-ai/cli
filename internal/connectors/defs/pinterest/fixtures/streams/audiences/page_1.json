@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/ad_accounts/synthetic-conformance-value/audiences" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "audience_fixture_1",
+          "ad_account_id": "synthetic-conformance-value",
+          "name": "Fixture Audience One",
+          "audience_type": "CUSTOMER_LIST",
+          "size": 100,
+          "status": "READY",
+          "created_timestamp": 1767225601
+        },
+        {
+          "id": "audience_fixture_2",
+          "ad_account_id": "synthetic-conformance-value",
+          "name": "Fixture Audience Two",
+          "audience_type": "CUSTOMER_LIST",
+          "size": 200,
+          "status": "READY",
+          "created_timestamp": 1767225602
+        }
+      ],
+      "bookmark": null
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizationalEntityShareStatistics",
+    "query": {
+      "q": "organizationalEntity",
+      "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+      "count": "100",
+      "start": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "elements": [
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "totalShareStatistics": {
+            "impressionCount": 1000,
+            "clickCount": 50,
+            "likeCount": 20,
+            "commentCount": 5,
+            "shareCount": 3,
+            "engagement": 0.078,
+            "uniqueImpressionsCount": 800
+          }
+        }
+      ]
+    }
+  }
+}

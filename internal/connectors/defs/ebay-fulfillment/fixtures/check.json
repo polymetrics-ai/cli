@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sell/fulfillment/v1/order",
+    "query": { "limit": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "orders": [],
+      "total": 0,
+      "limit": 1,
+      "offset": 0
+    }
+  }
+}

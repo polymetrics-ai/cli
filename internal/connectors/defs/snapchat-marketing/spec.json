@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Snapchat Marketing Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "refresh_token"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Snapchat Marketing API OAuth 2.0 client ID for the refresh-token grant. Used only in the token-request form; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Snapchat Marketing API OAuth 2.0 client secret. Used only in the token-request form; never logged."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived Snapchat Marketing API OAuth 2.0 refresh token. Exchanged for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is out of scope for this connector (credentials layer already owns it)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://adsapi.snapchat.com/v1",
+      "description": "Snapchat Ads API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://accounts.snapchat.com/login/oauth2/access_token",
+      "description": "Snapchat OAuth 2.0 token endpoint override. MUST be http(s) with a host; the hook fails closed on an invalid value to prevent exfiltrating the refresh token/client secret to an attacker-chosen endpoint."
+    },
+    "organization_ids": {
+      "type": "string",
+      "description": "Comma-separated list of Snapchat organization ids to read ad accounts for (required for the adaccounts stream, e.g. \"org1,org2\")."
+    },
+    "ad_account_ids": {
+      "type": "string",
+      "description": "Comma-separated list of Snapchat ad account ids to read campaigns/adsquads/ads for (required for the campaigns, adsquads, and ads streams, e.g. \"ACC1,ACC2\")."
+    }
+  }
+}

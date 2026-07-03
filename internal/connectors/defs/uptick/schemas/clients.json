@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "created": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] },
+    "ref": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "contact_name": { "type": ["string", "null"] },
+    "contact_email": { "type": ["string", "null"] },
+    "contact_phone_bh": { "type": ["string", "null"] },
+    "address": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Uptick Connection Specification",
+  "type": "object",
+  "required": ["base_url", "username", "client_id", "client_secret", "password"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Uptick tenant base URL (per-tenant instance, e.g. https://demo-fire.onuptick.com). Required; must be an absolute http(s) URL with a host to bound SSRF risk."
+    },
+    "username": {
+      "type": "string",
+      "description": "Uptick OAuth 2.0 Resource Owner Password Credentials grant username (e.g. an operator email). Not a secret; sent alongside the password in the token-request form."
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Uptick OAuth 2.0 client ID for the password grant. Used only in the token-request form; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Uptick OAuth 2.0 client secret. Used only in the token-request form; never logged."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Uptick account password for the OAuth 2.0 password grant. Used only in the token-request form; never logged."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-200), sent as the page_size query param."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "RFC3339 lower bound for the updatedsince query param on a fresh (no-cursor) sync. Optional; omitted entirely when unset (full sync)."
+    }
+  }
+}

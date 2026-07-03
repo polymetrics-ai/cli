@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/organizations/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1000,
+      "$URN": "urn:li:organization:1000",
+      "vanityName": "fixture-org",
+      "localizedName": "Fixture Organization",
+      "localizedWebsite": "https://fixture.example",
+      "primaryOrganizationType": "NONE",
+      "organizationType": "SELF_OWNED",
+      "versionTag": "1",
+      "staffCountRange": "SIZE_2_TO_10",
+      "name": { "localized": { "en_US": "Fixture Organization" } },
+      "locations": [],
+      "industries": ["urn:li:industry:4"]
+    }
+  }
+}

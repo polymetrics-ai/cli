@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/customer/disputes",
+    "query": { "page_size": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "dispute_id": "PP-D-fixture-1",
+          "reason": "MERCHANDISE_OR_SERVICE_NOT_RECEIVED",
+          "status": "RESOLVED",
+          "dispute_state": "RESOLVED",
+          "dispute_amount": { "currency_code": "USD", "value": "12.31" },
+          "create_time": "2026-01-01T00:00:00Z",
+          "update_time": "2026-01-01T00:05:00Z"
+        }
+      ],
+      "links": [
+        { "href": "https://api-m.paypal.com/v1/customer/disputes?page_size=50&start_time=2026-01-01T00:00:00Z&next_page_token=fixture-token-2", "rel": "next", "method": "GET" }
+      ]
+    }
+  }
+}

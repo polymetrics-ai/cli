@@ -1,0 +1,27 @@
+{
+  "name": "blogger",
+  "display_name": "Blogger",
+  "description": "Reads Blogger (Google Blogger API v3) blogs, posts, pages, and comments using an OAuth 2.0 refresh-token grant. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.google.com/blogger/docs/3.0/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Blogger API read of blog/post/page/comment metadata",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by internal/connectors/paritytest/blogger (the AuthHook's real OAuth2 refresh-grant path) -- conformance's synthetic config has no real token_url and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

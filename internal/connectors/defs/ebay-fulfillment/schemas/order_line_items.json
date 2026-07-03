@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "order_line_items",
+  "type": "object",
+  "x-primary-key": ["line_item_id"],
+  "x-cursor-field": "creation_date",
+  "required": ["line_item_id"],
+  "properties": {
+    "line_item_id": { "type": "string" },
+    "order_id": { "type": ["string", "null"] },
+    "legacy_item_id": { "type": ["string", "null"] },
+    "sku": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "quantity": { "type": ["integer", "null"] },
+    "line_item_fulfillment_status": { "type": ["string", "null"] },
+    "total_value": { "type": ["string", "null"] },
+    "total_currency": { "type": ["string", "null"] },
+    "creation_date": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": {
+      "updated_at[gte]": "2020-01-01T00:00:00Z",
+      "sort_by": "updated_at",
+      "sort_direction": "ASC"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 201,
+          "guid": "guid-1",
+          "name": "Fixture User One",
+          "first_name": "Fixture",
+          "last_name": "UserOne",
+          "email": "fixtureuser1@example.com",
+          "active": true,
+          "time_zone": "America/New_York",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 202,
+          "guid": "guid-2",
+          "name": "Fixture User Two",
+          "first_name": "Fixture",
+          "last_name": "UserTwo",
+          "email": "fixtureuser2@example.com",
+          "active": true,
+          "time_zone": "America/New_York",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:01Z"
+        }
+      ],
+      "metadata": { "paging": { "per_page": 2, "current_page": 1, "next_page": null, "total_pages": 1 } }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/api/rest/v1/families", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_links": { "self": { "href": "x" } },
+      "_embedded": {
+        "items": [
+          {
+            "code": "family_fixture_1",
+            "attribute_as_label": "name",
+            "attribute_as_image": null,
+            "attributes": ["name", "description"],
+            "labels": { "en_US": "Fixture Family 1" }
+          },
+          {
+            "code": "family_fixture_2",
+            "attribute_as_label": "name",
+            "attribute_as_image": "image",
+            "attributes": ["name", "description", "image"],
+            "labels": { "en_US": "Fixture Family 2" }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/v1/reporting/balances" },
+  "response": {
+    "status": 200,
+    "body": {
+      "balances": [
+        {
+          "currency": "USD",
+          "primary": true,
+          "total_balance": { "currency_code": "USD", "value": "100.01" },
+          "available_balance": { "currency_code": "USD", "value": "90.01" },
+          "withheld_balance": { "currency_code": "USD", "value": "10.01" }
+        },
+        {
+          "currency": "EUR",
+          "primary": false,
+          "total_balance": { "currency_code": "EUR", "value": "50.02" },
+          "available_balance": { "currency_code": "EUR", "value": "45.02" },
+          "withheld_balance": { "currency_code": "EUR", "value": "5.02" }
+        }
+      ],
+      "account_id": "fixture-account",
+      "as_of_time": "2026-01-01T00:00:00Z"
+    }
+  }
+}

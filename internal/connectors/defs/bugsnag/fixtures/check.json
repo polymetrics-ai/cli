@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/user/organizations",
+    "query": { "per_page": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

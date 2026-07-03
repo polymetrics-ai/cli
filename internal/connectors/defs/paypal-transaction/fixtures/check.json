@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/reporting/balances" },
+  "response": {
+    "status": 200,
+    "body": {
+      "balances": [
+        { "currency": "USD", "primary": true, "total_balance": { "currency_code": "USD", "value": "100.00" } }
+      ],
+      "account_id": "fixture-account"
+    }
+  }
+}

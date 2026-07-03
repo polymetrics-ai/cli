@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/sell/fulfillment/v1/payment_dispute", "query": { "limit": "2", "offset": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 3,
+      "limit": 2,
+      "offset": 2,
+      "paymentDisputeSummaries": [
+        {
+          "paymentDisputeId": "dispute_3",
+          "orderId": "03-00003",
+          "paymentDisputeStatus": "CLOSED",
+          "reason": "ITEM_NOT_AS_DESCRIBED",
+          "openDate": "2026-01-03T00:00:00.000Z",
+          "amount": { "value": "30.00", "currency": "USD" },
+          "buyerUsername": "buyer_3"
+        }
+      ]
+    }
+  }
+}

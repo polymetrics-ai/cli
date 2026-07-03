@@ -1,0 +1,7 @@
+{
+  "request": { "method": "POST", "path": "/AccountsInfo/Query", "body": { "OnlyParentAccounts": false } },
+  "response": {
+    "status": 200,
+    "body": { "AccountsInfo": [{ "Id": "1000001", "Name": "Fixture Account 1", "Number": "F0000001", "AccountLifeCycleStatus": "Active" }] }
+  }
+}

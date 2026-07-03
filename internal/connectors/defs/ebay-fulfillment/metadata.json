@@ -1,0 +1,27 @@
+{
+  "name": "ebay-fulfillment",
+  "display_name": "eBay Fulfillment",
+  "description": "Reads eBay seller orders, exploded line items, shipping fulfillments, and payment disputes through the eBay Sell Fulfillment REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.ebay.com/api-docs/sell/fulfillment/overview.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external eBay Sell Fulfillment API read of a seller's order, shipment, and dispute data",
+    "approval": "none; read-only"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); conformance's synthetic config overrides token_url with the non-URL literal \"synthetic-conformance-value\" (runtimeConfigForEngine ignores spec.json defaults), which the AuthHook's validateHTTPSURL correctly rejects (SSRF hardening) -- every auth-resolving dynamic check would otherwise fail identically and uninformatively on this synthetic-config artifact, not a real bundle defect. Matches gmail's identical documented skip_dynamic shape (same mode:custom, same synthetic-token_url clash). Correctness of the AuthHook's refresh-token exchange and the StreamHook's order_line_items/shipping_fulfillments explosion is a direct, field-for-field port of internal/connectors/ebay-fulfillment's own tested behavior (auth.go's refreshTokenAuth, streams.go's lineItemRecord/shippingFulfillmentRecord); a dedicated hooks_test.go/paritytest/ebay-fulfillment suite is recommended follow-up (docs.md Known limits) but out of scope for this JSON+docs.md migration pass."
+  }
+}

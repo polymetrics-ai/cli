@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "responses",
+  "type": "object",
+  "x-primary-key": ["response_id"],
+  "x-cursor-field": "last_submitted_time",
+  "required": ["response_id", "form_id"],
+  "properties": {
+    "response_id": { "type": "string" },
+    "form_id": { "type": "string" },
+    "create_time": { "type": ["string", "null"] },
+    "last_submitted_time": { "type": ["string", "null"] },
+    "respondent_email": { "type": ["string", "null"] },
+    "total_score": { "type": ["number", "null"] },
+    "answers": { "type": ["object", "null"] }
+  }
+}

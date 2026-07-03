@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/ads/find",
+    "body": {
+      "pagination": { "offset": 0, "limit": 1000 }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 444000441,
+          "adGroupId": 222000221,
+          "campaignId": 111000111,
+          "name": "Fixture ad 1",
+          "creativeId": 555000551,
+          "creativeType": "DEFAULT",
+          "status": "ENABLED",
+          "servingStatus": "RUNNING",
+          "creationTime": "2026-01-01T00:00:00.000Z",
+          "modificationTime": "2026-01-01T00:00:00.000Z",
+          "deleted": false
+        }
+      ],
+      "pagination": { "totalResults": 1, "startIndex": 0, "itemsPerPage": 1 }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "blogs",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "published": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "posts_total": { "type": ["integer", "string", "null"], "description": "Blogger's real wire type for posts.totalItems is a JSON string (e.g. \"2\"), matching legacy's raw pass-through of the nested totalItems field with no numeric coercion." },
+    "pages_total": { "type": ["integer", "string", "null"], "description": "Same as posts_total; Blogger's pages.totalItems is a JSON string on the wire." }
+  }
+}

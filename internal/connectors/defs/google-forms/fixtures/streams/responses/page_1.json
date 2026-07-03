@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/synthetic-conformance-value/responses",
+    "query": { "pageSize": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "responses": [
+        { "responseId": "response_1", "createTime": "2026-01-01T00:00:00Z", "lastSubmittedTime": "2026-01-01T00:00:00Z", "respondentEmail": "fixture1@example.com", "totalScore": 1, "answers": { "q_1": { "textAnswers": { "answers": [{ "value": "answer 1" }] } } } },
+        { "responseId": "response_2", "createTime": "2026-01-02T00:00:00Z", "lastSubmittedTime": "2026-01-02T00:00:00Z", "respondentEmail": "fixture2@example.com", "totalScore": 2, "answers": { "q_1": { "textAnswers": { "answers": [{ "value": "answer 2" }] } } } }
+      ],
+      "nextPageToken": "page2token"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "search_analytics_by_date",
+  "type": "object",
+  "x-primary-key": ["site_url", "search_type", "date"],
+  "x-cursor-field": "date",
+  "required": ["site_url", "search_type", "date"],
+  "properties": {
+    "site_url": { "type": "string" },
+    "search_type": { "type": "string" },
+    "date": { "type": "string" },
+    "clicks": { "type": ["number", "null"] },
+    "impressions": { "type": ["number", "null"] },
+    "ctr": { "type": ["number", "null"] },
+    "position": { "type": ["number", "null"] }
+  }
+}

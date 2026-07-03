@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "channels",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "currencies": { "type": ["array", "null"] },
+    "locales": { "type": ["array", "null"] },
+    "category_tree": { "type": ["string", "null"] },
+    "labels": { "type": ["object", "null"] }
+  }
+}

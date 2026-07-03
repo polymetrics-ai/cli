@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/ad_accounts", "query": { "page_size": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "items": [], "bookmark": null }
+  }
+}

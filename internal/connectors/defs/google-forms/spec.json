@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Forms Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_refresh_token", "form_id"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 client ID for the refresh-token grant. Used only in the token-request form; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 client secret (optional for some client types, e.g. installed-app/native clients). Used only in the token-request form; never logged."
+    },
+    "client_refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived Google OAuth 2.0 refresh token. Exchanged for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is out of scope for this connector (credentials layer already owns it)."
+    },
+    "form_id": {
+      "type": "string",
+      "description": "Comma-, space-, or newline-separated Google Form IDs to read (forms, form_items, responses all fan out over this list, one request sequence per form)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://forms.googleapis.com/v1",
+      "description": "Google Forms API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://oauth2.googleapis.com/token",
+      "description": "Google OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a non-https or unparseable value to prevent exfiltrating the refresh token to an attacker-chosen endpoint."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound on response submission timestamp (responses stream's filter=timestamp>=... query). The incremental cursor (previously-synced last_submitted_time), when present, overrides this on a repeat sync."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 5000,
+      "description": "Records requested per page (pageSize query param) for the responses stream. Google Forms caps this at 5000."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

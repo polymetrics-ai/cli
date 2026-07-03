@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/users/me/organizations/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "has_more_items": false, "continuation": null },
+      "organizations": [
+        { "id": "org_fixture_1", "name": "Fixture Org", "vertical": "default", "locale": "en_US", "image_id": null }
+      ]
+    }
+  }
+}

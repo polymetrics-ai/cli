@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizationalEntityFollowerStatistics",
+    "query": {
+      "q": "organizationalEntity",
+      "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+      "count": "100",
+      "start": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "elements": [
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 101,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

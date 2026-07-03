@@ -1,0 +1,136 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "uptick",
+        "token_url": "{{ config.base_url }}/api/oauth2/token/",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "username": "{{ config.username }}",
+        "password": "{{ secrets.password }}"
+      }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "links.next"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/api/v2.14/clients/",
+      "query": {
+        "page_size": "1",
+        "fields[Client]": "id,created,updated,ref,name,is_active,contact_name,contact_email,contact_phone_bh,address,notes"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "uptick password-grant token exchange failed or access token expired; re-run pm credentials add uptick"
+      },
+      {
+        "status": 403,
+        "hint": "uptick account lacks access/scope for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "uptick API rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "tasks",
+      "path": "/api/v2.14/tasks/",
+      "query": {
+        "ordering": "-updated",
+        "page_size": "{{ config.page_size }}",
+        "fields[Task]": "id,created,updated,deleted,ref,description,is_active,name,due,status,client,property,priority"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "updated",
+        "request_param": "updatedsince",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "clients",
+      "path": "/api/v2.14/clients/",
+      "query": {
+        "ordering": "-updated",
+        "page_size": "{{ config.page_size }}",
+        "fields[Client]": "id,created,updated,ref,name,is_active,contact_name,contact_email,contact_phone_bh,address,notes"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "updated",
+        "request_param": "updatedsince",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "properties",
+      "path": "/api/v2.14/properties/",
+      "query": {
+        "ordering": "-updated",
+        "page_size": "{{ config.page_size }}",
+        "fields[Property]": "id,created,updated,name,ref,address,timezone,status,coords"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "updated",
+        "request_param": "updatedsince",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/properties.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/api/v2.14/invoices/",
+      "query": {
+        "ordering": "-updated",
+        "page_size": "{{ config.page_size }}",
+        "fields[Invoice]": "id,created,updated,number,ref,description,currency,date,due_date,status,subtotal,gst,total,is_overdue,is_sent,property,task"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "updated",
+        "request_param": "updatedsince",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "assets",
+      "path": "/api/v2.14/assets/",
+      "query": {
+        "ordering": "-updated",
+        "page_size": "{{ config.page_size }}",
+        "fields[Asset]": "id,created,updated,deleted,is_active,ref,uptick_ref,label,location,status,make,model,size,barcode,serviced_date,property,type,variant"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "updated",
+        "request_param": "updatedsince",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/assets.json"
+    }
+  ]
+}

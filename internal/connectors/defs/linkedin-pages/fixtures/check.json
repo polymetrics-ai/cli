@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/organizations/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1000,
+      "$URN": "urn:li:organization:1000",
+      "vanityName": "fixture-org",
+      "localizedName": "Fixture Organization"
+    }
+  }
+}

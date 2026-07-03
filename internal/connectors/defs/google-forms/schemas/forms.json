@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "forms",
+  "type": "object",
+  "x-primary-key": ["form_id"],
+  "required": ["form_id"],
+  "properties": {
+    "form_id": { "type": "string" },
+    "revision_id": { "type": ["string", "null"] },
+    "responder_uri": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "document_title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] }
+  }
+}

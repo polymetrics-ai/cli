@@ -1,0 +1,58 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "none" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "POST", "path": "/AccountsInfo/Query" },
+    "error_map": [
+      { "status": 401, "hint": "bing-ads OAuth refresh grant failed, access token expired, or DeveloperToken is invalid; re-run pm credentials add bing-ads" },
+      { "status": 403, "hint": "bing-ads account lacks access for this CustomerId/CustomerAccountId scope" },
+      { "status": 429, "class": "rate_limited", "hint": "Microsoft Advertising API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "method": "POST",
+      "path": "/AccountsInfo/Query",
+      "records": { "path": "AccountsInfo" },
+      "schema": "schemas/accounts.json",
+      "conformance": { "skip_dynamic": true, "reason": "Tier-3 native package (internal/connectors/native/bing-ads): this streams.json entry is documentation/schema-reference only (identity/spec/schema uniformity with every other connector, engine.Base.Definition()); Read/Catalog are hand-written Go, never routed through engine.Read. Proven live by internal/connectors/native/bing-ads's own unit tests and internal/connectors/paritytest/bing-ads." }
+    },
+    {
+      "name": "users",
+      "method": "POST",
+      "path": "/User/Query",
+      "records": { "path": "User" },
+      "schema": "schemas/users.json",
+      "conformance": { "skip_dynamic": true, "reason": "Tier-3 native package (internal/connectors/native/bing-ads): documentation/schema-reference only; see the accounts stream's reason for the full explanation." }
+    },
+    {
+      "name": "campaigns",
+      "method": "POST",
+      "path": "/Campaigns/QueryByAccountId",
+      "records": { "path": "Campaigns" },
+      "schema": "schemas/campaigns.json",
+      "conformance": { "skip_dynamic": true, "reason": "Tier-3 native package (internal/connectors/native/bing-ads): documentation/schema-reference only; see the accounts stream's reason for the full explanation. The real implementation (reader.go) targets a second, Campaign Management base URL and fans out per configured account id, both of which this shadow declarative entry cannot express (a single base.url and no JSON-body fan-out field)." }
+    },
+    {
+      "name": "ad_groups",
+      "method": "POST",
+      "path": "/AdGroups/QueryByCampaignId",
+      "records": { "path": "AdGroups" },
+      "schema": "schemas/ad_groups.json",
+      "conformance": { "skip_dynamic": true, "reason": "Tier-3 native package (internal/connectors/native/bing-ads): documentation/schema-reference only; see the accounts stream's reason for the full explanation." }
+    },
+    {
+      "name": "ads",
+      "method": "POST",
+      "path": "/Ads/QueryByAdGroupId",
+      "records": { "path": "Ads" },
+      "schema": "schemas/ads.json",
+      "conformance": { "skip_dynamic": true, "reason": "Tier-3 native package (internal/connectors/native/bing-ads): documentation/schema-reference only; see the accounts stream's reason for the full explanation." }
+    }
+  ]
+}

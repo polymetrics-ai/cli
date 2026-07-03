@@ -1,0 +1,18 @@
+{
+  "api": "PayPal REST API (https://api-m.paypal.com)",
+  "docs": "https://developer.paypal.com/api/rest/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave-fresh migration: the 4 legacy-parity read streams only; the full PayPal REST surface (payments/orders, invoicing, payouts, subscriptions/billing plans, webhooks, identity, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/reporting/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/v1/reporting/balances", "covered_by": { "stream": "balances" } },
+    { "method": "GET", "path": "/v1/catalogs/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/v1/customer/disputes", "covered_by": { "stream": "disputes" } },
+    { "method": "POST", "path": "/v1/oauth2/token", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 client-credentials token exchange, not a syncable object stream (consumed internally by the AuthHook)" } },
+    { "method": "GET", "path": "/v2/checkout/orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/payments/payouts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/invoicing/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v1/billing/subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v1/customer/disputes/{id}/accept-claim", "excluded": { "category": "out_of_scope", "reason": "no approved reverse-ETL write surface; connector is read-only" } }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "created": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "ref": { "type": ["string", "null"] },
+    "address": { "type": ["string", "null"] },
+    "timezone": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "coords": { "type": ["string", "null"] }
+  }
+}

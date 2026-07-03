@@ -1,0 +1,47 @@
+{
+  "request": { "method": "GET", "path": "/organizations/synthetic-conformance-value/events/", "query": { "expand": "venue,ticket_classes" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "has_more_items": true, "continuation": "event_cursor_2" },
+      "events": [
+        {
+          "id": "event_fixture_1",
+          "name": { "text": "Fixture Launch", "html": "<p>Fixture Launch</p>" },
+          "description": { "text": "Fixture launch event", "html": "<p>Fixture launch event</p>" },
+          "url": "https://www.eventbrite.com/e/fixture-launch",
+          "start": { "timezone": "UTC", "local": "2026-01-01T00:00:00", "utc": "2026-01-01T00:00:00Z" },
+          "end": { "timezone": "UTC", "local": "2026-01-01T04:00:00", "utc": "2026-01-01T04:00:00Z" },
+          "created": "2026-01-01T00:00:00Z",
+          "changed": "2026-01-01T00:00:00Z",
+          "published": "2026-01-01T00:00:00Z",
+          "status": "live",
+          "currency": "USD",
+          "online_event": false,
+          "listed": true,
+          "organization_id": "org_fixture_1",
+          "venue_id": "venue_fixture_1",
+          "capacity": 100
+        },
+        {
+          "id": "event_fixture_2",
+          "name": { "text": "Fixture Party", "html": "<p>Fixture Party</p>" },
+          "description": { "text": "Fixture party event", "html": "<p>Fixture party event</p>" },
+          "url": "https://www.eventbrite.com/e/fixture-party",
+          "start": { "timezone": "UTC", "local": "2026-01-02T00:00:00", "utc": "2026-01-02T00:00:00Z" },
+          "end": { "timezone": "UTC", "local": "2026-01-02T04:00:00", "utc": "2026-01-02T04:00:00Z" },
+          "created": "2026-01-01T00:00:00Z",
+          "changed": "2026-01-02T00:00:00Z",
+          "published": "2026-01-01T00:00:00Z",
+          "status": "live",
+          "currency": "USD",
+          "online_event": true,
+          "listed": true,
+          "organization_id": "org_fixture_1",
+          "venue_id": null,
+          "capacity": 200
+        }
+      ]
+    }
+  }
+}

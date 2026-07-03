@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/synthetic-conformance-value/responses",
+    "query": { "pageSize": "synthetic-conformance-value", "pageToken": "page2token" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "responses": [
+        { "responseId": "response_3", "createTime": "2026-01-03T00:00:00Z", "lastSubmittedTime": "2026-01-03T00:00:00Z", "respondentEmail": "fixture3@example.com", "totalScore": 3, "answers": { "q_1": { "textAnswers": { "answers": [{ "value": "answer 3" }] } } } }
+      ]
+    }
+  }
+}

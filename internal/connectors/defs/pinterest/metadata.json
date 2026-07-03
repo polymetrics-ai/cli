@@ -1,0 +1,27 @@
+{
+  "name": "pinterest",
+  "display_name": "Pinterest",
+  "description": "Reads Pinterest ad accounts, boards, campaigns, ad groups, and audiences through the Pinterest API v5 (OAuth2 refresh-token auth). Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.pinterest.com/docs/api/v5/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external Pinterest API read of ad account, board, campaign, ad group, and audience data",
+    "approval": "none; read-only"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by internal/connectors/paritytest/pinterest (the AuthHook's real OAuth2 refresh-grant path, HTTP Basic client auth) -- conformance's synthetic config has no real token_url/refresh_token round-trip and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

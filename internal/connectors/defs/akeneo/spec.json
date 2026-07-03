@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Akeneo Connection Specification",
+  "type": "object",
+  "required": ["base_url", "client_id", "api_username"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Akeneo PIM host URL (e.g. https://example.trial.akeneo.cloud). An absolute http(s) URL with a host is required; the connector fails closed otherwise (SSRF guard)."
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Akeneo OAuth2 API client ID (Basic-auth'd, paired with the client secret, on the token-exchange request only). Matches legacy's own config (non-secret) classification (internal/connectors/akeneo/akeneo.go's cfg.Config[\"client_id\"]) even though it flows into an auth exchange -- never logged regardless."
+    },
+    "secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Akeneo OAuth2 API client secret, paired with client_id as HTTP Basic auth on the token-exchange request. Never logged."
+    },
+    "api_username": {
+      "type": "string",
+      "description": "Akeneo API user username, sent in the password-grant token-exchange JSON body. Matches legacy's own config (non-secret) classification -- never logged regardless."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Akeneo API user password, sent in the password-grant token-exchange JSON body. Never logged."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100, the limit query param)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Hard cap on the number of pages fetched per stream read. 0 (or unset) means unlimited."
+    }
+  }
+}

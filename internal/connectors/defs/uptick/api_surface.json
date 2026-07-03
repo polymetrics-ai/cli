@@ -1,0 +1,20 @@
+{
+  "api": "Uptick REST API v2.14",
+  "docs": "https://developer.uptick.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Fresh migration at legacy capability parity: the 5 legacy read streams only (tasks, clients, properties, invoices, assets); legacy uptick is read-only (the upstream source supports only full_refresh/incremental reads; Write always returns ErrUnsupportedOperation) and the full Uptick API surface (quotes, purchase orders, forms, users, teams, stock/inventory) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2.14/tasks/", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/api/v2.14/clients/", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/api/v2.14/properties/", "covered_by": { "stream": "properties" } },
+    { "method": "GET", "path": "/api/v2.14/invoices/", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/api/v2.14/assets/", "covered_by": { "stream": "assets" } },
+    { "method": "GET", "path": "/api/v2.14/quotes/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2.14/purchaseorders/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2.14/forms/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2.14/users/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2.14/teams/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v2.14/stockitems/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v2.14/tasks/", "excluded": { "category": "out_of_scope", "reason": "no safe reverse-ETL write surface identified" } }
+  ]
+}

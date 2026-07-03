@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/releases",
+    "query": {
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "release_fixture_1",
+        "project_id": "synthetic-conformance-value",
+        "release_group_id": "rg_fixture_1",
+        "app_version": "1.0.1",
+        "app_version_code": "1",
+        "app_bundle_version": "1.0.1",
+        "build_label": "build-1",
+        "release_stage": "production",
+        "release_source": "api",
+        "release_time": "2026-01-01T00:00:00.000Z",
+        "errors_seen_count": 5,
+        "errors_introduced_count": 1
+      }
+    ]
+  }
+}

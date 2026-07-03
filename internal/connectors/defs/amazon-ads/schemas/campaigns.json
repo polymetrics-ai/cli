@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["campaign_id"],
+  "required": ["campaign_id"],
+  "properties": {
+    "campaign_id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "campaign_type": { "type": ["string", "null"] },
+    "targeting_type": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "daily_budget": { "type": ["number", "null"] },
+    "start_date": { "type": ["string", "null"] },
+    "end_date": { "type": ["string", "null"] },
+    "premium_bid_adjustment": { "type": ["boolean", "null"] },
+    "portfolio_id": { "type": ["integer", "null"] }
+  }
+}

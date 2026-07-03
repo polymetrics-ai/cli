@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bing Ads Connection Specification",
+  "type": "object",
+  "required": ["client_id", "developer_token", "refresh_token"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Microsoft identity platform (Azure AD) application (client) ID for the refresh-token grant. Used only in the token-request form; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Microsoft identity platform application client secret (optional for public/native client app registrations). Used only in the token-request form; never logged."
+    },
+    "developer_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Microsoft Advertising developer token, sent as the DeveloperToken header on every Customer/Campaign Management request; never logged."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived Microsoft identity platform OAuth 2.0 refresh token. Exchanged for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is out of scope for this connector (credentials layer already owns it)."
+    },
+    "tenant_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Azure AD tenant id used to build the default token_url (https://login.microsoftonline.com/<tenant_id>/oauth2/v2.0/token). Defaults to 'common' when unset."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://clientcenter.api.bingads.microsoft.com/CustomerManagement/v13",
+      "description": "Customer Management REST service base URL override for tests or proxies."
+    },
+    "campaign_base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://campaign.api.bingads.microsoft.com/CampaignManagement/v13",
+      "description": "Campaign Management REST service base URL override for tests or proxies. Campaign-scoped streams (campaigns, ad_groups, ads) target this service instead of base_url."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Microsoft identity platform OAuth 2.0 token endpoint override. Defaults to https://login.microsoftonline.com/<tenant_id>/oauth2/v2.0/token. MUST be https in production; the hook fails closed on a non-https or unparseable value."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Microsoft Advertising CustomerId header/body scoping value, sent on Campaign Management requests and included in the accounts (AccountsInfo) query body when set."
+    },
+    "customer_account_id": {
+      "type": "string",
+      "description": "Microsoft Advertising CustomerAccountId header value for Campaign Management requests. Falls back to account_id when unset."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Single advertiser account id; used as the CustomerAccountId header fallback and as the sole AccountId when account_ids is unset."
+    },
+    "account_ids": {
+      "type": "string",
+      "description": "Comma-separated advertiser account ids. The campaigns stream fans out one QueryByAccountId request per id, stamping account_id onto every emitted record. Falls back to a single-element list from customer_account_id/account_id when unset."
+    },
+    "campaign_id": {
+      "type": "string",
+      "description": "Campaign id used to scope the ad_groups stream's AdGroups/QueryByCampaignId request body."
+    },
+    "ad_group_id": {
+      "type": "string",
+      "description": "Ad group id used to scope the ads stream's Ads/QueryByAdGroupId request body."
+    }
+  }
+}

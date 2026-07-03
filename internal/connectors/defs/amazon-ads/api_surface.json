@@ -1,0 +1,20 @@
+{
+  "api": "Amazon Ads API (Sponsored Products / Ads API v2), https://advertising-api.amazon.com",
+  "docs": "https://advertising.amazon.com/API/docs/en-us/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Fresh migration at legacy capability parity: the 5 legacy-parity read streams only (profiles, Sponsored Products campaigns/ad groups/keywords, portfolios); Sponsored Brands, Sponsored Display, reporting, and all write/mutating endpoints are out of scope until Pass B capability expansion.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/profiles", "covered_by": { "stream": "profiles" } },
+    { "method": "GET", "path": "/v2/sp/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/v2/sp/adGroups", "covered_by": { "stream": "ad_groups" } },
+    { "method": "GET", "path": "/v2/portfolios", "covered_by": { "stream": "portfolios" } },
+    { "method": "GET", "path": "/v2/sp/keywords", "covered_by": { "stream": "keywords" } },
+    { "method": "POST", "path": "/v2/sp/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "PUT", "path": "/v2/sp/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/sp/productAds", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v2/sp/negativeKeywords", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/sb/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/sd/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/reporting/reports", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

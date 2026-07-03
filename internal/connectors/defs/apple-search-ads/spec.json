@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Apple Search Ads Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "org_id"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Apple Search Ads API client ID, used as client_id in the OAuth2 client_credentials token exchange. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Apple Search Ads API client secret, used as client_secret in the OAuth2 client_credentials token exchange. Never logged."
+    },
+    "org_id": {
+      "type": "string",
+      "description": "Apple Search Ads organization ID. Sent on every Campaign Management API request as the X-AP-Context: orgId=<org_id> header, matching legacy's requester's DefaultHeaders."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.searchads.apple.com/api/v5",
+      "description": "Apple Search Ads Campaign Management API base URL. Matches legacy's defaultBaseURL."
+    },
+    "token_refresh_endpoint": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://appleid.apple.com/auth/oauth2/token",
+      "description": "Apple ID OAuth2 token endpoint override. Matches legacy's defaultTokenURL (legacy's literal default additionally carries grant_type/scope as query params on the URL itself; this bundle sends both as form fields on every token request instead via the oauth2_client_credentials auth mode + scopes, which is accepted identically by Apple's token endpoint regardless of whether the configured URL also repeats them as query params)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "1000",
+      "description": "Records per page (offset/limit pagination), 1-1000. Matches legacy's defaultPageSize/maxPageSize."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages to read; 0, all, or unlimited exhausts the stream, matching legacy's maxPagesFor."
+    }
+  }
+}

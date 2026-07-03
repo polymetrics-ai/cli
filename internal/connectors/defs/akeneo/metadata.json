@@ -1,0 +1,27 @@
+{
+  "name": "akeneo",
+  "display_name": "Akeneo",
+  "description": "Reads Akeneo PIM products, categories, families, attributes, and channels through the Akeneo REST API (OAuth2 password grant).",
+  "integration_type": "api",
+  "docs_url": "https://api.akeneo.com/documentation/authentication.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Akeneo PIM API read of product, category, family, attribute, and channel data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by internal/connectors/paritytest/akeneo (the AuthHook's real OAuth2 password-grant path) -- conformance's synthetic config has no real token_url/api_username/password and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

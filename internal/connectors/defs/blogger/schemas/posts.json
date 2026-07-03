@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "posts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "type": ["string", "null"] },
+    "blog_id": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "content": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "published": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] },
+    "author_id": { "type": ["string", "null"] },
+    "author_display_name": { "type": ["string", "null"] },
+    "replies_total": { "type": ["integer", "string", "null"], "description": "Blogger's real wire type for replies.totalItems is a JSON string (e.g. \"0\"), matching legacy's raw pass-through with no numeric coercion." },
+    "status": { "type": ["string", "null"] }
+  }
+}

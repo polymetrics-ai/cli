@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/networkSizes/urn:li:organization:synthetic-conformance-value",
+    "query": { "edgeType": "COMPANY_FOLLOWED_BY_MEMBER" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "firstDegreeSize": 219145 }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "api": "Eventbrite API v3 (https://www.eventbriteapi.com/v3)",
+  "docs": "https://www.eventbrite.com/platform/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "full legacy-parity migration: all 5 legacy read streams (organizations, events, attendees, orders, ticket_classes); Eventbrite is read-only in legacy (no reverse-ETL writes), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/users/me/organizations/", "covered_by": { "stream": "organizations" } },
+    { "method": "GET", "path": "/v3/organizations/{organization_id}/events/", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/v3/events/{event_id}/attendees/", "covered_by": { "stream": "attendees" } },
+    { "method": "GET", "path": "/v3/events/{event_id}/orders/", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/v3/events/{event_id}/ticket_classes/", "covered_by": { "stream": "ticket_classes" } },
+    { "method": "GET", "path": "/v3/users/me/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/venues/{venue_id}/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/events/{event_id}/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/v3/organizations/{organization_id}/events/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/v3/events/{event_id}/attendees/{attendee_id}/", "excluded": { "category": "duplicate_of", "reason": "single-attendee lookup; covered by the attendees list stream" } }
+  ]
+}

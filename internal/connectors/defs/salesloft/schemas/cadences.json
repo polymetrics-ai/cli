@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cadences",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "team_cadence": { "type": ["boolean", "null"] },
+    "shared": { "type": ["boolean", "null"] },
+    "remove_bounces_enabled": { "type": ["boolean", "null"] },
+    "remove_replies_enabled": { "type": ["boolean", "null"] },
+    "archived_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["transaction_id"],
+  "x-cursor-field": "transaction_initiation_date",
+  "required": ["transaction_id"],
+  "properties": {
+    "transaction_id": { "type": "string" },
+    "transaction_status": { "type": ["string", "null"] },
+    "transaction_event_code": { "type": ["string", "null"] },
+    "transaction_initiation_date": { "type": ["string", "null"] },
+    "transaction_updated_date": { "type": ["string", "null"] },
+    "currency_code": { "type": ["string", "null"] },
+    "amount": { "type": ["string", "null"] },
+    "fee_amount": { "type": ["string", "null"] },
+    "paypal_account_id": { "type": ["string", "null"] }
+  }
+}

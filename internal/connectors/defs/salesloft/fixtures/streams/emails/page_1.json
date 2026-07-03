@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/emails",
+    "query": {
+      "updated_at[gte]": "2020-01-01T00:00:00Z",
+      "sort_by": "updated_at",
+      "sort_direction": "ASC"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 401,
+          "subject": "Fixture email 1",
+          "status": "sent",
+          "bounced": false,
+          "view_tracking": true,
+          "click_tracking": true,
+          "sent_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 402,
+          "subject": "Fixture email 2",
+          "status": "sent",
+          "bounced": false,
+          "view_tracking": true,
+          "click_tracking": true,
+          "sent_at": "2026-01-01T00:00:01Z",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:01Z"
+        }
+      ],
+      "metadata": { "paging": { "per_page": 2, "current_page": 1, "next_page": null, "total_pages": 1 } }
+    }
+  }
+}

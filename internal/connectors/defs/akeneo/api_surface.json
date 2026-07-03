@@ -1,0 +1,20 @@
+{
+  "api": "Akeneo PIM REST API v1 (https://api.akeneo.com/api-reference.html)",
+  "docs": "https://api.akeneo.com/api-reference.html",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave1-shaped Tier-2 migration: the 5 legacy-parity read streams only (products, categories, families, attributes, channels); legacy akeneo is read-only (Write always returns ErrUnsupportedOperation) and the full Akeneo PIM surface (asset manager, reference entities, product models, media files, measurement families, catalogs export/import) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/rest/v1/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/api/rest/v1/categories", "covered_by": { "stream": "categories" } },
+    { "method": "GET", "path": "/api/rest/v1/families", "covered_by": { "stream": "families" } },
+    { "method": "GET", "path": "/api/rest/v1/attributes", "covered_by": { "stream": "attributes" } },
+    { "method": "GET", "path": "/api/rest/v1/channels", "covered_by": { "stream": "channels" } },
+    { "method": "GET", "path": "/api/rest/v1/product-models", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/rest/v1/reference-entities", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/rest/v1/measure-families", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/rest/v1/media-files/{code}/download", "excluded": { "category": "binary_payload", "reason": "media file bytes are not a syncable record stream" } },
+    { "method": "PATCH", "path": "/api/rest/v1/products/{code}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/rest/v1/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/api/rest/v1/products/{code}", "excluded": { "category": "destructive_admin", "reason": "no obviously-safe reverse-ETL write surface for this pilot" } }
+  ]
+}

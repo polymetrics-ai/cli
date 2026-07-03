@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/boards" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "board_fixture_1",
+          "name": "Fixture Board One",
+          "description": "fixture board",
+          "owner": { "username": "fixture_user" },
+          "privacy": "PUBLIC",
+          "pin_count": 10,
+          "follower_count": 5,
+          "created_at": "2026-01-01T00:00:00"
+        },
+        {
+          "id": "board_fixture_2",
+          "name": "Fixture Board Two",
+          "description": "fixture board",
+          "owner": { "username": "fixture_user" },
+          "privacy": "PUBLIC",
+          "pin_count": 20,
+          "follower_count": 8,
+          "created_at": "2026-01-01T00:00:00"
+        }
+      ],
+      "bookmark": null
+    }
+  }
+}

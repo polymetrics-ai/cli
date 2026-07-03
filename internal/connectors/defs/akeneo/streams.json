@@ -1,0 +1,93 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "akeneo",
+        "token_url": "{{ config.base_url }}/api/oauth/v1/token",
+        "client_id": "{{ config.client_id }}",
+        "client_secret": "{{ secrets.secret }}",
+        "username": "{{ config.api_username }}",
+        "password": "{{ secrets.password }}"
+      }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "_links.next.href"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/api/rest/v1/channels",
+      "query": { "limit": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "akeneo OAuth2 password grant failed or access token expired; re-run pm credentials add akeneo" },
+      { "status": 403, "hint": "akeneo account lacks access for this request/scope" },
+      { "status": 429, "class": "rate_limited", "hint": "akeneo API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/api/rest/v1/products",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.identifier }}"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "categories",
+      "path": "/api/rest/v1/categories",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "families",
+      "path": "/api/rest/v1/families",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/families.json"
+    },
+    {
+      "name": "attributes",
+      "path": "/api/rest/v1/attributes",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/attributes.json"
+    },
+    {
+      "name": "channels",
+      "path": "/api/rest/v1/channels",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/channels.json"
+    }
+  ]
+}

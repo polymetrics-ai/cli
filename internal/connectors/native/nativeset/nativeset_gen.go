@@ -9,5 +9,6 @@
 package nativeset
 
 import (
+	_ "polymetrics.ai/internal/connectors/native/bing-ads"
 	_ "polymetrics.ai/internal/connectors/native/postgres"
 )

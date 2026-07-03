@@ -1,0 +1,108 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Amazon-Advertising-API-ClientId": "{{ config.client_id }}"
+    },
+    "auth": [
+      { "mode": "custom", "hook": "amazon-ads" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "count",
+      "offset_param": "startIndex",
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "v2/profiles",
+      "query": {
+        "startIndex": "0",
+        "count": "1"
+      }
+    },
+    "error_map": [
+      { "status": 401, "hint": "amazon-ads LWA credentials are missing or invalid; re-run pm credentials add amazon-ads" },
+      { "status": 403, "hint": "amazon-ads credentials lack access for this profile/resource" },
+      { "status": 429, "class": "rate_limited", "hint": "Amazon Ads API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "profiles",
+      "path": "v2/profiles",
+      "records": { "path": "" },
+      "computed_fields": {
+        "profile_id": "{{ record.profileId }}",
+        "country_code": "{{ record.countryCode }}",
+        "currency_code": "{{ record.currencyCode }}",
+        "timezone": "{{ record.timezone }}",
+        "daily_budget": "{{ record.dailyBudget }}",
+        "marketplace_string_id": "{{ record.accountInfo.marketplaceStringId }}",
+        "account_type": "{{ record.accountInfo.type }}",
+        "account_name": "{{ record.accountInfo.name }}",
+        "account_id": "{{ record.accountInfo.id }}"
+      },
+      "schema": "schemas/profiles.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "v2/sp/campaigns",
+      "records": { "path": "" },
+      "computed_fields": {
+        "campaign_id": "{{ record.campaignId }}",
+        "name": "{{ record.name }}",
+        "campaign_type": "{{ record.campaignType }}",
+        "targeting_type": "{{ record.targetingType }}",
+        "state": "{{ record.state }}",
+        "daily_budget": "{{ record.dailyBudget }}",
+        "start_date": "{{ record.startDate }}",
+        "end_date": "{{ record.endDate }}",
+        "premium_bid_adjustment": "{{ record.premiumBidAdjustment }}",
+        "portfolio_id": "{{ record.portfolioId }}"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "ad_groups",
+      "path": "v2/sp/adGroups",
+      "records": { "path": "" },
+      "computed_fields": {
+        "ad_group_id": "{{ record.adGroupId }}",
+        "name": "{{ record.name }}",
+        "campaign_id": "{{ record.campaignId }}",
+        "default_bid": "{{ record.defaultBid }}",
+        "state": "{{ record.state }}"
+      },
+      "schema": "schemas/ad_groups.json"
+    },
+    {
+      "name": "portfolios",
+      "path": "v2/portfolios",
+      "records": { "path": "" },
+      "computed_fields": {
+        "portfolio_id": "{{ record.portfolioId }}",
+        "name": "{{ record.name }}",
+        "state": "{{ record.state }}",
+        "in_budget": "{{ record.inBudget }}"
+      },
+      "schema": "schemas/portfolios.json"
+    },
+    {
+      "name": "keywords",
+      "path": "v2/sp/keywords",
+      "records": { "path": "" },
+      "computed_fields": {
+        "keyword_id": "{{ record.keywordId }}",
+        "campaign_id": "{{ record.campaignId }}",
+        "ad_group_id": "{{ record.adGroupId }}",
+        "keyword_text": "{{ record.keywordText }}",
+        "match_type": "{{ record.matchType }}",
+        "state": "{{ record.state }}",
+        "bid": "{{ record.bid }}"
+      },
+      "schema": "schemas/keywords.json"
+    }
+  ]
+}

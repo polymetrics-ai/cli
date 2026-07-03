@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "campaign_id": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "optimization_goal": { "type": ["string", "null"] },
+    "billing_event": { "type": ["string", "null"] },
+    "bid_micro": { "type": ["integer", "null"] },
+    "daily_budget_micro": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

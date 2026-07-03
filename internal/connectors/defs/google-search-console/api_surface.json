@@ -1,0 +1,20 @@
+{
+  "api": "Google Search Console API v3 (https://www.googleapis.com/webmasters/v3)",
+  "docs": "https://developers.google.com/webmaster-tools/v1/api_reference_index",
+  "reviewed_at": "2026-07-03",
+  "scope": "Full legacy-parity migration: all 7 legacy read streams (sites, sitemaps, and the 5 search_analytics_by_* dimension views). Legacy is read-only (no reverse-ETL write path); the full Search Console API surface (sitemap submit/delete, URL inspection) is out of scope until Pass B capability expansion. The 5 search_analytics_by_* entries below are declared method GET (not the literal wire HTTP verb, which is always POST for searchAnalytics.query) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design section E.1 rule 4; monday's api_surface.json documents the identical convention for its GraphQL POST-only transport) -- Search Console's searchAnalytics.query uses POST to carry a request body for what is semantically a read (a report query), never a mutation.",
+  "endpoints": [
+    { "method": "GET", "path": "/sites", "covered_by": { "stream": "sites" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/sitemaps", "covered_by": { "stream": "sitemaps" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/searchAnalytics/query (wire verb POST; semantic read)", "covered_by": { "stream": "search_analytics_by_date" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/searchAnalytics/query (wire verb POST; semantic read)", "covered_by": { "stream": "search_analytics_by_country" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/searchAnalytics/query (wire verb POST; semantic read)", "covered_by": { "stream": "search_analytics_by_device" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/searchAnalytics/query (wire verb POST; semantic read)", "covered_by": { "stream": "search_analytics_by_page" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/searchAnalytics/query (wire verb POST; semantic read)", "covered_by": { "stream": "search_analytics_by_query" } },
+    { "method": "PUT", "path": "/sites/{siteUrl}/sitemaps/{feedpath}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "DELETE", "path": "/sites/{siteUrl}/sitemaps/{feedpath}", "excluded": { "category": "destructive_admin", "reason": "sitemap deletion is a destructive admin action, not a syncable read/write record" } },
+    { "method": "PUT", "path": "/sites/{siteUrl}", "excluded": { "category": "requires_elevated_scope", "reason": "adding a site property requires site-owner-level scope beyond a read-only connector" } },
+    { "method": "DELETE", "path": "/sites/{siteUrl}", "excluded": { "category": "destructive_admin", "reason": "removing a site property is a destructive admin action, not a syncable record" } },
+    { "method": "POST", "path": "/urlTestingTools/mobileFriendlyTest:run", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

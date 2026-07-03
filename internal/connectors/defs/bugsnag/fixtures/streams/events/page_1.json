@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/events",
+    "query": {
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "event_fixture_1",
+        "project_id": "synthetic-conformance-value",
+        "error_id": "err_fixture_1",
+        "context": "GET /fixture",
+        "severity": "error",
+        "unhandled": true,
+        "received_at": "2026-01-02T00:00:00.000Z",
+        "is_full_report": true,
+        "url": "https://app.bugsnag.com/fixture-org-1/fixture-project-1/events/event_fixture_1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/sites/synthetic-conformance-value/sitemaps" },
+  "response": {
+    "status": 200,
+    "body": {
+      "sitemap": [
+        {
+          "path": "https://fixture-1.example.com/sitemap-1.xml",
+          "lastSubmitted": "2026-01-01T00:00:00Z",
+          "lastDownloaded": "2026-01-01T01:00:00Z",
+          "isPending": false,
+          "isSitemapsIndex": false,
+          "type": "sitemap",
+          "warnings": "0",
+          "errors": "0"
+        },
+        {
+          "path": "https://fixture-1.example.com/sitemap-2.xml",
+          "lastSubmitted": "2026-01-02T00:00:00Z",
+          "lastDownloaded": "2026-01-02T01:00:00Z",
+          "isPending": true,
+          "isSitemapsIndex": false,
+          "type": "sitemap",
+          "warnings": "1",
+          "errors": "0"
+        }
+      ]
+    }
+  }
+}

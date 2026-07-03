@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/blogs/fixture_blog_1/comments", "query": { "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "blogger#commentList",
+      "nextPageToken": "fixture_page_2_token",
+      "items": [
+        {
+          "kind": "blogger#comment",
+          "id": "comment_fixture_1",
+          "blog": { "id": "fixture_blog_1" },
+          "post": { "id": "post_fixture_1" },
+          "content": "<p>Fixture comment 1</p>",
+          "published": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z",
+          "author": { "id": "author_fixture_1", "displayName": "Fixture Author" },
+          "status": "live"
+        }
+      ]
+    }
+  }
+}

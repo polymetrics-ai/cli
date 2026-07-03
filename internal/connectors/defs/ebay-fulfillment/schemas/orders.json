@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orders",
+  "type": "object",
+  "x-primary-key": ["order_id"],
+  "x-cursor-field": "creation_date",
+  "required": ["order_id"],
+  "properties": {
+    "order_id": { "type": "string" },
+    "legacy_order_id": { "type": ["string", "null"] },
+    "creation_date": { "type": ["string", "null"], "format": "date-time" },
+    "last_modified_date": { "type": ["string", "null"], "format": "date-time" },
+    "order_fulfillment_status": { "type": ["string", "null"] },
+    "order_payment_status": { "type": ["string", "null"] },
+    "seller_id": { "type": ["string", "null"] },
+    "buyer_username": { "type": ["string", "null"] },
+    "sales_record_reference": { "type": ["string", "null"] },
+    "total_value": { "type": ["string", "null"] },
+    "total_currency": { "type": ["string", "null"] }
+  }
+}

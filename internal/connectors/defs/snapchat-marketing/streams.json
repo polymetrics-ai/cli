@@ -1,0 +1,140 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "snapchat-marketing",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.refresh_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "paging.next_link"
+    },
+    "check": { "method": "GET", "path": "/organizations", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "snapchat-marketing refresh-token exchange failed or access token expired; re-run pm credentials add snapchat-marketing" },
+      { "status": 403, "hint": "snapchat-marketing account lacks access/scope for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "snapchat-marketing API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "organizations",
+      "path": "/organizations",
+      "query": { "limit": "50" },
+      "records": { "path": "organizations" },
+      "computed_fields": {
+        "id": "{{ record.organization.id }}",
+        "name": "{{ record.organization.name }}",
+        "type": "{{ record.organization.type }}",
+        "country": "{{ record.organization.country }}",
+        "address_line_1": "{{ record.organization.address_line_1 }}",
+        "locality": "{{ record.organization.locality }}",
+        "administrative_district_level_1": "{{ record.organization.administrative_district_level_1 }}",
+        "postal_code": "{{ record.organization.postal_code }}",
+        "created_at": "{{ record.organization.created_at }}",
+        "updated_at": "{{ record.organization.updated_at }}"
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "adaccounts",
+      "path": "/organizations/{{ fanout.id }}/adaccounts",
+      "query": { "limit": "50" },
+      "records": { "path": "adaccounts" },
+      "fan_out": {
+        "ids_from": { "config_key": "organization_ids" },
+        "into": { "path_var": "organization_id" }
+      },
+      "computed_fields": {
+        "id": "{{ record.adaccount.id }}",
+        "name": "{{ record.adaccount.name }}",
+        "type": "{{ record.adaccount.type }}",
+        "status": "{{ record.adaccount.status }}",
+        "organization_id": "{{ record.adaccount.organization_id }}",
+        "currency": "{{ record.adaccount.currency }}",
+        "timezone": "{{ record.adaccount.timezone }}",
+        "advertiser": "{{ record.adaccount.advertiser }}",
+        "created_at": "{{ record.adaccount.created_at }}",
+        "updated_at": "{{ record.adaccount.updated_at }}"
+      },
+      "schema": "schemas/adaccounts.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/adaccounts/{{ fanout.id }}/campaigns",
+      "query": { "limit": "50" },
+      "records": { "path": "campaigns" },
+      "fan_out": {
+        "ids_from": { "config_key": "ad_account_ids" },
+        "into": { "path_var": "ad_account_id" }
+      },
+      "computed_fields": {
+        "id": "{{ record.campaign.id }}",
+        "name": "{{ record.campaign.name }}",
+        "status": "{{ record.campaign.status }}",
+        "ad_account_id": "{{ record.campaign.ad_account_id }}",
+        "objective": "{{ record.campaign.objective }}",
+        "start_time": "{{ record.campaign.start_time }}",
+        "end_time": "{{ record.campaign.end_time }}",
+        "daily_budget_micro": "{{ record.campaign.daily_budget_micro }}",
+        "lifetime_spend_cap_micro": "{{ record.campaign.lifetime_spend_cap_micro }}",
+        "created_at": "{{ record.campaign.created_at }}",
+        "updated_at": "{{ record.campaign.updated_at }}"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "adsquads",
+      "path": "/adaccounts/{{ fanout.id }}/adsquads",
+      "query": { "limit": "50" },
+      "records": { "path": "adsquads" },
+      "fan_out": {
+        "ids_from": { "config_key": "ad_account_ids" },
+        "into": { "path_var": "ad_account_id" }
+      },
+      "computed_fields": {
+        "id": "{{ record.adsquad.id }}",
+        "name": "{{ record.adsquad.name }}",
+        "status": "{{ record.adsquad.status }}",
+        "campaign_id": "{{ record.adsquad.campaign_id }}",
+        "type": "{{ record.adsquad.type }}",
+        "optimization_goal": "{{ record.adsquad.optimization_goal }}",
+        "billing_event": "{{ record.adsquad.billing_event }}",
+        "bid_micro": "{{ record.adsquad.bid_micro }}",
+        "daily_budget_micro": "{{ record.adsquad.daily_budget_micro }}",
+        "created_at": "{{ record.adsquad.created_at }}",
+        "updated_at": "{{ record.adsquad.updated_at }}"
+      },
+      "schema": "schemas/adsquads.json"
+    },
+    {
+      "name": "ads",
+      "path": "/adaccounts/{{ fanout.id }}/ads",
+      "query": { "limit": "50" },
+      "records": { "path": "ads" },
+      "fan_out": {
+        "ids_from": { "config_key": "ad_account_ids" },
+        "into": { "path_var": "ad_account_id" }
+      },
+      "computed_fields": {
+        "id": "{{ record.ad.id }}",
+        "name": "{{ record.ad.name }}",
+        "status": "{{ record.ad.status }}",
+        "ad_squad_id": "{{ record.ad.ad_squad_id }}",
+        "creative_id": "{{ record.ad.creative_id }}",
+        "type": "{{ record.ad.type }}",
+        "review_status": "{{ record.ad.review_status }}",
+        "created_at": "{{ record.ad.created_at }}",
+        "updated_at": "{{ record.ad.updated_at }}"
+      },
+      "schema": "schemas/ads.json"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns",
+    "query": {
+      "offset": "0",
+      "limit": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 111000111,
+          "orgId": 123456,
+          "name": "Fixture campaign",
+          "status": "ENABLED",
+          "servingStatus": "RUNNING",
+          "modificationTime": "2026-01-01T00:00:00.000Z"
+        }
+      ],
+      "pagination": { "totalResults": 1, "startIndex": 0, "itemsPerPage": 1 }
+    }
+  }
+}

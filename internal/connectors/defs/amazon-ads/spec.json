@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Amazon Ads Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "refresh_token"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Login with Amazon (LWA) application client ID, used both as client_id in the refresh_token token exchange and verbatim in the Amazon-Advertising-API-ClientId header on every data request. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Login with Amazon (LWA) application client secret, used as client_secret in the refresh_token token exchange. Never logged."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived LWA refresh_token exchanged for a short-lived access_token on every Check/Read. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://advertising-api.amazon.com",
+      "description": "Amazon Ads API base URL. Defaults to the North America (NA) endpoint, matching legacy's regionBaseURL[\"NA\"] fallback. Legacy also derives this from a 'region' config enum (NA/EU/FE) at runtime; this bundle requires the resolved base_url directly for non-NA regions instead, since the engine's spec.json \"default\" mechanism only materializes one fixed literal, not a region-derived choice between three URLs (documented scope narrowing, see docs.md). Set to https://advertising-api-eu.amazon.com or https://advertising-api-fe.amazon.com for EU/FE accounts."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.amazon.com/auth/o2/token",
+      "description": "Login with Amazon token exchange endpoint override (matches legacy's regionTokenURL[\"NA\"] default). Set to https://api.amazon.co.uk/auth/o2/token or https://api.amazon.co.jp/auth/o2/token for EU/FE accounts."
+    },
+    "profile_id": {
+      "type": "string",
+      "description": "Amazon Ads advertising profile ID. Required for every stream except profiles (which enumerates the accessible profiles/scopes itself); sent as the Amazon-Advertising-API-Scope header on profile-scoped streams (campaigns, ad_groups, portfolios, keywords), matching legacy's endpoint.scoped gate."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (startIndex/count offset pagination), 1-100. Matches legacy's defaultPageSize/maxPageSize."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages to read; 0, all, or unlimited exhausts the stream, matching legacy's amazonAdsMaxPages."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/sites" },
+  "response": {
+    "status": 200,
+    "body": {
+      "siteEntry": [
+        { "siteUrl": "https://fixture-1.example.com/", "permissionLevel": "siteOwner" },
+        { "siteUrl": "sc-domain:fixture-2.example.com", "permissionLevel": "siteFullUser" }
+      ]
+    }
+  }
+}

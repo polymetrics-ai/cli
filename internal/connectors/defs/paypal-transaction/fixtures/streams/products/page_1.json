@@ -1,0 +1,179 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/catalogs/products",
+    "query": {
+      "page": "1",
+      "page_size": "20"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "products": [
+        {
+          "id": "PROD-fixture-1",
+          "name": "Fixture Product 1",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-2",
+          "name": "Fixture Product 2",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-3",
+          "name": "Fixture Product 3",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-4",
+          "name": "Fixture Product 4",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-5",
+          "name": "Fixture Product 5",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-6",
+          "name": "Fixture Product 6",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-7",
+          "name": "Fixture Product 7",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-8",
+          "name": "Fixture Product 8",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-9",
+          "name": "Fixture Product 9",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-10",
+          "name": "Fixture Product 10",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-11",
+          "name": "Fixture Product 11",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-12",
+          "name": "Fixture Product 12",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-13",
+          "name": "Fixture Product 13",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-14",
+          "name": "Fixture Product 14",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-15",
+          "name": "Fixture Product 15",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-16",
+          "name": "Fixture Product 16",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-17",
+          "name": "Fixture Product 17",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-18",
+          "name": "Fixture Product 18",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-19",
+          "name": "Fixture Product 19",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "PROD-fixture-20",
+          "name": "Fixture Product 20",
+          "description": "fixture",
+          "type": "SERVICE",
+          "category": "SOFTWARE",
+          "create_time": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "total_items": 21,
+      "total_pages": 2
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Version": "2"
+    },
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "Authorization",
+        "prefix": "token ",
+        "value": "{{ secrets.auth_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "link_header"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/user/organizations",
+      "query": {
+        "per_page": "1"
+      }
+    },
+    "error_map": [
+      { "status": 401, "hint": "bugsnag auth_token is missing or invalid; re-run pm credentials add bugsnag" },
+      { "status": 403, "hint": "bugsnag account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "bugsnag rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "organizations",
+      "path": "/user/organizations",
+      "query": {
+        "per_page": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "projects",
+      "path": "/organizations/{{ fanout.id }}/projects",
+      "query": {
+        "per_page": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "organization_id" },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organization_id"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "collaborators",
+      "path": "/organizations/{{ fanout.id }}/collaborators",
+      "query": {
+        "per_page": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "organization_id" },
+        "into": { "path_var": "organization_id" }
+      },
+      "schema": "schemas/collaborators.json"
+    },
+    {
+      "name": "errors",
+      "path": "/projects/{{ fanout.id }}/errors",
+      "query": {
+        "per_page": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "project_id" },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "computed_fields": {
+        "events_count": "{{ record.events }}"
+      },
+      "incremental": {
+        "cursor_field": "last_seen"
+      },
+      "schema": "schemas/errors.json"
+    },
+    {
+      "name": "events",
+      "path": "/projects/{{ fanout.id }}/events",
+      "query": {
+        "per_page": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "project_id" },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "incremental": {
+        "cursor_field": "received_at"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "releases",
+      "path": "/projects/{{ fanout.id }}/releases",
+      "query": {
+        "per_page": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "project_id" },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "incremental": {
+        "cursor_field": "release_time"
+      },
+      "schema": "schemas/releases.json"
+    }
+  ]
+}

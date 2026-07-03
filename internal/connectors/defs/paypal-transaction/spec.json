@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PayPal Transaction Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "start_date"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "PayPal REST app client id, used as the HTTP Basic username on the OAuth 2.0 client-credentials token exchange. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "PayPal REST app client secret, used as the HTTP Basic password on the OAuth 2.0 client-credentials token exchange. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api-m.paypal.com",
+      "description": "PayPal API base URL. Defaults to the production host; set to https://api-m.sandbox.paypal.com directly for PayPal's sandbox environment (see docs.md Known limits for why is_sandbox is not modeled as a separate toggle)."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound for the transactions reporting stream's start_date query param. Required for every read (the incremental cursor, when present from a prior sync, raises this bound automatically)."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 upper bound for the transactions reporting stream's end_date query param. Optional; when unset, PayPal's own reporting endpoint default applies (see docs.md Known limits: legacy computed time.Now() client-side, which this bundle cannot reproduce as a declarative default)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

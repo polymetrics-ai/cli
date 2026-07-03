@@ -1,0 +1,65 @@
+{
+  "request": { "method": "GET", "path": "/sell/fulfillment/v1/order", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 3,
+      "limit": 2,
+      "offset": 0,
+      "orders": [
+        {
+          "orderId": "03-00001",
+          "legacyOrderId": "1000000001",
+          "creationDate": "2026-01-01T00:00:00.000Z",
+          "lastModifiedDate": "2026-01-01T00:00:00.000Z",
+          "orderFulfillmentStatus": "FULFILLED",
+          "orderPaymentStatus": "PAID",
+          "sellerId": "fixture_seller",
+          "salesRecordReference": "101",
+          "buyer": { "username": "buyer_1" },
+          "pricingSummary": { "total": { "value": "10.00", "currency": "USD" } },
+          "lineItems": [
+            { "lineItemId": "li_1", "legacyItemId": "item_1", "sku": "SKU-1", "title": "Fixture Product 1", "quantity": 1, "lineItemFulfillmentStatus": "FULFILLED", "total": { "value": "10.00", "currency": "USD" } }
+          ],
+          "fulfillmentStartInstructions": [
+            {
+              "fulfillmentInstructionsType": "SHIP_TO",
+              "shippingStep": {
+                "shipTo": {
+                  "fullName": "Buyer One",
+                  "contactAddress": { "city": "San Jose", "stateOrProvince": "CA", "postalCode": "95125", "countryCode": "US" }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "orderId": "03-00002",
+          "legacyOrderId": "1000000002",
+          "creationDate": "2026-01-02T00:00:00.000Z",
+          "lastModifiedDate": "2026-01-02T00:00:00.000Z",
+          "orderFulfillmentStatus": "IN_PROGRESS",
+          "orderPaymentStatus": "PAID",
+          "sellerId": "fixture_seller",
+          "salesRecordReference": "102",
+          "buyer": { "username": "buyer_2" },
+          "pricingSummary": { "total": { "value": "20.00", "currency": "USD" } },
+          "lineItems": [
+            { "lineItemId": "li_2", "legacyItemId": "item_2", "sku": "SKU-2", "title": "Fixture Product 2", "quantity": 2, "lineItemFulfillmentStatus": "IN_PROGRESS", "total": { "value": "20.00", "currency": "USD" } }
+          ],
+          "fulfillmentStartInstructions": [
+            {
+              "fulfillmentInstructionsType": "SHIP_TO",
+              "shippingStep": {
+                "shipTo": {
+                  "fullName": "Buyer Two",
+                  "contactAddress": { "city": "Austin", "stateOrProvince": "TX", "postalCode": "73301", "countryCode": "US" }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
