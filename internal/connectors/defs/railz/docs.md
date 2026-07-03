@@ -23,10 +23,11 @@ secrets are marked `x-secret: true` and never logged. `base_url` defaults to
 All 5 streams share the same shape: `GET` against the Railz list endpoint, records at the `data`
 key. Pagination is `offset_limit` (`limit`/`offset` query params, base default `page_size: 100`
 matching legacy's `railzDefaultPageSize`) — a page shorter than `limit` is the last page, matching
-legacy's own `len(records) < pageSize` stop condition (`railz.go:117-120`) exactly. The
-`businesses` stream declares a stream-level pagination override (`page_size: 2`) purely to keep its
-2-page conformance fixture small (`docs/migration/conventions.md` §4); the other 4 streams keep the
-base's real default and ship single-page fixtures.
+legacy's own `len(records) < pageSize` stop condition (`railz.go:117-120`) exactly. All 5 streams
+use the base's real default (`limit: 100`); `businesses` ships the required 2-page conformance
+fixture by returning a full 100-record first page (triggering the paginator to fetch page 2) and a
+short second page, per `docs/migration/conventions.md` §4 — the live page size is never shrunk to
+make the fixture small. The other 4 streams ship single-page fixtures.
 
 `businesses` and `connections` publish a decorative `incremental.cursor_field: created_at` (no
 `request_param`) matching legacy's identical `CursorFields` catalog declaration — legacy never

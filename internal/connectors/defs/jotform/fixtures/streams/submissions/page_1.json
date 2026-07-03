@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/user/submissions", "query": { "limit": "2", "offset": "0" } },
+  "request": { "method": "GET", "path": "/user/submissions", "query": { "limit": "100", "offset": "0" } },
   "response": {
     "status": 200,
     "body": {
@@ -18,7 +18,7 @@
           "answers": { "1": { "name": "field", "answer": "value 1" } }
         }
       ],
-      "resultSet": { "offset": 0, "limit": 2, "count": 1 }
+      "resultSet": { "offset": 0, "limit": 100, "count": 1 }
     }
   }
 }

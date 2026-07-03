@@ -1,10 +1,22 @@
 {
-  "request": { "method": "GET", "path": "/customers", "query": { "page": "2", "per_page": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/customers",
+    "query": {
+      "page": "2",
+      "per_page": "200"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "customers": [
-        { "customer_id": "cust_fixture_3", "display_name": "Fixture Customer 3", "status": "inactive", "updated_time": "2026-01-03T00:00:00+0000" }
+        {
+          "customer_id": "cust_fixture_201",
+          "display_name": "Fixture Customer 201",
+          "status": "inactive",
+          "updated_time": "2026-01-06T00:00:00+0000"
+        }
       ]
     }
   }

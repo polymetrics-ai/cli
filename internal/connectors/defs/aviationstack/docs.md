@@ -39,14 +39,12 @@ searxng's golden already documented and resolved by simply not declaring the dea
 `docs/migration/conventions.md` searxng worked example). `streams.json`'s `base.pagination.page_size`
 is set to legacy's real production default, `100` (legacy: `defaultPageSize = 100`,
 `maxPageSize = 100`) — this is the actual value a live deployment's paginator sends; it is not a
-fixture convenience. The `airlines` stream declares a stream-level `pagination` override
-(`page_size: 2`) so its required 2-page conformance fixture
-(`fixtures/streams/airlines/{page_1,page_2}.json`, §4 of `docs/migration/conventions.md`) can stay
-small and readable; since stream-level `pagination` replaces the base spec wholesale, this is an
-intentional, ledgered per-stream deviation from legacy's uniform 100-record page size — `airlines`
-reads in smaller, more numerous pages than legacy would, everywhere else identical. The other 4
-streams (`flights`, `airports`, `airplanes`, `countries`) are unaffected and use legacy's true
-100-record page size end-to-end, matching their single-page fixtures' `limit=100` request/response.
+fixture convenience. All 5 streams, including `airlines`, use this same base pagination block
+end-to-end (no stream-level override) — `airlines` previously declared a stream-level
+`page_size: 2` override that leaked a fixture-sized page size into live config; that override has
+been removed so `airlines` reads legacy's true 100-record page size like every other stream. Its
+2-page conformance fixture (`fixtures/streams/airlines/{page_1,page_2}.json`) is sized to match:
+page 1 returns a full 100-record page (so the paginator continues), page 2 returns the remainder.
 
 ## Write actions & risks
 

@@ -9,7 +9,7 @@
       "type": "offset_limit",
       "offset_param": "from",
       "limit_param": "size",
-      "page_size": 2
+      "page_size": 1000
     },
     "check": { "method": "GET", "path": "/contacts", "query": { "size": "1", "from": "0" } },
     "error_map": [

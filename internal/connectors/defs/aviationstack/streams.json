@@ -41,12 +41,6 @@
       "name": "airlines",
       "path": "/airlines",
       "records": { "path": "data" },
-      "pagination": {
-        "type": "offset_limit",
-        "limit_param": "limit",
-        "offset_param": "offset",
-        "page_size": 2
-      },
       "schema": "schemas/airlines.json"
     },
     {

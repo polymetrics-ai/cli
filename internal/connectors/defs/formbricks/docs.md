@@ -58,8 +58,10 @@ None. Formbricks' write/mutation surface is not exposed by this connector (legac
   every stream (even non-paginated ones, where `page_size` is simply unused). The engine's
   `PaginationSpec.PageSize`/`MaxPages` fields are plain fixed JSON integers baked into
   `streams.json` — there is no templating/config-driven override mechanism for them. This bundle
-  declares a fixed `page_size: 2` for the `responses` stream (chosen small so the required 2-page
-  conformance fixture is realistic and exercises the short-page stop rule; legacy's own default is
-  50) and no `max_pages` cap (unbounded, matching legacy's own default). Neither `page_size` nor
-  `max_pages` is declared in `spec.json` (F6, `docs/migration/conventions.md`: dead, unwireable
-  config is worse than absent config).
+  declares a fixed `page_size: 50` for the `responses` stream, matching legacy's own default
+  exactly (`formbricksDefaultPageSize`, `formbricks.go:28`), and no `max_pages` cap (unbounded,
+  matching legacy's own default). Neither `page_size` nor `max_pages` is declared in `spec.json`
+  (F6, `docs/migration/conventions.md`: dead, unwireable config is worse than absent config). The
+  required 2-page conformance fixture (`docs/migration/conventions.md` §4) uses a full 50-record
+  page 1 followed by a short 1-record page 2 to exercise the real page-size stop rule realistically
+  rather than leaking a fixture-scale page size into the live default.

@@ -28,14 +28,7 @@
       "name": "jobs",
       "path": "/jobs",
       "records": { "path": "data" },
-      "schema": "schemas/jobs.json",
-      "pagination": {
-        "type": "page_number",
-        "page_param": "page",
-        "size_param": "page_size",
-        "start_page": 1,
-        "page_size": 2
-      }
+      "schema": "schemas/jobs.json"
     },
     {
       "name": "clients",

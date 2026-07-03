@@ -23,13 +23,6 @@
       "name": "tickers",
       "path": "/data/tickers",
       "records": { "path": "data" },
-      "pagination": {
-        "type": "page_number",
-        "page_param": "page",
-        "size_param": "limit",
-        "start_page": 1,
-        "page_size": 2
-      },
       "schema": "schemas/tickers.json"
     },
     {

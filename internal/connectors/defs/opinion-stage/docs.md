@@ -36,11 +36,11 @@ and `attributes.timestamps.created`/`attributes.timestamps.modified` are renamed
 Pagination is JSON:API-style page-number pagination: `page[number]` (1-based) and `page[size]`,
 matching legacy's `harvest` loop (`opinion_stage.go:131-161`) exactly — a page returning fewer
 records than `page[size]` stops the read (`len(records) < pageSize`); the base pagination block's
-`page_size: 2` is the bundle's own fixed per-page-request size (legacy's own runtime default is 50,
-config-overridable up to 1000, but the declarative dialect's `PaginationSpec.PageSize` is a fixed
-value baked into the bundle — see Known limits). There is no cursor/incremental field: legacy is
-full-refresh only (`docs/connectors/source-opinion-stage/MANUAL.md`: `supports incremental: false`),
-so `schemas/items.json` declares no `x-cursor-field`.
+`page_size: 50` matches legacy's own runtime default (`opinionStageDefaultPageSize`,
+config-overridable up to 1000), fixed as a bundle-baked value rather than config-templated (see
+Known limits). There is no cursor/incremental field: legacy is full-refresh only
+(`docs/connectors/source-opinion-stage/MANUAL.md`: `supports incremental: false`), so
+`schemas/items.json` declares no `x-cursor-field`.
 
 ## Write actions & risks
 
@@ -69,6 +69,6 @@ bundle ships no `writes.json`, matching legacy's `Write` stub
   the dialect to route a `spec.json` property into either field (unlike `stream.Query`'s opt-in
   templating). Declaring `page_size`/`max_pages` in `spec.json` anyway would be genuinely dead
   config no template in this bundle ever consumes (F6, `docs/migration/conventions.md`), so
-  neither is declared. `page_size` in this bundle is fixed at 2 (the client-side short-page stop
-  threshold, analogous to searxng's identical fixed-`page_size` shape); `max_pages` is unbounded
-  (absent, matching legacy's own `all`/`unlimited` default).
+  neither is declared. `page_size` in this bundle is fixed at 50, matching legacy's own default
+  (the client-side short-page stop threshold); `max_pages` is unbounded (absent, matching legacy's
+  own `all`/`unlimited` default).

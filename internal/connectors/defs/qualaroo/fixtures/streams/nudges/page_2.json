@@ -1,12 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/nudges", "query": { "page": "2", "per_page": "2" } },
+  "request": { "method": "GET", "path": "/nudges", "query": { "page": "2", "per_page": "100" } },
   "response": {
     "status": 200,
     "body": {
       "nudges": [
         {
-          "id": 4003,
-          "name": "Fixture Nudge Three",
+          "id": 4101,
+          "name": "Fixture Nudge 101",
           "status": "active",
           "created_at": "2026-01-05T00:00:00Z",
           "updated_at": "2026-01-06T00:00:00Z"

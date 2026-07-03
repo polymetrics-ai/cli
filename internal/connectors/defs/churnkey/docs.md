@@ -84,13 +84,18 @@ reverse-ETL read/write surface for a source connector.
   instead. No request/data change once configured — the value is sent as the same static `x-ck-app`
   header either way.
 - **`page_size`/`max_pages` config keys dropped.** `streams.json`'s `pagination.page_size` is a
-  static JSON int (`PaginationSpec.PageSize`), not a runtime-templated value. Legacy defaults
-  `page_size` to 100 (configurable up to 10,000 via a `page_size` config value), but since this
-  bundle can only declare ONE fixed page size (used both for the real per-page request size AND as
-  the conformance harness's short-page-stop threshold), this bundle declares `page_size: 2` purely
-  to keep the required 2-page fixture (conventions.md §4) small and realistic; it has no bearing on
-  production correctness. Legacy's `page_size`/`max_pages` config properties are consequently
-  genuinely dead config in this dialect and are not declared in `spec.json` (F6, conventions.md).
+  static JSON int (`PaginationSpec.PageSize`), not a runtime-templated value, so legacy's
+  config-overridable `page_size` (default 100, up to 10,000) cannot be reproduced as live
+  runtime-configurable; `page_size` is fixed at legacy's real production default, `100`
+  (`churnkeyDefaultPageSize`), matching the value an actual deployment's paginator sends. The
+  required 2-page conformance fixture (conventions.md §4) is satisfied with a full 100-record
+  `page_1` (`limit=100, skip=0`) followed by a genuinely short 1-record `page_2` (`limit=100,
+  skip=100`), the same pattern used by other single-paginated-stream bundles (e.g. bamboo-hr's
+  `employees`) — a small static `page_size` is not needed to keep the fixture small. Legacy's
+  `max_pages` config property remains genuinely dead config in this dialect and is not declared in
+  `spec.json` (F6, conventions.md); `page_size` itself is not declared as a live-configurable
+  `spec.json` property either, since the dialect has no template hook for it, but the STATIC value
+  now matches legacy's real default rather than a fixture-only shortcut.
 - `metadata.json` declares no `rate_limit` block: legacy Churnkey enforces no client-side rate
   limiting (no `rate_limit`/throttle field anywhere in `churnkey.go`), so this bundle adds none
   either, matching conventions.md §3's "informational vs. enforced" rate-limit rule.

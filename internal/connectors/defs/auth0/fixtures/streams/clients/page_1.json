@@ -1,10 +1,10 @@
 {
-  "request": { "method": "GET", "path": "/api/v2/clients", "query": { "page": "1", "per_page": "2", "include_totals": "true" } },
+  "request": { "method": "GET", "path": "/api/v2/clients", "query": { "page": "1", "per_page": "50", "include_totals": "true" } },
   "response": {
     "status": 200,
     "body": {
       "start": 0,
-      "limit": 2,
+      "limit": 50,
       "length": 1,
       "total": 1,
       "clients": [

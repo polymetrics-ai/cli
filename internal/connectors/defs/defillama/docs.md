@@ -16,7 +16,7 @@ all (matching legacy, which never builds an `Auth` value for its `connsdk.Reques
 
 - `protocols` (`GET /protocols`, records at the response body root) and `chains` (`GET
   /v2/chains`, records at the response body root) are client-side paginated with
-  `pagination.type: offset_limit` (`limit`/`offset` query params, `page_size: 5`) — DefiLlama's
+  `pagination.type: offset_limit` (`limit`/`offset` query params, `page_size: 1000`) — DefiLlama's
   real endpoints return the full list in one response with no server-side pagination contract, but
   legacy pages the response client-side anyway to keep payloads bounded, and this bundle
   reproduces that same client-side limit/offset request shape (a short/empty page from the API
@@ -55,14 +55,14 @@ None. DefiLlama is a read-only public analytics API (`capabilities.write: false`
   and this stream's exclusion from `pagination_terminates`/`records_match_schema`/
   `cursor_advances`' candidate-stream selection) are skipped, not silently faked. The other 4
   streams (all on `api.llama.fi`, matching `base.url`) are fully dynamically conformance-tested.
-- `protocols`/`chains` pagination's declared `page_size: 5` is a fixture-authoring-practicality
-  choice, not a copy of legacy's real default (`defillamaDefaultPageSize = 1000`, max `5000`):
-  `spec.json` cannot expose a config-driven `page_size` at all (see next bullet), so this bundle
-  fixes one static value. A smaller page size only changes how many client-side-paginated HTTP
-  round-trips a full sync makes, never which records are emitted — the offset/limit loop still
-  exhausts the entire list either way. Operationally this bundle would issue more requests per
-  sync than legacy's 1000-per-page default against a real, large protocol list; documented here
-  rather than silently chosen.
+- `protocols`/`chains` pagination's declared `page_size: 1000` matches legacy's real default
+  (`defillamaDefaultPageSize = 1000`, max `5000`): `spec.json` cannot expose a config-driven
+  `page_size` at all (see next bullet), so this bundle fixes one static value rather than legacy's
+  config-overridable one, but the fixed value is legacy's own default, not an arbitrarily smaller
+  one. `fixtures/streams/{protocols,chains}/page_1.json` request `limit=1000` accordingly and
+  return their entire small fixture record set on a single short page (`protocols`'s fixture,
+  previously split across two `page_size: 5` pages, is now the single `page_1.json` file with all
+  6 records).
 - `page_size`/`max_pages`/`stablecoins_base_url` config keys legacy exposed are not declared in
   `spec.json`: the engine's `offset_limit` paginator (and `MaxPages`) read their values only from
   `streams.json`'s statically-declared `pagination` block, with no mechanism to source either from

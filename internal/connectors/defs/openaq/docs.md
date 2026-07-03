@@ -18,12 +18,15 @@ failure when unset.
 All 5 streams share OpenAQ v3's common list envelope: `{"meta":{"page","limit","found"},
 "results":[...]}` with 1-indexed page/limit pagination (`pagination.type: page_number`,
 `page_param: page`, `size_param: limit`). `streams.json`'s `base.pagination.page_size` is set to
-`2` purely so the required 2-page conformance fixture (`fixtures/streams/countries/{page_1,
-page_2}.json`) can prove real pagination termination without an oversized fixture; legacy's actual
-runtime default (`openaqDefaultPageSize`, 100) is not itself expressible as a spec-overridable
-value (see the `page_size`/`max_pages` note below) — `2` is a fixture-authoring convenience,
-matching the identical pattern in `internal/connectors/defs/aviationstack`'s golden. Pagination
-stops on a short page (fewer than `page_size` records) —
+legacy's real production default, `100` (legacy: `openaqDefaultPageSize = 100`) — this is the
+actual value a live deployment's paginator sends, not a fixture convenience; a prior
+`page_size: 2` here leaked a fixture-sized page size into live config (matching the defect
+`internal/connectors/defs/aviationstack`'s golden already resolved for `airlines`) and has been
+restored. `countries` (the bundle's first eligible stream, used by conformance's
+`pagination_terminates` check) ships the required 2-page fixture
+(`fixtures/streams/countries/{page_1,page_2}.json`) sized to match: page 1 returns a full
+100-record page (so the paginator continues), page 2 returns the 101st record (a short page,
+so the paginator stops). Pagination stops on a short page (fewer than `page_size` records) —
 legacy's additional `meta.found`-based early stop is a defensive optimization only reachable at
 the exact page-size boundary; the engine's short-page stop alone terminates correctly for every
 input legacy itself would accept (a final page that exactly fills `page_size` returns zero records

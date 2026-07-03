@@ -1,27 +1,35 @@
 {
-  "request": { "method": "GET", "path": "/api/v2/users", "query": { "page": "2", "per_page": "2", "include_totals": "true" } },
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/users",
+    "query": {
+      "page": "2",
+      "per_page": "50",
+      "include_totals": "true"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
-      "start": 2,
-      "limit": 2,
+      "start": 50,
+      "limit": 50,
       "length": 1,
-      "total": 3,
+      "total": 51,
       "users": [
         {
-          "user_id": "auth0|fixture_user_3",
-          "email": "fixture3@example.com",
-          "email_verified": false,
-          "username": "fixture_user_3",
-          "name": "Fixture Three",
-          "nickname": "fix3",
+          "user_id": "auth0|fixture_user_51",
+          "email": "fixture51@example.com",
+          "email_verified": true,
+          "username": "fixture_user_51",
+          "name": "Fixture User 51",
+          "nickname": "fix51",
           "given_name": "Fixture",
-          "family_name": "Three",
-          "picture": "https://example.com/avatar3.png",
-          "created_at": "2026-01-03T00:00:00.000Z",
-          "updated_at": "2026-01-03T00:00:00.000Z",
-          "last_login": "2026-01-03T00:00:00.000Z",
-          "logins_count": 3,
+          "family_name": "User51",
+          "picture": "https://example.com/avatar51.png",
+          "created_at": "2026-01-24T00:00:00.000Z",
+          "updated_at": "2026-01-24T00:00:00.000Z",
+          "last_login": "2026-01-24T00:00:00.000Z",
+          "logins_count": 51,
           "blocked": false
         }
       ]

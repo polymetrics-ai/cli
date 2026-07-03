@@ -25,7 +25,7 @@
         "type": "page_number",
         "page_param": "page",
         "start_page": 1,
-        "page_size": 2
+        "page_size": 100
       },
       "incremental": {
         "cursor_field": "date_updated",

@@ -4,14 +4,14 @@
     "path": "/a/synthetic-conformance-value/users.json",
     "query": {
       "page": "1",
-      "per_page": "2"
+      "per_page": "100"
     }
   },
   "response": {
     "status": 200,
     "body": {
       "page": 1,
-      "per_page": 2,
+      "per_page": 100,
       "total_pages": 1,
       "total_records": 1,
       "users": [

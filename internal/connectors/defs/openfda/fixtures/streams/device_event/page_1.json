@@ -1,9 +1,9 @@
 {
-  "request": { "method": "GET", "path": "/device/event.json", "query": { "limit": "2" } },
+  "request": { "method": "GET", "path": "/device/event.json", "query": { "limit": "100" } },
   "response": {
     "status": 200,
     "body": {
-      "meta": { "results": { "skip": 0, "limit": 2, "total": 1 } },
+      "meta": { "results": { "skip": 0, "limit": 100, "total": 1 } },
       "results": [
         {
           "mdr_report_key": "device_event_fixture_1",

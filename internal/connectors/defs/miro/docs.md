@@ -46,20 +46,18 @@ legacy's `Write` returning `connectors.ErrUnsupportedOperation`.
 
 ## Known limits
 
-- **`page_size` is not runtime-configurable, and is fixed small (2) rather than at legacy's default
-  (50).** Legacy exposes `page_size` as a config-driven override (`miroPageSize`, `miro.go:257-270`,
-  default 50, max 50). The engine's `offset_limit` paginator's `PageSize` is a static bundle-authored
-  int (not templated), so there is no way to expose it as a config override; `page_size` is
-  therefore not declared in `spec.json` at all (F6, REVIEW.md: a declared-but-unwireable config key
-  is worse than an absent one). It is set to `2` (not legacy's default of 50) specifically so the
-  mandatory 2-page conformance fixture (`fixtures/streams/boards/{page_1,page_2}.json`) is realistic
-  to author and honestly exercises the short-page stop rule (`conformance`'s `pagination_terminates`
-  check requires the replay server to serve exactly one request per fixture page — a `page_size` of
-  50 against a small hand-authored fixture would never reach a genuine short page), matching
-  callrail's/bamboo-hr's identical documented precedent (`docs/migration/conventions.md`). This
-  changes the real per-page record count from legacy's 50 to 2 — a REST-shape difference (more,
-  smaller requests), never a data-emission difference (every record is still read exactly once,
-  across more, smaller pages).
+- **`page_size` config override is not modeled.** Legacy exposes `page_size` as a config-driven
+  override (`miroPageSize`, `miro.go:257-270`, default 50, max 50). The engine's `offset_limit`
+  paginator's `PageSize` is a static bundle-authored int (not templated), so there is no way to
+  expose it as a config override; `page_size` is therefore not declared in `spec.json` at all (F6,
+  REVIEW.md: a declared-but-unwireable config key is worse than an absent one). This bundle declares
+  a fixed `page_size: 50` (legacy's own default) rather than a fixture-convenience value — a
+  fixture-convenience page size is never leaked into the live pagination config (callrail's/
+  bamboo-hr's documented precedent, `docs/migration/conventions.md`). The mandatory 2-page
+  conformance fixture (`fixtures/streams/boards/{page_1,page_2}.json`) is sized to match live
+  behavior instead: page 1 returns a full 50-record page (so the paginator continues to page 2) and
+  page 2 returns the 3-record remainder, honestly exercising the short-page stop rule without
+  shrinking the live `page_size`.
 - **`max_pages` is not runtime-configurable.** Legacy exposes `max_pages` as a config-driven hard
   request-count cap override (`miroMaxPages`, `miro.go:272-285`, default 0/unbounded). The engine's
   `PaginationSpec.MaxPages` is a static bundle-authored int (not templated) — there is no

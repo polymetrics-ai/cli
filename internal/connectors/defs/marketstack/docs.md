@@ -37,9 +37,15 @@ is never logged.
   a short page (`len(records) < pageSize`). **`page_size` is not exposed as config** —
   `PaginationSpec.PageSize` is a plain JSON int resolved once at bundle load, with no config-driven
   override in this engine version (the same static-pagination-field limitation documented in the
-  auth0/searxng goldens, `docs/migration/conventions.md`). `streams.json`'s `pagination.page_size: 2`
-  exists purely to keep the 2-page fixture (required whenever a bundle declares pagination) small;
-  it has no bearing on a live deployment.
+  auth0/searxng goldens, `docs/migration/conventions.md`). `streams.json`'s `pagination.page_size` is
+  set to **100**, matching legacy's `marketstackDefaultPageSize` constant exactly — this static field
+  is sent as `limit` on every request, fixture-replayed or live, so it must reflect legacy's real
+  default rather than a small fixture-only value (a prior revision of this bundle shipped
+  `page_size: 2`, which would have sent `limit=2` on every live request too; corrected per the wave2
+  sweep's C3 finding). The required 2-page `pagination_terminates` proof (`exchanges` stream)
+  therefore ships a 100-record page 1 (a full page, matching `page_size`) followed by a 1-record short
+  page 2 — mirroring the auth0/aviationstack goldens' same page-size-realism-over-fixture-brevity
+  tradeoff, not a shortcut.
 
 Legacy enforces no client-side rate limiting, so this bundle declares no `streams.json`
 `base.rate_limit` either, matching that (lack of) behavior exactly.
@@ -82,8 +88,8 @@ market data has no sensible reverse-ETL surface.
   No `paritytest/marketstack` exists to cite as a live substitute (this bundle has no hooks); the
   marker's reason is the honest ENGINE_GAP description above, not a claim of alternate proof.
 - `page_size`/`max_pages` are not exposed as config (see Streams notes above) — only the static,
-  bundle-declared page size (2) governs every request's `limit` and the pagination stop threshold.
-  This never changes emitted record DATA for any input legacy itself would accept; it narrows
-  configurability only.
+  bundle-declared page size (100, matching legacy's default) governs every request's `limit` and the
+  pagination stop threshold. This never changes emitted record DATA for any input legacy itself
+  would accept; it narrows configurability only.
 - The full Marketstack API surface (intraday prices, standalone currencies/timezones lookup
   endpoints) is out of scope for this wave; see `api_surface.json`'s `excluded` entries.

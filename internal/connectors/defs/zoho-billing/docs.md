@@ -62,16 +62,19 @@ the ones enumerated here; expanding the allow-list to Zoho's full documented
 response shape per stream is Pass B scope (see `api_surface.json`).
 
 Pagination is `page_number` (`page_param: page`, `size_param: per_page`,
-matching legacy's `baseQuery`) with `pagination.page_size: 2` declared
-purely to keep the required 2-page `customers` fixture small (the
-auth0/aviationstack precedent, conventions.md) — this has no bearing on a
-live deployment, since `PaginationSpec.PageSize` is a static value read
-once at bundle load with no config-driven override mechanism. Legacy's real
-default is `per_page=200` (configurable 1-200 via a `page_size` config key,
-`pageSize()`, `zoho_billing.go:261-271`); the engine has no analogous
-runtime override for `page_number`'s `PageSize` field (F6, REVIEW.md: a
-declared-but-unwireable `page_size` spec property is worse than an absent
-one), so `page_size` is not declared in `spec.json` at all. Every schema
+matching legacy's `baseQuery`) with `pagination.page_size: 200`, matching
+legacy's real default (`per_page=200`, configurable 1-200 via a `page_size`
+config key, `pageSize()`, `zoho_billing.go:261-271`); the engine has no
+analogous runtime override for `page_number`'s `PageSize` field (F6,
+REVIEW.md: a declared-but-unwireable `page_size` spec property is worse
+than an absent one), so `page_size` is not declared in `spec.json` at all.
+`customers` ships a genuine two-page conformance fixture
+(`fixtures/streams/customers/{page_1,page_2}.json`) at the real
+`page_size: 200`: page 1 carries a full 200 records (proving the paginator
+requests a second page only when a page is genuinely full,
+conventions.md §4) and page 2 carries a single, honestly short final
+record; `subscriptions`/`invoices` ship a single fixture page (1 record, an
+honestly short final page under the same 200 page-size). Every schema
 declares `x-cursor-field: updated_at` for manifest-surface documentation
 only; no stream declares an `incremental` block — legacy's own `harvest()`
 (`zoho_billing.go:135-156`) never sends a server-side lower-bound filter on
@@ -101,8 +104,8 @@ None. Legacy `zoho-billing` is read-only (`Write` returns
   static-`PaginationSpec`-field reason documented in auth0's and searxng's
   goldens: `PaginationSpec.PageSize`/`MaxPages` are plain JSON values
   resolved once at bundle load, with no template/config-driven override.
-  `streams.json`'s `pagination.page_size: 2` exists purely to keep the
-  required 2-page fixture small; it has no bearing on a live deployment.
+  `streams.json`'s `pagination.page_size: 200` matches legacy's real
+  default exactly.
 - **Legacy's fixture-mode-only fields are not modeled.** Legacy's
   `readFixture` path (only reached when `config.mode == "fixture"`, a
   credential-free conformance-harness affordance) stamps a

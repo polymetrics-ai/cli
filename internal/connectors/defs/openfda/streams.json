@@ -10,7 +10,7 @@
       "type": "offset_limit",
       "limit_param": "limit",
       "offset_param": "skip",
-      "page_size": 2
+      "page_size": 100
     },
     "check": { "method": "GET", "path": "/drug/event.json", "query": { "limit": "1" } },
     "error_map": [

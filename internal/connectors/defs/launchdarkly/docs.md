@@ -50,20 +50,18 @@ None. LaunchDarkly is `capabilities.write: false`; no `writes.json` is shipped, 
 
 ## Known limits
 
-- **`page_size`/`max_pages` are no longer runtime-configurable, and `page_size` is fixed small (2)
-  rather than at legacy's default (20).** Legacy exposes both as config overrides
+- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config overrides
   (`launchdarklyPageSize`/`launchdarklyMaxPages`, `launchdarkly.go:245-273`, default 20, max 100). The
   engine's `offset_limit` paginator's `PageSize` is a static bundle-authored int (not templated), with
   no `MaxPages`-equivalent config-driven knob either; `max_pages` is left unbounded (matching legacy's
-  own default-unlimited behavior). `page_size` is set to `2` (not legacy's default of 20) specifically
-  so the mandatory 2-page conformance fixture (`fixtures/streams/projects/{page_1,page_2}.json`) is
-  realistic to author and honestly exercises the short-page stop rule (`conformance`'s
-  `pagination_terminates` check requires the replay server to serve exactly one request per fixture
-  page — a `page_size` of 20 against a small hand-authored fixture would short-circuit after page 1 and
-  never touch page 2 at all), matching cal-com's and bamboo-hr's identical documented precedent
-  (`docs/migration/conventions.md`). This changes the real per-page record count from legacy's 20 to
-  2 — a REST-shape difference (more, smaller requests), never a data-emission difference (every
-  project/member/audit-entry/flag/environment is still read exactly once, across more pages).
+  own default-unlimited behavior). `streams.json`'s `base.pagination.page_size` is set to legacy's
+  real production default, `20` (legacy: `launchdarklyDefaultPageSize = 20`) — this is the actual
+  value a live deployment's paginator sends; it is not a fixture convenience. The mandatory 2-page
+  conformance fixture (`fixtures/streams/projects/{page_1,page_2}.json`) is sized to match: page 1
+  returns a full 20-record page (so the paginator continues to page 2), page 2 returns the 1-record
+  remainder — matching aviationstack's and awin-advertiser's identical repaired precedent
+  (`docs/migration/conventions.md`, wave2 sweep class C3). Every other stream's single-page fixture
+  requests `limit=20` to match.
 - **`auditlog`'s `date` cursor field is catalog-only, matching legacy exactly (not a deviation).** See
   "Streams notes" above — this is legacy's own behavior, ported faithfully, not a scope narrowing
   introduced by this migration.

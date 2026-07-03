@@ -1,15 +1,1420 @@
 {
-  "request": { "method": "GET", "path": "/users.list", "query": { "count": "2", "offset": "0" } },
+  "request": {
+    "method": "GET",
+    "path": "/users.list",
+    "query": {
+      "count": "100",
+      "offset": "0"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "users": [
-        { "_id": "user_fixture_1", "username": "fixture.one", "name": "Fixture One", "emails": [{ "address": "fixture.one@example.com", "verified": true }], "status": "online", "active": true, "_updatedAt": "2026-01-01T00:00:00.000Z" },
-        { "_id": "user_fixture_2", "username": "fixture.two", "name": "Fixture Two", "emails": [{ "address": "fixture.two@example.com", "verified": true }], "status": "offline", "active": true, "_updatedAt": "2026-01-01T00:05:00.000Z" }
+        {
+          "_id": "user_fixture_1",
+          "username": "fixture.user1",
+          "name": "Fixture User 1",
+          "emails": [
+            {
+              "address": "fixture.user1@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:01:00.000Z"
+        },
+        {
+          "_id": "user_fixture_2",
+          "username": "fixture.user2",
+          "name": "Fixture User 2",
+          "emails": [
+            {
+              "address": "fixture.user2@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:02:00.000Z"
+        },
+        {
+          "_id": "user_fixture_3",
+          "username": "fixture.user3",
+          "name": "Fixture User 3",
+          "emails": [
+            {
+              "address": "fixture.user3@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:03:00.000Z"
+        },
+        {
+          "_id": "user_fixture_4",
+          "username": "fixture.user4",
+          "name": "Fixture User 4",
+          "emails": [
+            {
+              "address": "fixture.user4@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:04:00.000Z"
+        },
+        {
+          "_id": "user_fixture_5",
+          "username": "fixture.user5",
+          "name": "Fixture User 5",
+          "emails": [
+            {
+              "address": "fixture.user5@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:05:00.000Z"
+        },
+        {
+          "_id": "user_fixture_6",
+          "username": "fixture.user6",
+          "name": "Fixture User 6",
+          "emails": [
+            {
+              "address": "fixture.user6@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:06:00.000Z"
+        },
+        {
+          "_id": "user_fixture_7",
+          "username": "fixture.user7",
+          "name": "Fixture User 7",
+          "emails": [
+            {
+              "address": "fixture.user7@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:07:00.000Z"
+        },
+        {
+          "_id": "user_fixture_8",
+          "username": "fixture.user8",
+          "name": "Fixture User 8",
+          "emails": [
+            {
+              "address": "fixture.user8@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:08:00.000Z"
+        },
+        {
+          "_id": "user_fixture_9",
+          "username": "fixture.user9",
+          "name": "Fixture User 9",
+          "emails": [
+            {
+              "address": "fixture.user9@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:09:00.000Z"
+        },
+        {
+          "_id": "user_fixture_10",
+          "username": "fixture.user10",
+          "name": "Fixture User 10",
+          "emails": [
+            {
+              "address": "fixture.user10@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:10:00.000Z"
+        },
+        {
+          "_id": "user_fixture_11",
+          "username": "fixture.user11",
+          "name": "Fixture User 11",
+          "emails": [
+            {
+              "address": "fixture.user11@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:11:00.000Z"
+        },
+        {
+          "_id": "user_fixture_12",
+          "username": "fixture.user12",
+          "name": "Fixture User 12",
+          "emails": [
+            {
+              "address": "fixture.user12@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:12:00.000Z"
+        },
+        {
+          "_id": "user_fixture_13",
+          "username": "fixture.user13",
+          "name": "Fixture User 13",
+          "emails": [
+            {
+              "address": "fixture.user13@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:13:00.000Z"
+        },
+        {
+          "_id": "user_fixture_14",
+          "username": "fixture.user14",
+          "name": "Fixture User 14",
+          "emails": [
+            {
+              "address": "fixture.user14@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:14:00.000Z"
+        },
+        {
+          "_id": "user_fixture_15",
+          "username": "fixture.user15",
+          "name": "Fixture User 15",
+          "emails": [
+            {
+              "address": "fixture.user15@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:15:00.000Z"
+        },
+        {
+          "_id": "user_fixture_16",
+          "username": "fixture.user16",
+          "name": "Fixture User 16",
+          "emails": [
+            {
+              "address": "fixture.user16@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:16:00.000Z"
+        },
+        {
+          "_id": "user_fixture_17",
+          "username": "fixture.user17",
+          "name": "Fixture User 17",
+          "emails": [
+            {
+              "address": "fixture.user17@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:17:00.000Z"
+        },
+        {
+          "_id": "user_fixture_18",
+          "username": "fixture.user18",
+          "name": "Fixture User 18",
+          "emails": [
+            {
+              "address": "fixture.user18@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:18:00.000Z"
+        },
+        {
+          "_id": "user_fixture_19",
+          "username": "fixture.user19",
+          "name": "Fixture User 19",
+          "emails": [
+            {
+              "address": "fixture.user19@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:19:00.000Z"
+        },
+        {
+          "_id": "user_fixture_20",
+          "username": "fixture.user20",
+          "name": "Fixture User 20",
+          "emails": [
+            {
+              "address": "fixture.user20@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:20:00.000Z"
+        },
+        {
+          "_id": "user_fixture_21",
+          "username": "fixture.user21",
+          "name": "Fixture User 21",
+          "emails": [
+            {
+              "address": "fixture.user21@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:21:00.000Z"
+        },
+        {
+          "_id": "user_fixture_22",
+          "username": "fixture.user22",
+          "name": "Fixture User 22",
+          "emails": [
+            {
+              "address": "fixture.user22@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:22:00.000Z"
+        },
+        {
+          "_id": "user_fixture_23",
+          "username": "fixture.user23",
+          "name": "Fixture User 23",
+          "emails": [
+            {
+              "address": "fixture.user23@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:23:00.000Z"
+        },
+        {
+          "_id": "user_fixture_24",
+          "username": "fixture.user24",
+          "name": "Fixture User 24",
+          "emails": [
+            {
+              "address": "fixture.user24@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:24:00.000Z"
+        },
+        {
+          "_id": "user_fixture_25",
+          "username": "fixture.user25",
+          "name": "Fixture User 25",
+          "emails": [
+            {
+              "address": "fixture.user25@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:25:00.000Z"
+        },
+        {
+          "_id": "user_fixture_26",
+          "username": "fixture.user26",
+          "name": "Fixture User 26",
+          "emails": [
+            {
+              "address": "fixture.user26@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:26:00.000Z"
+        },
+        {
+          "_id": "user_fixture_27",
+          "username": "fixture.user27",
+          "name": "Fixture User 27",
+          "emails": [
+            {
+              "address": "fixture.user27@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:27:00.000Z"
+        },
+        {
+          "_id": "user_fixture_28",
+          "username": "fixture.user28",
+          "name": "Fixture User 28",
+          "emails": [
+            {
+              "address": "fixture.user28@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:28:00.000Z"
+        },
+        {
+          "_id": "user_fixture_29",
+          "username": "fixture.user29",
+          "name": "Fixture User 29",
+          "emails": [
+            {
+              "address": "fixture.user29@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:29:00.000Z"
+        },
+        {
+          "_id": "user_fixture_30",
+          "username": "fixture.user30",
+          "name": "Fixture User 30",
+          "emails": [
+            {
+              "address": "fixture.user30@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:30:00.000Z"
+        },
+        {
+          "_id": "user_fixture_31",
+          "username": "fixture.user31",
+          "name": "Fixture User 31",
+          "emails": [
+            {
+              "address": "fixture.user31@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:31:00.000Z"
+        },
+        {
+          "_id": "user_fixture_32",
+          "username": "fixture.user32",
+          "name": "Fixture User 32",
+          "emails": [
+            {
+              "address": "fixture.user32@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:32:00.000Z"
+        },
+        {
+          "_id": "user_fixture_33",
+          "username": "fixture.user33",
+          "name": "Fixture User 33",
+          "emails": [
+            {
+              "address": "fixture.user33@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:33:00.000Z"
+        },
+        {
+          "_id": "user_fixture_34",
+          "username": "fixture.user34",
+          "name": "Fixture User 34",
+          "emails": [
+            {
+              "address": "fixture.user34@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:34:00.000Z"
+        },
+        {
+          "_id": "user_fixture_35",
+          "username": "fixture.user35",
+          "name": "Fixture User 35",
+          "emails": [
+            {
+              "address": "fixture.user35@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:35:00.000Z"
+        },
+        {
+          "_id": "user_fixture_36",
+          "username": "fixture.user36",
+          "name": "Fixture User 36",
+          "emails": [
+            {
+              "address": "fixture.user36@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:36:00.000Z"
+        },
+        {
+          "_id": "user_fixture_37",
+          "username": "fixture.user37",
+          "name": "Fixture User 37",
+          "emails": [
+            {
+              "address": "fixture.user37@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:37:00.000Z"
+        },
+        {
+          "_id": "user_fixture_38",
+          "username": "fixture.user38",
+          "name": "Fixture User 38",
+          "emails": [
+            {
+              "address": "fixture.user38@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:38:00.000Z"
+        },
+        {
+          "_id": "user_fixture_39",
+          "username": "fixture.user39",
+          "name": "Fixture User 39",
+          "emails": [
+            {
+              "address": "fixture.user39@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:39:00.000Z"
+        },
+        {
+          "_id": "user_fixture_40",
+          "username": "fixture.user40",
+          "name": "Fixture User 40",
+          "emails": [
+            {
+              "address": "fixture.user40@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:40:00.000Z"
+        },
+        {
+          "_id": "user_fixture_41",
+          "username": "fixture.user41",
+          "name": "Fixture User 41",
+          "emails": [
+            {
+              "address": "fixture.user41@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:41:00.000Z"
+        },
+        {
+          "_id": "user_fixture_42",
+          "username": "fixture.user42",
+          "name": "Fixture User 42",
+          "emails": [
+            {
+              "address": "fixture.user42@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:42:00.000Z"
+        },
+        {
+          "_id": "user_fixture_43",
+          "username": "fixture.user43",
+          "name": "Fixture User 43",
+          "emails": [
+            {
+              "address": "fixture.user43@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:43:00.000Z"
+        },
+        {
+          "_id": "user_fixture_44",
+          "username": "fixture.user44",
+          "name": "Fixture User 44",
+          "emails": [
+            {
+              "address": "fixture.user44@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:44:00.000Z"
+        },
+        {
+          "_id": "user_fixture_45",
+          "username": "fixture.user45",
+          "name": "Fixture User 45",
+          "emails": [
+            {
+              "address": "fixture.user45@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:45:00.000Z"
+        },
+        {
+          "_id": "user_fixture_46",
+          "username": "fixture.user46",
+          "name": "Fixture User 46",
+          "emails": [
+            {
+              "address": "fixture.user46@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:46:00.000Z"
+        },
+        {
+          "_id": "user_fixture_47",
+          "username": "fixture.user47",
+          "name": "Fixture User 47",
+          "emails": [
+            {
+              "address": "fixture.user47@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:47:00.000Z"
+        },
+        {
+          "_id": "user_fixture_48",
+          "username": "fixture.user48",
+          "name": "Fixture User 48",
+          "emails": [
+            {
+              "address": "fixture.user48@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:48:00.000Z"
+        },
+        {
+          "_id": "user_fixture_49",
+          "username": "fixture.user49",
+          "name": "Fixture User 49",
+          "emails": [
+            {
+              "address": "fixture.user49@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:49:00.000Z"
+        },
+        {
+          "_id": "user_fixture_50",
+          "username": "fixture.user50",
+          "name": "Fixture User 50",
+          "emails": [
+            {
+              "address": "fixture.user50@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:50:00.000Z"
+        },
+        {
+          "_id": "user_fixture_51",
+          "username": "fixture.user51",
+          "name": "Fixture User 51",
+          "emails": [
+            {
+              "address": "fixture.user51@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:51:00.000Z"
+        },
+        {
+          "_id": "user_fixture_52",
+          "username": "fixture.user52",
+          "name": "Fixture User 52",
+          "emails": [
+            {
+              "address": "fixture.user52@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:52:00.000Z"
+        },
+        {
+          "_id": "user_fixture_53",
+          "username": "fixture.user53",
+          "name": "Fixture User 53",
+          "emails": [
+            {
+              "address": "fixture.user53@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:53:00.000Z"
+        },
+        {
+          "_id": "user_fixture_54",
+          "username": "fixture.user54",
+          "name": "Fixture User 54",
+          "emails": [
+            {
+              "address": "fixture.user54@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:54:00.000Z"
+        },
+        {
+          "_id": "user_fixture_55",
+          "username": "fixture.user55",
+          "name": "Fixture User 55",
+          "emails": [
+            {
+              "address": "fixture.user55@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:55:00.000Z"
+        },
+        {
+          "_id": "user_fixture_56",
+          "username": "fixture.user56",
+          "name": "Fixture User 56",
+          "emails": [
+            {
+              "address": "fixture.user56@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:56:00.000Z"
+        },
+        {
+          "_id": "user_fixture_57",
+          "username": "fixture.user57",
+          "name": "Fixture User 57",
+          "emails": [
+            {
+              "address": "fixture.user57@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:57:00.000Z"
+        },
+        {
+          "_id": "user_fixture_58",
+          "username": "fixture.user58",
+          "name": "Fixture User 58",
+          "emails": [
+            {
+              "address": "fixture.user58@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:58:00.000Z"
+        },
+        {
+          "_id": "user_fixture_59",
+          "username": "fixture.user59",
+          "name": "Fixture User 59",
+          "emails": [
+            {
+              "address": "fixture.user59@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:59:00.000Z"
+        },
+        {
+          "_id": "user_fixture_60",
+          "username": "fixture.user60",
+          "name": "Fixture User 60",
+          "emails": [
+            {
+              "address": "fixture.user60@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "_id": "user_fixture_61",
+          "username": "fixture.user61",
+          "name": "Fixture User 61",
+          "emails": [
+            {
+              "address": "fixture.user61@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:01:00.000Z"
+        },
+        {
+          "_id": "user_fixture_62",
+          "username": "fixture.user62",
+          "name": "Fixture User 62",
+          "emails": [
+            {
+              "address": "fixture.user62@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:02:00.000Z"
+        },
+        {
+          "_id": "user_fixture_63",
+          "username": "fixture.user63",
+          "name": "Fixture User 63",
+          "emails": [
+            {
+              "address": "fixture.user63@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:03:00.000Z"
+        },
+        {
+          "_id": "user_fixture_64",
+          "username": "fixture.user64",
+          "name": "Fixture User 64",
+          "emails": [
+            {
+              "address": "fixture.user64@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:04:00.000Z"
+        },
+        {
+          "_id": "user_fixture_65",
+          "username": "fixture.user65",
+          "name": "Fixture User 65",
+          "emails": [
+            {
+              "address": "fixture.user65@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:05:00.000Z"
+        },
+        {
+          "_id": "user_fixture_66",
+          "username": "fixture.user66",
+          "name": "Fixture User 66",
+          "emails": [
+            {
+              "address": "fixture.user66@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:06:00.000Z"
+        },
+        {
+          "_id": "user_fixture_67",
+          "username": "fixture.user67",
+          "name": "Fixture User 67",
+          "emails": [
+            {
+              "address": "fixture.user67@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:07:00.000Z"
+        },
+        {
+          "_id": "user_fixture_68",
+          "username": "fixture.user68",
+          "name": "Fixture User 68",
+          "emails": [
+            {
+              "address": "fixture.user68@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:08:00.000Z"
+        },
+        {
+          "_id": "user_fixture_69",
+          "username": "fixture.user69",
+          "name": "Fixture User 69",
+          "emails": [
+            {
+              "address": "fixture.user69@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:09:00.000Z"
+        },
+        {
+          "_id": "user_fixture_70",
+          "username": "fixture.user70",
+          "name": "Fixture User 70",
+          "emails": [
+            {
+              "address": "fixture.user70@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:10:00.000Z"
+        },
+        {
+          "_id": "user_fixture_71",
+          "username": "fixture.user71",
+          "name": "Fixture User 71",
+          "emails": [
+            {
+              "address": "fixture.user71@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:11:00.000Z"
+        },
+        {
+          "_id": "user_fixture_72",
+          "username": "fixture.user72",
+          "name": "Fixture User 72",
+          "emails": [
+            {
+              "address": "fixture.user72@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:12:00.000Z"
+        },
+        {
+          "_id": "user_fixture_73",
+          "username": "fixture.user73",
+          "name": "Fixture User 73",
+          "emails": [
+            {
+              "address": "fixture.user73@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:13:00.000Z"
+        },
+        {
+          "_id": "user_fixture_74",
+          "username": "fixture.user74",
+          "name": "Fixture User 74",
+          "emails": [
+            {
+              "address": "fixture.user74@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:14:00.000Z"
+        },
+        {
+          "_id": "user_fixture_75",
+          "username": "fixture.user75",
+          "name": "Fixture User 75",
+          "emails": [
+            {
+              "address": "fixture.user75@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:15:00.000Z"
+        },
+        {
+          "_id": "user_fixture_76",
+          "username": "fixture.user76",
+          "name": "Fixture User 76",
+          "emails": [
+            {
+              "address": "fixture.user76@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:16:00.000Z"
+        },
+        {
+          "_id": "user_fixture_77",
+          "username": "fixture.user77",
+          "name": "Fixture User 77",
+          "emails": [
+            {
+              "address": "fixture.user77@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:17:00.000Z"
+        },
+        {
+          "_id": "user_fixture_78",
+          "username": "fixture.user78",
+          "name": "Fixture User 78",
+          "emails": [
+            {
+              "address": "fixture.user78@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:18:00.000Z"
+        },
+        {
+          "_id": "user_fixture_79",
+          "username": "fixture.user79",
+          "name": "Fixture User 79",
+          "emails": [
+            {
+              "address": "fixture.user79@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:19:00.000Z"
+        },
+        {
+          "_id": "user_fixture_80",
+          "username": "fixture.user80",
+          "name": "Fixture User 80",
+          "emails": [
+            {
+              "address": "fixture.user80@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:20:00.000Z"
+        },
+        {
+          "_id": "user_fixture_81",
+          "username": "fixture.user81",
+          "name": "Fixture User 81",
+          "emails": [
+            {
+              "address": "fixture.user81@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:21:00.000Z"
+        },
+        {
+          "_id": "user_fixture_82",
+          "username": "fixture.user82",
+          "name": "Fixture User 82",
+          "emails": [
+            {
+              "address": "fixture.user82@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:22:00.000Z"
+        },
+        {
+          "_id": "user_fixture_83",
+          "username": "fixture.user83",
+          "name": "Fixture User 83",
+          "emails": [
+            {
+              "address": "fixture.user83@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:23:00.000Z"
+        },
+        {
+          "_id": "user_fixture_84",
+          "username": "fixture.user84",
+          "name": "Fixture User 84",
+          "emails": [
+            {
+              "address": "fixture.user84@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:24:00.000Z"
+        },
+        {
+          "_id": "user_fixture_85",
+          "username": "fixture.user85",
+          "name": "Fixture User 85",
+          "emails": [
+            {
+              "address": "fixture.user85@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:25:00.000Z"
+        },
+        {
+          "_id": "user_fixture_86",
+          "username": "fixture.user86",
+          "name": "Fixture User 86",
+          "emails": [
+            {
+              "address": "fixture.user86@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:26:00.000Z"
+        },
+        {
+          "_id": "user_fixture_87",
+          "username": "fixture.user87",
+          "name": "Fixture User 87",
+          "emails": [
+            {
+              "address": "fixture.user87@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:27:00.000Z"
+        },
+        {
+          "_id": "user_fixture_88",
+          "username": "fixture.user88",
+          "name": "Fixture User 88",
+          "emails": [
+            {
+              "address": "fixture.user88@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:28:00.000Z"
+        },
+        {
+          "_id": "user_fixture_89",
+          "username": "fixture.user89",
+          "name": "Fixture User 89",
+          "emails": [
+            {
+              "address": "fixture.user89@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:29:00.000Z"
+        },
+        {
+          "_id": "user_fixture_90",
+          "username": "fixture.user90",
+          "name": "Fixture User 90",
+          "emails": [
+            {
+              "address": "fixture.user90@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:30:00.000Z"
+        },
+        {
+          "_id": "user_fixture_91",
+          "username": "fixture.user91",
+          "name": "Fixture User 91",
+          "emails": [
+            {
+              "address": "fixture.user91@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:31:00.000Z"
+        },
+        {
+          "_id": "user_fixture_92",
+          "username": "fixture.user92",
+          "name": "Fixture User 92",
+          "emails": [
+            {
+              "address": "fixture.user92@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:32:00.000Z"
+        },
+        {
+          "_id": "user_fixture_93",
+          "username": "fixture.user93",
+          "name": "Fixture User 93",
+          "emails": [
+            {
+              "address": "fixture.user93@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:33:00.000Z"
+        },
+        {
+          "_id": "user_fixture_94",
+          "username": "fixture.user94",
+          "name": "Fixture User 94",
+          "emails": [
+            {
+              "address": "fixture.user94@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:34:00.000Z"
+        },
+        {
+          "_id": "user_fixture_95",
+          "username": "fixture.user95",
+          "name": "Fixture User 95",
+          "emails": [
+            {
+              "address": "fixture.user95@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:35:00.000Z"
+        },
+        {
+          "_id": "user_fixture_96",
+          "username": "fixture.user96",
+          "name": "Fixture User 96",
+          "emails": [
+            {
+              "address": "fixture.user96@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:36:00.000Z"
+        },
+        {
+          "_id": "user_fixture_97",
+          "username": "fixture.user97",
+          "name": "Fixture User 97",
+          "emails": [
+            {
+              "address": "fixture.user97@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:37:00.000Z"
+        },
+        {
+          "_id": "user_fixture_98",
+          "username": "fixture.user98",
+          "name": "Fixture User 98",
+          "emails": [
+            {
+              "address": "fixture.user98@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:38:00.000Z"
+        },
+        {
+          "_id": "user_fixture_99",
+          "username": "fixture.user99",
+          "name": "Fixture User 99",
+          "emails": [
+            {
+              "address": "fixture.user99@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:39:00.000Z"
+        },
+        {
+          "_id": "user_fixture_100",
+          "username": "fixture.user100",
+          "name": "Fixture User 100",
+          "emails": [
+            {
+              "address": "fixture.user100@example.com",
+              "verified": true
+            }
+          ],
+          "status": "online",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:40:00.000Z"
+        }
       ],
-      "count": 2,
+      "count": 100,
       "offset": 0,
-      "total": 3,
+      "total": 101,
       "success": true
     }
   }

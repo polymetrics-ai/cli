@@ -18,9 +18,10 @@ expansion but is not wired into any template in this bundle — it currently has
 ## Streams notes
 
 `stations` reads `GET /api/station`, records at the `Stations` top-level array key, primary key
-`["StationNbr"]`, every field passed straight through unchanged (matching legacy's
-`cimisStationRecord`, a verbatim passthrough with no renaming). No incremental cursor is published
-(matching legacy: the `stations` stream carries no `CursorFields`).
+`["StationNbr"]`, every field passed straight through unchanged via `"projection": "passthrough"`
+(matching legacy's `cimisStationRecord`, which copies every key from the raw item onto the record
+with no allowlist and no renaming: `for key, value := range item { rec[key] = value }`). No
+incremental cursor is published (matching legacy: the `stations` stream carries no `CursorFields`).
 
 ## Write actions & risks
 

@@ -4,7 +4,7 @@
     "path": "/inventory.api",
     "query": {
       "page": "1",
-      "per_page": "2",
+      "per_page": "25",
       "show_image_urls": "true",
       "show_document_urls": "true",
       "include_custom_fields": "true",

@@ -54,9 +54,8 @@ None. Factorial is read-only in both legacy and this bundle (`capabilities.write
 - `page_size`/`max_pages`/`limit` config knobs from legacy are not declared in `spec.json`:
   pagination fields (`streams.json`'s `base.pagination` block) are plain Go values, not
   template-interpolated, so there is no mechanism to wire a runtime config value into them — a
-  fixed `page_size: 2` is used instead (chosen small so the required 2-page conformance fixture
-  is realistic and exercises the short-page stop rule honestly; legacy's own default is
-  `factorialDefaultPageSize = 50`, recorded as `metadata.json`'s `batch.read_page_size` for
+  fixed `page_size: 50` is used instead, matching legacy's own default
+  (`factorialDefaultPageSize = 50`, recorded as `metadata.json`'s `batch.read_page_size` for
   operator awareness) and no `max_pages` cap (unbounded, matching legacy's own default).
 - `rate_limit` is not declared on `streams.json`'s `base` block: legacy enforces no client-side
   rate limiting, so none is added here.

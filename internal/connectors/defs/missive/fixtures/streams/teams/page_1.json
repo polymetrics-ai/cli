@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/teams", "query": { "limit": "2", "offset": "0" } },
+  "request": { "method": "GET", "path": "/teams", "query": { "limit": "50", "offset": "0" } },
   "response": {
     "status": 200,
     "body": {

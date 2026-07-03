@@ -58,13 +58,12 @@ only when configured (`omit_when_absent`), matching legacy's config-key passthro
 Pagination is offset+limit (`pagination.type: offset_limit`, `limit_param: count`,
 `offset_param: offset`), matching legacy's `connsdk.OffsetPaginator{LimitParam: "count",
 OffsetParam: "offset"}` short-page-stop semantics (`recordCount < page_size` stops pagination)
-exactly. `streams.json`'s `pagination.page_size: 2` (vs. legacy's real default of 100) exists purely
-to keep this bundle's committed 2-page conformance fixture small and reviewable (jira's identical
-precedent, `docs/migration/conventions.md`) — `page_size` is a static bundle-authored JSON int with
-no config-driven override on either side (see Known limits), so this is not a live-vs-fixture
-behavior divergence, only a fixture-authoring convenience; a real Rocket.Chat server is paged
-through 2 records at a time by this bundle rather than legacy's 100, functionally identical
-(both fully exhaust every page) but chattier. None of Rocket.Chat's
+exactly. `streams.json`'s `pagination.page_size: 100` matches legacy's real default
+(`rocket_chat.go:18`, `defaultPageSize = 100`) exactly — `page_size` is a static bundle-authored
+JSON int with no config-driven override on either side (see Known limits). The `users` stream's
+committed 2-page conformance fixture (`fixtures/streams/users/{page_1,page_2}.json`, 100 records
+then 1) proves pagination termination at this same page size, per
+`docs/migration/conventions.md`'s 2-page-fixture rule. None of Rocket.Chat's
 list endpoints expose a server-side incremental filter parameter (legacy's own streams declare
 `CursorFields` for catalog purposes only, with no `incremental` read-path wiring at all) — this
 bundle likewise declares no `incremental` block for any stream; every read is full refresh, matching
@@ -93,10 +92,9 @@ None. Rocket.Chat's list endpoints are read-only in this bundle (legacy: `Write`
   static JSON number fixed at bundle-author time, not a `config.*`-templated value, and there is no
   `MaxPages`-equivalent config knob wired to a per-stream override either (only a bundle-wide
   `pagination.MaxPages` static cap, unused here to match legacy's default-unbounded behavior). This
-  bundle sends a fixed page size (`count=2`, chosen for fixture-authoring convenience — see Streams
-  notes; unbounded pages) rather than legacy's real default of 100; `page_size`/`max_pages` are not
-  declared in `spec.json` at all (F6, REVIEW.md: a declared-but-unwireable config key is worse than
-  an absent one).
+  bundle sends a fixed page size (`count=100`, matching legacy's real default exactly; unbounded
+  pages) with no config override; `page_size`/`max_pages` are not declared in `spec.json` at all
+  (F6, REVIEW.md: a declared-but-unwireable config key is worse than an absent one).
 - **`rooms`'s `remove` array is not surfaced.** Rocket.Chat's `rooms.get` "changed rooms" feed
   returns both an `update` array (upserted rooms) and a `remove` array (deleted room ids); legacy's
   own `recordsAt` only ever looks up the `update` path (`rocket_chat.go:110`, `endpoints["rooms"]`),

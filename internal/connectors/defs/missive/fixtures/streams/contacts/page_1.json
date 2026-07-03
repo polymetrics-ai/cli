@@ -1,11 +1,316 @@
 {
-  "request": { "method": "GET", "path": "/contacts", "query": { "limit": "2", "offset": "0" } },
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "contacts": [
-        { "id": "contact_fixture_1", "first_name": "Fixture1", "last_name": "Example", "modified_at": 1767225601 },
-        { "id": "contact_fixture_2", "first_name": "Fixture2", "last_name": "Example", "modified_at": 1767225602 }
+        {
+          "id": "contact_fixture_1",
+          "first_name": "Fixture1",
+          "last_name": "Example",
+          "modified_at": 1767225601
+        },
+        {
+          "id": "contact_fixture_2",
+          "first_name": "Fixture2",
+          "last_name": "Example",
+          "modified_at": 1767225602
+        },
+        {
+          "id": "contact_fixture_3",
+          "first_name": "Fixture3",
+          "last_name": "Example",
+          "modified_at": 1767225603
+        },
+        {
+          "id": "contact_fixture_4",
+          "first_name": "Fixture4",
+          "last_name": "Example",
+          "modified_at": 1767225604
+        },
+        {
+          "id": "contact_fixture_5",
+          "first_name": "Fixture5",
+          "last_name": "Example",
+          "modified_at": 1767225605
+        },
+        {
+          "id": "contact_fixture_6",
+          "first_name": "Fixture6",
+          "last_name": "Example",
+          "modified_at": 1767225606
+        },
+        {
+          "id": "contact_fixture_7",
+          "first_name": "Fixture7",
+          "last_name": "Example",
+          "modified_at": 1767225607
+        },
+        {
+          "id": "contact_fixture_8",
+          "first_name": "Fixture8",
+          "last_name": "Example",
+          "modified_at": 1767225608
+        },
+        {
+          "id": "contact_fixture_9",
+          "first_name": "Fixture9",
+          "last_name": "Example",
+          "modified_at": 1767225609
+        },
+        {
+          "id": "contact_fixture_10",
+          "first_name": "Fixture10",
+          "last_name": "Example",
+          "modified_at": 1767225610
+        },
+        {
+          "id": "contact_fixture_11",
+          "first_name": "Fixture11",
+          "last_name": "Example",
+          "modified_at": 1767225611
+        },
+        {
+          "id": "contact_fixture_12",
+          "first_name": "Fixture12",
+          "last_name": "Example",
+          "modified_at": 1767225612
+        },
+        {
+          "id": "contact_fixture_13",
+          "first_name": "Fixture13",
+          "last_name": "Example",
+          "modified_at": 1767225613
+        },
+        {
+          "id": "contact_fixture_14",
+          "first_name": "Fixture14",
+          "last_name": "Example",
+          "modified_at": 1767225614
+        },
+        {
+          "id": "contact_fixture_15",
+          "first_name": "Fixture15",
+          "last_name": "Example",
+          "modified_at": 1767225615
+        },
+        {
+          "id": "contact_fixture_16",
+          "first_name": "Fixture16",
+          "last_name": "Example",
+          "modified_at": 1767225616
+        },
+        {
+          "id": "contact_fixture_17",
+          "first_name": "Fixture17",
+          "last_name": "Example",
+          "modified_at": 1767225617
+        },
+        {
+          "id": "contact_fixture_18",
+          "first_name": "Fixture18",
+          "last_name": "Example",
+          "modified_at": 1767225618
+        },
+        {
+          "id": "contact_fixture_19",
+          "first_name": "Fixture19",
+          "last_name": "Example",
+          "modified_at": 1767225619
+        },
+        {
+          "id": "contact_fixture_20",
+          "first_name": "Fixture20",
+          "last_name": "Example",
+          "modified_at": 1767225620
+        },
+        {
+          "id": "contact_fixture_21",
+          "first_name": "Fixture21",
+          "last_name": "Example",
+          "modified_at": 1767225621
+        },
+        {
+          "id": "contact_fixture_22",
+          "first_name": "Fixture22",
+          "last_name": "Example",
+          "modified_at": 1767225622
+        },
+        {
+          "id": "contact_fixture_23",
+          "first_name": "Fixture23",
+          "last_name": "Example",
+          "modified_at": 1767225623
+        },
+        {
+          "id": "contact_fixture_24",
+          "first_name": "Fixture24",
+          "last_name": "Example",
+          "modified_at": 1767225624
+        },
+        {
+          "id": "contact_fixture_25",
+          "first_name": "Fixture25",
+          "last_name": "Example",
+          "modified_at": 1767225625
+        },
+        {
+          "id": "contact_fixture_26",
+          "first_name": "Fixture26",
+          "last_name": "Example",
+          "modified_at": 1767225626
+        },
+        {
+          "id": "contact_fixture_27",
+          "first_name": "Fixture27",
+          "last_name": "Example",
+          "modified_at": 1767225627
+        },
+        {
+          "id": "contact_fixture_28",
+          "first_name": "Fixture28",
+          "last_name": "Example",
+          "modified_at": 1767225628
+        },
+        {
+          "id": "contact_fixture_29",
+          "first_name": "Fixture29",
+          "last_name": "Example",
+          "modified_at": 1767225629
+        },
+        {
+          "id": "contact_fixture_30",
+          "first_name": "Fixture30",
+          "last_name": "Example",
+          "modified_at": 1767225630
+        },
+        {
+          "id": "contact_fixture_31",
+          "first_name": "Fixture31",
+          "last_name": "Example",
+          "modified_at": 1767225631
+        },
+        {
+          "id": "contact_fixture_32",
+          "first_name": "Fixture32",
+          "last_name": "Example",
+          "modified_at": 1767225632
+        },
+        {
+          "id": "contact_fixture_33",
+          "first_name": "Fixture33",
+          "last_name": "Example",
+          "modified_at": 1767225633
+        },
+        {
+          "id": "contact_fixture_34",
+          "first_name": "Fixture34",
+          "last_name": "Example",
+          "modified_at": 1767225634
+        },
+        {
+          "id": "contact_fixture_35",
+          "first_name": "Fixture35",
+          "last_name": "Example",
+          "modified_at": 1767225635
+        },
+        {
+          "id": "contact_fixture_36",
+          "first_name": "Fixture36",
+          "last_name": "Example",
+          "modified_at": 1767225636
+        },
+        {
+          "id": "contact_fixture_37",
+          "first_name": "Fixture37",
+          "last_name": "Example",
+          "modified_at": 1767225637
+        },
+        {
+          "id": "contact_fixture_38",
+          "first_name": "Fixture38",
+          "last_name": "Example",
+          "modified_at": 1767225638
+        },
+        {
+          "id": "contact_fixture_39",
+          "first_name": "Fixture39",
+          "last_name": "Example",
+          "modified_at": 1767225639
+        },
+        {
+          "id": "contact_fixture_40",
+          "first_name": "Fixture40",
+          "last_name": "Example",
+          "modified_at": 1767225640
+        },
+        {
+          "id": "contact_fixture_41",
+          "first_name": "Fixture41",
+          "last_name": "Example",
+          "modified_at": 1767225641
+        },
+        {
+          "id": "contact_fixture_42",
+          "first_name": "Fixture42",
+          "last_name": "Example",
+          "modified_at": 1767225642
+        },
+        {
+          "id": "contact_fixture_43",
+          "first_name": "Fixture43",
+          "last_name": "Example",
+          "modified_at": 1767225643
+        },
+        {
+          "id": "contact_fixture_44",
+          "first_name": "Fixture44",
+          "last_name": "Example",
+          "modified_at": 1767225644
+        },
+        {
+          "id": "contact_fixture_45",
+          "first_name": "Fixture45",
+          "last_name": "Example",
+          "modified_at": 1767225645
+        },
+        {
+          "id": "contact_fixture_46",
+          "first_name": "Fixture46",
+          "last_name": "Example",
+          "modified_at": 1767225646
+        },
+        {
+          "id": "contact_fixture_47",
+          "first_name": "Fixture47",
+          "last_name": "Example",
+          "modified_at": 1767225647
+        },
+        {
+          "id": "contact_fixture_48",
+          "first_name": "Fixture48",
+          "last_name": "Example",
+          "modified_at": 1767225648
+        },
+        {
+          "id": "contact_fixture_49",
+          "first_name": "Fixture49",
+          "last_name": "Example",
+          "modified_at": 1767225649
+        },
+        {
+          "id": "contact_fixture_50",
+          "first_name": "Fixture50",
+          "last_name": "Example",
+          "modified_at": 1767225650
+        }
       ]
     }
   }

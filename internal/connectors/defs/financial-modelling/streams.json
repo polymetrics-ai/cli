@@ -34,7 +34,7 @@
         "type": "offset_limit",
         "limit_param": "limit",
         "offset_param": "offset",
-        "page_size": 2
+        "page_size": 1000
       },
       "schema": "schemas/stock_screener.json"
     },

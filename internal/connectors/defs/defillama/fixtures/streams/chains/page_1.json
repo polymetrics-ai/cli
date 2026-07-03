@@ -2,7 +2,7 @@
   "request": {
     "method": "GET",
     "path": "/v2/chains",
-    "query": { "limit": "5", "offset": "0" }
+    "query": { "limit": "1000", "offset": "0" }
   },
   "response": {
     "status": 200,

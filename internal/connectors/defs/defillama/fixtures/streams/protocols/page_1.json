@@ -3,7 +3,7 @@
     "method": "GET",
     "path": "/protocols",
     "query": {
-      "limit": "5",
+      "limit": "1000",
       "offset": "0"
     }
   },
@@ -88,6 +88,22 @@
         "mcap": 10000.0,
         "change_1d": 5.0,
         "change_7d": 10.0,
+        "url": "https://example.com"
+      },
+      {
+        "id": "fixture-protocol-6",
+        "name": "Fixture Protocol 6",
+        "slug": "fixture-protocol-6",
+        "symbol": "FIX",
+        "category": "Dexes",
+        "chain": "Ethereum",
+        "chains": [
+          "Ethereum"
+        ],
+        "tvl": 6000.0,
+        "mcap": 12000.0,
+        "change_1d": 6.0,
+        "change_7d": 12.0,
         "url": "https://example.com"
       }
     ]

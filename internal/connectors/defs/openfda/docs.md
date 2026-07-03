@@ -19,23 +19,25 @@ legacy's `requester`, which only attaches `connsdk.APIKeyQuery("api_key", key)` 
 
 All 5 streams share openFDA's common list envelope: `{"meta":{"results":{"skip","limit","total"}},
 "results":[...]}` with offset/limit pagination (`pagination.type: offset_limit`, `limit_param:
-limit`, `offset_param: skip`). `streams.json`'s `base.pagination.page_size` is set to `2` purely so
-the required 2-page conformance fixture (`fixtures/streams/drug_event/{page_1,page_2}.json`) can
-prove real pagination termination without an oversized fixture; legacy's actual runtime default
-(`openfdaDefaultPageSize`, 100) is not itself expressible as a spec-overridable value (see the
-`page_size`/`max_pages`/`max_skip` note below) — `2` is a fixture-authoring convenience, matching
-the identical pattern in `internal/connectors/defs/aviationstack`'s golden. Pagination stops on a
-short page (fewer than `page_size` records) — legacy's additional
-`meta.results.total`-based early stop is a defensive optimization only reachable at the exact
-page-size boundary; the engine's short-page stop alone terminates correctly for every input legacy
-itself would accept. Every stream accepts an optional `search` query string (openFDA's Lucene-like
-query syntax), applied via the `omit_when_absent` optional-query dialect — absent entirely when
-unset, matching legacy's `if search != "" { base.Set("search", search) }`. Every field in every
-stream's schema is copied verbatim from the raw openFDA result object (1:1 passthrough, matching
-legacy's `*Record` mapper functions field-for-field); no renames or computed fields are needed.
-`drug_enforcement` and `food_enforcement` share the identical field shape (both use legacy's
-`enforcementRecord`/`enforcementFields`) but are declared as two independent schemas per the
-one-schema-per-stream convention.
+limit`, `offset_param: skip`). `streams.json`'s `base.pagination.page_size` is set to legacy's real
+production default, `100` (legacy: `openfdaDefaultPageSize = 100`) — this is the actual value a
+live deployment's paginator sends, not a fixture convenience; a prior `page_size: 2` here leaked a
+fixture-sized page size into live config (matching the defect `internal/connectors/defs/
+aviationstack`'s golden already resolved for `airlines`) and has been restored. `drug_event` (the
+bundle's first eligible stream, used by conformance's `pagination_terminates` check) ships the
+required 2-page fixture (`fixtures/streams/drug_event/{page_1,page_2}.json`) sized to match: page 1
+returns a full 100-record page (so the paginator continues), page 2 returns the 101st record (a
+short page, so the paginator stops). Pagination stops on a short page (fewer than `page_size`
+records) — legacy's additional `meta.results.total`-based early stop is a defensive optimization
+only reachable at the exact page-size boundary; the engine's short-page stop alone terminates
+correctly for every input legacy itself would accept. Every stream accepts an optional `search`
+query string (openFDA's Lucene-like query syntax), applied via the `omit_when_absent` optional-query
+dialect — absent entirely when unset, matching legacy's `if search != "" { base.Set("search",
+search) }`. Every field in every stream's schema is copied verbatim from the raw openFDA result
+object (1:1 passthrough, matching legacy's `*Record` mapper functions field-for-field); no renames
+or computed fields are needed. `drug_enforcement` and `food_enforcement` share the identical field
+shape (both use legacy's `enforcementRecord`/`enforcementFields`) but are declared as two
+independent schemas per the one-schema-per-stream convention.
 
 ## Write actions & risks
 

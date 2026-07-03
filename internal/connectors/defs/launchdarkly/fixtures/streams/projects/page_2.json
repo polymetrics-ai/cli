@@ -1,12 +1,26 @@
 {
-  "request": { "method": "GET", "path": "/projects", "query": { "limit": "2", "offset": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/projects",
+    "query": {
+      "limit": "20",
+      "offset": "20"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "items": [
-        { "_id": "proj_fixture_3", "key": "fixture-proj-3", "name": "Fixture Project 3", "tags": ["fixture"] }
+        {
+          "_id": "proj_fixture_21",
+          "key": "fixture-proj-21",
+          "name": "Fixture Project 21",
+          "tags": [
+            "fixture"
+          ]
+        }
       ],
-      "totalCount": 3
+      "totalCount": 21
     }
   }
 }

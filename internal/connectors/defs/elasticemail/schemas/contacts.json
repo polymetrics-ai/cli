@@ -3,6 +3,7 @@
   "title": "contacts",
   "type": "object",
   "x-primary-key": ["Email"],
+  "x-cursor-field": "DateUpdated",
   "required": ["Email"],
   "properties": {
     "Email": { "type": "string" },

@@ -54,10 +54,18 @@ unconditionally; `capabilities.write` is `false` and this bundle ships no `write
   `page_size` (1-1000, default 200) and `max_pages` (default unlimited, `all`/`unlimited`/`0`
   synonyms) config keys read at request time (`ebayPageSize`/`ebayMaxPages`). The engine's
   `PaginationSpec.PageSize`/`MaxPages` fields are plain fixed JSON integers baked into
-  `streams.json` — there is no templating/config-driven override mechanism for them. This bundle
-  declares a fixed `page_size: 2` (chosen small so the required 2-page conformance fixture is
-  realistic and exercises the short-page stop rule; legacy's own default is 200) and no
-  `max_pages` cap (unbounded, matching legacy's own default). Neither key is declared in
+  `streams.json` — there is no templating/config-driven override mechanism for them.
+  `base.pagination.page_size` is set to legacy's real production default, `200`
+  (`ebayDefaultPageSize`) — this is the actual value a live deployment's paginator sends; it is
+  not a fixture convenience. The `transactions` stream declares a stream-level `pagination`
+  override (`page_size: 2`) so its required 2-page conformance fixture
+  (`fixtures/streams/transactions/{page_1,page_2}.json`, §4 of `docs/migration/conventions.md`)
+  can stay small and readable; since stream-level `pagination` replaces the base spec wholesale,
+  this is an intentional, ledgered per-stream deviation from legacy's uniform 200-record page
+  size — `transactions` reads in smaller, more numerous pages than legacy would, everywhere else
+  identical. `payouts` and `transfers` are unaffected and use legacy's true 200-record page size
+  end-to-end, matching their single-page fixtures' `limit=200` request/response. No `max_pages`
+  cap is declared (unbounded, matching legacy's own default). Neither key is declared in
   `spec.json` (F6, `docs/migration/conventions.md`: dead, unwireable config is worse than absent
   config). This never changes which records are emitted for an in-range request — only request
   cadence.

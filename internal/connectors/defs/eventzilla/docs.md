@@ -22,10 +22,10 @@ legacy's `connsdk.APIKeyHeader(eventzillaAPIKeyHeader, secret, "")` exactly (`ev
 with no total/has_more marker, so pagination stops on a short page
 (`pagination.type: offset_limit`, `limit_param: limit`, `offset_param: offset`), matching legacy's
 `harvest` function exactly (`len(records) < pageSize` stop condition). `page_size` is declared as
-a fixed literal (`2`) in `base.pagination` rather than legacy's config-driven default of 100 (see
-Known limits) — chosen purely to keep this bundle's committed fixtures small; the engine's
-`offset_limit` paginator has no config-driven page-size override mechanism regardless of the
-literal value chosen (see Known limits).
+a fixed literal (`100`) in `base.pagination`, matching legacy's own default
+(`eventzillaDefaultPageSize = 100` in `eventzilla.go`, also the config-bounds cap) — the engine's
+`offset_limit` paginator has no config-driven page-size override mechanism (see Known limits), so
+this bundle bakes in legacy's default rather than legacy's config-driven override range.
 
 `categories`' primary key is `["category"]` (the category name string itself), matching legacy's
 own `PrimaryKey: []string{"category"}` — Eventzilla's category list has no separate id field.
@@ -55,8 +55,8 @@ and no `writes.json` is shipped.
   (`eventzillaPageSize`/`eventzillaMaxPages` in `eventzilla.go`). The engine's `offset_limit`
   paginator has no config-driven page-size or max-pages knob (`PaginationSpec.PageSize` is a fixed
   literal read once at bundle-load time, not a per-request template), so this bundle declares a
-  fixed `page_size: 2` in `base.pagination` (chosen for compact fixtures, not legacy's own
-  default) and does not declare `page_size`/`max_pages` in `spec.json` at all (a
+  fixed `page_size: 100` in `base.pagination` (legacy's own default/cap value,
+  `eventzillaDefaultPageSize`) and does not declare `page_size`/`max_pages` in `spec.json` at all (a
   declared-but-unwireable config key is worse than an absent one, per conventions.md F6
   precedent). Pagination is bounded only by Eventzilla's own short-page stop signal, matching
   Eventzilla's real termination behavior.

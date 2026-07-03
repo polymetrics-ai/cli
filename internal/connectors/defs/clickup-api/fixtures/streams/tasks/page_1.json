@@ -1,5 +1,13 @@
 {
-  "request": { "method": "GET", "path": "/team/synthetic-conformance-value/task", "query": { "page": "1", "archived": "synthetic-conformance-value", "include_closed": "synthetic-conformance-value" } },
+  "request": {
+    "method": "GET",
+    "path": "/team/synthetic-conformance-value/task",
+    "query": {
+      "page": "1",
+      "archived": "synthetic-conformance-value",
+      "include_closed": "synthetic-conformance-value"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -7,28 +15,2302 @@
         {
           "id": "task_fixture_1",
           "name": "Fixture Task 1",
-          "status": { "status": "open" },
+          "status": {
+            "status": "open"
+          },
           "date_created": "1767225600000",
-          "date_updated": "1767225601000",
+          "date_updated": "1767225600001",
           "date_closed": null,
-          "creator": { "id": 100001 },
-          "list": { "id": "list_fixture_1" },
-          "folder": { "id": "folder_fixture_1" },
-          "space": { "id": "space_fixture_1" },
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
           "url": "https://app.clickup.com/t/task_fixture_1"
         },
         {
           "id": "task_fixture_2",
           "name": "Fixture Task 2",
-          "status": { "status": "in progress" },
+          "status": {
+            "status": "in progress"
+          },
           "date_created": "1767225600000",
-          "date_updated": "1767225602000",
+          "date_updated": "1767225600002",
           "date_closed": null,
-          "creator": { "id": 100002 },
-          "list": { "id": "list_fixture_1" },
-          "folder": { "id": "folder_fixture_1" },
-          "space": { "id": "space_fixture_1" },
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
           "url": "https://app.clickup.com/t/task_fixture_2"
+        },
+        {
+          "id": "task_fixture_3",
+          "name": "Fixture Task 3",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600003",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_3"
+        },
+        {
+          "id": "task_fixture_4",
+          "name": "Fixture Task 4",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600004",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_4"
+        },
+        {
+          "id": "task_fixture_5",
+          "name": "Fixture Task 5",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600005",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_5"
+        },
+        {
+          "id": "task_fixture_6",
+          "name": "Fixture Task 6",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600006",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_6"
+        },
+        {
+          "id": "task_fixture_7",
+          "name": "Fixture Task 7",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600007",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_7"
+        },
+        {
+          "id": "task_fixture_8",
+          "name": "Fixture Task 8",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600008",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_8"
+        },
+        {
+          "id": "task_fixture_9",
+          "name": "Fixture Task 9",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600009",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_9"
+        },
+        {
+          "id": "task_fixture_10",
+          "name": "Fixture Task 10",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600010",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_10"
+        },
+        {
+          "id": "task_fixture_11",
+          "name": "Fixture Task 11",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600011",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_11"
+        },
+        {
+          "id": "task_fixture_12",
+          "name": "Fixture Task 12",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600012",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_12"
+        },
+        {
+          "id": "task_fixture_13",
+          "name": "Fixture Task 13",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600013",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_13"
+        },
+        {
+          "id": "task_fixture_14",
+          "name": "Fixture Task 14",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600014",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_14"
+        },
+        {
+          "id": "task_fixture_15",
+          "name": "Fixture Task 15",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600015",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_15"
+        },
+        {
+          "id": "task_fixture_16",
+          "name": "Fixture Task 16",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600016",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_16"
+        },
+        {
+          "id": "task_fixture_17",
+          "name": "Fixture Task 17",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600017",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_17"
+        },
+        {
+          "id": "task_fixture_18",
+          "name": "Fixture Task 18",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600018",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_18"
+        },
+        {
+          "id": "task_fixture_19",
+          "name": "Fixture Task 19",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600019",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_19"
+        },
+        {
+          "id": "task_fixture_20",
+          "name": "Fixture Task 20",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600020",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_20"
+        },
+        {
+          "id": "task_fixture_21",
+          "name": "Fixture Task 21",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600021",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_21"
+        },
+        {
+          "id": "task_fixture_22",
+          "name": "Fixture Task 22",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600022",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_22"
+        },
+        {
+          "id": "task_fixture_23",
+          "name": "Fixture Task 23",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600023",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_23"
+        },
+        {
+          "id": "task_fixture_24",
+          "name": "Fixture Task 24",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600024",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_24"
+        },
+        {
+          "id": "task_fixture_25",
+          "name": "Fixture Task 25",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600025",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_25"
+        },
+        {
+          "id": "task_fixture_26",
+          "name": "Fixture Task 26",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600026",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_26"
+        },
+        {
+          "id": "task_fixture_27",
+          "name": "Fixture Task 27",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600027",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_27"
+        },
+        {
+          "id": "task_fixture_28",
+          "name": "Fixture Task 28",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600028",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_28"
+        },
+        {
+          "id": "task_fixture_29",
+          "name": "Fixture Task 29",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600029",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_29"
+        },
+        {
+          "id": "task_fixture_30",
+          "name": "Fixture Task 30",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600030",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_30"
+        },
+        {
+          "id": "task_fixture_31",
+          "name": "Fixture Task 31",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600031",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_31"
+        },
+        {
+          "id": "task_fixture_32",
+          "name": "Fixture Task 32",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600032",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_32"
+        },
+        {
+          "id": "task_fixture_33",
+          "name": "Fixture Task 33",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600033",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_33"
+        },
+        {
+          "id": "task_fixture_34",
+          "name": "Fixture Task 34",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600034",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_34"
+        },
+        {
+          "id": "task_fixture_35",
+          "name": "Fixture Task 35",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600035",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_35"
+        },
+        {
+          "id": "task_fixture_36",
+          "name": "Fixture Task 36",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600036",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_36"
+        },
+        {
+          "id": "task_fixture_37",
+          "name": "Fixture Task 37",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600037",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_37"
+        },
+        {
+          "id": "task_fixture_38",
+          "name": "Fixture Task 38",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600038",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_38"
+        },
+        {
+          "id": "task_fixture_39",
+          "name": "Fixture Task 39",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600039",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_39"
+        },
+        {
+          "id": "task_fixture_40",
+          "name": "Fixture Task 40",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600040",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_40"
+        },
+        {
+          "id": "task_fixture_41",
+          "name": "Fixture Task 41",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600041",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_41"
+        },
+        {
+          "id": "task_fixture_42",
+          "name": "Fixture Task 42",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600042",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_42"
+        },
+        {
+          "id": "task_fixture_43",
+          "name": "Fixture Task 43",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600043",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_43"
+        },
+        {
+          "id": "task_fixture_44",
+          "name": "Fixture Task 44",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600044",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_44"
+        },
+        {
+          "id": "task_fixture_45",
+          "name": "Fixture Task 45",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600045",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_45"
+        },
+        {
+          "id": "task_fixture_46",
+          "name": "Fixture Task 46",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600046",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_46"
+        },
+        {
+          "id": "task_fixture_47",
+          "name": "Fixture Task 47",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600047",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_47"
+        },
+        {
+          "id": "task_fixture_48",
+          "name": "Fixture Task 48",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600048",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_48"
+        },
+        {
+          "id": "task_fixture_49",
+          "name": "Fixture Task 49",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600049",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_49"
+        },
+        {
+          "id": "task_fixture_50",
+          "name": "Fixture Task 50",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600050",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_50"
+        },
+        {
+          "id": "task_fixture_51",
+          "name": "Fixture Task 51",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600051",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_51"
+        },
+        {
+          "id": "task_fixture_52",
+          "name": "Fixture Task 52",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600052",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_52"
+        },
+        {
+          "id": "task_fixture_53",
+          "name": "Fixture Task 53",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600053",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_53"
+        },
+        {
+          "id": "task_fixture_54",
+          "name": "Fixture Task 54",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600054",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_54"
+        },
+        {
+          "id": "task_fixture_55",
+          "name": "Fixture Task 55",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600055",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_55"
+        },
+        {
+          "id": "task_fixture_56",
+          "name": "Fixture Task 56",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600056",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_56"
+        },
+        {
+          "id": "task_fixture_57",
+          "name": "Fixture Task 57",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600057",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_57"
+        },
+        {
+          "id": "task_fixture_58",
+          "name": "Fixture Task 58",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600058",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_58"
+        },
+        {
+          "id": "task_fixture_59",
+          "name": "Fixture Task 59",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600059",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_59"
+        },
+        {
+          "id": "task_fixture_60",
+          "name": "Fixture Task 60",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600060",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_60"
+        },
+        {
+          "id": "task_fixture_61",
+          "name": "Fixture Task 61",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600061",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_61"
+        },
+        {
+          "id": "task_fixture_62",
+          "name": "Fixture Task 62",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600062",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_62"
+        },
+        {
+          "id": "task_fixture_63",
+          "name": "Fixture Task 63",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600063",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_63"
+        },
+        {
+          "id": "task_fixture_64",
+          "name": "Fixture Task 64",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600064",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_64"
+        },
+        {
+          "id": "task_fixture_65",
+          "name": "Fixture Task 65",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600065",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_65"
+        },
+        {
+          "id": "task_fixture_66",
+          "name": "Fixture Task 66",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600066",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_66"
+        },
+        {
+          "id": "task_fixture_67",
+          "name": "Fixture Task 67",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600067",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_67"
+        },
+        {
+          "id": "task_fixture_68",
+          "name": "Fixture Task 68",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600068",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_68"
+        },
+        {
+          "id": "task_fixture_69",
+          "name": "Fixture Task 69",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600069",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_69"
+        },
+        {
+          "id": "task_fixture_70",
+          "name": "Fixture Task 70",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600070",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_70"
+        },
+        {
+          "id": "task_fixture_71",
+          "name": "Fixture Task 71",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600071",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_71"
+        },
+        {
+          "id": "task_fixture_72",
+          "name": "Fixture Task 72",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600072",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_72"
+        },
+        {
+          "id": "task_fixture_73",
+          "name": "Fixture Task 73",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600073",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_73"
+        },
+        {
+          "id": "task_fixture_74",
+          "name": "Fixture Task 74",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600074",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_74"
+        },
+        {
+          "id": "task_fixture_75",
+          "name": "Fixture Task 75",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600075",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_75"
+        },
+        {
+          "id": "task_fixture_76",
+          "name": "Fixture Task 76",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600076",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_76"
+        },
+        {
+          "id": "task_fixture_77",
+          "name": "Fixture Task 77",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600077",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_77"
+        },
+        {
+          "id": "task_fixture_78",
+          "name": "Fixture Task 78",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600078",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_78"
+        },
+        {
+          "id": "task_fixture_79",
+          "name": "Fixture Task 79",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600079",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_79"
+        },
+        {
+          "id": "task_fixture_80",
+          "name": "Fixture Task 80",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600080",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_80"
+        },
+        {
+          "id": "task_fixture_81",
+          "name": "Fixture Task 81",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600081",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_81"
+        },
+        {
+          "id": "task_fixture_82",
+          "name": "Fixture Task 82",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600082",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_82"
+        },
+        {
+          "id": "task_fixture_83",
+          "name": "Fixture Task 83",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600083",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_83"
+        },
+        {
+          "id": "task_fixture_84",
+          "name": "Fixture Task 84",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600084",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_84"
+        },
+        {
+          "id": "task_fixture_85",
+          "name": "Fixture Task 85",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600085",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_85"
+        },
+        {
+          "id": "task_fixture_86",
+          "name": "Fixture Task 86",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600086",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_86"
+        },
+        {
+          "id": "task_fixture_87",
+          "name": "Fixture Task 87",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600087",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_87"
+        },
+        {
+          "id": "task_fixture_88",
+          "name": "Fixture Task 88",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600088",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_88"
+        },
+        {
+          "id": "task_fixture_89",
+          "name": "Fixture Task 89",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600089",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_89"
+        },
+        {
+          "id": "task_fixture_90",
+          "name": "Fixture Task 90",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600090",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_90"
+        },
+        {
+          "id": "task_fixture_91",
+          "name": "Fixture Task 91",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600091",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_91"
+        },
+        {
+          "id": "task_fixture_92",
+          "name": "Fixture Task 92",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600092",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_92"
+        },
+        {
+          "id": "task_fixture_93",
+          "name": "Fixture Task 93",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600093",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_93"
+        },
+        {
+          "id": "task_fixture_94",
+          "name": "Fixture Task 94",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600094",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_94"
+        },
+        {
+          "id": "task_fixture_95",
+          "name": "Fixture Task 95",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600095",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_95"
+        },
+        {
+          "id": "task_fixture_96",
+          "name": "Fixture Task 96",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600096",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_96"
+        },
+        {
+          "id": "task_fixture_97",
+          "name": "Fixture Task 97",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600097",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_97"
+        },
+        {
+          "id": "task_fixture_98",
+          "name": "Fixture Task 98",
+          "status": {
+            "status": "in progress"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600098",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_98"
+        },
+        {
+          "id": "task_fixture_99",
+          "name": "Fixture Task 99",
+          "status": {
+            "status": "closed"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600099",
+          "date_closed": null,
+          "creator": {
+            "id": 100001
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_99"
+        },
+        {
+          "id": "task_fixture_100",
+          "name": "Fixture Task 100",
+          "status": {
+            "status": "open"
+          },
+          "date_created": "1767225600000",
+          "date_updated": "1767225600100",
+          "date_closed": null,
+          "creator": {
+            "id": 100002
+          },
+          "list": {
+            "id": "list_fixture_1"
+          },
+          "folder": {
+            "id": "folder_fixture_1"
+          },
+          "space": {
+            "id": "space_fixture_1"
+          },
+          "url": "https://app.clickup.com/t/task_fixture_100"
         }
       ],
       "last_page": false

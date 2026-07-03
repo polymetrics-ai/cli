@@ -24,14 +24,21 @@ key (e.g. `{"contacts":[...]}`), primary key `["id"]`, cursor field `updated_at`
 only — see Known limits). `view_id` defaults to `"0"` (Freshsales's default/all-view alias,
 matching legacy's `freshsalesDefaultView`) and is shared across every stream via the single
 `config.view_id` template. Pagination is `page_number` (`page` query param, no size param sent —
-Freshsales list endpoints do not accept a page-size override) with `page_size: 2` as the
-short-page stop threshold (conformance-fixture scale; production traffic sees Freshsales's real
-page sizes, which are fixed server-side per view). This mirrors legacy's own dual stop condition
-(`meta.total_pages` when present, else "stop on an empty/short page") well enough for parity: any
-page shorter than the declared `page_size` is treated as the last page, exactly matching legacy's
-fallback branch (`freshsales.go:181-183`); legacy's `meta.total_pages`-driven early stop is a
-stricter variant of the same "don't request past the last real page" behavior, never a a data
-divergence for any full page Freshsales actually returns.
+Freshsales list endpoints do not accept a page-size override) with `page_size: 100` as the
+short-page stop threshold. Legacy itself has no page-size concept at all (no config key, no
+constant, no size param ever sent) — its real stop condition is `meta.total_pages` when present,
+falling back to "stop only on a truly EMPTY page" when it is absent (`freshsales.go:171-183`;
+the fallback branch never compares against a record count, only `len(records) == 0`). The engine's
+`page_number` paginator has no `meta.total_pages`-aware stop mode, only a short-page (`recordCount
+< page_size`) threshold, so `page_size` is set to a deliberately large, realistic value (100,
+matching the sibling `page_number`+empty-`size_param` convention used by xero/judge-me-reviews/
+buzzsprout for this exact "client-side stop threshold only, no server-side size param" shape) to
+keep that threshold from ever firing on a genuine, non-final Freshsales page — every actual
+termination in practice still comes from `meta.total_pages` (present on every real Freshsales list
+response and on every fixture in this bundle) or a genuinely empty page, matching legacy's real
+behavior far more closely than a small threshold would. A tiny `page_size` (e.g. 2) would invert
+this: it would treat ordinary non-final pages as "short" and stop early whenever `meta.total_pages`
+happened to be absent, which legacy itself never does.
 
 ## Write actions & risks
 
@@ -61,6 +68,12 @@ None. Freshsales is read-only (`capabilities.write: false`, no `writes.json`), m
   exactly. `updated_at` is still declared as `x-cursor-field` in each schema (as legacy declares
   `CursorFields`) so downstream `*_deduped` sync modes remain available, but no request-time
   filtering happens on either side.
-- Fixture pagination uses a small `page_size: 2` purely to make the conformance harness's 2-page
-  fixture exercise the short-page stop signal deterministically; production Freshsales page sizes
-  are fixed server-side and unrelated to this value.
+- **`page_size` is not runtime-configurable** (there is no such legacy config key to restore in the
+  first place — see Streams notes above). `spec.json` intentionally declares no `page_size`
+  property (F6, conventions.md: a declared-but-unwireable key is worse than an absent one). The
+  `contacts` stream's required 2-page conformance fixture (conventions.md §4) ships a full
+  100-record page 1 (with `meta.total_pages: 2`, matching a real Freshsales response shape) followed
+  by a genuinely short page 2, so the fixture exercises the engine's short-page-stop signal without
+  relying on an unrealistically tiny `page_size` to do it; `sales_accounts`/`deals`/`leads` each
+  ship a single terminal page (`meta.total_pages: 1`), unaffected by the `page_size` threshold at
+  all.

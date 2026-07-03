@@ -1,22 +1,29 @@
 {
-  "request": { "method": "GET", "path": "/parties", "query": { "page": "2", "perPage": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/parties",
+    "query": {
+      "page": "2",
+      "perPage": "50"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "parties": [
         {
-          "id": 3,
+          "id": 51,
           "type": "person",
-          "firstName": "Fixture3",
+          "firstName": "Fixture51",
           "lastName": "Example",
           "organisationName": null,
           "title": "Mx",
-          "jobTitle": "Manager",
+          "jobTitle": "Engineer",
           "about": "conformance fixture party",
           "owner": "fixture-owner",
-          "createdAt": "2026-01-03T00:00:00Z",
-          "updatedAt": "2026-01-03T00:00:00Z",
-          "lastContactedAt": "2026-01-03T00:00:00Z"
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-24T00:00:00Z",
+          "lastContactedAt": null
         }
       ]
     }

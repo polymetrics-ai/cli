@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/members.api", "query": { "page": "1", "per_page": "2" } },
+  "request": { "method": "GET", "path": "/members.api", "query": { "page": "1", "per_page": "25" } },
   "response": {
     "status": 200,
     "body": {

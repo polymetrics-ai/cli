@@ -1,9 +1,9 @@
 {
-  "request": { "method": "GET", "path": "/exchanges", "query": { "limit": "2", "offset": "2" } },
+  "request": { "method": "GET", "path": "/exchanges", "query": { "limit": "100", "offset": "100" } },
   "response": {
     "status": 200,
     "body": {
-      "pagination": { "limit": 2, "offset": 2, "count": 1, "total": 3 },
+      "pagination": { "limit": 100, "offset": 100, "count": 1, "total": 101 },
       "data": [
         {
           "mic": "XTKS",

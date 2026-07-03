@@ -9,7 +9,7 @@
       "type": "offset_limit",
       "limit_param": "limit",
       "offset_param": "offset",
-      "page_size": 2
+      "page_size": 100
     },
     "check": { "method": "GET", "path": "/lists" },
     "error_map": [
@@ -21,7 +21,16 @@
     {
       "name": "contacts",
       "path": "/contacts",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 2
+      },
       "records": { "path": "" },
+      "incremental": {
+        "cursor_field": "DateUpdated"
+      },
       "schema": "schemas/contacts.json"
     },
     {

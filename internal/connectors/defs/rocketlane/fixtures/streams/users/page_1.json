@@ -1,12 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/users", "query": { "page": "1", "pageSize": "2" } },
+  "request": { "method": "GET", "path": "/users", "query": { "page": "1", "pageSize": "100" } },
   "response": {
     "status": 200,
     "body": {
       "data": [
         { "id": "user_fixture_1", "name": "Fixture User", "email": "fixture.user@example.com", "status": "ACTIVE", "updated_at": "2026-01-01T00:00:00Z" }
       ],
-      "pageInfo": { "page": 1, "pageSize": 2, "totalRecords": 1 }
+      "pageInfo": { "page": 1, "pageSize": 100, "totalRecords": 1 }
     }
   }
 }

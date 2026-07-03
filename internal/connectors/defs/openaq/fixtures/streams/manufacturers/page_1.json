@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/manufacturers", "query": { "limit": "2", "page": "1" } },
+  "request": { "method": "GET", "path": "/manufacturers", "query": { "limit": "100", "page": "1" } },
   "response": {
     "status": 200,
     "body": {

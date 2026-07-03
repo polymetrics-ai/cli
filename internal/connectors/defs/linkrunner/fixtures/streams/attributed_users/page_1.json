@@ -2,7 +2,7 @@
   "request": {
     "method": "GET",
     "path": "/attributed-users",
-    "query": { "page": "1", "limit": "2" }
+    "query": { "page": "1", "limit": "100" }
   },
   "response": {
     "status": 200,

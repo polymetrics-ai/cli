@@ -77,22 +77,19 @@ is shipped.
 - Full Codefresh API surface (pipeline triggers/runs, builds, deployments, user/team management)
   is out of scope for this migration; see `api_surface.json`'s `excluded` entries. Only the 4
   legacy-parity read streams are implemented.
-- **`page_size` is fixed at `2` (not legacy's default of `50`), and neither `page_size` nor
+- **`page_size` is fixed at `50` (matching legacy's default), and neither `page_size` nor
   `max_pages` is runtime-configurable.** Legacy exposes both as config overrides
   (`codefreshPageSize`/`codefreshMaxPages`, `codefresh.go:268-296`, clamped 1-100 / `0`/`all`/
   `unlimited`). The engine's `page_number` paginator's `PageSize` is a static bundle-authored int
   (not template-resolvable from `config.*`), and there is no `MaxPages`-equivalent config-driven
   knob for this paginator type either; `max_pages` is unbounded (matching legacy's own
   `max_pages=0`/`all`/`unlimited` default, since `PaginationSpec` here declares no `max_pages`
-  cap). `page_size` is set to `2` specifically so the mandatory 2-page conformance fixture
-  (`fixtures/streams/projects/{page_1,page_2}.json`) is realistic to author and honestly exercises
-  the short-page stop rule (`conformance`'s `pagination_terminates` check requires the replay
-  server to serve exactly one request per fixture page — a `page_size` of 50 against a small
-  hand-authored fixture would short-circuit after page 1 and never touch page 2 at all), matching
-  bamboo-hr's and callrail's identical documented precedent
-  (`docs/migration/conventions.md`). This changes the real per-page record count from legacy's 50
-  to 2 — a REST-shape difference (more, smaller requests), never a data-emission difference (every
-  record is still read exactly once, across more pages).
+  cap). `page_size` is set to legacy's own default (`codefreshDefaultPageSize = 50`,
+  `codefresh.go:31`) rather than a small fixture-convenience value — the mandatory 2-page
+  conformance fixture (`fixtures/streams/projects/{page_1,page_2}.json`) is authored with 50
+  records on page 1 (full page, continues) and 1 record on page 2 (short page, stops) to honestly
+  exercise the short-page stop rule at the real page size. `page_size`/`max_pages` not being
+  runtime-configurable is the only remaining config-surface narrowing versus legacy.
 - **Legacy's fixture-mode-only synthetic record shape is not modeled.** Legacy's `readFixture` path
   (only reached when `config.mode == "fixture"`) emits 2 synthetic records per stream with a
   single hard-coded shape shared across all 4 resource types (`codefresh.go:170-203`) — a

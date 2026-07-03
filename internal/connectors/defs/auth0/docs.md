@@ -43,9 +43,12 @@ matching legacy's per-endpoint `arrayKey`. `users` is the only stream with a cur
 **`page_size`/`max_pages` are not exposed as config** for the same static-`PaginationSpec`-field
 reason documented in `aviationstack`'s and searxng's goldens (`docs/migration/conventions.md`):
 `PaginationSpec.PageSize`/`MaxPages` are plain JSON ints, resolved once at bundle load, with no
-template/config-driven override. `streams.json`'s `pagination.page_size: 2` exists purely to keep
-the required 2-page `users` fixture small; it has no bearing on a live deployment (every request,
-fixture-replayed or live, is driven by the same static value).
+template/config-driven override. `streams.json`'s `pagination.page_size: 50` matches legacy's own
+`auth0DefaultPageSize` (`auth0.go:31`) — every request, fixture-replayed or live, is driven by this
+same static value. The `users` fixture (the only stream needing the required 2-page conformance
+proof) ships a full 50-record page 1 (triggering the paginator's short-page continuation) plus a
+1-record page 2, matching this page size exactly rather than an arbitrary fixture-convenience
+number.
 
 ## Write actions & risks
 

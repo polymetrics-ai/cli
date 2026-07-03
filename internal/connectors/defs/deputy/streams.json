@@ -9,7 +9,7 @@
       "type": "offset_limit",
       "limit_param": "max",
       "offset_param": "start",
-      "page_size": 5
+      "page_size": 500
     },
     "check": { "method": "GET", "path": "/api/v1/resource/Company", "query": { "max": "1" } },
     "error_map": [
@@ -22,6 +22,12 @@
     {
       "name": "locations",
       "path": "/api/v1/resource/Company",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "max",
+        "offset_param": "start",
+        "page_size": 5
+      },
       "records": { "path": "" },
       "computed_fields": {
         "id": "{{ record.Id }}",

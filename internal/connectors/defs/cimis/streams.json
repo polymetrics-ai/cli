@@ -16,7 +16,8 @@
       "name": "stations",
       "path": "/api/station",
       "records": { "path": "Stations" },
-      "schema": "schemas/stations.json"
+      "schema": "schemas/stations.json",
+      "projection": "passthrough"
     }
   ]
 }

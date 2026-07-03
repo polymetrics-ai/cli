@@ -25,7 +25,10 @@ nested `response.items` path (`flowluRecordsPath` in legacy), primary key `id`. 
 "count"`), stopping on a short page (fewer than `page_size` records), matching legacy's `harvest`
 loop (`flowlu.go:152-186`) exactly — legacy has no server-side incremental filter parameter, so
 every read is a full stream read (matching legacy's `InitialState`, which always starts from an
-empty cursor and never advances it via a request param).
+empty cursor and never advances it via a request param). `base.pagination.page_size` is `100`,
+matching legacy's real production default/hard-max (`flowluDefaultPageSize`/`flowluMaxPageSize`) —
+this is the actual value a live deployment's paginator sends on every stream, not a fixture
+convenience (see Known limits for why legacy's runtime override isn't wired).
 
 Every schema declares `x-cursor-field: updated_date` for manifest-surface parity with legacy's
 declared `CursorFields: []string{"updated_date"}` on every stream, but (matching legacy) no stream
@@ -53,8 +56,12 @@ ships no `writes.json`.
   (1-100, default 100) and `max_pages` (default unlimited) config keys read at request time
   (`flowluPageSize`/`flowluMaxPages`, `flowlu.go:314-342`). The engine's `PaginationSpec.PageSize`/
   `MaxPages` fields are plain fixed JSON integers baked into `streams.json`'s `base.pagination` block
-  — there is no templating/config-driven override mechanism for them at all. This bundle declares a
-  fixed `page_size: 2` (chosen small so the required 2-page conformance fixture is realistic and
-  exercises the short-page stop rule; legacy's own default is 100) and no `max_pages` cap
-  (unbounded, matching legacy's own default). Neither `page_size` nor `max_pages` is declared in
-  `spec.json` (F6: dead, unwireable config is worse than absent config).
+  — there is no templating/config-driven override mechanism for them at all. `base.pagination.
+  page_size` is fixed at legacy's own default/max (`100`), reproducing legacy's
+  default-configuration behavior exactly for every stream, and no `max_pages` cap is set (unbounded,
+  matching legacy's own default). An operator who had overridden legacy's `page_size` away from its
+  default cannot reproduce that override here, but every request this bundle sends by default
+  matches legacy's own default cadence — this never changes the total SET of records a full sync
+  retrieves, only how many requests it takes to retrieve them (see `docs/migration/conventions.md`
+  §5's parity-deviation meta-rule). Neither `page_size` nor `max_pages` is declared in `spec.json`
+  (F6: dead, unwireable config is worse than absent config).

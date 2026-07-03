@@ -27,11 +27,11 @@ Legacy's `limit`/`max_pages` runtime config overrides are not exposed as `spec.j
 this engine version, so a declared-but-unwireable `spec.json` property would be dead config (F6,
 `docs/migration/conventions.md` §3) — this bundle relies on the engine's `page_number` short-page
 stop and leaves `max_pages` unbounded (matching legacy's `0`/unlimited default) rather than a
-config-driven override. `streams.json`'s declared `page_size: 2` is a fixture-authoring
-accommodation (per campaign-monitor's identical precedent), not legacy's real default (100) — since
-`page_size` here is purely a client-side chunk/stop-detection size with no bearing on which records
-are returned (only how many round trips fetch them), this does not change any emitted record data;
-see "Known limits" below.
+config-driven override. `streams.json`'s `page_size: 100` matches legacy's real default
+(`paperformDefaultLimit`) exactly, per campaign-monitor's identical precedent (`page_size: 100` in
+its own `base.pagination` block) — `page_size` is purely a client-side chunk/stop-detection size
+with no bearing on which records are returned (only how many round trips fetch them), so this does
+not change any emitted record data.
 
 ## Write actions & risks
 
@@ -46,11 +46,13 @@ None. This connector is read-only, matching legacy (`Capabilities.Write: false`,
 - `submissions` requires the `form_id` config value; there is no cross-form submissions listing
   endpoint in the Paperform API, matching legacy's own `form_id`-required behavior exactly (legacy
   errors with the same "requires config form_id" condition when unset).
-- **`page_size` is fixture-sized (2), not runtime-configurable.** Legacy exposes `limit`/`max_pages`
-  as config overrides (`pageSize`/`maxPages` in `paperform.go`); the engine's `page_number`
-  paginator's `page_size` is a static bundle-authored int, not templated, so it cannot vary per
-  connection the way legacy's config-driven `limit` did. `page_size: 2` here exists purely so the
-  bundle's committed fixture pair (§4's required 2-page fixture for declared pagination) actually
-  exercises a second request; it does not change which records are returned or in what order, only
-  how many are fetched per round trip, following campaign-monitor's identical documented
-  scope-narrowing precedent.
+- **`page_size` (100, matching legacy's default) is not runtime-configurable.** Legacy exposes
+  `limit`/`max_pages` as config overrides (`pageSize`/`maxPages` in `paperform.go`); the engine's
+  `page_number` paginator's `page_size` is a static bundle-authored int, not templated, so it
+  cannot vary per connection the way legacy's config-driven `limit` did — `page_size: 100` is fixed
+  at legacy's own default rather than a config-driven override, following campaign-monitor's
+  identical documented scope-narrowing precedent. `fixtures/streams/forms/page_1.json` ships a
+  genuinely full 100-record page (`has_more: true`) and `page_2.json` a short, 1-record final page
+  (`has_more: false`) — the page-1-full-page fixture pattern required to exercise a real second
+  request under a `page_number`/`offset_limit` paginator's short-page stop rule, rather than
+  shrinking the live `page_size` to fit a hand-authored fixture.

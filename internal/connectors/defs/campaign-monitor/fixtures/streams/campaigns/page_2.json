@@ -4,7 +4,7 @@
     "path": "/clients/synthetic-conformance-value/campaigns.json",
     "query": {
       "page": "2",
-      "pagesize": "1"
+      "pagesize": "100"
     }
   },
   "response": {
@@ -12,22 +12,22 @@
     "body": {
       "Results": [
         {
-          "CampaignID": "camp_fixture_2",
-          "Name": "Fixture Campaign 2",
-          "Subject": "Fixture subject 2",
+          "CampaignID": "camp_fixture_101",
+          "Name": "Fixture Campaign 101",
+          "Subject": "Fixture subject 101",
           "FromName": "Fixture Sender",
           "FromEmail": "sender@example.com",
           "ReplyTo": "reply@example.com",
-          "WebVersionURL": "https://example.com/view/2",
-          "WebVersionTextURL": "https://example.com/view/2.txt",
-          "SentDate": "2026-01-02 10:00:00",
-          "TotalRecipients": 200
+          "WebVersionURL": "https://example.com/view/101",
+          "WebVersionTextURL": "https://example.com/view/101.txt",
+          "SentDate": "2026-02-01 10:00:00",
+          "TotalRecipients": 10100
         }
       ],
       "PageNumber": 2,
-      "PageSize": 1,
+      "PageSize": 100,
       "RecordsOnThisPage": 1,
-      "TotalNumberOfRecords": 2,
+      "TotalNumberOfRecords": 101,
       "NumberOfPages": 2
     }
   }

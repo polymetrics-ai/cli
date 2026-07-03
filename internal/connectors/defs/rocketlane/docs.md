@@ -24,12 +24,12 @@ API field into the emitted record unfiltered before adding `id`/`stream`, so thi
 that rather than silently dropping any raw field the schema doesn't declare. Pagination is 1-based
 page-number (`pagination.type: page_number`, `page_param: page`, `size_param: pageSize`,
 `start_page: 1`), matching legacy's `connsdk.PageNumberPaginator{PageParam: "page", SizeParam:
-"pageSize", StartPage: 1}` short-page-stop semantics exactly. `streams.json`'s `pagination.page_size:
-2` (vs. legacy's real default of 100) exists purely to keep this bundle's committed 2-page
-conformance fixture (`projects`) small and reviewable (jira's identical precedent,
-`docs/migration/conventions.md`) — `page_size` is a static bundle-authored JSON int with no
-config-driven override on either side (see Known limits), so this is a fixture-authoring
-convenience only, not a live-vs-fixture behavior divergence.
+"pageSize", StartPage: 1}` short-page-stop semantics exactly. `streams.json`'s
+`pagination.page_size: 100` matches legacy's real default (`rocketlane.go:19`, `defaultPageSize =
+100`) exactly — `page_size` is a static bundle-authored JSON int with no config-driven override on
+either side (see Known limits). The `projects` stream's committed 2-page conformance fixture
+(`fixtures/streams/projects/{page_1,page_2}.json`, 100 records then 1) proves pagination
+termination at this same page size, per `docs/migration/conventions.md`'s 2-page-fixture rule.
 
 Legacy's four optional config passthrough filters (`updated_after`, `created_after`, `projectId`,
 `status`, `rocketlane.go:88-91`) are wired per-stream to the endpoints legacy sent them on:
@@ -60,7 +60,6 @@ None. Rocketlane's endpoints are read-only in this bundle (legacy: `Write` retur
   (`rocketlane.go:249-255`). The engine's `page_number` paginator's `PaginationSpec.PageSize` is a
   static JSON number fixed at bundle-author time, not a `config.*`-templated value, and there is no
   `MaxPages`-equivalent config knob wired to a per-stream override either. This bundle sends a fixed
-  page size (`pageSize=2`, chosen for fixture-authoring convenience — see Streams notes; unbounded
-  pages) rather than legacy's real default of 100; `page_size`/`max_pages` are not declared in
-  `spec.json` at all (F6, REVIEW.md: a declared-but-unwireable config key is worse than an absent
-  one).
+  page size (`pageSize=100`, matching legacy's real default exactly; unbounded pages) with no config
+  override; `page_size`/`max_pages` are not declared in `spec.json` at all (F6, REVIEW.md: a
+  declared-but-unwireable config key is worse than an absent one).

@@ -24,7 +24,7 @@
         "type": "offset_limit",
         "limit_param": "limit",
         "offset_param": "skip",
-        "page_size": 2
+        "page_size": 100
       },
       "computed_fields": {
         "blueprint_id": "{{ record.blueprintId }}",

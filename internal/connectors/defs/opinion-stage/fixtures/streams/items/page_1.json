@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/api/v2/items", "query": { "page[number]": "1", "page[size]": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/items",
+    "query": {
+      "page[number]": "1",
+      "page[size]": "50"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -10,13 +17,17 @@
           "attributes": {
             "title": "Fixture Poll One",
             "status": "published",
-            "embed": { "kind": "poll" },
+            "embed": {
+              "kind": "poll"
+            },
             "timestamps": {
               "created": "2026-01-01T00:00:00Z",
               "modified": "2026-01-02T00:00:00Z"
             }
           },
-          "links": { "self": "https://api.opinionstage.com/api/v2/items/item_fixture_1" },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_1"
+          },
           "relationships": {}
         },
         {
@@ -25,13 +36,929 @@
           "attributes": {
             "title": "Fixture Quiz Two",
             "status": "draft",
-            "embed": { "kind": "quiz" },
+            "embed": {
+              "kind": "quiz"
+            },
             "timestamps": {
               "created": "2026-01-03T00:00:00Z",
               "modified": "2026-01-04T00:00:00Z"
             }
           },
-          "links": { "self": "https://api.opinionstage.com/api/v2/items/item_fixture_2" },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_2"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_3",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 3",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_3"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_4",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 4",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_4"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_5",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 5",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_5"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_6",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 6",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_6"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_7",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 7",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_7"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_8",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 8",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_8"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_9",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 9",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_9"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_10",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 10",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_10"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_11",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 11",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_11"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_12",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 12",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_12"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_13",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 13",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_13"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_14",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 14",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_14"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_15",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 15",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_15"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_16",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 16",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_16"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_17",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 17",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_17"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_18",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 18",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_18"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_19",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 19",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_19"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_20",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 20",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_20"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_21",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 21",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_21"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_22",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 22",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_22"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_23",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 23",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_23"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_24",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 24",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_24"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_25",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 25",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_25"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_26",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 26",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_26"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_27",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 27",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_27"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_28",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 28",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_28"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_29",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 29",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_29"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_30",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 30",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_30"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_31",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 31",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_31"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_32",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 32",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_32"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_33",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 33",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_33"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_34",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 34",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_34"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_35",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 35",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_35"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_36",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 36",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_36"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_37",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 37",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_37"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_38",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 38",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_38"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_39",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 39",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_39"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_40",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 40",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_40"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_41",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 41",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_41"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_42",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 42",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_42"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_43",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 43",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_43"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_44",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 44",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_44"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_45",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 45",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_45"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_46",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 46",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_46"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_47",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 47",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_47"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_48",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 48",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_48"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_49",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 49",
+            "status": "published",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_49"
+          },
+          "relationships": {}
+        },
+        {
+          "id": "item_fixture_50",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Item 50",
+            "status": "draft",
+            "embed": {
+              "kind": "poll"
+            },
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_50"
+          },
           "relationships": {}
         }
       ]

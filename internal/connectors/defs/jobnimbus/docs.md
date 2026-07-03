@@ -19,11 +19,10 @@ All 5 streams share JobNimbus's offset pagination shape (an offset `from` param 
 size, stopping on a short page); `pagination.type: offset_limit` with `offset_param: from`,
 `limit_param: size` reproduces this exactly (`connsdk.OffsetPaginator`'s
 `recordCount < PageSize` stop matches legacy's own short-page check). `streams.json`'s
-`pagination.page_size: 2` (vs. legacy's real default of 1000) exists purely to keep the required
-2-page `contacts` fixture small, per the identical precedent documented on auth0's and
-aviationstack's goldens (`docs/migration/conventions.md`) — `PaginationSpec.PageSize` is a fixed
-value with no config-driven override on either side, so `page_size`/`max_pages` are not declared
-in `spec.json` (F6: a declared-but-unwireable key is worse than an absent one).
+`pagination.page_size: 1000` matches legacy's real default (`jobnimbusDefaultPageSize`,
+`jobnimbus.go:33`) — `PaginationSpec.PageSize` is a fixed value with no config-driven override on
+either side, so `page_size`/`max_pages` are not declared in `spec.json` (F6: a
+declared-but-unwireable key is worse than an absent one).
 
 JobNimbus's list envelope key is inconsistent per stream, exactly mirrored by each stream's
 `records.path`: `contacts`/`jobs`/`tasks` nest under `results`, `activities` nests under
@@ -51,8 +50,8 @@ None. JobNimbus is exposed read-only (`capabilities.write: false`); this bundle 
   overrides (`jobnimbusPageSize`/`jobnimbusMaxPages`, `jobnimbus.go:258-286`); the engine's
   `offset_limit` paginator reads `PaginationSpec.PageSize`/`MaxPages` as fixed values resolved once
   at bundle load, with no template/config-driven override mechanism. This bundle sends a fixed
-  page size (`2`, chosen only to keep the fixture small — see Streams notes) and does not cap
-  `max_pages` (unbounded, matching legacy's own default of 0/unlimited).
+  page size (`1000`, matching legacy's own default `jobnimbusDefaultPageSize`, `jobnimbus.go:33`)
+  and does not cap `max_pages` (unbounded, matching legacy's own default of 0/unlimited).
 - **No incremental fetch behavior on any stream** — see Streams notes. `date_updated` is declared
   as `x-cursor-field` for downstream dedup/ordering purposes only; it was never a wired
   server-side filter in legacy either, so this is capability parity, not a narrowing.

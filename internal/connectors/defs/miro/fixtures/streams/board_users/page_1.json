@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/v2/boards/synthetic-conformance-value/members", "query": { "limit": "2", "offset": "0" } },
+  "request": { "method": "GET", "path": "/v2/boards/synthetic-conformance-value/members", "query": { "limit": "50", "offset": "0" } },
   "response": {
     "status": 200,
     "body": {
@@ -14,7 +14,7 @@
       "total": 1,
       "size": 1,
       "offset": 0,
-      "limit": 2
+      "limit": 50
     }
   }
 }

@@ -33,11 +33,10 @@ check; legacy's *additional* early-stop on `startAt+count >= total` is not separ
 engine paginator has no `total`-envelope awareness), but this can only ever issue one extra,
 zero-record trailing request when `total` is an exact multiple of the page size — never a data
 difference, since that request's own short/empty page independently terminates pagination.
-`streams.json`'s `pagination.page_size: 2` (vs. legacy's real default of 50) exists purely to keep
-the required 2-page `issues` fixture small, per the identical precedent documented on auth0's and
-aviationstack's goldens (`docs/migration/conventions.md`): `PaginationSpec.PageSize` is a plain
-JSON int with no config-driven override on either side (`page_size`/`max_pages` are therefore not
-declared in `spec.json` at all — a declared-but-unwireable key is worse than an absent one, F6).
+`streams.json`'s `pagination.page_size: 50` matches legacy's real default (`jiraDefaultPageSize`,
+`jira.go:33`); `PaginationSpec.PageSize` is a plain JSON int with no config-driven override on
+either side (`page_size`/`max_pages` are therefore not declared in `spec.json` at all — a
+declared-but-unwireable key is worse than an absent one, F6).
 
 - `issues` (`GET /rest/api/3/search`, records at `issues`): top-level `id`/`key`/`self` survive
   schema projection directly; the curated `fields.*` subset legacy's own `jiraIssueRecord` lifts to
@@ -72,8 +71,8 @@ None. Jira is a read-only source connector (`capabilities.write: false`); this b
   overrides (`jiraPageSize`/`jiraMaxPages`, `jira.go:344-372`); the engine's `offset_limit`
   paginator reads `PaginationSpec.PageSize`/`MaxPages` as fixed values resolved once at bundle
   load, with no template/config-driven override mechanism. This bundle sends a fixed page size
-  (`2`, chosen only to keep the fixture small — see Streams notes) and does not cap `max_pages`
-  (unbounded, matching legacy's own default of 0/unlimited).
+  (`50`, matching legacy's own default `jiraDefaultPageSize`, `jira.go:33`) and does not cap
+  `max_pages` (unbounded, matching legacy's own default of 0/unlimited).
 - **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (reached only
   when `config.mode == "fixture"`, a credential-free conformance-harness affordance) stamps an
   extra `previous_cursor` field (echoing `req.State["cursor"]`) onto every fixture-mode record

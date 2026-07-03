@@ -58,10 +58,12 @@ None. BambooHR is read-only in this bundle (`capabilities.write: false`), matchi
   (`bambooPageSize`/`bambooMaxPages`, `bamboohr.go:305-333`). The engine's `PaginationSpec.PageSize`/
   `MaxPages` fields are plain fixed JSON integers baked into `streams.json`'s `base.pagination`
   block — there is no templating/config-driven override mechanism for either. This bundle declares
-  a fixed `page_size: 2` (chosen small so the required 2-page conformance fixture is realistic and
-  exercises the short-page stop rule honestly; legacy's own default is 100) and no `max_pages` cap
-  (unbounded, matching legacy's own default). Neither `page_size` nor `max_pages` is declared in
-  `spec.json` (a declared-but-unwireable key is worse than an absent one).
+  a fixed `page_size: 100` (legacy's own default) and no `max_pages` cap (unbounded, matching
+  legacy's own default). Neither `page_size` nor `max_pages` is declared in `spec.json` (a
+  declared-but-unwireable key is worse than an absent one). The required 2-page conformance
+  fixture (`fixtures/streams/employees/{page_1,page_2}.json`) is sized to match live behavior:
+  page 1 returns a full 100-record page (so the paginator continues to page 2) and page 2 returns
+  the remainder — a fixture-convenience page size is never leaked into the live pagination config.
 - `employees/directory`'s `fields` envelope key (the account's configured custom-field list) is not
   modeled as a stream — it is directory metadata about the request, not a syncable object
   collection, matching legacy's own scope (legacy never surfaces it as a stream either).

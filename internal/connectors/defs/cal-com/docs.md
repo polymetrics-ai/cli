@@ -21,8 +21,8 @@ to `https://api.cal.com` and may be overridden for tests/proxies.
 `bookings` (`GET /v2/bookings`) and `schedules` (`GET /v2/schedules`) both use Cal.com's offset
 (`skip`/`take`) pagination (`pagination.type: offset_limit`, `limit_param: take`, `offset_param:
 skip`) — records live at `data`, and a page shorter than `take` stops pagination, matching legacy's
-`harvest` exactly (`cal_com.go:145-167`); see Known limits for why `page_size` is fixed small (`1`)
-rather than at legacy's default (100). `my_profile` (`GET /v2/me`)
+`harvest` exactly (`cal_com.go:145-167`); `page_size` is `100`, matching legacy's own default
+(see Known limits for why it is not runtime-configurable). `my_profile` (`GET /v2/me`)
 is not paginated (`pagination.type: none`, matching legacy's `endpoint.paginated == false` branch);
 its `data` envelope is a single object rather than an array, which `records.path: "data"` handles
 identically to an array of one (the engine's `RecordsAt` treats a single JSON object at the resolved
@@ -54,21 +54,15 @@ None. Cal.com is exposed read-only, matching legacy's `Write` returning
   silently dropping the stream from the catalog without documentation; the other 3 streams
   (`bookings`, `schedules`, `my_profile`) are migrated at full parity. See `api_surface.json`'s
   `excluded` entry for `/v2/event-types`.
-- **`page_size`/`max_pages` are not runtime-configurable, and `page_size` is fixed small (1) rather
-  than at legacy's default (100).** Legacy exposes both as config overrides
-  (`pageSizeFromConfig`/`maxPagesFromConfig`, `cal_com.go:327-355`). The engine's `offset_limit`
-  paginator's `PageSize` is a static bundle-authored int (not templated), and there is no
-  `MaxPages`-equivalent config-driven knob either; `max_pages` is unbounded (matching legacy's own
-  `max_pages=0`/`all`/`unlimited` default). `page_size` is set to `1` (not legacy's default of 100)
-  specifically so the mandatory 2-page conformance fixtures (`fixtures/streams/{bookings,schedules}/
-  {page_1,page_2}.json`) are realistic to author and honestly exercise the short-page stop rule
-  (`conformance`'s `pagination_terminates` check requires the replay server to serve exactly one
-  request per fixture page — a `page_size` of 100 against a small hand-authored fixture would
-  short-circuit after page 1 and never touch page 2 at all), matching bamboo-hr's identical
-  documented precedent (`docs/migration/conventions.md`, bamboo-hr's `docs.md`). This changes the
-  real per-page record count from legacy's 100 to 1 — a REST-shape difference (more, smaller
-  requests), never a data-emission difference (every booking/schedule is still read exactly once,
-  across more pages).
+- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config overrides
+  (`pageSizeFromConfig`/`maxPagesFromConfig`, `cal_com.go:327-355`, `page_size` defaulting to 100,
+  capped at 100). The engine's `offset_limit` paginator's `PageSize` is a static bundle-authored int
+  (not templated), and there is no `MaxPages`-equivalent config-driven knob either; `max_pages` is
+  unbounded (matching legacy's own `max_pages=0`/`all`/`unlimited` default). `page_size` is fixed at
+  `100` to match legacy's own default exactly; the conformance fixtures for `bookings`/`schedules` are
+  each a single page of 1 record — a short page relative to `page_size: 100` — so
+  `pagination_terminates` observes exactly one request per stream, matching the real
+  one-request-in-production behavior for any result set under 100 records.
 - **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
   when `config.mode == "fixture"`) stamps extra fields (`connector`, `fixture`) onto every
   fixture-mode record (`cal_com.go:226-262`); none are part of the live record shape. This bundle's

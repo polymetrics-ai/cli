@@ -1,10 +1,17 @@
 {
-  "request": { "method": "GET", "path": "/sessions", "query": { "limit": "2", "skip": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/sessions",
+    "query": {
+      "limit": "100",
+      "skip": "100"
+    }
+  },
   "response": {
     "status": 200,
     "body": [
       {
-        "_id": "sess_fixture_3",
+        "_id": "sess_fixture_101",
         "org": "org_fixture",
         "blueprintId": "bp_fixture_1",
         "segmentId": "seg_fixture_1",
@@ -14,15 +21,15 @@
         "aborted": true,
         "canceled": false,
         "surveyId": "survey_fixture_1",
-        "surveyChoiceId": "choice_fixture_3",
+        "surveyChoiceId": "choice_fixture_101",
         "surveyChoiceValue": "other",
         "feedback": "",
         "discountCooldownApplied": false,
-        "createdAt": "2026-01-03T00:00:00Z",
-        "updatedAt": "2026-01-03T00:00:00Z",
+        "createdAt": "2026-02-01T00:00:00Z",
+        "updatedAt": "2026-02-01T00:00:00Z",
         "customer": {
-          "id": "cus_fixture_3",
-          "email": "fixture3@example.com",
+          "id": "cus_fixture_101",
+          "email": "fixture101@example.com",
           "planId": "plan_starter",
           "billingInterval": "year"
         },

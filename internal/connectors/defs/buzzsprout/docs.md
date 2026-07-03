@@ -28,8 +28,8 @@ Both streams return a bare top-level JSON array (`records.path: ""`) with no ser
 metadata; legacy's own `harvest` requests `page=1,2,...` and stops on a short/empty page
 (`buzzsproutDefaultPageSize = 100`). This is exactly `pagination.type: page_number` with
 `size_param: ""` (Buzzsprout never accepts a page-size query parameter — legacy never sends one
-either) and `page_size: 100` as the short-page stop threshold, matching stripe/searxng's precedent for
-a page-number API with no size param.
+either) and `page_size: 100` as the short-page stop threshold, matching legacy's own default exactly
+and matching stripe/searxng's precedent for a page-number API with no size param.
 
 `episodes` declares `incremental.cursor_field: published_at` with no `request_param` and no
 `client_filtered` — this matches legacy's real (lack of) filtering behavior exactly: legacy's
@@ -47,22 +47,17 @@ None. Buzzsprout is exposed read-only, matching legacy's `Write` returning
 
 ## Known limits
 
-- **`page_size` is not runtime-configurable, and is fixed small (2) rather than at legacy's default
-  (100).** Legacy exposes `page_size` as a config override (`buzzsproutPageSize`,
-  `buzzsprout.go:289-302`, defaulting to 100, capped at 1000) used purely as the client-side
-  short-page stop threshold (Buzzsprout's API accepts no page-size query parameter on either side).
-  The engine's `page_number` paginator's `PageSize` field is a static bundle-authored int, not a
-  templated value, so it cannot read a runtime `config.page_size` override; this bundle fixes it at
-  a single JSON value in `streams.json`'s base pagination block. `page_size` is set to `2` (not
-  legacy's default of 100) specifically so the mandatory 2-page conformance fixture
-  (`fixtures/streams/episodes/{page_1,page_2}.json`) is realistic to author and honestly exercises
-  the short-page stop rule (`conformance`'s `pagination_terminates` check requires the replay server
-  to serve exactly one request per fixture page — a `page_size` of 100 against a small
-  hand-authored fixture would short-circuit after page 1 and never touch page 2 at all), matching
-  bamboo-hr's identical documented precedent (`docs/migration/conventions.md`, bamboo-hr's
-  `docs.md`). This changes the real per-page record count from legacy's 100 to 2 — a REST-shape
-  difference (more, smaller requests), never a data-emission difference (every episode is still
-  read exactly once, across more pages).
+- **`page_size` is not runtime-configurable.** Legacy exposes `page_size` as a config override
+  (`buzzsproutPageSize`, `buzzsprout.go:289-302`, defaulting to 100, capped at 1000) used purely as
+  the client-side short-page stop threshold (Buzzsprout's API accepts no page-size query parameter
+  on either side). The engine's `page_number` paginator's `PageSize` field is a static bundle-authored
+  int, not a templated value, so it cannot read a runtime `config.page_size` override; this bundle
+  fixes it at a single JSON value in `streams.json`'s base pagination block, set to `100` to match
+  legacy's own default exactly (the conformance fixture for `episodes` is a single page of 2 records —
+  a short page relative to `page_size: 100` — so `pagination_terminates` observes exactly one request,
+  matching the real one-request-in-production behavior; `podcasts` is likewise a single fixture page).
+  This is a REST-shape parity fix, not a data-emission difference: every episode/podcast is still read
+  exactly once.
 - **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
   when `config.mode == "fixture"`) stamps extra fields (`connector`, `fixture`, `previous_cursor`)
   onto every fixture-mode record (`buzzsprout.go:187-220`); none are part of the live record shape.

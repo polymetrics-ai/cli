@@ -9,7 +9,7 @@
       "type": "offset_limit",
       "offset_param": "startAt",
       "limit_param": "maxResults",
-      "page_size": 2
+      "page_size": 50
     },
     "check": { "method": "GET", "path": "/rest/api/3/myself" },
     "error_map": [

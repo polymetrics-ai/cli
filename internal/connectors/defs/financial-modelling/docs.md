@@ -34,10 +34,17 @@ Numeric/boolean fields (`market_cap`, `beta`, `volume`, `is_etf`, `is_actively_t
 `{{ record.<path> }}` computed_fields references, which the engine's typed-extraction rule copies
 as their native JSON type (not stringified).
 
-Legacy's `stock_screener`/`delisted_companies` default page size (`fmDefaultPageSize = 1000`) is
-represented in this bundle's `pagination.page_size` as `2` — a batching-size-only reduction (see
-Known limits) to keep fixtures small; it never changes the total SET of records a full sync
-retrieves, only how many requests it takes to retrieve them.
+`stock_screener`'s `pagination.page_size` is `1000`, matching legacy's real production default
+(`fmDefaultPageSize = 1000`) — this is the actual value a live deployment's paginator sends, not a
+fixture convenience (see Known limits for why legacy's runtime override isn't wired).
+`delisted_companies` declares a stream-level `pagination` override (`page_size: 2`) so its required
+2-page conformance fixture (`fixtures/streams/delisted_companies/{page_1,page_2}.json`, §4 of
+`docs/migration/conventions.md`) can stay small and readable; since stream-level `pagination`
+replaces the base spec wholesale, this is an intentional, ledgered per-stream deviation from
+legacy's uniform 1000-record page size — `delisted_companies` reads in smaller, more numerous pages
+than legacy would, `stock_screener` is unaffected and uses legacy's true 1000-record page size
+end-to-end (matching its fixture's `limit=1000` request/response). Neither deviation changes the
+total SET of records a full sync retrieves, only how many requests it takes to retrieve them.
 
 ## Write actions & risks
 
@@ -53,13 +60,17 @@ is `false` and no `writes.json` is declared, matching legacy's `Write` stub
   templated against `config.*` — there is no mechanism to make either config-overridable in the
   declarative dialect (same class as searxng's dead `page_size`/`max_pages` config, §1 of
   `docs/migration/conventions.md`). Both config keys are therefore not declared in `spec.json` (a
-  declared-but-unwireable key is worse than an absent one, per F6). The bundle instead ships a
-  fixed `page_size: 2` for both paginated streams — a batching-granularity choice, not a
-  behavior-changing one: a full sync still retrieves the exact same set of records regardless of
-  how many requests it takes (the short-page-stop rule is unaffected by the page-size value; see
-  `docs/migration/conventions.md` §5 for the parity-deviation meta-rule this satisfies).
-  ACCEPTABLE per that meta-rule: this never changes emitted record data for any legacy-accepted
-  input, only request cadence.
+  declared-but-unwireable key is worse than an absent one, per F6). `stock_screener`'s
+  `pagination.page_size` is fixed at legacy's own default (`1000`), reproducing legacy's
+  default-configuration behavior exactly; `delisted_companies` keeps a smaller `page_size: 2` as a
+  ledgered per-stream deviation purely to keep its 2-page conformance fixture small (see Streams
+  notes) — an operator who had overridden legacy's `page_size` away from its default cannot
+  reproduce that override here, but every request this bundle sends by default matches legacy's own
+  default cadence. Neither deviation changes the total SET of records a full sync retrieves, only
+  how many requests it takes to retrieve them (the short-page-stop rule is unaffected by the
+  page-size value; see `docs/migration/conventions.md` §5 for the parity-deviation meta-rule this
+  satisfies). ACCEPTABLE per that meta-rule: this never changes emitted record data for any
+  legacy-accepted input, only request cadence.
 - Only the 4 legacy-parity read streams are implemented. FMP's much larger documented surface
   (company profiles, historical prices, financial statements, quotes, forex, crypto) is out of
   scope until Pass B; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B

@@ -2,7 +2,7 @@
   "request": {
     "method": "GET",
     "path": "/adCampaigns",
-    "query": { "q": "search", "count": "2", "start": "0" }
+    "query": { "q": "search", "count": "100", "start": "0" }
   },
   "response": {
     "status": 200,

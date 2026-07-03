@@ -9,7 +9,7 @@
       "type": "offset_limit",
       "limit_param": "limit",
       "offset_param": "offset",
-      "page_size": 2
+      "page_size": 200
     },
     "check": { "method": "GET", "path": "/seller_funds_summary" },
     "error_map": [
@@ -21,6 +21,12 @@
     {
       "name": "transactions",
       "path": "/transaction",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 2
+      },
       "query": {
         "filter": { "template": "transactionDate:[{{ incremental.lower_bound }}..]", "omit_when_absent": true }
       },

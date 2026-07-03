@@ -24,13 +24,6 @@
       "name": "contacts",
       "path": "/contacts",
       "records": { "path": "contacts" },
-      "pagination": {
-        "type": "page_number",
-        "page_param": "page",
-        "size_param": "page_size",
-        "start_page": 1,
-        "page_size": 2
-      },
       "incremental": {
         "cursor_field": "updated_at"
       },

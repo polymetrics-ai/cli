@@ -40,19 +40,19 @@ legacy's `Write` returning `connectors.ErrUnsupportedOperation`.
 
 ## Known limits
 
-- **`limit`/`page_size` are not runtime-configurable, and the declared page size is fixed small (2)
-  rather than at legacy's default (50).** Legacy exposes a config-driven page-size override
-  (`missivePageSize`, `missive.go:247-263`, reads `limit` first, falls back to `page_size`, default
-  50, max 200). The engine's `offset_limit` paginator's `PageSize` is a static bundle-authored int
-  (not templated), so there is no way to expose it as a config override; neither `limit` nor
-  `page_size` is declared in `spec.json` (F6, REVIEW.md: a declared-but-unwireable config key is
-  worse than an absent one). It is set to `2` (not legacy's default of 50) specifically so the
-  mandatory 2-page conformance fixture (`fixtures/streams/contacts/{page_1,page_2}.json`) is
-  realistic to author and honestly exercises the short-page stop rule (`conformance`'s
-  `pagination_terminates` check requires the replay server to serve exactly one request per fixture
-  page), matching callrail's/bamboo-hr's identical documented precedent
-  (`docs/migration/conventions.md`). This changes the real per-page record count from legacy's 50 to
-  2 — a REST-shape difference (more, smaller requests), never a data-emission difference.
+- **`limit`/`page_size` config overrides are not modeled.** Legacy exposes a config-driven
+  page-size override (`missivePageSize`, `missive.go:247-263`, reads `limit` first, falls back to
+  `page_size`, default 50, max 200). The engine's `offset_limit` paginator's `PageSize` is a static
+  bundle-authored int (not templated), so there is no way to expose it as a config override;
+  neither `limit` nor `page_size` is declared in `spec.json` (F6, REVIEW.md: a declared-but-unwireable
+  config key is worse than an absent one). This bundle declares a fixed `page_size: 50` (legacy's
+  own default) rather than a fixture-convenience value — a fixture-convenience page size is never
+  leaked into the live pagination config (callrail's/bamboo-hr's documented precedent,
+  `docs/migration/conventions.md`). The mandatory 2-page conformance fixture
+  (`fixtures/streams/contacts/{page_1,page_2}.json`) is sized to match live behavior instead: page 1
+  returns a full 50-record page (so the paginator continues to page 2) and page 2 returns the
+  3-record remainder, honestly exercising the short-page stop rule without shrinking the live
+  `page_size`.
 - **`max_pages` is not runtime-configurable.** Legacy exposes `max_pages` as a config-driven hard
   request-count cap override (`missiveMaxPages`, `missive.go:265-278`, default 0/unbounded). The
   engine's `PaginationSpec.MaxPages` is a static bundle-authored int (not templated) — there is no

@@ -1,15 +1,22 @@
 {
-  "request": { "method": "GET", "path": "/projects", "query": { "limit": "2", "page": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/projects",
+    "query": {
+      "limit": "50",
+      "page": "2"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "projects": [
         {
-          "id": "5f8a1c2b3d4e5f6a7b8c9d03",
-          "projectName": "data-pipeline",
-          "favorite": false,
-          "pipelinesNumber": 1,
-          "updatedAt": "2026-01-01T00:10:00Z",
+          "id": "5f8a1c2b3d4e5f6a7b8c9d33",
+          "projectName": "project-51",
+          "favorite": true,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:51:00Z",
           "tags": []
         }
       ]

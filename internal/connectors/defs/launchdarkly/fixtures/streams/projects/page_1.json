@@ -1,13 +1,178 @@
 {
-  "request": { "method": "GET", "path": "/projects", "query": { "limit": "2", "offset": "0" } },
+  "request": {
+    "method": "GET",
+    "path": "/projects",
+    "query": {
+      "limit": "20",
+      "offset": "0"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "items": [
-        { "_id": "proj_fixture_1", "key": "fixture-proj-1", "name": "Fixture Project 1", "tags": ["fixture"] },
-        { "_id": "proj_fixture_2", "key": "fixture-proj-2", "name": "Fixture Project 2", "tags": ["fixture"] }
+        {
+          "_id": "proj_fixture_1",
+          "key": "fixture-proj-1",
+          "name": "Fixture Project 1",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_2",
+          "key": "fixture-proj-2",
+          "name": "Fixture Project 2",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_3",
+          "key": "fixture-proj-3",
+          "name": "Fixture Project 3",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_4",
+          "key": "fixture-proj-4",
+          "name": "Fixture Project 4",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_5",
+          "key": "fixture-proj-5",
+          "name": "Fixture Project 5",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_6",
+          "key": "fixture-proj-6",
+          "name": "Fixture Project 6",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_7",
+          "key": "fixture-proj-7",
+          "name": "Fixture Project 7",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_8",
+          "key": "fixture-proj-8",
+          "name": "Fixture Project 8",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_9",
+          "key": "fixture-proj-9",
+          "name": "Fixture Project 9",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_10",
+          "key": "fixture-proj-10",
+          "name": "Fixture Project 10",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_11",
+          "key": "fixture-proj-11",
+          "name": "Fixture Project 11",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_12",
+          "key": "fixture-proj-12",
+          "name": "Fixture Project 12",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_13",
+          "key": "fixture-proj-13",
+          "name": "Fixture Project 13",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_14",
+          "key": "fixture-proj-14",
+          "name": "Fixture Project 14",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_15",
+          "key": "fixture-proj-15",
+          "name": "Fixture Project 15",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_16",
+          "key": "fixture-proj-16",
+          "name": "Fixture Project 16",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_17",
+          "key": "fixture-proj-17",
+          "name": "Fixture Project 17",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_18",
+          "key": "fixture-proj-18",
+          "name": "Fixture Project 18",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_19",
+          "key": "fixture-proj-19",
+          "name": "Fixture Project 19",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "_id": "proj_fixture_20",
+          "key": "fixture-proj-20",
+          "name": "Fixture Project 20",
+          "tags": [
+            "fixture"
+          ]
+        }
       ],
-      "totalCount": 3
+      "totalCount": 21
     }
   }
 }

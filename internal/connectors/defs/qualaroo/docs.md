@@ -23,10 +23,11 @@ differently on either side).
 Both streams (`nudges`, `responses`) are simple list endpoints: `GET /nudges` (records at the
 `nudges` key) and `GET /responses` (records at the `responses` key). Pagination is `page_number`
 (`page`/`per_page` query params, 1-based `start_page`, base default `page_size: 100` matching
-legacy's `qualarooDefaultPageSize`) — a page shorter than `per_page` is the last page. The
-`nudges` stream declares a stream-level pagination override (`page_size: 2`) purely to keep its
-2-page conformance fixture small (`docs/migration/conventions.md` §4's 2-page-fixture requirement
-for a paginated stream); `responses` keeps the base's real default.
+legacy's `qualarooDefaultPageSize`) — a page shorter than `per_page` is the last page. Both streams
+use the base's real default (`per_page: 100`); the `nudges` conformance fixture's 2-page shape is
+achieved by returning a full 100-record first page (triggering the paginator to fetch page 2) and
+a short second page, per `docs/migration/conventions.md` §4's 2-page-fixture requirement — the
+live page size is never shrunk to make the fixture small.
 
 Legacy's own halt condition additionally reads a `pagination.next_page` value from the response
 body and stops early when it is empty (or does not advance), rather than relying solely on a

@@ -16,7 +16,7 @@
         "type": "offset_limit",
         "limit_param": "limit",
         "offset_param": "offset",
-        "page_size": 5
+        "page_size": 1000
       },
       "schema": "schemas/protocols.json"
     },
@@ -28,7 +28,7 @@
         "type": "offset_limit",
         "limit_param": "limit",
         "offset_param": "offset",
-        "page_size": 5
+        "page_size": 1000
       },
       "schema": "schemas/chains.json"
     },

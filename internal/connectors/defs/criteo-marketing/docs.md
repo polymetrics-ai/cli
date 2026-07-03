@@ -41,11 +41,15 @@ Pagination is `offset_limit` (`limit_param: limit`, `offset_param: offset`) for 
 matching legacy's uniform offset/limit `harvest` loop (`base.Set("limit", ...)`, then
 `query.Set("offset", ...)` per page) with a short-page stop (no explicit "has more" flag in any
 Criteo list response) — exactly the `OffsetPaginator`'s built-in behavior. `streams.json`'s
-`pagination.page_size: 2` is a deliberately small static value chosen purely to keep the required
-2-page fixture (`fixtures/streams/ad_sets/{page_1,page_2}.json`) compact; it has no bearing on a
-live deployment (every request, fixture-replayed or live, is driven by the same static value) —
-see `docs/migration/conventions.md`'s `page_size`/`max_pages` non-runtime-overridable note and the
-identical auth0/aviationstack precedent. None of the 5 streams are incremental in legacy (no
+`pagination.page_size: 100` matches legacy's own `criteoDefaultPageSize` (the value legacy's
+`criteoPageSize` config helper falls back to whenever `page_size` is unset — legacy also allows a
+per-call config override up to `criteoMaxPageSize = 1000`, which this bundle's static-literal
+`base.pagination.page_size` cannot express; see `docs/migration/conventions.md`'s `page_size`/
+`max_pages` non-runtime-overridable note). All 6 fixtures (`fixtures/streams/{ad_sets,advertisers,
+campaigns,audiences,statistics}/page_1.json`) request `limit=100` accordingly and return their
+entire small fixture record set on a single short page (`ad_sets`' fixture, previously split
+across two `page_size: 2` pages, is now the single `page_1.json` file with all 3 records). None of
+the 5 streams are incremental in legacy (no
 persisted-cursor-driven request filtering anywhere in `criteo_marketing.go`): `statistics`'
 `startDate`/`endDate` filters are plain config passthroughs, not a state-cursor-driven incremental
 mechanism, so no `streams.json` entry declares an `incremental` block. `statistics`' schema still

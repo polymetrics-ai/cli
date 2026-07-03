@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/timeoff/leave_types", "query": { "page": "1", "limit": "2" } },
+  "request": { "method": "GET", "path": "/timeoff/leave_types", "query": { "page": "1", "limit": "50" } },
   "response": {
     "status": 200,
     "body": {

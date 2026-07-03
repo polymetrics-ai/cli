@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/pipelines", "query": { "limit": "2", "page": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/pipelines",
+    "query": {
+      "limit": "50",
+      "page": "1"
+    }
+  },
   "response": {
     "status": 200,
     "body": {

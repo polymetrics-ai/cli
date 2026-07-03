@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/2024-01/marketing-solutions/ad-sets/search", "query": { "limit": "2", "offset": "0" } },
+  "request": { "method": "GET", "path": "/2024-01/marketing-solutions/ad-sets/search", "query": { "limit": "100", "offset": "0" } },
   "response": {
     "status": 200,
     "body": {
@@ -30,6 +30,20 @@
             "mediaType": "Display",
             "destinationEnvironment": "app",
             "objective": "Conversion"
+          }
+        },
+        {
+          "id": "ad_set_fixture_3",
+          "type": "ad-set",
+          "attributes": {
+            "name": "Fixture Ad Set 3",
+            "advertiserId": "adv_fixture_1",
+            "datasetId": "ds_fixture_1",
+            "campaignId": "cmp_fixture_1",
+            "status": "Active",
+            "mediaType": "Video",
+            "destinationEnvironment": "web",
+            "objective": "Awareness"
           }
         }
       ]

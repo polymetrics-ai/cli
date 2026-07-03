@@ -23,7 +23,7 @@
       "type": "offset_limit",
       "limit_param": "$top",
       "offset_param": "$skip",
-      "page_size": 2
+      "page_size": 100
     },
     "check": { "method": "GET", "path": "/sites/{{ config.site_id }}/lists" },
     "error_map": [

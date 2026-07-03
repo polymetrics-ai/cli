@@ -9,7 +9,7 @@
       "type": "offset_limit",
       "limit_param": "limit",
       "offset_param": "offset",
-      "page_size": 2
+      "page_size": 20
     },
     "check": { "method": "GET", "path": "/projects", "query": { "limit": "1" } },
     "error_map": [

@@ -38,15 +38,13 @@ fields are static JSON integers (no `{{ config.* }}` templating support), so the
 as runtime-configurable knobs — this bundle declares neither `page_size` nor `max_pages` in
 `spec.json` at all (a declared-but-unwireable key is worse than an absent one, per
 conventions.md F6). This mirrors bitly's identical documented "`page_size` is not
-runtime-configurable" limitation. `streams.json`'s base pagination pins `page_size: 2` (NOT
-legacy's real default of 100) purely so the required 2-page fixture (conventions.md §4) can stay
-small and realistic — the declared value is both the real per-page request size AND the
-conformance harness's short-page-stop threshold, so a 2-page proof needs its first page's record
-count to exactly equal the declared value (chargify's identical documented precedent). This has
-no bearing on production correctness: whatever page size an operator's read pipeline actually
-needs is a separate, larger concern this pinned value does not change (a request landing on
-Clarifai's real API always asks for exactly the declared `page_size`, same as any other pinned
-value would).
+runtime-configurable" limitation. `streams.json`'s base pagination pins `page_size: 100`, matching
+legacy's real default (`clarifaiDefaultPageSize`) exactly — a live request always asks for the same
+per-page size legacy would have asked for absent an explicit override. The required first-stream
+2-page fixture proof (conventions.md §4) is built the same way as chargify's identical precedent:
+`applications` page 1 returns exactly 100 records (a full page, so the paginator advances) and page
+2 returns 1 (a short page, so the paginator terminates); every other stream's single fixture page
+returns 1 record against a declared `per_page=100`, correctly read as an already-short page.
 
 ## Write actions & risks
 

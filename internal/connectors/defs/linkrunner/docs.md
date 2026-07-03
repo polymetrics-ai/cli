@@ -36,13 +36,18 @@ None. Linkrunner is read-only in pm (`capabilities.write: false`), matching lega
 
 ## Known limits
 
-- **Fixture pagination page size**: `streams.json`'s `base.pagination.page_size` is `2` (rather
-  than legacy's real default of `100`) so a committed 2-page fixture can prove pagination
-  termination without embedding 100 synthetic records — an implementation detail of the fixture
-  chunking, never a change to emitted record data. `config.page_size`/`config.max_pages` are
-  declared in `spec.json` for parity with legacy's config surface but, like stripe's documented
+- **`page_size`/`max_pages` config overrides are not modeled.** `streams.json`'s
+  `base.pagination.page_size` is set to legacy's real production default, `100` (legacy:
+  `linkrunnerDefaultPageSize = 100`) — this is the actual value a live deployment's paginator
+  sends; it is not a fixture convenience. `config.page_size`/`config.max_pages` are declared in
+  `spec.json` for parity with legacy's config surface but, like stripe's documented
   `page_size`/`limit_param` deviation (conventions.md §5 item 3), are not wired into the engine's
-  fixed pagination block.
+  fixed pagination block. The mandatory 2-page conformance fixture
+  (`fixtures/streams/campaigns/{page_1,page_2}.json`) is sized to match: page 1 returns a full
+  100-record page (so the paginator continues to page 2), page 2 returns the 1-record remainder —
+  matching aviationstack's and awin-advertiser's identical repaired precedent
+  (`docs/migration/conventions.md`, wave2 sweep class C3). The `attributed_users` single-page
+  fixture requests `limit=100` to match.
 - Linkrunner's public docs (`docs.linkrunner.io/sdk-less/api-reference`) describe the client SDK
   surface (`init`/`attribution-data`/`trigger`), not this connector's Data API endpoints
   (`/campaigns`, `/attributed-users`); the legacy Go connector and its test suite are the

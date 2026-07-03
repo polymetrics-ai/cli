@@ -2,7 +2,10 @@
   "request": {
     "method": "GET",
     "path": "/campaigns",
-    "query": { "page": "2", "limit": "2" }
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
   },
   "response": {
     "status": 200,
@@ -10,18 +13,18 @@
       "data": {
         "campaigns": [
           {
-            "display_id": "camp_fixture_3",
-            "name": "Fixture Campaign Three",
-            "created_at": "2026-01-05T00:00:00Z",
-            "update_at": "2026-01-06T00:00:00Z",
-            "google": true,
-            "meta": true,
-            "meta_campaign_id": "meta_fixture_3",
-            "active": false,
+            "display_id": "camp_fixture_101",
+            "name": "Fixture Campaign 101",
+            "created_at": "2026-01-18T00:00:00Z",
+            "update_at": "2026-01-18T00:00:00Z",
+            "google": false,
+            "meta": false,
+            "meta_campaign_id": "",
+            "active": true,
             "default_link": false,
-            "attributed_users": 5,
-            "link": "https://lr.example/c/3",
-            "shareable_link": "https://lr.example/s/3",
+            "attributed_users": 505,
+            "link": "https://lr.example/c/101",
+            "shareable_link": "https://lr.example/s/101",
             "website": "https://example.com",
             "domain": "example.com"
           }

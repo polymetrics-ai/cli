@@ -21,12 +21,16 @@ All 5 streams share the identical shape: `GET`, records at the response root (`r
 `connsdk.RecordsAt(resp.Body, "")`'s root-array selection and legacy's own `RecordsAt(resp.Body,
 "")` call), and `offset_limit` pagination (`limit`/`offset` query params). Primary keys match each
 stream's natural identifier rather than a synthetic id, exactly as legacy's own catalog declares:
-`Email` for `contacts`, `ListName` for `lists`, `Name` for `campaigns`/`segments`/`templates`. No
-stream declares an incremental cursor — legacy exposes none (Elastic Email v4 list endpoints have
-no request-side time-range filter parameter its own connector code ever sends); `contacts`'
-`DateUpdated` field is emitted (matching legacy's raw pass-through) but not used as an
-`x-cursor-field`, since legacy's own `Read` never filters on it either — only `Catalog()`'s
-`CursorFields` hint names it, without any corresponding read-time behavior.
+`Email` for `contacts`, `ListName` for `lists`, `Name` for `campaigns`/`segments`/`templates`.
+`contacts` declares a bare `incremental.cursor_field: "DateUpdated"` (no `request_param`) and its
+schema's `x-cursor-field` names the same field, matching legacy's `Catalog()` `CursorFields:
+[]string{"DateUpdated"}` hint for the `contacts` stream — legacy's own `Read` never filters on it
+(Elastic Email v4 list endpoints have no request-side time-range filter parameter its own
+connector code ever sends), so per `docs/migration/conventions.md`'s incremental-declaration truth
+table (bare `cursor_field` iff legacy publishes `CursorFields`; `request_param` iff legacy sends a
+server-side filter) this is a bare declaration only, not a `request_param`. `campaigns`/`lists`/
+`segments`/`templates` declare no `CursorFields` in legacy and correspondingly have no
+`incremental` block or `x-cursor-field`.
 
 `contacts`' schema includes `Activity`/`Consent`/`CustomFields` (nested objects legacy's
 `contactRecord` mapper emits) even though legacy's separate `contactFields()` catalog-description
@@ -46,13 +50,21 @@ unconditionally; `capabilities.write` is `false` and this bundle ships no `write
   `page_size` (1-1000, default 100) and `max_pages` (default unlimited, `all`/`unlimited`/`0`
   synonyms) config keys read at request time (`elasticEmailPageSize`/`elasticEmailMaxPages`). The
   engine's `PaginationSpec.PageSize`/`MaxPages` fields are plain fixed JSON integers baked into
-  `streams.json` — there is no templating/config-driven override mechanism for them. This bundle
-  declares a fixed `page_size: 2` (chosen small so the required 2-page conformance fixture is
-  realistic and exercises the short-page stop rule; legacy's own default is 100) and no
-  `max_pages` cap (unbounded, matching legacy's own default). Neither key is declared in
-  `spec.json` (F6, `docs/migration/conventions.md`: dead, unwireable config is worse than absent
-  config). This never changes which records are emitted for an in-range request — only request
-  cadence.
+  `streams.json` — there is no templating/config-driven override mechanism for them.
+  `base.pagination.page_size` is set to legacy's real production default, `100`
+  (`elasticEmailDefaultPageSize`) — this is the actual value a live deployment's paginator sends;
+  it is not a fixture convenience. The `contacts` stream declares a stream-level `pagination`
+  override (`page_size: 2`) so its required 2-page conformance fixture
+  (`fixtures/streams/contacts/{page_1,page_2}.json`, §4 of `docs/migration/conventions.md`) can
+  stay small and readable; since stream-level `pagination` replaces the base spec wholesale, this
+  is an intentional, ledgered per-stream deviation from legacy's uniform 100-record page size —
+  `contacts` reads in smaller, more numerous pages than legacy would, everywhere else identical.
+  `campaigns`/`lists`/`segments`/`templates` are unaffected and use legacy's true 100-record page
+  size end-to-end, matching their single-page fixtures' `limit=100` request/response. No
+  `max_pages` cap is declared (unbounded, matching legacy's own default). Neither key is declared
+  in `spec.json` (F6, `docs/migration/conventions.md`: dead, unwireable config is worse than
+  absent config). This never changes which records are emitted for an in-range request — only
+  request cadence.
 - **`base_url` scheme/host validation is enforced by legacy in Go** with dedicated error messages
   (`elasticEmailBaseURL`); the engine has no equivalent declarative URL-shape validator, so a
   malformed `base_url` here surfaces as a generic request-construction/connection error rather

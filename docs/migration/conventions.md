@@ -730,3 +730,16 @@ do not delete).
 
 **No-commit rule**: migration agents do not run `git commit`. The orchestrator commits once per
 wave-close after the path-guard (`git status --porcelain` limited to assigned dirs) passes.
+
+## §8 Post-wave2 review rules (mandatory for wave3+)
+
+1. **Projection decision**: declare `projection: "passthrough"` iff the legacy read path emits
+   records verbatim (no field-built `connectors.Record{...}` mapping). Schema-mode projection on a
+   verbatim-emitting legacy silently drops fields — meta-rule violation.
+2. **Incremental truth table**: bare `incremental.cursor_field` iff legacy publishes CursorFields
+   in its catalog; `request_param` iff legacy sends a server-side filter; neither → no incremental
+   block (keep `x-cursor-field` in schemas only).
+3. **Fixture/live separation**: live config (page sizes, limits) must reproduce legacy defaults —
+   never inherit fixture conveniences. Fixture request values for templated config are the literal
+   `"synthetic-conformance-value"`; page-1 fixtures are FULL pages when page_number/offset
+   pagination is declared (token/cursor types stop on token absence instead).

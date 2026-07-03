@@ -1,25 +1,720 @@
 {
-  "request": { "method": "GET", "path": "/nudges", "query": { "page": "1", "per_page": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/nudges",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "nudges": [
         {
           "id": 4001,
-          "name": "Fixture Nudge One",
+          "name": "Fixture Nudge 1",
           "status": "active",
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-02T00:00:00Z"
         },
         {
           "id": 4002,
-          "name": "Fixture Nudge Two",
+          "name": "Fixture Nudge 2",
           "status": "paused",
-          "created_at": "2026-01-03T00:00:00Z",
-          "updated_at": "2026-01-04T00:00:00Z"
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4003,
+          "name": "Fixture Nudge 3",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4004,
+          "name": "Fixture Nudge 4",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4005,
+          "name": "Fixture Nudge 5",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4006,
+          "name": "Fixture Nudge 6",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4007,
+          "name": "Fixture Nudge 7",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4008,
+          "name": "Fixture Nudge 8",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4009,
+          "name": "Fixture Nudge 9",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4010,
+          "name": "Fixture Nudge 10",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4011,
+          "name": "Fixture Nudge 11",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4012,
+          "name": "Fixture Nudge 12",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4013,
+          "name": "Fixture Nudge 13",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4014,
+          "name": "Fixture Nudge 14",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4015,
+          "name": "Fixture Nudge 15",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4016,
+          "name": "Fixture Nudge 16",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4017,
+          "name": "Fixture Nudge 17",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4018,
+          "name": "Fixture Nudge 18",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4019,
+          "name": "Fixture Nudge 19",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4020,
+          "name": "Fixture Nudge 20",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4021,
+          "name": "Fixture Nudge 21",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4022,
+          "name": "Fixture Nudge 22",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4023,
+          "name": "Fixture Nudge 23",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4024,
+          "name": "Fixture Nudge 24",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4025,
+          "name": "Fixture Nudge 25",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4026,
+          "name": "Fixture Nudge 26",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4027,
+          "name": "Fixture Nudge 27",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4028,
+          "name": "Fixture Nudge 28",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4029,
+          "name": "Fixture Nudge 29",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4030,
+          "name": "Fixture Nudge 30",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4031,
+          "name": "Fixture Nudge 31",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4032,
+          "name": "Fixture Nudge 32",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4033,
+          "name": "Fixture Nudge 33",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4034,
+          "name": "Fixture Nudge 34",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4035,
+          "name": "Fixture Nudge 35",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4036,
+          "name": "Fixture Nudge 36",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4037,
+          "name": "Fixture Nudge 37",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4038,
+          "name": "Fixture Nudge 38",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4039,
+          "name": "Fixture Nudge 39",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4040,
+          "name": "Fixture Nudge 40",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4041,
+          "name": "Fixture Nudge 41",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4042,
+          "name": "Fixture Nudge 42",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4043,
+          "name": "Fixture Nudge 43",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4044,
+          "name": "Fixture Nudge 44",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4045,
+          "name": "Fixture Nudge 45",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4046,
+          "name": "Fixture Nudge 46",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4047,
+          "name": "Fixture Nudge 47",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4048,
+          "name": "Fixture Nudge 48",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4049,
+          "name": "Fixture Nudge 49",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4050,
+          "name": "Fixture Nudge 50",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4051,
+          "name": "Fixture Nudge 51",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4052,
+          "name": "Fixture Nudge 52",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4053,
+          "name": "Fixture Nudge 53",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4054,
+          "name": "Fixture Nudge 54",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4055,
+          "name": "Fixture Nudge 55",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4056,
+          "name": "Fixture Nudge 56",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4057,
+          "name": "Fixture Nudge 57",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4058,
+          "name": "Fixture Nudge 58",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4059,
+          "name": "Fixture Nudge 59",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4060,
+          "name": "Fixture Nudge 60",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4061,
+          "name": "Fixture Nudge 61",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4062,
+          "name": "Fixture Nudge 62",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4063,
+          "name": "Fixture Nudge 63",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4064,
+          "name": "Fixture Nudge 64",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4065,
+          "name": "Fixture Nudge 65",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4066,
+          "name": "Fixture Nudge 66",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4067,
+          "name": "Fixture Nudge 67",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4068,
+          "name": "Fixture Nudge 68",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4069,
+          "name": "Fixture Nudge 69",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4070,
+          "name": "Fixture Nudge 70",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4071,
+          "name": "Fixture Nudge 71",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4072,
+          "name": "Fixture Nudge 72",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4073,
+          "name": "Fixture Nudge 73",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4074,
+          "name": "Fixture Nudge 74",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4075,
+          "name": "Fixture Nudge 75",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4076,
+          "name": "Fixture Nudge 76",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4077,
+          "name": "Fixture Nudge 77",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4078,
+          "name": "Fixture Nudge 78",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4079,
+          "name": "Fixture Nudge 79",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4080,
+          "name": "Fixture Nudge 80",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4081,
+          "name": "Fixture Nudge 81",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4082,
+          "name": "Fixture Nudge 82",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4083,
+          "name": "Fixture Nudge 83",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4084,
+          "name": "Fixture Nudge 84",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4085,
+          "name": "Fixture Nudge 85",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4086,
+          "name": "Fixture Nudge 86",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4087,
+          "name": "Fixture Nudge 87",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4088,
+          "name": "Fixture Nudge 88",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4089,
+          "name": "Fixture Nudge 89",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4090,
+          "name": "Fixture Nudge 90",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4091,
+          "name": "Fixture Nudge 91",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4092,
+          "name": "Fixture Nudge 92",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4093,
+          "name": "Fixture Nudge 93",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4094,
+          "name": "Fixture Nudge 94",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4095,
+          "name": "Fixture Nudge 95",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4096,
+          "name": "Fixture Nudge 96",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4097,
+          "name": "Fixture Nudge 97",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4098,
+          "name": "Fixture Nudge 98",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4099,
+          "name": "Fixture Nudge 99",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4100,
+          "name": "Fixture Nudge 100",
+          "status": "paused",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
         }
       ],
-      "pagination": { "next_page": "2" }
+      "pagination": {
+        "next_page": "2"
+      }
     }
   }
 }

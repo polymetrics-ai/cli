@@ -42,8 +42,9 @@ shape: `GET` against the Chargify list endpoint (`/customers.json` etc.), record
 top-level JSON array (`records.path: "."`), each element wrapped in a single-key resource envelope
 (e.g. `{"customer": {...}}`) exactly like legacy's `unwrap()` helper. Pagination follows Chargify's
 `page`/`per_page` convention (`pagination.type: page_number`, `page_param: page`,
-`size_param: per_page`, `start_page: 1`); a page shorter than the declared `page_size` ends the
-read, matching legacy's `harvest()` loop (`chargify.go:152-183`) exactly. Primary key is `["id"]`
+`size_param: per_page`, `start_page: 1`, `page_size: 100` — matches legacy's
+`chargifyDefaultPageSize`); a page shorter than the declared `page_size` ends the read, matching
+legacy's `harvest()` loop (`chargify.go:152-183`) exactly. Primary key is `["id"]`
 across every stream; the incremental cursor field is `["updated_at"]` for `customers`/
 `subscriptions`/`products`/`coupons` and `["created_at"]` for `transactions`, matching legacy's
 `chargifyStreams()` catalog. **No `incremental.request_param`/`client_filtered` is declared for any
@@ -94,16 +95,15 @@ returns `connectors.ErrUnsupportedOperation`) and this bundle (`metadata.json`'s
 - **`page_size`/`max_pages` config keys dropped.** `streams.json`'s `pagination.page_size` is a
   static JSON int (`PaginationSpec.PageSize`), not a runtime-templated value — there is no engine
   mechanism to let a `spec.json` config property override it per-read. Legacy defaults `page_size`
-  to 100 (`chargifyDefaultPageSize`, configurable up to 200 via a `page_size` config value), but
-  since this bundle can only declare ONE fixed page size (used both for the real per-page request
-  size AND as the conformance harness's short-page-stop threshold — a 2-page fixture must have its
-  first page be exactly the declared value's record count to prove pagination continues), this
-  bundle declares `page_size: 2` purely to keep the required 2-page fixture (conventions.md §4)
-  small and realistic; it has no bearing on production correctness (Chargify's real per_page cap of
-  200 is respected by whatever value an operator's read pipeline requests upstream of this engine,
-  which is out of this bundle's control either way). Legacy's `page_size`/`max_pages` config
-  properties are consequently genuinely dead config in this dialect and are not declared in
-  `spec.json` (F6, conventions.md — a declared-but-unwireable key is worse than an absent one).
+  to 100 (`chargifyDefaultPageSize`, configurable up to 200 via a `page_size` config value); this
+  bundle declares the identical `page_size: 100` static default (restored — an earlier draft of
+  this bundle had leaked a fixture-sized `page_size: 2` into the live `streams.json` pagination
+  block, which would have shipped a 50x-smaller production page size than legacy's default; the
+  required 2-page fixture (conventions.md §4) instead ships 100 full customer records on page 1 and
+  1 record on page 2 to prove pagination continuation at the real page size). Legacy's
+  `page_size`/`max_pages` config properties are consequently genuinely dead config in this dialect
+  and are not declared in `spec.json` (F6, conventions.md — a declared-but-unwireable key is worse
+  than an absent one).
 - `metadata.json` declares no `rate_limit` block: legacy Chargify enforces no client-side rate
   limiting (no `rate_limit`/throttle field anywhere in `chargify.go`), so this bundle adds none
   either, matching conventions.md §3's "informational vs. enforced" rate-limit rule.

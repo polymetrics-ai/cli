@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/sites/fixture-site/lists/fixture-list/items", "query": { "$top": "2", "$skip": "0" } },
+  "request": { "method": "GET", "path": "/sites/fixture-site/lists/fixture-list/items", "query": { "$top": "100", "$skip": "0" } },
   "response": {
     "status": 200,
     "body": {

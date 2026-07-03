@@ -17,11 +17,11 @@ query parameter on every request (`mode: api_key_query`), matching legacy's
 
 All 4 streams (`tickers`, `eod_prices`, `intraday_prices`, `news`) share StockData's page-number
 pagination (`pagination.type: page_number`, `page_param: page`, `size_param: limit`, `start_page:
-1`), records at `data`. Default page size is 100 (matches legacy's `defaultPageSize`); the
-`tickers` stream declares a stream-level `pagination.page_size: 2` override purely so its 2-page
-conformance fixture can exercise pagination termination without needing 101 synthetic records — the
-live default of 100 is unaffected in production reads (stream-level `pagination` replaces the
-base-level spec wholesale only for streams that declare their own block).
+1`, `page_size: 100`), records at `data`. Default page size is 100 (matches legacy's
+`defaultPageSize`); no stream declares a stream-level `pagination` override, so every stream reads at
+the live default. `tickers`' conformance fixture exercises pagination termination with a full
+100-record `page_1` (`limit=100`) followed by a short `page_2` (1 record), per the page-1-full-page
+fixture convention — it does not rely on a fixture-only page-size override.
 
 `eod_prices` and `intraday_prices` both require the `symbols` config value (a plain, non-optional
 `{{ config.symbols }}` query template hard-errors if absent, exactly matching legacy's

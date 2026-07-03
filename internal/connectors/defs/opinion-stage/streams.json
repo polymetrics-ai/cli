@@ -10,7 +10,7 @@
       "page_param": "page[number]",
       "size_param": "page[size]",
       "start_page": 1,
-      "page_size": 2
+      "page_size": 50
     },
     "check": { "method": "GET", "path": "/api/v2/items" },
     "error_map": [

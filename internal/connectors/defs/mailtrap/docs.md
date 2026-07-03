@@ -27,14 +27,19 @@ per_page`, `start_page: 1`), matching legacy's `harvest` loop, which advances a 
 and stops on a short page (`len(records) < pageSize`). **`page_size` is not exposed as config** —
 `PaginationSpec.PageSize` is a plain JSON int resolved once at bundle load, with no template/config-
 driven override in this engine version (the same static-pagination-field limitation documented in
-the auth0/searxng goldens, `docs/migration/conventions.md`). `streams.json`'s `pagination.page_size:
-2` exists purely to keep the 2-page fixture (required whenever a bundle declares pagination) small;
-it has no bearing on a live deployment — every request, fixture-replayed or live, is driven by the
-same static per-request page size. Legacy's own `mailtrapPageSize` config-driven default (100) and
-the dedupe-by-`id` defensive guard (protecting against an upstream that ignores `page` entirely and
-repeats the same page) are therefore not reproduced: the short-page stop condition alone is what
-this bundle relies on, which is legacy's PRIMARY stop signal and the one every legacy test actually
-exercises (`TestReadInboxesPaginates`) — the id-dedupe guard is a defensive fallback for a
+the auth0/searxng goldens, `docs/migration/conventions.md`). `streams.json`'s `pagination.page_size`
+is set to **100**, matching legacy's `mailtrapDefaultPageSize` constant exactly — this static field is
+sent as `per_page` on every request, fixture-replayed or live, so it must reflect legacy's real
+default rather than a small fixture-only value (a prior revision of this bundle shipped
+`page_size: 2`, which would have sent `per_page=2` on every live request too; corrected per the
+wave2 sweep's C3 finding). The required 2-page `pagination_terminates` proof (`accounts` stream)
+therefore ships a 100-record page 1 (a full page, matching `page_size`) followed by a 1-record short
+page 2 — mirroring the auth0/aviationstack goldens' same page-size-realism-over-fixture-brevity
+tradeoff, not a shortcut. Legacy's own `mailtrapPageSize` config-driven default (100) is honored by
+this static value; the dedupe-by-`id` defensive guard (protecting against an upstream that ignores
+`page` entirely and repeats the same page) is not reproduced: the short-page stop condition alone is
+what this bundle relies on, which is legacy's PRIMARY stop signal and the one every legacy test
+actually exercises (`TestReadInboxesPaginates`) — the id-dedupe guard is a defensive fallback for a
 misbehaving upstream, never exercised by any legacy test with a real (non-repeating) fixture.
 
 No stream in this bundle is incremental — Mailtrap account-management objects carry no
@@ -54,7 +59,8 @@ surface.
 
 - `page_size` is not config-driven (see Streams notes) — the engine's `page_number` pagination type
   has no mechanism to read a page size from `RuntimeConfig.Config` at request time; only the
-  static, bundle-declared `pagination.page_size` is ever sent or used as the stop threshold.
+  static, bundle-declared `pagination.page_size` (100, matching legacy's default) is ever sent or
+  used as the stop threshold.
 - Legacy's id-based dedupe guard (defensive against an upstream that ignores the `page` param and
   repeats the same page indefinitely) is not reproduced — the short-page stop condition
   (`len(records) < page_size`) is legacy's actual behavior-driving stop signal and is preserved

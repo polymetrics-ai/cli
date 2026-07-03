@@ -31,7 +31,7 @@
         "type": "offset_limit",
         "limit_param": "limit",
         "offset_param": "skip",
-        "page_size": 2
+        "page_size": 50
       },
       "computed_fields": {
         "survey_id": "{{ record.surveyId }}",

@@ -1,9 +1,23 @@
 {
-  "request": { "method": "GET", "path": "/eod", "query": { "limit": "2", "offset": "0", "symbols": "synthetic-conformance-value", "date_from": "2020-01-01" } },
+  "request": {
+    "method": "GET",
+    "path": "/eod",
+    "query": {
+      "limit": "100",
+      "offset": "0",
+      "symbols": "synthetic-conformance-value",
+      "date_from": "2020-01-01"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
-      "pagination": { "limit": 2, "offset": 0, "count": 1, "total": 1 },
+      "pagination": {
+        "limit": 100,
+        "offset": 0,
+        "count": 1,
+        "total": 1
+      },
       "data": [
         {
           "symbol": "AAPL",

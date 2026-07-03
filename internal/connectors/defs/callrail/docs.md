@@ -26,8 +26,8 @@ equivalent to legacy's own primary stop signal (`total_pages` reached) for every
 response (the last page is never longer than `per_page`); the one edge case where a result set is
 an exact multiple of `per_page` costs one extra, empty-page request on the engine side that legacy's
 `total <= page` check would have avoided, never a data difference (both sides stop after emitting
-the same records). See Known limits for why `page_size` is fixed small (`2`) rather than at
-legacy's default (100).
+the same records). `page_size` is `100`, matching legacy's own default (see Known limits for why it
+is not runtime-configurable).
 
 Each stream sends `start_date` (`param_format: date`, converting a resolved RFC3339 lower bound to
 `YYYY-MM-DD` for the wire) computed either from the sync's persisted cursor or, on a fresh sync, from
@@ -54,21 +54,16 @@ None. CallRail is exposed read-only, matching legacy's `Write` returning
   documented config-surface narrowing versus legacy's more permissive YYYY-MM-DD-or-RFC3339
   acceptance; any RFC3339 `start_date` value (e.g. `"2026-01-01T00:00:00Z"`) still produces the exact
   same `YYYY-MM-DD` wire value legacy would send for the equivalent date.
-- **`page_size`/`max_pages` are not runtime-configurable, and `page_size` is fixed small (2) rather
-  than at legacy's default (100).** Legacy exposes both as config overrides
-  (`callrailPageSize`/`callrailMaxPages`, `callrail.go:348-376`). The engine's `page_number`
-  paginator's `PageSize` is a static bundle-authored int (not templated), and there is no
-  `MaxPages`-equivalent config-driven knob either; `max_pages` is unbounded (matching legacy's own
-  `max_pages=0`/`all`/`unlimited` default). `page_size` is set to `2` (not legacy's default of 100)
-  specifically so the mandatory 2-page conformance fixture (`fixtures/streams/calls/{page_1,
-  page_2}.json`) is realistic to author and honestly exercises the short-page stop rule
-  (`conformance`'s `pagination_terminates` check requires the replay server to serve exactly one
-  request per fixture page — a `page_size` of 100 against a small hand-authored fixture would
-  short-circuit after page 1 and never touch page 2 at all), matching bamboo-hr's identical
-  documented precedent (`docs/migration/conventions.md`, bamboo-hr's `docs.md`). This changes the
-  real per-page record count from legacy's 100 to 2 — a REST-shape difference (more, smaller
-  requests), never a data-emission difference (every record is still read exactly once, across more
-  pages).
+- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config overrides
+  (`callrailPageSize`/`callrailMaxPages`, `callrail.go:348-376`, `page_size` defaulting to 100,
+  capped at 250). The engine's `page_number` paginator's `PageSize` is a static bundle-authored int
+  (not templated), and there is no `MaxPages`-equivalent config-driven knob either; `max_pages` is
+  unbounded (matching legacy's own `max_pages=0`/`all`/`unlimited` default). `page_size` is fixed at
+  `100` to match legacy's own default exactly; the conformance fixture for `calls` is a single page
+  of 3 records (all `total_records`) — a short page relative to `page_size: 100` — so
+  `pagination_terminates` observes exactly one request, matching the real one-request-in-production
+  behavior for any result set under 100 records; `companies`/`users`/`text_messages` are likewise
+  single fixture pages.
 - **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
   when `config.mode == "fixture"`) stamps a `previous_cursor` field onto every fixture-mode record
   when a prior cursor happens to be set (`callrail.go:206-239`); this is not part of the live record

@@ -1,18 +1,29 @@
 {
-  "request": { "method": "GET", "path": "/management/responses", "query": { "limit": "2", "skip": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/management/responses",
+    "query": {
+      "limit": "50",
+      "skip": "50"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "data": [
         {
-          "id": "res_fixture_3",
+          "id": "res_fixture_51",
           "surveyId": "srv_fixture_1",
-          "contactId": "ctc_fixture_3",
-          "finished": true,
-          "data": { "q1": "answer three" },
-          "meta": { "source": "fixture" },
-          "createdAt": "2026-01-03T00:00:00.000Z",
-          "updatedAt": "2026-01-03T00:00:00.000Z"
+          "contactId": "ctc_fixture_51",
+          "finished": false,
+          "data": {
+            "q1": "answer 51"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-20T00:00:00.000Z",
+          "updatedAt": "2026-01-20T00:00:00.000Z"
         }
       ]
     }

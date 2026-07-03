@@ -21,11 +21,12 @@ short/empty page exactly like legacy's own `!endpoint.paginated || len(records) 
 len(records) < pageSize` check. `reports`, `folders`, and `user` are non-paginated
 single-response reads (`pagination.type: none` overrides the base spec per-stream), matching
 legacy's `endpoint.paginated == false` branch (no `limit`/`offset` query params sent at all).
-`streams.json`'s `pagination.page_size: 2` (vs. legacy's real default of 100) exists purely to
-keep the required 2-page `forms` fixture small, per the identical precedent documented on auth0's
-and aviationstack's goldens (`docs/migration/conventions.md`) — `PaginationSpec.PageSize` is a
-fixed value with no config-driven override on either side, so `page_size`/`max_pages` are not
-declared in `spec.json` (F6: a declared-but-unwireable key is worse than an absent one).
+`streams.json`'s `pagination.page_size: 100` matches legacy's real default
+(`jotformDefaultPageSize`, `jotform.go:35`) exactly — `PaginationSpec.PageSize` is a fixed value
+with no config-driven override on either side, so `page_size`/`max_pages` are not declared in
+`spec.json` (F6: a declared-but-unwireable key is worse than an absent one). The `forms` fixture's
+two pages (100 records then a 1-record short page) reflect a full page-1 at that size, matching
+aviationstack's corrected precedent.
 
 Every stream's records live at the top-level `content` key regardless of pagination shape — this
 is Jotform's uniform envelope (`{responseCode, content: [...] | {...}, resultSet?: {...}}`);
@@ -63,7 +64,7 @@ None. Jotform is a read-only source connector (`capabilities.write: false`); thi
   overrides (`jotformPageSize`/`jotformMaxPages`, `jotform.go:288-316`); the engine's
   `offset_limit` paginator reads `PaginationSpec.PageSize`/`MaxPages` as fixed values resolved once
   at bundle load, with no template/config-driven override mechanism. This bundle sends a fixed
-  page size (`2`, chosen only to keep the fixture small — see Streams notes) and does not cap
+  page size (`100`, matching legacy's own default — see Streams notes) and does not cap
   `max_pages` (unbounded, matching legacy's own default of 0/unlimited).
 - **No incremental fetch behavior on any stream** — see Streams notes. `created_at` is declared as
   `x-cursor-field` on `forms`/`submissions`/`reports` for downstream dedup/ordering purposes only;

@@ -13,7 +13,7 @@
       "type": "offset_limit",
       "limit_param": "count",
       "offset_param": "start",
-      "page_size": 2
+      "page_size": 100
     },
     "check": { "method": "GET", "path": "/adAccounts" },
     "error_map": [

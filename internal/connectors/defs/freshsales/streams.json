@@ -10,7 +10,7 @@
       "page_param": "page",
       "size_param": "",
       "start_page": 1,
-      "page_size": 2
+      "page_size": 100
     },
     "check": { "method": "GET", "path": "/contacts/view/{{ config.view_id }}" },
     "error_map": [

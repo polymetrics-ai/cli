@@ -22,12 +22,13 @@ stopping on a short/empty page exactly like legacy's `connsdk.PageNumberPaginato
 `streams.json`'s `pagination.page_size` is a static JSON int (`PaginationSpec.PageSize`),
 resolved once at bundle load with no config-driven override — the same shape documented in
 `auth0`'s and `searxng`'s goldens (`docs/migration/conventions.md`). Legacy's real default is
-50 (`capsuleDefaultPageSize`, configurable up to 100 via a `page_size` config value), but
-since this field is identical in both fixture-replay and live requests (there is no fixture-
-vs-production divergence — every request, live or replayed, is driven by the exact same
-declared value), this bundle declares `page_size: 2` purely to keep the required 2-page
-`parties` conformance fixture (`docs/migration/conventions.md` §4) small; it has no bearing on
-correctness. Legacy's `page_size`/`max_pages` config properties are consequently genuinely
+50 (`capsuleDefaultPageSize`, configurable up to 100 via a `page_size` config value); this
+bundle declares `page_size: 50` to match that default exactly (a smaller static value would
+silently narrow every live page fetch to a fraction of legacy's request size, multiplying the
+number of API calls per sync even though fixture replay would look identical either way). The
+required 2-page `parties` conformance fixture (`docs/migration/conventions.md` §4) accordingly
+ships a full 50-record page 1 and a short 1-record page 2 to exercise the real stop threshold.
+Legacy's `page_size`/`max_pages` config properties are consequently genuinely
 dead in this dialect (no template anywhere reads them) and are intentionally NOT declared in
 `spec.json` (F6, REVIEW.md: a declared-but-unwireable key is worse than an absent one).
 

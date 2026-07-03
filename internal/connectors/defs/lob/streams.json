@@ -20,7 +20,7 @@
     {
       "name": "addresses",
       "path": "/addresses",
-      "query": { "limit": "2" },
+      "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "data" },
       "incremental": {
         "cursor_field": "date_created"
@@ -30,7 +30,7 @@
     {
       "name": "postcards",
       "path": "/postcards",
-      "query": { "limit": "2" },
+      "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "data" },
       "incremental": {
         "cursor_field": "date_created"
@@ -40,7 +40,7 @@
     {
       "name": "letters",
       "path": "/letters",
-      "query": { "limit": "2" },
+      "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "data" },
       "incremental": {
         "cursor_field": "date_created"
@@ -50,7 +50,7 @@
     {
       "name": "checks",
       "path": "/checks",
-      "query": { "limit": "2" },
+      "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "data" },
       "incremental": {
         "cursor_field": "date_created"
@@ -60,7 +60,7 @@
     {
       "name": "bank_accounts",
       "path": "/bank_accounts",
-      "query": { "limit": "2" },
+      "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "data" },
       "incremental": {
         "cursor_field": "date_created"

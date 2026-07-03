@@ -21,10 +21,11 @@ key matching the stream name (`contacts`/`segmentations`/`events`/`landing_pages
 `email_templates`). Pagination is `page_number` (`page`/`page_size` query params, base default
 `page_size: 125` matching legacy's `rdDefaultPageSize`/`rdMaxPageSize`, both fixed at 125 — legacy
 allows a config-driven `page_size` override in the 1-125 range, but always defaults to and never
-exceeds 125) — a page shorter than `page_size` is the last page. The `contacts` stream declares a
-stream-level pagination override (`page_size: 2`) purely to keep its 2-page conformance fixture
-small (`docs/migration/conventions.md` §4); the other 4 streams keep the base default and ship
-single-page fixtures.
+exceeds 125) — a page shorter than `page_size` is the last page. All 5 streams use the base default
+(`page_size: 125`); `contacts` ships the required 2-page conformance fixture by returning a full
+125-record first page (triggering the paginator to fetch page 2) and a short second page, per
+`docs/migration/conventions.md` §4 — the live page size is never shrunk to make the fixture small.
+The other 4 streams ship single-page fixtures.
 
 Legacy's own halt condition additionally reads a `pagination.next_page` value from the response
 body and stops early when it is empty or does not advance (`rd_station_marketing.go:118-129`),

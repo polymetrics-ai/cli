@@ -12,7 +12,7 @@
       "type": "offset_limit",
       "limit_param": "take",
       "offset_param": "skip",
-      "page_size": 1
+      "page_size": 100
     },
     "check": { "method": "GET", "path": "/v2/me" },
     "error_map": [

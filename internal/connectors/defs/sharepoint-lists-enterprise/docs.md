@@ -71,14 +71,13 @@ matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`.
   both as config-driven overrides (`sharepoint_lists_enterprise.go:89-96`,
   `positiveInt`/`parseMaxPages`, `page_size` clamped 1-999, `max_pages` defaulting to 1). The
   `offset_limit` paginator's `page_size` is a fixed value baked into `streams.json`'s
-  `base.pagination` block, and there is no per-request `max_pages` override mechanism at all
-  (conventions.md §3). Neither key is declared in `spec.json` (a declared-but-unwireable key is
-  worse than an absent one — searxng precedent).
-- **`page_size` is baked at `2`, not legacy's own default of `100`.** A deliberate, documented
-  fixture-authoring choice (conventions.md §4's 2-page-fixture-required rule), not a live-caller
-  behavior change: the short-page stop contract applies identically at any page size, only the
-  request count for a large result set changes. Bumping back to 100 pre-launch is a one-line
-  follow-up.
+  `base.pagination` block (set to `100`, matching legacy's own default,
+  `sharepoint_lists_enterprise.go:21`, `defaultPageSize`), and there is no per-request `max_pages`
+  override mechanism at all (conventions.md §3). Neither key is declared in `spec.json` (a
+  declared-but-unwireable key is worse than an absent one — searxng precedent). The `lists` stream's
+  committed 2-page conformance fixture (`fixtures/streams/lists/{page_1,page_2}.json`, 100 records
+  then 1) proves pagination termination at this same page size, per conventions.md §4's
+  2-page-fixture-required rule.
 - Legacy's own default `max_pages` is `1` (`sharepoint_lists_enterprise.go:22`,
   `defaultMaxPages`); this bundle's unset `MaxPages` (unbounded, stopped only by the short-page
   signal) is a strict superset of legacy's default single-page behavior — no caller-visible

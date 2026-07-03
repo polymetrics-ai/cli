@@ -10,7 +10,7 @@
       "page_param": "page",
       "size_param": "perPage",
       "start_page": 1,
-      "page_size": 2
+      "page_size": 50
     },
     "check": { "method": "GET", "path": "/parties", "query": { "page": "1", "perPage": "1" } },
     "error_map": [

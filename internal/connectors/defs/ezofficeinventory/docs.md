@@ -40,11 +40,9 @@ detail-enrichment query params legacy's `detailParams` table applies
 fields (`streams.json`'s `base.pagination` block) are plain Go values, not template-interpolated,
 so there is no mechanism to wire a runtime config value into them at all — declaring a spec
 property no template anywhere in the bundle ever consumes would be dead config. The bundle uses a
-fixed `page_size: 2` (chosen small so the required 2-page conformance fixture is realistic and
-exercises the short-page stop rule honestly, matching the bamboo-hr bundle's identical precedent;
-legacy's own default is `ezoDefaultPageSize = 25`, recorded as `metadata.json`'s
-`batch.read_page_size` for operator awareness) and no `max_pages` cap (unbounded, matching
-legacy's own default of 0/unlimited).
+fixed `page_size: 25`, matching legacy's own default (`ezoDefaultPageSize = 25` in
+`ezofficeinventory.go`, also recorded as `metadata.json`'s `batch.read_page_size` for operator
+awareness) and no `max_pages` cap (unbounded, matching legacy's own default of 0/unlimited).
 
 ## Write actions & risks
 

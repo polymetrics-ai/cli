@@ -23,11 +23,16 @@ a short page — identical to legacy's `connsdk.OffsetPaginator{LimitParam: "lim
 "offset", PageSize: pageSize}`. No `computed_fields` are needed for any of the 4 streams: legacy's
 mappers (`datascopeLocationRecord`/`datascopeAnswerRecord`/`datascopeListRecord`/
 `datascopeNotificationRecord`) all copy fields directly off the raw item with no renames, so plain
-schema projection reproduces them exactly. `streams.json`'s `pagination.page_size: 2` is a
-deliberately small static value chosen purely to keep the required 2-page fixture
-(`fixtures/streams/locations/{page_1,page_2}.json`) compact — matching the identical
-auth0/aviationstack/criteo-marketing precedent in this repo; it has no bearing on a live
-deployment.
+schema projection reproduces them exactly. `streams.json`'s `pagination.page_size: 200`
+matches legacy's own `datascopeDefaultPageSize` (the value legacy's `datascopePageSize` config
+helper falls back to whenever `page_size` is unset; legacy's `datascopeMaxPageSize` is also 200,
+so this is legacy's only usable value, not merely its default) — this bundle's static-literal
+`base.pagination.page_size` cannot expose a runtime override the way legacy's config-driven helper
+does (see `docs/migration/conventions.md`'s `page_size`/`max_pages` non-runtime-overridable note).
+All 5 fixtures (`fixtures/streams/{locations,answers,lists,notifications}/page_1.json`) request
+`limit=200` accordingly and return their entire small fixture record set on a single short page
+(`locations`'s fixture, previously split across two `page_size: 2` pages, is now the single
+`page_1.json` file with all 3 records).
 
 `answers`/`notifications` are `windowed` in legacy: a `start`/`end` datetime-range request pair,
 formatted in DataScope's native `dd/mm/yyyy HH:MM` layout, is added when a persisted cursor or the

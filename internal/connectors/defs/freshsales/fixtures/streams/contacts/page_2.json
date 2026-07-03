@@ -1,17 +1,23 @@
 {
-  "request": { "method": "GET", "path": "/contacts/view/synthetic-conformance-value", "query": { "page": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/contacts/view/synthetic-conformance-value",
+    "query": {
+      "page": "2"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "contacts": [
         {
-          "id": 3,
-          "first_name": "Fixture3",
+          "id": 101,
+          "first_name": "Fixture101",
           "last_name": "User",
-          "display_name": "Fixture3 User",
-          "email": "fixture3@example.com",
-          "mobile_number": "+15550104",
-          "work_number": "+15550105",
+          "display_name": "Fixture101 User",
+          "email": "fixture101@example.com",
+          "mobile_number": "+15550101",
+          "work_number": "+15550101",
           "job_title": "Engineer",
           "city": "Springfield",
           "country": "US",
@@ -20,7 +26,10 @@
           "updated_at": "2026-01-01T00:00:00Z"
         }
       ],
-      "meta": { "total": 3, "total_pages": 2 }
+      "meta": {
+        "total": 101,
+        "total_pages": 2
+      }
     }
   }
 }

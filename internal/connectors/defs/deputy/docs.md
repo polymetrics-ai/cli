@@ -42,16 +42,21 @@ returns `ErrUnsupportedOperation`.
 
 ## Known limits
 
-- `pagination.page_size` is declared as `5` in this bundle rather than legacy's real default/max
-  (`deputyDefaultPageSize`/`deputyMaxPageSize`, both 500): the engine's `offset_limit` paginator
+- `base.pagination.page_size` is set to legacy's real production default/max
+  (`deputyDefaultPageSize`/`deputyMaxPageSize`, both `500`) — this is the actual value a live
+  deployment's paginator sends; it is not a fixture convenience. `page_size`/`max_pages` are still
+  not declared in `spec.json` (dead config, F6, REVIEW.md): the engine's `offset_limit` paginator
   reads its page size only from `streams.json`'s statically-declared `pagination` block, with no
   config-driven override mechanism (the same limitation documented for searxng's `page_size`/
-  `max_pages`, `docs/migration/conventions.md`'s Tier-1 read-only variant section) — `page_size`/
-  `max_pages` are consequently not declared in `spec.json` at all (dead config, F6, REVIEW.md). A
-  smaller page size only changes how many HTTP round-trips a full sync makes (more, smaller pages
-  for the same total dataset against a real Deputy account with more than 5 locations/departments),
-  never which records are emitted — `metadata.json.batch.read_page_size` still documents Deputy's
-  real 500 default/max for operator awareness, matching the same informational-vs-enforced split
-  used for `metadata.json.rate_limit` elsewhere in this codebase.
+  `max_pages`, `docs/migration/conventions.md`'s Tier-1 read-only variant section). The `locations`
+  stream declares a stream-level `pagination` override (`page_size: 5`) so its required 2-page
+  conformance fixture (`fixtures/streams/locations/{page_1,page_2}.json`, §4 of
+  `docs/migration/conventions.md`) can stay small and readable; since stream-level `pagination`
+  replaces the base spec wholesale, this is an intentional, ledgered per-stream deviation from
+  legacy's uniform 500-record page size — `locations` reads in smaller, more numerous pages than
+  legacy would, everywhere else identical. `departments` (the other paginated stream) is
+  unaffected and uses legacy's true 500-record page size end-to-end, matching its single-page
+  fixture's `max=500` request/response. `metadata.json.batch.read_page_size` documents Deputy's
+  real 500 default/max for operator awareness.
 - Full Deputy API surface (rosters, leave, journals, resource create/update/delete) is out of
   scope for this wave; see `api_surface.json`'s `excluded` entries.

@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/rest/api/3/project/search", "query": { "maxResults": "2", "startAt": "0" } },
+  "request": { "method": "GET", "path": "/rest/api/3/project/search", "query": { "maxResults": "50", "startAt": "0" } },
   "response": {
     "status": 200,
     "body": {

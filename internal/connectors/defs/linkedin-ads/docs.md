@@ -39,15 +39,19 @@ None. LinkedIn Ads is read-only in pm (`capabilities.write: false`), matching le
 
 ## Known limits
 
-- **Fixture pagination page size**: `streams.json`'s `base.pagination.page_size` is set to `2`
-  (rather than legacy's real default of `100`) purely so a committed 2-page fixture can prove
-  pagination termination without embedding 100 synthetic records. This never changes emitted record
-  data — only how many HTTP round trips a real sync takes to exhaust a stream. `config.page_size`
-  from legacy's spec is not wired into the engine's pagination block (the same "config value looks
-  live but is dead" shape documented for stripe's `page_size`/`limit_param`, conventions.md §5 item
-  3) since the dialect's pagination spec is a fixed, bundle-declared value, not a per-request
-  override; the value is still declared in `spec.json` for config-surface documentation but is
-  otherwise inert.
+- **`page_size`/`max_pages` config overrides are not modeled.** `streams.json`'s
+  `base.pagination.page_size` is set to legacy's real production default, `100` (legacy:
+  `linkedinDefaultPageSize = 100`) — this is the actual value a live deployment's paginator sends;
+  it is not a fixture convenience. `config.page_size` from legacy's spec is not wired into the
+  engine's pagination block (the same "config value looks live but is dead" shape documented for
+  stripe's `page_size`/`limit_param`, conventions.md §5 item 3) since the dialect's pagination spec
+  is a fixed, bundle-declared value, not a per-request override; the value is still declared in
+  `spec.json` for config-surface documentation but is otherwise inert. The mandatory 2-page
+  conformance fixture (`fixtures/streams/accounts/{page_1,page_2}.json`) is sized to match: page 1
+  returns a full 100-record page (so the paginator continues to page 2), page 2 returns the
+  1-record remainder — matching aviationstack's and awin-advertiser's identical repaired precedent
+  (`docs/migration/conventions.md`, wave2 sweep class C3). Every other stream's single-page fixture
+  requests `count=100` to match.
 - **`creatives`' `changeAuditStamps` fallback is not modeled**: legacy falls back to
   `changeAuditStamps.created.time`/`changeAuditStamps.lastModified.time` only when a creatives
   record has neither `createdAt` nor `lastModifiedAt` set. The real LinkedIn creatives API always

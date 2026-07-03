@@ -1,18 +1,18 @@
 {
-  "request": { "method": "GET", "path": "/rest/api/3/search", "query": { "maxResults": "2", "startAt": "2" } },
+  "request": { "method": "GET", "path": "/rest/api/3/search", "query": { "maxResults": "50", "startAt": "50" } },
   "response": {
     "status": 200,
     "body": {
-      "startAt": 2,
-      "maxResults": 2,
-      "total": 3,
+      "startAt": 50,
+      "maxResults": 50,
+      "total": 51,
       "issues": [
         {
-          "id": "10003",
-          "key": "FIX-3",
-          "self": "https://fixture.atlassian.net/rest/api/3/issue/10003",
+          "id": "10051",
+          "key": "FIX-51",
+          "self": "https://fixture.atlassian.net/rest/api/3/issue/10051",
           "fields": {
-            "summary": "Fixture issue 3",
+            "summary": "Fixture issue 51",
             "created": "2026-01-03T00:00:00.000+0000",
             "updated": "2026-01-03T00:00:00.000+0000",
             "status": { "name": "Done" },

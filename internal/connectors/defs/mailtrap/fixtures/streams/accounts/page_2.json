@@ -1,9 +1,9 @@
 {
-  "request": { "method": "GET", "path": "/accounts", "query": { "page": "2", "per_page": "2" } },
+  "request": { "method": "GET", "path": "/accounts", "query": { "page": "2", "per_page": "100" } },
   "response": {
     "status": 200,
     "body": [
-      { "id": 3, "name": "Fixture Account 3", "access_levels": [1000] }
+      { "id": 101, "name": "Fixture Account 101", "access_levels": [1000] }
     ]
   }
 }

@@ -46,9 +46,12 @@ Pagination (`tasks` only; every other stream is a single unpaginated read, match
 `fetchOnce` for those 4 streams): `pagination.type: page_number`, `page_param: page`, **no
 `size_param`** (legacy never sends a page-size query parameter — ClickUp's task list endpoint
 returns a fixed ~100 items per page server-side, confirmed by ClickUp's own docs: "Responses are
-limited to 100 tasks per page"). `streams.json` pins `page_size: 2` purely as the client-side
-short-page-stop threshold for the required 2-page fixture (conventions.md §4) — chargify's/
-clarif-ai's identical documented precedent.
+limited to 100 tasks per page"). `streams.json` pins `page_size: 100`, matching that real
+server-side page size, as the client-side short-page-stop threshold (no query param is ever sent
+for it — `size_param` is absent — so this value only ever decides when the paginator stops, never
+what is requested). The required first-stream 2-page fixture proof (conventions.md §4) follows
+chargify's/clarif-ai's identical precedent: page 1 returns exactly 100 tasks (a full page, so the
+paginator advances) and page 2 returns 1 (a short page, so it terminates).
 
 Legacy's real stop signal is `last_page == "true" || len(records) == 0`; the engine's
 `page_number` paginator has no `stop_path`-equivalent field (that is exclusive to the `cursor`

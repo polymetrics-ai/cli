@@ -11,7 +11,7 @@
       "page_param": "page",
       "size_param": "pagesize",
       "start_page": 1,
-      "page_size": 1
+      "page_size": 100
     },
     "check": { "method": "GET", "path": "/clients.json" },
     "error_map": [

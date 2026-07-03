@@ -13,7 +13,7 @@
       "page_param": "page",
       "size_param": "limit",
       "start_page": 1,
-      "page_size": 2
+      "page_size": 50
     },
     "check": { "method": "GET", "path": "/projects", "query": { "limit": "1" } },
     "error_map": [

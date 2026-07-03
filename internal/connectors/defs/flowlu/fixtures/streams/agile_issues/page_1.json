@@ -1,12 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/agile/issues/list", "query": { "page": "1", "count": "2" } },
+  "request": { "method": "GET", "path": "/agile/issues/list", "query": { "page": "1", "count": "100" } },
   "response": {
     "status": 200,
     "body": {
       "response": {
         "total_result": 1,
         "page": 1,
-        "count": 2,
+        "count": 100,
         "items": [
           {
             "id": 1,

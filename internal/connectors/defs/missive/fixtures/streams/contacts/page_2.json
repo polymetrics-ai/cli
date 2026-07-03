@@ -1,10 +1,34 @@
 {
-  "request": { "method": "GET", "path": "/contacts", "query": { "limit": "2", "offset": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "limit": "50",
+      "offset": "50"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "contacts": [
-        { "id": "contact_fixture_3", "first_name": "Fixture3", "last_name": "Example", "modified_at": 1767225603 }
+        {
+          "id": "contact_fixture_51",
+          "first_name": "Fixture51",
+          "last_name": "Example",
+          "modified_at": 1767225651
+        },
+        {
+          "id": "contact_fixture_52",
+          "first_name": "Fixture52",
+          "last_name": "Example",
+          "modified_at": 1767225652
+        },
+        {
+          "id": "contact_fixture_53",
+          "first_name": "Fixture53",
+          "last_name": "Example",
+          "modified_at": 1767225653
+        }
       ]
     }
   }
