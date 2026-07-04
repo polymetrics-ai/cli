@@ -6,8 +6,6 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
-    "name": { "type": ["string", "null"] },
-    "Deal_Name": { "type": ["string", "null"], "description": "Zoho Bigin's Deals-module display name field. Present when module_name is Deals; other modules use their own module-specific name field instead (e.g. Contacts uses a different field). See docs.md Known limits." },
-    "display_value": { "type": ["string", "null"], "description": "Zoho Bigin's generic record display label, present on most modules." }
+    "name": { "type": ["string", "null"] }
   }
 }

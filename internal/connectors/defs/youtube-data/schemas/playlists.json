@@ -3,7 +3,6 @@
   "title": "playlists",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "published_at",
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },

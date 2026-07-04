@@ -67,12 +67,15 @@ metadata/settings endpoints are not documented as paginated.
   legacy's `mapPipeline` exactly: `id`, `name`, `display_value`, no rename needed (raw field names
   already match the schema).
 - `records` — `GET /{{ config.module_name }}` (defaults to `Deals`, matching legacy's
-  `zoho_bigin.go:103-107` fallback when `module_name` is unset), records at `data`. Declared
-  `projection: "passthrough"` rather than schema projection — see Known limits for why.
-- `fields` — `GET /settings/fields`, records at `fields`. Declared `projection: "passthrough"` for
-  the same reason as `records` — see Known limits.
-- `contacts` — `GET /Contacts`, records at `data`, `passthrough` (same module-family coalesce
-  concern as `records`/`fields` — see Known limits).
+  `zoho_bigin.go:103-107` fallback when `module_name` is unset), records at `data`. Schema projection
+  (`id`, `name`) plus a `computed_fields` coalesce `name = {{ coalesce record.name record.Deal_Name
+  record.display_value }}` reproduces legacy's `mapRecord` `first(item["name"], item["Deal_Name"],
+  item["display_value"])` exactly.
+- `fields` — `GET /settings/fields`, records at `fields`. Schema projection (`id`, `api_name`,
+  `display_label`) plus `computed_fields` `id = {{ coalesce record.id record.api_name }}` reproduces
+  legacy's `mapField` `first(item["id"], item["api_name"])` exactly.
+- `contacts` — `GET /Contacts`, records at `data`, `passthrough` (fresh Pass B surface with no
+  legacy `mapRecord` projection to reproduce; every raw field survives verbatim).
 - `companies` — `GET /Accounts` (Bigin's "Companies" module; the wire API name remains `Accounts`,
   matching Zoho's own CRM-family naming), records at `data`, `passthrough`.
 - `products` — `GET /Products`, records at `data`, `passthrough`.
@@ -120,28 +123,16 @@ as Zoho's wire format expects with no hook needed.
 
 ## Known limits
 
-- **`records` and `fields` streams do not reproduce legacy's multi-field name/id coalesce.**
-  Legacy's `mapRecord` derives its `name` output field as `first(item["name"], item["Deal_Name"],
-  item["display_value"])` (first non-empty value wins across three differently-shaped raw fields,
-  since different Zoho Bigin modules use different display-name conventions), and `mapField`
-  derives `id` as `first(item["id"], item["api_name"])`. The engine's `computed_fields` dialect has
-  no coalesce/fallback-across-multiple-source-fields primitive (`docs/migration/conventions.md` §3:
-  every `computed_fields` entry is a single template resolved against one reference or literal, with
-  only "skip if THIS entry's source is absent" tolerance, never "try field A, else field B, else field
-  C"). Declaring only the first-priority field (e.g. `name` alone) would silently drop records where
-  legacy would have fallen back to `Deal_Name`/`display_value`/`api_name` — an accepted-input
-  emitted-DATA change, not cosmetic. Both streams are instead declared `projection: "passthrough"`:
-  every raw field (`id`, `name`, `Deal_Name`, `display_value`, `api_name`, `display_label`, and any
-  other module-specific field) survives verbatim, strictly more permissive than legacy (a downstream
-  consumer can reproduce legacy's exact coalesce priority itself, or read the specific field it
-  needs) and never drops data legacy would have emitted for any accepted input. This is documented
-  here per `docs/migration/conventions.md` §5's parity-deviation ledger convention; classified
-  ACCEPTABLE (never drops/changes data for any legacy-accepted input, differs only in also exposing
-  additional raw fields legacy's narrower projection discarded). The 8 Pass-B-added module-shaped
-  streams (`contacts`/`companies`/`products`/`tasks`/`events`/`calls`/`notes`/`users`/`tags`/
-  `modules`) are `passthrough` for the identical reason — every one of them shares Zoho Bigin's same
-  cross-module display-name/lookup-object field-shape variability, and none of them have a prior
-  legacy implementation to diverge from (this is fresh Pass B surface, not a migration deviation).
+- **`records` and `fields` now reproduce legacy's multi-field name/id coalesce exactly.** Legacy's
+  `mapRecord` derives `name` as `first(item["name"], item["Deal_Name"], item["display_value"])` and
+  `mapField` derives `id` as `first(item["id"], item["api_name"])`. The engine's `computed_fields`
+  `{{ coalesce record.a record.b record.c }}` primitive (first present, non-null value,
+  type-preserving) now expresses both directly, so `records`/`fields` use schema-mode projection
+  plus a coalesce `computed_fields` entry and emit exactly legacy's field set (no extra raw fields).
+  The 9 Pass-B-added module-shaped streams (`contacts`/`companies`/`products`/`tasks`/`events`/
+  `calls`/`notes`/`users`/`tags`/`modules`) remain `passthrough`: none have a prior legacy
+  `mapRecord` projection to reproduce (fresh Pass B surface), so emitting every raw field verbatim is
+  a valid design, not a migration deviation.
 - **Pass B's `page_number` pagination on `pipelines`/`records` is a real-API-surface correction,
   not a parity deviation.** Legacy's hand-written `Read` issued exactly one request per stream with
   no page parameter — a genuine limitation of the legacy implementation (it never paged past the

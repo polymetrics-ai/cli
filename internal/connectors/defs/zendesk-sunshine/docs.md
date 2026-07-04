@@ -24,12 +24,10 @@ emits every record from the response's top-level `data` array; this bundle does 
 
 `object_types`' raw API record carries its identifier under the field name `key`, not `id`; a
 `computed_fields` rename (`"id": "{{ record.key }}"`) maps it to the schema's `id` property,
-matching legacy's `mapObjectType` output field name exactly. `objects` and `relationships` records
-already carry a natural `id` field matching the schema (Zendesk Sunshine's own JSON:API-flavored
-wire shape), so plain schema projection copies it through with no rename needed; legacy's
-`first(item["id"], item["key"])` fallback to `key` only matters for a record that omits `id`
-entirely, which the documented Sunshine wire shape never does for these two streams — see Known
-limits.
+matching legacy's `mapObjectType` output field name exactly. `objects` and `relationships` compute
+`id` as `{{ coalesce record.id record.key }}`, reproducing legacy's `first(item["id"], item["key"])`
+fallback (first present, non-null value) field-for-field; only the `id`-present case occurs on the
+documented Sunshine wire shape, but the coalesce keeps the `key`-fallback parity legacy emits.
 
 ## Write actions & risks
 
@@ -50,10 +48,9 @@ None. `capabilities.write` is `false` and this bundle ships no `writes.json`, ma
   config, per the "declared config must be consumed" rule) — a documented config-surface narrowing,
   not a silent behavior change: any caller that previously relied on subdomain-only configuration
   must now supply the full `base_url`.
-- **`objects`/`relationships`' `key`-fallback id derivation is not modeled.** Legacy's `mapObject`/
-  `mapRelationship` compute `id` as `first(item["id"], item["key"])`. Zendesk Sunshine's documented
-  API always returns `id` for object and relationship records, so this fallback is
-  defensive/unreachable on the real wire shape; the declarative dialect has no
-  ordered-multi-field-fallback primitive (only a single bare `{{ record.<path> }}` reference or a
-  filter chain), so only the `id`-present case is expressed. Deliberately out-of-scope edge case,
-  not a defect.
+- **`objects`/`relationships` emit only `id`, `type`, and (`attributes` | `source`+`target`).**
+  Legacy's `mapObject`/`mapRelationship` project exactly those fields and drop the raw API's
+  `external_id`/`type_version`/`created_at`/`updated_at` (objects) and `created_at`/`updated_at`
+  (relationships); this bundle's schemas declare only the legacy-emitted properties so schema-mode
+  projection matches legacy's emitted record DATA exactly, rather than widening the record with
+  raw fields legacy deliberately dropped.

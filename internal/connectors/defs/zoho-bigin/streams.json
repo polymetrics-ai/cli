@@ -40,15 +40,19 @@
       "name": "records",
       "path": "/{{ config.module_name }}",
       "records": { "path": "data" },
-      "schema": "schemas/records.json",
-      "projection": "passthrough"
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.Deal_Name record.display_value }}"
+      },
+      "schema": "schemas/records.json"
     },
     {
       "name": "fields",
       "path": "/settings/fields",
       "records": { "path": "fields" },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.api_name }}"
+      },
       "schema": "schemas/fields.json",
-      "projection": "passthrough",
       "pagination": { "type": "none" }
     },
     {

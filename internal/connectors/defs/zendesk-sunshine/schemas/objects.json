@@ -7,10 +7,6 @@
   "properties": {
     "id": { "type": "string" },
     "type": { "type": ["string", "null"] },
-    "attributes": { "type": ["object", "null"] },
-    "external_id": { "type": ["string", "null"] },
-    "type_version": { "type": ["integer", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
+    "attributes": { "type": ["object", "null"] }
   }
 }

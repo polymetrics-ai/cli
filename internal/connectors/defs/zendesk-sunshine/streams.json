@@ -17,7 +17,6 @@
       "name": "object_types",
       "path": "/objects/types",
       "records": { "path": "data" },
-      "pagination": { "type": "next_url", "next_url_path": "links.next" },
       "computed_fields": {
         "id": "{{ record.key }}"
       },
@@ -39,7 +38,9 @@
       "query": {
         "type": { "template": "{{ config.object_type }}", "omit_when_absent": true }
       },
-      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.key }}"
+      },
       "schema": "schemas/objects.json"
     },
     {
@@ -49,7 +50,9 @@
       "query": {
         "type": { "template": "{{ config.relationship_type }}", "omit_when_absent": true }
       },
-      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.key }}"
+      },
       "schema": "schemas/relationships.json"
     }
   ]
