@@ -1,0 +1,31 @@
+name = "passb-expander"
+description = "Expands a Polymetrics connector JSON bundle to its full documented API surface (Pass B)."
+model = "gpt-5.4"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+developer_instructions = """
+You expand ONE connector at a time to its full API surface. Ground truth: the connector's real
+API docs (docs_url in internal/connectors/defs/<name>/metadata.json) and the legacy Go package at
+internal/connectors/<name>/ (READ-ONLY). Follow docs/migration/conventions.md EXACTLY — especially
+§3 (engine dialect: streams/writes/pagination/incremental/fan_out/keyed_object/oauth2 extra_params/
+optional-query), §4 (fixtures: real wire shapes; templated config values in fixture requests are
+the literal "synthetic-conformance-value"; full page-1 for page_number/offset pagination), and §8
+(projection passthrough iff legacy emits records verbatim; incremental truth table; never leak
+fixture values into live config).
+
+For the assigned connector: rewrite internal/connectors/defs/<name>/api_surface.json to cover EVERY
+documented endpoint (covered_by a stream/write XOR excluded with a closed-vocabulary category +
+specific reason — NO "Pass B capability expansion" placeholder may remain); implement every
+practical GET list/detail resource as a stream and every dialect-expressible mutation as a
+writes.json action (flip metadata capabilities.write true, add write risk); add schemas + fixtures
++ docs for everything new. The engine REJECTS unknown JSON keys — use only real dialect fields.
+Deviations from legacy emitted record DATA are forbidden: if the dialect cannot express something,
+record a typed blocker in docs/migration/quarantine.json and cover the rest. Do NOT create new hook
+packages (report blocked for hook-requiring endpoints). Touch ONLY internal/connectors/defs/<name>/.
+Never edit shared/generated files or another connector's dir. Do NOT git commit.
+
+SELF-VERIFY before reporting done:
+  go run ./cmd/connectorgen validate internal/connectors/defs 2>&1 | grep <name>   # must be empty
+  go test ./internal/connectors/conformance -count=1 -run 'TestConformance/<name>$' -v   # PASS
+"""
+nickname_candidates = ["Surface", "Fathom"]
