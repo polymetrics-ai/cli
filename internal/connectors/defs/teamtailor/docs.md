@@ -34,20 +34,19 @@ the raw pre-projection record. Pagination follows a 1-based page-number conventi
 
 - `jobs` (legacy-parity): `GET /jobs`, primary key `["id"]`. `title`/`created_at` computed-field-
   renamed from `attributes.title`/`attributes.created-at`.
-- `candidates`: `GET /candidates`, primary key `["id"]`, `x-cursor-field: created_at`.
-  `first_name`/`last_name`/`email`/`created_at` computed-field-renamed from
+- `candidates`: `GET /candidates`, primary key `["id"]`. `first_name`/`last_name`/`email`/
+  `created_at` computed-field-renamed from
   `attributes.first-name`/`attributes.last-name`/`attributes.email`/`attributes.created-at`.
-- `job_applications`: `GET /job-applications`, primary key `["id"]`, `x-cursor-field: created_at`.
-  `created_at` renamed from `attributes.created-at`; `candidate_id`/`job_id` are derived from the
+- `job_applications`: `GET /job-applications`, primary key `["id"]`. `created_at` renamed from
+  `attributes.created-at`; `candidate_id`/`job_id` are derived from the
   JSON:API `relationships.candidate.data.id`/`relationships.job.data.id` linkage objects (NOT plain
   attributes) via the same `computed_fields` dotted-path walk.
 - `departments`, `locations`, `roles`, `stages`, `teams`, `regions`: each `GET /<resource>`,
   primary key `["id"]`, `name`(/`city`/`country` for locations) computed-field-renamed from
   `attributes.name` etc. No incremental cursor (Teamtailor's own `attributes` for these resources
   carry no `created-at`/`updated-at` field consistently enough to model one).
-- `users`: `GET /users`, primary key `["id"]`, `x-cursor-field: created_at`. `name`/`email`/
-  `created_at` computed-field-renamed from `attributes.name`/`attributes.email`/
-  `attributes.created-at`.
+- `users`: `GET /users`, primary key `["id"]`. `name`/`email`/`created_at`
+  computed-field-renamed from `attributes.name`/`attributes.email`/`attributes.created-at`.
 
 ## Write actions & risks
 

@@ -1,11 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/customers",
-    "query": {
-      "skippages": "0",
-      "pagesize": "100"
-    }
+    "path": "/customers"
   },
   "response": {
     "status": 200,

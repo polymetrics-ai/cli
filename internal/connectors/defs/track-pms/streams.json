@@ -24,24 +24,37 @@
       "name": "reservations",
       "path": "/reservations",
       "records": { "path": "reservations" },
+      "computed_fields": {
+        "confirmation_number": "{{ coalesce record.confirmation_number record.confirmationNumber }}",
+        "arrival_date": "{{ coalesce record.arrival_date record.arrivalDate }}"
+      },
       "schema": "schemas/reservations.json"
     },
     {
       "name": "guests",
       "path": "/guests",
       "records": { "path": "guests" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.full_name }}"
+      },
       "schema": "schemas/guests.json"
     },
     {
       "name": "units",
       "path": "/units",
       "records": { "path": "units" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.unit_name }}"
+      },
       "schema": "schemas/units.json"
     },
     {
       "name": "owners",
       "path": "/owners",
       "records": { "path": "owners" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.full_name }}"
+      },
       "schema": "schemas/owners.json"
     },
     {

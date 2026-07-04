@@ -4,26 +4,9 @@
   "type": "object",
   "x-primary-key": ["id"],
   "required": ["id"],
-  "x-cursor-field": "lastUpdated",
   "properties": {
     "id": { "type": "string" },
     "name": { "type": ["string", "null"] },
-    "currency": { "type": ["string", "null"] },
-    "email": { "type": ["string", "null"] },
-    "vatNumber": { "type": ["string", "null"] },
-    "ean": { "type": ["string", "null"] },
-    "address": { "type": ["string", "null"] },
-    "city": { "type": ["string", "null"] },
-    "zip": { "type": ["string", "null"] },
-    "country": { "type": ["string", "null"] },
-    "telephoneAndFaxNumber": { "type": ["string", "null"] },
-    "mobilePhone": { "type": ["string", "null"] },
-    "website": { "type": ["string", "null"] },
-    "balance": { "type": ["number", "null"] },
-    "dueAmount": { "type": ["number", "null"] },
-    "creditLimit": { "type": ["number", "null"] },
-    "barred": { "type": ["boolean", "null"] },
-    "corporateIdentificationNumber": { "type": ["string", "null"] },
-    "lastUpdated": { "type": ["string", "null"] }
+    "currency": { "type": ["string", "null"] }
   }
 }

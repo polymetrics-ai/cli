@@ -34,6 +34,7 @@
       "name": "users",
       "path": "/users.json",
       "query": {
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true },
         "page": { "template": "{{ config.page }}", "omit_when_absent": true },
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },
@@ -45,6 +46,7 @@
       "name": "departments",
       "path": "/departments.json",
       "query": {
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true },
         "page": { "template": "{{ config.page }}", "omit_when_absent": true },
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },
@@ -56,6 +58,7 @@
       "name": "categories",
       "path": "/categories.json",
       "query": {
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true },
         "page": { "template": "{{ config.page }}", "omit_when_absent": true },
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },
@@ -67,6 +70,7 @@
       "name": "problems",
       "path": "/problems.json",
       "query": {
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true },
         "page": { "template": "{{ config.page }}", "omit_when_absent": true },
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },
@@ -78,6 +82,7 @@
       "name": "changes",
       "path": "/changes.json",
       "query": {
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true },
         "page": { "template": "{{ config.page }}", "omit_when_absent": true },
         "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
       },

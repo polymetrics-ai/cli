@@ -26,7 +26,7 @@
       "path": "/v1/business-units/{{ config.business_unit_id }}/reviews",
       "records": { "path": "reviews" },
       "computed_fields": {
-        "created_at": "{{ record.createdAt }}"
+        "created_at": "{{ coalesce record.createdAt record.created_at }}"
       },
       "schema": "schemas/reviews.json"
     },
@@ -35,7 +35,7 @@
       "path": "/v1/private/business-units/{{ config.business_unit_id }}/invitations",
       "records": { "path": "invitations" },
       "computed_fields": {
-        "created_at": "{{ record.createdAt }}"
+        "created_at": "{{ coalesce record.createdAt record.created_at }}"
       },
       "schema": "schemas/invitations.json"
     },
@@ -44,7 +44,7 @@
       "path": "/v1/business-units/{{ config.business_unit_id }}",
       "records": { "path": "." },
       "computed_fields": {
-        "display_name": "{{ record.displayName }}"
+        "display_name": "{{ coalesce record.displayName record.display_name }}"
       },
       "schema": "schemas/business_units.json"
     },

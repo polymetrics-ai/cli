@@ -3,7 +3,6 @@
   "title": "products",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "created_at",
   "required": ["id"],
   "properties": {
     "id": { "type": "integer" },

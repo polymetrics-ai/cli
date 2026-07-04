@@ -135,6 +135,5 @@ additive/idempotent mutations.
   param is ever sent) — this bundle matches that exact behavior on `courses`:
   `schemas/courses.json` declares `x-cursor-field: created_at` for catalog-hint parity, but no
   `incremental` block is declared, so every sync is full-refresh, exactly like legacy. New Pass B
-  streams likewise declare `x-cursor-field` (where a `created_at`/similar timestamp field exists)
-  for catalog-hint value only, with no `incremental` block, since the published OpenAPI spec
-  documents no server-side updated-since filter parameter on any of these list endpoints.
+  streams do not declare cursor metadata, since neither legacy nor the published OpenAPI spec
+  documents a server-side updated-since filter parameter on those list endpoints.

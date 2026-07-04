@@ -21,11 +21,8 @@
     {
       "name": "customers",
       "path": "/customers",
-      "query": {
-        "filter": { "template": "lastUpdated$gte:{{ incremental.lower_bound }}", "omit_when_absent": true }
-      },
       "records": { "path": "collection" },
-      "incremental": { "cursor_field": "lastUpdated", "request_param": "filter", "start_config_key": "start_date" },
+      "pagination": { "type": "none" },
       "computed_fields": {
         "id": "{{ record.customerNumber | last_path_segment }}"
       },

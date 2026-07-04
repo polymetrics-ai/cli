@@ -42,11 +42,11 @@ flat-array JSON list convention — see the schema-shape note below), and `pagin
 extends that exact same unconditional-single-request shape to every newly added stream for
 consistency, rather than inventing a pagination loop the legacy connector never had.
 
-`incidents` additionally forwards `config.start_date` as the `updated_after` query param via the
-opt-in optional-query dialect (`omit_when_absent: true`) — present only when `start_date` is
-configured, omitted entirely otherwise, matching legacy's own `copyConfig(q, cfg, "start_date",
-"updated_after")` (`solarwinds_service_desk.go:150`, only wired for the `incidents` stream). All 24
-streams forward `config.page`/`config.per_page` verbatim as `page`/`per_page` query params
+The 6 legacy-parity streams additionally forward `config.start_date` as the `updated_after` query
+param via the opt-in optional-query dialect (`omit_when_absent: true`) — present only when
+`start_date` is configured, omitted entirely otherwise, matching legacy's shared `queryParams`
+helper (`solarwinds_service_desk.go:147-152`). All 24 streams forward `config.page`/`config.per_page`
+verbatim as `page`/`per_page` query params
 (likewise `omit_when_absent`), matching legacy's own unconditional `copyConfig(q, cfg, "page",
 "page")`/`copyConfig(q, cfg, "per_page", "per_page")` pattern extended uniformly to the new
 streams. No stream declares an `incremental` block: legacy's own catalog declares no

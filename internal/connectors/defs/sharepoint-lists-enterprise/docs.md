@@ -110,18 +110,14 @@ read stream's own `list_id` requirement.
 - **`page_size`/`max_pages` are not runtime-configurable per the engine dialect.** Legacy exposes
   both as config-driven overrides (`sharepoint_lists_enterprise.go:89-96`,
   `positiveInt`/`parseMaxPages`, `page_size` clamped 1-999, `max_pages` defaulting to 1). The
-  `offset_limit` paginator's `page_size` is a fixed value baked into `streams.json`'s
-  `base.pagination` block (set to `100`, matching legacy's own default,
-  `sharepoint_lists_enterprise.go:21`, `defaultPageSize`), and there is no per-request `max_pages`
-  override mechanism at all (conventions.md §3). Neither key is declared in `spec.json` (a
+  `offset_limit` paginator's `page_size` and `max_pages` values are fixed values baked into
+  `streams.json`'s `base.pagination` block (set to `100` and `1`, matching legacy's own defaults,
+  `sharepoint_lists_enterprise.go:21-22`), and there is no per-request override mechanism for
+  either field (conventions.md §3). Neither key is declared in `spec.json` (a
   declared-but-unwireable key is worse than an absent one — searxng precedent). The `lists` stream's
   committed 2-page conformance fixture (`fixtures/streams/lists/{page_1,page_2}.json`, 100 records
-  then 1) proves pagination termination at this same page size, per conventions.md §4's
-  2-page-fixture-required rule.
-- Legacy's own default `max_pages` is `1` (`sharepoint_lists_enterprise.go:22`,
-  `defaultMaxPages`); this bundle's unset `MaxPages` (unbounded, stopped only by the short-page
-  signal) is a strict superset of legacy's default single-page behavior — no caller-visible
-  behavior regresses for the common case (fewer records than one page).
+  then 1) documents the wire shape at this same page size, but legacy's default `max_pages: 1`
+  means only the first page is requested unless a caller opts into a larger cap.
 - `base_url` config override exists in `spec.json` for test/proxy use (matching legacy's own
   override check, `sharepoint_lists_enterprise.go:127`) but is not exercised by any fixture
   (dynamic checks are skipped bundle-wide, above). `token_url`'s override precedence IS fully

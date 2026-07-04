@@ -26,24 +26,26 @@ materialized via `spec.json`'s `"default"` value.
 
 ## Streams notes
 
-All 17 streams share the same envelope, pagination, and incremental shape:
+All 17 streams share the same `collection` envelope. The legacy-parity `customers` stream keeps
+legacy's single unpaginated, unfiltered request shape; the expanded non-legacy streams use the
+documented e-conomic list pagination and filters where applicable:
 
 - **Records envelope**: every list endpoint returns its collection under a top-level `collection`
   array (e-conomic's uniform list envelope) — `records.path: "collection"` on every stream.
 - **Pagination**: `base.pagination` declares `page_number` with `page_param: skippages`,
   `size_param: pagesize`, `start_page: 0` (e-conomic's `skippages` is 0-indexed — the number of
-  PAGES to skip, not a record offset), `page_size: 100`. This applies uniformly to every stream;
-  none override it.
+  PAGES to skip, not a record offset), `page_size: 100`. Expanded streams inherit this default.
+  `customers` overrides it with `pagination.type: none` to match legacy's `GET customers` call.
 - **Incremental filtering**: e-conomic supports a uniform `lastUpdated$gte:<ISO8601>` query filter
   (its own documented `filter` parameter grammar) on every resource whose object carries a
   `lastUpdated` field. Streams whose real wire objects expose `lastUpdated`
-  (`customers`/`suppliers`/`products`/`invoices_booked`/`invoices_drafts`/`orders_drafts`/
+  (`suppliers`/`products`/`invoices_booked`/`invoices_drafts`/`orders_drafts`/
   `orders_sent`/`quotes_drafts`/`quotes_sent`) declare `incremental.cursor_field: lastUpdated` +
   `request_param: filter`, gated by `omit_when_absent` (§3's optional-query dialect) so a full-refresh
   read sends no `filter` param at all — matching e-conomic's own "omit for unfiltered" contract, not
   an empty-string filter. Static reference/master-data collections with no `lastUpdated` field on
   their own object (`departments`/`payment_terms`/`units`/`vat_types`/`vat_zones`/`accounts`/
-  `customer_groups`/`product_groups`) declare no `incremental` block — there is no cursor to expose.
+  `customer_groups`/`product_groups`) and legacy-parity `customers` declare no `incremental` block.
 - **id derivation**: every stream stamps `id` via `computed_fields` from that resource's own
   `<resource>Number` field (e-conomic's own primary-key convention — `customerNumber`,
   `supplierNumber`, `productNumber`, `bookedInvoiceNumber`, `draftInvoiceNumber`, `orderNumber`,

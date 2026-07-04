@@ -23,16 +23,16 @@ is required and is substituted into every stream's business-unit-scoped path, ma
 - `reviews` — `GET /v1/business-units/<business_unit_id>/reviews`, records at `reviews`, primary
   key `["id"]`. Legacy's `reviewRecord` renames the raw API's camelCase `createdAt` to
   `created_at` (falling back to an already-snake_case `created_at` if present); this bundle
-  reproduces the rename via a `computed_fields` entry (`"created_at": "{{ record.createdAt }}"`).
-  The legacy fallback-to-snake_case branch is dead in practice (Trustpilot's real API always sends
-  camelCase `createdAt`); see Known limits.
+  reproduces the rename via a typed coalesce computed field.
 - `invitations` — `GET /v1/private/business-units/<business_unit_id>/invitations`, records at
-  `invitations`, primary key `["id"]`. Same `createdAt` -> `created_at` rename as `reviews`.
+  `invitations`, primary key `["id"]`. Same `createdAt`/`created_at` -> `created_at` fallback as
+  `reviews`.
 - `business_units` — `GET /v1/business-units/<business_unit_id>` (a single-object response, not a
   list); `records.path` is `"."`, which the engine's record extractor treats as one record when
   the body root is a JSON object (matching legacy's `recordsPath: "."` /
   `connsdk.RecordsAt(body, ".")` behavior exactly). Primary key `["id"]`; `displayName` is renamed
-  to `display_name` via `computed_fields`, matching legacy's `businessUnitRecord`.
+  to `display_name` via `computed_fields`, with fallback to an already-snake_case `display_name`,
+  matching legacy's `businessUnitRecord`.
 - `categories` (new in Pass B) — `GET /v1/business-units/<business_unit_id>/categories`, records
   at `categories`, primary key `["category_id"]`. Not paginated (`pagination: {"type": "none"}`
   overrides the base's `page_number` spec) — Trustpilot's own docs declare no page/perPage

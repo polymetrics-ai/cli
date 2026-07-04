@@ -32,6 +32,10 @@ is explicitly configured to a larger number, `"all"`, or `"unlimited"` (`track_p
 never actually filters or advances reads by it (no `incremental` block on legacy's own reservation
 read path), so no `incremental` block is declared here either — matching legacy's real full-refresh
 behavior.
+Legacy accepts alternate wire keys in its fixed record mappers; this bundle mirrors them with typed
+coalesce computed fields: `confirmation_number` falls back to `confirmationNumber`, `arrival_date`
+falls back to `arrivalDate`, guest/owner `name` falls back to `full_name`, and unit `name` falls
+back to `unit_name`.
 
 **New Pass B streams** (real documented paths — no legacy precedent, so these use the CURRENT
 documented shape rather than reproducing any legacy convention):
@@ -114,18 +118,6 @@ fractional ownership, and the many admin-taxonomy configuration endpoints).
   (`internal/connectors/defs/searxng/fixtures`) — proving 2-page pagination termination would
   require the paginator to fetch a page this connector's declared configuration can never actually
   request.
-- **Legacy's dual-key field fallbacks (`confirmationNumber`/`arrivalDate`/`full_name`/`unit_name`)
-  are not modeled.** Legacy's `reservationRecord`/`personRecord`/`unitRecord` mapping functions
-  each accept EITHER a snake_case OR a camelCase/alternate key via a `first(item, ...)` helper
-  (`track_pms.go:225-241`) — e.g. `confirmation_number` OR `confirmationNumber`, `name` OR
-  `full_name`/`unit_name` — preferring the snake_case key first. The engine's `computed_fields`
-  dialect has no coalesce/fallback filter (each output field name resolves against exactly one
-  template), so only the snake_case shape legacy's own test suite exercises
-  (`track_pms_test.go:23`: `confirmation_number`/`arrival_date`) is modeled via plain schema
-  projection. This is a documented scope narrowing, not a data change for any input legacy's own
-  tests demonstrate as the real wire shape; if the live Track PMS API ever sends the camelCase
-  variant instead, this bundle would silently drop that field where legacy would have populated it
-  — flagged here rather than fudged.
 - **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
   when `config.mode == "fixture"`) stamps a static `connector: "track-pms"` marker and a `fixture:
   true` flag onto two synthesized records per stream (`track_pms.go:121-135`). Neither is part of

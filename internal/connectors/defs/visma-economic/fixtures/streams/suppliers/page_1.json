@@ -17,7 +17,8 @@
           "currency": "DKK",
           "city": "Aarhus",
           "country": "Denmark",
-          "email": "supplier1@example.com"
+          "email": "supplier1@example.com",
+          "lastUpdated": "2026-01-01T00:00:00Z"
         },
         {
           "supplierNumber": 2,
@@ -25,7 +26,8 @@
           "currency": "EUR",
           "city": "Copenhagen",
           "country": "Denmark",
-          "email": "supplier2@example.com"
+          "email": "supplier2@example.com",
+          "lastUpdated": "2026-01-02T00:00:00Z"
         }
       ]
     }
