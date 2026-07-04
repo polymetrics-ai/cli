@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "responses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "item_id": { "type": ["string", "null"], "description": "Stamped from the parent item id by fan_out." },
+    "type": { "type": ["string", "null"] },
+    "answers": { "type": ["array", "null"] },
+    "result": { "type": ["object", "null"] },
+    "result_title": { "type": ["string", "null"], "description": "Mapped from attributes.result.title via computed_fields." },
+    "result_text": { "type": ["string", "null"], "description": "Mapped from attributes.result.text via computed_fields." },
+    "created": { "type": ["string", "null"], "description": "Mapped from attributes.timestamps.created via computed_fields." },
+    "duration": { "type": ["number", "null"], "description": "Mapped from attributes.timings.duration via computed_fields." },
+    "utm": { "type": ["object", "null"] },
+    "links": { "type": ["object", "null"] }
+  }
+}

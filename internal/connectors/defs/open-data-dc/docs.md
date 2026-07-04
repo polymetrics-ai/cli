@@ -21,12 +21,10 @@ The MAR API is not paginated — each stream returns its full result set in a si
   path, urlencoded by default per the engine's path-interpolation rule); `location` is required for
   this stream only (an unresolved `config.location` reference hard-errors, matching legacy's own
   explicit `"open-data-dc locations stream requires config location"` error). Records live at
-  `Result.addresses`; each raw item is shaped `{"address":{"properties":{...}}, "distance": <num>}` —
-  since the useful fields are nested two levels deep under `address.properties` (not at the record's
-  top level), every field is extracted via `computed_fields` bare `{{ record.address.properties.<field>
-  }}` references (typed extraction preserves `Latitude`/`Longitude`/`Xcoord`/`Ycoord` as numbers), plus
-  a top-level `{{ record.distance }}` passthrough for the optional search-ranking score, matching
-  legacy's `mapLocationRecord`/`locationProperties` fallback-lifting behavior field-for-field.
+  `Result.addresses`; each raw item is normally shaped `{"address":{"properties":{...}}, "distance":
+  <num>}`. Legacy `locationProperties` also accepts `properties.<field>` and flat `<field>` fallback
+  shapes, so every lifted location field uses `coalesce` across those three raw locations while keeping
+  `{{ record.distance }}` as a top-level-only passthrough for the optional search-ranking score.
 - `units` requests `GET /units/{{ config.marid }}`; `marid` is required for this stream only, matching
   legacy's explicit error. Records live at `Result.units` and are already flat (no nested wrap), so
   plain schema projection (no `computed_fields`) reproduces legacy's `mapUnitRecord` exactly.

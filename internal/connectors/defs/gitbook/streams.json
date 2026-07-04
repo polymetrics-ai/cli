@@ -48,8 +48,8 @@
         "type": "none"
       },
       "computed_fields": {
-        "display_name": "{{ record.displayName }}",
-        "photo_url": "{{ record.photoURL }}"
+        "display_name": "{{ coalesce record.displayName record.display_name }}",
+        "photo_url": "{{ coalesce record.photoURL record.photo_url }}"
       },
       "schema": "schemas/users.json"
     },
@@ -63,8 +63,8 @@
         "path": "items"
       },
       "computed_fields": {
-        "created_at": "{{ record.createdAt }}",
-        "url": "{{ record.urls.location }}"
+        "created_at": "{{ coalesce record.createdAt record.created_at }}",
+        "url": "{{ record.urls }}"
       },
       "schema": "schemas/organizations.json"
     },
@@ -78,9 +78,9 @@
         "path": "items"
       },
       "computed_fields": {
-        "id": "{{ record.user.id }}",
-        "display_name": "{{ record.user.displayName }}",
-        "email": "{{ record.user.email }}"
+        "id": "{{ coalesce record.id record.user.id }}",
+        "display_name": "{{ coalesce record.displayName record.display_name record.user.displayName record.user.display_name }}",
+        "email": "{{ coalesce record.email record.user.email }}"
       },
       "schema": "schemas/org_members.json"
     },

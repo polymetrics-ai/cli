@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/items/item_fixture_1/responses",
+    "query": {
+      "page[number]": "1",
+      "page[size]": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "response_fixture_1",
+          "type": "response",
+          "attributes": {
+            "answers": [
+              { "question": "Fixture question", "selection": ["Fixture answer"] }
+            ],
+            "result": {
+              "title": "Fixture result",
+              "text": "Fixture result text"
+            },
+            "timings": { "duration": 12 },
+            "utm": { "source": "fixture" },
+            "timestamps": {
+              "created": "2026-01-03T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_1/responses/response_fixture_1"
+          }
+        }
+      ]
+    }
+  }
+}

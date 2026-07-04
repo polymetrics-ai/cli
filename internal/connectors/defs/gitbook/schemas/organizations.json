@@ -9,6 +9,6 @@
     "title": { "type": ["string", "null"] },
     "type": { "type": ["string", "null"] },
     "created_at": { "type": ["string", "null"] },
-    "url": { "type": ["string", "null"] }
+    "url": { "type": ["object", "string", "null"] }
   }
 }

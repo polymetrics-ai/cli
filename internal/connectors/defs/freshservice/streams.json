@@ -42,16 +42,12 @@
       "path": "/tickets",
       "query": {
         "updated_since": {
-          "template": "{{ incremental.lower_bound }}",
+          "template": "{{ config.start_date }}",
           "omit_when_absent": true
         }
       },
       "records": {
         "path": "tickets"
-      },
-      "incremental": {
-        "cursor_field": "updated_at",
-        "start_config_key": "start_date"
       },
       "schema": "schemas/tickets.json"
     },

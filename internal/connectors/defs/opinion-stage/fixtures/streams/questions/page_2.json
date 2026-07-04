@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/items/item_fixture_1/questions",
+    "query": {
+      "page[number]": "1",
+      "page[size]": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "question_fixture_1",
+          "type": "question",
+          "attributes": {
+            "title": "Fixture question",
+            "kind": "poll",
+            "lead": true,
+            "timestamps": {
+              "created": "2026-01-04T00:00:00Z",
+              "modified": "2026-01-05T00:00:00Z"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -10,7 +10,7 @@ Most Pass B streams are scoped by GitBook entity identifiers such as `organizati
 
 ## Streams notes
 
-The legacy streams retain their original schema projection and record shaping: `users` flattens `displayName`/`photoURL`, `organizations` flattens `createdAt` and `urls.location`, `org_members` flattens nested `user` fields, and `content` reads page records from `pages`.
+The legacy streams retain their original schema projection and record shaping: `users` flattens `displayName`/`photoURL`, `organizations` flattens `createdAt` and emits the raw `urls` value as `url`, `org_members` flattens nested `user` fields only when top-level values are absent, and `content` reads page records from `pages`.
 
 New Pass B streams use the OpenAPI operation ID as the stream name in snake_case and `projection: passthrough` with a minimal permissive schema. List responses read from the documented array envelope such as `items` or `pages`; detail responses read the JSON object root. Cursor pagination follows GitBook's `next.page` convention where present and terminates on fixtures without a next token. GitBook does not document stable incremental cursors for these REST resources, so all streams are full-refresh.
 

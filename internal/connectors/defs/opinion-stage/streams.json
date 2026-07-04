@@ -32,6 +32,56 @@
         "modified": "{{ record.attributes.timestamps.modified }}"
       },
       "schema": "schemas/items.json"
+    },
+    {
+      "name": "responses",
+      "path": "/api/v2/items/{{ fanout.id }}/responses",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "answers": "{{ record.attributes.answers }}",
+        "result": "{{ record.attributes.result }}",
+        "result_title": "{{ record.attributes.result.title }}",
+        "result_text": "{{ record.attributes.result.text }}",
+        "created": "{{ record.attributes.timestamps.created }}",
+        "duration": "{{ record.attributes.timings.duration }}",
+        "utm": "{{ record.attributes.utm }}"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v2/items", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "item_id" },
+        "stamp_field": "item_id"
+      },
+      "schema": "schemas/responses.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "fan_out-driven stream: the id-listing preliminary request has no single fixed request path for dynamic conformance replay; static validation checks the fan_out path interpolation and fixture replay covers the request sequence."
+      }
+    },
+    {
+      "name": "questions",
+      "path": "/api/v2/items/{{ fanout.id }}/questions",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "title": "{{ record.attributes.title }}",
+        "kind": "{{ record.attributes.kind }}",
+        "lead": "{{ record.attributes.lead }}",
+        "created": "{{ record.attributes.timestamps.created }}",
+        "modified": "{{ record.attributes.timestamps.modified }}"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v2/items", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "item_id" },
+        "stamp_field": "item_id"
+      },
+      "schema": "schemas/questions.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "fan_out-driven stream: the id-listing preliminary request has no single fixed request path for dynamic conformance replay; static validation checks the fan_out path interpolation and fixture replay covers the request sequence."
+      }
     }
   ]
 }

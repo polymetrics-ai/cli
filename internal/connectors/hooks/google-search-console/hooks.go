@@ -13,9 +13,12 @@
 // engine's already-built HTTP client/auth/base-URL plumbing) exactly as the
 // declarative path itself would.
 //
-// sites and sitemaps are NOT handled here -- they are fully declarative GET
-// reads (see streams.json) and this StreamHook returns handled=false for
-// them, falling back to the engine's own declarative read path.
+// sites is NOT handled here -- it is a fully declarative GET read (see
+// streams.json) and this StreamHook returns handled=false for it, falling
+// back to the engine's own declarative read path. sitemaps is handled here
+// because legacy accepts either site_urls or the single-site site_url fallback
+// and stringifies warning/error count fields; fan_out config_key cannot
+// express that fallback.
 package googlesearchconsole
 
 import (
@@ -55,11 +58,17 @@ var analyticsDimensions = map[string][]string{
 	"search_analytics_by_query":   {"query"},
 }
 
-// ReadStream implements engine.StreamHook. It handles every
-// search_analytics_by_* stream (handled=true); every other stream
-// (sites/sitemaps) returns handled=false so the engine's declarative read
-// path runs instead.
+// ReadStream implements engine.StreamHook. It handles sitemaps plus every
+// search_analytics_by_* stream (handled=true); every other stream returns
+// handled=false so the engine's declarative read path runs instead.
 func (h *Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
+	if stream.Name == "sitemaps" {
+		if err := h.readSitemaps(ctx, rt.Requester, req.Config, emit); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+
 	dims, ok := analyticsDimensions[stream.Name]
 	if !ok {
 		return false, nil
@@ -89,6 +98,57 @@ func (h *Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req co
 		}
 	}
 	return true, nil
+}
+
+func (h *Hooks) readSitemaps(ctx context.Context, r *connsdk.Requester, cfg connectors.RuntimeConfig, emit func(connectors.Record) error) error {
+	for _, site := range siteURLs(cfg) {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		path := "/sites/" + url.PathEscape(site) + "/sitemaps"
+		resp, err := r.Do(ctx, http.MethodGet, path, nil, nil)
+		if err != nil {
+			return fmt.Errorf("read google-search-console sitemaps for %s: %w", site, err)
+		}
+		records, err := connsdk.RecordsAt(resp.Body, "sitemap")
+		if err != nil {
+			return fmt.Errorf("decode google-search-console sitemaps: %w", err)
+		}
+		for _, item := range records {
+			if err := ctx.Err(); err != nil {
+				return err
+			}
+			if err := emit(sitemapRecord(site, item)); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func sitemapRecord(site string, item map[string]any) connectors.Record {
+	return connectors.Record{
+		"site_url":          site,
+		"path":              item["path"],
+		"last_submitted":    item["lastSubmitted"],
+		"last_downloaded":   item["lastDownloaded"],
+		"is_pending":        item["isPending"],
+		"is_sitemaps_index": item["isSitemapsIndex"],
+		"type":              item["type"],
+		"warnings":          stringify(item["warnings"]),
+		"errors":            stringify(item["errors"]),
+	}
+}
+
+func stringify(v any) string {
+	switch t := v.(type) {
+	case nil:
+		return ""
+	case string:
+		return t
+	default:
+		return fmt.Sprintf("%v", t)
+	}
 }
 
 // analyticsRequestBody is the JSON body for a searchAnalytics/query call,
@@ -200,6 +260,9 @@ func analyticsDateRange(req connectors.ReadRequest) (string, string, error) {
 // declarative stream in this bundle already uses.
 func siteURLs(cfg connectors.RuntimeConfig) []string {
 	raw := strings.TrimSpace(cfg.Config["site_urls"])
+	if raw == "" {
+		raw = strings.TrimSpace(cfg.Config["site_url"])
+	}
 	if raw == "" {
 		return nil
 	}

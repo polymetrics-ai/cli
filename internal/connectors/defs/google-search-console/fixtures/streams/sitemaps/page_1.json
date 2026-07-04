@@ -11,8 +11,8 @@
           "isPending": false,
           "isSitemapsIndex": false,
           "type": "sitemap",
-          "warnings": "0",
-          "errors": "0"
+          "warnings": 0,
+          "errors": 0
         },
         {
           "path": "https://fixture-1.example.com/sitemap-2.xml",
@@ -21,8 +21,8 @@
           "isPending": true,
           "isSitemapsIndex": false,
           "type": "sitemap",
-          "warnings": "1",
-          "errors": "0"
+          "warnings": 1,
+          "errors": 0
         }
       ]
     }

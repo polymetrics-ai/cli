@@ -35,7 +35,7 @@ func TestInit_RegistersHooks(t *testing.T) {
 
 func TestReadStream_UnknownStreamFallsBackToDeclarative(t *testing.T) {
 	h := &Hooks{}
-	for _, name := range []string{"sites", "sitemaps", "not_a_real_stream", ""} {
+	for _, name := range []string{"sites", "not_a_real_stream", ""} {
 		handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: name}, connectors.ReadRequest{}, newRuntime("http://example.invalid"), func(connectors.Record) error { return nil })
 		if err != nil {
 			t.Fatalf("ReadStream(%q): %v", name, err)
@@ -43,6 +43,54 @@ func TestReadStream_UnknownStreamFallsBackToDeclarative(t *testing.T) {
 		if handled {
 			t.Fatalf("ReadStream(%q) handled = true, want false (declarative fallback)", name)
 		}
+	}
+}
+
+func TestReadStream_SitemapsUsesSingleSiteFallbackAndStringifiesCounts(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		const wantPath = "/sites/https:%2F%2Fexample.com%2F/sitemaps"
+		if r.URL.EscapedPath() != wantPath {
+			t.Errorf("path = %q, want %q", r.URL.EscapedPath(), wantPath)
+			http.NotFound(w, r)
+			return
+		}
+		if r.Method != http.MethodGet {
+			t.Errorf("method = %q, want GET", r.Method)
+		}
+		_, _ = w.Write([]byte(`{"sitemap":[{
+			"path":"https://example.com/sitemap.xml",
+			"lastSubmitted":"2026-01-01T00:00:00Z",
+			"lastDownloaded":"2026-01-01T01:00:00Z",
+			"isPending":false,
+			"isSitemapsIndex":false,
+			"type":"sitemap",
+			"warnings":2,
+			"errors":1
+		}]}`))
+	}))
+	defer srv.Close()
+
+	req := connectors.ReadRequest{Config: connectors.RuntimeConfig{Config: map[string]string{"site_url": "https://example.com/"}}}
+	var got []connectors.Record
+	h := &Hooks{}
+	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "sitemaps"}, req, newRuntime(srv.URL), func(rec connectors.Record) error {
+		got = append(got, rec)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ReadStream: %v", err)
+	}
+	if !handled {
+		t.Fatal("handled = false, want true for sitemaps")
+	}
+	if len(got) != 1 {
+		t.Fatalf("records = %d, want 1", len(got))
+	}
+	if got[0]["site_url"] != "https://example.com/" {
+		t.Fatalf("site_url = %v, want https://example.com/", got[0]["site_url"])
+	}
+	if got[0]["warnings"] != "2" || got[0]["errors"] != "1" {
+		t.Fatalf("warnings/errors = %v/%v, want stringified 2/1", got[0]["warnings"], got[0]["errors"])
 	}
 }
 
