@@ -1,0 +1,17 @@
+{
+  "record": {
+    "identifier": "uuid",
+    "value": "contact_funnel_fixture_1",
+    "lifecycle_stage": "Qualified Lead",
+    "opportunity": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/uuid:contact_funnel_fixture_1/funnels/default",
+    "body": {
+      "lifecycle_stage": "Qualified Lead",
+      "opportunity": true
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

@@ -7,32 +7,62 @@
     "auth_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Zonka Feedback API token, sent as a Bearer token (Authorization: Bearer <auth_token>). Takes precedence over access_token when both are set. Never logged."
+      "description": "Zonka Feedback API token, sent as the Z-API-TOKEN header. Takes precedence over access_token when both are set. Never logged."
     },
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Fallback Zonka Feedback API token, used only when auth_token is unset. Sent as a Bearer token. Never logged."
+      "description": "Fallback Zonka Feedback API token, used only when auth_token is unset. Sent as the Z-API-TOKEN header. Never logged."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://api.zonkafeedback.com",
-      "description": "Zonka Feedback API base URL override for tests or proxies."
+      "default": "https://us1.apis.zonkafeedback.com",
+      "description": "Zonka Feedback API base URL for the account datacenter, such as https://us1.apis.zonkafeedback.com, https://e.apis.zonkafeedback.com, https://in.apis.zonkafeedback.com, or https://au.apis.zonkafeedback.com."
     },
-    "page_size": {
+    "response_id": {
       "type": "string",
-      "default": "100",
-      "description": "Records per page (1-200); sent as the 'per_page' query param."
+      "description": "Response ID used by the response_details stream."
     },
-    "max_pages": {
+    "survey_id": {
       "type": "string",
-      "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+      "description": "Survey ID used by the survey_details stream and distribution_logs stream."
     },
-    "mode": {
+    "contact_id": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Contact ID or external ID used by the contact_details stream."
+    },
+    "device_id": {
+      "type": "string",
+      "description": "Device ID used by the device_details, device_uptime, and device_responses streams."
+    },
+    "location_id": {
+      "type": "string",
+      "description": "Location ID or external ID used by the location_details stream and optional log filtering."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User ID used by the user_details stream."
+    },
+    "device_stats_start_date": {
+      "type": "string",
+      "description": "Start date/time for device uptime and response stats, in the format expected by Zonka Feedback."
+    },
+    "device_stats_end_date": {
+      "type": "string",
+      "description": "End date/time for device uptime and response stats, in the format expected by Zonka Feedback."
+    },
+    "distribution_logs_start_date": {
+      "type": "string",
+      "description": "Start date for distribution logs in YYYY-MM-DD format."
+    },
+    "distribution_logs_end_date": {
+      "type": "string",
+      "description": "End date for distribution logs in YYYY-MM-DD format."
+    },
+    "distribution_logs_channel": {
+      "type": "string",
+      "description": "Distribution log channel filter, such as email, sms, or whatsapp."
     }
   }
 }

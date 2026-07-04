@@ -95,19 +95,12 @@ synthetic ids, matching how each resource's own list-stream schema names its `x-
   engine's `PaginationSpec.PageSize`/`MaxPages` fields are plain fixed JSON integers baked into
   `streams.json` — there is no templating/config-driven override mechanism for them.
   `base.pagination.page_size` is set to legacy's real production default, `100`
-  (`elasticEmailDefaultPageSize`) — this is the actual value a live deployment's paginator sends;
-  it is not a fixture convenience. The `contacts` stream declares a stream-level `pagination`
-  override (`page_size: 2`) so its required 2-page conformance fixture
-  (`fixtures/streams/contacts/{page_1,page_2}.json`, §4 of `docs/migration/conventions.md`) can
-  stay small and readable; since stream-level `pagination` replaces the base spec wholesale, this
-  is an intentional, ledgered per-stream deviation from legacy's uniform 100-record page size —
-  `contacts` reads in smaller, more numerous pages than legacy would, everywhere else identical.
-  `campaigns`/`lists`/`segments`/`templates` are unaffected and use legacy's true 100-record page
-  size end-to-end, matching their single-page fixtures' `limit=100` request/response. No
-  `max_pages` cap is declared (unbounded, matching legacy's own default). Neither key is declared
-  in `spec.json` (F6, `docs/migration/conventions.md`: dead, unwireable config is worse than
-  absent config). This never changes which records are emitted for an in-range request — only
-  request cadence.
+  (`elasticEmailDefaultPageSize`) — this is the actual value every paginated live stream sends;
+  it is not a fixture convenience. The required two-page `contacts` conformance fixture therefore
+  records a full 100-row first page and a short second page, matching legacy's request cadence.
+  No `max_pages` cap is declared (unbounded, matching legacy's own default). Neither key is
+  declared in `spec.json` (F6, `docs/migration/conventions.md`: dead, unwireable config is worse
+  than absent config).
 - **`base_url` scheme/host validation is enforced by legacy in Go** with dedicated error messages
   (`elasticEmailBaseURL`); the engine has no equivalent declarative URL-shape validator, so a
   malformed `base_url` here surfaces as a generic request-construction/connection error rather

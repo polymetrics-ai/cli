@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/promotions/by_coupon",
+    "query": {
+      "product_id": "synthetic-conformance-value",
+      "coupon_code": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "name": "Fixture promotion_by_coupon",
+      "slug": "fixture-promotion_by_coupon",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+}

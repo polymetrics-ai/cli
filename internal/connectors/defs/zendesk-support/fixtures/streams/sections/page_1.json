@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/help_center/sections",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "sections": [
+        {
+          "id": 1,
+          "name": "fixture_name",
+          "category_id": 1,
+          "parent_section_id": 1,
+          "position": 7,
+          "description": "fixture_description",
+          "locale": "fixture_locale",
+          "url": "fixture_url",
+          "html_url": "fixture_html_url",
+          "source_locale": "fixture_source_locale",
+          "theme_template": "fixture_theme_template",
+          "outdated": "fixture_outdated",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "next": null
+      },
+      "meta": {
+        "has_more": false,
+        "after_cursor": null
+      }
+    }
+  }
+}

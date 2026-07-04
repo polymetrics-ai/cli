@@ -1,0 +1,36 @@
+{
+  "record": {
+    "ticket_field": {
+      "title": "Fixture title",
+      "name": "Fixture name",
+      "email": "fixture@example.com",
+      "subject": "Fixture subject",
+      "type": "text",
+      "conditions": [
+
+      ],
+      "actions": [
+
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/ticket_fields",
+    "body": {
+      "ticket_field": {
+        "title": "Fixture title",
+        "name": "Fixture name",
+        "email": "fixture@example.com",
+        "subject": "Fixture subject",
+        "type": "text",
+        "conditions": [
+
+        ],
+        "actions": [
+
+        ]
+      }
+    }
+  }
+}

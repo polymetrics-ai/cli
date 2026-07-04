@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/enrollments/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "name": "Fixture enrollment",
+      "slug": "fixture-enrollment",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+}

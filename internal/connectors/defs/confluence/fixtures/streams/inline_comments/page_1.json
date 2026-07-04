@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/inline-comments", "query": { "limit": "25", "body-format": "storage" } },
+  "request": {
+    "method": "GET",
+    "path": "/wiki/api/v2/inline-comments",
+    "query": {
+      "limit": "25",
+      "body-format": "storage"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -12,7 +19,9 @@
           "blogPostId": "",
           "parentCommentId": "",
           "resolutionStatus": "open",
-          "version": { "number": 1 }
+          "version": {
+            "number": 1
+          }
         },
         {
           "id": "ic_fixture_2",
@@ -22,7 +31,9 @@
           "blogPostId": "",
           "parentCommentId": "",
           "resolutionStatus": "resolved",
-          "version": { "number": 1 }
+          "version": {
+            "number": 1
+          }
         }
       ],
       "_links": {}

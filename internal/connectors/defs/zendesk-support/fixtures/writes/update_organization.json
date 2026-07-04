@@ -1,0 +1,37 @@
+{
+  "record": {
+    "id": 1,
+    "organization": {
+      "title": "Fixture title",
+      "name": "Fixture name",
+      "email": "fixture@example.com",
+      "subject": "Fixture subject",
+      "type": "text",
+      "conditions": [
+
+      ],
+      "actions": [
+
+      ]
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/organizations/1",
+    "body": {
+      "organization": {
+        "title": "Fixture title",
+        "name": "Fixture name",
+        "email": "fixture@example.com",
+        "subject": "Fixture subject",
+        "type": "text",
+        "conditions": [
+
+        ],
+        "actions": [
+
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/incremental/ticket_metric_events",
+    "query": {
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ticket_metric_events": [
+        {
+          "metric": "fixture_metric",
+          "id": 1,
+          "time": "fixture_time",
+          "instance_id": 1,
+          "ticket_id": 1,
+          "type": "fixture_type",
+          "sla": {
+          },
+          "group_sla": {
+          },
+          "status": {
+          },
+          "deleted": true
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

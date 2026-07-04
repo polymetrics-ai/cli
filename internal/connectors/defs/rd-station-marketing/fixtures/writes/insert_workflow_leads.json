@@ -1,0 +1,14 @@
+{
+  "record": {
+    "workflow_id": "workflow_fixture_1",
+    "leads": ["fixture.workflow@example.com"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/workflows/workflow_fixture_1/leads",
+    "body": {
+      "leads": ["fixture.workflow@example.com"]
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

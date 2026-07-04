@@ -3,33 +3,58 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "basic", "username": "{{ config.email }}", "password": "{{ secrets.api_token }}" }
+      {
+        "mode": "basic",
+        "username": "{{ config.email }}",
+        "password": "{{ secrets.api_token }}"
+      }
     ],
     "pagination": {
       "type": "next_url",
       "next_url_path": "_links.next",
       "allow_cross_host": true
     },
-    "check": { "method": "GET", "path": "/spaces" },
+    "check": {
+      "method": "GET",
+      "path": "/wiki/api/v2/spaces"
+    },
     "error_map": [
-      { "status": 401, "hint": "confluence email/api_token is missing or invalid; re-run pm credentials add confluence" },
-      { "status": 403, "hint": "confluence account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "confluence rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "confluence email/api_token is missing or invalid; re-run pm credentials add confluence"
+      },
+      {
+        "status": 403,
+        "hint": "confluence account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "confluence rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "spaces",
-      "path": "/spaces",
-      "query": { "limit": "25" },
-      "records": { "path": "results" },
+      "path": "/wiki/api/v2/spaces",
+      "query": {
+        "limit": "25"
+      },
+      "records": {
+        "path": "results"
+      },
       "schema": "schemas/spaces.json"
     },
     {
       "name": "pages",
-      "path": "/pages",
-      "query": { "limit": "25" },
-      "records": { "path": "results" },
+      "path": "/wiki/api/v2/pages",
+      "query": {
+        "limit": "25"
+      },
+      "records": {
+        "path": "results"
+      },
       "computed_fields": {
         "version": "{{ record.version.number }}"
       },
@@ -37,9 +62,13 @@
     },
     {
       "name": "blogposts",
-      "path": "/blogposts",
-      "query": { "limit": "25" },
-      "records": { "path": "results" },
+      "path": "/wiki/api/v2/blogposts",
+      "query": {
+        "limit": "25"
+      },
+      "records": {
+        "path": "results"
+      },
       "computed_fields": {
         "version": "{{ record.version.number }}"
       },
@@ -47,23 +76,36 @@
     },
     {
       "name": "labels",
-      "path": "/labels",
-      "query": { "limit": "25" },
-      "records": { "path": "results" },
+      "path": "/wiki/api/v2/labels",
+      "query": {
+        "limit": "25"
+      },
+      "records": {
+        "path": "results"
+      },
       "schema": "schemas/labels.json"
     },
     {
       "name": "attachments",
-      "path": "/attachments",
-      "query": { "limit": "25" },
-      "records": { "path": "results" },
+      "path": "/wiki/api/v2/attachments",
+      "query": {
+        "limit": "25"
+      },
+      "records": {
+        "path": "results"
+      },
       "schema": "schemas/attachments.json"
     },
     {
       "name": "footer_comments",
-      "path": "/footer-comments",
-      "query": { "limit": "25", "body-format": "storage" },
-      "records": { "path": "results" },
+      "path": "/wiki/api/v2/footer-comments",
+      "query": {
+        "limit": "25",
+        "body-format": "storage"
+      },
+      "records": {
+        "path": "results"
+      },
       "computed_fields": {
         "version": "{{ record.version.number }}"
       },
@@ -71,9 +113,14 @@
     },
     {
       "name": "inline_comments",
-      "path": "/inline-comments",
-      "query": { "limit": "25", "body-format": "storage" },
-      "records": { "path": "results" },
+      "path": "/wiki/api/v2/inline-comments",
+      "query": {
+        "limit": "25",
+        "body-format": "storage"
+      },
+      "records": {
+        "path": "results"
+      },
       "computed_fields": {
         "version": "{{ record.version.number }}"
       },
@@ -81,16 +128,26 @@
     },
     {
       "name": "tasks",
-      "path": "/tasks",
-      "query": { "limit": "25", "body-format": "storage" },
-      "records": { "path": "results" },
+      "path": "/wiki/api/v2/tasks",
+      "query": {
+        "limit": "25",
+        "body-format": "storage"
+      },
+      "records": {
+        "path": "results"
+      },
       "schema": "schemas/tasks.json"
     },
     {
       "name": "custom_content",
-      "path": "/custom-content",
-      "query": { "limit": "25", "type": "{{ config.custom_content_type }}" },
-      "records": { "path": "results" },
+      "path": "/wiki/api/v2/custom-content",
+      "query": {
+        "limit": "25",
+        "type": "{{ config.custom_content_type }}"
+      },
+      "records": {
+        "path": "results"
+      },
       "computed_fields": {
         "version": "{{ record.version.number }}"
       },

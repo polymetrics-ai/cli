@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/incremental/ticket_events.json",
+    "query": {
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ticket_events": [
+        {
+          "id": 1,
+          "ticket_id": 1,
+          "timestamp": 7,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updater_id": 1,
+          "via": "fixture_via",
+          "via_reference_id": 1,
+          "system": {
+          },
+          "child_events": [
+
+          ],
+          "event_type": "fixture_event_type"
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

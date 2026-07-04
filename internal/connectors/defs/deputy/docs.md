@@ -76,16 +76,9 @@ are deliberately NOT covered — see Known limits and `api_surface.json`'s per-e
   not declared in `spec.json` (dead config, F6, REVIEW.md): the engine's `offset_limit` paginator
   reads its page size only from `streams.json`'s statically-declared `pagination` block, with no
   config-driven override mechanism (the same limitation documented for searxng's `page_size`/
-  `max_pages`, `docs/migration/conventions.md`'s Tier-1 read-only variant section). The `locations`
-  stream declares a stream-level `pagination` override (`page_size: 5`) so its required 2-page
-  conformance fixture (`fixtures/streams/locations/{page_1,page_2}.json`, §4 of
-  `docs/migration/conventions.md`) can stay small and readable; since stream-level `pagination`
-  replaces the base spec wholesale, this is an intentional, ledgered per-stream deviation from
-  legacy's uniform 500-record page size — `locations` reads in smaller, more numerous pages than
-  legacy would, everywhere else identical. `departments` (the other paginated stream) is
-  unaffected and uses legacy's true 500-record page size end-to-end, matching its single-page
-  fixture's `max=500` request/response. `metadata.json.batch.read_page_size` documents Deputy's
-  real 500 default/max for operator awareness.
+  `max_pages`, `docs/migration/conventions.md`'s Tier-1 read-only variant section).
+  `fixtures/streams/locations/{page_1,page_2}.json` uses a full 500-record first page and a short
+  second page so conformance exercises the same `max=500` live request shape legacy uses.
 - **Company/Employee/Timesheet/Task mutations are excluded, not silently dropped**: `Company`
   (location) create/update/delete only exist via the separately-gated, untyped-body
   `/supervise/company*` endpoints (no generic-resource `/resource/Company` mutation path exists at

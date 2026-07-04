@@ -45,22 +45,9 @@ ships no `writes.json`.
 
 ## Known limits
 
-- **`variant_count`/`subset_count` derived integer fields are not modeled.** Legacy's `fontRecord`
-  emits two extra convenience columns — the integer length of the raw `variants[]` and `subsets[]`
-  arrays — computed by an in-code `lenOf` helper. The engine's `computed_fields` dialect has no
-  array-length/count filter (only `join:<sep>`, which produces a joined STRING, not an integer
-  count — using it here would silently change the field's type and semantics from legacy's integer
-  count to a comma-joined string, which is not equivalent data). This is a genuine engine
-  expressiveness gap (no count/length filter exists anywhere in `interpolate.go`), not a
-  convenience shortcut: reproducing it would require either a new engine filter or a Tier-2
-  `RecordHook`, both out of scope for this Tier-1 pass. The two convenience columns are omitted;
-  every other field legacy emits (`family`, `category`, `version`, `lastModified`, `kind`, `menu`,
-  `variants`, `subsets`, `files`, `axes`) is modeled at exact parity via plain schema projection
-  (no rename needed — legacy's `fontRecord` copies these keys through unchanged). A downstream
-  consumer needing the counts can derive them from the passed-through `variants`/`subsets` arrays
-  directly. Flagged as an `ENGINE_GAP` in the migration report; not a blocker for the rest of the
-  bundle since it affects only 2 of 12 fields and every other stream/pagination/auth behavior is at
-  full parity.
+- Legacy's derived `variant_count` and `subset_count` integer fields are modeled with
+  `computed_fields` using the engine's typed `length` filter, matching the in-code `lenOf` helper
+  for the documented Google Fonts wire shape where `variants` and `subsets` are arrays.
 - **Real-world pagination is unobserved.** The Google Fonts Developer API does not document a
   `nextPageToken` response field in its public reference; legacy's tolerance for one appears to be
   defensive/future-proofing rather than an exercised behavior. This bundle's 2-page fixture proves

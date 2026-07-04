@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "survey_stats",
+  "type": "object",
+  "x-primary-key": [
+    "surveyId"
+  ],
+  "required": [
+    "surveyId"
+  ],
+  "properties": {
+    "surveyId": {
+      "type": "string"
+    },
+    "surveyName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "surveyLanguage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "responses": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "averageTime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "completionRate": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "NPS": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "CSAT": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "CES": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

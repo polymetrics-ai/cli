@@ -1,0 +1,26 @@
+{
+  "record": {
+    "surveyId": "survey_fixture_1",
+    "response": {
+      "q_1": "9"
+    },
+    "contact": {
+      "email": "fixture@example.com"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/responses",
+    "body": {
+      "surveyId": "survey_fixture_1"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "status": 201,
+      "success": true,
+      "responseId": "response_fixture_1"
+    }
+  }
+}

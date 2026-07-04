@@ -14,6 +14,28 @@
       "format": "uri",
       "default": "https://api.rd.services/platform",
       "description": "RD Station Marketing platform API base URL override for tests or proxies."
+    },
+    "contact_identifier": {
+      "type": "string",
+      "enum": ["uuid", "email", "phone"],
+      "default": "uuid",
+      "description": "Identifier kind for contact detail/funnel streams."
+    },
+    "contact_identifier_value": {
+      "type": "string",
+      "description": "Identifier value for contact detail/funnel streams."
+    },
+    "contact_uuid": {
+      "type": "string",
+      "description": "Contact UUID for contact event streams."
+    },
+    "segmentation_id": {
+      "type": "string",
+      "description": "Segmentation ID for the segmentation_contacts stream."
+    },
+    "catalog_feed_id": {
+      "type": "string",
+      "description": "Product catalog feed ID for the catalog_feed detail stream."
     }
   }
 }

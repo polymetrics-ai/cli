@@ -29,21 +29,12 @@ operator convention (set `base_url` explicitly for sandbox), documented under Kn
 parameters, records read from the top-level JSON array (`records.path: ""`), no pagination
 (`type: none`) — matching legacy's `readMetadata`, which issues exactly one request per stream.
 
-**`symbols`'s endpoint was corrected, not just extended, in this pass.** Legacy (and this bundle,
-before this pass) read the bare `GET /v1/symbols` (an all-exchanges symbol listing with no query
-parameters). CoinAPI's current, live OpenAPI spec
-(`https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml`,
-reviewed 2026-07-04) no longer documents that bare endpoint at all — symbol listing is now
-exchange-scoped only, via `GET /v1/symbols/{exchange_id}/active`. This bundle now requires a new
-`exchange_id` config value (e.g. `BITSTAMP`) and reads `/v1/symbols/{{ config.exchange_id }}/active`
-instead. This is filed as a correctness fix rather than a parity deviation: the OLD endpoint may
-still work in practice (an unauthenticated probe against `https://rest.coinapi.io/v1/symbols`
-returns a 401 auth-gate response rather than a 404, so its live routing status could not be
-confirmed without a real API key), but it is no longer part of CoinAPI's documented, supported
-surface, and Pass B's mandate is to target the real current documented API. `symbol_id`/
-`exchange_id` filter query params on the new endpoint (`filter_symbol_id`/`filter_asset_id`) are not
-wired — this bundle always lists every active symbol for the configured exchange, matching the
-scope (if not the exact endpoint) of legacy's original all-exchanges listing.
+`symbols` keeps legacy's bare `GET /v1/symbols` endpoint: an all-exchanges symbol listing with no
+query parameters. CoinAPI's current OpenAPI spec emphasizes exchange-scoped symbol endpoints
+(`/v1/symbols/{exchange_id}/active`, `/map`, and `/history`), but replacing legacy's all-symbols
+stream with an exchange-scoped stream narrows the emitted dataset. The unauthenticated legacy route
+still reaches CoinAPI's auth gate rather than returning a route-level 404, so this bundle preserves
+the legacy endpoint and emitted record scope.
 
 `ohlcv_historical_data` and `trades_historical_data` are symbol-scoped historical series requiring
 `symbol_id` (and, for OHLCV, `period`) in config. Both send `limit` (default `100`, materialized

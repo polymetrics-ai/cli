@@ -1,0 +1,24 @@
+{
+  "record": {
+    "taskName": "Call customer",
+    "typeName": "Call",
+    "assignTo": [
+      "user_fixture_1"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/add",
+    "body": {
+      "taskName": "Call customer",
+      "typeName": "Call"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "success": true
+    }
+  }
+}

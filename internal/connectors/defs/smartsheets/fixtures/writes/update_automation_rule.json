@@ -1,0 +1,25 @@
+{
+  "record": {
+    "sheet_id": "sheet_id_fixture",
+    "automation_rule_id": "automation_rule_id_fixture",
+    "name": "Fixture",
+    "text": "Fixture text"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/sheets/sheet_id_fixture/automationrules/automation_rule_id_fixture",
+    "body": {
+      "name": "Fixture",
+      "text": "Fixture text"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

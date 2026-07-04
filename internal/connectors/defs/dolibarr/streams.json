@@ -25,6 +25,7 @@
       "path": "/thirdparties",
       "query": { "sortfield": "t.rowid", "sortorder": "ASC" },
       "records": { "path": "" },
+      "incremental": { "cursor_field": "date_modification" },
       "schema": "schemas/thirdparties.json"
     },
     {
@@ -32,6 +33,7 @@
       "path": "/contacts",
       "query": { "sortfield": "t.rowid", "sortorder": "ASC" },
       "records": { "path": "" },
+      "incremental": { "cursor_field": "date_modification" },
       "schema": "schemas/contacts.json"
     },
     {
@@ -39,6 +41,7 @@
       "path": "/products",
       "query": { "sortfield": "t.rowid", "sortorder": "ASC" },
       "records": { "path": "" },
+      "incremental": { "cursor_field": "date_modification" },
       "schema": "schemas/products.json"
     },
     {
@@ -46,6 +49,7 @@
       "path": "/invoices",
       "query": { "sortfield": "t.rowid", "sortorder": "ASC" },
       "records": { "path": "" },
+      "incremental": { "cursor_field": "date_modification" },
       "schema": "schemas/invoices.json"
     },
     {
@@ -53,6 +57,7 @@
       "path": "/orders",
       "query": { "sortfield": "t.rowid", "sortorder": "ASC" },
       "records": { "path": "" },
+      "incremental": { "cursor_field": "date_modification" },
       "schema": "schemas/orders.json"
     },
     {

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "name": "Fixture",
+    "description": "Fixture description"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users",
+    "body": {
+      "name": "Fixture",
+      "description": "Fixture description"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

@@ -4,23 +4,42 @@
       "name": "create_page",
       "kind": "create",
       "method": "POST",
-      "path": "/pages",
+      "path": "/wiki/api/v2/pages",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["spaceId", "title", "body"],
+        "required": [
+          "spaceId",
+          "title",
+          "body"
+        ],
         "properties": {
-          "spaceId": { "type": "string" },
-          "status": { "type": "string" },
-          "title": { "type": "string" },
-          "parentId": { "type": "string" },
+          "spaceId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string"
+          },
           "body": {
             "type": "object",
-            "required": ["representation", "value"],
+            "required": [
+              "representation",
+              "value"
+            ],
             "properties": {
-              "representation": { "type": "string" },
-              "value": { "type": "string" }
+              "representation": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
             }
           }
         }
@@ -31,31 +50,57 @@
       "name": "update_page",
       "kind": "update",
       "method": "PUT",
-      "path": "/pages/{{ record.id }}",
-      "path_fields": ["id"],
+      "path": "/wiki/api/v2/pages/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id", "status", "title", "spaceId", "version"],
+        "required": [
+          "id",
+          "status",
+          "title",
+          "spaceId",
+          "version"
+        ],
         "properties": {
-          "id": { "type": "string" },
-          "status": { "type": "string" },
-          "title": { "type": "string" },
-          "spaceId": { "type": "string" },
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "spaceId": {
+            "type": "string"
+          },
           "body": {
             "type": "object",
             "properties": {
-              "representation": { "type": "string" },
-              "value": { "type": "string" }
+              "representation": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
             }
           },
           "version": {
             "type": "object",
-            "required": ["number"],
+            "required": [
+              "number"
+            ],
             "properties": {
-              "number": { "type": "integer" },
-              "message": { "type": "string" }
+              "number": {
+                "type": "integer"
+              },
+              "message": {
+                "type": "string"
+              }
             }
           }
         }
@@ -66,22 +111,39 @@
       "name": "create_blogpost",
       "kind": "create",
       "method": "POST",
-      "path": "/blogposts",
+      "path": "/wiki/api/v2/blogposts",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["spaceId", "title", "body"],
+        "required": [
+          "spaceId",
+          "title",
+          "body"
+        ],
         "properties": {
-          "spaceId": { "type": "string" },
-          "status": { "type": "string" },
-          "title": { "type": "string" },
+          "spaceId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
           "body": {
             "type": "object",
-            "required": ["representation", "value"],
+            "required": [
+              "representation",
+              "value"
+            ],
             "properties": {
-              "representation": { "type": "string" },
-              "value": { "type": "string" }
+              "representation": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
             }
           }
         }
@@ -92,22 +154,38 @@
       "name": "create_footer_comment",
       "kind": "create",
       "method": "POST",
-      "path": "/footer-comments",
+      "path": "/wiki/api/v2/footer-comments",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["pageId", "body"],
+        "required": [
+          "pageId",
+          "body"
+        ],
         "properties": {
-          "pageId": { "type": "string" },
-          "blogPostId": { "type": "string" },
-          "parentCommentId": { "type": "string" },
+          "pageId": {
+            "type": "string"
+          },
+          "blogPostId": {
+            "type": "string"
+          },
+          "parentCommentId": {
+            "type": "string"
+          },
           "body": {
             "type": "object",
-            "required": ["representation", "value"],
+            "required": [
+              "representation",
+              "value"
+            ],
             "properties": {
-              "representation": { "type": "string" },
-              "value": { "type": "string" }
+              "representation": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
             }
           }
         }
@@ -118,31 +196,56 @@
       "name": "create_inline_comment",
       "kind": "create",
       "method": "POST",
-      "path": "/inline-comments",
+      "path": "/wiki/api/v2/inline-comments",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["pageId", "body", "inlineCommentProperties"],
+        "required": [
+          "pageId",
+          "body",
+          "inlineCommentProperties"
+        ],
         "properties": {
-          "pageId": { "type": "string" },
-          "blogPostId": { "type": "string" },
-          "parentCommentId": { "type": "string" },
+          "pageId": {
+            "type": "string"
+          },
+          "blogPostId": {
+            "type": "string"
+          },
+          "parentCommentId": {
+            "type": "string"
+          },
           "body": {
             "type": "object",
-            "required": ["representation", "value"],
+            "required": [
+              "representation",
+              "value"
+            ],
             "properties": {
-              "representation": { "type": "string" },
-              "value": { "type": "string" }
+              "representation": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
             }
           },
           "inlineCommentProperties": {
             "type": "object",
-            "required": ["textSelection"],
+            "required": [
+              "textSelection"
+            ],
             "properties": {
-              "textSelection": { "type": "string" },
-              "textSelectionMatchCount": { "type": "integer" },
-              "textSelectionMatchIndex": { "type": "integer" }
+              "textSelection": {
+                "type": "string"
+              },
+              "textSelectionMatchCount": {
+                "type": "integer"
+              },
+              "textSelectionMatchIndex": {
+                "type": "integer"
+              }
             }
           }
         }

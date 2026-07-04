@@ -16,11 +16,10 @@ Two streams, each with a different pagination shape (matching legacy's `streamEn
 routing):
 
 - `peoples` (`GET /search/people`): 1-based `page_number` pagination (`page_param: page`,
-  `start_page: 1`), request size driven by `query.limit` (`config.page_size`, default `"100"`).
-  Legacy's own page-size config also drives the short-page stop check; see the pagination
-  stop-threshold note below (same class as judge-me-reviews' documented narrowing). Every record
-  gets a static `connector: "just-sift"` marker stamped via `computed_fields`, matching legacy
-  `peopleRecord`/`fieldRecord`'s `rec["connector"] = registryName` line.
+  `start_page: 1`) with a fixed `limit=100`, matching legacy's default page size and the engine's
+  short-page stop threshold. Every record gets a static `connector: "just-sift"` marker stamped via
+  `computed_fields`, matching legacy `peopleRecord`/`fieldRecord`'s `rec["connector"] =
+  registryName` line.
 - `fields` (`GET /fields/person`): `cursor` pagination with `token_path: links.next` and
   `cursor_param: cursor` — the next-page token is read from the response body's `links.next` and
   sent back as the `cursor` query parameter.
@@ -35,12 +34,9 @@ None. JustSift is read-only in both legacy and this bundle (`capabilities.write:
 
 ## Known limits
 
-- **Pagination stop-threshold parity narrowing (ACCEPTABLE, documented, same class as
-  judge-me-reviews)**: legacy's `page_size` config (1-500, default 100) drives both the `limit`
-  request query param and the `peoples` stream's short-page stop check. The engine's `page_number`
-  paginator's stop-threshold (`pagination.page_size`) is a fixed literal (`100`, legacy's default)
-  and cannot be wired to the same runtime `config.page_size` value the `limit` query param uses.
-  Never wrong for the default-`page_size` case; only imprecise for a non-default override.
+- `page_size` is not exposed as bundle config. The engine's `page_number` paginator requires a
+  fixed short-page stop threshold, so the bundle uses legacy's default `limit=100` consistently
+  rather than accepting a non-default request size that could stop paging early.
 - **`links.next` query-fragment parsing (ACCEPTABLE, documented)**: legacy's `applyNextCursor`
   defensively handles a `links.next` token shaped as a full `"key=value"` query fragment (e.g.
   `"cursor=abc"`) by parsing it and merging the parsed key/value pairs into the request query,

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sheets/synthetic-conformance-value/rows/synthetic-conformance-value/columns/synthetic-conformance-value/history",
+    "query": {
+      "page": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalCount": 1,
+      "data": [
+        {
+          "id": 12345,
+          "name": "Fixture sheet_cell_history",
+          "type": "sheet_cell_history",
+          "modifiedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

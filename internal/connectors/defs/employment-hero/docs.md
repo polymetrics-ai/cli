@@ -10,7 +10,7 @@ Provide an Employment Hero access token via the `api_key` secret. The engine sen
 
 ## Streams notes
 
-The connector base URL is `https://api.employmenthero.com/api`; stream paths include `/v1` or `/v2`. The official collection uses `item_per_page` (singular), so Pass B uses `page_index`/`item_per_page` pagination. This intentionally differs from the legacy Go connector's `items_per_page` spelling.
+The connector base URL is `https://api.employmenthero.com/api`; stream paths include `/v1` or `/v2`. For the legacy-migrated list streams, requests use the legacy Go connector's `page_index`/`items_per_page` pagination spelling.
 
 `organisations` is the root discovery stream. Most streams require `organization_id` (the official docs spell the path parameter `organisation_id`). Collection-style employee subresources fan out by listing `/v1/organisations/{organization_id}/employees` and then reading each employee child endpoint. Single-object employee detail endpoints (superannuation, tax declaration, work eligibility) use `employee_ids`, a comma-separated config list, because the current fan-out dialect cannot use one pagination strategy for the ID discovery request and a different no-pagination strategy for the child single-object request.
 

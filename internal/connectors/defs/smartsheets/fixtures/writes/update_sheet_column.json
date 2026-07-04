@@ -1,0 +1,25 @@
+{
+  "record": {
+    "sheet_id": "sheet_id_fixture",
+    "column_id": "column_id_fixture",
+    "name": "Fixture",
+    "text": "Fixture text"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/sheets/sheet_id_fixture/columns/column_id_fixture",
+    "body": {
+      "name": "Fixture",
+      "text": "Fixture text"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

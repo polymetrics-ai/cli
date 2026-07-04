@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalCount": 1,
+      "data": [
+        {
+          "id": 12345,
+          "name": "Fixture reports",
+          "type": "reports",
+          "modifiedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

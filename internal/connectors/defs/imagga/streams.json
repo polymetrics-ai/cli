@@ -58,7 +58,7 @@
         "stamp_field": "image_url"
       },
       "computed_fields": {
-        "tag": "{{ record.tag.en }}",
+        "tag": "{{ coalesce record.tag.en record.tag }}",
         "confidence": "{{ record.confidence }}"
       },
       "schema": "schemas/tags.json"
@@ -79,7 +79,7 @@
         "stamp_field": "image_url"
       },
       "computed_fields": {
-        "category": "{{ record.name.en }}",
+        "category": "{{ coalesce record.name.en record.name }}",
         "confidence": "{{ record.confidence }}"
       },
       "schema": "schemas/categories.json"

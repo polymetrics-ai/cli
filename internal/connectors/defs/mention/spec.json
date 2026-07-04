@@ -23,11 +23,6 @@
       "type": "string",
       "description": "Mention alert id, required only by the 'mention' and 'alert_tag' streams (used to build their path: accounts/{account_id}/alerts/{alert_id}/mentions|tags)."
     },
-    "page_size": {
-      "type": "string",
-      "default": "100",
-      "description": "Records per page for paginated streams (1-1000)."
-    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

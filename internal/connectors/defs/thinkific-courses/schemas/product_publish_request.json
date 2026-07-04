@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "product_publish_request",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slug": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "course_id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "user_id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "product_id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "percentage_completed": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "items": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "meta": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

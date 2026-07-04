@@ -1,0 +1,15 @@
+{
+  "record": {
+    "identifier": "uuid",
+    "value": "contact_tag_fixture_1",
+    "tags": ["fixture", "reviewed"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/uuid:contact_tag_fixture_1/tag",
+    "body": {
+      "tags": ["fixture", "reviewed"]
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "device_details",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "friendlyName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deviceBrand": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deviceModel": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deviceOS": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lastCommunication": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "appStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

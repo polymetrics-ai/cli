@@ -39,11 +39,12 @@ comma-separated `config.payment_references` fan-out list, and `payout_summaries`
 their own schemas, so they do not alter the three legacy stream record shapes.
 
 Pagination is `offset_limit` (`limit_param: size`, `offset_param: offset`, `page_size: 100`, matching
-legacy's `klarnaDefaultPageSize`/`OffsetPaginator` with Klarna's own `size`/`offset` query-param
-naming); the engine stops once a page returns fewer than `page_size` records. `max_pages` defaults to
-`0` (unlimited), matching legacy's `klarnaMaxPages` default. No stream declares an `incremental`
-block or `x-cursor-field`: legacy's `klarnaStreams()` catalog publishes no `CursorFields` for any
-stream (the Settlements API supports full refresh only), so this bundle matches that exactly.
+legacy's default `klarnaDefaultPageSize`/`OffsetPaginator` with Klarna's own `size`/`offset`
+query-param naming); the engine stops once a page returns fewer than `page_size` records. No
+`max_pages` cap is declared, matching legacy's default `klarnaMaxPages` behavior (unlimited). No
+stream declares an `incremental` block or `x-cursor-field`: legacy's `klarnaStreams()` catalog
+publishes no `CursorFields` for any stream (the Settlements API supports full refresh only), so this
+bundle matches that exactly.
 
 ## Write actions & risks
 
@@ -73,6 +74,11 @@ None. The Klarna Settlements API is read-only for pm reverse-ETL purposes; `capa
   compared), this bundle sources `username` from `secrets.username` only. A caller who previously
   supplied `username` only via `Config` (the fallback path) must instead supply it as a secret; this
   is a config-shape narrowing, not a behavior change for the common (Secrets-configured) case.
+- **`page_size`/`max_pages` runtime overrides are not modeled.** Legacy accepts `config.page_size`
+  (1-500, default 100) and `config.max_pages` (0/`all`/`unlimited` = unbounded). The engine's
+  `offset_limit` paginator reads `page_size`/`max_pages` only from fixed `streams.json` pagination
+  fields, not from runtime config, so `spec.json` intentionally does not declare these dead config
+  properties. The bundle matches legacy defaults: `page_size: 100` and unbounded pages.
 - The four report endpoints (`/reports/payout-with-transactions`, `/reports/payout`,
   `/reports/payouts-summary-with-transactions`, and `/reports/payouts-summary`) return CSV or PDF
   payloads. They are accounted for in `api_surface.json` as `binary_payload` exclusions because the

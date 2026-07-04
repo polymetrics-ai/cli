@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assignedTo": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "contactId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "responseId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dueDateTime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "reminderSetting": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "isCompleted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  }
+}

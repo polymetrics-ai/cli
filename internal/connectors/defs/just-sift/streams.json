@@ -17,7 +17,7 @@
       "name": "peoples",
       "path": "/search/people",
       "query": {
-        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+        "limit": "100"
       },
       "records": { "path": "data" },
       "pagination": {
@@ -36,7 +36,7 @@
       "name": "fields",
       "path": "/fields/person",
       "query": {
-        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+        "limit": "100"
       },
       "records": { "path": "data" },
       "pagination": {

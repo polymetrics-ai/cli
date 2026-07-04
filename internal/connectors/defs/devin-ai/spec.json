@@ -27,7 +27,7 @@
     "page_size": {
       "type": "string",
       "default": "100",
-      "description": "Records per page (1-200), sent as the first query param on every stream."
+      "description": "Records per page (1-200), sent as the first query param on cursor-paginated streams."
     },
     "metrics_time_after": {
       "type": "string",

@@ -1,0 +1,215 @@
+{
+  "actions": [
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "job_title": { "type": "string" },
+          "birthdate": { "type": "string" },
+          "bio": { "type": "string" },
+          "website": { "type": "string" },
+          "personal_phone": { "type": "string" },
+          "mobile_phone": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "country": { "type": "string" },
+          "twitter": { "type": "string" },
+          "facebook": { "type": "string" },
+          "linkedin": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "legal_bases": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "creates a contact in the RD Station Marketing lead base"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contacts/{{ record.identifier }}:{{ record.value }}",
+      "path_fields": ["identifier", "value"],
+      "record_schema": {
+        "type": "object",
+        "required": ["identifier", "value"],
+        "minProperties": 3,
+        "properties": {
+          "identifier": { "type": "string", "enum": ["uuid", "email", "phone"] },
+          "value": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "job_title": { "type": "string" },
+          "birthdate": { "type": "string" },
+          "bio": { "type": "string" },
+          "website": { "type": "string" },
+          "personal_phone": { "type": "string" },
+          "mobile_phone": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "country": { "type": "string" },
+          "twitter": { "type": "string" },
+          "facebook": { "type": "string" },
+          "linkedin": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "legal_bases": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "updates an existing RD Station Marketing contact"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.identifier }}:{{ record.value }}",
+      "path_fields": ["identifier", "value"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["identifier", "value"],
+        "properties": {
+          "identifier": { "type": "string", "enum": ["uuid", "email", "phone"] },
+          "value": { "type": "string" }
+        }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "deletes a contact from the RD Station Marketing lead base",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_contact_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/contacts/{{ record.identifier }}:{{ record.value }}/tag",
+      "path_fields": ["identifier", "value"],
+      "record_schema": {
+        "type": "object",
+        "required": ["identifier", "value", "tags"],
+        "properties": {
+          "identifier": { "type": "string", "enum": ["uuid", "email", "phone"] },
+          "value": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "adds tags to an existing RD Station Marketing contact"
+    },
+    {
+      "name": "update_contact_funnel",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.identifier }}:{{ record.value }}/funnels/default",
+      "path_fields": ["identifier", "value"],
+      "record_schema": {
+        "type": "object",
+        "required": ["identifier", "value"],
+        "minProperties": 3,
+        "properties": {
+          "identifier": { "type": "string", "enum": ["uuid", "email", "phone"] },
+          "value": { "type": "string" },
+          "lifecycle_stage": { "type": "string", "enum": ["Lead", "Qualified Lead", "Client"] },
+          "opportunity": { "type": "boolean" },
+          "contact_owner_email": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "updates lifecycle/opportunity ownership fields in the default contact funnel"
+    },
+    {
+      "name": "insert_workflow_leads",
+      "kind": "update",
+      "method": "POST",
+      "path": "/workflows/{{ record.workflow_id }}/leads",
+      "path_fields": ["workflow_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["workflow_id", "leads"],
+        "properties": {
+          "workflow_id": { "type": "string" },
+          "leads": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "inserts one or more leads into a marketing automation workflow"
+    },
+    {
+      "name": "create_contact_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/fields",
+      "record_schema": {
+        "type": "object",
+        "required": ["api_identifier", "data_type", "label", "name", "presentation_type"],
+        "properties": {
+          "api_identifier": { "type": "string" },
+          "data_type": { "type": "string", "enum": ["STRING", "INTEGER", "BOOLEAN", "STRING[]"] },
+          "name": { "type": "object" },
+          "label": { "type": "object" },
+          "presentation_type": { "type": "string", "enum": ["TEXT_INPUT", "EMAIL_INPUT", "COMBO_BOX", "URL_INPUT", "TEXT_AREA", "RADIO_BUTTON", "PHONE_INPUT", "NUMBER_INPUT", "CHECK_BOX", "MULTIPLE_CHOICE"] },
+          "validation_rules": { "type": "object" }
+        }
+      },
+      "risk": "creates a custom contact field in the RD Station Marketing account"
+    },
+    {
+      "name": "create_catalog_feed",
+      "kind": "create",
+      "method": "POST",
+      "path": "/catalog_feeds",
+      "record_schema": {
+        "type": "object",
+        "required": ["name", "url", "format"],
+        "properties": {
+          "name": { "type": "string" },
+          "url": { "type": "string" },
+          "format": { "type": "string", "enum": ["xml", "json", "google_shopping"] },
+          "username": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "risk": "creates a product catalog feed configuration"
+    },
+    {
+      "name": "update_catalog_feed",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/catalog_feeds/{{ record.catalog_feed_id }}",
+      "path_fields": ["catalog_feed_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["catalog_feed_id", "name", "url", "format"],
+        "properties": {
+          "catalog_feed_id": { "type": ["string", "integer"] },
+          "name": { "type": "string" },
+          "url": { "type": "string" },
+          "format": { "type": "string", "enum": ["xml", "json", "google_shopping"] },
+          "username": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "risk": "updates a product catalog feed configuration"
+    },
+    {
+      "name": "delete_catalog_feed",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/catalog_feeds/{{ record.catalog_feed_id }}",
+      "path_fields": ["catalog_feed_id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["catalog_feed_id"],
+        "properties": {
+          "catalog_feed_id": { "type": ["string", "integer"] }
+        }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "deletes a product catalog feed configuration",
+      "confirm": "destructive"
+    }
+  ]
+}

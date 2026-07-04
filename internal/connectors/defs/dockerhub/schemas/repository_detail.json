@@ -3,7 +3,6 @@
   "title": "repository_detail",
   "type": "object",
   "x-primary-key": ["name"],
-  "x-cursor-field": "last_updated",
   "required": ["name"],
   "properties": {
     "name": { "type": "string" },

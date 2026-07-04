@@ -24,16 +24,7 @@ legacy's `connsdk.APIKeyHeader("Authorization", secret, "")`. Never logged.
   cursor` with `token_path: "_links.more.params.cursor"` and `cursor_param: "cursor"` (no
   `stop_path` needed; legacy's own loop stops purely on an empty/repeated cursor token, which is
   the paginator's default behavior when `stop_path` is omitted). `limit` is sent as the static
-  literal `100`, matching legacy's `mentionDefaultPageSize`. `spec.json`'s `page_size` property is
-  informational only (documents the same default value and legacy's accepted 1-1000 range) and is
-  not wired into a template — the same pattern stripe's golden bundle uses for its own `limit`
-  query param (see `docs/migration/conventions.md`'s parity-deviation ledger item 3): a
-  config-templated page-size query param cannot be safely used because conformance's dynamic
-  checks populate EVERY declared config property (including `page_size`) with a synthetic
-  non-numeric string, so any bundle that templates `{{ config.page_size }}` directly into a query
-  param would send that literal synthetic string to the replay server during conformance instead of
-  a real page size — a static literal sidesteps this entirely and exactly matches legacy's runtime
-  behavior for a caller that never overrides `page_size` (the common case).
+  literal `100`, matching legacy's default `mentionDefaultPageSize`.
 - `mention` (`GET accounts/{account_id}/alerts/{alert_id}/mentions`) uses the identical cursor
   pagination shape; primary key `["id"]`.
 - `alert_tag` (`GET accounts/{account_id}/alerts/{alert_id}/tags`) is unpaginated, matching
@@ -69,14 +60,12 @@ curation/read state, and alert preferences, so they remain excluded in `api_surf
   (`"mention config alert_id is required for the mention and alert_tag streams"`) when unset for
   those two streams; declared as an optional `spec.json` property (not globally required) since
   `account_me`/`account`/`alert` don't need it, exactly mirroring legacy's per-stream requirement.
-- **`max_pages` config dropped**: legacy accepts a runtime `max_pages` config value (0/`all`/
-  `unlimited` for unbounded, else a positive integer hard cap). The engine's
-  `PaginationSpec.MaxPages` is a fixed integer baked into the bundle, not a per-request templated
-  value, so there is no mechanism to wire a runtime config value into it. Since legacy's own default
-  is unbounded (`max_pages` unset), and declaring a fixed cap here would silently CHANGE accepted
-  behavior for any caller relying on an unbounded sync, `max_pages` is left undeclared entirely (no
-  cap enforced by this bundle, matching legacy's default) rather than kept as dead, unwireable
-  config (F6, `docs/migration/conventions.md`).
+- **`page_size`/`max_pages` runtime overrides are not modeled**: legacy accepts `config.page_size`
+  (1-1000, default 100) and `config.max_pages` (0/`all`/`unlimited` for unbounded, else a positive
+  integer hard cap). The engine's pagination fields are fixed values baked into `streams.json`, not
+  per-request templated config values, so `spec.json` intentionally does not declare dead,
+  unwireable config properties. The bundle matches legacy defaults: `limit=100` and unbounded
+  cursor pagination.
 - Fixtures use Mention's real wire shape for every field. The 2-page `alert`/`mention` fixtures set
   `_links.more.params.cursor` on page 1 and an empty `_links` object on page 2 (no `more` key),
   matching the paginator's stop-on-absent-token behavior exactly.

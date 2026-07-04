@@ -31,11 +31,11 @@ overridden for tests/proxies.
   /stats/facebook/posts`), **`linkedin_posts`** (`GET /stats/linkedin/posts`): all three share the
   identical shape — records at the response root, `dateLegacy` encoding (`start`/`end` query params,
   legacy's `YYYYMMDD` convention, `metricool.go:146-148`), and the fan-out block below. Primary key
-  `["blogId", "postId"]`, cursor field `publishDate`.
+  `["blogId", "postId"]`.
 - **`tiktok_posts`** (`GET /v2/analytics/posts/tiktok`): records at the `data` envelope (legacy's
   `dateV2` shape, `streams.go:70-74`), `from`/`to` query params (legacy's `YYYY-MM-DDTHH:MM:SS`
   convention, `metricool.go:149-151`), and the fan-out block below. Primary key `["blogId",
-  "videoId"]`, cursor field `publishDate`.
+  "videoId"]`.
 - **Fan-out (all 4 per-brand streams)**: `fan_out.ids_from.config_key` names `blog_ids` (a
   comma-separated config list, matching legacy's `metricoolBlogIDs` parsing, `metricool.go:274-287`
   exactly — trimmed, empty entries dropped), `into.query_param` names `blogId` (matching legacy's

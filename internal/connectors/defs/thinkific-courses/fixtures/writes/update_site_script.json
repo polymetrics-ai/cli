@@ -1,0 +1,22 @@
+{
+  "record": {
+    "site_script_id": "site_script_id_fixture",
+    "name": "Fixture",
+    "description": "Fixture description"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/site_scripts/site_script_id_fixture",
+    "body": {
+      "name": "Fixture",
+      "description": "Fixture description"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

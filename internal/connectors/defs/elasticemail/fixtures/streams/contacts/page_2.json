@@ -1,9 +1,25 @@
 {
-  "request": { "method": "GET", "path": "/contacts", "query": { "limit": "2", "offset": "2" } },
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
   "response": {
     "status": 200,
     "body": [
-      { "Email": "fixture3@example.com", "FirstName": "Fixture3", "LastName": "User", "Status": "Bounced", "Source": "Fixture", "DateAdded": "2026-01-03T00:00:00Z", "DateUpdated": "2026-01-03T00:00:00Z", "StatusChangeDate": "2026-01-03T00:00:00Z" }
+      {
+        "Email": "fixture101@example.com",
+        "FirstName": "Fixture101",
+        "LastName": "User",
+        "Status": "Bounced",
+        "Source": "Fixture",
+        "DateAdded": "2026-01-17T00:00:00Z",
+        "DateUpdated": "2026-01-17T00:00:00Z",
+        "StatusChangeDate": "2026-01-17T00:00:00Z"
+      }
     ]
   }
 }

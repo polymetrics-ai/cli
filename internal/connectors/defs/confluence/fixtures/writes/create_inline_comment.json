@@ -1,20 +1,33 @@
 {
   "record": {
     "pageId": "pages_fixture_1",
-    "body": { "representation": "storage", "value": "<p>Fixture inline comment</p>" },
-    "inlineCommentProperties": { "textSelection": "Fixture Page 1" }
+    "body": {
+      "representation": "storage",
+      "value": "<p>Fixture inline comment</p>"
+    },
+    "inlineCommentProperties": {
+      "textSelection": "Fixture Page 1"
+    }
   },
   "expect": {
     "method": "POST",
-    "path": "/inline-comments",
+    "path": "/wiki/api/v2/inline-comments",
     "body": {
       "pageId": "pages_fixture_1",
-      "body": { "representation": "storage", "value": "<p>Fixture inline comment</p>" },
-      "inlineCommentProperties": { "textSelection": "Fixture Page 1" }
+      "body": {
+        "representation": "storage",
+        "value": "<p>Fixture inline comment</p>"
+      },
+      "inlineCommentProperties": {
+        "textSelection": "Fixture Page 1"
+      }
     }
   },
   "response": {
     "status": 200,
-    "body": { "id": "ic_fixture_new", "status": "current" }
+    "body": {
+      "id": "ic_fixture_new",
+      "status": "current"
+    }
   }
 }

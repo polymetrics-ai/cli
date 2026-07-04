@@ -2,7 +2,7 @@
   "api": "CoinAPI Market Data REST API v1/v2 (https://rest.coinapi.io, sandbox https://rest-sandbox.coinapi.io)",
   "docs": "https://docs.coinapi.io/",
   "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: reviewed the current, live CoinAPI Market Data REST API OpenAPI spec (50 method+path operations across v1 and v2, fetched from https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml -- the canonical source CoinAPI's own docs page links to; the docs.coinapi.io site itself blocks automated fetches, so this spec, plus a live unauthenticated probe of https://rest.coinapi.io to confirm host/auth-gate behavior, was the review source). CoinAPI is entirely read-only (every documented operation is GET; there is no write/mutation surface at all, consistent with legacy). 9 streams now cover the practical surface: the original 5 (symbols, exchanges, assets, ohlcv_historical_data, trades_historical_data -- symbols' endpoint corrected from the retired bare GET /v1/symbols to the current documented GET /v1/symbols/{exchange_id}/active, see docs.md) plus 4 new in this pass (exchange_rates, quotes_current, orderbook_current, metrics_listing). The remaining ~41 operations are genuinely out of scope: latest/current/history variants of already-covered resources (duplicate_of), per-entity metrics values requiring iteration over the large metrics catalog, order-book depth/v3-envelope/history variants, options-chain data, blockchain-chain metadata, and icon image binaries.",
+  "scope": "Pass B full-surface expansion: reviewed the current, live CoinAPI Market Data REST API OpenAPI spec (50 method+path operations across v1 and v2, fetched from https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml -- the canonical source CoinAPI's own docs page links to; the docs.coinapi.io site itself blocks automated fetches, so this spec, plus a live unauthenticated probe of https://rest.coinapi.io to confirm host/auth-gate behavior, was the review source). CoinAPI is entirely read-only (every documented operation is GET; there is no write/mutation surface at all, consistent with legacy). 9 streams now cover the practical surface: the original 5 (symbols, exchanges, assets, ohlcv_historical_data, trades_historical_data -- symbols retains legacy's all-exchanges GET /v1/symbols endpoint to preserve emitted data scope, see docs.md) plus 4 new in this pass (exchange_rates, quotes_current, orderbook_current, metrics_listing). The remaining ~41 operations are genuinely out of scope: latest/current/history variants of already-covered resources (duplicate_of), per-entity metrics values requiring iteration over the large metrics catalog, order-book depth/v3-envelope/history variants, options-chain data, blockchain-chain metadata, and icon image binaries.",
   "endpoints": [
     {
       "method": "GET",
@@ -295,17 +295,25 @@
     },
     {
       "method": "GET",
+      "path": "/v1/symbols",
+      "covered_by": {
+        "stream": "symbols"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1/symbols/map/{exchange_id}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "per-exchange historical/mapping symbol variants of the covered symbols stream; Pass B full-surface expansion covers the active-symbols listing only"
+        "reason": "per-exchange historical/mapping symbol variants of the covered legacy all-symbols stream"
       }
     },
     {
       "method": "GET",
       "path": "/v1/symbols/{exchange_id}/active",
-      "covered_by": {
-        "stream": "symbols"
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-exchange active-symbol subset of the covered legacy all-symbols stream; using it as the primary symbols stream would narrow legacy's emitted dataset"
       }
     },
     {
@@ -313,7 +321,7 @@
       "path": "/v1/symbols/{exchange_id}/history",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "per-exchange historical/mapping symbol variants of the covered symbols stream; Pass B full-surface expansion covers the active-symbols listing only"
+        "reason": "per-exchange historical/mapping symbol variants of the covered legacy all-symbols stream"
       }
     },
     {

@@ -4,7 +4,7 @@
     "path": "/v1/organisations/synthetic-conformance-value/certifications",
     "query": {
       "page_index": "1",
-      "item_per_page": "100"
+      "items_per_page": "100"
     }
   },
   "response": {

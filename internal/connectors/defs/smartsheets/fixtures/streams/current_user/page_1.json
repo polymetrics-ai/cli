@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/me",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 12345,
+      "name": "Fixture User",
+      "email": "fixture@example.com"
+    }
+  }
+}

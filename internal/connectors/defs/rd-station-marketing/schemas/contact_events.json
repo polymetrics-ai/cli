@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contact_events",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "event_type": { "type": ["string", "null"] },
+    "event_family": { "type": ["string", "null"] },
+    "event_identifier": { "type": ["string", "null"] },
+    "event_timestamp": { "type": ["string", "null"] },
+    "payload": { "type": ["object", "null"] },
+    "email": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] }
+  }
+}

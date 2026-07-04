@@ -1,60 +1,30 @@
 # Overview
 
-Thinkific Courses is a wave2 fan-out declarative-HTTP migration. It reads courses, chapters,
-lessons, and enrollments from the Thinkific public API (`GET https://api.thinkific.com/api/public/v1/...`).
-This bundle targets capability parity with `internal/connectors/thinkific-courses` (the hand-written
-connector it migrates); the legacy package stays registered and unchanged until wave6's registry flip.
+Thinkific Courses reads the Thinkific Admin API v1 at `https://api.thinkific.com/api/public/v1`. The bundle keeps the four legacy streams (`courses`, `chapters`, `lessons`, `enrollments`) and adds documented Admin API v1 streams for bundles, categories, coupons, contents, course detail/chapters, custom profile fields, groups, instructors, orders, product publish requests, products, promotions, course reviews, users, and site scripts.
+
+Pass B also adds declarative write actions for documented JSON Admin API mutations that do not require write-time query parameters.
 
 ## Auth setup
 
-Provide a Thinkific API key via the `api_key` secret (sent as the `X-Auth-API-Key` header) and the
-account subdomain via the required `subdomain` config key (sent as the `X-Auth-Subdomain` header),
-matching legacy's `X-Auth-API-Key`/`X-Auth-Subdomain` header pair (`thinkific_courses.go:121-129`).
-Neither is ever logged. `base_url` defaults to `https://api.thinkific.com/api/public/v1`
-(legacy's `defaultBaseURL`).
+Provide `api_key` as a secret and `subdomain` as config. The API key is sent in `X-Auth-API-Key`; the subdomain is sent in `X-Auth-Subdomain`, matching legacy. `base_url` defaults to `https://api.thinkific.com/api/public/v1`.
+
+Detail and nested streams use explicit config IDs such as `bundle_id`, `course_id`, `collection_id`, `group_id`, `user_id`, and `site_script_id`.
 
 ## Streams notes
 
-All four streams share the identical Thinkific envelope: `GET /<resource>` returns
-`{"items":[...]}`; records live at the top-level `items` key for every stream (legacy's
-`recordsPath: "items"`, uniform across all four `streamSpecs`). Pagination is `page_number`
-(`page`/`limit`, `start_page: 1`, static `page_size: 100` matching legacy's `defaultPageSize`).
-None of the four streams declare an `incremental` block: legacy's `Read` never applies a
-cursor-based filter parameter of any kind (no `updated_at`-style query param is ever sent), so
-every read is a full paginated sweep — this bundle matches that exactly rather than inventing an
-incremental capability legacy never had.
+Thinkific collection endpoints use the `items` response envelope and page-number pagination with `page`/`limit`. Detail endpoints are single-object streams. The legacy `chapters` and `lessons` list streams remain because the Go connector emits them today, even though the current OpenAPI focuses on `/chapters/{id}`, `/chapters/{id}/contents`, and `/courses/{id}/chapters`.
 
-Legacy's `Read` calls `connsdk.Harvest` with a callback that does `return emit(connectors.Record(rec))`
-verbatim (`thinkific_courses.go:96-98`) — there is no `mapRecord`-style field-building step, so every
-raw field the Thinkific API returns for a record reaches the emitted output today, not just the
-fields listed in `commonFields(...)` (that list only backs the legacy `Catalog`'s advertised `Fields`
-metadata, not an actual projection filter). All four streams therefore declare
-`"projection": "passthrough"` to preserve that exact verbatim-emit behavior; the per-stream
-`schemas/*.json` files remain a documentation surface only (the advertised/expected shape) and are
-not widened to `additionalProperties: true`, matching the pingdom/searxng precedent for this rule.
+The stream projections remain passthrough because the legacy connector emits raw records directly from Thinkific without a mapRecord transformation.
 
 ## Write actions & risks
 
-None. Thinkific Courses is read-only (`capabilities.write` is `false`); this bundle ships no
-`writes.json`, matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`.
+Write actions require the standard reverse-ETL plan, preview, approval, execute flow. Covered actions create and update bundle enrollments, categories, collection memberships, enrollments, external orders, groups, group analysts/users, instructors, product publish decisions, promotions, users, and site scripts.
+
+Deletes are marked destructive and allow 404 as an idempotent missing result. Required path fields are removed from the JSON body; remaining record fields become the request body.
 
 ## Known limits
 
-- **`page_size`/`max_pages` config overrides are not modeled.** Legacy exposes `page_size`
-  (default 100, must be a positive integer) and `max_pages` (0/absent = unbounded, or a
-  non-negative integer cap) as config-driven overrides (`pageSize`/`maxPages` helpers,
-  `thinkific_courses.go:208-230`). The engine's `page_number` paginator has no config-driven
-  page-size or request-count-cap knob (mirrors the aha/adobe-commerce-magento precedent from this
-  same wave); `page_size`/`max_pages` are therefore not declared in `spec.json`, and this bundle
-  sends Thinkific's own default (`limit=100`) as a static pagination-block value with no page cap.
-- **Legacy's `firstConfig` subdomain-key aliasing is narrowed to a single key name.** Legacy accepts
-  any of `X-Auth-Subdomain`, `x_auth_subdomain`, or `subdomain` as the config key naming the account
-  subdomain (`firstConfig(cfg, "X-Auth-Subdomain", "x_auth_subdomain", "subdomain")`,
-  `thinkific_courses.go:117`). This bundle declares only `subdomain`; an operator previously using
-  one of the other two key names must rename it. This is a config-surface naming narrowing only —
-  the resolved effective subdomain value once configured is identical.
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path stamps a
-  `fixture: true` marker field with no live-path equivalent (`thinkific_courses.go:175`). This
-  bundle's schemas and fixtures target the live record shape only; the engine's own
-  `internal/connectors/conformance` fixture-replay harness provides the credential-free test
-  affordance this bundle needs.
+- `POST /coupons`, `POST /coupons/bulk_create`, and `POST /course_reviews` are excluded because they require query parameters and `writes.json` has no query parameter field.
+- OAuth authorization endpoints are excluded because they use the site-subdomain base URL rather than the Admin API v1 base.
+- Thinkific Webhooks API endpoints are excluded because they use `https://api.thinkific.com/api/v2` and a different Authorization header surface.
+- Config aliases accepted by legacy for `X-Auth-Subdomain`/`x_auth_subdomain` are narrowed to `subdomain` in this declarative bundle.

@@ -1,19 +1,1323 @@
 {
   "api": "Smartsheet REST API v2 (https://api.smartsheet.com/2.0)",
-  "docs": "https://smartsheet.redoc.ly/",
-  "reviewed_at": "2026-07-03",
-  "scope": "Migration of the read-only legacy connector: sheet metadata and sheet row listing only. The full Smartsheet surface (reports, sights, workspaces, attachments, discussions, webhooks, writes) is out of scope; a read-only migration mirrors legacy exactly.",
+  "docs": "https://developers.smartsheet.com/api/smartsheet/openapi/home",
+  "reviewed_at": "2026-07-04",
+  "scope": "Smartsheet API v2 OpenAPI surface under https://api.smartsheet.com/2.0. GET list/detail endpoints are modeled as streams unless they require an ad hoc caller query or return only service constants. JSON write endpoints are modeled when writes.json can express the path and body; binary/multipart uploads, required-query writes, OAuth token lifecycle, notification sends, and high-risk administrative/destructive account operations are explicitly excluded.",
   "endpoints": [
-    { "method": "GET", "path": "/sheets", "covered_by": { "stream": "sheets" } },
-    { "method": "GET", "path": "/sheets/{sheetId}", "covered_by": { "stream": "sheet_rows" } },
-    { "method": "GET", "path": "/reports/{reportId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/sights/{sightId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/workspaces", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/sheets/{sheetId}/attachments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/sheets/{sheetId}/discussions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/sheets/{sheetId}/rows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "PUT", "path": "/sheets/{sheetId}/rows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/sheets/{sheetId}/rows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "DELETE",
+      "path": "/favorites/{favoriteType}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk favorite delete requires an objectIds query parameter; writes.json has no query parameter field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/favorites/{favoriteType}/{favoriteId}",
+      "covered_by": {
+        "write": "delete_favorite"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/folders/{folderId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes an entire folder and its contained Smartsheet assets; not exposed as an autonomous reverse-ETL action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{groupId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes an organization group and requires administrative scope; group member removal remains covered"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{groupId}/members/{userId}",
+      "covered_by": {
+        "write": "delete_group_member"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/reports/{reportId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes an entire report; not exposed as an autonomous reverse-ETL action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/reports/{reportId}/scope",
+      "covered_by": {
+        "write": "remove_report_scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/shares/{shareId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires assetType and assetId query parameters; writes.json has no query parameter field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes an entire sheet; row/column/comment scoped writes remain covered"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/attachments/{attachmentId}",
+      "covered_by": {
+        "write": "delete_sheet_attachment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/attachments/{attachmentId}/versions",
+      "covered_by": {
+        "write": "delete_sheet_attachment_versions"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/automationrules/{automationRuleId}",
+      "covered_by": {
+        "write": "delete_automation_rule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/columns/{columnId}",
+      "covered_by": {
+        "write": "delete_sheet_column"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/comments/{commentId}",
+      "covered_by": {
+        "write": "delete_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/discussions/{discussionId}",
+      "covered_by": {
+        "write": "delete_sheet_discussion"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/proofs/{proofId}",
+      "covered_by": {
+        "write": "delete_proof"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/proofs/{proofId}/requests",
+      "covered_by": {
+        "write": "delete_proof_requests"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/proofs/{proofId}/versions",
+      "covered_by": {
+        "write": "delete_proof_version"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/rows",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "row delete requires an ids query parameter; writes.json has no query parameter field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/sentupdaterequests/{sentUpdateRequestId}",
+      "covered_by": {
+        "write": "delete_sent_update_request"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/summary/fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "summary field delete requires an ids query parameter; writes.json has no query parameter field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sheets/{sheetId}/updaterequests/{updateRequestId}",
+      "covered_by": {
+        "write": "delete_update_request"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sights/{sightId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes an entire dashboard; not exposed as an autonomous reverse-ETL action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token revocation endpoint; credential lifecycle is handled outside connector writes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "removes a user from the organization and requires administrative scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/alternateemails/{alternateEmailId}",
+      "covered_by": {
+        "write": "delete_alternate_email"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/plans/{planId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "removes a user from a plan and requires administrative scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{webhookId}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspaceId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes an entire workspace; not exposed as an autonomous reverse-ETL action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contactId}",
+      "covered_by": {
+        "stream": "contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/favorites",
+      "covered_by": {
+        "stream": "favorites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/favorites/{favoriteType}/{favoriteId}",
+      "covered_by": {
+        "stream": "favorite"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folderId}/children",
+      "covered_by": {
+        "stream": "folder_children"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folderId}/metadata",
+      "covered_by": {
+        "stream": "folder_metadata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folderId}/path",
+      "covered_by": {
+        "stream": "folder_path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/personal",
+      "covered_by": {
+        "stream": "home_contents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{groupId}",
+      "covered_by": {
+        "stream": "group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/home/folders",
+      "covered_by": {
+        "stream": "home_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports",
+      "covered_by": {
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{reportId}",
+      "covered_by": {
+        "stream": "report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{reportId}/path",
+      "covered_by": {
+        "stream": "report_path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{reportId}/publish",
+      "covered_by": {
+        "stream": "report_publish"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a caller-supplied free-text query parameter, so it is an ad hoc search endpoint rather than a fixed syncable list/detail stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/sheets/{sheetId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a caller-supplied free-text query parameter, so it is an ad hoc sheet search rather than a fixed syncable list/detail stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/serverinfo",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns API/application constants, not account data to sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shares",
+      "covered_by": {
+        "stream": "asset_shares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shares/{shareId}",
+      "covered_by": {
+        "stream": "asset_share"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets",
+      "covered_by": {
+        "stream": "sheets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}",
+      "covered_by": {
+        "stream": "sheet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}?include=rows",
+      "covered_by": {
+        "stream": "sheet_rows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/attachments",
+      "covered_by": {
+        "stream": "sheet_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/attachments/{attachmentId}",
+      "covered_by": {
+        "stream": "sheet_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/attachments/{attachmentId}/versions",
+      "covered_by": {
+        "stream": "sheet_attachment_versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/automationrules",
+      "covered_by": {
+        "stream": "sheet_automation_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/automationrules/{automationRuleId}",
+      "covered_by": {
+        "stream": "sheet_automation_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/columns",
+      "covered_by": {
+        "stream": "sheet_columns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/columns/{columnId}",
+      "covered_by": {
+        "stream": "sheet_column"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/comments/{commentId}",
+      "covered_by": {
+        "stream": "sheet_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/crosssheetreferences",
+      "covered_by": {
+        "stream": "sheet_cross_sheet_references"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/crosssheetreferences/{crossSheetReferenceId}",
+      "covered_by": {
+        "stream": "sheet_cross_sheet_reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/discussions",
+      "covered_by": {
+        "stream": "sheet_discussions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/discussions/{discussionId}",
+      "covered_by": {
+        "stream": "sheet_discussion"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/discussions/{discussionId}/attachments",
+      "covered_by": {
+        "stream": "sheet_discussion_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/path",
+      "covered_by": {
+        "stream": "sheet_path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/proofs",
+      "covered_by": {
+        "stream": "sheet_proofs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/proofs/{proofId}",
+      "covered_by": {
+        "stream": "sheet_proof"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/proofs/{proofId}/attachments",
+      "covered_by": {
+        "stream": "sheet_proof_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/proofs/{proofId}/discussions",
+      "covered_by": {
+        "stream": "sheet_proof_discussions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/proofs/{proofId}/requestactions",
+      "covered_by": {
+        "stream": "sheet_proof_request_actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/proofs/{proofId}/versions",
+      "covered_by": {
+        "stream": "sheet_proof_versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/publish",
+      "covered_by": {
+        "stream": "sheet_publish"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/rows/{rowId}",
+      "covered_by": {
+        "stream": "sheet_row"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/rows/{rowId}/attachments",
+      "covered_by": {
+        "stream": "sheet_row_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/rows/{rowId}/columns/{columnId}/history",
+      "covered_by": {
+        "stream": "sheet_cell_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/rows/{rowId}/discussions",
+      "covered_by": {
+        "stream": "sheet_row_discussions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/sentupdaterequests",
+      "covered_by": {
+        "stream": "sheet_sent_update_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/sentupdaterequests/{sentUpdateRequestId}",
+      "covered_by": {
+        "stream": "sheet_sent_update_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/summary",
+      "covered_by": {
+        "stream": "sheet_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/summary/fields",
+      "covered_by": {
+        "stream": "sheet_summary_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/updaterequests",
+      "covered_by": {
+        "stream": "sheet_update_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/updaterequests/{updateRequestId}",
+      "covered_by": {
+        "stream": "sheet_update_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sheets/{sheetId}/version",
+      "covered_by": {
+        "stream": "sheet_version"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sights",
+      "covered_by": {
+        "stream": "dashboards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sights/{sightId}",
+      "covered_by": {
+        "stream": "dashboard"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sights/{sightId}/path",
+      "covered_by": {
+        "stream": "dashboard_path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sights/{sightId}/publish",
+      "covered_by": {
+        "stream": "dashboard_publish"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/alternateemails",
+      "covered_by": {
+        "stream": "user_alternate_emails"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/alternateemails/{alternateEmailId}",
+      "covered_by": {
+        "stream": "user_alternate_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/plans",
+      "covered_by": {
+        "stream": "user_plans"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me",
+      "covered_by": {
+        "stream": "current_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/sheets",
+      "covered_by": {
+        "stream": "org_sheets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{webhookId}",
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces",
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspaceId}/children",
+      "covered_by": {
+        "stream": "workspace_children"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspaceId}/metadata",
+      "covered_by": {
+        "stream": "workspace_metadata"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/shares/{shareId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires assetType and assetId query parameters; writes.json has no query parameter field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/favorites",
+      "covered_by": {
+        "write": "add_favorites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/filteredEvents",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "POST filtered events is an alternate filtered query shape for the GET /events event stream; GET /events is covered by the events stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folderId}/copy",
+      "covered_by": {
+        "write": "copy_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folderId}/folders",
+      "covered_by": {
+        "write": "create_folder_in_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folderId}/move",
+      "covered_by": {
+        "write": "move_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folderId}/sheets",
+      "covered_by": {
+        "write": "create_sheet_in_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folderId}/sheets/import",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "imports a sheet from binary content and a required sheetName query parameter"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups",
+      "covered_by": {
+        "write": "create_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups/{groupId}/members",
+      "covered_by": {
+        "write": "add_group_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/home/folders",
+      "covered_by": {
+        "write": "create_home_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/imageurls",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "utility endpoint that resolves image URLs for later binary cell-image operations, not a persistent data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reports",
+      "covered_by": {
+        "write": "create_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reports/{reportId}/columns",
+      "covered_by": {
+        "write": "add_report_columns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reports/{reportId}/emails",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "sends a report email notification rather than mutating a durable record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reports/{reportId}/scope",
+      "covered_by": {
+        "write": "add_report_scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shares",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires assetType and assetId query parameters; writes.json has no query parameter field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets",
+      "covered_by": {
+        "write": "create_sheet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/attachments",
+      "covered_by": {
+        "write": "attach_url_to_sheet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/attachments/{attachmentId}/versions",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "attachment version upload requires octet-stream or multipart file content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/columns",
+      "covered_by": {
+        "write": "add_sheet_columns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/comments/{commentId}/attachments",
+      "covered_by": {
+        "write": "attach_url_to_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/copy",
+      "covered_by": {
+        "write": "copy_sheet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/crosssheetreferences",
+      "covered_by": {
+        "write": "create_cross_sheet_reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/discussions",
+      "covered_by": {
+        "write": "create_sheet_discussion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/discussions/{discussionId}/comments",
+      "covered_by": {
+        "write": "create_discussion_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/emails",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "sends a sheet email notification rather than mutating a durable record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/move",
+      "covered_by": {
+        "write": "move_sheet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/proofs/{proofId}/attachments",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "proof attachment upload requires binary file content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/proofs/{proofId}/discussions",
+      "covered_by": {
+        "write": "create_proof_discussion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/proofs/{proofId}/requests",
+      "covered_by": {
+        "write": "create_proof_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/proofs/{proofId}/versions",
+      "covered_by": {
+        "write": "create_proof_version"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/rows",
+      "covered_by": {
+        "write": "add_sheet_rows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/rows/{rowId}/attachments",
+      "covered_by": {
+        "write": "attach_url_to_row"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/rows/{rowId}/columns/{columnId}/cellimages",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "cell image upload requires an application/octet-stream image body"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/rows/{rowId}/discussions",
+      "covered_by": {
+        "write": "create_row_discussion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/rows/{rowId}/proofs",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "proof creation from row requires binary file content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/rows/copy",
+      "covered_by": {
+        "write": "copy_rows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/rows/emails",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "sends row email notifications rather than mutating durable row records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/rows/move",
+      "covered_by": {
+        "write": "move_rows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/sort",
+      "covered_by": {
+        "write": "sort_sheet_rows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/summary/fields",
+      "covered_by": {
+        "write": "add_summary_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/summary/fields/{fieldId}/images",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "summary field image upload requires an application/octet-stream image body"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/{sheetId}/updaterequests",
+      "covered_by": {
+        "write": "create_update_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sheets/import",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "imports CSV/XLSX from an application/octet-stream body plus sheetName query parameter; writes.json supports JSON/form/none only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sights/{sightId}/copy",
+      "covered_by": {
+        "write": "copy_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sights/{sightId}/move",
+      "covered_by": {
+        "write": "move_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token issuance/refresh endpoint; this connector uses a pre-provisioned bearer token secret instead"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "adds an organization user and requires administrative account scope; excluded from reverse-ETL business-object writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/alternateemails",
+      "covered_by": {
+        "write": "add_alternate_emails"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/alternateemails/{alternateEmailId}/makeprimary",
+      "covered_by": {
+        "write": "make_alternate_email_primary"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/deactivate",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deactivates an organization user account; administrative lifecycle action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/plans/{planId}/downgrade",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "changes user plan membership and requires administrative scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/plans/{planId}/upgrade",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "changes user plan membership and requires administrative scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/profileimage",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "profile image upload requires binary or multipart image content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/reactivate",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reactivates an organization user account; administrative lifecycle action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/{webhookId}/resetSharedSecret",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "rotates a webhook shared secret; credential-like lifecycle action outside reverse-ETL data writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces",
+      "covered_by": {
+        "write": "create_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspaceId}/copy",
+      "covered_by": {
+        "write": "copy_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspaceId}/folders",
+      "covered_by": {
+        "write": "create_workspace_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspaceId}/sheets",
+      "covered_by": {
+        "write": "create_sheet_in_workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspaceId}/sheets/import",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "imports a sheet into a workspace from binary content and a required sheetName query parameter"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/folders/{folderId}",
+      "covered_by": {
+        "write": "update_folder"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/groups/{groupId}",
+      "covered_by": {
+        "write": "update_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/reports/{reportId}/definition",
+      "covered_by": {
+        "write": "update_report_definition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/reports/{reportId}/publish",
+      "covered_by": {
+        "write": "set_report_publish"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sheets/{sheetId}",
+      "covered_by": {
+        "write": "update_sheet"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sheets/{sheetId}/automationrules/{automationRuleId}",
+      "covered_by": {
+        "write": "update_automation_rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sheets/{sheetId}/columns/{columnId}",
+      "covered_by": {
+        "write": "update_sheet_column"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sheets/{sheetId}/comments/{commentId}",
+      "covered_by": {
+        "write": "update_comment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sheets/{sheetId}/proofs/{proofId}",
+      "covered_by": {
+        "write": "update_proof"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sheets/{sheetId}/publish",
+      "covered_by": {
+        "write": "set_sheet_publish"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sheets/{sheetId}/rows",
+      "covered_by": {
+        "write": "update_sheet_rows"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sheets/{sheetId}/summary/fields",
+      "covered_by": {
+        "write": "update_summary_fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sheets/{sheetId}/updaterequests/{updateRequestId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the OpenAPI operation declares no JSON request body shape; exposing a bodyless update would not be useful or documented enough for reverse ETL"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sights/{sightId}",
+      "covered_by": {
+        "write": "update_dashboard"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sights/{sightId}/publish",
+      "covered_by": {
+        "write": "set_dashboard_publish"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates organization user profile/role fields and requires administrative scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{webhookId}",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspaceId}",
+      "covered_by": {
+        "write": "update_workspace"
+      }
+    }
   ]
 }

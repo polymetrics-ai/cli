@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contact_detail",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "uuid": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "job_title": { "type": ["string", "null"] },
+    "birthdate": { "type": ["string", "null"] },
+    "bio": { "type": ["string", "null"] },
+    "website": { "type": ["string", "null"] },
+    "personal_phone": { "type": ["string", "null"] },
+    "mobile_phone": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "twitter": { "type": ["string", "null"] },
+    "facebook": { "type": ["string", "null"] },
+    "linkedin": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "legal_bases": { "type": ["array", "null"], "items": { "type": "object" } },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

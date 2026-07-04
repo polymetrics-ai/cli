@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/custom_roles",
+    "query": {
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "custom_roles": [
+        {
+          "id": 1,
+          "name": "fixture_name",
+          "description": "fixture_description",
+          "role_type": 7,
+          "team_member_count": 7,
+          "configuration": {
+          },
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "manage_macro_content_suggestions": true,
+          "read_macro_content_suggestions": true
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

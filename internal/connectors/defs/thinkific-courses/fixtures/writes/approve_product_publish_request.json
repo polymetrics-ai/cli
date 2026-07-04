@@ -1,0 +1,22 @@
+{
+  "record": {
+    "product_publish_request_id": "product_publish_request_id_fixture",
+    "name": "Fixture",
+    "description": "Fixture description"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/product_publish_requests/product_publish_request_id_fixture/approve",
+    "body": {
+      "name": "Fixture",
+      "description": "Fixture description"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

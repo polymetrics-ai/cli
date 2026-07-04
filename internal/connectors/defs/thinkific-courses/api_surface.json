@@ -1,15 +1,580 @@
 {
-  "api": "Thinkific Public API v1 (https://developers.thinkific.com/)",
-  "docs": "https://developers.thinkific.com/api/api-documentation/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Thinkific surface (products, orders, users, coupons, bundles, custom profile fields, etc.) is out of scope until Pass B. thinkific-courses is read-only in legacy (Capabilities.Write is false) so no writes.json.",
+  "api": "Thinkific Admin API v1 (https://api.thinkific.com/api/public/v1)",
+  "docs": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+  "reviewed_at": "2026-07-04",
+  "scope": "Thinkific Admin API v1 under https://api.thinkific.com/api/public/v1. The legacy /chapters and /lessons list streams are retained for parity even though the current OpenAPI exposes chapter/course-specific content endpoints instead. OAuth and Webhooks APIs are separate base/auth surfaces and are explicitly excluded.",
   "endpoints": [
-    { "method": "GET", "path": "/courses", "covered_by": { "stream": "courses" } },
-    { "method": "GET", "path": "/chapters", "covered_by": { "stream": "chapters" } },
-    { "method": "GET", "path": "/lessons", "covered_by": { "stream": "lessons" } },
-    { "method": "GET", "path": "/enrollments", "covered_by": { "stream": "enrollments" } },
-    { "method": "GET", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/enrollments", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; thinkific-courses connector is read-only" } }
+    {
+      "method": "DELETE",
+      "path": "/collection_memberships/{id}",
+      "covered_by": {
+        "write": "delete_product_from_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collections/{id}",
+      "covered_by": {
+        "write": "delete_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/coupons/{id}",
+      "covered_by": {
+        "write": "delete_coupon"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/group_analysts/{user_id}/groups/{group_id}",
+      "covered_by": {
+        "write": "remove_group_from_analyst"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{id}",
+      "covered_by": {
+        "write": "delete_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{group_id}/analysts/{user_id}",
+      "covered_by": {
+        "write": "remove_group_analyst"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/instructors/{id}",
+      "covered_by": {
+        "write": "delete_instructor"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/promotions/{id}",
+      "covered_by": {
+        "write": "delete_promotion"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/site_scripts/{id}",
+      "covered_by": {
+        "write": "delete_site_script"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{id}",
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhooks*",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Thinkific Webhooks API uses the separate https://api.thinkific.com/api/v2 base URL and bearer-style Authorization header, outside this Admin API v1 bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bundles/{id}",
+      "covered_by": {
+        "stream": "bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bundles/{id}/courses",
+      "covered_by": {
+        "stream": "bundle_courses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bundles/{id}/enrollments",
+      "covered_by": {
+        "stream": "bundle_enrollments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/chapters",
+      "covered_by": {
+        "stream": "chapters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/chapters/{id}",
+      "covered_by": {
+        "stream": "chapter"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/chapters/{id}/contents",
+      "covered_by": {
+        "stream": "chapter_contents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections",
+      "covered_by": {
+        "stream": "collections"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{id}",
+      "covered_by": {
+        "stream": "collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{id}/products",
+      "covered_by": {
+        "stream": "collection_products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contents/{id}",
+      "covered_by": {
+        "stream": "content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coupons",
+      "covered_by": {
+        "stream": "coupons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coupons/{id}",
+      "covered_by": {
+        "stream": "coupon"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/course_reviews",
+      "covered_by": {
+        "stream": "course_reviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/course_reviews/{id}",
+      "covered_by": {
+        "stream": "course_review"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/courses",
+      "covered_by": {
+        "stream": "courses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/courses/{id}",
+      "covered_by": {
+        "stream": "course"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/courses/{id}/chapters",
+      "covered_by": {
+        "stream": "course_chapters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_profile_field_definitions",
+      "covered_by": {
+        "stream": "custom_profile_field_definitions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enrollments",
+      "covered_by": {
+        "stream": "enrollments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enrollments/{id}",
+      "covered_by": {
+        "stream": "enrollment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}",
+      "covered_by": {
+        "stream": "group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{group_id}/analysts",
+      "covered_by": {
+        "stream": "group_analysts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/instructors",
+      "covered_by": {
+        "stream": "instructors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/instructors/{id}",
+      "covered_by": {
+        "stream": "instructor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lessons",
+      "covered_by": {
+        "stream": "lessons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/oauth/*",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "OAuth authorization endpoints are documented under a separate base URL on the Thinkific site subdomain, not the Admin API v1 base used by this connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/{id}",
+      "covered_by": {
+        "stream": "order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/product_publish_requests",
+      "covered_by": {
+        "stream": "product_publish_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/product_publish_requests/{id}",
+      "covered_by": {
+        "stream": "product_publish_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}",
+      "covered_by": {
+        "stream": "product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}/related",
+      "covered_by": {
+        "stream": "related_products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/promotions",
+      "covered_by": {
+        "stream": "promotions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/promotions/{id}",
+      "covered_by": {
+        "stream": "promotion"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/promotions/by_coupon",
+      "covered_by": {
+        "stream": "promotion_by_coupon"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/site_scripts",
+      "covered_by": {
+        "stream": "site_scripts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/site_scripts/{id}",
+      "covered_by": {
+        "stream": "site_script"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/authentications/{provider}",
+      "covered_by": {
+        "stream": "user_authentication"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bundles/{id}/enrollments",
+      "covered_by": {
+        "write": "create_bundle_enrollment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collection_memberships/{id}",
+      "covered_by": {
+        "write": "add_product_to_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collections",
+      "covered_by": {
+        "write": "create_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/coupons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "coupon creation requires a promotion_id query parameter; writes.json has no query parameter field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/coupons/bulk_create",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk coupon creation requires a promotion_id query parameter; writes.json has no query parameter field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/course_reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "course review creation requires a course_id query parameter; writes.json has no query parameter field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/enrollments",
+      "covered_by": {
+        "write": "create_enrollment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/external_orders",
+      "covered_by": {
+        "write": "create_external_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/external_orders/{id}/transactions/purchase",
+      "covered_by": {
+        "write": "purchase_external_order_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/external_orders/{id}/transactions/refund",
+      "covered_by": {
+        "write": "refund_external_order_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/group_analysts/{user_id}/groups",
+      "covered_by": {
+        "write": "add_groups_to_analyst"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/group_users",
+      "covered_by": {
+        "write": "create_group_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups",
+      "covered_by": {
+        "write": "create_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups/{group_id}/analysts",
+      "covered_by": {
+        "write": "assign_group_analysts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/instructors",
+      "covered_by": {
+        "write": "create_instructor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/product_publish_requests/{id}/approve",
+      "covered_by": {
+        "write": "approve_product_publish_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/product_publish_requests/{id}/deny",
+      "covered_by": {
+        "write": "deny_product_publish_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/promotions",
+      "covered_by": {
+        "write": "create_promotion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/site_scripts",
+      "covered_by": {
+        "write": "create_site_script"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "covered_by": {
+        "write": "create_user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bundles/{id}/enrollments",
+      "covered_by": {
+        "write": "update_bundle_enrollments"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/collections/{id}",
+      "covered_by": {
+        "write": "update_collection"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/coupons/{id}",
+      "covered_by": {
+        "write": "update_coupon"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enrollments/{id}",
+      "covered_by": {
+        "write": "update_enrollment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/instructors/{id}",
+      "covered_by": {
+        "write": "update_instructor"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/promotions/{id}",
+      "covered_by": {
+        "write": "update_promotion"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/site_scripts/{id}",
+      "covered_by": {
+        "write": "update_site_script"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{id}",
+      "covered_by": {
+        "write": "update_user"
+      }
+    }
   ]
 }

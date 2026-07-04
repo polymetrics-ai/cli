@@ -1,21 +1,556 @@
 {
-  "api": "Zendesk Support API v2 (https://developer.zendesk.com/api-reference/ticketing/introduction/)",
-  "docs": "https://developer.zendesk.com/api-reference/ticketing/introduction/",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave1 pilot migration: the 5 legacy-parity read streams only (tickets, users, organizations, groups, satisfaction_ratings); the full Zendesk Support surface (macros, triggers, automations, views, attachments, help center, talk, chat, etc.) is out of scope until Pass B. zendesk-support has no allow-listed write actions in legacy (read-only connector).",
+  "api": "Zendesk Support REST API v2",
+  "docs": "https://developer.zendesk.com/api-reference/ticketing/; Airbyte source-zendesk-support manifest",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B covers the existing legacy streams plus directly expressible top-level streams from the public Airbyte source-zendesk-support manifest and common Zendesk Support CRUD resources. Nested partitioned Guide/community resources, state-delegating ticket metrics, dynamic interval export streams, uploads, redactions, voice display helpers, compliance/session/password operations, and bulk destructive/admin-only endpoints are explicitly excluded rather than guessed.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/tickets", "covered_by": { "stream": "tickets" } },
-    { "method": "GET", "path": "/api/v2/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/api/v2/organizations", "covered_by": { "stream": "organizations" } },
-    { "method": "GET", "path": "/api/v2/groups", "covered_by": { "stream": "groups" } },
-    { "method": "GET", "path": "/api/v2/satisfaction_ratings", "covered_by": { "stream": "satisfaction_ratings" } },
-    { "method": "POST", "path": "/api/v2/tickets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy zendesk-support implements no write actions at all" } },
-    { "method": "GET", "path": "/api/v2/ticket_fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/macros", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/triggers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/automations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/views", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/help_center/articles", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/channels/voice/stats", "excluded": { "category": "non_data_endpoint", "reason": "operational statistics snapshot, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets",
+      "covered_by": {
+        "stream": "tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/organizations",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/satisfaction_ratings",
+      "covered_by": {
+        "stream": "satisfaction_ratings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/deleted_tickets",
+      "covered_by": {
+        "stream": "deleted_tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/routing/attributes",
+      "covered_by": {
+        "stream": "account_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/routing/attributes/definitions",
+      "covered_by": {
+        "stream": "attribute_definitions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/brands",
+      "covered_by": {
+        "stream": "brands"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/custom_roles",
+      "covered_by": {
+        "stream": "custom_roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/business_hours/schedules.json",
+      "covered_by": {
+        "stream": "schedules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/slas/policies.json",
+      "covered_by": {
+        "stream": "sla_policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ticket_fields",
+      "covered_by": {
+        "stream": "ticket_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ticket_forms",
+      "covered_by": {
+        "stream": "ticket_forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/community/topics",
+      "covered_by": {
+        "stream": "topics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/user_fields",
+      "covered_by": {
+        "stream": "user_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/automations",
+      "covered_by": {
+        "stream": "automations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/help_center/categories",
+      "covered_by": {
+        "stream": "categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/help_center/sections",
+      "covered_by": {
+        "stream": "sections"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/help_center/incremental/articles",
+      "covered_by": {
+        "stream": "articles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/group_memberships",
+      "covered_by": {
+        "stream": "group_memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/macros",
+      "covered_by": {
+        "stream": "macros"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/organization_fields",
+      "covered_by": {
+        "stream": "organization_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/organization_memberships",
+      "covered_by": {
+        "stream": "organization_memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/community/posts",
+      "covered_by": {
+        "stream": "posts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/activities",
+      "covered_by": {
+        "stream": "ticket_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ticket_audits",
+      "covered_by": {
+        "stream": "ticket_audits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/incremental/ticket_metric_events",
+      "covered_by": {
+        "stream": "ticket_metric_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/incremental/ticket_events.json",
+      "covered_by": {
+        "stream": "ticket_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/skips.json",
+      "covered_by": {
+        "stream": "ticket_skips"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/triggers",
+      "covered_by": {
+        "stream": "triggers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/views",
+      "covered_by": {
+        "stream": "views"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets",
+      "covered_by": {
+        "write": "create_ticket"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{id}",
+      "covered_by": {
+        "write": "update_ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{id}",
+      "covered_by": {
+        "write": "delete_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/users",
+      "covered_by": {
+        "write": "create_user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/users/{id}",
+      "covered_by": {
+        "write": "update_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/users/{id}",
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/organizations",
+      "covered_by": {
+        "write": "create_organization"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/organizations/{id}",
+      "covered_by": {
+        "write": "update_organization"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/organizations/{id}",
+      "covered_by": {
+        "write": "delete_organization"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/groups",
+      "covered_by": {
+        "write": "create_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/groups/{id}",
+      "covered_by": {
+        "write": "update_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/groups/{id}",
+      "covered_by": {
+        "write": "delete_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/macros",
+      "covered_by": {
+        "write": "create_macro"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/macros/{id}",
+      "covered_by": {
+        "write": "update_macro"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/macros/{id}",
+      "covered_by": {
+        "write": "delete_macro"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/triggers",
+      "covered_by": {
+        "write": "create_trigger"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/triggers/{id}",
+      "covered_by": {
+        "write": "update_trigger"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/triggers/{id}",
+      "covered_by": {
+        "write": "delete_trigger"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/automations",
+      "covered_by": {
+        "write": "create_automation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/automations/{id}",
+      "covered_by": {
+        "write": "update_automation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/automations/{id}",
+      "covered_by": {
+        "write": "delete_automation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/views",
+      "covered_by": {
+        "write": "create_view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/views/{id}",
+      "covered_by": {
+        "write": "update_view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/views/{id}",
+      "covered_by": {
+        "write": "delete_view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/ticket_fields",
+      "covered_by": {
+        "write": "create_ticket_field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/ticket_fields/{id}",
+      "covered_by": {
+        "write": "update_ticket_field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/ticket_fields/{id}",
+      "covered_by": {
+        "write": "delete_ticket_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/help_center/articles/{{ stream_partition.article_id }}/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires Airbyte-style parent partition routing/subresource fan-out; not modeled in this Pass B Zendesk bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/help_center/articles/{{ stream_partition.article_id }}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires Airbyte-style parent partition routing/subresource fan-out; not modeled in this Pass B Zendesk bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/help_center/articles/{{ stream_partition.article_id }}/votes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires Airbyte-style parent partition routing/subresource fan-out; not modeled in this Pass B Zendesk bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/help_center/articles/{{ stream_partition.id.article_id }}/comments/{{ stream_partition.id.comment_id }}/votes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires Airbyte-style parent partition routing/subresource fan-out; not modeled in this Pass B Zendesk bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/audit_logs",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "dynamic interval export or alternate representation of an implemented top-level resource; excluded from this direct-stream Pass B slice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/community/posts/{{ stream_partition.id.post_id }}/comments/{{ stream_partition.id.comment_id }}/votes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires Airbyte-style parent partition routing/subresource fan-out; not modeled in this Pass B Zendesk bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/community/posts/{{ stream_partition.post_id }}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires Airbyte-style parent partition routing/subresource fan-out; not modeled in this Pass B Zendesk bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/community/posts/{{ stream_partition.post_id }}/votes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires Airbyte-style parent partition routing/subresource fan-out; not modeled in this Pass B Zendesk bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/incremental/ticket_events.json",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "dynamic interval export or alternate representation of an implemented top-level resource; excluded from this direct-stream Pass B slice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{{ stream_partition.ticket_id }}/side_conversations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires Airbyte-style parent partition routing/subresource fan-out; not modeled in this Pass B Zendesk bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/incremental/users/cursor.json",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "dynamic interval export or alternate representation of an implemented top-level resource; excluded from this direct-stream Pass B slice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/uploads",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "multipart upload token flow is not supported by the JSON write dialect"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{ticket_id}/comments/{comment_id}/redact",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible redaction is not exposed as a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/imports/tickets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ticket import/archive flow has different semantics than ordinary ticket creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/create_many",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk job endpoint returns async job status; single-record create_ticket is implemented instead"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/update_many",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk job endpoint returns async job status; single-record update_ticket is implemented instead"
+      }
+    }
   ]
 }

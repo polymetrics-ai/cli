@@ -1,0 +1,21 @@
+{
+  "record": {
+    "taskId": "task_fixture_1",
+    "taskName": "Follow up with customer",
+    "reminderSetting": "15min"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/task_fixture_1",
+    "body": {
+      "taskName": "Follow up with customer"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "success": true
+    }
+  }
+}

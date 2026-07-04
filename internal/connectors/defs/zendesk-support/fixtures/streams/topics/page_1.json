@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/community/topics",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "topics": [
+        {
+          "html_url": "fixture_html_url",
+          "id": 12.5,
+          "name": "fixture_name",
+          "url": "fixture_url",
+          "created_at": "2026-01-01T00:00:00Z",
+          "community_id": 1,
+          "updated_at": "2026-01-01T00:00:00Z",
+          "description": "fixture_description",
+          "manageable_by": "fixture_manageable_by",
+          "follower_count": 12.5,
+          "position": 12.5,
+          "user_segment_id": 12.5
+        }
+      ],
+      "links": {
+        "next": null
+      },
+      "meta": {
+        "has_more": false,
+        "after_cursor": null
+      }
+    }
+  }
+}

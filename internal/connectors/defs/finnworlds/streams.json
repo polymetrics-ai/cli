@@ -23,6 +23,7 @@
         "into": { "query_param": "ticker" },
         "stamp_field": "ticker"
       },
+      "incremental": { "cursor_field": "date" },
       "schema": "schemas/dividends.json"
     },
     {
@@ -34,6 +35,7 @@
         "into": { "query_param": "ticker" },
         "stamp_field": "ticker"
       },
+      "incremental": { "cursor_field": "date" },
       "schema": "schemas/stock_splits.json"
     },
     {
@@ -45,6 +47,7 @@
         "into": { "query_param": "ticker" },
         "stamp_field": "ticker"
       },
+      "incremental": { "cursor_field": "date" },
       "schema": "schemas/historical_candlestick.json"
     },
     {
@@ -56,6 +59,7 @@
         "into": { "query_param": "commodity_name" },
         "stamp_field": "commodity_name"
       },
+      "incremental": { "cursor_field": "datetime" },
       "schema": "schemas/commodities.json"
     }
   ]

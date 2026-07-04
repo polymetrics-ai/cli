@@ -28,11 +28,6 @@
       "type": "string",
       "description": "commercetools project key; every stream path is scoped to this project."
     },
-    "page_size": {
-      "type": "integer",
-      "default": 100,
-      "description": "Records requested per page (limit query param)."
-    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

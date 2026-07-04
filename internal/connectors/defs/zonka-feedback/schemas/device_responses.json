@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "device_responses",
+  "type": "object",
+  "x-primary-key": [
+    "deviceId"
+  ],
+  "properties": {
+    "deviceId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "responses": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "totalResponses": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    }
+  }
+}

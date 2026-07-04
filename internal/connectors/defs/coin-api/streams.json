@@ -15,7 +15,7 @@
   "streams": [
     {
       "name": "symbols",
-      "path": "/v1/symbols/{{ config.exchange_id }}/active",
+      "path": "/v1/symbols",
       "records": { "path": "" },
       "pagination": { "type": "none" },
       "schema": "schemas/symbols.json"

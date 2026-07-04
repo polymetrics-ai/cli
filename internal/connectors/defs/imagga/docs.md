@@ -44,12 +44,12 @@ image)`); `stamp_field: "image_url"` writes the same URL onto every emitted reco
 legacy's `imageURL` parameter threaded through both mappers). `records.path: "result.tags"` /
 `"result.categories"` selects the nested array directly (an ordinary dotted-path array
 extraction — `connsdk.RecordsAt` fans it into one record per element with no special-casing
-needed). Each raw tag/category's localized name object (`{"en": "..."}`) is flattened via
-`computed_fields`' dotted-path record resolution: `"tag": "{{ record.tag.en }}"` /
-`"category": "{{ record.name.en }}"`, matching legacy's `localizedName` helper
-(`streams.go:206-215`) exactly for the common case where an English name is present. `confidence`
-uses a bare `{{ record.confidence }}` reference (typed extraction, preserving its native number
-type). Neither stream is incremental, matching legacy (no `CursorFields` for either).
+needed). Each raw tag/category's localized name is flattened via `computed_fields` with
+`coalesce` (`record.tag.en` then `record.tag`, and `record.name.en` then `record.name`), matching
+legacy's `localizedName` helper (`streams.go:206-215`) for both the localized object form and the
+plain-string fallback. `confidence` uses a bare `{{ record.confidence }}` reference (typed
+extraction, preserving its native number type). Neither stream is incremental, matching legacy (no
+`CursorFields` for either).
 
 `image_urls`'s `spec.json` `"default"` is Imagga's own sample image
 (`https://imagga.com/static/images/categorization/child-476506_640.jpg`, matching legacy's

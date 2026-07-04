@@ -37,7 +37,7 @@ package elasticsearch
 import (
 	"context"
 	"encoding/base64"
-	"fmt"
+	"net/http"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
@@ -64,16 +64,25 @@ func (Hooks) ConnectorName() string { return "elasticsearch" }
 // (mirrors wasabi-stats-api's reuse of the Value field for a
 // custom-auth-only purpose per API-CONTRACT.md's documented convention).
 func (Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec engine.AuthSpec) (connsdk.Authenticator, error) {
-	id := strings.TrimSpace(cfg.Config["api_key_id"])
-	if id == "" {
-		return nil, fmt.Errorf("elasticsearch custom auth: api_key_id is required")
+	id := firstNonEmpty(cfg.Config["api_key_id"], cfg.Config["apiKeyId"])
+	secret := firstNonEmpty(cfg.Secrets["api_key_secret"], cfg.Secrets["apiKeySecret"])
+	if id != "" && secret != "" {
+		encoded := base64.StdEncoding.EncodeToString([]byte(id + ":" + secret))
+		return connsdk.APIKeyHeader("Authorization", encoded, "ApiKey "), nil
 	}
-	secret := strings.TrimSpace(cfg.Secrets["api_key_secret"])
-	if secret == "" {
-		return nil, fmt.Errorf("elasticsearch custom auth: api_key_secret is required")
+	if username := strings.TrimSpace(cfg.Config["username"]); username != "" {
+		return connsdk.Basic(username, cfg.Secrets["password"]), nil
 	}
-	encoded := base64.StdEncoding.EncodeToString([]byte(id + ":" + secret))
-	return connsdk.APIKeyHeader("Authorization", encoded, "ApiKey "), nil
+	return connsdk.AuthFunc(func(context.Context, *http.Request) error { return nil }), nil
+}
+
+func firstNonEmpty(values ...string) string {
+	for _, value := range values {
+		if trimmed := strings.TrimSpace(value); trimmed != "" {
+			return trimmed
+		}
+	}
+	return ""
 }
 
 // MapRecord implements engine.RecordHook for the "documents" stream only

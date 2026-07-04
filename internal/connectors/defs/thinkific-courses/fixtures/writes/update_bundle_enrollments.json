@@ -1,0 +1,22 @@
+{
+  "record": {
+    "bundle_id": "bundle_id_fixture",
+    "name": "Fixture",
+    "description": "Fixture description"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/bundles/bundle_id_fixture/enrollments",
+    "body": {
+      "name": "Fixture",
+      "description": "Fixture description"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

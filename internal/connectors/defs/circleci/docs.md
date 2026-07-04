@@ -36,9 +36,11 @@ legacy's own `strings.TrimSpace(next) == ""` check). `pipelines`/`workflows` pub
 none, and legacy's own `harvest` never applies one) — the cursor field is published for downstream
 sync-mode eligibility without ever being requested, the same shape as this wave's aha bundle.
 
-`projects`' single nested `vcs_info.default_branch` is lifted to the top-level `default_branch`
-field via `computed_fields` (bare `{{ record.vcs_info.default_branch }}` reference), matching
-legacy's `circleciProjectRecord` nesting-flatten.
+`projects`' nested `vcs_info.default_branch` is lifted to the top-level `default_branch` field via
+`computed_fields` (bare `{{ record.vcs_info.default_branch }}` reference), matching legacy's
+`circleciProjectRecord` nesting-flatten. `vcs_url` also matches legacy's fallback behavior: the
+bundle emits the top-level `vcs_url` when present and falls back to `vcs_info.vcs_url` via
+`{{ coalesce record.vcs_url record.vcs_info.vcs_url }}`.
 
 `contexts`/`schedules`/`checkout_keys`/`environment_variables`/`insights_workflow_summary` are new
 Pass B streams sharing the same `{"items":[...],"next_page_token":...}` cursor-pagination envelope
@@ -94,13 +96,6 @@ run.
   conventions.md §5 meta-rule — never changes emitted record DATA for any legacy-accepted input); a
   caller previously supplying `project_slug: "gh/acme/widgets"` must instead supply `vcs_type: "gh"`,
   `org: "acme"`, `repo: "widgets"`.
-- **`vcs_url`'s `vcs_info.vcs_url` fallback is not modeled.** Legacy's `circleciProjectRecord` reads
-  the top-level `vcs_url` field and falls back to the nested `vcs_info.vcs_url` only when the
-  top-level field is absent. The engine's `computed_fields` dialect has no "first of N paths"
-  coalesce primitive (same shape as this wave's cin7 `firstField` narrowing). This bundle's schema
-  projects the top-level `vcs_url` field directly (present on every real CircleCI project response);
-  the nested fallback, which legacy defends against for a hypothetical response shape never observed
-  in practice, is not reproduced. ACCEPTABLE per conventions.md §5's meta-rule.
 - **Webhook management (`/webhook*`), pipeline-definitions/triggers, and project/org-level OIDC
   claims are out of scope**: each requires a project UUID (`scope-id`/`project_id`/`projectID`)
   that CircleCI's API exposes no slug-to-UUID lookup endpoint for; this bundle's config only ever

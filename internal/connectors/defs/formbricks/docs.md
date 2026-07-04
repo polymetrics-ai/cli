@@ -46,7 +46,9 @@ request.
 Only `responses` paginates, using documented `limit` and `skip` offset
 pagination with the legacy default page size of 50. No stream declares an
 incremental request parameter because legacy published cursor metadata only and
-did not send server-side incremental filters.
+did not send server-side incremental filters. The legacy streams with cursor
+metadata declare bare `incremental.cursor_field: "updated_at"` to preserve sync
+modes without inventing request-side filtering.
 
 ## Write actions & risks
 

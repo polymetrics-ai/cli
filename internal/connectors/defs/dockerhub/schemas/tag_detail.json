@@ -3,7 +3,6 @@
   "title": "tag_detail",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "last_updated",
   "required": ["id"],
   "properties": {
     "id": { "type": "integer" },

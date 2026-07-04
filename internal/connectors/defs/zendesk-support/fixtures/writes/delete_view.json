@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v2/views/1"
+  }
+}

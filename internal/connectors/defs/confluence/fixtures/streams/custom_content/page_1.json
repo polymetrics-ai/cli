@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/custom-content", "query": { "limit": "25", "type": "synthetic-conformance-value" } },
+  "request": {
+    "method": "GET",
+    "path": "/wiki/api/v2/custom-content",
+    "query": {
+      "limit": "25",
+      "type": "synthetic-conformance-value"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -14,7 +21,9 @@
           "blogPostId": "",
           "authorId": "author_fixture_1",
           "createdAt": "2026-01-01T00:00:00.000Z",
-          "version": { "number": 1 }
+          "version": {
+            "number": 1
+          }
         },
         {
           "id": "cc_fixture_2",
@@ -26,7 +35,9 @@
           "blogPostId": "",
           "authorId": "author_fixture_1",
           "createdAt": "2026-01-01T00:00:00.000Z",
-          "version": { "number": 1 }
+          "version": {
+            "number": 1
+          }
         }
       ],
       "_links": {}

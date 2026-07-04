@@ -1,0 +1,18 @@
+{
+  "record": {
+    "catalog_feed_id": 1,
+    "name": "Fixture Catalog Updated",
+    "url": "https://example.com/catalog-updated.json",
+    "format": "json"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/catalog_feeds/1",
+    "body": {
+      "name": "Fixture Catalog Updated",
+      "url": "https://example.com/catalog-updated.json",
+      "format": "json"
+    }
+  },
+  "response": { "status": 200, "body": { "id": 1 } }
+}

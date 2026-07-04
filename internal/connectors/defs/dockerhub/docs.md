@@ -46,7 +46,7 @@ authenticator at all). No secret is configured or required.
 - None of the five streams have a genuine server-side incremental filter in the legacy connector
   (Docker Hub's list endpoints do not accept a since/updated-after query parameter) — legacy exposes
   `CursorFields` purely as bookkeeping metadata for a full-refresh-only source. This bundle mirrors
-  that: every stream's schema declares `x-cursor-field: last_updated` (matching legacy's
+  that: the legacy-parity list streams declare `x-cursor-field: last_updated` (matching legacy's
   `CursorFields`) but no stream declares an `incremental` block, so only `full_refresh_append`/
   `full_refresh_append_deduped` sync modes apply — never `incremental_append*` — exactly matching
   legacy's real behavior (its `InitialState` cursor is bookkeeping only, never read back into a

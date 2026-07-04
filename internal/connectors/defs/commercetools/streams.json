@@ -28,7 +28,6 @@
     {
       "name": "customers",
       "path": "/{{ config.project_key }}/customers",
-      "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "results" },
       "projection": "passthrough",
       "schema": "schemas/customers.json"
@@ -36,7 +35,6 @@
     {
       "name": "orders",
       "path": "/{{ config.project_key }}/orders",
-      "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "results" },
       "projection": "passthrough",
       "schema": "schemas/orders.json"
@@ -44,7 +42,6 @@
     {
       "name": "products",
       "path": "/{{ config.project_key }}/products",
-      "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "results" },
       "projection": "passthrough",
       "schema": "schemas/products.json"

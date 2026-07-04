@@ -3,7 +3,6 @@
   "title": "tiktok_posts",
   "type": "object",
   "x-primary-key": ["blogId", "videoId"],
-  "x-cursor-field": "publishDate",
   "required": ["blogId", "videoId"],
   "properties": {
     "blogId": { "type": "string" },

@@ -177,7 +177,8 @@
       },
       "computed_fields": {
         "repository": "{{ config.owner }}/{{ config.repo }}",
-        "author_login": "{{ record.author.login }}"
+        "author_login": "{{ record.author.login }}",
+        "assets_count": "{{ record.assets | length }}"
       },
       "schema": "schemas/releases.json"
     },

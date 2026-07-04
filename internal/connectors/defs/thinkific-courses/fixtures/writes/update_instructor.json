@@ -1,0 +1,22 @@
+{
+  "record": {
+    "instructor_id": "instructor_id_fixture",
+    "name": "Fixture",
+    "description": "Fixture description"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/instructors/instructor_id_fixture",
+    "body": {
+      "name": "Fixture",
+      "description": "Fixture description"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

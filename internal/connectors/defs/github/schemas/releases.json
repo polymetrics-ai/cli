@@ -53,6 +53,9 @@
         "null"
       ]
     },
+    "assets_count": {
+      "type": "integer"
+    },
     "created_at": {
       "type": "string"
     },

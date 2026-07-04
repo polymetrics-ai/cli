@@ -24,18 +24,21 @@
       "name": "subscribers",
       "path": "/{{ config.account_id }}/subscribers",
       "records": { "path": "subscribers" },
+      "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/subscribers.json"
     },
     {
       "name": "campaigns",
       "path": "/{{ config.account_id }}/campaigns",
       "records": { "path": "campaigns" },
+      "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/campaigns.json"
     },
     {
       "name": "broadcasts",
       "path": "/{{ config.account_id }}/broadcasts",
       "records": { "path": "broadcasts" },
+      "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/broadcasts.json"
     },
     {
@@ -43,6 +46,7 @@
       "path": "/accounts",
       "pagination": { "type": "none" },
       "records": { "path": "accounts" },
+      "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/accounts.json"
     },
     {

@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "folder_metadata",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "permalink": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "modifiedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "data": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "items": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "folders": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "reports": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "sheets": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "sights": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "templates": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "readOnly": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  }
+}

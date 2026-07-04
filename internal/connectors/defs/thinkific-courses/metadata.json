@@ -1,14 +1,14 @@
 {
   "name": "thinkific-courses",
   "display_name": "Thinkific Courses",
-  "description": "Reads courses, chapters, lessons, and enrollments from the Thinkific public API.",
+  "description": "Reads and writes Thinkific Admin API v1 courses, bundles, categories, coupons, enrollments, orders, groups, instructors, products, promotions, reviews, users, and site scripts.",
   "integration_type": "api",
   "docs_url": "https://developers.thinkific.com/api/api-documentation/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Thinkific API read of course catalog and enrollment data"
+    "read": "external Thinkific Admin API read of course catalog, enrollment, commerce, user, group, promotion, review, and site-script data",
+    "write": "creates, updates, approves, denies, and deletes Thinkific enrollments, categories, coupons, external orders, groups, instructors, promotions, users, and site scripts; destructive deletes require approval",
+    "approval": "reverse ETL writes require plan preview and approval token"
   }
 }

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "name": "Fixture",
+    "text": "Fixture text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "name": "Fixture",
+      "text": "Fixture text"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

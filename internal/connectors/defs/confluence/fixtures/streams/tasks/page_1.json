@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/tasks", "query": { "limit": "25", "body-format": "storage" } },
+  "request": {
+    "method": "GET",
+    "path": "/wiki/api/v2/tasks",
+    "query": {
+      "limit": "25",
+      "body-format": "storage"
+    }
+  },
   "response": {
     "status": 200,
     "body": {

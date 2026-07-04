@@ -1,0 +1,19 @@
+{
+  "record": {
+    "sheet_id": "sheet_id_fixture",
+    "proof_id": "proof_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/sheets/sheet_id_fixture/proofs/proof_id_fixture/requests"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

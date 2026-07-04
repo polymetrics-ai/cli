@@ -24,7 +24,16 @@
           "login": "octocat",
           "id": 1
         },
-        "assets": [],
+        "assets": [
+          {
+            "id": 801,
+            "name": "fixture.tar.gz"
+          },
+          {
+            "id": 802,
+            "name": "fixture.zip"
+          }
+        ],
         "created_at": "2026-01-05T00:00:00Z",
         "published_at": "2026-01-05T01:00:00Z"
       }

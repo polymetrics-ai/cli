@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/routing/attributes/definitions",
+    "query": {
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "attributes": [
+        {
+          "title": "fixture_title",
+          "subject": "fixture_subject",
+          "type": "fixture_type",
+          "group": "fixture_group",
+          "nullable": true,
+          "repeatable": true,
+          "operators": [
+
+          ],
+          "values": [
+
+          ],
+          "condition": "fixture_condition",
+          "confition": "fixture_confition",
+          "metadata": {
+          },
+          "id": 1
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

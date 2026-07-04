@@ -1,7 +1,11 @@
 {
   "request": {
     "method": "GET",
-    "path": "/courses"
+    "path": "/courses",
+    "query": {
+      "page": "1",
+      "limit": "1"
+    }
   },
   "response": {
     "status": 200,

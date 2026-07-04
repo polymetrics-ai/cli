@@ -9,16 +9,17 @@ Pass B full-surface review of the live v2 resource-group documentation.
 
 ## Auth setup
 
-Provide `base_url` (your site's full API base URL including the `/wiki/api/v2` path, e.g.
-`https://mysite.atlassian.net/wiki/api/v2`), `email` (the Atlassian account email), and the
-`api_token` secret (an Atlassian API token). Auth is HTTP Basic (`email:api_token`); the token is
-only ever passed into the `basic` auth mode and never logged.
+Provide `base_url` (your site's origin without the `/wiki/api/v2` path, e.g.
+`https://mysite.atlassian.net`), `email` (the Atlassian account email), and the `api_token` secret
+(an Atlassian API token). Auth is HTTP Basic (`email:api_token`); the token is only ever passed into
+the `basic` auth mode and never logged.
 
 Legacy also accepted a bare `domain_name` config key and derived the base URL in code as
 `https://<domain_name>/wiki/api/v2`. The engine's `spec.json` `"default"` mechanism only
 materializes a fixed literal default, not one derived from another config value (see
 `docs/migration/conventions.md` §3's "spec.json default values" section) — so this bundle requires
-`base_url` directly and drops the `domain_name`-derivation convenience. See Known limits.
+`base_url` directly as the site origin and drops the `domain_name`-derivation convenience. See Known
+limits.
 
 `custom_content_type` (optional, defaults to `com.atlassian.confluence.macro.core`) selects which
 app-defined custom-content type key the `custom_content` stream reads — `GET /custom-content` has
@@ -29,6 +30,8 @@ no type-agnostic list mode; `type` is a required query parameter on the real API
 All 9 streams are `GET` requests against the Confluence v2 list endpoints, with records at
 `results`, primary key `["id"]`, and `limit=25` sent on every request (matches legacy's default
 page size for the original 5 streams; the 4 new streams adopt the same page size for consistency).
+The stream and write paths include `/wiki/api/v2` explicitly because `base_url` is the Atlassian
+site origin.
 
 Pagination follows Confluence v2's cursor-in-relative-URL convention: each page response includes
 `_links.next`, a **relative** path (e.g. `/wiki/api/v2/spaces?cursor=<token>&limit=25`) carrying an
@@ -37,11 +40,9 @@ header) is always relative, never absolute. This bundle uses `pagination.type: n
 `next_url_path: "_links.next"` and `allow_cross_host: true`. `allow_cross_host` is ordinarily an
 opt-out of the engine's same-origin SSRF guard for a genuinely cross-host next-page URL; here it is
 the only way to route around the guard's stricter "next URL has no host" fail-closed check, which
-otherwise rejects every relative URL outright regardless of same-origin intent (the guard's
-same-origin case implicitly assumes an absolute next URL). This is safe for Confluence specifically:
-`_links.next` is a same-instance relative path by API design, incapable of ever pointing at a
-different host — there is no cross-host redirection risk being waived here, only the guard's
-overly strict host-required parsing for what is, in practice, always a same-host relative link.
+otherwise rejects every relative URL outright regardless of same-origin intent. This is safe for
+Confluence specifically: `_links.next` is a same-instance relative path by API design, incapable of
+ever pointing at a different host.
 
 `pages`, `blogposts`, `footer_comments`, `inline_comments`, and `custom_content` project a computed
 `version` field from the raw nested `{"version": {"number": N}}` shape via `computed_fields`' bare
@@ -106,10 +107,11 @@ those PUT endpoints; `create_*` covers the primary lifecycle mutation for each r
   declared-but-unwireable config key is worse than an absent one (F6, REVIEW.md), so `page_size`/
   `max_pages` are not declared in `spec.json`.
 - `domain_name`-based base URL derivation (legacy's `https://<domain_name>/wiki/api/v2` fallback)
-  is not modeled; `base_url` must be supplied in full. This is a documented config-surface
-  narrowing per `docs/migration/conventions.md` §3 (derived defaults are not expressible via the
-  engine's `spec.json` `"default"` mechanism), not a data or behavior deviation for any input this
-  bundle does accept.
+  is not modeled; `base_url` must be supplied as the Atlassian site origin. This is a documented
+  config-surface narrowing per `docs/migration/conventions.md` §3 (derived defaults are not
+  expressible via the engine's `spec.json` `"default"` mechanism), not a data or behavior deviation
+  for any input this bundle does accept. Supplying a `base_url` that already includes `/wiki/api/v2`
+  would double-prefix requests because the bundle paths include the API prefix explicitly.
 - Per-content-id-scoped sub-resources (content properties, version history, ancestors/children/
   descendants for every content type; space permissions/roles/properties; classification levels;
   redactions; likes) have no global/cross-item list endpoint in the real API — enumerating them

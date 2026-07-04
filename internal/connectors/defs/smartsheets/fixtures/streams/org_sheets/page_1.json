@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/sheets",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalCount": 1,
+      "data": [
+        {
+          "id": 12345,
+          "name": "Fixture org_sheets",
+          "type": "org_sheets",
+          "modifiedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

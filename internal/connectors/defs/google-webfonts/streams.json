@@ -64,6 +64,10 @@
       "records": {
         "path": "items"
       },
+      "computed_fields": {
+        "variant_count": "{{ record.variants | length }}",
+        "subset_count": "{{ record.subsets | length }}"
+      },
       "schema": "schemas/webfonts.json"
     },
     {
@@ -98,6 +102,10 @@
       },
       "records": {
         "path": "items"
+      },
+      "computed_fields": {
+        "variant_count": "{{ record.variants | length }}",
+        "subset_count": "{{ record.subsets | length }}"
       },
       "schema": "schemas/popular_fonts.json"
     },
@@ -134,6 +142,10 @@
       "records": {
         "path": "items"
       },
+      "computed_fields": {
+        "variant_count": "{{ record.variants | length }}",
+        "subset_count": "{{ record.subsets | length }}"
+      },
       "schema": "schemas/trending_fonts.json"
     },
     {
@@ -169,6 +181,10 @@
       "records": {
         "path": "items"
       },
+      "computed_fields": {
+        "variant_count": "{{ record.variants | length }}",
+        "subset_count": "{{ record.subsets | length }}"
+      },
       "schema": "schemas/newest_fonts.json"
     },
     {
@@ -203,6 +219,10 @@
       },
       "records": {
         "path": "items"
+      },
+      "computed_fields": {
+        "variant_count": "{{ record.variants | length }}",
+        "subset_count": "{{ record.subsets | length }}"
       },
       "schema": "schemas/alpha_fonts.json"
     }

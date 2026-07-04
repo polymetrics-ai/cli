@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/folders/personal",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "folders": [
+        {
+          "id": 12345,
+          "name": "Fixture home_contents",
+          "type": "home_contents",
+          "modifiedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "sheets": [],
+      "reports": [],
+      "sights": [],
+      "templates": []
+    }
+  }
+}

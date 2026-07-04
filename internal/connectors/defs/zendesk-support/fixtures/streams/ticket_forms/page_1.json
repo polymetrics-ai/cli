@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/ticket_forms",
+    "query": {
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ticket_forms": [
+        {
+          "agent_conditions": [
+
+          ],
+          "end_user_conditions": [
+
+          ],
+          "created_at": "2026-01-01T00:00:00Z",
+          "name": "fixture_name",
+          "display_name": "fixture_display_name",
+          "raw_display_name": "fixture_raw_display_name",
+          "position": 7,
+          "raw_name": "fixture_raw_name",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "active": true,
+          "default": true,
+          "in_all_brands": true,
+          "end_user_visible": true,
+          "url": "fixture_url",
+          "id": 1,
+          "restricted_brand_ids": [
+
+          ],
+          "ticket_field_ids": [
+
+          ]
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

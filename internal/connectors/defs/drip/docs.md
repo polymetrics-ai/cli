@@ -36,11 +36,12 @@ own harvest loop treats a missing `meta.total_pages` as "a single page of result
 endpoint.
 
 Every pre-existing stream's primary key is `["id"]` and incremental cursor field is `created_at`,
-matching legacy's uniform `dripStreams()` catalog — but no stream declares an `incremental` block
-here: Drip's list endpoints accept no `updated_since`-style server-side filter parameter, matching
-legacy's own `InitialState` always starting with an empty cursor (full refresh only). The 3 new
-streams follow the same full-refresh-only shape; `workflows`/`forms`/`webhooks` records carry no
-documented `created_at`/`updated_at` field at all, so none declares `x-cursor-field`.
+matching legacy's uniform `dripStreams()` catalog. Those four streams declare a bare
+`incremental.cursor_field` to preserve legacy's cursor-capable sync modes, but no `request_param`:
+Drip's list endpoints accept no `updated_since`-style server-side filter parameter, matching
+legacy's own full-page harvest behavior. The 3 new streams follow the same full-refresh-only shape;
+`workflows`/`forms`/`webhooks` records carry no documented `created_at`/`updated_at` field at all,
+so none declares `x-cursor-field`.
 
 `GET /{account_id}/tags` is NOT modeled as a stream: it returns a BARE JSON STRING ARRAY
 (`{"tags": ["Customer", "SEO"]}`), not an array of objects. `connsdk.RecordsAt` only extracts array

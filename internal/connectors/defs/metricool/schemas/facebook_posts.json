@@ -3,7 +3,6 @@
   "title": "facebook_posts",
   "type": "object",
   "x-primary-key": ["blogId", "postId"],
-  "x-cursor-field": "publishDate",
   "required": ["blogId", "postId"],
   "properties": {
     "blogId": { "type": "string" },

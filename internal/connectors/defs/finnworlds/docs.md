@@ -30,6 +30,9 @@ config list (`tickers` for `dividends`/`stock_splits`/`historical_candlestick`, 
 (matching legacy's `stitch` logic, `finnworlds.go:130-135,152-156`) — one full read/pagination
 sequence (here, unpaginated: `pagination.type: none`, matching legacy's own single-request-per-value
 harvest with no page-token support at all, `finnworlds.go:119-123`) per configured value.
+Each stream declares a bare `incremental.cursor_field` matching legacy's `CursorFields` catalog
+metadata (`date` or `datetime`) without any `request_param`, because legacy never sends a
+server-side cursor filter.
 
 - **`dividends`** (`GET /dividends?ticker=<value>`): records at `result.output.dividends` (Finnworlds
   wraps every response as `{"result":{"output": ...}}`; this stream nests one level deeper than most

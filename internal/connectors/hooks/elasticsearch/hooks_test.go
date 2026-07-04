@@ -64,19 +64,67 @@ func TestAuthenticator_BuildsApiKeyHeader(t *testing.T) {
 	}
 }
 
-func TestAuthenticator_MissingIDIsError(t *testing.T) {
+func TestAuthenticator_MissingIDFallsBackToBasic(t *testing.T) {
 	h := Hooks{}
-	cfg := connectors.RuntimeConfig{Secrets: map[string]string{"api_key_secret": "secret456"}}
-	if _, err := h.Authenticator(context.Background(), cfg, baseSpec()); err == nil {
-		t.Fatal("Authenticator() error = nil, want an error for a missing api_key_id")
+	cfg := connectors.RuntimeConfig{
+		Config:  map[string]string{"username": "elastic"},
+		Secrets: map[string]string{"api_key_secret": "secret456", "password": "password"},
+	}
+	auth, err := h.Authenticator(context.Background(), cfg, baseSpec())
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	req := doAuthenticatedRequest(t, auth)
+	want := "Basic " + base64.StdEncoding.EncodeToString([]byte("elastic:password"))
+	if got := req.Header.Get("Authorization"); got != want {
+		t.Fatalf("Authorization = %q, want %q", got, want)
 	}
 }
 
-func TestAuthenticator_MissingSecretIsError(t *testing.T) {
+func TestAuthenticator_MissingSecretFallsBackToBasic(t *testing.T) {
+	h := Hooks{}
+	cfg := connectors.RuntimeConfig{
+		Config:  map[string]string{"api_key_id": "id123", "username": "elastic"},
+		Secrets: map[string]string{"password": "password"},
+	}
+	auth, err := h.Authenticator(context.Background(), cfg, baseSpec())
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	req := doAuthenticatedRequest(t, auth)
+	want := "Basic " + base64.StdEncoding.EncodeToString([]byte("elastic:password"))
+	if got := req.Header.Get("Authorization"); got != want {
+		t.Fatalf("Authorization = %q, want %q", got, want)
+	}
+}
+
+func TestAuthenticator_IncompleteAPIKeyWithoutBasicIsNoAuth(t *testing.T) {
 	h := Hooks{}
 	cfg := connectors.RuntimeConfig{Config: map[string]string{"api_key_id": "id123"}}
-	if _, err := h.Authenticator(context.Background(), cfg, baseSpec()); err == nil {
-		t.Fatal("Authenticator() error = nil, want an error for a missing api_key_secret")
+	auth, err := h.Authenticator(context.Background(), cfg, baseSpec())
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	req := doAuthenticatedRequest(t, auth)
+	if got := req.Header.Get("Authorization"); got != "" {
+		t.Fatalf("Authorization = %q, want empty header", got)
+	}
+}
+
+func TestAuthenticator_AcceptsLegacyCamelCaseAPIKeyNames(t *testing.T) {
+	h := Hooks{}
+	cfg := connectors.RuntimeConfig{
+		Config:  map[string]string{"apiKeyId": "id123"},
+		Secrets: map[string]string{"apiKeySecret": "secret456"},
+	}
+	auth, err := h.Authenticator(context.Background(), cfg, baseSpec())
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	req := doAuthenticatedRequest(t, auth)
+	want := "ApiKey " + base64.StdEncoding.EncodeToString([]byte("id123:secret456"))
+	if got := req.Header.Get("Authorization"); got != want {
+		t.Fatalf("Authorization = %q, want %q", got, want)
 	}
 }
 

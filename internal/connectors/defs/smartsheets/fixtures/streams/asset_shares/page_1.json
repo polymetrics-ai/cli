@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shares",
+    "query": {
+      "assetType": "synthetic-conformance-value",
+      "assetId": "synthetic-conformance-value",
+      "maxItems": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 12345,
+          "name": "Fixture asset_shares",
+          "type": "asset_shares",
+          "modifiedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

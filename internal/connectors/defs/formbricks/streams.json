@@ -21,6 +21,7 @@
         "created_at": "{{ record.createdAt }}",
         "updated_at": "{{ record.updatedAt }}"
       },
+      "incremental": { "cursor_field": "updated_at" },
       "schema": "schemas/surveys.json"
     },
     {
@@ -59,6 +60,7 @@
         "created_at": "{{ record.createdAt }}",
         "updated_at": "{{ record.updatedAt }}"
       },
+      "incremental": { "cursor_field": "updated_at" },
       "schema": "schemas/responses.json"
     },
     {
@@ -86,6 +88,7 @@
         "created_at": "{{ record.createdAt }}",
         "updated_at": "{{ record.updatedAt }}"
       },
+      "incremental": { "cursor_field": "updated_at" },
       "schema": "schemas/action_classes.json"
     },
     {
@@ -112,6 +115,7 @@
         "created_at": "{{ record.createdAt }}",
         "updated_at": "{{ record.updatedAt }}"
       },
+      "incremental": { "cursor_field": "updated_at" },
       "schema": "schemas/attribute_classes.json"
     },
     {

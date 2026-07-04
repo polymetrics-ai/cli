@@ -1,0 +1,21 @@
+{
+  "record": {
+    "surveyId": "survey_fixture_1",
+    "email": "fixture@example.com",
+    "name": "Fixture Recipient"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sendemail",
+    "body": {
+      "surveyId": "survey_fixture_1",
+      "email": "fixture@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": "true"
+    }
+  }
+}

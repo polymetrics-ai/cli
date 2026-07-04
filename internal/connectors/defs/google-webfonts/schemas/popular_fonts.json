@@ -73,6 +73,12 @@
         "array",
         "null"
       ]
+    },
+    "variant_count": {
+      "type": "integer"
+    },
+    "subset_count": {
+      "type": "integer"
     }
   }
 }

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/contacts/synthetic-conformance-value:synthetic-conformance-value/funnels/default" },
+  "response": {
+    "status": 200,
+    "body": {
+      "lifecycle_stage": "Client",
+      "opportunity": true,
+      "contact_owner_email": "owner@example.com",
+      "fit": 60,
+      "interest": 100
+    }
+  }
+}

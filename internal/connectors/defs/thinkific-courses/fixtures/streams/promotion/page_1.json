@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/promotions/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "name": "Fixture promotion",
+      "slug": "fixture-promotion",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+}

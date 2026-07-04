@@ -1,0 +1,2140 @@
+{
+  "actions": [
+    {
+      "name": "add_favorites",
+      "kind": "create",
+      "method": "POST",
+      "path": "/favorites",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "adds one or more favorites"
+    },
+    {
+      "name": "delete_favorite",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/favorites/{{ record.favorite_type }}/{{ record.favorite_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "favorite_type",
+          "favorite_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "favorite_type": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "favorite_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "removes one favorite",
+      "path_fields": [
+        "favorite_type",
+        "favorite_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_folder",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/folders/{{ record.folder_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "folder_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "folder_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates folder metadata",
+      "path_fields": [
+        "folder_id"
+      ]
+    },
+    {
+      "name": "copy_folder",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/folders/{{ record.folder_id }}/copy",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "folder_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "folder_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "copies a folder to a destination",
+      "path_fields": [
+        "folder_id"
+      ]
+    },
+    {
+      "name": "create_folder_in_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/folders/{{ record.folder_id }}/folders",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "folder_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "folder_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates a child folder",
+      "path_fields": [
+        "folder_id"
+      ]
+    },
+    {
+      "name": "move_folder",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/folders/{{ record.folder_id }}/move",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "folder_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "folder_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "moves a folder to a destination",
+      "path_fields": [
+        "folder_id"
+      ]
+    },
+    {
+      "name": "create_sheet_in_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/folders/{{ record.folder_id }}/sheets",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "folder_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "folder_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates a sheet in a folder",
+      "path_fields": [
+        "folder_id"
+      ]
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/groups",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates an organization group"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/groups/{{ record.group_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "group_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "group_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates an organization group",
+      "path_fields": [
+        "group_id"
+      ]
+    },
+    {
+      "name": "add_group_members",
+      "kind": "create",
+      "method": "POST",
+      "path": "/groups/{{ record.group_id }}/members",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "group_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "group_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds members to a group",
+      "path_fields": [
+        "group_id"
+      ]
+    },
+    {
+      "name": "delete_group_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/groups/{{ record.group_id }}/members/{{ record.user_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "group_id",
+          "user_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "group_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "user_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "removes a member from a group",
+      "path_fields": [
+        "group_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_home_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/home/folders",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a folder in home"
+    },
+    {
+      "name": "create_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reports",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a report"
+    },
+    {
+      "name": "add_report_columns",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reports/{{ record.report_id }}/columns",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "report_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds columns to a report",
+      "path_fields": [
+        "report_id"
+      ]
+    },
+    {
+      "name": "update_report_definition",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/reports/{{ record.report_id }}/definition",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "report_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates a report definition",
+      "path_fields": [
+        "report_id"
+      ]
+    },
+    {
+      "name": "set_report_publish",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/reports/{{ record.report_id }}/publish",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "report_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates report publish settings",
+      "path_fields": [
+        "report_id"
+      ]
+    },
+    {
+      "name": "add_report_scope",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reports/{{ record.report_id }}/scope",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "report_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds sheets to a report scope",
+      "path_fields": [
+        "report_id"
+      ]
+    },
+    {
+      "name": "remove_report_scope",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/reports/{{ record.report_id }}/scope",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "report_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "removes sheets from a report scope",
+      "path_fields": [
+        "report_id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_sheet",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a sheet in the Sheets folder"
+    },
+    {
+      "name": "update_sheet",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sheets/{{ record.sheet_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates sheet metadata",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "attach_url_to_sheet",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/attachments",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds a URL attachment to a sheet",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "delete_sheet_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "attachment_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a sheet attachment",
+      "path_fields": [
+        "sheet_id",
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_sheet_attachment_versions",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/attachments/{{ record.attachment_id }}/versions",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "attachment_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes all versions of a sheet attachment",
+      "path_fields": [
+        "sheet_id",
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_automation_rule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sheets/{{ record.sheet_id }}/automationrules/{{ record.automation_rule_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "automation_rule_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "automation_rule_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates an automation rule",
+      "path_fields": [
+        "sheet_id",
+        "automation_rule_id"
+      ]
+    },
+    {
+      "name": "delete_automation_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/automationrules/{{ record.automation_rule_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "automation_rule_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "automation_rule_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes an automation rule",
+      "path_fields": [
+        "sheet_id",
+        "automation_rule_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_sheet_columns",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/columns",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds columns to a sheet",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "update_sheet_column",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sheets/{{ record.sheet_id }}/columns/{{ record.column_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "column_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "column_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates a sheet column",
+      "path_fields": [
+        "sheet_id",
+        "column_id"
+      ]
+    },
+    {
+      "name": "delete_sheet_column",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/columns/{{ record.column_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "column_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "column_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a sheet column",
+      "path_fields": [
+        "sheet_id",
+        "column_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_comment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sheets/{{ record.sheet_id }}/comments/{{ record.comment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "comment_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "comment_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "edits a comment",
+      "path_fields": [
+        "sheet_id",
+        "comment_id"
+      ]
+    },
+    {
+      "name": "delete_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/comments/{{ record.comment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "comment_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "comment_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a comment",
+      "path_fields": [
+        "sheet_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "attach_url_to_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/comments/{{ record.comment_id }}/attachments",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "comment_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "comment_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds a URL attachment to a comment",
+      "path_fields": [
+        "sheet_id",
+        "comment_id"
+      ]
+    },
+    {
+      "name": "copy_sheet",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/copy",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "copies a sheet",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "create_cross_sheet_reference",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/crosssheetreferences",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates cross-sheet references",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "create_sheet_discussion",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/discussions",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates a sheet discussion",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "delete_sheet_discussion",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/discussions/{{ record.discussion_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "discussion_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "discussion_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a sheet discussion",
+      "path_fields": [
+        "sheet_id",
+        "discussion_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_discussion_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/discussions/{{ record.discussion_id }}/comments",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "discussion_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "discussion_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds a comment to a discussion",
+      "path_fields": [
+        "sheet_id",
+        "discussion_id"
+      ]
+    },
+    {
+      "name": "move_sheet",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/move",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "moves a sheet",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "update_proof",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "proof_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "proof_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates proof status",
+      "path_fields": [
+        "sheet_id",
+        "proof_id"
+      ]
+    },
+    {
+      "name": "delete_proof",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "proof_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "proof_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a proof",
+      "path_fields": [
+        "sheet_id",
+        "proof_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_proof_discussion",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}/discussions",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "proof_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "proof_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates a proof discussion",
+      "path_fields": [
+        "sheet_id",
+        "proof_id"
+      ]
+    },
+    {
+      "name": "create_proof_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}/requests",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "proof_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "proof_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates proof requests",
+      "path_fields": [
+        "sheet_id",
+        "proof_id"
+      ]
+    },
+    {
+      "name": "delete_proof_requests",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}/requests",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "proof_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "proof_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes proof requests",
+      "path_fields": [
+        "sheet_id",
+        "proof_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_proof_version",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}/versions",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "proof_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "proof_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates a proof version from JSON metadata",
+      "path_fields": [
+        "sheet_id",
+        "proof_id"
+      ]
+    },
+    {
+      "name": "delete_proof_version",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}/versions",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "proof_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "proof_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a proof version",
+      "path_fields": [
+        "sheet_id",
+        "proof_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "set_sheet_publish",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sheets/{{ record.sheet_id }}/publish",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates sheet publish settings",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "add_sheet_rows",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/rows",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds rows to a sheet",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "update_sheet_rows",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sheets/{{ record.sheet_id }}/rows",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates rows in a sheet",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "copy_rows",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/rows/copy",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "copies rows to another sheet",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "move_rows",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/rows/move",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "moves rows to another sheet",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "attach_url_to_row",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/rows/{{ record.row_id }}/attachments",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "row_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "row_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds a URL attachment to a row",
+      "path_fields": [
+        "sheet_id",
+        "row_id"
+      ]
+    },
+    {
+      "name": "create_row_discussion",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/rows/{{ record.row_id }}/discussions",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "row_id"
+        ],
+        "minProperties": 3,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "row_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates a row discussion",
+      "path_fields": [
+        "sheet_id",
+        "row_id"
+      ]
+    },
+    {
+      "name": "delete_sent_update_request",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/sentupdaterequests/{{ record.sent_update_request_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "sent_update_request_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "sent_update_request_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a sent update request",
+      "path_fields": [
+        "sheet_id",
+        "sent_update_request_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_summary_fields",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/summary/fields",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds sheet summary fields",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "update_summary_fields",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sheets/{{ record.sheet_id }}/summary/fields",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates sheet summary fields",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "create_update_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/updaterequests",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates an update request",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "delete_update_request",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sheets/{{ record.sheet_id }}/updaterequests/{{ record.update_request_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id",
+          "update_request_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "update_request_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes an update request",
+      "path_fields": [
+        "sheet_id",
+        "update_request_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "sort_sheet_rows",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/sheets/{{ record.sheet_id }}/sort",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sheet_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sheet_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "sorts rows in a sheet",
+      "path_fields": [
+        "sheet_id"
+      ]
+    },
+    {
+      "name": "update_dashboard",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sights/{{ record.sight_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sight_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sight_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates dashboard metadata",
+      "path_fields": [
+        "sight_id"
+      ]
+    },
+    {
+      "name": "copy_dashboard",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/sights/{{ record.sight_id }}/copy",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sight_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sight_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "copies a dashboard",
+      "path_fields": [
+        "sight_id"
+      ]
+    },
+    {
+      "name": "move_dashboard",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/sights/{{ record.sight_id }}/move",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sight_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sight_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "moves a dashboard",
+      "path_fields": [
+        "sight_id"
+      ]
+    },
+    {
+      "name": "set_dashboard_publish",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sights/{{ record.sight_id }}/publish",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sight_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "sight_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates dashboard publish settings",
+      "path_fields": [
+        "sight_id"
+      ]
+    },
+    {
+      "name": "add_alternate_emails",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/{{ record.user_id }}/alternateemails",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "adds alternate email addresses to a user",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "delete_alternate_email",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.user_id }}/alternateemails/{{ record.alternate_email_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "alternate_email_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "alternate_email_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes an alternate email address",
+      "path_fields": [
+        "user_id",
+        "alternate_email_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "make_alternate_email_primary",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/users/{{ record.user_id }}/alternateemails/{{ record.alternate_email_id }}/makeprimary",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "alternate_email_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          },
+          "alternate_email_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "makes an alternate email primary",
+      "path_fields": [
+        "user_id",
+        "alternate_email_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a webhook"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "webhook_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates a webhook",
+      "path_fields": [
+        "webhook_id"
+      ]
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "minProperties": 1,
+        "properties": {
+          "webhook_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a webhook",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a workspace"
+    },
+    {
+      "name": "update_workspace",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ record.workspace_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "workspace_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "updates a workspace",
+      "path_fields": [
+        "workspace_id"
+      ]
+    },
+    {
+      "name": "copy_workspace",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_id }}/copy",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "workspace_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "copies a workspace",
+      "path_fields": [
+        "workspace_id"
+      ]
+    },
+    {
+      "name": "create_workspace_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_id }}/folders",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "workspace_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates a folder in a workspace",
+      "path_fields": [
+        "workspace_id"
+      ]
+    },
+    {
+      "name": "create_sheet_in_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_id }}/sheets",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "workspace_id"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
+          }
+        }
+      },
+      "risk": "creates a sheet in a workspace",
+      "path_fields": [
+        "workspace_id"
+      ]
+    }
+  ]
+}

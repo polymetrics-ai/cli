@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sights/synthetic-conformance-value/path",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "path": [
+        {
+          "id": 1,
+          "name": "Home"
+        },
+        {
+          "id": 12345,
+          "name": "Fixture dashboard_path",
+          "type": "dashboard_path",
+          "modifiedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

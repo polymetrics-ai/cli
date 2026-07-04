@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/help_center/categories",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "categories": [
+        {
+          "id": 1,
+          "name": "fixture_name",
+          "position": 7,
+          "description": "fixture_description",
+          "locale": "fixture_locale",
+          "url": "fixture_url",
+          "html_url": "fixture_html_url",
+          "source_locale": "fixture_source_locale",
+          "outdated": "fixture_outdated",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "next": null
+      },
+      "meta": {
+        "has_more": false,
+        "after_cursor": null
+      }
+    }
+  }
+}

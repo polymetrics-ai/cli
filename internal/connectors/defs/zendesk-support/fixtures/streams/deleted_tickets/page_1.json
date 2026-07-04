@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/deleted_tickets",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "deleted_tickets": [
+        {
+          "actor": {
+          },
+          "id": 1,
+          "subject": "fixture_subject",
+          "description": "fixture_description",
+          "deleted_at": "2026-01-01T00:00:00Z",
+          "previous_state": "fixture_previous_state"
+        }
+      ],
+      "links": {
+        "next": null
+      },
+      "meta": {
+        "has_more": false,
+        "after_cursor": null
+      }
+    }
+  }
+}

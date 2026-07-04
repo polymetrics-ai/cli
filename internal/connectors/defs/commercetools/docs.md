@@ -19,12 +19,12 @@ supported here). `project_key` scopes every stream path (`/{project_key}/custome
 
 All 3 streams (`customers`, `orders`, `products`) share the same shape: `GET
 /{project_key}/<resource>`, records at `results` (commercetools' list-endpoint envelope), `limit`/
-`offset` query pagination (`pagination.type: offset_limit`), page size configurable via
-`page_size` (default 100, matching legacy's `defaultPageSize`). Pagination stops on a short page
-(fewer than `page_size` records), the same signal legacy's own `readOffset` checks first;
-`max_pages` is a static cap of 100 (`streams.json`'s `base.pagination.max_pages`), matching
-legacy's `defaultMaxPages` constant exactly — legacy also allows a per-read config override of
-`max_pages`, which has no engine-dialect equivalent (see Known limits).
+`offset` query pagination (`pagination.type: offset_limit`) with a fixed page size of 100 matching
+legacy's `defaultPageSize`. Pagination stops on a short page (fewer than 100 records), the same
+signal legacy's own `readOffset` checks first; `max_pages` is a static cap of 100 (`streams.json`'s
+`base.pagination.max_pages`), matching legacy's `defaultMaxPages` constant exactly — legacy also
+allows per-read config overrides of `page_size` and `max_pages`, which have no engine-dialect
+equivalent (see Known limits).
 
 Every stream uses `projection: "passthrough"`: legacy's `readOffset` emits
 `connectors.Record(rec)` directly from the raw decoded JSON with no field-built mapping, so
@@ -53,11 +53,11 @@ None. `capabilities.write` is `false`; no `writes.json` is shipped.
   `param_format`/default-materialization section and the sentry/chargebee precedent for the same
   narrowing). This bundle requires `base_url` and `token_url` as fully-formed URLs instead; a
   caller previously relying on the region/host shorthand must now precompute those two URLs itself.
-- Legacy's config-overridable `max_pages` (a per-read hard page-count cap, defaulting to 100) has
-  no engine-dialect equivalent for a per-call override: `PaginationSpec.MaxPages` is a static
-  integer declared in `streams.json`, not templated/config-driven. This bundle declares the static
-  default (100), matching legacy's own default for every caller that never overrides it; a caller
-  that previously set a different numeric `max_pages` has no equivalent knob here.
+- Legacy's config-overridable `page_size` and `max_pages` have no engine-dialect equivalent for a
+  per-call override: `PaginationSpec.PageSize` and `PaginationSpec.MaxPages` are static integers
+  declared in `streams.json`, not templated/config-driven. This bundle declares the static defaults
+  (100 for each), matching legacy's own default behavior for every caller that never overrides
+  them; a caller that previously set different numeric values has no equivalent knob here.
 - Legacy's `Catalog()` publishes a shared generic `Fields` list (`id`/`version`/`createdAt`) across
   all 3 streams as a simplified illustrative catalog. This bundle's per-stream schemas instead
   describe commercetools' real per-resource wire shape (matching the "recorded-real-shape" fixture

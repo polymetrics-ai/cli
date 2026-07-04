@@ -1,0 +1,885 @@
+{
+  "actions": [
+    {
+      "name": "create_bundle_enrollment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/bundles/{{ record.bundle_id }}/enrollments",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "bundle_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "bundle_id"
+        ]
+      },
+      "risk": "creates enrollments in a bundle of courses",
+      "path_fields": [
+        "bundle_id"
+      ]
+    },
+    {
+      "name": "update_bundle_enrollments",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/bundles/{{ record.bundle_id }}/enrollments",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "bundle_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "bundle_id"
+        ]
+      },
+      "risk": "updates enrollments in a bundle",
+      "path_fields": [
+        "bundle_id"
+      ]
+    },
+    {
+      "name": "create_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/collections",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a category/collection"
+    },
+    {
+      "name": "update_collection",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/collections/{{ record.collection_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "collection_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "collection_id"
+        ]
+      },
+      "risk": "updates a category/collection",
+      "path_fields": [
+        "collection_id"
+      ]
+    },
+    {
+      "name": "delete_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/collections/{{ record.collection_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "collection_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "collection_id"
+        ]
+      },
+      "risk": "deletes a category/collection",
+      "path_fields": [
+        "collection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_product_to_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/collection_memberships/{{ record.collection_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "collection_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "collection_id"
+        ]
+      },
+      "risk": "adds products to a category/collection",
+      "path_fields": [
+        "collection_id"
+      ]
+    },
+    {
+      "name": "delete_product_from_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/collection_memberships/{{ record.collection_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "collection_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "collection_id"
+        ]
+      },
+      "risk": "removes products from a category/collection",
+      "path_fields": [
+        "collection_id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_coupon",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/coupons/{{ record.coupon_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "coupon_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "coupon_id"
+        ]
+      },
+      "risk": "updates a coupon",
+      "path_fields": [
+        "coupon_id"
+      ]
+    },
+    {
+      "name": "delete_coupon",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/coupons/{{ record.coupon_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "coupon_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "coupon_id"
+        ]
+      },
+      "risk": "deletes a coupon",
+      "path_fields": [
+        "coupon_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_enrollment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/enrollments",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a course enrollment"
+    },
+    {
+      "name": "update_enrollment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/enrollments/{{ record.enrollment_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "enrollment_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "enrollment_id"
+        ]
+      },
+      "risk": "updates a course enrollment",
+      "path_fields": [
+        "enrollment_id"
+      ]
+    },
+    {
+      "name": "create_external_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/external_orders",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates an external order record"
+    },
+    {
+      "name": "refund_external_order_transaction",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/external_orders/{{ record.order_id }}/transactions/refund",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "order_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "order_id"
+        ]
+      },
+      "risk": "records a refund transaction for an external order",
+      "path_fields": [
+        "order_id"
+      ]
+    },
+    {
+      "name": "purchase_external_order_transaction",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/external_orders/{{ record.order_id }}/transactions/purchase",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "order_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "order_id"
+        ]
+      },
+      "risk": "records a purchase transaction for an external order",
+      "path_fields": [
+        "order_id"
+      ]
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/groups",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a group"
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/groups/{{ record.group_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "group_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "group_id"
+        ]
+      },
+      "risk": "deletes a group",
+      "path_fields": [
+        "group_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "assign_group_analysts",
+      "kind": "create",
+      "method": "POST",
+      "path": "/groups/{{ record.group_id }}/analysts",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "group_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "group_id"
+        ]
+      },
+      "risk": "assigns analysts to a group",
+      "path_fields": [
+        "group_id"
+      ]
+    },
+    {
+      "name": "remove_group_analyst",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/groups/{{ record.group_id }}/analysts/{{ record.user_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "group_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          },
+          "user_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "group_id",
+          "user_id"
+        ]
+      },
+      "risk": "removes an analyst from a group",
+      "path_fields": [
+        "group_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_groups_to_analyst",
+      "kind": "create",
+      "method": "POST",
+      "path": "/group_analysts/{{ record.user_id }}/groups",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "adds groups to an analyst",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "remove_group_from_analyst",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/group_analysts/{{ record.user_id }}/groups/{{ record.group_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          },
+          "group_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "user_id",
+          "group_id"
+        ]
+      },
+      "risk": "removes a group from an analyst",
+      "path_fields": [
+        "user_id",
+        "group_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_instructor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/instructors",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates an instructor"
+    },
+    {
+      "name": "update_instructor",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/instructors/{{ record.instructor_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "instructor_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "instructor_id"
+        ]
+      },
+      "risk": "updates an instructor",
+      "path_fields": [
+        "instructor_id"
+      ]
+    },
+    {
+      "name": "delete_instructor",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/instructors/{{ record.instructor_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "instructor_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "instructor_id"
+        ]
+      },
+      "risk": "deletes an instructor",
+      "path_fields": [
+        "instructor_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_group_users",
+      "kind": "create",
+      "method": "POST",
+      "path": "/group_users",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "adds users to existing groups"
+    },
+    {
+      "name": "approve_product_publish_request",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/product_publish_requests/{{ record.product_publish_request_id }}/approve",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "product_publish_request_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "product_publish_request_id"
+        ]
+      },
+      "risk": "approves a product publish request",
+      "path_fields": [
+        "product_publish_request_id"
+      ]
+    },
+    {
+      "name": "deny_product_publish_request",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/product_publish_requests/{{ record.product_publish_request_id }}/deny",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "product_publish_request_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "product_publish_request_id"
+        ]
+      },
+      "risk": "denies a product publish request",
+      "path_fields": [
+        "product_publish_request_id"
+      ]
+    },
+    {
+      "name": "create_promotion",
+      "kind": "create",
+      "method": "POST",
+      "path": "/promotions",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a promotion"
+    },
+    {
+      "name": "update_promotion",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/promotions/{{ record.promotion_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "promotion_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "promotion_id"
+        ]
+      },
+      "risk": "updates a promotion",
+      "path_fields": [
+        "promotion_id"
+      ]
+    },
+    {
+      "name": "delete_promotion",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/promotions/{{ record.promotion_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "promotion_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "promotion_id"
+        ]
+      },
+      "risk": "deletes a promotion",
+      "path_fields": [
+        "promotion_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a user"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.user_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "updates a user",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.user_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "deletes a user",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_site_script",
+      "kind": "create",
+      "method": "POST",
+      "path": "/site_scripts",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {}
+      },
+      "risk": "creates a site script"
+    },
+    {
+      "name": "update_site_script",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/site_scripts/{{ record.site_script_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 2,
+        "properties": {
+          "site_script_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "site_script_id"
+        ]
+      },
+      "risk": "updates a site script",
+      "path_fields": [
+        "site_script_id"
+      ]
+    },
+    {
+      "name": "delete_site_script",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/site_scripts/{{ record.site_script_id }}",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "site_script_id": {
+            "type": [
+              "string",
+              "number",
+              "integer"
+            ]
+          }
+        },
+        "required": [
+          "site_script_id"
+        ]
+      },
+      "risk": "deletes a site script",
+      "path_fields": [
+        "site_script_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    }
+  ]
+}

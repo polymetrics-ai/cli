@@ -60,10 +60,16 @@
       "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ fanout.id }}/messages",
       "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
       "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "created_after",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
       "computed_fields": {
-        "message_id": "{{ record.event_id }}",
-        "role": "{{ record.source }}",
-        "content": "{{ record.message }}"
+        "message_id": "{{ coalesce record.message_id record.event_id }}",
+        "role": "{{ coalesce record.role record.source }}",
+        "content": "{{ coalesce record.content record.message }}"
       },
       "fan_out": {
         "ids_from": { "request": { "path": "/v3/organizations/{{ config.org_id }}/sessions", "records_path": "items", "id_field": "session_id" } },
@@ -100,8 +106,8 @@
       "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
       "records": { "path": "items" },
       "computed_fields": {
-        "name": "{{ record.title }}",
-        "description": "{{ record.body }}"
+        "name": "{{ coalesce record.name record.title }}",
+        "description": "{{ coalesce record.description record.body }}"
       },
       "schema": "schemas/playbooks.json"
     },
@@ -111,8 +117,8 @@
       "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
       "records": { "path": "items" },
       "computed_fields": {
-        "name": "{{ record.key }}",
-        "type": "{{ record.secret_type }}"
+        "name": "{{ coalesce record.name record.key }}",
+        "type": "{{ coalesce record.type record.secret_type }}"
       },
       "schema": "schemas/secrets.json"
     },
@@ -150,7 +156,6 @@
     {
       "name": "schedules",
       "path": "/v3/organizations/{{ config.org_id }}/schedules",
-      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
       "records": { "path": "items" },
       "pagination": {
         "type": "offset_limit",

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "sheet_id": "sheet_id_fixture",
+    "comment_id": "comment_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/sheets/sheet_id_fixture/comments/comment_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

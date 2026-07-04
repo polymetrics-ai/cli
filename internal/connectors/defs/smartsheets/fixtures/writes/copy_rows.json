@@ -1,0 +1,24 @@
+{
+  "record": {
+    "sheet_id": "sheet_id_fixture",
+    "name": "Fixture",
+    "text": "Fixture text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sheets/sheet_id_fixture/rows/copy",
+    "body": {
+      "name": "Fixture",
+      "text": "Fixture text"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

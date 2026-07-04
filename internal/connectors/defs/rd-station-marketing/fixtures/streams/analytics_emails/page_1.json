@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/analytics/emails" },
+  "response": {
+    "status": 200,
+    "body": {
+      "account_id": 1001,
+      "query_date": { "start_date": "2026-01-01", "end_date": "2026-01-31" },
+      "emails": [
+        {
+          "campaign_id": 202,
+          "campaign_name": "Fixture Campaign",
+          "send_at": "2026-01-03T00:00:00Z",
+          "contacts_count": 1000,
+          "email_dropped_count": 3,
+          "email_delivered_count": 997,
+          "email_bounced_count": 5,
+          "email_opened_count": 500,
+          "email_clicked_count": 250,
+          "email_unsubscribed_count": 4,
+          "email_spam_reported_count": 1,
+          "email_delivered_rate": 98.7,
+          "email_opened_rate": 46.9,
+          "email_clicked_rate": 36.5,
+          "email_spam_reported_rate": 0.1
+        }
+      ]
+    }
+  }
+}

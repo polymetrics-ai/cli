@@ -1,0 +1,19 @@
+{
+  "record": {
+    "sheet_id": "sheet_id_fixture",
+    "attachment_id": "attachment_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/sheets/sheet_id_fixture/attachments/attachment_id_fixture/versions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

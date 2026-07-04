@@ -4,22 +4,38 @@
     "status": "current",
     "title": "Fixture Page 1 (updated)",
     "spaceId": "spaces_fixture_1",
-    "body": { "representation": "storage", "value": "<p>Updated fixture body</p>" },
-    "version": { "number": 2, "message": "fixture update" }
+    "body": {
+      "representation": "storage",
+      "value": "<p>Updated fixture body</p>"
+    },
+    "version": {
+      "number": 2,
+      "message": "fixture update"
+    }
   },
   "expect": {
     "method": "PUT",
-    "path": "/pages/pages_fixture_1",
+    "path": "/wiki/api/v2/pages/pages_fixture_1",
     "body": {
       "status": "current",
       "title": "Fixture Page 1 (updated)",
       "spaceId": "spaces_fixture_1",
-      "body": { "representation": "storage", "value": "<p>Updated fixture body</p>" },
-      "version": { "number": 2, "message": "fixture update" }
+      "body": {
+        "representation": "storage",
+        "value": "<p>Updated fixture body</p>"
+      },
+      "version": {
+        "number": 2,
+        "message": "fixture update"
+      }
     }
   },
   "response": {
     "status": 200,
-    "body": { "id": "pages_fixture_1", "status": "current", "title": "Fixture Page 1 (updated)" }
+    "body": {
+      "id": "pages_fixture_1",
+      "status": "current",
+      "title": "Fixture Page 1 (updated)"
+    }
   }
 }

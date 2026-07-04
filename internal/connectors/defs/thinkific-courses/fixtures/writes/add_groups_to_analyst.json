@@ -1,0 +1,22 @@
+{
+  "record": {
+    "user_id": "user_id_fixture",
+    "name": "Fixture",
+    "description": "Fixture description"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/group_analysts/user_id_fixture/groups",
+    "body": {
+      "name": "Fixture",
+      "description": "Fixture description"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

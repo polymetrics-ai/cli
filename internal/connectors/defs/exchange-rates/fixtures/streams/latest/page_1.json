@@ -4,7 +4,6 @@
     "status": 200,
     "body": {
       "success": true,
-      "historical": false,
       "date": "2026-01-02",
       "timestamp": 1767312000,
       "base": "EUR",

@@ -32,13 +32,12 @@ construction exactly). Pagination is genuinely 0-indexed (`pagination.type: page
 page returning fewer than `limit` records stops the read (legacy's `len(records) < pageSize`
 short-page stop).
 
-None of the 5 list streams declares an `incremental` block: legacy's `harvest` sends no server-side
-filter parameter derived from a cursor or `start_date`-shaped config value at all (only the static
-`sortfield`/`sortorder`/`limit`/`page` params above) — per conventions.md §8 rule 2, an
-`incremental` block is only declared when legacy actually sends a server-side filter, which it does
-not here. `x-cursor-field: date_modification` is still declared on every schema (matching legacy's
-published `CursorFields`) for catalog/sync-mode-derivation parity even though no request-time
-filtering happens.
+Each of the 5 list streams declares a bare `incremental.cursor_field: date_modification`, matching
+legacy's published `CursorFields` and preserving incremental sync-mode eligibility. No
+`request_param` is declared because legacy's `harvest` sends no server-side filter derived from a
+cursor or `start_date`-shaped config value at all (only the static
+`sortfield`/`sortorder`/`limit`/`page` params above). `x-cursor-field: date_modification` is also
+declared on every schema so the cursor field remains part of the projected record shape.
 
 `thirdparty_detail`/`contact_detail`/`product_detail`/`invoice_detail`/`order_detail` (Pass B
 additions) each read `GET /{resource}/{id}` — a single-object detail record scoped by a new

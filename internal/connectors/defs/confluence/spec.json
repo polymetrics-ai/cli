@@ -7,7 +7,7 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "Your Confluence Cloud site's full API base URL, including the /wiki/api/v2 path (e.g. https://mysite.atlassian.net/wiki/api/v2)."
+      "description": "Your Confluence Cloud site origin, without the /wiki/api/v2 path (e.g. https://mysite.atlassian.net). The bundle paths include /wiki/api/v2 so relative _links.next pagination follows the same host correctly."
     },
     "email": {
       "type": "string",

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "instructor_id": "instructor_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/instructors/instructor_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

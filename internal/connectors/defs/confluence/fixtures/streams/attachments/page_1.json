@@ -1,5 +1,11 @@
 {
-  "request": { "method": "GET", "path": "/attachments", "query": { "limit": "25" } },
+  "request": {
+    "method": "GET",
+    "path": "/wiki/api/v2/attachments",
+    "query": {
+      "limit": "25"
+    }
+  },
   "response": {
     "status": 200,
     "body": {

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "analytics_emails",
+  "type": "object",
+  "x-primary-key": ["campaign_id"],
+  "required": ["campaign_id"],
+  "properties": {
+    "campaign_id": { "type": "integer" },
+    "campaign_name": { "type": ["string", "null"] },
+    "send_at": { "type": ["string", "null"] },
+    "contacts_count": { "type": ["integer", "null"] },
+    "email_dropped_count": { "type": ["integer", "null"] },
+    "email_delivered_count": { "type": ["integer", "null"] },
+    "email_bounced_count": { "type": ["integer", "null"] },
+    "email_opened_count": { "type": ["integer", "null"] },
+    "email_clicked_count": { "type": ["integer", "null"] },
+    "email_unsubscribed_count": { "type": ["integer", "null"] },
+    "email_spam_reported_count": { "type": ["integer", "null"] },
+    "email_delivered_rate": { "type": ["number", "null"] },
+    "email_opened_rate": { "type": ["number", "null"] },
+    "email_clicked_rate": { "type": ["number", "null"] },
+    "email_spam_reported_rate": { "type": ["number", "null"] }
+  }
+}

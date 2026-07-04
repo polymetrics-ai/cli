@@ -3,20 +3,30 @@
     "spaceId": "spaces_fixture_1",
     "status": "current",
     "title": "Fixture Created Blog Post",
-    "body": { "representation": "storage", "value": "<p>Fixture blog body</p>" }
+    "body": {
+      "representation": "storage",
+      "value": "<p>Fixture blog body</p>"
+    }
   },
   "expect": {
     "method": "POST",
-    "path": "/blogposts",
+    "path": "/wiki/api/v2/blogposts",
     "body": {
       "spaceId": "spaces_fixture_1",
       "status": "current",
       "title": "Fixture Created Blog Post",
-      "body": { "representation": "storage", "value": "<p>Fixture blog body</p>" }
+      "body": {
+        "representation": "storage",
+        "value": "<p>Fixture blog body</p>"
+      }
     }
   },
   "response": {
     "status": 200,
-    "body": { "id": "blogposts_fixture_new", "status": "current", "title": "Fixture Created Blog Post" }
+    "body": {
+      "id": "blogposts_fixture_new",
+      "status": "current",
+      "title": "Fixture Created Blog Post"
+    }
   }
 }

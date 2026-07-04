@@ -90,6 +90,9 @@ endpoint at all.
   `normalizeRates` fallback to `{}` — this only differs for a response shape the real API does
   not produce for the `latest` endpoint, so it is an ACCEPTABLE deviation (never diverges for any
   legacy-accepted real response).
+- The documented `latest` response does not include `historical`; legacy's field-built mapper would
+  emit `"historical": null` for that absent key, while the engine omits absent fields. Keep fixtures
+  faithful to the documented wire shape rather than adding `historical: false`.
 - **`timeseries`/`fluctuation` do not fan their nested per-date/per-currency `rates` object out
   into individual records (documented scope narrowing, not an ENGINE_GAP blocker).** Both streams
   emit ONE record per requested `[start_date, end_date]` window, with the entire `rates` object

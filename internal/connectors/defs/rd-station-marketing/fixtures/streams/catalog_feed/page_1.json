@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/catalog_feeds/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "name": "Fixture Catalog Detail",
+      "url": "https://example.com/catalog-detail.json",
+      "status": "active",
+      "format": "json",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-02T00:00:00Z",
+      "credentials": null
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "taskId": [
+      "task_fixture_1"
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tasks/delete",
+    "body": {
+      "taskId": [
+        "task_fixture_1"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "success": true
+    }
+  }
+}

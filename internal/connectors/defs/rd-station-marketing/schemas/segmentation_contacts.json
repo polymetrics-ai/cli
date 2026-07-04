@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segmentation_contacts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "uuid": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "last_conversion_date": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "links": { "type": ["array", "null"], "items": { "type": "object" } }
+  }
+}

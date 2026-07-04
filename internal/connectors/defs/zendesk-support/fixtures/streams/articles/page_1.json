@@ -1,0 +1,50 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/help_center/incremental/articles",
+    "query": {
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "articles": [
+        {
+          "author_id": 1,
+          "body": "fixture_body",
+          "comments_disabled": true,
+          "content_tag_ids": [
+
+          ],
+          "created_at": "2026-01-01T00:00:00Z",
+          "draft": true,
+          "edited_at": "2026-01-01T00:00:00Z",
+          "html_url": "fixture_html_url",
+          "id": 1,
+          "label_names": [
+
+          ],
+          "locale": "fixture_locale",
+          "name": "fixture_name",
+          "outdated": true,
+          "outdated_locales": [
+
+          ],
+          "permission_group_id": 1,
+          "position": 7,
+          "promoted": true,
+          "section_id": 1,
+          "source_locale": "fixture_source_locale",
+          "title": "fixture_title",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "url": "fixture_url",
+          "user_segment_id": 1,
+          "vote_count": 7,
+          "vote_sum": 7
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

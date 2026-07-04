@@ -18,7 +18,8 @@
       "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}",
       "records": { "path": "" },
       "computed_fields": {
-        "default_branch": "{{ record.vcs_info.default_branch }}"
+        "default_branch": "{{ record.vcs_info.default_branch }}",
+        "vcs_url": "{{ coalesce record.vcs_url record.vcs_info.vcs_url }}"
       },
       "schema": "schemas/projects.json"
     },

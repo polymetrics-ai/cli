@@ -3,8 +3,18 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.auth_token }}", "when": "{{ secrets.auth_token }}" },
-      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" }
+      {
+        "mode": "api_key_header",
+        "header": "Z-API-TOKEN",
+        "value": "{{ secrets.auth_token }}",
+        "when": "{{ secrets.auth_token }}"
+      },
+      {
+        "mode": "api_key_header",
+        "header": "Z-API-TOKEN",
+        "value": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      }
     ],
     "pagination": {
       "type": "page_number",
@@ -13,30 +23,282 @@
       "start_page": 1,
       "page_size": 100
     },
-    "check": { "method": "GET", "path": "/responses", "query": { "page": "1", "per_page": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/responses",
+      "query": {
+        "page": "1",
+        "per_page": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "zonka-feedback auth_token/access_token is missing or invalid; re-run pm credentials add zonka-feedback" },
-      { "status": 429, "class": "rate_limited", "hint": "zonka-feedback rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "zonka-feedback auth_token/access_token is missing or invalid; re-run pm credentials add zonka-feedback"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "zonka-feedback rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "responses",
       "path": "/responses",
-      "records": { "path": "responses" },
+      "records": {
+        "path": "responses"
+      },
       "schema": "schemas/responses.json"
     },
     {
       "name": "surveys",
       "path": "/surveys",
-      "records": { "path": "surveys" },
+      "records": {
+        "path": "surveys"
+      },
       "schema": "schemas/surveys.json"
     },
     {
       "name": "contacts",
       "path": "/contacts",
-      "records": { "path": "contacts" },
+      "records": {
+        "path": "contacts"
+      },
       "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "response_details",
+      "path": "/responses/{{ config.response_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/response_details.json"
+    },
+    {
+      "name": "workspaces",
+      "path": "/workspaces",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workspaces.json"
+    },
+    {
+      "name": "survey_stats",
+      "path": "/snapshot",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/survey_stats.json"
+    },
+    {
+      "name": "survey_details",
+      "path": "/surveys/{{ config.survey_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/survey_details.json"
+    },
+    {
+      "name": "contact_details",
+      "path": "/contacts/{{ config.contact_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact_details.json"
+    },
+    {
+      "name": "contact_segments",
+      "path": "/contactlist",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact_segments.json"
+    },
+    {
+      "name": "devices",
+      "path": "/devices",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "projection": "passthrough",
+      "schema": "schemas/devices.json"
+    },
+    {
+      "name": "device_details",
+      "path": "/devices/{{ config.device_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/device_details.json"
+    },
+    {
+      "name": "device_uptime",
+      "path": "/devices/uptimestat",
+      "query": {
+        "startDate": "{{ config.device_stats_start_date }}",
+        "endDate": "{{ config.device_stats_end_date }}",
+        "deviceId": "{{ config.device_id }}"
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/device_uptime.json"
+    },
+    {
+      "name": "device_responses",
+      "path": "/devices/responses",
+      "query": {
+        "startDate": "{{ config.device_stats_start_date }}",
+        "endDate": "{{ config.device_stats_end_date }}",
+        "deviceId": "{{ config.device_id }}"
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/device_responses.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "locations",
+      "path": "/locations",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "projection": "passthrough",
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "location_details",
+      "path": "/locations/{{ config.location_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/location_details.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "projection": "passthrough",
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "user_details",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/user_details.json"
+    },
+    {
+      "name": "distribution_logs",
+      "path": "/distribution-logs",
+      "query": {
+        "startDate": "{{ config.distribution_logs_start_date }}",
+        "endDate": "{{ config.distribution_logs_end_date }}",
+        "channel": "{{ config.distribution_logs_channel }}",
+        "surveyId": "{{ config.survey_id }}",
+        "locationId": {
+          "template": "{{ config.location_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "projection": "passthrough",
+      "schema": "schemas/distribution_logs.json"
     }
   ]
 }
