@@ -40,10 +40,12 @@ bundle matches that exact scope.
   capability for `users`/`scorecards` on top of legacy's full-refresh-only catalog entry; it never
   changes what data is emitted for any read legacy itself would perform (the same `fromDateTime`
   filter value flows to the same query parameter either way).
-- Field renames follow Gong's camelCase wire shape exactly, via `computed_fields`:
+- Field renames snake_case Gong's camelCase wire shape, via `computed_fields`:
   `email_address`/`first_name`/`last_name`/`phone_number`/`manager_id` (users),
-  `is_private` (calls), `scorecard_id`/`scorecard_name`/`workspace_id` (scorecards). Every other
-  field name matches the raw API key verbatim and needs no rename.
+  `is_private` (calls). The `scorecards` stream is emitted verbatim (legacy `gongScorecardRecord`
+  passes `scorecardId`/`scorecardName`/`workspaceId` through unchanged, and the catalog primary key
+  is `scorecardId`), so it needs no `computed_fields` rename. Every other field name matches the raw
+  API key verbatim and needs no rename.
 
 ## Write actions & risks
 

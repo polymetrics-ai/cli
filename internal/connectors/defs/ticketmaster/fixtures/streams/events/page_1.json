@@ -3,7 +3,7 @@
     "method": "GET",
     "path": "/events.json",
     "query": {
-      "page": "1",
+      "page": "0",
       "size": "200"
     }
   },

@@ -25,7 +25,8 @@
         "type": "next_url",
         "next_url_path": "next"
       },
-      "schema": "schemas/events.json"
+      "schema": "schemas/events.json",
+      "projection": "passthrough"
     },
     {
       "name": "persons",
@@ -38,7 +39,8 @@
         "type": "next_url",
         "next_url_path": "next"
       },
-      "schema": "schemas/persons.json"
+      "schema": "schemas/persons.json",
+      "projection": "passthrough"
     }
   ]
 }

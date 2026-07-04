@@ -2,12 +2,8 @@
   "request": { "method": "GET", "path": "/images", "query": { "page": "1", "page_size": "200" } },
   "response": {
     "status": 200,
-    "body": {
-      "total_items": 1,
-      "page_count": 1,
-      "items": [
-        { "id": "img_fixture_1", "file_name": "image_1.png", "src": "https://images.typeform.com/images/img_fixture_1", "media_type": "image/png", "has_alpha": false, "width": 800, "height": 600 }
-      ]
-    }
+    "body": [
+      { "id": "img_fixture_1", "file_name": "image_1.png", "src": "https://images.typeform.com/images/img_fixture_1", "media_type": "image/png", "has_alpha": false, "width": 800, "height": 600 }
+    ]
   }
 }

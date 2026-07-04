@@ -36,19 +36,43 @@
     {
       "name": "tags",
       "path": "/tags",
+      "query": {
+        "since": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
       "records": { "path": "tags" },
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "request_param": "since",
+        "start_config_key": "since"
+      },
       "schema": "schemas/tags.json"
     },
     {
       "name": "orders",
       "path": "/events/{{ config.event_id }}/orders",
+      "query": {
+        "since": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
       "records": { "path": "orders" },
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "request_param": "since",
+        "start_config_key": "since"
+      },
       "schema": "schemas/orders.json"
     },
     {
       "name": "tickets",
       "path": "/events/{{ config.event_id }}/tickets",
+      "query": {
+        "since": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
       "records": { "path": "tickets" },
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "request_param": "since",
+        "start_config_key": "since"
+      },
       "schema": "schemas/tickets.json"
     }
   ]

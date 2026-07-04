@@ -4,7 +4,7 @@
     "status": 200,
     "body": {
       "data": [
-        { "id": 1003, "name": "Fixture story three", "state": "done", "updated_at": "2026-01-03T00:00:00Z" }
+        { "id": 1003, "name": "Fixture story three", "workflow_state_id": 500003, "updated_at": "2026-01-03T00:00:00Z" }
       ],
       "next": null
     }

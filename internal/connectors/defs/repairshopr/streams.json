@@ -30,7 +30,8 @@
       },
       "records": { "path": "customers" },
       "computed_fields": { "stream": "customers" },
-      "schema": "schemas/customers.json"
+      "schema": "schemas/customers.json",
+      "projection": "passthrough"
     },
     {
       "name": "tickets",
@@ -42,7 +43,8 @@
       },
       "records": { "path": "tickets" },
       "computed_fields": { "stream": "tickets" },
-      "schema": "schemas/tickets.json"
+      "schema": "schemas/tickets.json",
+      "projection": "passthrough"
     },
     {
       "name": "invoices",
@@ -54,7 +56,8 @@
       },
       "records": { "path": "invoices" },
       "computed_fields": { "stream": "invoices" },
-      "schema": "schemas/invoices.json"
+      "schema": "schemas/invoices.json",
+      "projection": "passthrough"
     },
     {
       "name": "estimates",
@@ -66,7 +69,8 @@
       },
       "records": { "path": "estimates" },
       "computed_fields": { "stream": "estimates" },
-      "schema": "schemas/estimates.json"
+      "schema": "schemas/estimates.json",
+      "projection": "passthrough"
     },
     {
       "name": "assets",
@@ -78,7 +82,8 @@
       },
       "records": { "path": "assets" },
       "computed_fields": { "stream": "assets" },
-      "schema": "schemas/assets.json"
+      "schema": "schemas/assets.json",
+      "projection": "passthrough"
     }
   ]
 }

@@ -4,8 +4,8 @@
     "status": 200,
     "body": {
       "environments": [
-        { "id": "development", "name": "development" },
-        { "id": "production", "name": "production" }
+        { "name": "development", "type": "development", "enabled": true, "protected": false, "sortOrder": 100 },
+        { "name": "production", "type": "production", "enabled": true, "protected": true, "sortOrder": 200 }
       ]
     }
   }

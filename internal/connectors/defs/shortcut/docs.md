@@ -39,18 +39,27 @@ None. Shortcut's legacy connector is read-only (`Write` returns
 
 ## Known limits
 
-- **Fallback field names are not modeled.** Legacy's `mapRecord` reads `state` with a fallback to
-  `workflow_state_id`, and `updated_at` with a fallback to `updated_at_override`
-  (`shortcut.go:152-154`, `first(item, "state", "workflow_state_id")` /
-  `first(item, "updated_at", "updated_at_override")`). This bundle's plain schema projection copies
-  `state`/`updated_at` by exact key match only — there is no coalesce/first-non-null filter in this
-  dialect's `computed_fields` templating (a bare `{{ record.<path> }}` reference either resolves or
-  is silently skipped for that record; it cannot try a second path). Legacy's own test suite
-  (`shortcut_test.go`) never exercises the fallback branch for either field (both fixture and live
-  test payloads always populate the primary key), and the real Shortcut API's documented story/epic/
-  project/iteration shape always includes `state`/`updated_at` directly — this is judged an
-  ACCEPTABLE, documented scope-narrowing rather than an `ENGINE_GAP`, per the `encharge` bundle's
-  identical precedent for an unexercised defensive fallback.
+- **`state` fallback to `workflow_state_id` (stories) is modeled via `computed_fields`.** Legacy's
+  `mapRecord` reads `state` with a fallback to `workflow_state_id`
+  (`shortcut.go:153`, `first(item, "state", "workflow_state_id")`). On the real Shortcut REST API
+  v3 wire the two keys are mutually exclusive per object type: a **Story** carries an integer
+  `workflow_state_id` and NO top-level `state`, whereas an **Epic**/**Project** carries a string
+  `state` and no `workflow_state_id`, and an **Iteration** carries neither (legacy emits `state:
+  null` for it). Because a plain schema projection copies `state` by exact key match only, the
+  `stories` stream would have emitted `state: null` for every real story. It is fixed with a
+  single `computed_fields` entry on the `stories` stream — `"state": "{{ record.workflow_state_id
+  }}"` — a bare single-reference template, so typed extraction copies the raw integer
+  `workflow_state_id` verbatim (native type preserved), reproducing legacy's emitted value exactly.
+  The `stories` schema types `state` as `["integer","string","null"]` to match. `epics`/`projects`
+  need no computed field (their wire carries `state` directly, which exact-key projection already
+  copies — legacy's `first` returns the primary `state` key there); `iterations` carries neither
+  key, so both legacy and this bundle emit `state: null`. The `updated_at` -> `updated_at_override`
+  fallback (`shortcut.go:153`) is NOT modeled: none of Story/Epic/Project/Iteration carries a
+  top-level `updated_at_override` on the real wire, so legacy's `first(item, "updated_at",
+  "updated_at_override")` always returns the primary `updated_at`, which exact-key projection
+  already copies identically — the fallback branch is unreachable dead code on every real payload
+  (and unexercised by legacy's own `shortcut_test.go`), so reproducing it would add no data-level
+  fidelity.
 - **`max_pages` is not runtime-configurable.** Legacy exposes a `max_pages` config override
   (`0`/`all`/`unlimited` for unbounded, or a positive integer hard cap, `shortcut.go:232-242`). The
   engine's `PaginationSpec.MaxPages` is a fixed bundle-authored literal, not config-driven; this

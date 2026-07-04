@@ -34,7 +34,8 @@
         "state": { "template": "{{ config.state }}", "omit_when_absent": true }
       },
       "computed_fields": { "stream": "orders" },
-      "schema": "schemas/orders.json"
+      "schema": "schemas/orders.json",
+      "projection": "passthrough"
     },
     {
       "name": "customers",
@@ -47,7 +48,8 @@
         "state": { "template": "{{ config.state }}", "omit_when_absent": true }
       },
       "computed_fields": { "stream": "customers" },
-      "schema": "schemas/customers.json"
+      "schema": "schemas/customers.json",
+      "projection": "passthrough"
     },
     {
       "name": "settlements",
@@ -60,7 +62,8 @@
         "state": { "template": "{{ config.state }}", "omit_when_absent": true }
       },
       "computed_fields": { "stream": "settlements" },
-      "schema": "schemas/settlements.json"
+      "schema": "schemas/settlements.json",
+      "projection": "passthrough"
     },
     {
       "name": "payment_links",
@@ -73,7 +76,8 @@
         "state": { "template": "{{ config.state }}", "omit_when_absent": true }
       },
       "computed_fields": { "stream": "payment_links" },
-      "schema": "schemas/payment_links.json"
+      "schema": "schemas/payment_links.json",
+      "projection": "passthrough"
     }
   ]
 }

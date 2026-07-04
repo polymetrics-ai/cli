@@ -39,8 +39,11 @@ and the `since` query param is wired through the opt-in optional-query dialect
 (`{{ incremental.lower_bound }}` with `omit_when_absent: true`) so it is sent only once a lower
 bound resolves (a state cursor from a prior sync, or the `since` config on a first run) — omitted
 entirely on a from-scratch full sync, exactly matching legacy's `if since := ...; since != ""`
-gate. `tags`, `orders`, and `tickets` expose no incremental filter in the Humanitix API (legacy
-never sends `since` for them), so no `incremental` block is declared for those three streams.
+gate. `tags`, `orders`, and `tickets` carry the identical incremental filter: legacy publishes
+`CursorFields: ["updatedAt"]` for all four streams (`streams.go:39,46,53,60`) and applies
+`base.Set("since", since)` stream-agnostically in the shared `Read` path (`humanitix.go:152-154`),
+so each of the three declares the same `incremental` block (`cursor_field: updatedAt`,
+`request_param: since`, `start_config_key: since`) and the same opt-in `since` query param.
 
 ## Write actions & risks
 

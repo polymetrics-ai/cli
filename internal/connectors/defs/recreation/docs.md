@@ -46,9 +46,11 @@ the response body's `METADATA.RESULTS.TOTAL_COUNT` field directly (`offset >= to
 total-count stop-signal hook (unlike the `cursor` paginator's `stop_path`), so this bundle relies on
 the short-page signal alone — see Known limits.
 
-`facilities` and `campsites` declare `x-cursor-field: updated_at` and `recareas` likewise, matching
-legacy's own `Catalog` `CursorFields` declaration (`recreation.go:170-174`) for
-informational/dedup-mode purposes only — per `docs/migration/conventions.md` §2,
+`facilities` and `campsites` declare `x-cursor-field: updated_at`, matching
+legacy's own `Catalog` `CursorFields` declaration (`recreation.go:170-171`) for
+informational/dedup-mode purposes only. `recareas` declares no `x-cursor-field`
+because legacy's `recareas` stream (`recreation.go:174`) publishes no `CursorFields`
+(unlike facilities/campsites). Per `docs/migration/conventions.md` §2,
 `incremental_append` sync modes are gated on the presence of an `incremental` block, not on
 `x-cursor-field` alone. None of the five streams expose a server-side incremental filter parameter
 in legacy (`Read` never sends a date-filter query param — `harvest` only ever sends `limit`/`offset`),

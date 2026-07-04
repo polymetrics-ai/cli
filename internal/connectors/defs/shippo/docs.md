@@ -37,12 +37,17 @@ that Shippo's real API never actually populates for any of these four resource t
 record.object_id }}"` (all four streams), `updated_at: "{{ record.object_updated }}"` (all four),
 and `name` mapped per-resource to whichever field legacy's fallback chain resolves to in practice —
 `addresses`' own plain `name` field (a person/company name Shippo does return on address objects),
-`parcels`' `object_owner` (the only "name-shaped" field Shippo actually returns for parcel objects).
-`shipments`/`transactions` declare no `name` computed field at all (legacy's own catalog `Fields`
-list only declares `name` for `addresses`/`parcels`, not `shipments`/`transactions` —
-`shippo.go` `streams()`/`fields()` calls at lines 153-156). `status` and `email` pass straight
-through via schema projection (Shippo's real field names match legacy's direct, non-fallback
-`item["status"]`/`item["email"]` reads exactly).
+and `object_owner` for `parcels`, `shipments`, and `transactions` (Shippo's Shipment and
+Transaction schemas define no top-level `name` field, so legacy's `first(item, "name",
+"object_owner")` resolves to the always-present `object_owner` username for those objects —
+confirmed against Shippo's OpenAPI spec, where `object_owner` is a `required` Shipment property and
+a documented Transaction property). Legacy's `shippoRecord` (`shippo.go:159-161`) field-builds the
+identical five-key record — `id`, `name`, `email`, `status`, `updated_at` — for ALL four streams
+and emits it verbatim into the warehouse; catalog `Fields` does not filter emitted records, so
+`name` must be mapped on every stream, not only the two whose catalog `Fields` happen to declare it.
+`status` and `email` pass straight through via schema projection (Shippo's real field names match
+legacy's direct, non-fallback `item["status"]`/`item["email"]` reads exactly); `email` is absent on
+Shipment/Transaction objects, so it resolves to null on those streams exactly as it does in legacy.
 
 ## Write actions & risks
 

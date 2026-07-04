@@ -111,6 +111,7 @@
         "propertyType": { "template": "{{ config.property_type }}", "omit_when_absent": true }
       },
       "computed_fields": {
+        "id": "{{ record.formattedAddress }}",
         "address": "{{ record.formattedAddress }}"
       },
       "schema": "schemas/value_estimates.json"
@@ -127,6 +128,7 @@
         "propertyType": { "template": "{{ config.property_type }}", "omit_when_absent": true }
       },
       "computed_fields": {
+        "id": "{{ record.formattedAddress }}",
         "address": "{{ record.formattedAddress }}"
       },
       "schema": "schemas/rental_estimates.json"

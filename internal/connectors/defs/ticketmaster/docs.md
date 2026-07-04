@@ -18,9 +18,12 @@ All four streams share the identical Ticketmaster Discovery envelope:
 `GET /<resource>.json` returns `{"_embedded":{"<resource>":[...]}}`; records live at
 `_embedded.<resource>` for every stream (legacy's `recordsPath` values, uniform per stream).
 Pagination is `page_number` (`page`/`size`, static `page_size: 200` matching legacy's
-`defaultPageSize`). `start_page: 1` is declared even though Ticketmaster's real page index is
-zero-based (legacy's `harvestPages` loop starts at `page := 0`, `ticketmaster.go:121`) — see Known
-limits below for why `start_page: 0` cannot be expressed here.
+`defaultPageSize`). `start_page: 0` is declared because Ticketmaster's real page index is
+zero-based (legacy's `harvestPages` loop starts at `page := 0` and sends `page=0` as its first
+request, `ticketmaster.go:121-127`); the engine honors an explicit `start_page: 0` verbatim
+(`startPageOrDefault` treats only a nil `*int` as unset, `engine/paginate.go`), so this bundle's
+first live request is `page=0`, matching legacy exactly. Fixture query params carry the same
+zero-based page numbers (`events` page_1.json = `page=0`, page_2.json = `page=1`).
 
 Every stream also declares the optional `keyword`/`countryCode`/`locale` query filters (legacy's
 `Read` sets these unconditionally from `config.keyword`/`config.country_code`/`config.locale`
@@ -67,25 +70,3 @@ None. Ticketmaster is read-only (`capabilities.write` is `false`); this bundle s
   schemas and fixtures target the live record shape only; the engine's own
   `internal/connectors/conformance` fixture-replay harness provides the credential-free test
   affordance this bundle needs.
-- **`ENGINE_GAP` — a genuinely zero-based `page_number` start cannot be declared.**
-  `PaginationSpec.StartPage` is a plain Go `int`; `engine/paginate.go`'s `newPaginator`
-  (`start := spec.StartPage; if start == 0 { start = 1 }`) and `connsdk.PageNumberPaginator.Start()`
-  both treat an explicit `"start_page": 0` identically to an absent/unset field — there is no
-  present-vs-absent sentinel, so `0` always coerces to `1`. Ticketmaster's real Discovery API is
-  zero-indexed (legacy's `harvestPages` sends `page=0` first, `page=1` second, ...,
-  `ticketmaster.go:121-127`); this bundle therefore declares `start_page: 1` (the honest description
-  of what the engine will actually send, not a request to start at Ticketmaster's true first page)
-  and every stream's fixture query params are shifted by one accordingly (this bundle's page 1 =
-  Ticketmaster's real page 0, this bundle's page 2 = Ticketmaster's real page 1). **This is an
-  accepted-input-behavior change, not a cosmetic one**: every request this connector sends is
-  off-by-one against Ticketmaster's own page-index convention relative to legacy, so a caller
-  relying on a specific absolute page number (rather than treating the stream as an opaque
-  full-sweep read, which is the only way legacy itself is ever driven) would see different results
-  than legacy for the same numeric page argument. No workaround is available within the declarative
-  dialect (Tier 1) or the five Tier-2 hook points (none of `AuthHook`/`RecordHook`/`StreamHook`/
-  `WriteHook`/`CheckHook` intercept pagination-query construction) short of a `StreamHook` full-read
-  override, which would be a disproportionate Tier-2 escalation for a single-field off-by-one; this
-  is recorded here as the honest, minimal-scope deviation instead. Fixing this at the source would
-  require `PaginationSpec.StartPage` to become a pointer/wrapper type (or an explicit
-  `start_page_set` companion field) so `0` and "absent" are distinguishable — a one-line engine
-  change, but out of scope for a JSON-only bundle fix.

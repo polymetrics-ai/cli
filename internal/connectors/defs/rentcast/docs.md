@@ -41,7 +41,14 @@ Each stream's schema is a field-for-field projection of legacy's own `mapRecord`
 (`formattedAddress` -> `address`, `propertyType` -> `property_type`, `zipCode` -> `zip_code`,
 `lastSeenDate` -> `last_seen_date`) via `computed_fields`, matching legacy's `first(item,
 "formattedAddress", "address")`-style helpers for the PRIMARY (first-preference) source field.
-`markets` renames `zipCode` -> `zip_code`. All three listing/property streams publish
+`markets` renames `zipCode` -> `zip_code`. `value_estimates`/`rental_estimates` map both `id`
+and `address` to `formattedAddress`: the RentCast AVM endpoints (`/avm/value`,
+`/avm/rent/long-term`) take an address as input and return a single object with NO top-level
+`id`, so legacy's `estimateRecord` derives `id` via `first(item, "id", "formattedAddress",
+"address")` — which resolves to `formattedAddress` for every real AVM response. This bundle wires
+`id` -> `formattedAddress` to reproduce that emitted value exactly (the leading `id` and trailing
+`address` fallback keys in legacy's chain never fire for the real wire shape). All three
+listing/property streams publish
 `last_seen_date` as `x-cursor-field`, matching legacy's own `CursorFields` declarations, but
 RentCast's endpoints expose no server-side incremental filter parameter and legacy's own `harvest`
 never applies one — every read is a full paginated sweep, matching legacy's true read behavior

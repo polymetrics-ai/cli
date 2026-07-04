@@ -76,7 +76,7 @@
       "path": "/archive_reasons",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "returns or manages file/download payloads rather than JSON records expressible by this connector bundle"
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
       }
     },
     {

@@ -25,7 +25,10 @@
         "limit": { "template": "{{ config.page_size }}", "default": "100" }
       },
       "records": { "path": "data" },
-      "schema": "schemas/stories.json"
+      "schema": "schemas/stories.json",
+      "computed_fields": {
+        "state": "{{ record.workflow_state_id }}"
+      }
     },
     {
       "name": "epics",

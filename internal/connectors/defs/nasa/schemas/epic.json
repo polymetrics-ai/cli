@@ -3,7 +3,6 @@
   "title": "epic",
   "type": "object",
   "x-primary-key": ["identifier"],
-  "x-cursor-field": "date",
   "required": ["identifier"],
   "properties": {
     "identifier": { "type": "string" },

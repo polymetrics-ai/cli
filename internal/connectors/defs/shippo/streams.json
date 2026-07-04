@@ -48,6 +48,7 @@
       "records": { "path": "results" },
       "computed_fields": {
         "id": "{{ record.object_id }}",
+        "name": "{{ record.object_owner }}",
         "updated_at": "{{ record.object_updated }}"
       },
       "schema": "schemas/shipments.json"
@@ -59,6 +60,7 @@
       "records": { "path": "results" },
       "computed_fields": {
         "id": "{{ record.object_id }}",
+        "name": "{{ record.object_owner }}",
         "updated_at": "{{ record.object_updated }}"
       },
       "schema": "schemas/transactions.json"

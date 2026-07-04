@@ -29,7 +29,8 @@
       },
       "computed_fields": {
         "id": "{{ record.businessUuid }}",
-        "name": "{{ record.businessName }}"
+        "name": "{{ record.businessName }}",
+        "created_at": "{{ record.createdAt }}"
       },
       "schema": "schemas/businesses.json"
     },
@@ -42,7 +43,8 @@
       },
       "computed_fields": {
         "id": "{{ record.connectionUuid }}",
-        "business_id": "{{ record.businessUuid }}"
+        "business_id": "{{ record.businessUuid }}",
+        "created_at": "{{ record.createdAt }}"
       },
       "schema": "schemas/connections.json"
     },

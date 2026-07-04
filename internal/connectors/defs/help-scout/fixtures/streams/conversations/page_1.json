@@ -18,7 +18,13 @@
             "state": "published",
             "subject": "Fixture conversation one",
             "mailboxId": 1,
-            "assigneeId": 1,
+            "assignee": {
+              "id": 1,
+              "type": "user",
+              "first": "Fixture",
+              "last": "Agent",
+              "email": "agent.one@example.com"
+            },
             "preview": "fixture preview one",
             "threads": 2,
             "createdAt": "2026-01-01T00:00:00Z",
@@ -34,7 +40,13 @@
             "state": "published",
             "subject": "Fixture conversation two",
             "mailboxId": 1,
-            "assigneeId": 1,
+            "assignee": {
+              "id": 2,
+              "type": "user",
+              "first": "Fixture",
+              "last": "Agent Two",
+              "email": "agent.two@example.com"
+            },
             "preview": "fixture preview two",
             "threads": 1,
             "createdAt": "2026-01-02T00:00:00Z",

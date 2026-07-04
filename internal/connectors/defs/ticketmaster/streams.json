@@ -9,7 +9,7 @@
       "type": "page_number",
       "page_param": "page",
       "size_param": "size",
-      "start_page": 1,
+      "start_page": 0,
       "page_size": 200
     },
     "check": { "method": "GET", "path": "/classifications.json" },

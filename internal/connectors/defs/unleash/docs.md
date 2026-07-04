@@ -48,14 +48,18 @@ toggle mutation is a side-effecting action inappropriate for a generic reverse-E
 ## Known limits
 
 - Legacy's `projects`/`environments`/`segments` record mappers derive `id` as `first(item, "id",
-  "name")` — a defensive fallback to the `name` field when a raw record has no `id` at all. This
-  bundle projects the raw `id` field directly with no fallback: the fallback path is untested in
-  legacy (no test exercises it) and Unleash's real admin API always returns an `id` on every project/
-  environment/segment object, so this narrowing never changes behavior for any record the real API
-  actually returns. The dialect has no coalesce/fallback template combinator (`computed_fields`
-  supports a single bare reference, a filter chain, or a static literal — not an either-or of two
-  reference paths), so a hypothetical malformed record missing `id` entirely would be dropped from
-  projection here (schema `required: ["id"]`) rather than falling back to `name` as legacy would.
+  "name")` — the raw `id` field, falling back to `name` when a record has no `id`. `projects` and
+  `segments` objects DO carry a real `id` from the Unleash admin API (distinct from `name`), so those
+  streams project the raw `id` directly. The `environments` list endpoint (`GET
+  /api/admin/environments`), by contrast, returns NO `id` on any record — per Unleash's own
+  `environmentSchema` the object is keyed on `name` (properties `name`/`type`/`enabled`/`protected`/
+  `sortOrder`, no `id`) — so legacy's `first(item, "id", "name")` ALWAYS resolves to `name` there.
+  This bundle reproduces that exactly with a `computed_fields` rename (`"id": "{{ record.name }}"`) on
+  the `environments` stream, emitting `{"id": name, "name": name}` for every record just as legacy
+  does; the environments fixture carries the real wire shape (no fabricated `id`). Because the derived
+  `id` always equals `name`, `x-primary-key: ["id"]` / `required: ["id"]` stay satisfied for every
+  record the real API returns. (There is no coalesce/fallback combinator for a record that carries a
+  real `id` on SOME rows and none on others within one stream, but no Unleash stream has that shape.)
 - `page_size` (100) and `max_pages` (1) are fixed values baked into `streams.json`'s
   `base.pagination` block, not exposed as runtime `spec.json` config properties — the engine's
   pagination spec has no config-templating mechanism. This matches legacy's own DEFAULT behavior

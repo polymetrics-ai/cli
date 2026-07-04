@@ -60,7 +60,7 @@
     {
       "name": "images",
       "path": "/images",
-      "records": { "path": "items" },
+      "records": { "path": "" },
       "schema": "schemas/images.json"
     }
   ]

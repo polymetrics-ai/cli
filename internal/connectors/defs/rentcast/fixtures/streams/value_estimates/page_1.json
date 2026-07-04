@@ -9,12 +9,22 @@
   },
   "response": {
     "status": 200,
-    "body": [
-      {
-        "id": "value_fixture_1",
-        "formattedAddress": "1 Fixture Blvd, Fixture City, CA 90000",
-        "price": 400000
-      }
-    ]
+    "body": {
+      "price": 400000,
+      "priceRangeLow": 380000,
+      "priceRangeHigh": 420000,
+      "latitude": 34.052235,
+      "longitude": -118.243683,
+      "formattedAddress": "1 Fixture Blvd, Fixture City, CA 90000",
+      "comparables": [
+        {
+          "id": "1-Comparable-St,-Fixture-City,-CA-90000",
+          "formattedAddress": "1 Comparable St, Fixture City, CA 90000",
+          "price": 395000,
+          "distance": 0.42,
+          "correlation": 0.98
+        }
+      ]
+    }
   }
 }

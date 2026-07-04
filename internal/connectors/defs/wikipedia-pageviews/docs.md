@@ -64,15 +64,17 @@ None. This connector is read-only in both legacy and this bundle (`capabilities.
   `top_articles` must now split it into `year`/`month`/`day` themselves; the emitted path segments
   (and therefore the request and its data) are byte-identical once the caller does so.
 - **`top_articles`'s emitted `id` field reproduces a real but degenerate legacy quirk.** Legacy's
-  `recordID` helper builds `id` from `item["project"]`/`item["article"]`/`item["timestamp"]`, none
-  of which exist on a real `top_articles` API item (that shape carries `project`/`access`/
-  `year`/`month`/`day`/`country`/`articles[]` instead, with no per-item `article`/`timestamp`
-  field and no `id`). Because `fmt.Sprint(nil)` renders `"<nil>"`, legacy's own `top_articles`
-  records are therefore emitted with the literal string id `"<config.project>:<nil>:<nil>"` for
-  every record — a real, if odd, legacy behavior. This bundle reproduces it exactly via the
-  computed field `"id": "{{ config.project }}:<nil>:<nil>"` rather than "fixing" it into something
-  more useful, per the meta-rule that a deviation from legacy's actual emitted data is never
-  acceptable even when the legacy behavior looks like a bug.
+  `recordID` helper builds `id` from `item["project"]`/`item["article"]`/`item["timestamp"]`. A real
+  `top_articles` API item carries `project`/`access`/`year`/`month`/`day`/`country`/`articles[]`,
+  with no per-item `article`/`timestamp` field and no `id`. Because the record's own `project` field
+  *is* present, `recordID` uses it directly (`parts[0] = fmt.Sprint(item["project"])`); the
+  `cfg.Config["project"]` fallback only fires when `parts[0] == "<nil>"`, which never happens on this
+  wire shape. The `article`/`timestamp` fields are absent, so `fmt.Sprint(nil)` renders them as
+  `"<nil>"`. Legacy therefore emits the id `"<record.project>:<nil>:<nil>"` for every record — a
+  real, if odd, legacy behavior. This bundle reproduces it exactly via the computed field
+  `"id": "{{ record.project }}:<nil>:<nil>"` rather than "fixing" it into something more useful, per
+  the meta-rule that a deviation from legacy's actual emitted data is never acceptable even when the
+  legacy behavior looks like a bug.
 - **`country` is declared as a raw schema property but is rarely present on real `items` entries**
   (it is a path parameter, not part of the response body, on the real Wikimedia API); legacy's own
   Field declaration includes it regardless, so this bundle's schema does too, for byte-for-byte

@@ -35,7 +35,8 @@
         "extension_number": "{{ record.extensionNumber }}",
         "stream": "extensions"
       },
-      "schema": "schemas/extensions.json"
+      "schema": "schemas/extensions.json",
+      "projection": "passthrough"
     },
     {
       "name": "call_log",
@@ -52,7 +53,8 @@
         "start_time": "{{ record.startTime }}",
         "stream": "call_log"
       },
-      "schema": "schemas/call_log.json"
+      "schema": "schemas/call_log.json",
+      "projection": "passthrough"
     },
     {
       "name": "messages",
@@ -69,7 +71,8 @@
         "creation_time": "{{ record.creationTime }}",
         "stream": "messages"
       },
-      "schema": "schemas/messages.json"
+      "schema": "schemas/messages.json",
+      "projection": "passthrough"
     },
     {
       "name": "contacts",
@@ -87,7 +90,8 @@
         "last_name": "{{ record.lastName }}",
         "stream": "contacts"
       },
-      "schema": "schemas/contacts.json"
+      "schema": "schemas/contacts.json",
+      "projection": "passthrough"
     },
     {
       "name": "devices",
@@ -101,7 +105,8 @@
         "direction": { "template": "{{ config.direction }}", "omit_when_absent": true }
       },
       "computed_fields": { "stream": "devices" },
-      "schema": "schemas/devices.json"
+      "schema": "schemas/devices.json",
+      "projection": "passthrough"
     }
   ]
 }

@@ -38,7 +38,7 @@
       "path": "/marketers/{marketerId}/reports",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "returns or manages file/download payloads rather than JSON records expressible by this connector bundle"
+        "reason": "marketer-scoped variant of /reports (identical JSON records at results); the marketer_id path-scoping branch is deferred to Pass B, so only the unscoped /reports stream is modeled"
       }
     },
     {

@@ -24,7 +24,7 @@
       "records": { "path": "items" },
       "projection": "passthrough",
       "computed_fields": {
-        "id": "{{ config.project }}:<nil>:<nil>"
+        "id": "{{ record.project }}:<nil>:<nil>"
       },
       "schema": "schemas/top_articles.json"
     }

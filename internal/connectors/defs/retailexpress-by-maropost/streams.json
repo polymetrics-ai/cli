@@ -37,7 +37,8 @@
       "computed_fields": {
         "stream": "products"
       },
-      "schema": "schemas/products.json"
+      "schema": "schemas/products.json",
+      "projection": "passthrough"
     },
     {
       "name": "customers",
@@ -55,7 +56,8 @@
       "computed_fields": {
         "stream": "customers"
       },
-      "schema": "schemas/customers.json"
+      "schema": "schemas/customers.json",
+      "projection": "passthrough"
     },
     {
       "name": "orders",
@@ -73,7 +75,8 @@
       "computed_fields": {
         "stream": "orders"
       },
-      "schema": "schemas/orders.json"
+      "schema": "schemas/orders.json",
+      "projection": "passthrough"
     },
     {
       "name": "stock_levels",
@@ -91,7 +94,8 @@
       "computed_fields": {
         "stream": "stock_levels"
       },
-      "schema": "schemas/stock_levels.json"
+      "schema": "schemas/stock_levels.json",
+      "projection": "passthrough"
     },
     {
       "name": "stores",
@@ -106,7 +110,8 @@
       "computed_fields": {
         "stream": "stores"
       },
-      "schema": "schemas/stores.json"
+      "schema": "schemas/stores.json",
+      "projection": "passthrough"
     }
   ]
 }

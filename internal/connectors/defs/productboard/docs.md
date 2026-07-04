@@ -79,9 +79,18 @@ None. Productboard's mutating endpoints are intentionally unsupported by legacy 
   of both keys side-by-side**, not a computed rename, since the engine's `computed_fields` dialect
   has no multi-key coalesce filter. Not exercised as a genuine divergence by legacy's own test
   fixtures (see Streams notes above).
-- **Legacy's `raw` escape-hatch field is not modeled.** `mapRecord` stamps a full copy of the
-  source item onto every record under the key `raw` (`productboard.go:178`). The engine's
-  `computed_fields` dialect has no whole-record reference primitive, so this cannot be expressed.
+- **Legacy's `raw` escape-hatch is preserved via `projection: "passthrough"`.** `mapRecord`
+  stamps a full copy of the source item onto every record under the key `raw`
+  (`productboard.go:178`), which is how every non-allowlisted real Productboard field
+  (description, owner, timeframe, links, custom fields, etc.) reached the destination. All 4
+  streams declare `projection: "passthrough"` so every raw source field survives unfiltered
+  rather than being narrowed to the 6 schema-declared properties. Shape note: passthrough
+  surfaces the source object's fields at the record top level, whereas legacy nested the full
+  copy under a literal `raw` key — the substantive data (every real field) is preserved
+  identically; only the nesting differs. The engine's `computed_fields` dialect has no
+  whole-record reference primitive, so reproducing the exact literal `raw` nesting is not
+  expressible, but passthrough eliminates the field-drop data-loss that a schema-mode allowlist
+  would silently cause.
 - **Legacy's fixture-mode-only synthetic records are not modeled.** Legacy's `readFixture` path
   (only reached when `config.mode == "fixture"`) emits synthetic records with an id shaped
   `"<stream>_<n>"` (not derived from any real API field); this bundle targets the live path only,

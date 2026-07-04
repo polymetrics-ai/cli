@@ -67,9 +67,9 @@ bundle carries an explicit `"conformance": {"skip_dynamic": true, "reason": "...
 fixture-replay check for these streams, since the StreamHook (always `handled=true`) is what every
 real `Read()` call actually dispatches through, and a declarative-only fixture replay cannot
 exercise an absolute-URL-follow loop at all. The authoritative substitute this marker names is
-`paritytest/microsoft-dataverse`'s dedicated 2-page `@odata.nextLink` test
-(`TestParityMicrosoftDataverse_AccountsNextLinkPagination`) and
-`hooks/microsoft-dataverse/hooks_test.go`.
+`hooks/microsoft-dataverse/hooks_test.go`'s dedicated 2-page `@odata.nextLink` test
+(`TestReadStream_NextLinkPaginationFollowsAbsoluteURL`, an `httptest.Server`-backed 2-page
+absolute-URL follow that asserts exactly 2 requests, 3 records, and correct field mapping).
 
 `max_pages` is a hook-consumed `spec.json` config value (permissive parse: empty/`all`/`unlimited`
 means unbounded), matching legacy's own `maxPages` parsing exactly — it is NOT a declarative
@@ -120,11 +120,10 @@ and no `writes.json` is declared.
   `microsoft-entra-id`'s own bundle-level marker (same dual when-gated
   `oauth2_client_credentials` auth candidates, same synthetic-config false-positive trigger).
   Static checks (spec/schema validity, `interpolations_resolve`, docs/fixtures presence, secret
-  redaction) still run and pass. Parity for both auth-candidate-ordering and the
-  pagination/schema-projection shape is proven by `paritytest/microsoft-dataverse` (a live
-  `httptest.Server`-backed 2-page `@odata.nextLink` follow test,
-  `TestParityMicrosoftDataverse_AccountsNextLinkPagination`) and
-  `hooks/microsoft-dataverse/hooks_test.go`'s unit coverage — this mirrors the identical,
+  redaction) still run and pass. Parity for the pagination/schema-projection shape is proven by
+  `hooks/microsoft-dataverse/hooks_test.go`'s unit coverage (a live `httptest.Server`-backed 2-page
+  `@odata.nextLink` follow test, `TestReadStream_NextLinkPaginationFollowsAbsoluteURL`, plus
+  no-nextLink single-page, name-fallback, and unknown-stream cases) — this mirrors the identical,
   already-accepted `microsoft-entra-id`/`microsoft-teams`/`sharepoint-lists-enterprise`
   `skip_dynamic` precedents for hook-covered or token-endpoint-derivation-blocked bundles.
 - `page_size` is runtime-configurable (`config.page_size`, default 100, matching legacy's

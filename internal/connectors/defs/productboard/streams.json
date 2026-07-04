@@ -25,7 +25,8 @@
         "type": "next_url",
         "next_url_path": "links.next"
       },
-      "schema": "schemas/features.json"
+      "schema": "schemas/features.json",
+      "projection": "passthrough"
     },
     {
       "name": "notes",
@@ -39,7 +40,8 @@
         "type": "next_url",
         "next_url_path": "links.next"
       },
-      "schema": "schemas/notes.json"
+      "schema": "schemas/notes.json",
+      "projection": "passthrough"
     },
     {
       "name": "components",
@@ -53,7 +55,8 @@
         "type": "next_url",
         "next_url_path": "links.next"
       },
-      "schema": "schemas/components.json"
+      "schema": "schemas/components.json",
+      "projection": "passthrough"
     },
     {
       "name": "products",
@@ -67,7 +70,8 @@
         "type": "next_url",
         "next_url_path": "links.next"
       },
-      "schema": "schemas/products.json"
+      "schema": "schemas/products.json",
+      "projection": "passthrough"
     }
   ]
 }

@@ -36,7 +36,8 @@
       "name": "environments",
       "path": "/api/admin/environments",
       "records": { "path": "environments" },
-      "schema": "schemas/environments.json"
+      "schema": "schemas/environments.json",
+      "computed_fields": { "id": "{{ record.name }}" }
     },
     {
       "name": "segments",

@@ -13,14 +13,14 @@
     },
     {
       "method": "GET",
-      "path": "/api/v2/feedback",
+      "path": "/api/v2/responses",
       "covered_by": {
         "stream": "responses"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v2/campaigns",
+      "path": "/api/v2/surveys",
       "covered_by": {
         "stream": "surveys"
       }

@@ -40,8 +40,9 @@
       },
       "records": { "path": "domains" },
       "computed_fields": {
-        "id": "{{ record.idString }}",
+        "id": "{{ record.id }}",
         "title": "{{ record.title }}",
+        "name": "{{ record.hostname }}",
         "updated_at": "{{ record.updatedAt }}"
       },
       "schema": "schemas/domains.json"

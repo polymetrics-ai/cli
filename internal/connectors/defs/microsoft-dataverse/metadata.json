@@ -22,6 +22,6 @@
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "Every stream is StreamHook-handled (hooks/microsoft-dataverse/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all — see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-dataverse (TestParityMicrosoftDataverse_AccountsNextLinkPagination) and internal/connectors/hooks/microsoft-dataverse/hooks_test.go."
+    "reason": "Every stream is StreamHook-handled (hooks/microsoft-dataverse/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all — see docs.md's Streams notes). hook-covered; proven live by internal/connectors/hooks/microsoft-dataverse/hooks_test.go (TestReadStream_NextLinkPaginationFollowsAbsoluteURL, an httptest.Server-backed 2-page @odata.nextLink absolute-URL follow)."
   }
 }

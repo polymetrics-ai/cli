@@ -62,11 +62,6 @@
         "request_param": "fromDateTime",
         "start_config_key": "start_date"
       },
-      "computed_fields": {
-        "scorecard_id": "{{ record.scorecardId }}",
-        "scorecard_name": "{{ record.scorecardName }}",
-        "workspace_id": "{{ record.workspaceId }}"
-      },
       "schema": "schemas/scorecards.json"
     }
   ]

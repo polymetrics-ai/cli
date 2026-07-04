@@ -4,8 +4,8 @@
     "status": 200,
     "body": {
       "data": [
-        { "id": 1001, "name": "Fixture story one", "state": "started", "updated_at": "2026-01-01T00:00:00Z" },
-        { "id": 1002, "name": "Fixture story two", "state": "unstarted", "updated_at": "2026-01-02T00:00:00Z" }
+        { "id": 1001, "name": "Fixture story one", "workflow_state_id": 500001, "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": 1002, "name": "Fixture story two", "workflow_state_id": 500002, "updated_at": "2026-01-02T00:00:00Z" }
       ],
       "next": "fixture_cursor_2"
     }

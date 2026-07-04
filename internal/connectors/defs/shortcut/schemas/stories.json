@@ -8,7 +8,7 @@
   "properties": {
     "id": { "type": "integer" },
     "name": { "type": ["string", "null"] },
-    "state": { "type": ["string", "null"] },
+    "state": { "type": ["integer", "string", "null"] },
     "updated_at": { "type": ["string", "null"] }
   }
 }
