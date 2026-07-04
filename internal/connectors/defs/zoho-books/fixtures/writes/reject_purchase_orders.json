@@ -1,0 +1,16 @@
+{
+  "record": {
+    "purchaseorder_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/purchaseorders/synthetic-conformance-value/reject"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

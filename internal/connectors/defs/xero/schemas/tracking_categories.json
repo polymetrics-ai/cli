@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tracking_categories",
+  "type": "object",
+  "x-primary-key": [
+    "TrackingCategoryID"
+  ],
+  "properties": {
+    "TrackingCategoryID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TrackingOptionID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Option": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Options": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

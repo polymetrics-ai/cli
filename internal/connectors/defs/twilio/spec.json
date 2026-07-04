@@ -2,7 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Twilio Connection Specification",
   "type": "object",
-  "required": ["account_sid", "auth_token"],
+  "required": [
+    "account_sid",
+    "auth_token"
+  ],
   "properties": {
     "account_sid": {
       "type": "string",
@@ -33,6 +36,74 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "add_on_result_sid": {
+      "type": "string",
+      "description": "Twilio AddOnResult SID used by docs-derived detail streams."
+    },
+    "address_sid": {
+      "type": "string",
+      "description": "Twilio Address SID used by docs-derived nested streams."
+    },
+    "assigned_add_on_sid": {
+      "type": "string",
+      "description": "Twilio Assigned Add-on SID used by docs-derived nested streams."
+    },
+    "call_sid": {
+      "type": "string",
+      "description": "Twilio Call SID used by docs-derived nested streams."
+    },
+    "conference_sid": {
+      "type": "string",
+      "description": "Twilio Conference SID used by docs-derived nested streams."
+    },
+    "connect_app_sid": {
+      "type": "string",
+      "description": "Twilio Connect App SID used by docs-derived detail streams."
+    },
+    "country_code": {
+      "type": "string",
+      "description": "ISO country code used by available phone number streams."
+    },
+    "credential_list_sid": {
+      "type": "string",
+      "description": "Twilio SIP Credential List SID used by docs-derived nested streams."
+    },
+    "domain_sid": {
+      "type": "string",
+      "description": "Twilio SIP Domain SID used by docs-derived nested streams."
+    },
+    "ip_access_control_list_sid": {
+      "type": "string",
+      "description": "Twilio SIP IP Access Control List SID used by docs-derived nested streams."
+    },
+    "message_sid": {
+      "type": "string",
+      "description": "Twilio Message SID used by docs-derived media and feedback streams."
+    },
+    "payload_sid": {
+      "type": "string",
+      "description": "Twilio Add-on payload SID used by docs-derived payload-data streams."
+    },
+    "queue_sid": {
+      "type": "string",
+      "description": "Twilio Queue SID used by docs-derived queue member streams."
+    },
+    "recording_sid": {
+      "type": "string",
+      "description": "Twilio Recording SID used by docs-derived transcription streams."
+    },
+    "reference_sid": {
+      "type": "string",
+      "description": "Twilio recording reference SID used by docs-derived Add-on result streams."
+    },
+    "resource_sid": {
+      "type": "string",
+      "description": "Twilio resource SID used by assigned Add-on streams."
+    },
+    "sid": {
+      "type": "string",
+      "description": "Generic Twilio resource SID for docs-derived detail streams and account-level resources."
     }
   }
 }

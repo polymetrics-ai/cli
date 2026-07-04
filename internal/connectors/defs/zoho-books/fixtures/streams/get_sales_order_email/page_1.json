@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/salesorders/synthetic-conformance-value/email",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "data": [
+        {
+          "entity_id": "get_sales_order_email_fixture_1",
+          "customer_name": "get_sales_order_email fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "get_sales_order_email_fixture_1",
+          "name": "get_sales_order_email fixture 1"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "invoice_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/invoices/synthetic-conformance-value/einvoice/status"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoice",
+  "type": "object",
+  "x-primary-key": [
+    "InvoiceID"
+  ],
+  "properties": {
+    "Type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Contact": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "LineItems": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "DueDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LineAmountTypes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "InvoiceNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BrandingThemeID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyRate": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SentToContact": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "ExpectedPaymentDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PlannedPaymentDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CISDeduction": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "CISRate": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "SubTotal": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "TotalTax": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Total": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "TotalDiscount": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "InvoiceID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "RepeatingInvoiceID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "HasAttachments": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "IsDiscounted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "Payments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Prepayments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Overpayments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "AmountDue": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "AmountPaid": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "FullyPaidOnDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "AmountCredited": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CreditNotes": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Attachments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "HasErrors": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "StatusAttributeString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Warnings": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "InvoiceAddresses": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "invoice_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

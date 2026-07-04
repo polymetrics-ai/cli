@@ -1,0 +1,17 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "settings_to_copy": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/synthetic-conformance-value/copysettings"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

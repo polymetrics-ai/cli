@@ -1,14 +1,14 @@
 {
   "name": "zoho-books",
   "display_name": "Zoho Books",
-  "description": "Reads Zoho Books contacts, invoices, and items through the Zoho Books REST API.",
+  "description": "Reads and writes Zoho Books API v3 accounting resources using the declarative connector engine.",
   "integration_type": "api",
   "docs_url": "https://www.zoho.com/books/api/v3/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -18,6 +18,7 @@
   },
   "risk": {
     "read": "external Zoho Books API read of accounting/contact data",
-    "approval": "none; read-only"
+    "write": "external Zoho Books API mutation of accounting, contact, inventory, project, banking, tax, and organization-adjacent records",
+    "approval": "writes require explicit user approval before execution; destructive deletes are marked destructive"
   }
 }

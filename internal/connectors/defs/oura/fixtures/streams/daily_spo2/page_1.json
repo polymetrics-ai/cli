@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/daily_spo2"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "daily_spo2_fixture_1",
+          "breathing_disturbance_index": 80,
+          "day": "2026-01-01",
+          "spo2_percentage": {}
+        }
+      ],
+      "next_token": null
+    }
+  }
+}

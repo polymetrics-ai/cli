@@ -1,0 +1,16 @@
+{
+  "record": {
+    "creditnote_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/einvoices/creditnotes/synthetic-conformance-value/cancel"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

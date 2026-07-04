@@ -1,0 +1,16 @@
+{
+  "record": {
+    "account_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bankaccounts/synthetic-conformance-value/inactive"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

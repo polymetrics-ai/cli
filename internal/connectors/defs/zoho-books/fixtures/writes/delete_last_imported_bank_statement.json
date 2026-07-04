@@ -1,0 +1,17 @@
+{
+  "record": {
+    "account_id": "synthetic-conformance-value",
+    "statement_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/bankaccounts/synthetic-conformance-value/statement/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

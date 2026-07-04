@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "heartrate",
+  "type": "object",
+  "x-primary-key": [
+    "timestamp"
+  ],
+  "required": [
+    "timestamp"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timestamp_unix": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bpm": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "timestamp"
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bills/editpage/frompurchaseorders",
+    "query": {
+      "page": "1",
+      "per_page": "200",
+      "purchaseorder_ids": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "purchaseorder_ids": [
+        {
+          "id": "convert_purchase_order_to_bill_fixture_1",
+          "name": "convert_purchase_order_to_bill fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "record": {
+    "invoice_id": "synthetic-conformance-value",
+    "payload": {
+      "fixture": true
+    },
+    "data": {
+      "fixture": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/synthetic-conformance-value/email",
+    "body": {
+      "payload": {
+        "fixture": true
+      },
+      "data": {
+        "fixture": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

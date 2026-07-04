@@ -1,0 +1,16 @@
+{
+  "record": {
+    "opening_balance_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/openingbalances/synthetic-conformance-value/writeoff"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

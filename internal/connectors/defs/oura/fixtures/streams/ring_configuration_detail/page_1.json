@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/ring_configuration/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "ring_configuration_detail_fixture_1",
+      "color": "fixture_color",
+      "design": "fixture_design",
+      "firmware_version": "fixture_firmware_version",
+      "hardware_type": "fixture_hardware_type",
+      "set_up_at": "2026-01-01T00:00:00+00:00",
+      "size": 80
+    }
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "daily_activity_detail",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "active_calories": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "average_met_minutes": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "class_5_min": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "contributors": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "day": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "equivalent_walking_distance": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "high_activity_met_minutes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "high_activity_time": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "inactivity_alerts": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "low_activity_met_minutes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "low_activity_time": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "medium_activity_met_minutes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "medium_activity_time": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "met": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "meters_to_target": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "non_wear_time": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "resting_time": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "score": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "sedentary_met_minutes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "sedentary_time": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "steps": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "target_calories": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "target_meters": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "timestamp": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_calories": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "day"
+}

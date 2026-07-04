@@ -1,0 +1,17 @@
+{
+  "record": {
+    "account_id": "synthetic-conformance-value",
+    "reconciliation_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bankaccounts/synthetic-conformance-value/reconciliations/synthetic-conformance-value/attachment"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

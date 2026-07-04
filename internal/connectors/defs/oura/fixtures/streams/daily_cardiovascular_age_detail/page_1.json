@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/daily_cardiovascular_age/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "daily_cardiovascular_age_detail_fixture_1",
+      "day": "2026-01-01",
+      "pulse_wave_velocity": 80.5,
+      "vascular_age": 80
+    }
+  }
+}

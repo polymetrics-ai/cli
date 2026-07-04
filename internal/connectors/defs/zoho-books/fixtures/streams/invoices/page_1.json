@@ -1,27 +1,33 @@
 {
-  "request": { "method": "GET", "path": "/invoices", "query": { "page": "1", "per_page": "200" } },
+  "request": {
+    "method": "GET",
+    "path": "/invoices",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "code": 0,
       "message": "success",
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      },
       "invoices": [
         {
-          "invoice_id": "invoice_fixture_1",
-          "invoice_number": "INV-000001",
-          "customer_id": "contact_fixture_1",
-          "customer_name": "Fixture Customer One",
-          "status": "sent",
-          "date": "2026-01-01",
-          "due_date": "2026-01-31",
-          "currency_code": "USD",
-          "total": 250.0,
-          "balance": 250.0,
-          "created_time": "2026-01-01T00:00:00+0000",
-          "last_modified_time": "2026-01-01T00:00:00+0000"
+          "invoice_id": "invoices_fixture_1",
+          "invoice_number": "invoices fixture 1",
+          "last_modified_time": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "invoices_fixture_1",
+          "name": "invoices fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z"
         }
-      ],
-      "page_context": { "page": 1, "per_page": 200, "has_more_page": false }
+      ]
     }
   }
 }

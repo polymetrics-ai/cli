@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "authorized_connect_app",
+  "type": "object",
+  "x-primary-key": [
+    "account_sid"
+  ],
+  "properties": {
+    "account_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "connect_app_company_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "connect_app_description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "connect_app_friendly_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "connect_app_homepage_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "connect_app_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "permissions": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "uri": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

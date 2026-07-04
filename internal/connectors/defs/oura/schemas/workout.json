@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "workout",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "activity": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "calories": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "day": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "distance": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "end_datetime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "intensity": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_datetime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "day"
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "bill_id": "synthetic-conformance-value",
+    "bill_payment_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/bills/synthetic-conformance-value/payments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

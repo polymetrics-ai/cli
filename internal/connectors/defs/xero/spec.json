@@ -2,7 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Xero Connection Specification",
   "type": "object",
-  "required": ["access_token", "tenant_id"],
+  "required": [
+    "access_token",
+    "tenant_id"
+  ],
   "properties": {
     "access_token": {
       "type": "string",
@@ -19,6 +22,126 @@
       "format": "uri",
       "default": "https://api.xero.com/api.xro/2.0",
       "description": "Xero Accounting API base URL override for tests or proxies."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Xero account id path parameter for docs-derived streams."
+    },
+    "bank_transaction_id": {
+      "type": "string",
+      "description": "Xero bank transaction id path parameter for docs-derived streams."
+    },
+    "bank_transfer_id": {
+      "type": "string",
+      "description": "Xero bank transfer id path parameter for docs-derived streams."
+    },
+    "batch_payment_id": {
+      "type": "string",
+      "description": "Xero batch payment id path parameter for docs-derived streams."
+    },
+    "branding_theme_id": {
+      "type": "string",
+      "description": "Xero branding theme id path parameter for docs-derived streams."
+    },
+    "budget_id": {
+      "type": "string",
+      "description": "Xero budget id path parameter for docs-derived streams."
+    },
+    "contact_group_id": {
+      "type": "string",
+      "description": "Xero contact group id path parameter for docs-derived streams."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Xero contact id path parameter for docs-derived streams."
+    },
+    "contact_number": {
+      "type": "string",
+      "description": "Xero contact number path parameter for docs-derived streams."
+    },
+    "credit_note_id": {
+      "type": "string",
+      "description": "Xero credit note id path parameter for docs-derived streams."
+    },
+    "expense_claim_id": {
+      "type": "string",
+      "description": "Xero expense claim id path parameter for docs-derived streams."
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Xero invoice id path parameter for docs-derived streams."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "Xero item id path parameter for docs-derived streams."
+    },
+    "journal_id": {
+      "type": "string",
+      "description": "Xero journal id path parameter for docs-derived streams."
+    },
+    "journal_number": {
+      "type": "string",
+      "description": "Xero journal number path parameter for docs-derived streams."
+    },
+    "linked_transaction_id": {
+      "type": "string",
+      "description": "Xero linked transaction id path parameter for docs-derived streams."
+    },
+    "manual_journal_id": {
+      "type": "string",
+      "description": "Xero manual journal id path parameter for docs-derived streams."
+    },
+    "organisation_id": {
+      "type": "string",
+      "description": "Xero organisation id path parameter for docs-derived streams."
+    },
+    "overpayment_id": {
+      "type": "string",
+      "description": "Xero overpayment id path parameter for docs-derived streams."
+    },
+    "payment_id": {
+      "type": "string",
+      "description": "Xero payment id path parameter for docs-derived streams."
+    },
+    "prepayment_id": {
+      "type": "string",
+      "description": "Xero prepayment id path parameter for docs-derived streams."
+    },
+    "purchase_order_id": {
+      "type": "string",
+      "description": "Xero purchase order id path parameter for docs-derived streams."
+    },
+    "purchase_order_number": {
+      "type": "string",
+      "description": "Xero purchase order number path parameter for docs-derived streams."
+    },
+    "quote_id": {
+      "type": "string",
+      "description": "Xero quote id path parameter for docs-derived streams."
+    },
+    "receipt_id": {
+      "type": "string",
+      "description": "Xero receipt id path parameter for docs-derived streams."
+    },
+    "repeating_invoice_id": {
+      "type": "string",
+      "description": "Xero repeating invoice id path parameter for docs-derived streams."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Xero report id path parameter for docs-derived streams."
+    },
+    "tax_type": {
+      "type": "string",
+      "description": "Xero tax type path parameter for docs-derived streams."
+    },
+    "tracking_category_id": {
+      "type": "string",
+      "description": "Xero tracking category id path parameter for docs-derived streams."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Xero user id path parameter for docs-derived streams."
     }
   }
 }

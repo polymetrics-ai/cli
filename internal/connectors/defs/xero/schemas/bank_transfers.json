@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "bank_transfers",
+  "type": "object",
+  "x-primary-key": [
+    "BankTransferID"
+  ],
+  "properties": {
+    "FromBankAccount": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "ToBankAccount": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Amount": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BankTransferID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyRate": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "FromBankTransactionID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ToBankTransactionID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "FromIsReconciled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "ToIsReconciled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "Reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "HasAttachments": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "CreatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

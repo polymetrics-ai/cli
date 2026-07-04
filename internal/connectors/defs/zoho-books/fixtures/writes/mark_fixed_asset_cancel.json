@@ -1,0 +1,16 @@
+{
+  "record": {
+    "fixed_asset_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/fixedassets/synthetic-conformance-value/status/cancel"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

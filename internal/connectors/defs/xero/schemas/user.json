@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "user",
+  "type": "object",
+  "x-primary-key": [
+    "UserID"
+  ],
+  "properties": {
+    "UserID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "EmailAddress": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "FirstName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LastName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "IsSubscriber": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "OrganisationRole": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

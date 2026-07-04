@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "report_ten_ninety_nine",
+  "type": "object",
+  "x-primary-key": [
+    "ReportName"
+  ],
+  "properties": {
+    "ReportName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ReportType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ReportTitle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ReportDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Contacts": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

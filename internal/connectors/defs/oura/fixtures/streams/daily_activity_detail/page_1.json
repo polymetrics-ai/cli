@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/daily_activity/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "daily_activity_detail_fixture_1",
+      "active_calories": 80,
+      "average_met_minutes": 80.5,
+      "class_5_min": "fixture_class_5_min",
+      "contributors": {},
+      "day": "2026-01-01",
+      "equivalent_walking_distance": 80,
+      "high_activity_met_minutes": 80,
+      "high_activity_time": 80,
+      "inactivity_alerts": 80,
+      "low_activity_met_minutes": 80,
+      "low_activity_time": 80,
+      "medium_activity_met_minutes": 80,
+      "medium_activity_time": 80,
+      "met": {},
+      "meters_to_target": 80,
+      "non_wear_time": 80,
+      "resting_time": 80,
+      "score": 80,
+      "sedentary_met_minutes": 80,
+      "sedentary_time": 80,
+      "steps": 80,
+      "target_calories": 80,
+      "target_meters": 80,
+      "timestamp": "2026-01-01T00:00:00+00:00",
+      "total_calories": 80
+    }
+  }
+}

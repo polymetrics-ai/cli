@@ -1,0 +1,16 @@
+{
+  "record": {
+    "bill_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bills/synthetic-conformance-value/status/open"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

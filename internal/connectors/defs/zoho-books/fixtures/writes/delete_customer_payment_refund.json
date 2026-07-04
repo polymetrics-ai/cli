@@ -1,0 +1,17 @@
+{
+  "record": {
+    "customer_payment_id": "synthetic-conformance-value",
+    "refund_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/customerpayments/synthetic-conformance-value/refunds/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

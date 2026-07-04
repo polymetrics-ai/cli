@@ -1,0 +1,15 @@
+{
+  "record": {
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/track1099"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "item_ids": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/items/addtoportal"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

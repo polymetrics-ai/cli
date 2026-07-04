@@ -1,0 +1,17 @@
+{
+  "record": {
+    "creditnote_id": "synthetic-conformance-value",
+    "creditnote_invoice_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/creditnotes/synthetic-conformance-value/invoices/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

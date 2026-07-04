@@ -1,0 +1,16 @@
+{
+  "record": {
+    "base_currency_adjustment_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/basecurrencyadjustment/synthetic-conformance-value/reevaluate"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

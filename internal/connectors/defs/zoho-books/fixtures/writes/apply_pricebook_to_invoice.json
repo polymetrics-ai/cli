@@ -1,0 +1,17 @@
+{
+  "record": {
+    "invoice_id": "synthetic-conformance-value",
+    "pricebook_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/invoices/synthetic-conformance-value/pricebooks/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

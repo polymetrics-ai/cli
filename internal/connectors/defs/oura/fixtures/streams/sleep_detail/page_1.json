@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/sleep/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "sleep_detail_fixture_1",
+      "average_breath": 80.5,
+      "average_heart_rate": 80.5,
+      "average_hrv": 80,
+      "awake_time": 80,
+      "bedtime_end": "2026-01-01T00:00:00+00:00",
+      "bedtime_start": "2026-01-01T00:00:00+00:00",
+      "day": "2026-01-01",
+      "deep_sleep_duration": 80,
+      "efficiency": 80,
+      "heart_rate": {},
+      "hrv": {},
+      "latency": 80,
+      "light_sleep_duration": 80,
+      "low_battery_alert": true,
+      "lowest_heart_rate": 80,
+      "movement_30_sec": "fixture_movement_30_sec",
+      "period": 80,
+      "readiness": {},
+      "readiness_score_delta": 80,
+      "rem_sleep_duration": 80,
+      "restless_periods": 80,
+      "sleep_algorithm_version": "fixture_sleep_algorithm_version",
+      "sleep_analysis_reason": "fixture_sleep_analysis_reason",
+      "sleep_phase_30_sec": "fixture_sleep_phase_30_sec",
+      "sleep_phase_5_min": "fixture_sleep_phase_5_min",
+      "sleep_score_delta": 80,
+      "time_in_bed": 80,
+      "total_sleep_duration": 80,
+      "type": "fixture_type",
+      "ring_id": "fixture_ring_id",
+      "app_sleep_phase_5_min": "fixture_app_sleep_phase_5_min"
+    }
+  }
+}

@@ -1,20 +1,6049 @@
 {
   "api": "Zoho Books API v3 (https://www.zohoapis.com/books/v3)",
-  "docs": "https://www.zoho.com/books/api/v3/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (contacts, invoices, items); legacy is read-only, so there are no write endpoints in or out of scope",
+  "docs": "https://www.zoho.com/books/api/v3/openapi-all.zip",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion generated from Zoho's OpenAPI archive dated 2026-06-25: 175 JSON GET streams, 569 JSON/form/no-body write actions, and explicit exclusions for binary/header-only/non-record operations.",
   "endpoints": [
-    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } },
-    { "method": "GET", "path": "/items", "covered_by": { "stream": "items" } },
-    { "method": "GET", "path": "/estimates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/creditnotes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/customerpayments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/bills", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/expenses", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/chartofaccounts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "legacy zoho-books connector is read-only; write support is Pass B capability expansion" } },
-    { "method": "POST", "path": "/invoices", "excluded": { "category": "out_of_scope", "reason": "legacy zoho-books connector is read-only; write support is Pass B capability expansion" } },
-    { "method": "GET", "path": "/organizations", "excluded": { "category": "non_data_endpoint", "reason": "organization metadata listing, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts",
+      "covered_by": {
+        "stream": "list_bank_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bankaccounts",
+      "covered_by": {
+        "write": "create_bank_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/balances",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/import/encryptionkey",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/overview",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}",
+      "covered_by": {
+        "stream": "get_bank_account"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bankaccounts/{account_id}",
+      "covered_by": {
+        "write": "update_bank_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bankaccounts/{account_id}",
+      "covered_by": {
+        "write": "delete_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bankaccounts/{account_id}/active",
+      "covered_by": {
+        "write": "mark_bank_account_active"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/balance",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/balances",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bankaccounts/{account_id}/inactive",
+      "covered_by": {
+        "write": "mark_bank_account_inactive"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/insights",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/overview",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/preferences",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bankaccounts/{account_id}/preferences",
+      "covered_by": {
+        "write": "update_bank_account_preferences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/reconciliations",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bankaccounts/{account_id}/reconciliations",
+      "covered_by": {
+        "write": "create_bank_reconciliation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/reconciliations/{reconciliation_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bankaccounts/{account_id}/reconciliations/{reconciliation_id}",
+      "covered_by": {
+        "write": "update_bank_reconciliation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bankaccounts/{account_id}/reconciliations/{reconciliation_id}",
+      "covered_by": {
+        "write": "delete_bank_reconciliation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bankaccounts/{account_id}/reconciliations/{reconciliation_id}/attachment",
+      "covered_by": {
+        "write": "add_bank_reconciliation_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/reconciliations/{reconciliation_id}/documents/{document_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bankaccounts/{account_id}/reconciliations/{reconciliation_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "delete_bank_reconciliation_document"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bankaccounts/{account_id}/reconciliations/{reconciliation_id}/draft",
+      "covered_by": {
+        "write": "save_bank_reconciliation_draft"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/statement/lastimported",
+      "covered_by": {
+        "stream": "get_last_imported_bank_statement"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bankaccounts/{account_id}/statement/{statement_id}",
+      "covered_by": {
+        "write": "delete_last_imported_bank_statement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/statements",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/statements/unreviewed",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/statementsummary",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/subaccounts",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/{account_id}/transactions",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bankstatements",
+      "covered_by": {
+        "write": "import_bank_statements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/matchfilters",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bankaccounts/matchfilters",
+      "covered_by": {
+        "write": "create_bank_account_match_filter"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bankaccounts/matchfilters/{match_filter_id}",
+      "covered_by": {
+        "write": "update_bank_account_match_filter"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bankaccounts/matchfilters/{match_filter_id}",
+      "covered_by": {
+        "write": "delete_bank_account_match_filter"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/rules",
+      "covered_by": {
+        "stream": "list_bank_account_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bankaccounts/rules",
+      "covered_by": {
+        "write": "create_bank_account_rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bankaccounts/rules",
+      "covered_by": {
+        "write": "bulk_update_bank_account_rules"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bankaccounts/rules",
+      "covered_by": {
+        "write": "bulk_delete_bank_account_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bankaccounts/rules/order",
+      "covered_by": {
+        "write": "reorder_bank_account_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bankaccounts/rules/skipsuggest",
+      "covered_by": {
+        "write": "skip_suggested_bank_account_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bankaccounts/rules/{rule_id}",
+      "covered_by": {
+        "stream": "get_bank_account_rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bankaccounts/rules/{rule_id}",
+      "covered_by": {
+        "write": "update_bank_account_rule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bankaccounts/rules/{rule_id}",
+      "covered_by": {
+        "write": "delete_bank_account_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/banktransactions",
+      "covered_by": {
+        "stream": "list_bank_transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions",
+      "covered_by": {
+        "write": "create_bank_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{statement_line_id}/categorize/paymentrefunds",
+      "covered_by": {
+        "write": "categorize_bank_transaction_as_payment_refund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{statement_line_id}/categorize/vendorpaymentrefunds",
+      "covered_by": {
+        "write": "categorize_as_vendor_payment_refund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{transaction_id}/categorize",
+      "covered_by": {
+        "write": "categorize_bank_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{transaction_id}/categorize/creditnoterefunds",
+      "covered_by": {
+        "write": "categorize_as_credit_note_refunds"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{transaction_id}/categorize/customerpayments",
+      "covered_by": {
+        "write": "categorize_bank_transaction_as_customer_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{transaction_id}/categorize/expenses",
+      "covered_by": {
+        "write": "categorize_bank_transaction_as_expense"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{transaction_id}/categorize/vendorcreditrefunds",
+      "covered_by": {
+        "write": "categorize_as_vendor_credit_refunds"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{transaction_id}/categorize/vendorpayments",
+      "covered_by": {
+        "write": "categorize_bank_transaction_as_vendor_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{transaction_id}/exclude",
+      "covered_by": {
+        "write": "exclude_bank_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/banktransactions/uncategorized/{transaction_id}/match",
+      "covered_by": {
+        "stream": "get_matching_bank_transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{transaction_id}/match",
+      "covered_by": {
+        "write": "match_bank_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/uncategorized/{transaction_id}/restore",
+      "covered_by": {
+        "write": "restore_bank_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/banktransactions/{bank_transaction_id}",
+      "covered_by": {
+        "stream": "get_bank_transaction"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/banktransactions/{bank_transaction_id}",
+      "covered_by": {
+        "write": "update_bank_transaction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/banktransactions/{bank_transaction_id}",
+      "covered_by": {
+        "write": "delete_bank_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/{transaction_id}/uncategorize",
+      "covered_by": {
+        "write": "uncategorize_bank_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/banktransactions/{transaction_id}/unmatch",
+      "covered_by": {
+        "write": "unmatch_bank_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/basecurrencyadjustment",
+      "covered_by": {
+        "stream": "list_base_currency_adjustments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/basecurrencyadjustment",
+      "covered_by": {
+        "write": "create_base_currency_adjustment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/basecurrencyadjustment/accounts",
+      "covered_by": {
+        "stream": "list_base_currency_adjustment_accounts"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/basecurrencyadjustment/bulkdelete",
+      "covered_by": {
+        "write": "bulk_delete_base_currency_adjustments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/basecurrencyadjustment/contacts",
+      "covered_by": {
+        "stream": "list_base_currency_adjustment_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/basecurrencyadjustment/{base_currency_adjustment_id}",
+      "covered_by": {
+        "stream": "get_base_currency_adjustment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/basecurrencyadjustment/{base_currency_adjustment_id}",
+      "covered_by": {
+        "write": "delete_base_currency_adjustment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/basecurrencyadjustment/{base_currency_adjustment_id}/reevaluate",
+      "covered_by": {
+        "write": "reevaluate_base_currency_adjustment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bill/{bill_id}/customfields",
+      "covered_by": {
+        "write": "update_custom_fields_in_bill"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bills",
+      "covered_by": {
+        "stream": "list_bills"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bills",
+      "covered_by": {
+        "write": "create_bill"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bills",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bills/editpage/frompurchaseorders",
+      "covered_by": {
+        "stream": "convert_purchase_order_to_bill"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bills/{bill_id}",
+      "covered_by": {
+        "stream": "get_bill"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bills/{bill_id}",
+      "covered_by": {
+        "write": "update_bill"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bills/{bill_id}",
+      "covered_by": {
+        "write": "delete_bill"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bills/{bill_id}/address/billing",
+      "covered_by": {
+        "write": "update_bill_billing_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bills/{bill_id}/approve",
+      "covered_by": {
+        "write": "approve_bill"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bills/{bill_id}/attachment",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bills/{bill_id}/attachment",
+      "covered_by": {
+        "write": "add_bill_attachment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bills/{bill_id}/attachment",
+      "covered_by": {
+        "write": "delete_bill_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bills/{bill_id}/comments",
+      "covered_by": {
+        "stream": "get_bill_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bills/{bill_id}/comments",
+      "covered_by": {
+        "write": "add_bill_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bills/{bill_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_bill_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bills/{bill_id}/credits",
+      "covered_by": {
+        "write": "apply_credits_to_bill"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bills/{bill_id}/payments",
+      "covered_by": {
+        "stream": "list_bill_payments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bills/{bill_id}/payments/{bill_payment_id}",
+      "covered_by": {
+        "write": "delete_bill_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bills/{bill_id}/status/open",
+      "covered_by": {
+        "write": "mark_bill_open"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bills/{bill_id}/status/void",
+      "covered_by": {
+        "write": "mark_bill_void"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bills/{bill_id}/submit",
+      "covered_by": {
+        "write": "submit_bill"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/chartofaccounts",
+      "covered_by": {
+        "stream": "list_chart_of_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/chartofaccounts",
+      "covered_by": {
+        "write": "create_chart_of_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/chartofaccounts/accounttransactions",
+      "covered_by": {
+        "stream": "list_chart_of_account_transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/chartofaccounts/active",
+      "covered_by": {
+        "write": "bulk_mark_chart_of_accounts_active"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/chartofaccounts/bulkdelete",
+      "covered_by": {
+        "write": "bulk_delete_chart_of_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/chartofaccounts/inactive",
+      "covered_by": {
+        "write": "bulk_mark_chart_of_accounts_inactive"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/chartofaccounts/transactions/{transaction_id}",
+      "covered_by": {
+        "write": "delete_chart_of_account_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/chartofaccounts/{account_id}",
+      "covered_by": {
+        "stream": "get_chart_of_account"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/chartofaccounts/{account_id}",
+      "covered_by": {
+        "write": "update_chart_of_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/chartofaccounts/{account_id}",
+      "covered_by": {
+        "write": "delete_chart_of_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/chartofaccounts/{account_id}/active",
+      "covered_by": {
+        "write": "mark_chart_of_account_active"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/chartofaccounts/{account_id}/inactive",
+      "covered_by": {
+        "write": "mark_chart_of_account_inactive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/contactpersons",
+      "covered_by": {
+        "write": "create_contact_person"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/contactpersons/{contact_person_id}",
+      "covered_by": {
+        "write": "update_contact_person"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/contactpersons/{contact_person_id}",
+      "covered_by": {
+        "write": "delete_contact_person"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/contactpersons/{contact_person_id}/primary",
+      "covered_by": {
+        "write": "mark_contact_person_primary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/contactpersons",
+      "covered_by": {
+        "stream": "list_contact_persons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/contactpersons/{contact_person_id}",
+      "covered_by": {
+        "stream": "get_contact_person"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts",
+      "covered_by": {
+        "write": "delete_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/address",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/address/verify",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/bankaccounts",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/cardcount",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/contactpersons",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/contactpersons",
+      "covered_by": {
+        "write": "create_contact_person_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/contactpersons/{contactperson_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/contactpersons/{contactperson_id}",
+      "covered_by": {
+        "write": "update_contact_person_2"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/contactpersons/{contactperson_id}",
+      "covered_by": {
+        "write": "delete_contact_person_2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/contactpersons/{contactperson_id}/portal/invite",
+      "covered_by": {
+        "write": "invite_contact_person_to_portal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/contactpersons/{contactperson_id}/portal/invite/resend",
+      "covered_by": {
+        "write": "resend_contact_person_portal_invite"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/contactpersons/{contactperson_id}/primary",
+      "covered_by": {
+        "write": "mark_contact_person_primary_2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/contactpersons/{contactperson_id}/sms/disable",
+      "covered_by": {
+        "write": "disable_contact_person_sms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/contactpersons/{contactperson_id}/sms/enable",
+      "covered_by": {
+        "write": "enable_contact_person_sms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/documents/restore",
+      "covered_by": {
+        "write": "restore_contact_documents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/owner",
+      "covered_by": {
+        "write": "assign_owner_to_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/reference/{reference_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/sms",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/sms",
+      "covered_by": {
+        "write": "send_contacts_sms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/track1099",
+      "covered_by": {
+        "write": "mark_contacts_for_1099_tracking"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "stream": "get_contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/active",
+      "covered_by": {
+        "write": "mark_contact_active"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/address",
+      "covered_by": {
+        "stream": "get_contact_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/address",
+      "covered_by": {
+        "write": "add_contact_address"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}/address/{address_id}",
+      "covered_by": {
+        "write": "update_contact_address"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/address/{address_id}",
+      "covered_by": {
+        "write": "delete_contact_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/address/{address_id}/markasbilling",
+      "covered_by": {
+        "write": "mark_contact_address_as_billing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/address/{address_id}/markasshipping",
+      "covered_by": {
+        "write": "mark_contact_address_as_shipping"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/address/{address_id}/verify",
+      "covered_by": {
+        "write": "verify_contact_address_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/attachment",
+      "covered_by": {
+        "write": "add_contact_attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/bankaccount",
+      "covered_by": {
+        "write": "add_contact_bank_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/bankaccount/{bank_account_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}/bankaccount/{bank_account_id}",
+      "covered_by": {
+        "write": "update_contact_bank_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/bankaccount/{bank_account_id}",
+      "covered_by": {
+        "write": "delete_contact_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/bankaccount/{bank_account_id}/approve",
+      "covered_by": {
+        "write": "approve_contact_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/bankaccount/{bank_account_id}/decline",
+      "covered_by": {
+        "write": "decline_contact_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/bankaccount/{bank_account_id}/verify",
+      "covered_by": {
+        "write": "verify_contact_bank_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/bankaccounts",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/card",
+      "covered_by": {
+        "write": "add_contact_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/card/{card_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}/card/{card_id}",
+      "covered_by": {
+        "write": "update_contact_card"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/card/{card_id}",
+      "covered_by": {
+        "write": "delete_contact_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/card/{card_id}/recurringinvoices",
+      "covered_by": {
+        "stream": "list_contact_autobill_recurring_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/cards",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/clientreviews/email",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/clientreviews/email",
+      "covered_by": {
+        "write": "send_contact_client_review_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/comments",
+      "covered_by": {
+        "stream": "list_contact_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/comments",
+      "covered_by": {
+        "write": "add_contact_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_contact_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/contactpersons",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/contactpersons/{contactperson_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/documents/{document_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "update_contact_document"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "delete_contact_document"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/einvoice/verify",
+      "covered_by": {
+        "write": "verify_contact_einvoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/email",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/email",
+      "covered_by": {
+        "write": "email_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/inactive",
+      "covered_by": {
+        "write": "mark_contact_inactive"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/incomeandexpense",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/inventorysummary",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/merge",
+      "covered_by": {
+        "write": "merge_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/openingbalances",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/owner",
+      "covered_by": {
+        "write": "assign_contact_owner"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/paymentmethod/email",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/paymentmethod/email",
+      "covered_by": {
+        "write": "send_contact_payment_method_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/paymentrefunds",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/paymentreminder/disable",
+      "covered_by": {
+        "write": "disable_contact_payment_reminder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/paymentreminder/enable",
+      "covered_by": {
+        "write": "enable_contact_payment_reminder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/portal/disable",
+      "covered_by": {
+        "write": "disable_contact_portal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/portal/enable",
+      "covered_by": {
+        "write": "enable_contact_portal"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/profitandloss",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/receivables/unusedcredits",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/receivables/unusedretainerpayments",
+      "covered_by": {
+        "stream": "get_unused_retainer_payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/refunds",
+      "covered_by": {
+        "stream": "list_contact_credit_note_refunds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/sms",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/sms",
+      "covered_by": {
+        "write": "send_contact_sms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/statements",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/statements/email",
+      "covered_by": {
+        "stream": "get_contact_statement_mail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/statements/email",
+      "covered_by": {
+        "write": "email_contact_statement"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}/tags",
+      "covered_by": {
+        "write": "update_contact_tags"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "delete_contact_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/taxinfo",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/taxinfo",
+      "covered_by": {
+        "write": "add_contact_tax_info"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}/taxinfo/{tax_info_id}",
+      "covered_by": {
+        "write": "update_contact_tax_info"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/taxinfo/{tax_info_id}",
+      "covered_by": {
+        "write": "delete_contact_tax_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/track1099",
+      "covered_by": {
+        "write": "track_contact_1099"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/trnstatus",
+      "covered_by": {
+        "write": "update_contact_trn_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/unpaidinvoices",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/untrack1099",
+      "covered_by": {
+        "write": "untrack_contact_1099"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/vendorstatements/email",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/vendorstatements/email",
+      "covered_by": {
+        "write": "send_contact_vendor_statement_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes",
+      "covered_by": {
+        "stream": "list_credit_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes",
+      "covered_by": {
+        "write": "create_credit_note"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/creditnotes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/approve",
+      "covered_by": {
+        "write": "approve_credit_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/einvoice",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/einvoice/cancel",
+      "covered_by": {
+        "write": "cancel_credit_notes_einvoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/einvoice/push",
+      "covered_by": {
+        "write": "push_credit_notes_einvoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/print",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "OpenAPI response is binary or file-oriented rather than a JSON object collection/detail that the stream dialect can extract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/refunds",
+      "covered_by": {
+        "stream": "list_credit_note_refunds_of_all_credit_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/refunds/{refund_id}",
+      "covered_by": {
+        "stream": "get_credit_note_refund_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/submit",
+      "covered_by": {
+        "write": "submit_credit_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/templates",
+      "covered_by": {
+        "stream": "list_credit_note_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}",
+      "covered_by": {
+        "stream": "get_credit_note"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/creditnotes/{creditnote_id}",
+      "covered_by": {
+        "write": "update_credit_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/creditnotes/{creditnote_id}",
+      "covered_by": {
+        "write": "delete_credit_note"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/creditnotes/{creditnote_id}/address/billing",
+      "covered_by": {
+        "write": "update_credit_note_billing_address"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/creditnotes/{creditnote_id}/address/shipping",
+      "covered_by": {
+        "write": "update_credit_note_shipping_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/approve",
+      "covered_by": {
+        "write": "approve_credit_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/approve/final",
+      "covered_by": {
+        "write": "finalize_credit_note_approval"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/attachment",
+      "covered_by": {
+        "write": "add_credit_note_attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/cfdi/status",
+      "covered_by": {
+        "write": "update_credit_note_cfdi_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/comments",
+      "covered_by": {
+        "stream": "list_credit_note_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/comments",
+      "covered_by": {
+        "write": "add_credit_note_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/creditnotes/{creditnote_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_credit_note_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/customfields",
+      "covered_by": {
+        "stream": "get_credit_note_custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/customfields",
+      "covered_by": {
+        "write": "update_credit_note_custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/documents/{document_id}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "OpenAPI response is binary or file-oriented rather than a JSON object collection/detail that the stream dialect can extract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/creditnotes/{creditnote_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "update_credit_note_document"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/creditnotes/{creditnote_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "delete_credit_note_document"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/dsign",
+      "covered_by": {
+        "write": "add_credit_note_digital_signature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/dsign/template",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/dsign/upload",
+      "covered_by": {
+        "write": "upload_credit_note_digital_signature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/einvoice",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/einvoice/cancel",
+      "covered_by": {
+        "write": "cancel_credit_note_einvoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/einvoice/fetch",
+      "covered_by": {
+        "write": "fetch_credit_note_einvoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/einvoice/push",
+      "covered_by": {
+        "write": "push_credit_note_einvoice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/creditnotes/{creditnote_id}/einvoice/status",
+      "covered_by": {
+        "write": "delete_credit_note_einvoice_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/einvoice/status/cancel",
+      "covered_by": {
+        "write": "mark_credit_note_einvoice_cancelled"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/einvoice/status/push",
+      "covered_by": {
+        "write": "mark_credit_note_einvoice_pushed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/einvoice/status/recall",
+      "covered_by": {
+        "write": "recall_credit_note_einvoice_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/email",
+      "covered_by": {
+        "stream": "get_credit_note_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/email",
+      "covered_by": {
+        "write": "email_credit_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/emailhistory",
+      "covered_by": {
+        "stream": "get_credit_note_email_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/invoices",
+      "covered_by": {
+        "stream": "list_invoices_of_credit_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/invoices",
+      "covered_by": {
+        "write": "apply_credit_note_to_invoice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/creditnotes/{creditnote_id}/invoices/{creditnote_invoice_id}",
+      "covered_by": {
+        "write": "delete_invoice_of_credit_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/mailcontent",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/refunds",
+      "covered_by": {
+        "stream": "list_credit_note_refunds_of_a_credit_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/refunds",
+      "covered_by": {
+        "write": "create_credit_note_refund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/refunds/einvoice/push",
+      "covered_by": {
+        "write": "push_credit_note_refund_einvoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes/{creditnote_id}/refunds/{creditnote_refund_id}",
+      "covered_by": {
+        "stream": "get_credit_note_refund"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/creditnotes/{creditnote_id}/refunds/{creditnote_refund_id}",
+      "covered_by": {
+        "write": "update_credit_note_refund"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/creditnotes/{creditnote_id}/refunds/{creditnote_refund_id}",
+      "covered_by": {
+        "write": "delete_credit_note_refund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/reject",
+      "covered_by": {
+        "write": "reject_credit_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/status/draft",
+      "covered_by": {
+        "write": "mark_credit_note_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/status/open",
+      "covered_by": {
+        "write": "mark_credit_note_open"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/status/readytopush",
+      "covered_by": {
+        "write": "mark_credit_note_ready_to_push"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/status/void",
+      "covered_by": {
+        "write": "mark_credit_note_void"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/submit",
+      "covered_by": {
+        "write": "submit_credit_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditnotes/{creditnote_id}/substatus/{substatus_id}",
+      "covered_by": {
+        "write": "apply_credit_note_substatus"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/creditnotes/{creditnote_id}/substatus/{substatus_id}",
+      "covered_by": {
+        "write": "delete_credit_note_substatus"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/creditnotes/{creditnote_id}/templates/{template_id}",
+      "covered_by": {
+        "write": "update_credit_note_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/einvoices/creditnotes/{creditnote_id}/cancel",
+      "covered_by": {
+        "write": "cancel_einvoice_credit_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/currencies",
+      "covered_by": {
+        "stream": "list_currencies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/currencies",
+      "covered_by": {
+        "write": "create_currency"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/currencies/{currency_id}",
+      "covered_by": {
+        "stream": "get_currency"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/currencies/{currency_id}",
+      "covered_by": {
+        "write": "update_currency"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/currencies/{currency_id}",
+      "covered_by": {
+        "write": "delete_currency"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/currencies/{currency_id}/exchangerates",
+      "covered_by": {
+        "stream": "list_exchange_rates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/currencies/{currency_id}/exchangerates",
+      "covered_by": {
+        "write": "create_exchange_rate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/currencies/{currency_id}/exchangerates/{exchange_rate_id}",
+      "covered_by": {
+        "stream": "get_exchange_rate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/currencies/{currency_id}/exchangerates/{exchange_rate_id}",
+      "covered_by": {
+        "write": "update_exchange_rate"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/currencies/{currency_id}/exchangerates/{exchange_rate_id}",
+      "covered_by": {
+        "write": "delete_exchange_rate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/modules",
+      "covered_by": {
+        "stream": "list_custom_modules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/modules",
+      "covered_by": {
+        "write": "create_custom_module"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/modules/{module_api_name}",
+      "covered_by": {
+        "stream": "get_custom_module"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/modules/{module_api_name}",
+      "covered_by": {
+        "write": "update_custom_module"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/modules/{module_api_name}",
+      "covered_by": {
+        "write": "delete_custom_module"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_name}",
+      "covered_by": {
+        "stream": "list_custom_module_records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{module_name}",
+      "covered_by": {
+        "write": "create_custom_module_record"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/{module_name}",
+      "covered_by": {
+        "write": "bulk_update_custom_module_records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_name}",
+      "covered_by": {
+        "write": "delete_custom_module_records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_name}/{module_id}",
+      "covered_by": {
+        "stream": "get_custom_module_record"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/{module_name}/{module_id}",
+      "covered_by": {
+        "write": "update_custom_module_record"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_name}/{module_id}",
+      "covered_by": {
+        "write": "delete_custom_module_record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices",
+      "covered_by": {
+        "write": "create_customer_debit_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{debit_note_id}",
+      "covered_by": {
+        "stream": "get_customer_debit_note"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{debit_note_id}",
+      "covered_by": {
+        "write": "update_customer_debit_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{debit_note_id}",
+      "covered_by": {
+        "write": "delete_customer_debit_note"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customerpayment/{customer_payment_id}/customfields",
+      "covered_by": {
+        "write": "update_custom_fields_in_customer_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerpayments",
+      "covered_by": {
+        "stream": "list_customer_payments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customerpayments",
+      "covered_by": {
+        "write": "create_customer_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customerpayments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customerpayments",
+      "covered_by": {
+        "write": "bulk_delete_customer_payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerpayments/{customer_payment_id}/refunds",
+      "covered_by": {
+        "stream": "list_customer_payment_refunds"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customerpayments/{customer_payment_id}/refunds",
+      "covered_by": {
+        "write": "create_customer_payment_refund"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerpayments/{customer_payment_id}/refunds/{refund_id}",
+      "covered_by": {
+        "stream": "get_customer_payment_refund"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customerpayments/{customer_payment_id}/refunds/{refund_id}",
+      "covered_by": {
+        "write": "update_customer_payment_refund"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customerpayments/{customer_payment_id}/refunds/{refund_id}",
+      "covered_by": {
+        "write": "delete_customer_payment_refund"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerpayments/{payment_id}",
+      "covered_by": {
+        "stream": "get_customer_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customerpayments/{payment_id}",
+      "covered_by": {
+        "write": "update_customer_payment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customerpayments/{payment_id}",
+      "covered_by": {
+        "write": "delete_customer_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/deliverychallans",
+      "covered_by": {
+        "stream": "list_delivery_challans"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/deliverychallans",
+      "covered_by": {
+        "write": "create_delivery_challan"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/deliverychallans/return",
+      "covered_by": {
+        "write": "return_delivery_challans"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/deliverychallans/templates",
+      "covered_by": {
+        "stream": "list_delivery_challan_templates"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/deliverychallans/undo/return",
+      "covered_by": {
+        "write": "undo_return_delivery_challans"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/deliverychallans/{deliverychallan_id}",
+      "covered_by": {
+        "stream": "get_delivery_challan"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/deliverychallans/{deliverychallan_id}",
+      "covered_by": {
+        "write": "update_delivery_challan"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/deliverychallans/{deliverychallan_id}",
+      "covered_by": {
+        "write": "delete_delivery_challan"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/deliverychallans/{deliverychallan_id}/address/shipping",
+      "covered_by": {
+        "write": "update_delivery_challan_shipping_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/deliverychallans/{deliverychallan_id}/attachment",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Request body is multipart/binary/file-oriented in OpenAPI; the declarative write dialect only supports JSON, form, or empty bodies."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/deliverychallans/{deliverychallan_id}/documents/{document_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/deliverychallans/{deliverychallan_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "delete_delivery_challan_attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/deliverychallans/{deliverychallan_id}/status/delivered",
+      "covered_by": {
+        "write": "mark_delivery_challan_as_delivered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/deliverychallans/{deliverychallan_id}/status/open",
+      "covered_by": {
+        "write": "mark_delivery_challan_as_open"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/deliverychallans/{deliverychallan_id}/status/returned",
+      "covered_by": {
+        "write": "mark_delivery_challan_as_returned"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/deliverychallans/{deliverychallan_id}/status/undelivered",
+      "covered_by": {
+        "write": "mark_delivery_challan_as_undelivered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/deliverychallans/{deliverychallan_id}/templates/{template_id}",
+      "covered_by": {
+        "write": "update_delivery_challan_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/estimate/{estimate_id}/customfields",
+      "covered_by": {
+        "write": "update_custom_fields_in_estimate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates",
+      "covered_by": {
+        "stream": "list_estimates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates",
+      "covered_by": {
+        "write": "create_estimate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/estimates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/email",
+      "covered_by": {
+        "write": "email_multiple_estimates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/pdf",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/print",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/templates",
+      "covered_by": {
+        "stream": "list_estimate_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/{estimate_id}",
+      "covered_by": {
+        "stream": "get_estimate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/estimates/{estimate_id}",
+      "covered_by": {
+        "write": "update_estimate"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/estimates/{estimate_id}",
+      "covered_by": {
+        "write": "delete_estimate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/estimates/{estimate_id}/address/billing",
+      "covered_by": {
+        "write": "update_estimate_billing_address"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/estimates/{estimate_id}/address/shipping",
+      "covered_by": {
+        "write": "update_estimate_shipping_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{estimate_id}/approve",
+      "covered_by": {
+        "write": "approve_estimate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/{estimate_id}/comments",
+      "covered_by": {
+        "stream": "list_estimate_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{estimate_id}/comments",
+      "covered_by": {
+        "write": "create_estimate_comment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/estimates/{estimate_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "update_estimate_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/estimates/{estimate_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_estimate_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/{estimate_id}/email",
+      "covered_by": {
+        "stream": "get_estimate_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{estimate_id}/email",
+      "covered_by": {
+        "write": "email_estimate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{estimate_id}/status/accepted",
+      "covered_by": {
+        "write": "mark_estimate_accepted"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{estimate_id}/status/declined",
+      "covered_by": {
+        "write": "mark_estimate_declined"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{estimate_id}/status/sent",
+      "covered_by": {
+        "write": "mark_estimate_sent"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{estimate_id}/submit",
+      "covered_by": {
+        "write": "submit_estimate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/estimates/{estimate_id}/templates/{template_id}",
+      "covered_by": {
+        "write": "update_estimate_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/employee/{employee_id}",
+      "covered_by": {
+        "write": "delete_employee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/employees",
+      "covered_by": {
+        "stream": "list_employees"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employees",
+      "covered_by": {
+        "write": "create_employee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/employees/{employee_id}",
+      "covered_by": {
+        "stream": "get_employee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expenses",
+      "covered_by": {
+        "stream": "list_expenses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expenses",
+      "covered_by": {
+        "write": "create_expense"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expenses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expenses/{expense_id}",
+      "covered_by": {
+        "stream": "get_expense"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expenses/{expense_id}",
+      "covered_by": {
+        "write": "update_expense"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expenses/{expense_id}",
+      "covered_by": {
+        "write": "delete_expense"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expenses/{expense_id}/attachment",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Request body is multipart/binary/file-oriented in OpenAPI; the declarative write dialect only supports JSON, form, or empty bodies."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expenses/{expense_id}/comments",
+      "covered_by": {
+        "stream": "list_expense_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expenses/{expense_id}/receipt",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expenses/{expense_id}/receipt",
+      "covered_by": {
+        "write": "create_expense_receipt"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expenses/{expense_id}/receipt",
+      "covered_by": {
+        "write": "delete_expense_receipt"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fixedassets",
+      "covered_by": {
+        "stream": "list_fixed_assets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fixedassets",
+      "covered_by": {
+        "write": "create_fixed_asset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fixedassets/{fixed_asset_id}",
+      "covered_by": {
+        "stream": "get_fixed_asset"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/fixedassets/{fixed_asset_id}",
+      "covered_by": {
+        "write": "update_fixed_asset"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/fixedassets/{fixed_asset_id}",
+      "covered_by": {
+        "write": "delete_fixed_asset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fixedassets/{fixed_asset_id}/comments",
+      "covered_by": {
+        "write": "create_fixed_asset_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/fixedassets/{fixed_asset_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_fixed_asset_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fixedassets/{fixed_asset_id}/forecast",
+      "covered_by": {
+        "stream": "get_fixed_asset_forecast"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fixedassets/{fixed_asset_id}/history",
+      "covered_by": {
+        "stream": "get_fixed_asset_history"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fixedassets/{fixed_asset_id}/sell",
+      "covered_by": {
+        "write": "sell_fixed_asset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fixedassets/{fixed_asset_id}/status/active",
+      "covered_by": {
+        "write": "mark_fixed_asset_active"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fixedassets/{fixed_asset_id}/status/cancel",
+      "covered_by": {
+        "write": "mark_fixed_asset_cancel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fixedassets/{fixed_asset_id}/status/draft",
+      "covered_by": {
+        "write": "mark_fixed_asset_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fixedassets/{fixed_asset_id}/writeoff",
+      "covered_by": {
+        "write": "write_off_fixed_asset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fixedassettypes",
+      "covered_by": {
+        "stream": "get_fixed_asset_type_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fixedassettypes",
+      "covered_by": {
+        "write": "create_fixed_asset_type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/fixedassettypes/{fixed_asset_type_id}",
+      "covered_by": {
+        "write": "update_fixed_asset_type"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/fixedassettypes/{fixed_asset_type_id}",
+      "covered_by": {
+        "write": "delete_fixed_asset_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/account/{crm_account_id}/import",
+      "covered_by": {
+        "write": "import_customer_using_crm_account_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/contact/{crm_contact_id}/import",
+      "covered_by": {
+        "write": "import_customer_using_crm_contact_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/item/{crm_product_id}/import",
+      "covered_by": {
+        "write": "import_item_using_crm_product_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/vendor/{crm_vendor_id}/import",
+      "covered_by": {
+        "write": "import_vendor_using_crm_vendor_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/einvoices/invoices/{invoice_id}/cancel",
+      "covered_by": {
+        "write": "cancel_einvoice_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoice/{invoice_id}/customfields",
+      "covered_by": {
+        "write": "update_custom_fields_in_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices",
+      "covered_by": {
+        "write": "create_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices",
+      "covered_by": {
+        "write": "delete_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/approve",
+      "covered_by": {
+        "write": "approve_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/coupons/preview",
+      "covered_by": {
+        "write": "preview_invoice_coupons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/dashboard",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/deliverynotes",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/einvoice",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/einvoice/cancel",
+      "covered_by": {
+        "write": "cancel_invoices_einvoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/einvoice/push",
+      "covered_by": {
+        "write": "push_invoices_einvoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/email",
+      "covered_by": {
+        "write": "email_invoices"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/expenses/{expense_id}/receipt",
+      "covered_by": {
+        "write": "delete_invoice_expense_receipt"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/fromestimates",
+      "covered_by": {
+        "write": "create_invoices_from_estimates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/fromprojects",
+      "covered_by": {
+        "write": "create_invoices_from_projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/fromsalesorder",
+      "covered_by": {
+        "write": "create_invoice_from_salesorder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/mapwithorder",
+      "covered_by": {
+        "write": "map_invoice_with_salesorder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/markasshipped",
+      "covered_by": {
+        "write": "mark_invoices_shipped"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/packingslips",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/paymentreminder",
+      "covered_by": {
+        "write": "bulk_invoice_reminder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/pdf",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/print",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/reference/{reference_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/status/sent",
+      "covered_by": {
+        "write": "mark_invoices_sent"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/status/void",
+      "covered_by": {
+        "write": "void_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/submit",
+      "covered_by": {
+        "write": "submit_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/templates",
+      "covered_by": {
+        "stream": "list_invoice_templates"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/unmap/salesorders",
+      "covered_by": {
+        "write": "unmap_invoices_from_salesorders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/unship",
+      "covered_by": {
+        "write": "unship_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/writeoff",
+      "covered_by": {
+        "write": "write_off_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}",
+      "covered_by": {
+        "stream": "get_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}",
+      "covered_by": {
+        "write": "update_invoice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}",
+      "covered_by": {
+        "write": "delete_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}/address/billing",
+      "covered_by": {
+        "write": "update_invoice_billing_address"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}/address/shipping",
+      "covered_by": {
+        "write": "update_invoice_shipping_address"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/advancedtrackingdetails",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}/advancedtrackingdetails",
+      "covered_by": {
+        "write": "update_invoice_advanced_tracking_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/approve",
+      "covered_by": {
+        "write": "approve_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/approve/final",
+      "covered_by": {
+        "write": "finalize_invoice_approval"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/attachment",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/attachment",
+      "covered_by": {
+        "write": "add_invoice_attachment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}/attachment",
+      "covered_by": {
+        "write": "update_invoice_attachment_preference"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}/attachment",
+      "covered_by": {
+        "write": "delete_invoice_attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/cfdi/status",
+      "covered_by": {
+        "write": "update_invoice_cfdi_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/comments",
+      "covered_by": {
+        "stream": "list_invoice_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/comments",
+      "covered_by": {
+        "write": "add_invoice_comment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "update_invoice_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_invoice_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/credits",
+      "covered_by": {
+        "write": "apply_credits_to_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/creditsapplied",
+      "covered_by": {
+        "stream": "list_invoice_credits_applied"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}/creditsapplied/{creditnotes_invoice_id}",
+      "covered_by": {
+        "write": "delete_invoice_applied_credit"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/customfields",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/deliverynote/print",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "OpenAPI response is binary or file-oriented rather than a JSON object collection/detail that the stream dialect can extract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/documents/{document_id}",
+      "covered_by": {
+        "stream": "get_invoice_document_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "add_invoice_document"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "delete_invoice_document"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/documents/{document_id}/upload",
+      "covered_by": {
+        "write": "upload_invoice_document"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/dsign",
+      "covered_by": {
+        "write": "add_invoice_digital_signature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/dsign/template",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/dsign/upload",
+      "covered_by": {
+        "write": "upload_invoice_digital_signature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/einvoice",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/einvoice/cancel",
+      "covered_by": {
+        "write": "cancel_invoice_einvoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/einvoice/fetch",
+      "covered_by": {
+        "write": "fetch_invoice_einvoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}/einvoice/paymentstatus",
+      "covered_by": {
+        "write": "update_invoice_einvoice_payment_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/einvoice/push",
+      "covered_by": {
+        "write": "push_invoice_einvoice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}/einvoice/status",
+      "covered_by": {
+        "write": "delete_invoice_einvoice_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/einvoice/status/cancel",
+      "covered_by": {
+        "write": "mark_invoice_einvoice_cancelled"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/einvoice/status/push",
+      "covered_by": {
+        "write": "mark_invoice_einvoice_pushed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/einvoice/status/recall",
+      "covered_by": {
+        "write": "recall_invoice_einvoice_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/email",
+      "covered_by": {
+        "stream": "get_invoice_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/email",
+      "covered_by": {
+        "write": "email_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/email/schedule",
+      "covered_by": {
+        "write": "schedule_invoice_email"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}/email/schedule",
+      "covered_by": {
+        "write": "cancel_scheduled_invoice_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/forcepay",
+      "covered_by": {
+        "write": "force_pay_invoice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}/lineitems/{line_item_id}",
+      "covered_by": {
+        "write": "delete_invoice_line_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/mailpdf",
+      "covered_by": {
+        "write": "mail_invoice_pdf"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/metadata/{metadata_name}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}/metadata/{metadata_name}",
+      "covered_by": {
+        "write": "update_invoice_metadata"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/onlinepayments/asynchronous",
+      "covered_by": {
+        "write": "create_invoice_asynchronous_online_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/onlinepayments/bankaccount",
+      "covered_by": {
+        "write": "add_invoice_online_payment_bank_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/onlinepayments/qr",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/onlinepayments/qr/status",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/onlinepayments/synchronous",
+      "covered_by": {
+        "write": "create_invoice_synchronous_online_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/packingslip/print",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "OpenAPI response is binary or file-oriented rather than a JSON object collection/detail that the stream dialect can extract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/paymentreminder",
+      "covered_by": {
+        "stream": "get_payment_reminder_mail_content_for_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/paymentreminder",
+      "covered_by": {
+        "write": "remind_customer_for_invoice_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/paymentreminder/disable",
+      "covered_by": {
+        "write": "disable_invoice_payment_reminder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/paymentreminder/enable",
+      "covered_by": {
+        "write": "enable_invoice_payment_reminder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/payments",
+      "covered_by": {
+        "stream": "list_invoice_payments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}/payments/{invoice_payment_id}",
+      "covered_by": {
+        "write": "delete_invoice_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}/pricebooks/{pricebook_id}",
+      "covered_by": {
+        "write": "apply_pricebook_to_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/qrcode",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/reject",
+      "covered_by": {
+        "write": "reject_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/senddunningnotifications",
+      "covered_by": {
+        "write": "send_invoice_dunning_notifications"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/sendretrysms",
+      "covered_by": {
+        "write": "send_invoice_retry_sms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/sms",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/sms",
+      "covered_by": {
+        "write": "send_invoice_sms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/snailmail",
+      "covered_by": {
+        "write": "send_invoice_via_snail_mail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/status/cancel",
+      "covered_by": {
+        "write": "cancel_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/status/draft",
+      "covered_by": {
+        "write": "mark_invoice_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/status/readytopush",
+      "covered_by": {
+        "write": "mark_invoice_ready_to_push"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/status/sent",
+      "covered_by": {
+        "write": "mark_invoice_sent"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/status/void",
+      "covered_by": {
+        "write": "mark_invoice_void"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/submit",
+      "covered_by": {
+        "write": "submit_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/substatus/{substatus_id}",
+      "covered_by": {
+        "write": "apply_invoice_substatus"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}/substatus/{substatus_id}",
+      "covered_by": {
+        "write": "delete_invoice_substatus"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}/templates/{template_id}",
+      "covered_by": {
+        "write": "update_invoice_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/writeoff",
+      "covered_by": {
+        "write": "write_off_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/writeoff/cancel",
+      "covered_by": {
+        "write": "cancel_write_off_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/share/paymentlink",
+      "covered_by": {
+        "stream": "generate_invoice_payment_link"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/item/{item_id}/customfields",
+      "covered_by": {
+        "write": "update_custom_fields_in_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/itemdetails",
+      "covered_by": {
+        "stream": "list_item_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items",
+      "covered_by": {
+        "write": "create_item"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items/addtoportal",
+      "covered_by": {
+        "write": "add_items_to_portal"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items/{item_id}",
+      "covered_by": {
+        "stream": "get_item"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/items/{item_id}",
+      "covered_by": {
+        "write": "update_item"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/items/{item_id}",
+      "covered_by": {
+        "write": "delete_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items/{item_id}/active",
+      "covered_by": {
+        "write": "mark_item_active"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items/{item_id}/addtoportal",
+      "covered_by": {
+        "write": "add_item_to_portal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items/{item_id}/inactive",
+      "covered_by": {
+        "write": "mark_item_inactive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items/{item_id}/removefromportal",
+      "covered_by": {
+        "write": "remove_item_from_portal"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/journals",
+      "covered_by": {
+        "stream": "list_journals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals",
+      "covered_by": {
+        "write": "create_journal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/approve",
+      "covered_by": {
+        "write": "bulk_approve_journals"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/journals/bulkdelete",
+      "covered_by": {
+        "write": "bulk_delete_journals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/status/publish",
+      "covered_by": {
+        "write": "bulk_publish_journals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/submit",
+      "covered_by": {
+        "write": "bulk_submit_journals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/journals/{journal_id}",
+      "covered_by": {
+        "stream": "get_journal"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/journals/{journal_id}",
+      "covered_by": {
+        "write": "update_journal"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/journals/{journal_id}",
+      "covered_by": {
+        "write": "delete_journal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/{journal_id}/approve",
+      "covered_by": {
+        "write": "approve_journal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/{journal_id}/attachment",
+      "covered_by": {
+        "write": "add_journal_attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/{journal_id}/comments",
+      "covered_by": {
+        "write": "add_journal_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/journals/{journal_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_journal_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/journals/{journal_id}/credits",
+      "covered_by": {
+        "stream": "list_journal_credits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/{journal_id}/credits/{journal_line_id}/bills",
+      "covered_by": {
+        "write": "apply_journal_credits_to_bills"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/{journal_id}/credits/{journal_line_id}/invoices",
+      "covered_by": {
+        "write": "apply_journal_credits_to_invoices"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/journals/{journal_id}/credits/{journal_line_id}/payables",
+      "covered_by": {
+        "write": "delete_journal_credits_payables"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/journals/{journal_id}/credits/{journal_line_id}/receivables",
+      "covered_by": {
+        "write": "delete_journal_credits_receivables"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/{journal_id}/reject",
+      "covered_by": {
+        "write": "reject_journal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/{journal_id}/reverse",
+      "covered_by": {
+        "write": "reverse_journal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/{journal_id}/status/publish",
+      "covered_by": {
+        "write": "mark_journal_published"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals/{journal_id}/submit",
+      "covered_by": {
+        "write": "submit_journal_for_approval"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringjournals",
+      "covered_by": {
+        "stream": "list_recurring_journals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringjournals",
+      "covered_by": {
+        "write": "create_recurring_journal"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringjournals/{recurring_journal_id}",
+      "covered_by": {
+        "stream": "get_recurring_journal"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/recurringjournals/{recurring_journal_id}",
+      "covered_by": {
+        "write": "update_recurring_journal"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/recurringjournals/{recurring_journal_id}",
+      "covered_by": {
+        "write": "delete_recurring_journal"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringjournals/{recurring_journal_id}/journals",
+      "covered_by": {
+        "stream": "list_child_journals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringjournals/{recurring_journal_id}/status/resume",
+      "covered_by": {
+        "write": "resume_recurring_journal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringjournals/{recurring_journal_id}/status/stop",
+      "covered_by": {
+        "write": "stop_recurring_journal"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions/{transaction_id}/journals",
+      "covered_by": {
+        "stream": "get_transaction_journal_view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations",
+      "covered_by": {
+        "stream": "list_locations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/locations",
+      "covered_by": {
+        "write": "create_location"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/locations/{location_id}",
+      "covered_by": {
+        "write": "update_location"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/locations/{location_id}",
+      "covered_by": {
+        "write": "delete_location"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/locations/{location_id}/active",
+      "covered_by": {
+        "write": "mark_location_active"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/locations/{location_id}/inactive",
+      "covered_by": {
+        "write": "mark_location_inactive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/locations/{location_id}/markasprimary",
+      "covered_by": {
+        "write": "mark_location_primary"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/locations/enable",
+      "covered_by": {
+        "write": "enable_locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/openingbalances/transactions",
+      "covered_by": {
+        "stream": "list_opening_balance_transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/openingbalances/{opening_balance_id}/writeoff",
+      "covered_by": {
+        "write": "writeoff_opening_balance"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/openingbalances/{opening_balance_id}/writeoff/cancel",
+      "covered_by": {
+        "write": "cancel_writeoff_opening_balance"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/openingbalancedetails",
+      "covered_by": {
+        "stream": "list_opening_balance_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/openingbalances",
+      "covered_by": {
+        "stream": "get_opening_balance"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/openingbalances",
+      "covered_by": {
+        "write": "create_opening_balance"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/openingbalances",
+      "covered_by": {
+        "write": "update_opening_balance"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/openingbalances",
+      "covered_by": {
+        "write": "delete_opening_balance"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations",
+      "covered_by": {
+        "stream": "list_organizations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations",
+      "covered_by": {
+        "write": "create_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/address",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/address",
+      "covered_by": {
+        "write": "create_organization_address"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/address/{address_id}",
+      "covered_by": {
+        "write": "update_organization_address"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/address/{address_id}",
+      "covered_by": {
+        "write": "delete_organization_address"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/user",
+      "covered_by": {
+        "stream": "list_organizations_for_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}",
+      "covered_by": {
+        "stream": "get_organization"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organization_id}",
+      "covered_by": {
+        "write": "update_organization"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/copysettings",
+      "covered_by": {
+        "write": "copy_organization_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/downgradetoinvoice",
+      "covered_by": {
+        "write": "downgrade_organization_to_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/inactive",
+      "covered_by": {
+        "write": "mark_organization_inactive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/upgradetobooks",
+      "covered_by": {
+        "write": "upgrade_organization_to_books"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pricebooks",
+      "covered_by": {
+        "stream": "list_pricebooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pricebooks",
+      "covered_by": {
+        "write": "create_pricebook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pricebooks/bulkfetch",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pricebooks/items",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pricebooks/{pricebook_id}",
+      "covered_by": {
+        "write": "update_pricebook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pricebooks/{pricebook_id}",
+      "covered_by": {
+        "write": "delete_pricebook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pricebooks/{pricebook_id}/active",
+      "covered_by": {
+        "write": "mark_pricebook_active"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pricebooks/{pricebook_id}/inactive",
+      "covered_by": {
+        "write": "mark_pricebook_inactive"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects",
+      "covered_by": {
+        "stream": "list_projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/projects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}",
+      "covered_by": {
+        "stream": "get_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/projects/{project_id}",
+      "covered_by": {
+        "write": "update_project"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}",
+      "covered_by": {
+        "write": "delete_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/active",
+      "covered_by": {
+        "write": "mark_project_active"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/clone",
+      "covered_by": {
+        "write": "clone_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/comments",
+      "covered_by": {
+        "stream": "list_project_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/comments",
+      "covered_by": {
+        "write": "add_project_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_project_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/inactive",
+      "covered_by": {
+        "write": "mark_project_inactive"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/invoices",
+      "covered_by": {
+        "stream": "list_project_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/tasks",
+      "covered_by": {
+        "stream": "list_project_tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/tasks",
+      "covered_by": {
+        "write": "add_project_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/tasks/{task_id}",
+      "covered_by": {
+        "stream": "get_project_task"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/projects/{project_id}/tasks/{task_id}",
+      "covered_by": {
+        "write": "update_project_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/tasks/{task_id}",
+      "covered_by": {
+        "write": "delete_project_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/users",
+      "covered_by": {
+        "stream": "list_project_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/users",
+      "covered_by": {
+        "write": "add_project_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/users/invite",
+      "covered_by": {
+        "write": "invite_project_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/users/{user_id}",
+      "covered_by": {
+        "stream": "get_project_user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/projects/{project_id}/users/{user_id}",
+      "covered_by": {
+        "write": "update_project_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/users/{user_id}",
+      "covered_by": {
+        "write": "delete_project_user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/purchaseorder/{purchaseorder_id}/customfields",
+      "covered_by": {
+        "write": "update_custom_fields_in_purchase_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchaseorders",
+      "covered_by": {
+        "stream": "list_purchase_orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchaseorders",
+      "covered_by": {
+        "write": "create_purchase_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/purchaseorders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchaseorders/templates",
+      "covered_by": {
+        "stream": "list_purchase_order_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchaseorders/{purchaseorder_id}",
+      "covered_by": {
+        "stream": "get_purchase_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/purchaseorders/{purchaseorder_id}",
+      "covered_by": {
+        "write": "update_purchase_order"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/purchaseorders/{purchaseorder_id}",
+      "covered_by": {
+        "write": "delete_purchase_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/purchaseorders/{purchaseorder_id}/address/billing",
+      "covered_by": {
+        "write": "update_purchase_order_billing_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchaseorders/{purchaseorder_id}/approve",
+      "covered_by": {
+        "write": "approve_purchase_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchaseorders/{purchaseorder_id}/attachment",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchaseorders/{purchaseorder_id}/attachment",
+      "covered_by": {
+        "write": "add_purchase_order_attachment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/purchaseorders/{purchaseorder_id}/attachment",
+      "covered_by": {
+        "write": "update_purchase_order_attachment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/purchaseorders/{purchaseorder_id}/attachment",
+      "covered_by": {
+        "write": "delete_purchase_order_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchaseorders/{purchaseorder_id}/comments",
+      "covered_by": {
+        "stream": "list_purchase_order_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchaseorders/{purchaseorder_id}/comments",
+      "covered_by": {
+        "write": "add_purchase_order_comment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/purchaseorders/{purchaseorder_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "update_purchase_order_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/purchaseorders/{purchaseorder_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_purchase_order_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchaseorders/{purchaseorder_id}/email",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchaseorders/{purchaseorder_id}/email",
+      "covered_by": {
+        "write": "email_purchase_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchaseorders/{purchaseorder_id}/reject",
+      "covered_by": {
+        "write": "reject_purchase_orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchaseorders/{purchaseorder_id}/status/billed",
+      "covered_by": {
+        "write": "mark_purchase_order_billed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchaseorders/{purchaseorder_id}/status/cancelled",
+      "covered_by": {
+        "write": "mark_purchase_order_cancelled"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchaseorders/{purchaseorder_id}/status/open",
+      "covered_by": {
+        "write": "mark_purchase_order_open"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchaseorders/{purchaseorder_id}/submit",
+      "covered_by": {
+        "write": "submit_purchase_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/purchaseorders/{purchaseorder_id}/templates/{template_id}",
+      "covered_by": {
+        "write": "update_purchase_order_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurring_bills/{recurring_bill_id}",
+      "covered_by": {
+        "stream": "get_recurring_bill"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/recurring_bills/{recurring_bill_id}",
+      "covered_by": {
+        "write": "delete_recurring_bill"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringbills",
+      "covered_by": {
+        "stream": "list_recurring_bills"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringbills",
+      "covered_by": {
+        "write": "create_recurring_bill"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/recurringbills",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/recurringbills/{recurring_bill_id}",
+      "covered_by": {
+        "write": "update_recurring_bill"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringbills/{recurring_bill_id}/comments",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringbills/{recurring_bill_id}/status/resume",
+      "covered_by": {
+        "write": "resume_recurring_bill"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringbills/{recurring_bill_id}/status/stop",
+      "covered_by": {
+        "write": "stop_recurring_bill"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringexpenses",
+      "covered_by": {
+        "stream": "list_recurring_expenses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringexpenses",
+      "covered_by": {
+        "write": "create_recurring_expense"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/recurringexpenses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringexpenses/{recurring_expense_id}",
+      "covered_by": {
+        "stream": "get_recurring_expense"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/recurringexpenses/{recurring_expense_id}",
+      "covered_by": {
+        "write": "update_recurring_expense"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/recurringexpenses/{recurring_expense_id}",
+      "covered_by": {
+        "write": "delete_recurring_expense"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringexpenses/{recurring_expense_id}/comments",
+      "covered_by": {
+        "stream": "list_recurring_expense_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringexpenses/{recurring_expense_id}/expenses",
+      "covered_by": {
+        "stream": "list_child_expenses_of_recurring_expense"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringexpenses/{recurring_expense_id}/status/resume",
+      "covered_by": {
+        "write": "resume_recurring_expense"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringexpenses/{recurring_expense_id}/status/stop",
+      "covered_by": {
+        "write": "stop_recurring_expense"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringinvoices",
+      "covered_by": {
+        "stream": "list_recurring_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringinvoices",
+      "covered_by": {
+        "write": "create_recurring_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/recurringinvoices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringinvoices/dashboard",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringinvoices/status/resume",
+      "covered_by": {
+        "write": "resume_recurring_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringinvoices/status/stop",
+      "covered_by": {
+        "write": "stop_recurring_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringinvoices/{recurring_invoice_id}",
+      "covered_by": {
+        "stream": "get_recurring_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/recurringinvoices/{recurring_invoice_id}",
+      "covered_by": {
+        "write": "update_recurring_invoice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/recurringinvoices/{recurring_invoice_id}",
+      "covered_by": {
+        "write": "delete_recurring_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringinvoices/{recurring_invoice_id}/autobill/disable",
+      "covered_by": {
+        "write": "disable_recurring_invoice_autobill"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringinvoices/{recurring_invoice_id}/autobill/enable",
+      "covered_by": {
+        "write": "enable_recurring_invoice_autobill"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/recurringinvoices/{recurring_invoice_id}/bankaccount",
+      "covered_by": {
+        "write": "delete_recurring_invoice_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringinvoices/{recurring_invoice_id}/bankaccount/{account_id}",
+      "covered_by": {
+        "write": "associate_recurring_invoice_bank_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/recurringinvoices/{recurring_invoice_id}/card",
+      "covered_by": {
+        "write": "delete_recurring_invoice_card"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringinvoices/{recurring_invoice_id}/card/{card_id}",
+      "covered_by": {
+        "write": "associate_recurring_invoice_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringinvoices/{recurring_invoice_id}/comments",
+      "covered_by": {
+        "stream": "list_recurring_invoice_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recurringinvoices/{recurring_invoice_id}/invoices",
+      "covered_by": {
+        "stream": "list_recurring_invoice_child_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringinvoices/{recurring_invoice_id}/status/resume",
+      "covered_by": {
+        "write": "resume_recurring_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recurringinvoices/{recurring_invoice_id}/status/stop",
+      "covered_by": {
+        "write": "stop_recurring_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/recurringinvoices/{recurring_invoice_id}/templates/{template_id}",
+      "covered_by": {
+        "write": "update_recurring_invoice_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/registers/{account_id}/budgetvsactuals",
+      "covered_by": {
+        "stream": "get_register_budget_vs_actuals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/registers/{account_id}/bulkhistory",
+      "covered_by": {
+        "stream": "list_register_bulk_action_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/registers/{account_id}/bulkhistory/{comment_id}",
+      "covered_by": {
+        "stream": "get_register_bulk_action_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/registers/{account_id}/bulkupdate/editpage",
+      "covered_by": {
+        "stream": "get_register_bulk_update_editpage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/registers/{account_id}/transactions",
+      "covered_by": {
+        "stream": "list_register_transactions"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/registers/{account_id}/transactions/bulkdelete",
+      "covered_by": {
+        "write": "bulk_delete_register_transactions"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/registers/{account_id}/transactions/bulkupdate",
+      "covered_by": {
+        "write": "bulk_update_register_transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reportingtags",
+      "covered_by": {
+        "stream": "get_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reportingtags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reportingtags/(\\d+)/options/all",
+      "covered_by": {
+        "stream": "all_tag_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reportingtags/options",
+      "covered_by": {
+        "stream": "get_all_tag_options"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/reportingtags/reorder",
+      "covered_by": {
+        "write": "reorder_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reportingtags/{tag_id}",
+      "covered_by": {
+        "write": "mark_default_option"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/reportingtags/{tag_id}",
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/reportingtags/{tag_id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reportingtags/{tag_id}/active",
+      "covered_by": {
+        "write": "active_tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/reportingtags/{tag_id}/criteria",
+      "covered_by": {
+        "write": "update_tag_criteria"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reportingtags/{tag_id}/inactive",
+      "covered_by": {
+        "write": "inactive_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reportingtags/{tag_id}/option/(\\d+)/active",
+      "covered_by": {
+        "write": "active_tag_option"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reportingtags/{tag_id}/option/(\\d+)/inactive",
+      "covered_by": {
+        "write": "inactive_tag_option"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/reportingtags/{tag_id}/options",
+      "covered_by": {
+        "write": "update_tag_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retainerinvoices",
+      "covered_by": {
+        "stream": "list_retainer_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices",
+      "covered_by": {
+        "write": "create_retainer_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retainerinvoices/templates",
+      "covered_by": {
+        "stream": "list_retainer_invoice_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retainerinvoices/{retainerinvoice_id}",
+      "covered_by": {
+        "stream": "get_retainer_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/retainerinvoices/{retainerinvoice_id}",
+      "covered_by": {
+        "write": "update_retainer_invoice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/retainerinvoices/{retainerinvoice_id}",
+      "covered_by": {
+        "write": "delete_retainer_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/retainerinvoices/{retainerinvoice_id}/address/billing",
+      "covered_by": {
+        "write": "update_retainer_invoice_billing_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices/{retainerinvoice_id}/approve",
+      "covered_by": {
+        "write": "approve_retainer_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retainerinvoices/{retainerinvoice_id}/attachment",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices/{retainerinvoice_id}/attachment",
+      "covered_by": {
+        "write": "add_retainer_invoice_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retainerinvoices/{retainerinvoice_id}/comments",
+      "covered_by": {
+        "stream": "list_retainer_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices/{retainerinvoice_id}/comments",
+      "covered_by": {
+        "write": "add_retainer_invoice_comment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/retainerinvoices/{retainerinvoice_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "update_retainer_invoice_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/retainerinvoices/{retainerinvoice_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_retainer_invoice_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/retainerinvoices/{retainerinvoice_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "delete_retainer_invoice_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retainerinvoices/{retainerinvoice_id}/email",
+      "covered_by": {
+        "stream": "get_retainer_invoice_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices/{retainerinvoice_id}/email",
+      "covered_by": {
+        "write": "email_retainer_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices/{retainerinvoice_id}/invoices",
+      "covered_by": {
+        "write": "apply_retainer_payments_to_invoices"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/retainerinvoices/{retainerinvoice_id}/invoices/{invoice_id}",
+      "covered_by": {
+        "write": "delete_applied_retainer_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices/{retainerinvoice_id}/onlinepayments/asynchronous",
+      "covered_by": {
+        "write": "create_retainer_invoice_async_online_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices/{retainerinvoice_id}/status/draft",
+      "covered_by": {
+        "write": "mark_retainer_invoice_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices/{retainerinvoice_id}/status/sent",
+      "covered_by": {
+        "write": "mark_retainer_invoice_sent"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices/{retainerinvoice_id}/status/void",
+      "covered_by": {
+        "write": "mark_retainer_invoice_void"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retainerinvoices/{retainerinvoice_id}/submit",
+      "covered_by": {
+        "write": "submit_retainer_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/retainerinvoices/{retainerinvoice_id}/templates/{template_id}",
+      "covered_by": {
+        "write": "update_retainer_invoice_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/salesorder/{salesorder_id}/customfields",
+      "covered_by": {
+        "write": "update_salesorder_customfields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesorders",
+      "covered_by": {
+        "stream": "list_sales_orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesorders",
+      "covered_by": {
+        "write": "create_sales_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/salesorders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesorders/pdf",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesorders/print",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesorders/templates",
+      "covered_by": {
+        "stream": "list_sales_order_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesorders/{salesorder_id}",
+      "covered_by": {
+        "stream": "get_sales_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/salesorders/{salesorder_id}",
+      "covered_by": {
+        "write": "update_sales_order"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/salesorders/{salesorder_id}",
+      "covered_by": {
+        "write": "delete_sales_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/salesorders/{salesorder_id}/address/billing",
+      "covered_by": {
+        "write": "update_sales_order_billing_address"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/salesorders/{salesorder_id}/address/shipping",
+      "covered_by": {
+        "write": "update_sales_order_shipping_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesorders/{salesorder_id}/approve",
+      "covered_by": {
+        "write": "approve_sales_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesorders/{salesorder_id}/attachment",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesorders/{salesorder_id}/attachment",
+      "covered_by": {
+        "write": "add_sales_order_attachment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/salesorders/{salesorder_id}/attachment",
+      "covered_by": {
+        "write": "update_sales_order_attachment_preference"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/salesorders/{salesorder_id}/attachment",
+      "covered_by": {
+        "write": "delete_sales_order_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesorders/{salesorder_id}/comments",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OpenAPI response does not expose a JSON record array or detail object beyond status/message metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesorders/{salesorder_id}/comments",
+      "covered_by": {
+        "write": "add_sales_order_comment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/salesorders/{salesorder_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "update_sales_order_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/salesorders/{salesorder_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_sales_order_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesorders/{salesorder_id}/email",
+      "covered_by": {
+        "stream": "get_sales_order_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesorders/{salesorder_id}/email",
+      "covered_by": {
+        "write": "email_sales_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesorders/{salesorder_id}/status/open",
+      "covered_by": {
+        "write": "mark_sales_order_as_open"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesorders/{salesorder_id}/status/void",
+      "covered_by": {
+        "write": "mark_sales_order_as_void"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesorders/{salesorder_id}/submit",
+      "covered_by": {
+        "write": "submit_sales_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesorders/{salesorder_id}/substatus/{status_code}",
+      "covered_by": {
+        "write": "update_sales_order_sub_status"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/salesorders/{salesorder_id}/templates/{template_id}",
+      "covered_by": {
+        "write": "update_sales_order_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesreceipts",
+      "covered_by": {
+        "stream": "list_sales_receipts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesreceipts",
+      "covered_by": {
+        "write": "create_sales_receipt"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesreceipts/{sales_receipt_id}",
+      "covered_by": {
+        "stream": "get_sales_receipt"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/salesreceipts/{sales_receipt_id}",
+      "covered_by": {
+        "write": "update_sales_receipt"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/salesreceipts/{sales_receipt_id}",
+      "covered_by": {
+        "write": "delete_sales_receipt"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/salesreceipts/{sales_receipt_id}/email",
+      "covered_by": {
+        "write": "email_sales_receipt"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks",
+      "covered_by": {
+        "stream": "list_tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks",
+      "covered_by": {
+        "write": "add_task"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tasks",
+      "covered_by": {
+        "write": "update_tasks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks",
+      "covered_by": {
+        "write": "delete_tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_id}",
+      "covered_by": {
+        "stream": "get_task"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tasks/{task_id}",
+      "covered_by": {
+        "write": "update_a_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks/{task_id}",
+      "covered_by": {
+        "write": "delete_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_id}/attachment",
+      "covered_by": {
+        "write": "add_task_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_id}/comments",
+      "covered_by": {
+        "stream": "list_task_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_id}/comments",
+      "covered_by": {
+        "write": "add_task_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks/{task_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_task_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_id}/documents/{document_id}",
+      "covered_by": {
+        "stream": "get_task_document"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks/{task_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "delete_task_document"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_id}/markascompleted",
+      "covered_by": {
+        "write": "mark_task_as_completed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_id}/markasongoing",
+      "covered_by": {
+        "write": "mark_task_as_ongoing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_id}/markasopen",
+      "covered_by": {
+        "write": "mark_task_as_open"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_id}/percentage",
+      "covered_by": {
+        "write": "update_percentage_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/taxauthorities",
+      "covered_by": {
+        "stream": "list_tax_authorities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/taxauthorities",
+      "covered_by": {
+        "write": "create_tax_authority"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/taxauthorities/{tax_authority_id}",
+      "covered_by": {
+        "stream": "get_tax_authority"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/taxauthorities/{tax_authority_id}",
+      "covered_by": {
+        "write": "update_tax_authority"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/taxauthorities/{tax_authority_id}",
+      "covered_by": {
+        "write": "delete_tax_authority"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/taxes",
+      "covered_by": {
+        "stream": "list_taxes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/taxes",
+      "covered_by": {
+        "write": "create_tax"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/taxes/{tax_id}",
+      "covered_by": {
+        "stream": "get_tax"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/taxes/{tax_id}",
+      "covered_by": {
+        "write": "update_tax"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/taxes/{tax_id}",
+      "covered_by": {
+        "write": "delete_tax"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/taxexemptions",
+      "covered_by": {
+        "stream": "list_tax_exemptions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/taxexemptions",
+      "covered_by": {
+        "write": "create_tax_exemption"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/taxexemptions/{tax_exemption_id}",
+      "covered_by": {
+        "stream": "get_tax_exemption"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/taxexemptions/{tax_exemption_id}",
+      "covered_by": {
+        "write": "update_tax_exemption"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/taxexemptions/{tax_exemption_id}",
+      "covered_by": {
+        "write": "delete_tax_exemption"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/taxgroups",
+      "covered_by": {
+        "write": "create_tax_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/taxgroups/{tax_group_id}",
+      "covered_by": {
+        "stream": "get_tax_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/taxgroups/{tax_group_id}",
+      "covered_by": {
+        "write": "update_tax_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/taxgroups/{tax_group_id}",
+      "covered_by": {
+        "write": "delete_tax_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/timeentries",
+      "covered_by": {
+        "stream": "list_time_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/timeentries",
+      "covered_by": {
+        "write": "create_time_entries"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/timeentries",
+      "covered_by": {
+        "write": "delete_time_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/timeentries/runningtimer/me",
+      "covered_by": {
+        "stream": "get_running_timer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/timeentries/timer/stop",
+      "covered_by": {
+        "write": "stop_entry_timer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/timeentries/{time_entry_id}",
+      "covered_by": {
+        "stream": "get_time_entry"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/projects/timeentries/{time_entry_id}",
+      "covered_by": {
+        "write": "update_time_entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/timeentries/{time_entry_id}",
+      "covered_by": {
+        "write": "delete_time_entry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/timeentries/{time_entry_id}/timer/start",
+      "covered_by": {
+        "write": "start_entry_timer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accountingperiods/transactionlock",
+      "covered_by": {
+        "stream": "get_accounting_period_transaction_lock"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactionlock",
+      "covered_by": {
+        "stream": "get_transaction_lock"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/transactionlock",
+      "covered_by": {
+        "write": "update_transaction_lock"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/transactionlock",
+      "covered_by": {
+        "write": "delete_transaction_lock"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/transactionlock/partialunlock",
+      "covered_by": {
+        "write": "update_partial_unlock"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactionlocks",
+      "covered_by": {
+        "stream": "list_transaction_locks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "list_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "covered_by": {
+        "write": "create_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me",
+      "covered_by": {
+        "stream": "get_current_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}",
+      "covered_by": {
+        "stream": "get_user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_id}",
+      "covered_by": {
+        "write": "update_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}",
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{user_id}/active",
+      "covered_by": {
+        "write": "mark_user_active"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{user_id}/inactive",
+      "covered_by": {
+        "write": "mark_user_inactive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{user_id}/invite",
+      "covered_by": {
+        "write": "invite_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorcredits",
+      "covered_by": {
+        "stream": "list_vendor_credits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorcredits",
+      "covered_by": {
+        "write": "create_vendor_credit"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorcredits/refunds",
+      "covered_by": {
+        "stream": "list_vendor_credit_refunds_of_all_vendor_credits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorcredits/{vendor_credit_id}",
+      "covered_by": {
+        "stream": "get_vendor_credit"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/vendorcredits/{vendor_credit_id}",
+      "covered_by": {
+        "write": "update_vendor_credit"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/vendorcredits/{vendor_credit_id}",
+      "covered_by": {
+        "write": "delete_vendor_credit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorcredits/{vendor_credit_id}/approve",
+      "covered_by": {
+        "write": "approve_vendor_credit"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorcredits/{vendor_credit_id}/bills",
+      "covered_by": {
+        "stream": "list_bills_credited"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorcredits/{vendor_credit_id}/bills",
+      "covered_by": {
+        "write": "apply_credits_to_a_bill"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/vendorcredits/{vendor_credit_id}/bills/{vendor_credit_bill_id}",
+      "covered_by": {
+        "write": "delete_vendor_credit_bill"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorcredits/{vendor_credit_id}/comments",
+      "covered_by": {
+        "stream": "list_vendor_credit_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorcredits/{vendor_credit_id}/comments",
+      "covered_by": {
+        "write": "add_vendor_credit_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/vendorcredits/{vendor_credit_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_vendor_credit_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorcredits/{vendor_credit_id}/refunds",
+      "covered_by": {
+        "stream": "list_vendor_credit_refunds_of_a_vendor_credit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorcredits/{vendor_credit_id}/refunds",
+      "covered_by": {
+        "write": "refund_vendor_credit"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorcredits/{vendor_credit_id}/refunds/{vendor_credit_refund_id}",
+      "covered_by": {
+        "stream": "get_vendor_credit_refund"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/vendorcredits/{vendor_credit_id}/refunds/{vendor_credit_refund_id}",
+      "covered_by": {
+        "write": "update_vendor_credit_refund"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/vendorcredits/{vendor_credit_id}/refunds/{vendor_credit_refund_id}",
+      "covered_by": {
+        "write": "delete_vendor_credit_refund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorcredits/{vendor_credit_id}/status/open",
+      "covered_by": {
+        "write": "mark_vendor_credit_open"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorcredits/{vendor_credit_id}/status/void",
+      "covered_by": {
+        "write": "mark_vendor_credit_void"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorcredits/{vendor_credit_id}/submit",
+      "covered_by": {
+        "write": "submit_vendor_credit"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorpayments",
+      "covered_by": {
+        "stream": "list_vendor_payments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorpayments",
+      "covered_by": {
+        "write": "create_vendor_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/vendorpayments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Requires per-action custom request headers (X-Unique-Identifier-Key, X-Unique-Identifier-Value) that the declarative write dialect does not model; id/path-based write variants cover ordinary mutations where available."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/vendorpayments",
+      "covered_by": {
+        "write": "bulk_delete_vendor_payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorpayments/{payment_id}",
+      "covered_by": {
+        "stream": "get_vendor_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/vendorpayments/{payment_id}",
+      "covered_by": {
+        "write": "update_vendor_payment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/vendorpayments/{payment_id}",
+      "covered_by": {
+        "write": "delete_vendor_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorpayments/{payment_id}/email",
+      "covered_by": {
+        "stream": "get_vendor_payment_email_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorpayments/{payment_id}/email",
+      "covered_by": {
+        "write": "email_vendor_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorpayments/{payment_id}/refunds",
+      "covered_by": {
+        "stream": "list_vendor_payment_refunds"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendorpayments/{payment_id}/refunds",
+      "covered_by": {
+        "write": "refund_excess_vendor_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendorpayments/{payment_id}/refunds/{vendorpayment_refund_id}",
+      "covered_by": {
+        "stream": "get_vendor_payment_refund"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/vendorpayments/{payment_id}/refunds/{vendorpayment_refund_id}",
+      "covered_by": {
+        "write": "update_vendor_payment_refund"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/vendorpayments/{payment_id}/refunds/{vendorpayment_refund_id}",
+      "covered_by": {
+        "write": "delete_vendor_payment_refund"
+      }
+    }
   ]
 }

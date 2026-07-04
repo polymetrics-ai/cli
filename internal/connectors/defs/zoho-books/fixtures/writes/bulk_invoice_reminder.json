@@ -1,0 +1,16 @@
+{
+  "record": {
+    "invoice_ids": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/paymentreminder"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

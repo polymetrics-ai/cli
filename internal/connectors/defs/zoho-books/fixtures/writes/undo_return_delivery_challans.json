@@ -1,0 +1,16 @@
+{
+  "record": {
+    "deliverychallan_ids": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/deliverychallans/undo/return"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

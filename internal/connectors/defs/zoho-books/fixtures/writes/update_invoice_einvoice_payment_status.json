@@ -1,0 +1,16 @@
+{
+  "record": {
+    "invoice_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/invoices/synthetic-conformance-value/einvoice/paymentstatus"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

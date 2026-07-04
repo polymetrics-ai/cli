@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/sleep_time"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sleep_time_fixture_1",
+          "day": "2026-01-01",
+          "optimal_bedtime": {},
+          "recommendation": "fixture_recommendation",
+          "status": "fixture_status"
+        }
+      ],
+      "next_token": null
+    }
+  }
+}

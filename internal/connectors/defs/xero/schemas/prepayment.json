@@ -1,0 +1,155 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "prepayment",
+  "type": "object",
+  "x-primary-key": [
+    "BrandingThemeID"
+  ],
+  "properties": {
+    "Type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Contact": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LineAmountTypes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LineItems": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "SubTotal": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "TotalTax": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Total": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "InvoiceNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PrepaymentID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BrandingThemeID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyRate": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "RemainingCredit": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Allocations": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Payments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "AppliedAmount": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "HasAttachments": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "Attachments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "prepayment_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

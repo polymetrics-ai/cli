@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/vO2_max"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "vo2_max_fixture_1",
+          "day": "2026-01-01",
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "vo2_max": 80
+        }
+      ],
+      "next_token": null
+    }
+  }
+}

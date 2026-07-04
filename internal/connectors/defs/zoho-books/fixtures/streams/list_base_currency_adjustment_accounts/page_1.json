@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/basecurrencyadjustment/accounts",
+    "query": {
+      "page": "1",
+      "per_page": "200",
+      "currency_id": "synthetic-conformance-value",
+      "adjustment_date": "synthetic-conformance-value",
+      "exchange_rate": "synthetic-conformance-value",
+      "notes": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "data": {
+        "currency_id": "list_base_currency_adjustment_accounts_fixture_1",
+        "name": "list_base_currency_adjustment_accounts fixture 1",
+        "updated_at": "2026-01-01T00:00:01Z",
+        "status": "active",
+        "id": "list_base_currency_adjustment_accounts_fixture_1"
+      }
+    }
+  }
+}

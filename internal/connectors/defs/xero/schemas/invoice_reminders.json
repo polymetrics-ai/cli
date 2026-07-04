@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoice_reminders",
+  "type": "object",
+  "x-primary-key": [
+    "Enabled"
+  ],
+  "properties": {
+    "Enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

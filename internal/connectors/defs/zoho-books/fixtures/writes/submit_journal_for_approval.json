@@ -1,0 +1,16 @@
+{
+  "record": {
+    "journal_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/journals/synthetic-conformance-value/submit"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "bill_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/bills/synthetic-conformance-value/attachment"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

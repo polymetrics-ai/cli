@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts/synthetic-conformance-value/receivables/unusedretainerpayments",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "unused_credits_receivable": [
+        {
+          "payment_id": "get_unused_retainer_payments_fixture_1",
+          "payment_number": "get_unused_retainer_payments fixture 1",
+          "date": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "get_unused_retainer_payments_fixture_1",
+          "name": "get_unused_retainer_payments fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

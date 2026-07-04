@@ -1,0 +1,30 @@
+{
+  "record": {
+    "location_id": "synthetic-conformance-value",
+    "payload": {
+      "fixture": true
+    },
+    "data": {
+      "fixture": true
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/locations/synthetic-conformance-value",
+    "body": {
+      "payload": {
+        "fixture": true
+      },
+      "data": {
+        "fixture": true
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

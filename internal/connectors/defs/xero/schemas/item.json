@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "item",
+  "type": "object",
+  "x-primary-key": [
+    "ItemID"
+  ],
+  "properties": {
+    "Code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "InventoryAssetAccountCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "IsSold": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "IsPurchased": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "Description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PurchaseDescription": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PurchaseDetails": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "SalesDetails": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "IsTrackedAsInventory": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "TotalCostPool": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "QuantityOnHand": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ItemID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "StatusAttributeString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "item_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

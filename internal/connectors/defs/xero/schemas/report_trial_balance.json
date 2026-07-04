@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "report_trial_balance",
+  "type": "object",
+  "x-primary-key": [
+    "ReportID"
+  ],
+  "properties": {
+    "ReportID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ReportName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ReportTitle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ReportType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ReportTitles": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "ReportDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Rows": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Fields": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

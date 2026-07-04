@@ -1,71 +1,26 @@
 # Overview
 
-Oura is a wave2 fan-out declarative-HTTP migration. It reads Oura member profile info and daily
-readiness, sleep, and activity summaries through the Oura API v2 user-collection endpoints
-(`GET https://api.ouraring.com/v2/usercollection/...`). This bundle migrates
-`internal/connectors/oura` (the hand-written connector); the legacy package stays registered and
-unchanged until wave6's registry flip.
+Oura reads the Oura API v2 usercollection surface from `https://api.ouraring.com/v2`. The bundle covers the member profile endpoint, every documented production usercollection list endpoint, and every documented usercollection document-detail endpoint from the OpenAPI 1.35 spec. Legacy streams keep the narrow field projection emitted by `internal/connectors/oura`; newly added streams project the documented top-level API fields.
 
 ## Auth setup
 
-Provide an Oura personal access token via the `api_key` secret; it is sent as a Bearer token
-(`Authorization: Bearer <api_key>`) and is never logged, matching legacy's `connsdk.Bearer(key)`
-(`oura.go:152`). `base_url` defaults to `https://api.ouraring.com/v2/usercollection` and may be
-overridden for tests/proxies.
+Provide an Oura OAuth2 bearer access token via the `api_key` secret. The field name stays `api_key` for legacy compatibility, but Oura's v2 docs describe OAuth2 bearer access tokens as the supported access method. `base_url` defaults to `https://api.ouraring.com/v2` and may be overridden for tests, proxies, or Oura sandbox reads.
 
 ## Streams notes
 
-`personal_info` is a single-object endpoint (`GET /personal_info`); `records.path: "."` reads the
-JSON body root as one record, matching legacy's `recordsPath: "."` short-circuit (`oura.go:118`,
-`244`).
+List streams: daily_sleep, daily_activity, daily_readiness, daily_cardiovascular_age, daily_resilience, daily_spo2, daily_stress, enhanced_tag, rest_mode_period, ring_configuration, session, sleep, sleep_time, tag, vo2_max, workout, heartrate, ring_battery_level. Each list stream reads the response `data` array and uses Oura's `next_token` cursor pagination. Date-based streams accept optional `start_date` and `end_date` config values. Time-series streams `heartrate` and `ring_battery_level` accept optional `start_datetime`, `end_datetime`, and `latest` config values.
 
-`daily_sleep`, `daily_activity`, and `daily_readiness` share an identical shape: records live under
-the `data` array, and pagination follows Oura's own `next_token` convention
-(`pagination.type: cursor`, `cursor_param: next_token`, `token_path: next_token`) — the engine
-requests the next page with `?next_token=<value>` and stops when the response omits `next_token`
-(or it resolves empty), matching legacy's `harvest` loop exactly (`oura.go:93-124`).
+Detail streams: daily_sleep_detail, daily_activity_detail, daily_readiness_detail, daily_cardiovascular_age_detail, daily_resilience_detail, daily_spo2_detail, daily_stress_detail, enhanced_tag_detail, rest_mode_period_detail, ring_configuration_detail, session_detail, sleep_detail, sleep_time_detail, tag_detail, vo2_max_detail, workout_detail. Detail streams use the shared optional `document_id` config value in the request path and read the response object as a single record.
 
-Each of these three streams optionally accepts `start_date`/`end_date` config values, sent as plain
-`start_date`/`end_date` query params via the optional-query dialect (`omit_when_absent: true`) —
-present only when configured, matching legacy's `dateQuery` building an empty `url.Values{}` when
-neither is set (`oura.go:184-193`).
-
-`day` is declared as this bundle's `x-cursor-field` for the three daily streams, matching legacy's
-own `CursorFields: []string{"day"}` (`oura.go:254-256`); no `incremental` block is declared because
-Oura's real cursor-driven sync behavior in legacy is client-side date-range filtering only (the
-`start_date`/`end_date` config knobs above), not a server-side incremental cursor read loop keyed
-off a persisted state cursor — legacy never wires `CursorFields` into any state-cursor-driven
-request param either.
+`personal_info` is a single-object stream. `daily_sleep`, `daily_activity`, and `daily_readiness` preserve legacy's emitted record shape: `id`, `day`, `score`, and `timestamp`.
 
 ## Write actions & risks
 
-None. Oura's user-collection endpoints have no reverse-ETL writes; `capabilities.write` is `false`
-and this bundle ships no `writes.json`, matching legacy's `Write` returning
-`connectors.ErrUnsupportedOperation`.
+None. This bundle is read-only. Oura webhook subscription create/update/renew/delete endpoints are intentionally excluded from writes because they use app-level `x-client-id` plus `x-client-secret` credentials and manage webhook subscriptions rather than usercollection data records.
 
 ## Known limits
 
-- **`start_date`/`end_date` must be pre-formatted date-only strings (`YYYY-MM-DD`).** Legacy's
-  `dateOnly` helper (`oura.go:195-207`) accepts either an RFC3339 timestamp (truncating it to its
-  date portion) or an already-date-only string and passes either through unchanged otherwise. The
-  engine dialect has no RFC3339-to-date-only conversion filter for an arbitrary `config.*`
-  reference (the `date` `param_format` conversion in `conventions.md` §3 applies only to the
-  incremental lower bound, not a plain config-driven query template) — so this bundle requires the
-  caller to supply `start_date`/`end_date` already truncated to `YYYY-MM-DD`. This is a strictly
-  *stricter* config-acceptance surface than legacy (an RFC3339 value that legacy would silently
-  truncate is rejected/mismatched here rather than accepted), never a looser one, and never changes
-  emitted record DATA for any accepted config — ACCEPTABLE per conventions.md §5's meta-rule.
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes `page_size`/`max_pages`
-  as config-driven overrides (`pageSize`/`maxPages`, `oura.go:209-231`). The engine's `cursor`
-  (`token_path`) paginator never reads `PaginationSpec.PageSize`/`MaxPages` from a per-request
-  config value — pagination is driven purely by the `next_token` presence/absence Oura's own API
-  returns, matching bitly's identical documented precedent (`docs/migration/conventions.md`,
-  bitly's `docs.md`). Neither key is declared in `spec.json` (F6: a declared-but-unwireable config
-  key is worse than an absent one).
-- **Legacy's fixture-mode-only `previous_cursor` echo field is not modeled.** Legacy's
-  `readFixture` path (only reached when `config.mode == "fixture"`, a credential-free
-  conformance-harness affordance) stamps `previous_cursor` onto every fixture-mode record when a
-  prior state cursor happens to be set (`oura.go:133-135`). This is not part of the LIVE record
-  shape; this bundle's schemas target the live path only, per the same precedent bitly documents.
-  The engine's own conformance/fixture-replay harness provides the credential-free test affordance
-  this bundle needs.
+- `start_date` and `end_date` must be pre-formatted `YYYY-MM-DD` values. Legacy accepted `start_datetime`/`end_datetime` and truncated them for its three daily streams; the declarative bundle uses the documented date query names directly.
+- `page_size` and `max_pages` are not runtime-configurable. Oura pagination is driven by `next_token`; the declarative engine stops when Oura omits or clears that token.
+- Webhook subscription GET and mutation endpoints are documented in `api_surface.json` but excluded from this usercollection connector because their app-level header auth is distinct from Oura bearer user-data auth.
+- Sandbox usercollection endpoints are excluded as duplicates. The same stream definitions can target sandbox URLs through `base_url` when a caller deliberately configures that environment.

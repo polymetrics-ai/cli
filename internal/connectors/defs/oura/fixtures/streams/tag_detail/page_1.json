@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/tag/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "tag_detail_fixture_1",
+      "day": "2026-01-01",
+      "text": "fixture_text",
+      "timestamp": "2026-01-01T00:00:00+00:00",
+      "tags": []
+    }
+  }
+}

@@ -1,0 +1,276 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contact",
+  "type": "object",
+  "x-primary-key": [
+    "ContactID"
+  ],
+  "properties": {
+    "ContactID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "MergedToContactID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ContactNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "AccountNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ContactStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "FirstName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LastName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CompanyNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "EmailAddress": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ContactPersons": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "BankAccountDetails": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TaxNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TaxNumberType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "AccountsReceivableTaxType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "AccountsPayableTaxType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Addresses": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Phones": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "IsSupplier": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "IsCustomer": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "SalesDefaultLineAmountType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PurchasesDefaultLineAmountType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "DefaultCurrency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "XeroNetworkKey": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SalesDefaultAccountCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PurchasesDefaultAccountCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SalesTrackingCategories": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "PurchasesTrackingCategories": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "TrackingCategoryName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TrackingCategoryOption": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PaymentTerms": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ContactGroups": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Website": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BrandingTheme": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "BatchPayments": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Discount": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Balances": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Attachments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "HasAttachments": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "HasValidationErrors": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "StatusAttributeString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "contact_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

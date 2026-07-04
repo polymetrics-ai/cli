@@ -1,0 +1,17 @@
+{
+  "record": {
+    "contact_id": "synthetic-conformance-value",
+    "bank_account_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/synthetic-conformance-value/bankaccount/synthetic-conformance-value/approve"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

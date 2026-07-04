@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/settings/openingbalancedetails",
+    "query": {
+      "page": "1",
+      "per_page": "200",
+      "account_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "opening_balance": {
+        "opening_balance_id": "list_opening_balance_details_fixture_1",
+        "name": "list_opening_balance_details fixture 1",
+        "date": "2026-01-01T00:00:01Z",
+        "status": "active",
+        "id": "list_opening_balance_details_fixture_1",
+        "updated_at": "2026-01-01T00:00:01Z"
+      }
+    }
+  }
+}

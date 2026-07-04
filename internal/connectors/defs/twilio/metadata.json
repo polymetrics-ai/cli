@@ -1,23 +1,25 @@
 {
   "name": "twilio",
   "display_name": "Twilio",
-  "description": "Reads Twilio messages, calls, recordings, conferences, and usage records through the Twilio REST API (2010-04-01).",
+  "description": "Reads and writes Twilio public REST API v2010 resources through declarative JSON bundle streams and typed write actions.",
   "integration_type": "api",
   "docs_url": "https://www.twilio.com/docs/usage/api",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Twilio API read of message/call/recording/conference/usage data",
-    "approval": "none; read-only source connector"
+    "read": "external Twilio API read of account, messaging, voice, phone-number, recording, SIP, usage, and related v2010 resources",
+    "write": "creates, updates, and deletes Twilio v2010 resources including messages, calls, phone numbers, recordings, queues, SIP resources, keys, and usage triggers",
+    "approval": "reverse ETL writes require plan preview and approval token; delete actions are marked destructive"
   }
 }

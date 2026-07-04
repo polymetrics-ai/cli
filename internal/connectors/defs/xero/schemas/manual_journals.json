@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "manual_journals",
+  "type": "object",
+  "x-primary-key": [
+    "ManualJournalID"
+  ],
+  "properties": {
+    "Narration": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "JournalLines": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LineAmountTypes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ShowOnCashBasisReports": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "HasAttachments": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ManualJournalID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "StatusAttributeString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Warnings": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Attachments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

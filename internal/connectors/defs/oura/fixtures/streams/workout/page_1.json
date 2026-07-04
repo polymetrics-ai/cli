@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/workout"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "workout_fixture_1",
+          "activity": "fixture_activity",
+          "calories": 80.5,
+          "day": "2026-01-01",
+          "distance": 80.5,
+          "end_datetime": "2026-01-01T00:00:00+00:00",
+          "intensity": "fixture_intensity",
+          "label": "fixture_label",
+          "source": "ring",
+          "start_datetime": "2026-01-01T00:00:00+00:00"
+        }
+      ],
+      "next_token": null
+    }
+  }
+}

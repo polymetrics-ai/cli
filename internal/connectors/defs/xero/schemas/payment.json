@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payment",
+  "type": "object",
+  "x-primary-key": [
+    "PaymentID"
+  ],
+  "properties": {
+    "Invoice": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "CreditNote": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Prepayment": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Overpayment": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "InvoiceNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CreditNoteNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BatchPayment": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Account": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyRate": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Amount": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "BankAmount": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "IsReconciled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PaymentType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PaymentID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BatchPaymentID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BankAccountNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Particulars": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Details": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "HasAccount": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "HasValidationErrors": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "StatusAttributeString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Warnings": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "payment_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

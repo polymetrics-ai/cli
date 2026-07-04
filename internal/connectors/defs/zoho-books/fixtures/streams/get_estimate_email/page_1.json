@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/estimates/synthetic-conformance-value/email",
+    "query": {
+      "page": "1",
+      "per_page": "200",
+      "email_template_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "error_list": [
+        {
+          "id": "get_estimate_email_fixture_1",
+          "name": "get_estimate_email fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

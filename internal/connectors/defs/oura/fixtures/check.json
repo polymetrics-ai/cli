@@ -1,5 +1,8 @@
 {
-  "request": { "method": "GET", "path": "/personal_info" },
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/personal_info"
+  },
   "response": {
     "status": 200,
     "body": {
@@ -7,7 +10,7 @@
       "email": "fixture1@example.com",
       "age": 35,
       "weight": 72.5,
-      "height": 178.0,
+      "height": 178,
       "biological_sex": "male"
     }
   }

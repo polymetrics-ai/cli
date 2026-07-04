@@ -1,21 +1,1687 @@
 {
   "api": "Xero Accounting API 2.0 (https://api.xero.com/api.xro/2.0)",
-  "docs": "https://developer.xero.com/documentation/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams (invoices, contacts, accounts, bank_transactions, items, payments) only; the broader Xero Accounting/Payroll/Assets/Files API surface (credit notes, purchase orders, quotes, tracking categories, reports, attachments, journals) is out of scope until Pass B",
+  "docs": "https://developer.xero.com/documentation/api/accounting/overview",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion for the official Xero Accounting OpenAPI file (xero_accounting.yaml) plus the legacy Xero streams. JSON GET endpoints are covered as streams; JSON/no-body PUT, POST, and DELETE endpoints are covered as write actions. Binary PDF and attachment download/upload endpoints are excluded as binary_payload. Payroll, Assets, Files, Projects, and other separate Xero APIs are outside this connector bundle because metadata and legacy code scope this connector to the Accounting API base URL.",
   "endpoints": [
-    { "method": "GET", "path": "/api.xro/2.0/Invoices", "covered_by": { "stream": "invoices" } },
-    { "method": "GET", "path": "/api.xro/2.0/Contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/api.xro/2.0/Accounts", "covered_by": { "stream": "accounts" } },
-    { "method": "GET", "path": "/api.xro/2.0/BankTransactions", "covered_by": { "stream": "bank_transactions" } },
-    { "method": "GET", "path": "/api.xro/2.0/Items", "covered_by": { "stream": "items" } },
-    { "method": "GET", "path": "/api.xro/2.0/Payments", "covered_by": { "stream": "payments" } },
-    { "method": "GET", "path": "/api.xro/2.0/Organisation", "excluded": { "category": "non_data_endpoint", "reason": "single organisation metadata object, used only by check; not a syncable object stream" } },
-    { "method": "GET", "path": "/api.xro/2.0/CreditNotes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api.xro/2.0/PurchaseOrders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api.xro/2.0/Quotes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api.xro/2.0/TrackingCategories", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api.xro/2.0/Reports/{reportID}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/api.xro/2.0/Invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Accounts",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Accounts",
+      "covered_by": {
+        "write": "create_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api.xro/2.0/Accounts/{AccountID}",
+      "covered_by": {
+        "write": "delete_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Accounts/{AccountID}",
+      "covered_by": {
+        "stream": "account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Accounts/{AccountID}",
+      "covered_by": {
+        "write": "update_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Accounts/{AccountID}/Attachments",
+      "covered_by": {
+        "stream": "account_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Accounts/{AccountID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Accounts/{AccountID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Accounts/{AccountID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Accounts/{AccountID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransactions",
+      "covered_by": {
+        "stream": "bank_transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/BankTransactions",
+      "covered_by": {
+        "write": "upsert_bank_transactions"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/BankTransactions",
+      "covered_by": {
+        "write": "create_bank_transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransactions/{BankTransactionID}",
+      "covered_by": {
+        "stream": "bank_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/BankTransactions/{BankTransactionID}",
+      "covered_by": {
+        "write": "update_bank_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransactions/{BankTransactionID}/Attachments",
+      "covered_by": {
+        "stream": "bank_transaction_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransactions/{BankTransactionID}/History",
+      "covered_by": {
+        "stream": "bank_transactions_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/BankTransactions/{BankTransactionID}/History",
+      "covered_by": {
+        "write": "create_bank_transaction_history_record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransfers",
+      "covered_by": {
+        "stream": "bank_transfers"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/BankTransfers",
+      "covered_by": {
+        "write": "create_bank_transfer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransfers/{BankTransferID}",
+      "covered_by": {
+        "stream": "bank_transfer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransfers/{BankTransferID}/Attachments",
+      "covered_by": {
+        "stream": "bank_transfer_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransfers/{BankTransferID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BankTransfers/{BankTransferID}/History",
+      "covered_by": {
+        "stream": "bank_transfer_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/BankTransfers/{BankTransferID}/History",
+      "covered_by": {
+        "write": "create_bank_transfer_history_record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BatchPayments",
+      "covered_by": {
+        "stream": "batch_payments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/BatchPayments",
+      "covered_by": {
+        "write": "delete_batch_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/BatchPayments",
+      "covered_by": {
+        "write": "create_batch_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BatchPayments/{BatchPaymentID}",
+      "covered_by": {
+        "stream": "batch_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/BatchPayments/{BatchPaymentID}",
+      "covered_by": {
+        "write": "delete_batch_payment_by_url_param"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BatchPayments/{BatchPaymentID}/History",
+      "covered_by": {
+        "stream": "batch_payment_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/BatchPayments/{BatchPaymentID}/History",
+      "covered_by": {
+        "write": "create_batch_payment_history_record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BrandingThemes",
+      "covered_by": {
+        "stream": "branding_themes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BrandingThemes/{BrandingThemeID}",
+      "covered_by": {
+        "stream": "branding_theme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/BrandingThemes/{BrandingThemeID}/PaymentServices",
+      "covered_by": {
+        "stream": "branding_theme_payment_services"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/BrandingThemes/{BrandingThemeID}/PaymentServices",
+      "covered_by": {
+        "write": "create_branding_theme_payment_services"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Budgets",
+      "covered_by": {
+        "stream": "budgets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Budgets/{BudgetID}",
+      "covered_by": {
+        "stream": "budget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ContactGroups",
+      "covered_by": {
+        "stream": "contact_groups"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/ContactGroups",
+      "covered_by": {
+        "write": "create_contact_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ContactGroups/{ContactGroupID}",
+      "covered_by": {
+        "stream": "contact_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/ContactGroups/{ContactGroupID}",
+      "covered_by": {
+        "write": "update_contact_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api.xro/2.0/ContactGroups/{ContactGroupID}/Contacts",
+      "covered_by": {
+        "write": "delete_contact_group_contacts"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/ContactGroups/{ContactGroupID}/Contacts",
+      "covered_by": {
+        "write": "create_contact_group_contacts"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api.xro/2.0/ContactGroups/{ContactGroupID}/Contacts/{ContactID}",
+      "covered_by": {
+        "write": "delete_contact_group_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Contacts",
+      "covered_by": {
+        "write": "upsert_contacts"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Contacts",
+      "covered_by": {
+        "write": "create_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Contacts/{ContactID}",
+      "covered_by": {
+        "stream": "contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Contacts/{ContactID}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Contacts/{ContactID}/Attachments",
+      "covered_by": {
+        "stream": "contact_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Contacts/{ContactID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Contacts/{ContactID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Contacts/{ContactID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Contacts/{ContactID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Contacts/{ContactID}/CISSettings",
+      "covered_by": {
+        "stream": "contact_cis_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Contacts/{ContactID}/History",
+      "covered_by": {
+        "stream": "contact_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Contacts/{ContactID}/History",
+      "covered_by": {
+        "write": "create_contact_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Contacts/{ContactNumber}",
+      "covered_by": {
+        "stream": "contact_by_contact_number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/CreditNotes",
+      "covered_by": {
+        "stream": "credit_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/CreditNotes",
+      "covered_by": {
+        "write": "upsert_credit_notes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/CreditNotes",
+      "covered_by": {
+        "write": "create_credit_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}",
+      "covered_by": {
+        "stream": "credit_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}",
+      "covered_by": {
+        "write": "update_credit_note"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}/Allocations",
+      "covered_by": {
+        "write": "create_credit_note_allocation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}/Allocations/{AllocationID}",
+      "covered_by": {
+        "write": "delete_credit_note_allocations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}/Attachments",
+      "covered_by": {
+        "stream": "credit_note_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}/History",
+      "covered_by": {
+        "stream": "credit_note_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}/History",
+      "covered_by": {
+        "write": "create_credit_note_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/CreditNotes/{CreditNoteID}/pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Currencies",
+      "covered_by": {
+        "stream": "currencies"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Currencies",
+      "covered_by": {
+        "write": "create_currency"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ExpenseClaims",
+      "covered_by": {
+        "stream": "expense_claims"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/ExpenseClaims",
+      "covered_by": {
+        "write": "create_expense_claims"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ExpenseClaims/{ExpenseClaimID}",
+      "covered_by": {
+        "stream": "expense_claim"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/ExpenseClaims/{ExpenseClaimID}",
+      "covered_by": {
+        "write": "update_expense_claim"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ExpenseClaims/{ExpenseClaimID}/History",
+      "covered_by": {
+        "stream": "expense_claim_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/ExpenseClaims/{ExpenseClaimID}/History",
+      "covered_by": {
+        "write": "create_expense_claim_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/InvoiceReminders/Settings",
+      "covered_by": {
+        "stream": "invoice_reminders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Invoices",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Invoices",
+      "covered_by": {
+        "write": "upsert_invoices"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Invoices",
+      "covered_by": {
+        "write": "create_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}",
+      "covered_by": {
+        "stream": "invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}",
+      "covered_by": {
+        "write": "update_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}/Attachments",
+      "covered_by": {
+        "stream": "invoice_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}/Email",
+      "covered_by": {
+        "write": "email_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}/History",
+      "covered_by": {
+        "stream": "invoice_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}/History",
+      "covered_by": {
+        "write": "create_invoice_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}/OnlineInvoice",
+      "covered_by": {
+        "stream": "online_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Invoices/{InvoiceID}/pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Items",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Items",
+      "covered_by": {
+        "write": "upsert_items"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Items",
+      "covered_by": {
+        "write": "create_items"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api.xro/2.0/Items/{ItemID}",
+      "covered_by": {
+        "write": "delete_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Items/{ItemID}",
+      "covered_by": {
+        "stream": "item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Items/{ItemID}",
+      "covered_by": {
+        "write": "update_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Items/{ItemID}/History",
+      "covered_by": {
+        "stream": "item_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Items/{ItemID}/History",
+      "covered_by": {
+        "write": "create_item_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Journals",
+      "covered_by": {
+        "stream": "journals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Journals/{JournalID}",
+      "covered_by": {
+        "stream": "journal"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Journals/{JournalNumber}",
+      "covered_by": {
+        "stream": "journal_by_number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/LinkedTransactions",
+      "covered_by": {
+        "stream": "linked_transactions"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/LinkedTransactions",
+      "covered_by": {
+        "write": "create_linked_transaction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api.xro/2.0/LinkedTransactions/{LinkedTransactionID}",
+      "covered_by": {
+        "write": "delete_linked_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/LinkedTransactions/{LinkedTransactionID}",
+      "covered_by": {
+        "stream": "linked_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/LinkedTransactions/{LinkedTransactionID}",
+      "covered_by": {
+        "write": "update_linked_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ManualJournals",
+      "covered_by": {
+        "stream": "manual_journals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/ManualJournals",
+      "covered_by": {
+        "write": "upsert_manual_journals"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/ManualJournals",
+      "covered_by": {
+        "write": "create_manual_journals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ManualJournals/{ManualJournalID}",
+      "covered_by": {
+        "stream": "manual_journal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/ManualJournals/{ManualJournalID}",
+      "covered_by": {
+        "write": "update_manual_journal"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ManualJournals/{ManualJournalID}/Attachments",
+      "covered_by": {
+        "stream": "manual_journal_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/ManualJournals/{ManualJournalID}/History",
+      "covered_by": {
+        "stream": "manual_journals_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/ManualJournals/{ManualJournalID}/History",
+      "covered_by": {
+        "write": "create_manual_journal_history_record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Organisation",
+      "covered_by": {
+        "stream": "organisations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Organisation/{OrganisationID}/CISSettings",
+      "covered_by": {
+        "stream": "organisation_cis_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Organisation/Actions",
+      "covered_by": {
+        "stream": "organisation_actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Overpayments",
+      "covered_by": {
+        "stream": "overpayments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Overpayments/{OverpaymentID}",
+      "covered_by": {
+        "stream": "overpayment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Overpayments/{OverpaymentID}/Allocations",
+      "covered_by": {
+        "write": "create_overpayment_allocations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api.xro/2.0/Overpayments/{OverpaymentID}/Allocations/{AllocationID}",
+      "covered_by": {
+        "write": "delete_overpayment_allocations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Overpayments/{OverpaymentID}/History",
+      "covered_by": {
+        "stream": "overpayment_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Overpayments/{OverpaymentID}/History",
+      "covered_by": {
+        "write": "create_overpayment_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Payments",
+      "covered_by": {
+        "stream": "payments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Payments",
+      "covered_by": {
+        "write": "create_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Payments",
+      "covered_by": {
+        "write": "create_payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Payments/{PaymentID}",
+      "covered_by": {
+        "stream": "payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Payments/{PaymentID}",
+      "covered_by": {
+        "write": "delete_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Payments/{PaymentID}/History",
+      "covered_by": {
+        "stream": "payment_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Payments/{PaymentID}/History",
+      "covered_by": {
+        "write": "create_payment_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/PaymentServices",
+      "covered_by": {
+        "stream": "payment_services"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/PaymentServices",
+      "covered_by": {
+        "write": "create_payment_service"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Prepayments",
+      "covered_by": {
+        "stream": "prepayments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Prepayments/{PrepaymentID}",
+      "covered_by": {
+        "stream": "prepayment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Prepayments/{PrepaymentID}/Allocations",
+      "covered_by": {
+        "write": "create_prepayment_allocations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api.xro/2.0/Prepayments/{PrepaymentID}/Allocations/{AllocationID}",
+      "covered_by": {
+        "write": "delete_prepayment_allocations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Prepayments/{PrepaymentID}/History",
+      "covered_by": {
+        "stream": "prepayment_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Prepayments/{PrepaymentID}/History",
+      "covered_by": {
+        "write": "create_prepayment_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/PurchaseOrders",
+      "covered_by": {
+        "stream": "purchase_orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/PurchaseOrders",
+      "covered_by": {
+        "write": "upsert_purchase_orders"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/PurchaseOrders",
+      "covered_by": {
+        "write": "create_purchase_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderID}",
+      "covered_by": {
+        "stream": "purchase_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderID}",
+      "covered_by": {
+        "write": "update_purchase_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderID}/Attachments",
+      "covered_by": {
+        "stream": "purchase_order_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderID}/History",
+      "covered_by": {
+        "stream": "purchase_order_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderID}/History",
+      "covered_by": {
+        "write": "create_purchase_order_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderID}/pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/PurchaseOrders/{PurchaseOrderNumber}",
+      "covered_by": {
+        "stream": "purchase_order_by_number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Quotes",
+      "covered_by": {
+        "stream": "quotes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Quotes",
+      "covered_by": {
+        "write": "upsert_quotes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Quotes",
+      "covered_by": {
+        "write": "create_quotes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Quotes/{QuoteID}",
+      "covered_by": {
+        "stream": "quote"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Quotes/{QuoteID}",
+      "covered_by": {
+        "write": "update_quote"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Quotes/{QuoteID}/Attachments",
+      "covered_by": {
+        "stream": "quote_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Quotes/{QuoteID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Quotes/{QuoteID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Quotes/{QuoteID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Quotes/{QuoteID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Quotes/{QuoteID}/History",
+      "covered_by": {
+        "stream": "quote_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Quotes/{QuoteID}/History",
+      "covered_by": {
+        "write": "create_quote_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Quotes/{QuoteID}/pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Receipts",
+      "covered_by": {
+        "stream": "receipts"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Receipts",
+      "covered_by": {
+        "write": "create_receipt"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Receipts/{ReceiptID}",
+      "covered_by": {
+        "stream": "receipt"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Receipts/{ReceiptID}",
+      "covered_by": {
+        "write": "update_receipt"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Receipts/{ReceiptID}/Attachments",
+      "covered_by": {
+        "stream": "receipt_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Receipts/{ReceiptID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Receipts/{ReceiptID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Receipts/{ReceiptID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Receipts/{ReceiptID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Receipts/{ReceiptID}/History",
+      "covered_by": {
+        "stream": "receipt_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/Receipts/{ReceiptID}/History",
+      "covered_by": {
+        "write": "create_receipt_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/RepeatingInvoices",
+      "covered_by": {
+        "stream": "repeating_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/RepeatingInvoices",
+      "covered_by": {
+        "write": "upsert_repeating_invoices"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/RepeatingInvoices",
+      "covered_by": {
+        "write": "create_repeating_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/RepeatingInvoices/{RepeatingInvoiceID}",
+      "covered_by": {
+        "stream": "repeating_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/RepeatingInvoices/{RepeatingInvoiceID}",
+      "covered_by": {
+        "write": "update_repeating_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/RepeatingInvoices/{RepeatingInvoiceID}/Attachments",
+      "covered_by": {
+        "stream": "repeating_invoice_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint returns file/PDF bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads attachment bytes; declarative writes support JSON bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/RepeatingInvoices/{RepeatingInvoiceID}/History",
+      "covered_by": {
+        "stream": "repeating_invoice_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/RepeatingInvoices/{RepeatingInvoiceID}/History",
+      "covered_by": {
+        "write": "create_repeating_invoice_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports",
+      "covered_by": {
+        "stream": "reports_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports/{ReportID}",
+      "covered_by": {
+        "stream": "report_from_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports/AgedPayablesByContact",
+      "covered_by": {
+        "stream": "report_aged_payables_by_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports/AgedReceivablesByContact",
+      "covered_by": {
+        "stream": "report_aged_receivables_by_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports/BalanceSheet",
+      "covered_by": {
+        "stream": "report_balance_sheet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports/BankSummary",
+      "covered_by": {
+        "stream": "report_bank_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports/BudgetSummary",
+      "covered_by": {
+        "stream": "report_budget_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports/ExecutiveSummary",
+      "covered_by": {
+        "stream": "report_executive_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports/ProfitAndLoss",
+      "covered_by": {
+        "stream": "report_profit_and_loss"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports/TenNinetyNine",
+      "covered_by": {
+        "stream": "report_ten_ninety_nine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Reports/TrialBalance",
+      "covered_by": {
+        "stream": "report_trial_balance"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/Setup",
+      "covered_by": {
+        "write": "setup_organisation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/TaxRates",
+      "covered_by": {
+        "stream": "tax_rates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/TaxRates",
+      "covered_by": {
+        "write": "update_tax_rate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/TaxRates",
+      "covered_by": {
+        "write": "create_tax_rates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/TaxRates/{TaxType}",
+      "covered_by": {
+        "stream": "tax_rate_by_tax_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/TrackingCategories",
+      "covered_by": {
+        "stream": "tracking_categories"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/TrackingCategories",
+      "covered_by": {
+        "write": "create_tracking_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api.xro/2.0/TrackingCategories/{TrackingCategoryID}",
+      "covered_by": {
+        "write": "delete_tracking_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/TrackingCategories/{TrackingCategoryID}",
+      "covered_by": {
+        "stream": "tracking_category"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/TrackingCategories/{TrackingCategoryID}",
+      "covered_by": {
+        "write": "update_tracking_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api.xro/2.0/TrackingCategories/{TrackingCategoryID}/Options",
+      "covered_by": {
+        "write": "create_tracking_options"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api.xro/2.0/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}",
+      "covered_by": {
+        "write": "delete_tracking_options"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api.xro/2.0/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}",
+      "covered_by": {
+        "write": "update_tracking_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api.xro/2.0/Users/{UserID}",
+      "covered_by": {
+        "stream": "user"
+      }
+    }
   ]
 }

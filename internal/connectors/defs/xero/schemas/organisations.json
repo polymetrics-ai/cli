@@ -1,0 +1,209 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organisations",
+  "type": "object",
+  "x-primary-key": [
+    "OrganisationID"
+  ],
+  "properties": {
+    "OrganisationID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "APIKey": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LegalName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PaysTax": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "Version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "OrganisationType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BaseCurrency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CountryCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "IsDemoCompany": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "OrganisationStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "RegistrationNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "EmployerIdentificationNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TaxNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "FinancialYearEndDay": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "FinancialYearEndMonth": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "SalesTaxBasis": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SalesTaxPeriod": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "DefaultSalesTax": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "DefaultPurchasesTax": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PeriodLockDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "EndOfYearLockDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CreatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Timezone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "OrganisationEntityType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ShortCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Class": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Edition": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LineOfBusiness": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Addresses": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Phones": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "ExternalLinks": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "PaymentTerms": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

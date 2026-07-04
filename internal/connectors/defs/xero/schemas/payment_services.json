@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payment_services",
+  "type": "object",
+  "x-primary-key": [
+    "PaymentServiceID"
+  ],
+  "properties": {
+    "PaymentServiceID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PaymentServiceName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PaymentServiceUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PayNowText": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PaymentServiceType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

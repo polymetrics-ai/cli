@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/daily_sleep/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "daily_sleep_detail_fixture_1",
+      "contributors": {},
+      "day": "2026-01-01",
+      "score": 80,
+      "timestamp": "2026-01-01T00:00:00+00:00"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "vendor_credit_id": "synthetic-conformance-value",
+    "vendor_credit_bill_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/vendorcredits/synthetic-conformance-value/bills/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

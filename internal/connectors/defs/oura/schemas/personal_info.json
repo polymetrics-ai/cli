@@ -2,14 +2,45 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "personal_info",
   "type": "object",
-  "x-primary-key": ["id"],
-  "required": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "email": { "type": ["string", "null"] },
-    "age": { "type": ["integer", "null"] },
-    "weight": { "type": ["number", "null"] },
-    "height": { "type": ["number", "null"] },
-    "biological_sex": { "type": ["string", "null"] }
+    "id": {
+      "type": "string"
+    },
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "age": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "weight": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "biological_sex": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
   }
 }

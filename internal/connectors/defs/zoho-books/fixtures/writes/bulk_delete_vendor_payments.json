@@ -1,0 +1,17 @@
+{
+  "record": {
+    "vendorpayment_id": "synthetic-conformance-value",
+    "bulk_delete": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/vendorpayments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

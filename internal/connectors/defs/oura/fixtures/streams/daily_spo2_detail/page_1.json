@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/daily_spo2/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "daily_spo2_detail_fixture_1",
+      "breathing_disturbance_index": 80,
+      "day": "2026-01-01",
+      "spo2_percentage": {}
+    }
+  }
+}

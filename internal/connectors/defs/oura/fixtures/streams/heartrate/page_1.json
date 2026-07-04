@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/heartrate"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "timestamp_unix": 1767225600000,
+          "bpm": 80,
+          "source": "ring"
+        }
+      ],
+      "next_token": null
+    }
+  }
+}

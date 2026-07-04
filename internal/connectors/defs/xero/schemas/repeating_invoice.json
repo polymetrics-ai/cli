@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "repeating_invoice",
+  "type": "object",
+  "x-primary-key": [
+    "ID"
+  ],
+  "properties": {
+    "Type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Contact": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Schedule": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "LineItems": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "LineAmountTypes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BrandingThemeID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SubTotal": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "TotalTax": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Total": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "RepeatingInvoiceID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "HasAttachments": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "Attachments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "ApprovedForSending": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "SendCopy": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "MarkAsSent": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "IncludePDF": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "repeating_invoice_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "journal_id": "synthetic-conformance-value",
+    "journal_line_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/journals/synthetic-conformance-value/credits/synthetic-conformance-value/receivables"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}
