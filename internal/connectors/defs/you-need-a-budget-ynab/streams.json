@@ -36,7 +36,7 @@
       },
       "projection": "passthrough",
       "computed_fields": {
-        "updated_at": "{{ record.last_modified_on }}"
+        "updated_at": "{{ coalesce record.last_modified_on record.updated_at }}"
       },
       "schema": "schemas/accounts.json"
     },
@@ -50,8 +50,8 @@
       },
       "projection": "passthrough",
       "computed_fields": {
-        "name": "{{ record.payee_name }}",
-        "updated_at": "{{ record.date }}"
+        "name": "{{ coalesce record.payee_name record.memo }}",
+        "updated_at": "{{ coalesce record.date record.last_modified_on }}"
       },
       "schema": "schemas/transactions.json"
     },

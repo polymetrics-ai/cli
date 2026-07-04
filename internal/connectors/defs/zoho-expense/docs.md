@@ -22,4 +22,4 @@ These writes can create, modify, submit, approve, reject, reimburse, archive, ex
 
 - Receipt and attachment upload/download endpoints are excluded as `binary_payload`; the current declarative write dialect does not send multipart file bodies, and binary responses are not JSON record streams.
 - Zoho's reporting tag OpenAPI file contains regex path placeholders for option/tag IDs. The bundle normalizes those placeholders to `tag_id` and `option_id` path variables while preserving the documented endpoint coverage in `api_surface.json`.
-- `page_size` and `max_pages` remain in `spec.json` for continuity with legacy configuration, but the declarative pagination block uses the static documented default of 200 records per page.
+- Legacy runtime `page_size` and `max_pages` overrides are not declared because the current declarative pagination block cannot apply config-driven page sizing or page caps; it uses the default 200 records per page.

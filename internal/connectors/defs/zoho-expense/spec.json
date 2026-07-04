@@ -21,16 +21,6 @@
       "type": "string",
       "description": "Zoho Expense organization ID. Sent as the X-com-zoho-expense-organizationid header for organization-scoped endpoints and as the documented organization_id query parameter for reporting tag endpoints."
     },
-    "page_size": {
-      "type": "string",
-      "default": "200",
-      "description": "Records per page for legacy documentation continuity; pagination uses the static bundle default."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Maximum pages for legacy documentation continuity; pagination uses the static bundle default."
-    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

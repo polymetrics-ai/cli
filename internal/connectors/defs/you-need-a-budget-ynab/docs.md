@@ -98,25 +98,9 @@ pattern, documented in `docs/migration/conventions.md`).
 
 ## Known limits
 
-- Documented parity deviation (narrower fallback chain, single computed_fields reference only):
-  legacy's `transactions` stream derives its convenience `name` field from
-  `firstValue(in, ["payee_name", "memo"])` — a 2-key fallback chain trying `payee_name` first,
-  falling back to `memo` only when `payee_name` is absent/nil. The engine's `computed_fields`
-  dialect has no coalesce/first-of filter (only a single bare `{{ record.<path> }}` reference or a
-  filter chain over ONE reference), so this bundle's `name` computed field only aliases
-  `payee_name` — a transaction with a null `payee_name` (e.g. a split transaction with no assigned
-  payee) emits `name: null` here where legacy would have back-filled the transaction's `memo` text
-  instead. This is a genuine, documented narrowing (not cosmetic): it changes emitted `name` data
-  for that specific edge-case input. Scope-narrowed rather than blocked because it affects one
-  convenience alias field on one stream, not the record's real YNAB data (every native field,
-  including `memo` itself, still survives via `passthrough` projection) — see
-  `docs/migration/conventions.md` §5's meta-rule and searxng's analogous documented-narrowing
-  precedent (ledger item 7).
-- Similarly, legacy's `accounts` stream tries `firstValue(in, ["last_modified_on", "updated_at"])`
-  for its `updated_at` alias; this bundle aliases only `last_modified_on`. YNAB's real Account
-  object has neither field natively (only `last_reconciled_at`), so both legacy and this bundle
-  resolve `updated_at` to absent/null for every real account record — this narrowing has no actual
-  effect on any real API response and is recorded for completeness only.
+- Legacy fallback aliases are modeled with `coalesce`: account `updated_at` uses
+  `last_modified_on` then `updated_at`, transaction `name` uses `payee_name` then `memo`, and
+  transaction `updated_at` uses `date` then `last_modified_on`.
 - No pagination or `max_pages`/`page_size` config is modeled on any stream — none of the 7
   documented list endpoints this bundle covers actually paginate; YNAB's own change-tracking
   mechanism is `server_knowledge`-based delta sync (`last_knowledge_of_server` query param /

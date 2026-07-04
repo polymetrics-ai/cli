@@ -48,7 +48,7 @@
         "path": "expense_reports"
       },
       "computed_fields": {
-        "id": "{{ coalesce record.report_id record.expense_report_id record.id }}",
+        "id": "{{ coalesce record.id record.report_id record.expense_report_id }}",
         "name": "{{ coalesce record.name record.report_name }}",
         "updated_at": "{{ coalesce record.updated_at record.modified_time record.last_modified_time }}"
       },
@@ -62,7 +62,7 @@
         "path": "expenses"
       },
       "computed_fields": {
-        "id": "{{ coalesce record.expense_id record.id }}",
+        "id": "{{ coalesce record.id record.expense_id }}",
         "name": "{{ coalesce record.name record.merchant_name record.description }}",
         "updated_at": "{{ coalesce record.updated_at record.modified_time record.last_modified_time }}"
       },
@@ -76,7 +76,7 @@
         "path": "users"
       },
       "computed_fields": {
-        "id": "{{ coalesce record.user_id record.id }}",
+        "id": "{{ coalesce record.id record.user_id }}",
         "name": "{{ coalesce record.name record.email }}",
         "updated_at": "{{ coalesce record.updated_at record.modified_time }}"
       },
