@@ -45,16 +45,15 @@ pagination stops when `next_start` is absent/null/empty — identical to legacy'
 looks only at `next_start`, never at `more_items_in_collection`, so adding a `stop_path` gate on that
 field would be new behavior, not a port.
 
-`deals`, `persons`, and `organizations` send `since_timestamp` (an optional-query entry,
-`omit_when_absent: true`) when `replication_start_date` is configured; `activities` sends the same
-value as `since` (a different param name — matches legacy's per-endpoint `sinceParam` map:
+`deals`, `persons`, and `organizations` send `since_timestamp`; `activities` sends the same lower
+bound as `since` (a different param name — matches legacy's per-endpoint `sinceParam` map:
 `deals`/`persons`/`organizations` → `since_timestamp`, `activities` → `since`, `products`/`users` →
-`""`, i.e. no since param wired at all for those two, matching this bundle's `products`/`users`
-streams declaring no such query key). Legacy resolves the since value from `req.State["cursor"]`
-first, falling back to `req.Config.Config["replication_start_date"]`; this bundle does not attempt to
-express the state-cursor half of that fallback as a stream-level `incremental` block because none of
-Pipedrive's since params here is wired as this dialect's `incremental.request_param` (no per-stream
-`x-cursor-field`/state-cursor round-trip is declared) — see Known limits.
+`""`, i.e. no since param wired at all for those two). Each of the four since-capable streams uses
+an `incremental` block with `cursor_field: "update_time"` and
+`start_config_key: "replication_start_date"`, so the lower bound is resolved from persisted sync
+state first and falls back to the static config value, matching legacy's
+`firstNonEmpty(req.State["cursor"], req.Config.Config["replication_start_date"])` helper exactly.
+No client-side filter is applied; legacy sends the parameter and emits whatever the server returns.
 
 The 14 Pass-B-added streams split into three pagination shapes. `notes` reuses the base
 `cursor`+`token_path: additional_data.pagination.next_start` shape exactly like the 6 legacy
@@ -94,17 +93,6 @@ non-destructive); every `update_*`/`delete_*` action requires approval.
 
 ## Known limits
 
-- Legacy's `since`/`since_timestamp` value can come from EITHER the sync's persisted
-  `state["cursor"]` OR the static `replication_start_date` config value (state takes precedence).
-  This bundle only wires the static config half (`config.replication_start_date`) via the
-  optional-query dialect; the state-cursor half is not modeled as a stream `incremental` block
-  because no stream here declares `x-cursor-field`/`incremental.cursor_field` — the raw
-  `update_time`/`add_time` fields legacy tracks are ordinary passthrough fields, not a declared
-  incremental cursor tied to a `request_param`. This means every read is effectively a
-  config-anchored (not truly resumable, state-cursor-advancing) read from wave2's bundle's
-  perspective. Out of scope for wave2 fan-out; a future capability-expansion pass can promote these
-  streams to full `incremental` blocks once the since-param-vs-state-cursor precedence is worth
-  modeling declaratively.
 - `page_size`/`max_pages` config knobs (legacy's client-side page-size and page-count bounds,
   1-500 and 0/all/unlimited respectively) have no bundle-level equivalent; `limit=100` is a fixed
   per-stream `query` value (matching legacy's `defaultPageSize`) and pagination relies solely on the

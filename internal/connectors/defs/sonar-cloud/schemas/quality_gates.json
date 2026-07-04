@@ -3,11 +3,13 @@
   "title": "quality_gates",
   "type": "object",
   "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
     "name": { "type": ["string", "null"] },
     "isDefault": { "type": ["boolean", "null"] },
-    "isBuiltIn": { "type": ["boolean", "null"] }
+    "isBuiltIn": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["string", "null"] }
   }
 }

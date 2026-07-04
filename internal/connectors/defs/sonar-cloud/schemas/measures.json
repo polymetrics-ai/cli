@@ -3,11 +3,13 @@
   "title": "measures",
   "type": "object",
   "x-primary-key": ["metric"],
+  "x-cursor-field": "createdAt",
   "required": ["metric"],
   "properties": {
     "metric": { "type": "string" },
     "value": { "type": ["string", "null"] },
     "component": { "type": ["string", "null"] },
-    "bestValue": { "type": ["boolean", "null"] }
+    "bestValue": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["string", "null"] }
   }
 }

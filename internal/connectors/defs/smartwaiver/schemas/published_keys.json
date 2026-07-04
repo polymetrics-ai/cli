@@ -3,7 +3,6 @@
   "title": "published_keys",
   "type": "object",
   "x-primary-key": ["key"],
-  "x-cursor-field": "createdAt",
   "required": ["key"],
   "properties": {
     "key": { "type": "string" },

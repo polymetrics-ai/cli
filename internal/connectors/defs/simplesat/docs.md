@@ -26,11 +26,9 @@ bundle preserves every field verbatim rather than gating on a fixed schema-decla
   GET list — no filter body is sent, so it lists every answer), records at `answers`.
 - `surveys`: `GET /surveys`, records at `surveys`.
 - `questions`: `GET /questions`, records at `questions`.
-- `customers`: `GET /customers`, records at `customers`. The only incremental stream:
-  `incremental.cursor_field: modified` + `request_param: modified_after` sends v1's own
-  `modified_after` server-side filter when a lower bound resolves (state cursor or the optional
-  `created_after` config passthrough for the FIRST sync's lower bound — see below); `created_after`
-  is a separate, always-available config passthrough filter independent of incremental state.
+- `customers`: `GET /customers`, records at `customers`. The optional `created_after` config
+  passthrough is sent only when configured. No stream declares incremental cursor behavior,
+  matching legacy's catalog, which published no `CursorFields`.
 - `responses`: `POST /responses/search` (no filter body — lists every response), records at
   `responses`, including each response's nested `ticket`/`customer`/`team_members`/`answers`
   sub-objects verbatim. This supersedes legacy's `tickets` stream concept: v1 has no standalone
@@ -46,8 +44,8 @@ conventions.md §4's sanctioned exception, `next_url` streams ship a single-page
 `answers` (see `fixtures/streams/answers/page_1.json`, whose `next: null` proves natural
 termination without a second page).
 
-`page_size` defaults to `100` and is always sent; `created_after`/`modified_after` are optional
-passthrough/incremental query params, omitted entirely when unset (`omit_when_absent: true`).
+`page_size` defaults to `100` and is always sent; `created_after` is an optional passthrough query
+param, omitted entirely when unset (`omit_when_absent: true`).
 
 ## Write actions & risks
 

@@ -181,6 +181,37 @@ func TestReadStream_DomainCompetitorsUsesGetCompetitorsProcedure(t *testing.T) {
 	}
 }
 
+func TestReadStream_DomainUrlsUsesGetDomainUrlsProcedure(t *testing.T) {
+	var sawMethod string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body jsonRPCRequest
+		_ = json.NewDecoder(r.Body).Decode(&body)
+		sawMethod = body.Method
+		_, _ = w.Write([]byte(`{"result":{"data":[{"url":"https://example.com/","keywords":42}]}}`))
+	}))
+	defer srv.Close()
+
+	req := connectors.ReadRequest{Stream: "domain_urls", Config: connectors.RuntimeConfig{Config: map[string]string{"pages_to_fetch": "1"}}}
+	var got []connectors.Record
+	h := Hooks{}
+	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "domain_urls"}, req, newRuntime(srv.URL), func(r connectors.Record) error {
+		got = append(got, r)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ReadStream: %v", err)
+	}
+	if !handled {
+		t.Fatal("handled = false, want true")
+	}
+	if sawMethod != "SerpstatDomainProcedure.getDomainUrls" {
+		t.Fatalf("method = %q, want getDomainUrls procedure", sawMethod)
+	}
+	if len(got) != 1 || got[0]["url"] != "https://example.com/" {
+		t.Fatalf("records = %+v, want one url record", got)
+	}
+}
+
 // --- pages_to_fetch bounds ---
 
 func TestReadStream_PagesToFetchCapsRequestCount(t *testing.T) {

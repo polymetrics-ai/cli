@@ -3,7 +3,6 @@
   "title": "templates",
   "type": "object",
   "x-primary-key": ["templateId"],
-  "x-cursor-field": "publishedOn",
   "required": ["templateId"],
   "properties": {
     "templateId": { "type": "string" },

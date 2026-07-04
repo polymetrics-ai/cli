@@ -3,7 +3,6 @@
   "title": "checkins",
   "type": "object",
   "x-primary-key": ["checkinId"],
-  "x-cursor-field": "date",
   "required": ["checkinId"],
   "properties": {
     "checkinId": { "type": "string" },

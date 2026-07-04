@@ -44,8 +44,9 @@ on `project_analyses` (that action's own real parameter names for the same bound
 concept).
 
 Legacy has no incremental/state-cursor read mode (no persisted cursor is ever read or written) —
-`start_date`/`end_date` are static per-read filters, not an `incremental` block, so no stream
-(old or new) declares `incremental` or `x-cursor-field` here.
+`start_date`/`end_date` are static per-read filters, not an `incremental` block. The four
+legacy-parity schemas still declare `x-cursor-field: createdAt` because legacy published that
+catalog cursor field, but no stream sends a server-side incremental request parameter.
 
 All 11 streams declare `"projection": "passthrough"`. Legacy's `Read` emits the raw API record
 verbatim (`emit(connectors.Record(rec))`, `sonar_cloud.go:126`, inside `readRecords`) with no

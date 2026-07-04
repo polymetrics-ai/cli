@@ -3,7 +3,6 @@
   "title": "customers",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "modified",
   "required": ["id"],
   "properties": {
     "id": { "type": "integer" },

@@ -40,12 +40,17 @@
     {
       "name": "companies",
       "path": "/api/v3/companies/list",
-      "records": {
-        "path": "data"
-      },
-      "pagination": {
-        "type": "page_number",
-        "page_param": "page",
+    "records": {
+      "path": "data"
+    },
+    "computed_fields": {
+      "id": "{{ coalesce record.id record.simId record.companyId }}",
+      "name": "{{ coalesce record.name record.companyName }}",
+      "updated_at": "{{ coalesce record.updated_at record.fiscalPeriod }}"
+    },
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
         "size_param": "limit",
         "start_page": 1,
         "page_size": 100
@@ -55,30 +60,37 @@
     {
       "name": "statements",
       "path": "/api/v3/statements/list",
-      "records": {
-        "path": "data"
-      },
-      "pagination": {
+    "records": {
+      "path": "data"
+    },
+    "pagination": {
         "type": "page_number",
         "page_param": "page",
         "size_param": "limit",
         "start_page": 1,
         "page_size": 100
-      },
-      "computed_fields": {
-        "updated_at": "{{ record.fiscalPeriod }}"
-      },
-      "schema": "schemas/statements.json"
     },
+    "computed_fields": {
+      "id": "{{ coalesce record.id record.simId record.companyId }}",
+      "name": "{{ coalesce record.name record.companyName }}",
+      "updated_at": "{{ coalesce record.updated_at record.fiscalPeriod }}"
+    },
+    "schema": "schemas/statements.json"
+  },
     {
       "name": "markets",
       "path": "/api/v3/markets/list",
-      "records": {
-        "path": "data"
-      },
-      "pagination": {
-        "type": "page_number",
-        "page_param": "page",
+    "records": {
+      "path": "data"
+    },
+    "computed_fields": {
+      "id": "{{ coalesce record.id record.simId record.companyId }}",
+      "name": "{{ coalesce record.name record.companyName }}",
+      "updated_at": "{{ coalesce record.updated_at record.fiscalPeriod }}"
+    },
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
         "size_param": "limit",
         "start_page": 1,
         "page_size": 100

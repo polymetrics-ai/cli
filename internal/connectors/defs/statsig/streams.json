@@ -6,10 +6,9 @@
       { "mode": "api_key_header", "header": "STATSIG-API-KEY", "value": "{{ secrets.api_key }}" }
     ],
     "pagination": {
-      "type": "page_number",
-      "page_param": "page",
-      "size_param": "limit",
-      "start_page": 1,
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
       "page_size": 100
     },
     "check": { "method": "GET", "path": "/gates", "query": { "limit": "1" } },

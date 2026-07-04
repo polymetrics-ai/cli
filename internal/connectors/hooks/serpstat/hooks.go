@@ -53,6 +53,7 @@ func (Hooks) ConnectorName() string { return "serpstat" }
 var jsonRPCMethod = map[string]string{
 	"domain_keywords":    "SerpstatDomainProcedure.getKeywords",
 	"domain_competitors": "SerpstatDomainProcedure.getCompetitors",
+	"domain_urls":        "SerpstatDomainProcedure.getDomainUrls",
 }
 
 // ReadStream implements engine.StreamHook, handling both declared streams

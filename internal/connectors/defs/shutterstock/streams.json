@@ -61,9 +61,9 @@
         "path": "data"
       },
       "computed_fields": {
-        "description": "{{ record.description }}",
-        "media_type": "{{ record.media_type }}",
-        "updated_at": "{{ record.updated_time }}"
+        "description": "{{ coalesce record.description record.title }}",
+        "media_type": "{{ coalesce record.media_type record.asset_type }}",
+        "updated_at": "{{ coalesce record.updated_time record.updated_at }}"
       },
       "schema": "schemas/images.json"
     },
@@ -92,9 +92,9 @@
         "path": "data"
       },
       "computed_fields": {
-        "description": "{{ record.description }}",
-        "media_type": "{{ record.media_type }}",
-        "updated_at": "{{ record.updated_time }}"
+        "description": "{{ coalesce record.description record.title }}",
+        "media_type": "{{ coalesce record.media_type record.asset_type }}",
+        "updated_at": "{{ coalesce record.updated_time record.updated_at }}"
       },
       "schema": "schemas/videos.json"
     },
@@ -123,9 +123,9 @@
         "path": "data"
       },
       "computed_fields": {
-        "description": "{{ record.description }}",
-        "media_type": "{{ record.media_type }}",
-        "updated_at": "{{ record.updated_time }}"
+        "description": "{{ coalesce record.description record.title }}",
+        "media_type": "{{ coalesce record.media_type record.asset_type }}",
+        "updated_at": "{{ coalesce record.updated_time record.updated_at }}"
       },
       "schema": "schemas/audio.json"
     },

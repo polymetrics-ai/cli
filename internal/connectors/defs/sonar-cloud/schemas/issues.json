@@ -3,6 +3,7 @@
   "title": "issues",
   "type": "object",
   "x-primary-key": ["key"],
+  "x-cursor-field": "createdAt",
   "required": ["key"],
   "properties": {
     "key": { "type": "string" },
@@ -17,6 +18,7 @@
     "organization": { "type": ["string", "null"] },
     "author": { "type": ["string", "null"] },
     "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "createdAt": { "type": ["string", "null"] },
     "creationDate": { "type": ["string", "null"] },
     "updateDate": { "type": ["string", "null"] }
   }

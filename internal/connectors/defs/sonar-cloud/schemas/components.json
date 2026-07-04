@@ -3,6 +3,7 @@
   "title": "components",
   "type": "object",
   "x-primary-key": ["key"],
+  "x-cursor-field": "createdAt",
   "required": ["key"],
   "properties": {
     "key": { "type": "string" },
@@ -10,6 +11,7 @@
     "qualifier": { "type": ["string", "null"] },
     "organization": { "type": ["string", "null"] },
     "project": { "type": ["string", "null"] },
-    "visibility": { "type": ["string", "null"] }
+    "visibility": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] }
   }
 }

@@ -49,14 +49,9 @@
       "path": "/customers",
       "query": {
         "page_size": { "template": "{{ config.page_size }}", "default": "100" },
-        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
-        "modified_after": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true }
       },
       "records": { "path": "customers" },
-      "incremental": {
-        "cursor_field": "modified",
-        "request_param": "modified_after"
-      },
       "schema": "schemas/customers.json",
       "projection": "passthrough"
     },

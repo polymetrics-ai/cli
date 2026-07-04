@@ -3,7 +3,6 @@
   "title": "waivers",
   "type": "object",
   "x-primary-key": ["waiverId"],
-  "x-cursor-field": "createdOn",
   "required": ["waiverId"],
   "properties": {
     "waiverId": { "type": "string" },

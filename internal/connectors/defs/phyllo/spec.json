@@ -20,16 +20,6 @@
       "default": "https://api.getphyllo.com",
       "description": "Phyllo API base URL. Defaults to the production host; set explicitly to https://api.sandbox.getphyllo.com or https://api.staging.getphyllo.com to target a non-production environment."
     },
-    "page_size": {
-      "type": "string",
-      "default": "50",
-      "description": "Records per page (1-100)."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
-    },
     "phyllo_account_id": {
       "type": "string",
       "description": "Optional Phyllo account id filter. When set, scopes the profiles/social_contents/audience/social_content_groups/social_comments/social_income_transactions/social_income_payouts/commerce_income_transactions/commerce_income_payouts/commerce_income_balances streams to that account; omitted from the request entirely when unset."

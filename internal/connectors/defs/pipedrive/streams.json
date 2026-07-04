@@ -23,8 +23,12 @@
       "path": "/deals",
       "query": {
         "start": "0",
-        "limit": "100",
-        "since_timestamp": { "template": "{{ config.replication_start_date }}", "omit_when_absent": true }
+        "limit": "100"
+      },
+      "incremental": {
+        "cursor_field": "update_time",
+        "request_param": "since_timestamp",
+        "start_config_key": "replication_start_date"
       },
       "records": { "path": "data" },
       "schema": "schemas/deals.json",
@@ -35,8 +39,12 @@
       "path": "/persons",
       "query": {
         "start": "0",
-        "limit": "100",
-        "since_timestamp": { "template": "{{ config.replication_start_date }}", "omit_when_absent": true }
+        "limit": "100"
+      },
+      "incremental": {
+        "cursor_field": "update_time",
+        "request_param": "since_timestamp",
+        "start_config_key": "replication_start_date"
       },
       "records": { "path": "data" },
       "schema": "schemas/persons.json",
@@ -47,8 +55,12 @@
       "path": "/organizations",
       "query": {
         "start": "0",
-        "limit": "100",
-        "since_timestamp": { "template": "{{ config.replication_start_date }}", "omit_when_absent": true }
+        "limit": "100"
+      },
+      "incremental": {
+        "cursor_field": "update_time",
+        "request_param": "since_timestamp",
+        "start_config_key": "replication_start_date"
       },
       "records": { "path": "data" },
       "schema": "schemas/organizations.json",
@@ -59,8 +71,12 @@
       "path": "/activities",
       "query": {
         "start": "0",
-        "limit": "100",
-        "since": { "template": "{{ config.replication_start_date }}", "omit_when_absent": true }
+        "limit": "100"
+      },
+      "incremental": {
+        "cursor_field": "update_time",
+        "request_param": "since",
+        "start_config_key": "replication_start_date"
       },
       "records": { "path": "data" },
       "schema": "schemas/activities.json",

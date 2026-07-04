@@ -28,7 +28,9 @@ top-level `data` key, `"projection": "passthrough"` (every raw field survives; `
 properties document the field set, they are not an allow-list — matching legacy's verbatim-emit
 `Read` for the original 4 streams, and the identical passthrough shape every other Phyllo list
 endpoint uses). Pagination is offset+limit (`pagination.type: offset_limit`, `limit_param: limit`,
-`offset_param: offset`, `page_size: 50`), stopping on a short page. None of Phyllo's list endpoints
+`offset_param: offset`, `page_size: 50`), stopping on a short page. This matches legacy's default
+page size; legacy's runtime `page_size`/`max_pages` knobs are not declared here because the current
+pagination dialect only supports fixed bundle-authored integers. None of Phyllo's list endpoints
 document a server-side incremental filter parameter, so no stream declares an `incremental` block
 (full-refresh reads only, matching every stream's real capability).
 

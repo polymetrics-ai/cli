@@ -8,7 +8,7 @@ Provide the SimFin API key via the `api_key` secret. The legacy connector sends 
 
 ## Streams notes
 
-The legacy streams `companies`, `statements`, and `markets` keep the legacy `data` envelope, one-based `page`/`limit` pagination, primary key `id`, and statement `updated_at` computed from `fiscalPeriod`. Those choices preserve the records emitted by `internal/connectors/simfin`.
+The legacy streams `companies`, `statements`, and `markets` keep the legacy `data` envelope, one-based `page`/`limit` pagination, primary key `id`, and `computed_fields` matching `simfinRecord`'s fallback order: `id|simId|companyId`, `name|companyName`, and `updated_at|fiscalPeriod`. Those choices preserve the records emitted by `internal/connectors/simfin`.
 
 The added ReadMe v3 streams are `company_general_compact`, `company_general_verbose`, `company_statements_compact`, `company_statements_verbose`, `company_prices_compact`, `company_prices_verbose`, `common_shares_outstanding`, `weighted_shares_outstanding`, `filings_by_company`, `filings`, `changed_companies`, and `data_change_log`. SimFin's current OpenAPI blocks do not publish concrete response schemas for most of these endpoints, so these streams use `projection: passthrough` with permissive schemas and recorded synthetic fixtures. The compact endpoints retain their nested compact payloads instead of flattening `columns`/`data` arrays, because the engine has no documented columnar response flattener.
 
