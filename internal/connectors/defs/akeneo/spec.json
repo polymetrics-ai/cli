@@ -31,11 +31,6 @@
       "type": "string",
       "default": "100",
       "description": "Records per page (1-100, the limit query param)."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Hard cap on the number of pages fetched per stream read. 0 (or unset) means unlimited."
     }
   }
 }

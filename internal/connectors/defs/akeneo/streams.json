@@ -37,7 +37,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.identifier }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/products.json"
     },
@@ -49,7 +49,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/categories.json"
     },
@@ -61,7 +61,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/families.json"
     },
@@ -73,7 +73,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/attributes.json"
     },
@@ -85,7 +85,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/channels.json"
     },
@@ -97,7 +97,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/product_models.json"
     },
@@ -109,7 +109,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/family_variants.json"
     },
@@ -121,7 +121,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/attribute_groups.json"
     },
@@ -133,7 +133,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/association_types.json"
     },
@@ -145,7 +145,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/locales.json"
     },
@@ -157,7 +157,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/currencies.json"
     },
@@ -169,7 +169,7 @@
       },
       "records": { "path": "_embedded.items" },
       "computed_fields": {
-        "id": "{{ record.code }}"
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
       },
       "schema": "schemas/measure_families.json"
     }

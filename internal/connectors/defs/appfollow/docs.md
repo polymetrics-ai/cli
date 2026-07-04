@@ -124,20 +124,10 @@ always treated as a genuine write failure, the safe default).
   credentials should verify the actual response envelope/field set against a real account and
   correct `schemas/*.json`/`records.path` if it differs — this is flagged here specifically so that
   correction is a schema/fixture edit, not a rediscovery.
-- **`ratings`'s `store` field is not populated per-row (ACCEPTABLE, documented deviation).**
-  AppFollow's `/meta/ratings` response nests each day's rating breakdown under `ratings.list`,
-  with `ext_id`/`store` as SIBLINGS of `list` (not fields on each row) —
-  `{"ratings":{"ext_id":"...","store":"...","list":[{...no ext_id/store...}]}}`. Legacy's
-  `ratingRows` (`appfollow.go:230`) reads both sibling fields once per request and injects them
-  onto every extracted row. The engine's `computed_fields`/`fan_out.stamp_field` mechanisms only
-  ever see the INDIVIDUAL extracted row (the object at `records.path`, here `ratings.list`'s
-  element) — there is no reference to a sibling path elsewhere in the same page body. `ext_id` is
-  still populated exactly (via `fan_out.stamp_field`, whose value is the same config-supplied id
-  legacy's fallback-to-config-id path also uses), but `store` is never set by this bundle — it
-  will read as `null` on every `ratings` record, a real, narrow field-level parity gap, not a
-  silent one. Closing this fully would need a "stamp a value read from a named sibling path in the
-  page body" primitive the dialect does not have today; adding one is out of scope for a
-  single-connector fan-out migration.
+- **`ratings` sibling metadata is stamped before projection.** AppFollow's `/meta/ratings`
+  response nests each day's rating breakdown under `ratings.list`, with `ext_id`/`store` as
+  siblings of `list`. `fan_out.stamp_field` restores legacy's `ext_id` fallback from the request id,
+  and `response_fields.store` restores legacy's `ratings.store` copy onto every emitted row.
 - **`app_lists`'s `app_collection_id` is typed as `string`, not legacy's `integer` (ACCEPTABLE,
   documented deviation).** `fan_out.stamp_field` always writes the fan-out id as the STRING split
   out of `app_collection_ids` (matching every other `stamp_field`-using bundle in this repo, e.g.

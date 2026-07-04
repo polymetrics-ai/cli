@@ -40,6 +40,9 @@
       "name": "ratings",
       "path": "/meta/ratings",
       "records": { "path": "ratings.list" },
+      "response_fields": {
+        "store": "ratings.store"
+      },
       "fan_out": {
         "ids_from": { "config_key": "ext_ids" },
         "into": { "query_param": "ext_id" },

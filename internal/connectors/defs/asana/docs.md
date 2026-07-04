@@ -27,11 +27,9 @@ Provide an Asana personal access token via the `access_token` secret; it is sent
 All 3 streams (`workspaces`, `projects`, `tasks`) share the same shape: `GET` against the Asana
 list endpoint, records at `data`, primary key `["gid"]`. Each stream sends its own
 `opt_fields` value (matching legacy's per-endpoint `optFields`) and a static `limit=100`
-(legacy's `asanaDefaultPageSize`/`asanaMaxPageSize`, both 100) — `page_size` is declared in
-`spec.json` for documentation parity with legacy's config surface, but the `next_url` paginator
-has no config-driven page-size override mechanism (it never reads a page-size field the way
-`page_number`/`offset_limit` paginators do), so (matching bitly's identical, already-documented
-limitation) the live request always sends Asana's own default rather than a runtime override.
+(legacy's `asanaDefaultPageSize`/`asanaMaxPageSize`, both 100). The `next_url` paginator has no
+config-driven page-size override mechanism, so the bundle keeps legacy's default request size and
+does not declare a dead `page_size` config property.
 
 `projects` and `tasks` optionally scope to a workspace via the `workspace` query param
 (`{{ config.workspace_id }}`, `omit_when_absent: true` — left off entirely when unset, matching
@@ -121,8 +119,8 @@ so implementing them as separate actions would be redundant surface, not new cap
   `bitlinks` stream (see `docs/migration/conventions.md` and bitly's own `docs.md`): the engine's
   `next_url` paginator has no analogous page-size knob, so `page_size`/`max_pages` (legacy's
   config-driven overrides, `asanaPageSize`/`asanaMaxPages`) are not wired into the live request —
-  Asana's own default (`limit=100`) is sent unconditionally. `page_size` remains declared in
-  `spec.json` for config-surface parity/documentation but is not consumed by any template.
+  Asana's own default (`limit=100`) is sent unconditionally, and `spec.json` does not declare a
+  dead `page_size` property.
 - **Fixtures ship one page per stream (sanctioned `next_url` exception, conventions.md §4).** A
   `next_url` stream's next-page URL is the replay server's own address, unknown ahead of time to a
   static fixture file — a genuine harness limitation, not a fixture-authoring shortcut. All 3

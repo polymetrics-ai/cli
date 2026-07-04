@@ -83,7 +83,7 @@
       "records": { "path": "data" },
       "incremental": { "cursor_field": "datetime" },
       "computed_fields": {
-        "datetime": "{{ record.date }}",
+        "datetime": "{{ coalesce record.datetime record.date }}",
         "latitude": "{{ config.latitude }}",
         "longitude": "{{ config.longitude }}"
       },

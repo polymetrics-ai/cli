@@ -35,6 +35,7 @@
       "path": "/users",
       "query": { "per_page": "50" },
       "records": { "path": "users" },
+      "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/users.json"
     },
     {

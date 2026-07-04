@@ -29,8 +29,12 @@ Provide a BoldSign API key via the `api_key` secret; it is sent as the `X-API-KE
   schemas (`UsersDetails`, `GroupContact`, `SenderIdentityViewModel`).
 
 Every stream's record mapper renames camelCase raw API fields to this bundle's snake_case schema
-fields via `computed_fields`; each is a bare single `{{ record.<path> }}` reference, so the
-engine's typed extraction preserves the raw JSON type. **Corrected in this revision**:
+fields via `computed_fields`; bare single `{{ record.<path> }}` entries and `coalesce` entries both
+preserve the raw JSON type. ID fields that legacy resolved with alternate mixed-case fallbacks now
+use `coalesce` with the same fallback order, e.g.
+`document_id` from `documentId` then `documentID`, `team_id` from `teamId` then `teamID`,
+`brand_id` from `brandId` then `brandID`, and contact `id` from `id` then `contactId`.
+**Corrected in this revision**:
 `documents.created_date`/`expiry_date` and `templates.created_date`/`teams.created_date` are
 BoldSign's real wire type — Unix-seconds **integers** (confirmed against the published OpenAPI
 spec and `developers.boldsign.com`'s documented sample response), not the RFC3339 strings the
@@ -85,14 +89,6 @@ require inventing an undeclared wrapping behavior the dialect doesn't support. S
 
 ## Known limits
 
-- **The mixed-case id fallback (`documentID`/`teamID`/`brandID`) is not modeled.** Legacy's
-  `firstString(item, "id", "contactId")`-style helper (`boldsign/streams.go:187-194`) falls back to
-  an alternate-cased key (e.g. `documentId` OR `documentID`) when the primary key is absent. The
-  engine's `computed_fields` dialect has no multi-path fallback filter (only a single `{{ record.
-  <path> }}` reference per field). This bundle wires the PRIMARY key observed in every available
-  fixture/test and BoldSign's published OpenAPI response schemas (camelCase only — the OpenAPI spec
-  never documents an alternate-cased variant), and does not model the defensive alternate-casing
-  fallback. ACCEPTABLE deviation, unchanged from the pre-expansion bundle.
 - **`page_size`/`max_pages` config overrides are not modeled.** Same as pre-expansion: fixed values
   baked into `streams.json`'s `base.pagination` block at bundle-author time.
 - **`create_contact`/`create_user` are not migrated** — see Write actions & risks above;

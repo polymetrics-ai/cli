@@ -24,7 +24,7 @@
       "path": "/v1/document/list",
       "records": { "path": "result" },
       "computed_fields": {
-        "document_id": "{{ record.documentId }}",
+        "document_id": "{{ coalesce record.documentId record.documentID }}",
         "sender_email": "{{ record.senderEmail }}",
         "message_title": "{{ record.messageTitle }}",
         "created_date": "{{ record.createdDate }}",
@@ -41,7 +41,7 @@
       "path": "/v1/template/list",
       "records": { "path": "result" },
       "computed_fields": {
-        "document_id": "{{ record.documentId }}",
+        "document_id": "{{ coalesce record.documentId record.documentID }}",
         "template_name": "{{ record.templateName }}",
         "template_description": "{{ record.templateDescription }}",
         "created_date": "{{ record.createdDate }}",
@@ -55,7 +55,7 @@
       "path": "/v1/teams/list",
       "records": { "path": "results" },
       "computed_fields": {
-        "team_id": "{{ record.teamId }}",
+        "team_id": "{{ coalesce record.teamId record.teamID }}",
         "team_name": "{{ record.teamName }}",
         "created_date": "{{ record.createdDate }}"
       },
@@ -66,6 +66,7 @@
       "path": "/v1/contacts/list",
       "records": { "path": "result" },
       "computed_fields": {
+        "id": "{{ coalesce record.id record.contactId }}",
         "phone_number": "{{ record.phoneNumber }}",
         "company_name": "{{ record.companyName }}"
       },
@@ -76,7 +77,7 @@
       "path": "/v1/brand/list",
       "records": { "path": "result" },
       "computed_fields": {
-        "brand_id": "{{ record.brandId }}",
+        "brand_id": "{{ coalesce record.brandId record.brandID }}",
         "brand_name": "{{ record.brandName }}",
         "is_default": "{{ record.isDefault }}",
         "background_color": "{{ record.backgroundColor }}",

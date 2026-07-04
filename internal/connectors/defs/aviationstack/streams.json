@@ -22,6 +22,7 @@
       "name": "flights",
       "path": "/flights",
       "records": { "path": "data" },
+      "incremental": { "cursor_field": "flight_date" },
       "computed_fields": {
         "flight_iata": "{{ record.flight.iata }}",
         "flight_icao": "{{ record.flight.icao }}",
