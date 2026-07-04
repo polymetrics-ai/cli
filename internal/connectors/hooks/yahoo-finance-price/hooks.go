@@ -24,6 +24,10 @@ func New() engine.Hooks { return Hooks{Connector: legacy.New()} }
 
 func (h Hooks) ConnectorName() string { return "yahoo-finance-price" }
 
+var handledStreams = map[string]struct{}{
+	"prices": {},
+}
+
 var streamAliases = map[string]string{}
 
 func (h Hooks) connector() connectors.Connector {
@@ -48,6 +52,9 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 	}
 	if req.Stream == "" {
 		return true, fmt.Errorf("yahoo-finance-price" + " stream name is required")
+	}
+	if _, ok := handledStreams[req.Stream]; !ok {
+		return false, nil
 	}
 	return true, h.connector().Read(ctx, req, emit)
 }

@@ -39,10 +39,10 @@ legacy's copy-first loop preserves under its own raw name. `passthrough` reprodu
 behavior; `computed_fields` then overlay the renamed aliases on top of the passed-through raw
 fields, matching legacy's overlay-after-copy order exactly.
 
-`computed_fields` rename each raw field to the schema's snake_case name: `updated` -> `updated_at`
-(all 3 legacy-parity streams), `invoiceNumber` -> `name` (invoices only, matching legacy's
-`nameKeys: {"invoiceNumber", "number", "name"}` primary preference). `account_id` is derived from
-the raw `accountId` field.
+`computed_fields` mirror legacy's first-non-null fallback chains with `coalesce`: accounts use
+`id`/`accountId` and `name`/`accountName`; invoices use `id`/`invoiceId` and
+`invoiceNumber`/`number`/`name`; all 3 legacy streams use `accountId`/`account_id` for
+`account_id` and `updated`/`updatedAt`/`updated_at` for `updated_at`.
 
 **Pass B new streams** (`products`, `payment_terms`, `currencies`, `webhooks`) also use
 `projection: passthrough` for the same undisguised-raw-field-preservation reasoning, with a
@@ -84,31 +84,10 @@ order-line-shaped nested body no `record_schema` here attempts to validate).
 
 ## Known limits
 
-- **Multi-key fallback chains are approximated by the primary key only.** Legacy's `mapRecord`
-  tries several candidate raw field names in preference order for `id` (accounts:
-  `{"id","accountId"}`, invoices: `{"id","invoiceId"}`), `name` (accounts:
-  `{"name","accountName"}`, invoices: `{"invoiceNumber","number","name"}`), and `updated_at`
-  (`{"updated","updatedAt","updated_at"}` on every stream) — only when the first-choice key is
-  absent does it fall through to the next. The engine's `computed_fields` dialect has no
-  coalesce/fallback filter (a single template resolves a single dotted path, hard-erroring or
-  silently skipping on absence, never trying a second path), so this bundle wires only each field's
-  first-preference legacy key (`id`, `name`/`invoiceNumber`, `updated`). **Fixtures for `accounts`
-  and `invoices` intentionally record the fallback-only shape** (`accountId`/`accountName`,
-  `invoiceId`/`invoiceNumber` — no top-level `id`/`name`) since this is the real, undisguised wire
-  response the fallback chain exists to handle: with only the first-preference key wired, `id` is
-  absent from the emitted `accounts`/`invoices` record in exactly this shape (accounts' `name` is
-  likewise absent, since its raw field is `accountName` not `name`; invoices' `name` still
-  populates, since it is wired from `invoiceNumber` — the invoice's actual first-preference key —
-  not from a fallback-only field), and the raw `accountId`/`accountName`/`invoiceId` fields
-  themselves still survive verbatim via `passthrough`. Because `id` can genuinely be absent this
-  way, `schemas/accounts.json` and
-  `schemas/invoices.json` do NOT list `id` in `required[]` (typed `["string","null"]` instead) —
-  `subscriptions` keeps `id` required/non-null since legacy's `idKeys` there is `{"id"}` only (no
-  fallback, so a real subscription response always carries `id`). `x-primary-key: ["id"]` still
-  names `id` as the intended primary key on all 3 streams (matching legacy's schema), even though
-  accounts/invoices can emit a record where that field is null — this is the honest, undisguised
-  parity gap, not a fixture-side workaround. Revisit if `ENGINE_GAP` recurrence (a coalesce/
-  first-non-null filter) crosses the §6 threshold.
+- Legacy's `mapRecord` still assigns alias keys with `nil` when every candidate field in a
+  fallback chain is absent. The declarative engine can now express the fallback chain itself, but
+  cannot force emission of a null-valued computed key when every candidate path is absent. This is
+  the same per-field emit-null limitation tracked in the shared fidelity follow-ups.
 - Full Younium API surface (~23 remaining resource categories — Bookings, ChartOfAccounts,
   Orders, Payments, Quotes, Usage, Users, and more) is out of scope for this pass; see
   `api_surface.json`'s per-endpoint `excluded` entries for the specific reason each was left out

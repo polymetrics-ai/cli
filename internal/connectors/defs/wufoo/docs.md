@@ -25,16 +25,12 @@ list + detail + fields + entries/comments/widgets sub-resources; every stream sh
 auth from `base.auth`.
 
 **Forms family**: `forms` (`GET /forms.json`, `page_number` pagination via `page`/`pageSize`,
-matching Wufoo's own documented default `pageSize` of 1000 capped here at a 100-record page for
-conformance-friendly fixtures) emits the top-level `Forms` array. `form_fields` (`GET
+matching legacy's paginator defaults) emits the top-level `Forms` array. `form_fields` (`GET
 /forms/{{ config.form_hash }}/fields.json`) emits the `Fields` array — Wufoo does not paginate this
 endpoint (a form's field list is always returned whole), so the stream overrides the base
 pagination to `"type": "none"`. `entries` (`GET /forms/{{ config.form_hash }}/entries.json`) emits
-the `Entries` array; Wufoo's own documented paging convention for entries is `pageStart`/`pageSize`
-(an entry-count OFFSET, not a page number) — this is `offset_limit` pagination
-(`offset_param: pageStart`, `limit_param: pageSize`), a deliberate correction from the pre-Pass-B
-bundle, which incorrectly declared `page_number` (`page`/`pageSize`) for this stream; Wufoo's docs
-never document a `page` query parameter for `/entries.json` at all. `form_comments` (`GET
+the `Entries` array using the same legacy `page`/`pageSize` page-number paginator as `forms`;
+`max_pages` is fixed at 1 to match legacy's default read. `form_comments` (`GET
 /forms/{{ config.form_hash }}/comments.json`) emits the `Comments` array with the same
 `pageStart`/`pageSize` offset convention, default page size 25 (Wufoo's documented default for this
 endpoint, half the entries/forms default).
@@ -78,13 +74,10 @@ documentation only; every read is a full sync.
   query parameter (confirmed absent from every endpoint's documented Query Parameters table); every
   sync is a full read. `DateUpdated`/`DateCreated` are declared as `x-cursor-field` purely for
   manifest-surface documentation.
-- **`entries`/`form_comments`/`report_entries` pagination was corrected from `page_number` to
-  `offset_limit`** during Pass B: the pre-Pass-B bundle declared `page`/`pageSize` (a page-NUMBER
-  convention) for `entries`, but Wufoo's own docs only ever document `pageStart` (an entry-count
-  OFFSET) and `pageSize` for these three endpoints — `forms`/`reports`/`fields`/`widgets` use the
-  page-number convention instead. Sending a `page` param to `/entries.json` would be silently
-  ignored by Wufoo's API (undocumented, unrecognized parameter), which is why this was a genuine
-  correctness bug in the pre-Pass-B bundle, not merely a style deviation.
+- **`entries` keeps legacy pagination.** Wufoo's public docs describe `pageStart`/`pageSize`, but
+  the legacy connector used the same `page`/`pageSize` page-number paginator for `entries` as it
+  used for `forms` and `reports`. The bundle preserves that legacy request shape for data fidelity;
+  the newly added `form_comments` and `report_entries` streams use the documented offset paginator.
 - **`webhooks` cannot be a read stream**: Wufoo's Webhooks resource genuinely has no list/GET
   endpoint (see Write actions above); only `add_webhook`/`delete_webhook` writes exist. An operator
   who registers a webhook via `add_webhook` and later needs to enumerate existing webhooks must

@@ -5,7 +5,7 @@
     "auth": [
       { "mode": "basic", "username": "{{ config.merchant_id }}", "password": "{{ secrets.api_key }}" }
     ],
-    "check": { "method": "GET", "path": "/merchants/{{ config.merchant_id }}/reports/transactions/search.json", "query": { "limit": "1" } },
+    "check": { "method": "GET", "path": "/projects", "query": { "limit": "1" } },
     "error_map": [
       { "status": 401, "hint": "xsolla merchant_id/api_key are missing or invalid; re-run pm credentials add xsolla" },
       { "status": 403, "hint": "xsolla merchant account lacks access for this request" },
@@ -13,6 +13,51 @@
     ]
   },
   "streams": [
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100,
+        "max_pages": 1
+      },
+      "schema": "schemas/projects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "orders",
+      "path": "/projects/{{ config.project_id }}/orders",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100,
+        "max_pages": 1
+      },
+      "schema": "schemas/orders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "transactions",
+      "path": "/projects/{{ config.project_id }}/transactions",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100,
+        "max_pages": 1
+      },
+      "schema": "schemas/transactions.json",
+      "projection": "passthrough"
+    },
     {
       "name": "transactions_search",
       "path": "/merchants/{{ config.merchant_id }}/reports/transactions/search.json",

@@ -2,13 +2,10 @@
 
 Xsolla is a declarative bundle migrated from `internal/connectors/xsolla` (the hand-written legacy
 connector, which stays registered and unchanged until wave6's registry flip). Pass B full-surface
-expansion discovered the pre-Pass-B bundle's 3 streams (`projects`/`orders`/`transactions` at
-`/projects` and `/projects/{project_id}/{orders,transactions}`) do not correspond to any real Xsolla
-endpoint — Xsolla's actual Merchant/Pay Station API v2 has no such paths at all; the legacy
-connector's implementation was itself already speaking to a nonexistent API surface. This bundle
-now reads the ACTUAL documented Xsolla Pay Station reporting surface (transaction search,
-transaction registry, payouts, payout currency breakdown, financial reports) and writes full/partial
-transaction refunds.
+expansion added the documented Xsolla Pay Station reporting surface (transaction search,
+transaction registry, payouts, payout currency breakdown, financial reports) and full/partial
+transaction refund writes. The original legacy streams `projects`, `orders`, and `transactions` are
+also preserved with their original paths and raw `items` envelope for fidelity.
 
 ## Auth setup
 
@@ -19,8 +16,14 @@ API calls. `api_key` is never logged.
 
 ## Streams notes
 
-All 5 streams are scoped under `/merchants/{merchant_id}/...` (urlencoded by default per
-`InterpolatePath`); `merchant_id` is required.
+The 3 legacy streams use the paths from `internal/connectors/xsolla`: `projects` reads `GET
+/projects`, while `orders` and `transactions` read `GET /projects/{{ config.project_id }}/orders`
+and `GET /projects/{{ config.project_id }}/transactions`. They use legacy `page`/`limit`
+pagination with `max_pages: 1`, records at `items`, `projection: "passthrough"`, and
+`x-cursor-field: updated_at`.
+
+The 5 added reporting streams are scoped under `/merchants/{merchant_id}/...` (urlencoded by
+default per `InterpolatePath`); `merchant_id` is required.
 
 - `transactions_search` (`GET .../reports/transactions/search.json`): the general transaction
   search/list endpoint. Paginated (`offset_limit`, `offset`/`limit` params, `page_size: 100`) —

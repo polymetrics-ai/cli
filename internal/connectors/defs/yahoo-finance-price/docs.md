@@ -9,6 +9,7 @@ Use the same configuration and secret names accepted by the legacy `yahoo-financ
 ## Streams notes
 
 The declared streams are static shadows used for schema, catalog, and surface validation. The Tier-2 hook handles reads and checks by calling the legacy connector, preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The declarative paths under `/__legacy_hook/` are not live API endpoints.
+The legacy-owned read config is `symbol` (default `AAPL`), `range` (default `1mo`), and `interval` (default `1d`); the bundle spec mirrors those names so engine default materialization does not change the values the hook passes to legacy.
 
 ## Write actions & risks
 

@@ -48,9 +48,9 @@
         "path": "expense_reports"
       },
       "computed_fields": {
-        "id": "{{ record.report_id }}",
-        "name": "{{ record.report_name }}",
-        "updated_at": "{{ record.modified_time }}"
+        "id": "{{ coalesce record.report_id record.expense_report_id record.id }}",
+        "name": "{{ coalesce record.name record.report_name }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_time record.last_modified_time }}"
       },
       "schema": "schemas/reports.json",
       "projection": "passthrough"
@@ -62,9 +62,9 @@
         "path": "expenses"
       },
       "computed_fields": {
-        "id": "{{ record.expense_id }}",
-        "name": "{{ record.merchant_name }}",
-        "updated_at": "{{ record.modified_time }}"
+        "id": "{{ coalesce record.expense_id record.id }}",
+        "name": "{{ coalesce record.name record.merchant_name record.description }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_time record.last_modified_time }}"
       },
       "schema": "schemas/expenses.json",
       "projection": "passthrough"
@@ -76,9 +76,9 @@
         "path": "users"
       },
       "computed_fields": {
-        "id": "{{ record.user_id }}",
-        "name": "{{ record.name }}",
-        "updated_at": "{{ record.modified_time }}"
+        "id": "{{ coalesce record.user_id record.id }}",
+        "name": "{{ coalesce record.name record.email }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_time }}"
       },
       "schema": "schemas/users.json",
       "projection": "passthrough"

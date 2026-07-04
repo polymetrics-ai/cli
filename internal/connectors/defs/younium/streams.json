@@ -22,10 +22,10 @@
       "records": { "path": "data" },
       "projection": "passthrough",
       "computed_fields": {
-        "id": "{{ record.id }}",
-        "name": "{{ record.name }}",
-        "account_id": "{{ record.accountId }}",
-        "updated_at": "{{ record.updated }}"
+        "id": "{{ coalesce record.id record.accountId }}",
+        "name": "{{ coalesce record.name record.accountName }}",
+        "account_id": "{{ coalesce record.accountId record.account_id }}",
+        "updated_at": "{{ coalesce record.updated record.updatedAt record.updated_at }}"
       },
       "schema": "schemas/accounts.json"
     },
@@ -37,8 +37,8 @@
       "computed_fields": {
         "id": "{{ record.id }}",
         "name": "{{ record.name }}",
-        "account_id": "{{ record.accountId }}",
-        "updated_at": "{{ record.updated }}"
+        "account_id": "{{ coalesce record.accountId record.account_id }}",
+        "updated_at": "{{ coalesce record.updated record.updatedAt record.updated_at }}"
       },
       "schema": "schemas/subscriptions.json"
     },
@@ -48,10 +48,10 @@
       "records": { "path": "data" },
       "projection": "passthrough",
       "computed_fields": {
-        "id": "{{ record.id }}",
-        "name": "{{ record.invoiceNumber }}",
-        "account_id": "{{ record.accountId }}",
-        "updated_at": "{{ record.updated }}"
+        "id": "{{ coalesce record.id record.invoiceId }}",
+        "name": "{{ coalesce record.invoiceNumber record.number record.name }}",
+        "account_id": "{{ coalesce record.accountId record.account_id }}",
+        "updated_at": "{{ coalesce record.updated record.updatedAt record.updated_at }}"
       },
       "schema": "schemas/invoices.json"
     },

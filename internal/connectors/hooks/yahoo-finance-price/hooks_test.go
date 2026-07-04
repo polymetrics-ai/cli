@@ -51,3 +51,17 @@ func TestHooksDelegateFixtureCheckAndRead(t *testing.T) {
 		t.Fatal("ReadStream emitted zero fixture records")
 	}
 }
+
+func TestHooksIgnoreUnknownStream(t *testing.T) {
+	h := Hooks{Connector: legacy.New()}
+	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "orders"}, connectors.ReadRequest{Stream: "orders"}, nil, func(connectors.Record) error {
+		t.Fatal("unexpected emit")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ReadStream unknown: %v", err)
+	}
+	if handled {
+		t.Fatal("ReadStream unknown handled = true, want false")
+	}
+}

@@ -2,10 +2,12 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Yahoo Finance Price Connection Specification",
   "type": "object",
-  "required": [
-    "tickers"
-  ],
   "properties": {
+    "symbol": {
+      "type": "string",
+      "default": "AAPL",
+      "description": "Ticker symbol to query. Defaults to AAPL, matching the legacy connector."
+    },
     "interval": {
       "type": "string",
       "description": "The interval of between prices queried."
@@ -14,14 +16,10 @@
       "type": "string",
       "description": "The range of prices to be queried."
     },
-    "tickers": {
-      "type": "string",
-      "description": "Comma-separated identifiers for the stocks to be queried. Whitespaces are allowed."
-    },
     "base_url": {
       "type": "string",
-      "default": "https://example.invalid",
-      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+      "default": "https://query1.finance.yahoo.com",
+      "description": "Yahoo Finance chart API base URL. Defaults to the legacy connector's public endpoint; override only for tests or proxies."
     },
     "mode": {
       "type": "string",
