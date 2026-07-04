@@ -45,9 +45,11 @@ the relative path against `config.base_url` correctly either way.
 
 `surveys` (`GET /surveys`) lists every survey in the workspace; `items_per_page` is sent statically
 at 100 (the documented max). The legacy connector's catalog publishes `updated_at` as the survey
-cursor field and its record mapper emits `updated_at` when the API returns it, so the schema keeps
-that field and `x-cursor-field` for legacy catalog/data parity. The v2 Data Export API docs and
-fixtures do not show a server-side incremental filter for it, so no `incremental` block is declared.
+cursor field and its `mapSurvey` mapper emits only `id`, `name`, `created_at`, and `updated_at`, so
+the schema keeps exactly those fields plus `x-cursor-field` for legacy catalog/data parity. The v2
+Data Export API docs and fixtures include additional fields, but widening the schema would emit
+fields legacy always dropped. The API docs do not show a server-side incremental filter for
+`updated_at`, so no `incremental` block is declared.
 
 `survey_questions` (`GET /surveys/{survey_id}/questions`) and `responses`
 (`GET /surveys/{survey_id}/responses`) both `fan_out` over every survey id (`ids_from.request`:

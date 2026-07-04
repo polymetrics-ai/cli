@@ -18,12 +18,12 @@
     "page_size": {
       "type": "integer",
       "default": 100,
-      "description": "Cursor page size sent as the 'limit' query parameter on every List endpoint (Pass B full-surface expansion). Vitally's documented max/default is 100."
+      "description": "Cursor page size sent as the 'limit' query parameter on the added non-legacy List endpoints (Pass B full-surface expansion). Vitally's documented max/default is 100."
     },
-    "account_status": {
+    "status": {
       "type": "string",
       "enum": ["active", "churned", "activeOrChurned"],
-      "description": "Optional accounts-stream filter, sent as the real API's 'status' query parameter only when configured (Pass B full-surface expansion of the accounts endpoint's documented status filter). Vitally defaults to 'active' server-side when this is left unset."
+      "description": "Optional accounts-stream filter, sent as the real API's 'status' query parameter only when configured; preserves legacy's config[\"status\"] passthrough. Vitally defaults to 'active' server-side when this is left unset."
     }
   }
 }

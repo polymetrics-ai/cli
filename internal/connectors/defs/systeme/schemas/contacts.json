@@ -8,9 +8,6 @@
   "properties": {
     "id": { "type": "string" },
     "email": { "type": "string" },
-    "locale": { "type": ["string", "null"] },
-    "fields": { "type": ["array", "null"] },
-    "tags": { "type": ["array", "null"] },
     "created_at": { "type": "string" }
   }
 }

@@ -7,14 +7,6 @@
   "properties": {
     "id": { "type": "integer" },
     "email": { "type": ["string", "null"] },
-    "name": { "type": ["string", "null"] },
-    "full_name": { "type": ["string", "null"] },
-    "phone": { "type": ["string", "null"] },
-    "mobile": { "type": ["string", "null"] },
-    "job_title": { "type": ["string", "null"] },
-    "contact_type": { "type": ["string", "null"] },
-    "referenceId": { "type": ["string", "null"] },
-    "unique_id": { "type": ["string", "null"] },
-    "unsubscribed": { "type": ["boolean", "null"] }
+    "name": { "type": ["string", "null"] }
   }
 }

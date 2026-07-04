@@ -3,6 +3,7 @@
   "title": "deployments",
   "type": "object",
   "x-primary-key": ["id"],
+  "x-cursor-field": "created",
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },

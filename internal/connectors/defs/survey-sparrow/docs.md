@@ -28,8 +28,11 @@ Provide a SurveySparrow access token via the `access_token` secret; it is sent a
 only on the short-page stop signal, matching legacy exactly; `has_next_page` is not consulted by
 either side).
 
-- `surveys`, `contacts`, `responses`, `questions` — the original 4 legacy-parity streams; schemas
-  widened with real documented fields (additive — every legacy-emitted field is preserved).
+- `surveys`, `contacts`, `responses`, `questions` — the original 4 legacy-parity streams. Their
+  schemas intentionally retain only the fields the legacy `copyRecord(...)` mappers emitted:
+  `id`/`name`/`survey_type`, `id`/`email`/`name`, `id`/`completed_time`/`survey_id`, and
+  `id`/`question`/`survey_id`. The real API returns additional fields, but widening these four
+  schemas would emit fields legacy always dropped.
 - `channels`, `contact_lists`, `contact_properties`, `reminders`, `reputation_platforms`,
   `reputation_app_platforms`, `reputation_reviews`, `survey_folders`, `ticket_fields`, `tickets`,
   `teams`, `roles`, `variables`, `webhooks`, `users`, `templates`, `email_themes`, `expressions` —

@@ -149,7 +149,9 @@ All actions carry `"risk": "external mutation; approval required"` (destructive 
 - **`Check` dials the network; legacy's `Check` never did** — unchanged from the original
   migration, a deliberate fail-loud improvement with zero record-data impact.
 - The optional `start_date`/`from` filter on `deployments` remains a stateless, config-only
-  passthrough (see the original migration) — not a true incremental sync; `projects`/`teams`/
-  `domains`/`project_env_vars` add no incremental filtering either (Vercel documents no
-  updated-since filter on any of these list endpoints beyond the deployments-specific `since`/
-  `until` window params, which this bundle does not wire as a stateful cursor in this pass).
+  passthrough (see the original migration) — not a true incremental sync. `created` is declared as
+  `x-cursor-field` only because legacy published it as `CursorFields`; no `incremental` block is
+  declared. `projects`/`teams`/`domains`/`project_env_vars` add no incremental filtering either
+  (Vercel documents no updated-since filter on any of these list endpoints beyond the
+  deployments-specific `since`/`until` window params, which this bundle does not wire as a stateful
+  cursor in this pass).

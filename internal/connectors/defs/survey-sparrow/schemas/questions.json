@@ -7,13 +7,6 @@
   "properties": {
     "id": { "type": "integer" },
     "question": { "type": ["string", "null"] },
-    "survey_id": { "type": ["integer", "null"] },
-    "type": { "type": ["string", "null"] },
-    "position": { "type": ["string", "null"] },
-    "hasDisplayLogic": { "type": ["boolean", "null"] },
-    "properties": { "type": ["object", "null"] },
-    "section_id": { "type": ["integer", "null"] },
-    "account_id": { "type": ["integer", "null"] },
-    "parent_question_id": { "type": ["integer", "null"] }
+    "survey_id": { "type": ["integer", "null"] }
   }
 }

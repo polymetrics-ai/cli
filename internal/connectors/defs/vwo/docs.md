@@ -54,12 +54,9 @@ still forced to string output via `computed_fields`' `"id": "{{ record.id | last
 (VWO's wire `id` is a bare JSON integer; the `last_path_segment` filter forces `Interpolate`'s
 string output while passing a delimiter-free numeric value through unchanged — same pattern as
 before this pass). The real record shape is considerably richer than legacy's narrow
-`{id, name, status, created_at}` projection — `type`, `platform`, `urls`, `labels`, `createdBy`,
-`goals` (a partial goal-count summary), `primaryGoal`, and `variations` (a partial variation-count
-summary) are all now modeled (Pass B's full-surface mandate). `created_at` (renamed via
-`computed_fields` from the real API's `createdOn`) is a Unix-seconds integer, preserved as a typed
-`integer` schema field (bare-reference computed_fields entries copy the raw JSON type, not a
-stringified value — conventions.md §3's typed-extraction rule).
+`{id, name, status, created_at}` projection, but the schema intentionally keeps that legacy
+projection. `created_at` is filled from legacy-shaped `created_at` first and the current API's
+`createdOn` fallback second.
 
 Two new optional query filters are wired via the optional-query dialect (`omit_when_absent: true`):
 `campaign_type` (the real API's `type` filter, one of 17 documented campaign-type values) and

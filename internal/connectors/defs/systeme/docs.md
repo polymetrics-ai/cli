@@ -36,12 +36,10 @@ All streams share the base's `page_number` pagination (`page_param: page`, `size
 already established for `contacts` and now confirmed live (via `OPTIONS`) to apply identically to
 every other listed resource.
 
-`contacts` (`GET /contacts`) is unchanged in shape from the prior version of this bundle
-(`records.path: items`, `computed_fields.created_at` renamed from the raw `createdAt`); this
-version additionally declares `locale`/`fields`/`tags` as optional passthrough-typed properties
-(Systeme.io's contact object embeds a `fields: [{slug, value}, ...]` array of custom-field values
-per the API's own documented shape) without asserting a rigid structure for `fields`' contents,
-since custom fields are workspace-defined and have no fixed schema.
+`contacts` (`GET /contacts`) preserves the legacy connector's emitted shape exactly: `id`, `email`,
+and `created_at` (computed from either raw `created_at` or `createdAt`). Systeme.io's wire contact
+object may include additional fields such as custom-field values or tags, but the legacy Go mapper
+did not emit them.
 
 `tags` (`GET /tags`) and `contact_fields` (`GET /contact_fields`) are plain top-level list streams,
 each with a matching `GET /{resource}/{id}` detail endpoint (live-confirmed, excluded as
@@ -112,9 +110,8 @@ undocumented.
 - **Courses are not part of the live public API** — confirmed both by the absence of any live
   route and by Systeme.io's own product roadmap listing course/student API endpoints as an open
   feature request.
-- **`fields` (custom contact-field values) has no fixed schema** — `contacts.fields` is typed as a
-  passthrough array; individual custom-field slugs/values vary per workspace and are not enumerated
-  in this schema (see `contact_fields` for the field DEFINITIONS stream, which is separate from
-  each contact's field VALUES).
+- **Contact custom-field values are not emitted by `contacts`** — the wire contact object may
+  include workspace-defined custom-field values, but the legacy Go connector emitted only
+  `id`/`email`/`created_at`; `contact_fields` covers field definitions separately.
 - All fixtures (`fixtures/streams/**`, `fixtures/check.json`) represent Systeme.io's real wire
   shape, including the camelCase `createdAt` field on contacts.

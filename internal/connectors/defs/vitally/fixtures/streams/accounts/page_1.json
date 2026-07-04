@@ -1,10 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/resources/accounts",
-    "query": {
-      "limit": "synthetic-conformance-value"
-    }
+    "path": "/resources/accounts"
   },
   "response": {
     "status": 200,

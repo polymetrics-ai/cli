@@ -39,23 +39,22 @@ header). Using `api_key_header` with an empty prefix is the byte-exact reproduct
 
 ## Streams notes
 
-All 6 List endpoints share the real API's uniform cursor-pagination envelope
+Vitally's List endpoints share the real API's uniform cursor-pagination envelope
 (`{"results": [...], "next": <cursor-or-null>}`), documented on the REST API Overview page: `limit`
 (default/max 100, wired via `spec.json`'s new `page_size` config, default `100`) and `from` (the
 opaque cursor returned as `next`) — modeled as `pagination: {"type": "cursor", "cursor_param":
-"from", "token_path": "next"}` at the bundle level, shared by every stream. `next: null` stops
+"from", "token_path": "next"}` at the bundle level for the five added streams. `next: null` stops
 pagination (no `stop_path` needed — Vitally's own docs guarantee `next` is exactly `null` at the
-end, unlike Zendesk's "may still be populated" caveat).
+end, unlike Zendesk's "may still be populated" caveat). The legacy `accounts` stream overrides this
+to `type: none` for exact parity.
 
 - **`accounts`** (`GET /resources/accounts`, `results` array): unchanged path from the original
-  migration, now with the full real record shape (health/NPS scores, CSM/AE ids, timestamps,
-  `keyRoles`, `segments`) rather than legacy's narrow `{id, name, traits}` projection — Pass B's
-  full-surface mandate. The previously-undocumented-here `status` filter (`active` / `churned` /
-  `activeOrChurned`, defaulting server-side to `active`) is now wired via `spec.json`'s
-  `account_status` enum and the optional-query dialect (`omit_when_absent: true`) — this is now
-  expressible because the engine's `stream.Query` object form (conventions.md §3) exists; it did
-  not exist at accounts-only migration time (see the superseded "Known limits" entry below, now
-  resolved).
+  migration, preserving legacy's narrow `{id, name, traits}` projection. The real response carries
+  more fields, but legacy's mapper explicitly drops them, so the schema stays narrow for fidelity.
+  The optional `status` filter (`active` / `churned` / `activeOrChurned`, defaulting server-side to
+  `active`) is wired through the same `config["status"]` key legacy reads. This stream overrides
+  the base cursor pagination with `type: none` and sends no `limit`, matching legacy's single
+  `GET resources/accounts` request exactly.
 - **`users`** (`GET /resources/users`, `results` array): full real record shape including nested
   `accounts`/`organizations` association arrays (read-only associations — see Known limits).
 - **`notes`** (`GET /resources/notes`, `results` array): real field names are camelCase
@@ -70,12 +69,13 @@ end, unlike Zendesk's "may still be populated" caveat).
   `externalId`, so `create_nps_response`'s POST doubles as an upsert (Vitally's own documented
   behavior — see Write actions & risks).
 
-All 6 streams declare `x-cursor-field` (`updatedAt`/`updated_at`) matching each resource's own
-`updatedAt` field, but **no `incremental` block**: the real List endpoints support only a `sortBy`
-ordering hint (`updatedAt` default or `createdAt`), never a since/after server-side filter
+The five added streams declare `x-cursor-field` (`updatedAt`/`updated_at`) matching each resource's
+own `updatedAt` field, but **no `incremental` block**: the real List endpoints support only a
+`sortBy` ordering hint (`updatedAt` default or `createdAt`), never a since/after server-side filter
 parameter, so there is no `request_param` for the engine's `incremental` machinery to drive
 (conventions.md §8 rule 2's truth table: declare `incremental` only when legacy/the real API
-genuinely supports a server-side filter — it does not here).
+genuinely supports a server-side filter — it does not here). The legacy `accounts` stream publishes
+no cursor field, so its schema does not invent one.
 
 ## Write actions & risks
 
@@ -124,8 +124,7 @@ general repo-wide delete-semantics convention, conventions.md §3).
   accounts-only migration's "Known limits" recorded this as an out-of-scope gap because the engine
   dialect at that time had no way to send a query param only when a config value is set. The
   `stream.Query` opt-in optional-query object form (conventions.md §3, `omit_when_absent`) now
-  exists and is used for `accounts`' `status` filter (via `spec.json`'s new `account_status` enum
-  property) and every stream's incremental-adjacent filtering needs generally.
+  exists and is used for `accounts`' legacy `status` config key.
   Resolved rather than re-documented as an open gap, per conventions.md §5's meta-rule.
 - **`users`' `accounts`/`organizations` association arrays are read-only pass-through.** The real
   API documents that NEW associations can be established by including `accountIds`/
