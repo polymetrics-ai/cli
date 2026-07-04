@@ -28,11 +28,10 @@
         "page_size": 100
       },
       "incremental": {
-        "cursor_field": "date_updated",
-        "client_filtered": true
+        "cursor_field": "date_updated"
       },
       "computed_fields": {
-        "status": "{{ record.status.status }}",
+        "status": "{{ coalesce record.status.status record.status }}",
         "creator_id": "{{ record.creator.id }}",
         "list_id": "{{ record.list.id }}",
         "folder_id": "{{ record.folder.id }}",

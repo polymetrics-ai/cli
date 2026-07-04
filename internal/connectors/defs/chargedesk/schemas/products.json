@@ -3,24 +3,16 @@
   "title": "products",
   "type": "object",
   "x-primary-key": ["product_id"],
-  "x-cursor-field": "first_seen",
+  "x-cursor-field": "occurred",
   "required": ["product_id"],
   "properties": {
     "product_id": { "type": "string" },
-    "first_seen": { "type": "integer" },
+    "object": { "type": ["string", "null"] },
+    "occurred": { "type": "integer" },
     "name": { "type": ["string", "null"] },
-    "description": { "type": ["string", "null"] },
-    "amount": { "type": ["number", "null"] },
+    "amount": { "type": ["string", "null"] },
     "currency": { "type": ["string", "null"] },
     "interval": { "type": ["string", "null"] },
-    "interval_count": { "type": ["integer", "null"] },
-    "quantity": { "type": ["integer", "null"] },
-    "status": { "type": ["string", "null"] },
-    "chargeable": { "type": ["integer", "null"] },
-    "taxable": { "type": ["integer", "null"] },
-    "url": { "type": ["string", "null"] },
-    "charges": { "type": ["integer", "null"] },
-    "gateway_id": { "type": ["string", "null"] },
-    "trial_period_days": { "type": ["integer", "null"] }
+    "status": { "type": ["string", "null"] }
   }
 }

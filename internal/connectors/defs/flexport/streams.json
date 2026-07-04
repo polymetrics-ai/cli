@@ -69,15 +69,13 @@
       "path": "/invoices",
       "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
       "records": { "path": "data.data" },
-      "projection": "passthrough",
       "schema": "schemas/invoices.json"
     },
     {
       "name": "companies",
-      "path": "/network/companies",
+      "path": "/companies",
       "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
       "records": { "path": "data.data" },
-      "projection": "passthrough",
       "schema": "schemas/companies.json"
     },
     {
@@ -98,10 +96,9 @@
     },
     {
       "name": "locations",
-      "path": "/network/locations",
+      "path": "/locations",
       "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
       "records": { "path": "data.data" },
-      "projection": "passthrough",
       "schema": "schemas/locations.json"
     },
     {
@@ -141,7 +138,6 @@
       "path": "/products",
       "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
       "records": { "path": "data.data" },
-      "projection": "passthrough",
       "schema": "schemas/products.json"
     },
     {
@@ -173,7 +169,6 @@
       "path": "/shipments",
       "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
       "records": { "path": "data.data" },
-      "projection": "passthrough",
       "schema": "schemas/shipments.json"
     }
   ]

@@ -15,21 +15,17 @@
         "next": null,
         "data": [
           {
-            "_object": "/shipments",
+            "_object": "/shipment",
             "id": 2983,
-            "name": "Fixture Shipment",
+            "status": "in_transit_to_arrival_port",
             "transportation_mode": "ocean",
             "freight_type": "port_to_door",
-            "freight_cost": "512.14",
-            "incoterm": "FOB",
-            "pieces": 12,
-            "status": "in_transit_to_arrival_port",
-            "priority": "standard",
-            "updated_at": "2026-01-11T12:00:00Z",
+            "origin_port": "CNSHA",
+            "destination_port": "USLAX",
             "estimated_departure_date": "2026-01-15T12:00:00Z",
             "estimated_arrival_date": "2026-02-01T12:00:00Z",
-            "cargo_ready_date": "2026-01-10",
-            "metadata": { "purchase_order": ["PO-FIXTURE-1"] }
+            "created_at": "2026-01-10T12:00:00Z",
+            "updated_at": "2026-01-11T12:00:00Z"
           }
         ]
       }

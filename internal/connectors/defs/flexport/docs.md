@@ -19,10 +19,12 @@ List streams use Flexport's paginated envelope: records are under `data.data` an
 is under `data.next`. `my_company` is the only single-object stream; it reads
 `GET /network/me/companies` and extracts `data`.
 
-All Pass B streams use `projection: "passthrough"` with permissive schemas keyed by `id`. This is
-intentional: the official Flexport v2 objects have broad nested logistics, address, money,
-metadata, reference, and cargo shapes, and schema projection would otherwise drop documented fields.
-The older wave2 legacy subset fields are no longer the limiting surface for this bundle.
+The five legacy-backed streams (`companies`, `locations`, `products`, `invoices`, and `shipments`)
+use schema projection matching the legacy Go mappers. In particular, `companies` and `locations`
+read the legacy `/companies` and `/locations` list paths rather than the newer `/network/*` list
+objects because the newer network resources expose a different shape. The Pass B-added streams use
+`projection: "passthrough"` with permissive schemas keyed by `id` to preserve their broad v2
+objects.
 
 ## Write actions & risks
 

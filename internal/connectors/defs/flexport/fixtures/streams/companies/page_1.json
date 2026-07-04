@@ -1,13 +1,13 @@
 {
   "request": {
     "method": "GET",
-    "path": "/network/companies"
+    "path": "/companies"
   },
   "response": {
     "status": 200,
     "body": {
       "_object": "/api/response",
-      "self": "https://api.flexport.com/network/companies",
+      "self": "https://api.flexport.com/companies",
       "version": 2,
       "data": {
         "_object": "/api/collections/paginated",
@@ -15,23 +15,13 @@
         "next": null,
         "data": [
           {
-            "_object": "/network/company",
+            "_object": "/company",
             "id": "company_fixture_1",
             "name": "Fixture Trading Co",
-            "ref": "fixture-company",
-            "editable": true,
-            "metadata": { "region": ["west"] },
-            "entities": [],
-            "locations": {
-              "_object": "/api/refs/collection",
-              "ref_type": "/network/location",
-              "link": "https://api.flexport.com/network/locations?f.company_ref=fixture-company"
-            },
-            "contacts": {
-              "_object": "/api/refs/collection",
-              "ref_type": "/network/contact",
-              "link": "https://api.flexport.com/network/contacts?f.company_ref=fixture-company"
-            }
+            "legal_name": "Fixture Trading Co LLC",
+            "dba_name": "Fixture Trading",
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-02T00:00:00Z"
           }
         ]
       }

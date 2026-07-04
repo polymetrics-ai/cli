@@ -9,25 +9,15 @@
         {
           "subscription_id": "sub_fixture_1",
           "object": "subscription",
-          "first_seen": 1767225600,
+          "occurred": 1767225600,
           "customer_id": "cus_fixture_1",
           "status": "active",
           "amount": "10.00",
           "currency": "usd",
           "interval": "month",
-          "interval_count": 1,
-          "quantity": 1,
           "current_period_start": 1767225600,
           "current_period_end": 1769904000,
-          "canceled_at": 0,
-          "ended_at": 0,
-          "trial_start": 0,
-          "trial_end": 0,
-          "trial_period_days": 0,
-          "product_id": "prod_fixture_1",
-          "gateway_id": "",
-          "manage_url": "https://chargedesk.com/manage/company-fixture/subscriptions/sub_fixture_1",
-          "metadata": {}
+          "product_id": "prod_fixture_1"
         }
       ]
     }

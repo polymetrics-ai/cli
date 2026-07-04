@@ -3,13 +3,16 @@
   "title": "companies",
   "type": "object",
   "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
   "required": ["id"],
   "properties": {
     "id": { "type": ["string", "integer"] },
     "_object": { "type": ["string", "null"] },
     "name": { "type": ["string", "null"] },
-    "ref": { "type": ["string", "null"] },
-    "editable": { "type": ["boolean", "null"] }
+    "legal_name": { "type": ["string", "null"] },
+    "dba_name": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
   },
   "additionalProperties": true
 }

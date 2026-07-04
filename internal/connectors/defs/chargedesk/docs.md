@@ -10,20 +10,8 @@ customer/charge/webhook/agent create-update-delete lifecycle actions, plus 4 liv
 itself, not just ChargeDesk's own records. Legacy is entirely read-only (`Write` stub returning
 `connectors.ErrUnsupportedOperation`); every write action here is new capability, not a parity port.
 
-**Schema correction (Pass B research finding, not a new deviation)**: the prior wave2 bundle declared
-`incremental.cursor_field: occurred` for ALL FOUR streams, but ChargeDesk's own API docs
-(`https://chargedesk.com/api-docs`, fetched and parsed directly for this pass) show `occurred` is a
-real field ONLY on `charges` (the timestamp the charge occurred). `customers`/`subscriptions`/
-`products` instead document a `first_seen` field (their real creation-timestamp cursor) and their
-list-filter query params are `first_seen[min]`/`first_seen[max]` (customers) and `created[min]`/
-`created[max]` (subscriptions/products) — never `occurred[...]` for any of the three. This bundle
-corrects the cursor field for `customers`/`subscriptions`/`products` to `first_seen` accordingly.
-This is a genuine research correction, not a data-changing deviation: the actual HTTP requests these
-3 streams send never included any incremental filter parameter either before or after this fix (see
-Streams notes below), so no request shape changes — only the schema's declared cursor FIELD NAME is
-corrected to match a field ChargeDesk's API actually returns (the previously-declared `occurred`
-field never appeared in any real customers/subscriptions/products response and would have gone
-straight through JSON-Schema optional-property handling as always-absent).
+The four legacy streams are field-built from the Go mappers; their schemas intentionally project
+only those legacy output fields even when ChargeDesk's current API returns additional attributes.
 
 ## Auth setup
 
@@ -55,10 +43,9 @@ and `records.path: "."`: `/webhooks/notifications` returns a bare JSON array (no
 named field), a static reference catalog of every possible webhook notification type ChargeDesk can
 send, with no pagination at all.
 
-`charges` keeps `incremental.cursor_field: occurred` (unchanged, real field). `customers`/
-`subscriptions`/`products` now declare `incremental.cursor_field: first_seen` (corrected — see
-Overview). `log_activity`/`log_cancellations` both declare `incremental.cursor_field: occurred`
-(their own real documented timestamp field). None of these 6 streams declare `request_param` or
+`charges`/`customers`/`subscriptions`/`products` all keep the legacy catalog cursor field
+`occurred`. `log_activity`/`log_cancellations` both declare `incremental.cursor_field: occurred`
+(their own documented timestamp field). None of these 6 streams declare `request_param` or
 `client_filtered` — this bundle never sends any incremental filter to the API and never
 client-side filters either (matching legacy's own unfiltered-full-walk behavior for the original
 4 streams); the bare `cursor_field` declaration exists only so the engine derives
@@ -114,9 +101,8 @@ need to duplicate.
 
 ## Known limits
 
-- **`customers`/`subscriptions`/`products` cursor field corrected from `occurred` to `first_seen`**
-  (see Overview) — a research correction, not a behavior change (no request shape changed; only the
-  schema's declared cursor field name now matches ChargeDesk's real API).
+- Additional current-API fields on the four legacy streams are intentionally not projected; legacy
+  emitted field-built records and remains the fidelity target for this pass.
 - `page_size`/`max_pages` runtime overrides are not exposed (see Streams notes above) — every
   read uses the fixed `page_size: 100`/unbounded-pages shape baked into `streams.json`. This never
   changes any single emitted record's DATA, only how many requests a sync issues and at what page

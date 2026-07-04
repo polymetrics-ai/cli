@@ -36,16 +36,14 @@ DATA-equivalent to legacy's own `has_more != "true" || len(records)==0` stop rul
 170-176`) for every real Close response shape: a full page always means more records remain, a
 short page always means none do (see Known limits for the one theoretical edge case).
 
-Legacy declares a `CursorFields: ["date_updated"]` on every stream (`streams.go:35` etc.) and an
-`InitialState` returning an empty starting cursor (`close_com.go:98-106`), but never actually wires
-`date_updated` into any request parameter or client-side filter anywhere in the harvest loop
+Legacy declares a `CursorFields: ["date_updated"]` on every original stream (`streams.go:35` etc.)
+and an `InitialState` returning an empty starting cursor (`close_com.go:98-106`), but never actually
+wires `date_updated` into any request parameter or client-side filter anywhere in the harvest loop
 (`close_com.go:144-180`) — every sync is a full, unfiltered `_skip`/`_limit` walk of the entire
-resource regardless of any prior cursor. Because there is no real incremental FILTERING behavior
-to port (only a schema-level field that happens to look like a cursor), this bundle declares no
-`incremental` block and no `x-cursor-field` on any schema, honestly representing legacy's actual
-behavior rather than its unused declared intent. `date_updated` remains a plain schema property.
-None of the Pass B streams below declare an `incremental` block either — Close's API offers no
-server-side updated-since filter on any of them.
+resource regardless of any prior cursor. This bundle mirrors that split: the five legacy schemas
+carry schema-level `x-cursor-field: "date_updated"` metadata, but no stream declares an
+`incremental` block. None of the Pass B streams below declare an `incremental` block either —
+Close's API offers no server-side updated-since filter on any of them.
 
 **Pass B streams**: `tasks` reuses the same `_skip`/`_limit` offset pagination and `data` envelope as
 `leads`/`contacts`. `lead_statuses`, `opportunity_statuses`, `pipelines`, `roles`, and `groups` are
@@ -95,11 +93,9 @@ create/update/delete endpoint.
 
 - **Declared `CursorFields`/`InitialState` are not modeled as an `incremental` block.** See Streams
   notes above — legacy declares the scaffolding for incremental sync (`CursorFields`,
-  `InitialState`) but the harvest loop never actually filters by it, so porting only the unused
-  declaration (without any request-side behavior) would create a schema-level `x-cursor-field`
-  that promises incremental-append sync-mode support the connector cannot deliver. Omitting it is
-  the honest representation of legacy's real behavior; `date_updated` remains queryable as a plain
-  field for any downstream consumer that wants to filter post-sync.
+  `InitialState`) but the harvest loop never actually filters by it, so the bundle preserves only
+  the schema-level cursor metadata and does not declare a request-side or client-side incremental
+  filter.
 - **The engine's `offset_limit` paginator stops on a short PAGE, not on legacy's own `has_more`
   flag.** These two stop rules are DATA-equivalent for every real Close response shape (Close's own
   `has_more` flag directly tracks whether the requested page was full) — the one theoretical edge

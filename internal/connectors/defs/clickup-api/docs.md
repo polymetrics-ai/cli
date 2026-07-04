@@ -74,11 +74,10 @@ distinguished from "never set" — the identical gap class documented in `algoli
 reads `tasks` starting from ClickUp's real first page — full read parity for every stream in this
 bundle (`teams`, `spaces`, `folders`, `lists`, `tasks`).
 
-`tasks`'s incremental cursor is `date_updated` with `client_filtered: true` (ClickUp's real task
-list endpoint exposes no server-side updated-since filter parameter — legacy's own `Read`/
-`harvestPaged` never sends one), matching legacy's full-scan-then-emit-everything behavior exactly;
-the engine drops already-seen records client-side by comparing `date_updated` against the
-persisted lower bound.
+`tasks` publishes `date_updated` as its cursor field, matching legacy catalog metadata, but does
+not declare a server-side request parameter or client-side filter. ClickUp's real task list
+endpoint exposes no updated-since filter parameter, and legacy's own `Read`/`harvestPaged` emits
+every record returned by the paged full scan.
 
 `archived`/`include_closed_tasks` config values are forwarded verbatim as the literal query value
 when present (`omit_when_absent`/`default` dialect), matching legacy's own `fetchOnce`

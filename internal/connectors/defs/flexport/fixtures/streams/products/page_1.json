@@ -20,17 +20,10 @@
             "name": "Fixture Widget",
             "sku": "SKU-FIXTURE-1",
             "description": "Sanitized fixture product",
-            "archived_at": null,
-            "product_category": "Apparel",
+            "hts_code": "8309.90.10.0",
             "country_of_origin": "US",
-            "client_verified": true,
-            "product_properties": [
-              { "name": "color", "value": "blue" }
-            ],
-            "hs_codes": [
-              { "code": "8309.90.10.0", "country_code": "US" }
-            ],
-            "classifications": []
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-02T00:00:00Z"
           }
         ]
       }

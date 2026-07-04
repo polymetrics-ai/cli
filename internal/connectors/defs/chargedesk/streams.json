@@ -31,21 +31,21 @@
       "name": "customers",
       "path": "/customers",
       "records": { "path": "data" },
-      "incremental": { "cursor_field": "first_seen" },
+      "incremental": { "cursor_field": "occurred" },
       "schema": "schemas/customers.json"
     },
     {
       "name": "subscriptions",
       "path": "/subscriptions",
       "records": { "path": "data" },
-      "incremental": { "cursor_field": "first_seen" },
+      "incremental": { "cursor_field": "occurred" },
       "schema": "schemas/subscriptions.json"
     },
     {
       "name": "products",
       "path": "/products",
       "records": { "path": "data" },
-      "incremental": { "cursor_field": "first_seen" },
+      "incremental": { "cursor_field": "occurred" },
       "schema": "schemas/products.json"
     },
     {

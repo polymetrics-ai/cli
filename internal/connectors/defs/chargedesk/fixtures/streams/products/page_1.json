@@ -8,21 +8,13 @@
       "data": [
         {
           "product_id": "prod_fixture_1",
-          "first_seen": 1767225600,
+          "object": "product",
+          "occurred": 1767225600,
           "name": "Fixture Product",
-          "description": "A fixture product",
-          "amount": 10,
+          "amount": "10.00",
           "currency": "usd",
           "interval": "month",
-          "interval_count": 1,
-          "quantity": 1,
-          "status": "complete",
-          "chargeable": 1,
-          "taxable": 1,
-          "url": "https://example.com/fixture-product",
-          "charges": 0,
-          "gateway_id": "",
-          "trial_period_days": 0
+          "status": "complete"
         }
       ]
     }

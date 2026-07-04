@@ -9,24 +9,14 @@
         {
           "customer_id": "cus_fixture_1",
           "object": "customer",
-          "first_seen": 1767225600,
+          "occurred": 1767225600,
           "email": "fixture1@example.com",
           "name": "Fixture One",
-          "first_name": "Fixture",
-          "username": "fixtureone",
           "country": "US",
           "phone": "+15550100",
-          "delinquent": 0,
-          "tax_number": null,
-          "description": "A fixture customer",
-          "company": "company-fixture",
-          "customer_company": "Fixture Co",
-          "billing_address": "1 Fixture Way",
-          "shipping_address": "",
-          "charges": 0,
-          "gateway_id": "",
-          "manage_url": "https://chargedesk.com/manage/company-fixture/customers/cus_fixture_1",
-          "metadata": {}
+          "currency": "usd",
+          "delinquent": false,
+          "tax_number": null
         }
       ]
     }

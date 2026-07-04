@@ -3,6 +3,7 @@
   "title": "products",
   "type": "object",
   "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
   "required": ["id"],
   "properties": {
     "id": { "type": ["string", "integer"] },
@@ -10,7 +11,10 @@
     "name": { "type": ["string", "null"] },
     "sku": { "type": ["string", "null"] },
     "description": { "type": ["string", "null"] },
-    "archived_at": { "type": ["string", "null"] }
+    "hts_code": { "type": ["string", "null"] },
+    "country_of_origin": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
   },
   "additionalProperties": true
 }
