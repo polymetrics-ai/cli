@@ -22,14 +22,14 @@
       "path": "/entries",
       "records": { "path": "entries" },
       "computed_fields": {
-        "id": "{{ record.API }}",
-        "api": "{{ record.API }}",
-        "description": "{{ record.Description }}",
-        "category": "{{ record.Category }}",
-        "auth": "{{ record.Auth }}",
-        "https": "{{ record.HTTPS }}",
-        "cors": "{{ record.Cors }}",
-        "link": "{{ record.Link }}"
+        "id": "{{ coalesce record.API record.api }}",
+        "api": "{{ coalesce record.API record.api }}",
+        "description": "{{ coalesce record.Description record.description }}",
+        "category": "{{ coalesce record.Category record.category }}",
+        "auth": "{{ coalesce record.Auth record.auth }}",
+        "https": "{{ coalesce record.HTTPS record.https }}",
+        "cors": "{{ coalesce record.Cors record.cors }}",
+        "link": "{{ coalesce record.Link record.link }}"
       },
       "schema": "schemas/entries.json"
     }

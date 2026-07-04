@@ -21,7 +21,9 @@ extracted from the `entries` array in the response body. The raw API returns
 PascalCase field names (`API`, `Description`, `Category`, `Auth`, `HTTPS`, `Cors`, `Link`);
 `computed_fields` renames each to the schema's snake_case/lower-case field names and additionally
 stamps `id` from the raw `API` field, matching legacy's `mapEntry`'s `id = api` convention
-(`public_apis.go:178-190`) since the raw API has no dedicated id field. Primary key is `id`.
+(`public_apis.go:178-190`) since the raw API has no dedicated id field. The same computed fields
+also coalesce legacy's defensive lowercase-key fallbacks (`api`, `description`, etc.). Primary key
+is `id`.
 
 Legacy's own short-page stop rule ALSO independently stops when the running offset plus this
 page's record count reaches the response body's top-level `count` field

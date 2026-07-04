@@ -58,14 +58,11 @@ of many datasets this stream fans out over, with no special-casing needed.
 `submissions` (`GET /forms/{form_id}/submissions`) remains scoped to a single, config-supplied
 `form_id` (required config, unchanged in spirit from the prior version) rather than fanning out
 over every form, because of the `forms/ids` `ENGINE_GAP` below — there is no config-free way to
-discover every form id to fan out over. `submissions`' schema keys off `submissionId` (not `id` —
-the real API's `orderBy` enum names `submissionId`/`reviewStatus`/`formDefinitionVersion`/
-`submissionDate`/`completionDate` as the metadata fields, and the actual per-submission response
-body shape is otherwise undocumented in the OpenAPI spec itself, `{"type": "object"}` with no
-`$ref`); `x-cursor-field` is `completionDate` (the API's own default `orderBy` value) as an
-informational marker only — no `incremental` block is declared, since the real per-submission
-record shape (and therefore which field genuinely represents a monotonic lower bound for a given
-form) is not confirmable without a live authenticated response to inspect.
+discover every form id to fan out over. The emitted schema intentionally preserves legacy's
+fixed-projection record (`id`, `form_id`, `submissionDate`) and catalog cursor
+(`submissionDate`): the v2 API's documented metadata name is `submissionId`, so the bundle fills
+legacy `id` from `id` or `submissionId` with a typed coalesce. No `incremental` block is declared,
+since neither legacy nor this bundle sends a server-side lower-bound request parameter.
 
 `groups`/`roles`/`users` are plain top-level list streams, each with a matching `GET
 /{resource}/{id}` (or `/roles/{roleId}`, permission-detail-shaped rather than a plain record read)
@@ -102,6 +99,13 @@ detail endpoint excluded per `api_surface.json`.
   standalone `forms`/`teams` stream, and `submissions` cannot fan out over every form (it is
   instead scoped by a single required `config.form_id`, forcing one connection per form for full
   multi-form coverage).
+- **Legacy `forms` and `cases` cannot be restored honestly with the current declarative dialect.**
+  Legacy exposed `forms` (`recordsPath: forms`, emitting `id`/`title`/`version`) and `cases`
+  (`recordsPath: cases`, emitting `caseid`/`form_id`/`status`). The current published API v2 spec
+  does not expose those object-list endpoints: form discovery is the scalar-string
+  `GET /forms/ids` endpoint above, and cases are represented as dataset records rather than a
+  standalone `/cases` object list. Adding fake `forms`/`cases` streams would either emit zero
+  records (scalar-array extraction) or guess at workspace-specific dataset fields.
 - **`ENGINE_GAP` — dataset single-record CRUD (`getRecord`/`updateRecord`/`deleteRecord`/
   `upsertRecord`, all at `/datasets/{datasetId}/record` singular) cannot be modeled as write
   actions.** Every one of these endpoints takes `recordId` as a **query parameter**

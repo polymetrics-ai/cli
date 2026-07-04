@@ -43,6 +43,7 @@
       "query": { "limit": "1000" },
       "records": { "path": "data" },
       "computed_fields": {
+        "id": "{{ coalesce record.id record.submissionId }}",
         "form_id": "{{ config.form_id }}"
       },
       "schema": "schemas/submissions.json"
