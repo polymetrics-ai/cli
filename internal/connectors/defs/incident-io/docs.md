@@ -50,7 +50,7 @@ every write with `connectors.ErrUnsupportedOperation`. No `writes.json` is shipp
 
 - Full incident.io API surface (actions, incident updates, alerts, schedules, workflows, custom
   fields) is out of scope for this wave; see `api_surface.json`'s `excluded: {category:
-  out_of_scope, reason: "Pass B capability expansion"}` entries. Only the 5 legacy-parity streams
+  out_of_scope, reason: "not implemented in this bundle"}` entries. Only the 5 legacy-parity streams
   are implemented.
 - `page_size`'s legacy validation range (1-250) is not enforced by this bundle's `spec.json` (the
   draft-07 subset has no numeric bounds check wired for a string-typed config field here); an

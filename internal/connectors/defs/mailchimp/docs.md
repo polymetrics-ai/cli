@@ -67,5 +67,5 @@ None. The legacy connector advertises no reverse-ETL actions (`Capabilities.Writ
   bundle renames them to `access_token`/`api_key` — a spec-property-naming translation only, with no
   change to wire behavior or credential semantics.
 - Only the 4 legacy-parity read streams are implemented; the broader Mailchimp Marketing API surface
-  (list members, templates, e-commerce stores, webhooks) is out of scope until Pass B — see
+  (list members, templates, e-commerce stores, webhooks) is out of scope outside this connector's current declared surface — see
   `api_surface.json`.

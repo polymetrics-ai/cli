@@ -52,7 +52,7 @@ None. GlassFrog is read-only (legacy's own `Capabilities.Write: false`, `Write` 
 
 - **Full GlassFrog API surface (checklist items, metrics, action items, organization profile) is
   out of scope for wave2.** See `api_surface.json`'s `excluded: {category: out_of_scope, reason:
-  "Pass B capability expansion"}` entries. Only the 5 legacy-parity streams are implemented.
+  "see api_surface.json for concrete exclusion reasons"}` entries. Only the 5 legacy-parity streams are implemented.
 - **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
   when `config.mode == "fixture"`, a credential-free conformance-harness affordance) synthesizes
   its own deterministic records directly in Go rather than shaping a real API response; this

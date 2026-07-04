@@ -55,7 +55,7 @@ None. Gong is a read-only source in both legacy and this bundle (`capabilities.w
 - Only the 3 legacy-parity streams (`users`, `calls`, `scorecards`) are implemented; the broader
   Gong surface (call transcripts, extensive call stats, interaction/activity trackers, workspaces,
   library folders, webhooks) is out of scope for this wave — see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries.
+  `api_surface.json` concrete exclusion entries.
   Gong's transcript and extensive-call-detail endpoints in particular require a
   request-time list of call IDs (a sub-resource fan-out shape, not a plain list endpoint) and were
   never implemented by legacy either.

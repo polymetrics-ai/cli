@@ -2,18 +2,90 @@
   "api": "FreshBooks Accounting API (https://api.freshbooks.com)",
   "docs": "https://www.freshbooks.com/api/start",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full FreshBooks surface (estimates, taxes, time entries, projects, staff, bills, journal entries, webhooks, etc.) is out of scope until Pass B; this connector is read-only, matching legacy",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full FreshBooks surface (estimates, taxes, time entries, projects, staff, bills, journal entries, webhooks, etc.) is out of scope outside this connector's current declared surface; this connector is read-only, matching legacy",
   "endpoints": [
-    { "method": "GET", "path": "/accounting/account/{account_id}/users/clients", "covered_by": { "stream": "clients" } },
-    { "method": "GET", "path": "/accounting/account/{account_id}/invoices/invoices", "covered_by": { "stream": "invoices" } },
-    { "method": "GET", "path": "/accounting/account/{account_id}/expenses/expenses", "covered_by": { "stream": "expenses" } },
-    { "method": "GET", "path": "/accounting/account/{account_id}/payments/payments", "covered_by": { "stream": "payments" } },
-    { "method": "GET", "path": "/accounting/account/{account_id}/items/items", "covered_by": { "stream": "items" } },
-    { "method": "POST", "path": "/accounting/account/{account_id}/users/clients", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only" } },
-    { "method": "GET", "path": "/accounting/account/{account_id}/gateways/estimates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/accounting/account/{account_id}/time_entries", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/accounting/account/{account_id}/projects/projects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/accounting/account/{account_id}/staffs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/accounting/account/{account_id}/bill_vendors", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/accounting/account/{account_id}/users/clients",
+      "covered_by": {
+        "stream": "clients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounting/account/{account_id}/invoices/invoices",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounting/account/{account_id}/expenses/expenses",
+      "covered_by": {
+        "stream": "expenses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounting/account/{account_id}/payments/payments",
+      "covered_by": {
+        "stream": "payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounting/account/{account_id}/items/items",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounting/account/{account_id}/users/clients",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle; legacy is read-only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounting/account/{account_id}/gateways/estimates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounting/account/{account_id}/time_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounting/account/{account_id}/projects/projects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounting/account/{account_id}/staffs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounting/account/{account_id}/bill_vendors",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
   ]
 }

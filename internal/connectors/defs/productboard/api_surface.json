@@ -4,13 +4,65 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (features, notes, components, products). Productboard's write endpoints (feature/note/component creation and updates) are out of scope; legacy itself ships no writes (capabilities.write is false).",
   "endpoints": [
-    { "method": "GET", "path": "/features", "covered_by": { "stream": "features" } },
-    { "method": "GET", "path": "/notes", "covered_by": { "stream": "notes" } },
-    { "method": "GET", "path": "/components", "covered_by": { "stream": "components" } },
-    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
-    { "method": "POST", "path": "/notes", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented note creation; Pass B capability expansion" } },
-    { "method": "PATCH", "path": "/features/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented feature updates; Pass B capability expansion" } },
-    { "method": "GET", "path": "/feature-statuses", "excluded": { "category": "out_of_scope", "reason": "feature status taxonomy not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "user/portal-user data not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/features",
+      "covered_by": {
+        "stream": "features"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notes",
+      "covered_by": {
+        "stream": "notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/components",
+      "covered_by": {
+        "stream": "components"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/notes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented note creation; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/features/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented feature updates; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feature-statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feature status taxonomy not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user/portal-user data not modeled by legacy; not implemented in this bundle"
+      }
+    }
   ]
 }

@@ -55,7 +55,7 @@ unconditionally ("merge connector is read-only").
   `docs/migration/conventions.md`).
 - Only the 6 legacy-parity ATS Common Model streams are implemented; the wider Merge ATS surface
   (scorecards, interviews, EEOCs, tags) and any write actions are out of scope for this wave — see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
+  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}`
   entries.
 - A 2-page fixture is provided for `candidates` (proving the cursor paginator consumes each page
   exactly once and terminates on a null `next`); the remaining 5 streams ship single-page fixtures,

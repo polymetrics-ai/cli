@@ -45,7 +45,7 @@ None. Grafana is a read-only source in this connector (legacy `Capabilities.Writ
 
 - Full Grafana API surface (dashboard/datasource/alert-rule create/update/delete, annotations,
   teams, service accounts, snapshots, etc.) is out of scope for wave2; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries. Only the 5
+  `api_surface.json` concrete exclusion entries. Only the 5
   legacy-parity read streams are implemented.
 - Legacy's config-driven `page_size` override (1-5000) is dropped; the bundle always requests
   `limit=1000` for the two paginated streams — see Streams notes above.

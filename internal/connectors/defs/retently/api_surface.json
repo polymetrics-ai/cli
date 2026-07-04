@@ -4,17 +4,97 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (customers, responses, surveys, campaigns); legacy ships no writes (capabilities.write is false) and the full Retently surface (feedback import, transactional survey queueing, templates, NPS/CSAT/CES score endpoints, campaign reports) is out of scope until Pass B.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/customers", "covered_by": { "stream": "customers" } },
-    { "method": "GET", "path": "/api/v2/feedback", "covered_by": { "stream": "responses" } },
-    { "method": "GET", "path": "/api/v2/campaigns", "covered_by": { "stream": "surveys" } },
-    { "method": "GET", "path": "/api/v2/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "POST", "path": "/api/v2/customers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented customer create/update; Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/api/v2/customers", "excluded": { "category": "destructive_admin", "reason": "bulk customer deletion; legacy never implemented writes" } },
-    { "method": "POST", "path": "/api/v2/import", "excluded": { "category": "out_of_scope", "reason": "batch historical feedback import not modeled by legacy; Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/api/v2/feedback", "excluded": { "category": "destructive_admin", "reason": "response soft-delete; legacy never implemented writes" } },
-    { "method": "POST", "path": "/api/v2/survey", "excluded": { "category": "out_of_scope", "reason": "transactional survey queueing not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/templates", "excluded": { "category": "out_of_scope", "reason": "survey template catalog not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/{metric}/score", "excluded": { "category": "out_of_scope", "reason": "aggregate NPS/CSAT/CES score endpoints not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/reports/", "excluded": { "category": "out_of_scope", "reason": "campaign report/trend endpoints not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/api/v2/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/feedback",
+      "covered_by": {
+        "stream": "responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/campaigns",
+      "covered_by": {
+        "stream": "surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/customers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy connector never implemented customer create/update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/customers",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk customer deletion; legacy never implemented writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Batch historical feedback import not modeled by legacy"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/feedback",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "response soft-delete; legacy never implemented writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/survey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Transactional survey queueing not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Survey template catalog not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/{metric}/score",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Aggregate NPS/CSAT/CES score endpoints not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/reports/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Campaign report/trend endpoints not modeled by legacy"
+      }
+    }
   ]
 }

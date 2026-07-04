@@ -45,6 +45,14 @@
       "records": { "path": "data" },
       "schema": "schemas/products.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "inventory",
+      "path": "/inventory",
+      "query": { "page_size": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/inventory.json",
+      "projection": "passthrough"
     }
   ]
 }

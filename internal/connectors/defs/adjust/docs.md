@@ -60,5 +60,7 @@ returns `ErrUnsupportedOperation`, matching legacy exactly.
   property with no template consuming it is dead config (per this repo's dead-config rule), and a
   second alias pair adds no expressive power the primary pair lacks. Both mean lower/upper Adjust
   report period bounds.
-- Adjust's campaign/creative-set management and KPI-service endpoints are not implemented (legacy
-  never implemented them either); see `api_surface.json`'s scope note.
+- Adjust's app automation, campaign, device, S2S, blocklist, deep-link, and export/report-job
+  endpoints are not implemented here. They are separate operational surfaces from the JSON report
+  row endpoint this connector is scoped to, and legacy never implemented them either; see
+  `api_surface.json`'s scope note.

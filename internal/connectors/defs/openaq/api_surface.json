@@ -4,14 +4,72 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity reference-data read streams only; measurement/sensor time-series endpoints are out of scope until Pass B",
   "endpoints": [
-    { "method": "GET", "path": "/v3/countries", "covered_by": { "stream": "countries" } },
-    { "method": "GET", "path": "/v3/parameters", "covered_by": { "stream": "parameters" } },
-    { "method": "GET", "path": "/v3/locations", "covered_by": { "stream": "locations" } },
-    { "method": "GET", "path": "/v3/instruments", "covered_by": { "stream": "instruments" } },
-    { "method": "GET", "path": "/v3/manufacturers", "covered_by": { "stream": "manufacturers" } },
-    { "method": "GET", "path": "/v3/locations/{id}/sensors", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/sensors/{id}/measurements", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/owners", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/providers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v3/countries",
+      "covered_by": {
+        "stream": "countries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/parameters",
+      "covered_by": {
+        "stream": "parameters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/locations",
+      "covered_by": {
+        "stream": "locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/instruments",
+      "covered_by": {
+        "stream": "instruments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/manufacturers",
+      "covered_by": {
+        "stream": "manufacturers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/locations/{id}/sensors",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v3/locations/{id}/sensors is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{id}/measurements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v3/sensors/{id}/measurements is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/owners",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v3/owners is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/providers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v3/providers is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
   ]
 }

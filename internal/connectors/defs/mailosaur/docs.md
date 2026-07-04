@@ -51,6 +51,6 @@ None. Mailosaur is a read-only source for this connector (legacy's `Write` retur
   declared in `spec.json`.
 - Full Mailosaur API surface (message content/attachment retrieval, spam analysis, server
   creation/deletion, message/server deletion, account plan limits) is out of scope for wave2; see
-  `api_surface.json`'s `excluded` entries (`out_of_scope` for Pass B capability expansion,
+  `api_surface.json`'s `excluded` entries (`out_of_scope` for not implemented in this bundle,
   `destructive_admin` for delete mutations, `non_data_endpoint` for the account limits snapshot).
   Only the 3 legacy-parity read streams are implemented.

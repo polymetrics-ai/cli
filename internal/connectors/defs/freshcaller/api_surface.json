@@ -4,13 +4,65 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave1 fan-out migration: the 4 legacy-parity read streams (calls, agents, teams, numbers) and legacy's single token-header auth mode are fully migrated. The broader Freshcaller API surface (call metrics, IVR/call routing config, business hours, holiday lists, webhooks) remains out of scope until Pass B.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v1/calls", "covered_by": { "stream": "calls" } },
-    { "method": "GET", "path": "/api/v1/agents", "covered_by": { "stream": "agents" } },
-    { "method": "GET", "path": "/api/v1/teams", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/api/v1/numbers", "covered_by": { "stream": "numbers" } },
-    { "method": "GET", "path": "/api/v1/call_metrics", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v1/ivrs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v1/business_calendars", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/api/v1/calls/{id}/note", "excluded": { "category": "destructive_admin", "reason": "mutates call records; not a syncable read" } }
+    {
+      "method": "GET",
+      "path": "/api/v1/calls",
+      "covered_by": {
+        "stream": "calls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "covered_by": {
+        "stream": "agents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/numbers",
+      "covered_by": {
+        "stream": "numbers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/call_metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/v1/call_metrics is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ivrs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/v1/ivrs is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/business_calendars",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/v1/business_calendars is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/calls/{id}/note",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "mutates call records; not a syncable read"
+      }
+    }
   ]
 }

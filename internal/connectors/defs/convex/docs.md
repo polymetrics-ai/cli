@@ -76,5 +76,5 @@ label correction above. This bundle ships no `writes.json` at all.
   legacy test-only escape hatch), so this never changes emitted record DATA for any production
   config.
 - Full Convex HTTP API surface (mutation/query/action endpoints) is out of scope for this pass; see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
+  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}`
   entries.

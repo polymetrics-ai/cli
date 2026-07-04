@@ -85,6 +85,17 @@
         "author_display_name": "{{ record.author.displayName }}"
       },
       "schema": "schemas/comments.json"
+    },
+    {
+      "name": "pageviews",
+      "path": "/blogs/{{ config.blog_id }}/pageviews",
+      "records": { "path": "counts" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "blog_id": "{{ config.blog_id }}",
+        "time_range": "{{ record.timeRange }}"
+      },
+      "schema": "schemas/pageviews.json"
     }
   ]
 }

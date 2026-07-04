@@ -1,0 +1,17 @@
+{
+  "record": {
+    "email": "fixture@example.com",
+    "name": "Fixture Person",
+    "send": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/people.json"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "person_fixture_1"
+    }
+  }
+}

@@ -4,12 +4,57 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (contacts, sales_accounts, deals, leads); Freshsales's write endpoints and other resources (tasks, appointments, notes) are out of scope (legacy itself ships no writes; capabilities.write is false).",
   "endpoints": [
-    { "method": "GET", "path": "/crm/sales/api/contacts/view/{view_id}", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/crm/sales/api/sales_accounts/view/{view_id}", "covered_by": { "stream": "sales_accounts" } },
-    { "method": "GET", "path": "/crm/sales/api/deals/view/{view_id}", "covered_by": { "stream": "deals" } },
-    { "method": "GET", "path": "/crm/sales/api/leads/view/{view_id}", "covered_by": { "stream": "leads" } },
-    { "method": "POST", "path": "/crm/sales/api/contacts", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
-    { "method": "GET", "path": "/crm/sales/api/tasks", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/crm/sales/api/appointments", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/crm/sales/api/contacts/view/{view_id}",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/sales/api/sales_accounts/view/{view_id}",
+      "covered_by": {
+        "stream": "sales_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/sales/api/deals/view/{view_id}",
+      "covered_by": {
+        "stream": "deals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/sales/api/leads/view/{view_id}",
+      "covered_by": {
+        "stream": "leads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/sales/api/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy connector never implemented writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/sales/api/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/sales/api/appointments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Not modeled by legacy"
+      }
+    }
   ]
 }

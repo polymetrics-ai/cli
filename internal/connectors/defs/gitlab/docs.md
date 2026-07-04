@@ -63,7 +63,7 @@ None. GitLab is a read-only source in this connector (legacy `Capabilities.Write
 
 - Full GitLab API surface (merge requests, pipelines, commits, branches, webhooks, project/group
   members, snippets, etc.) is out of scope for wave2; see `api_surface.json`'s `excluded:
-  {category: out_of_scope, reason: "Pass B capability expansion"}` entries. Only the 4
+  {category: out_of_scope, reason: "not implemented in this bundle"}` entries. Only the 4
   legacy-parity read streams are implemented.
 - Every stream fixture ships a single page rather than the usual 2-page requirement (§4). This is
   the same harness limitation as the sanctioned `next_url` exception, applied to `link_header`: a

@@ -4,13 +4,66 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (lists, campaigns, contacts); legacy is read-only, so there are no write endpoints in or out of scope",
   "endpoints": [
-    { "method": "GET", "path": "/lists", "covered_by": { "stream": "lists" } },
-    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/getcampaignreport", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/gettemplates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/campaigns", "excluded": { "category": "out_of_scope", "reason": "legacy zoho-campaign connector is read-only; write support is Pass B capability expansion" } },
-    { "method": "POST", "path": "/addlistsubscribersinbulk", "excluded": { "category": "out_of_scope", "reason": "legacy zoho-campaign connector is read-only; write support is Pass B capability expansion" } },
-    { "method": "GET", "path": "/org", "excluded": { "category": "non_data_endpoint", "reason": "organization metadata listing, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/lists",
+      "covered_by": {
+        "stream": "lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/getcampaignreport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns or manages file/download payloads rather than JSON records expressible by this connector bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gettemplates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy zoho-campaign connector is read-only; write support is not implemented in this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/addlistsubscribersinbulk",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy zoho-campaign connector is read-only; write support is not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/org",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "organization metadata listing, not a syncable object stream"
+      }
+    }
   ]
 }

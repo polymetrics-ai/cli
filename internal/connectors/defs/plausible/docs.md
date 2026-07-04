@@ -75,7 +75,7 @@ None. Plausible is `capabilities.write: false`; no `writes.json` is shipped, mat
   than silently wrong.
 - The full Plausible API surface (goals-scoped breakdowns, realtime visitor counts, funnels, CSV
   export, site provisioning/management) is out of scope for this wave; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries.
+  `api_surface.json` concrete exclusion entries.
 - `page_size`/`max_pages` config overrides from legacy (`intConfig` reading `config.page_size`/
   `config.max_pages`) have no runtime-config-driven equivalent in this engine dialect
   (`PaginationSpec.PageSize`/`MaxPages` are bundle-fixed values, never read from `RuntimeConfig`) —

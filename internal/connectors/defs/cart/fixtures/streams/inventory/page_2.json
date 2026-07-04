@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/inventory",
+    "query": {
+      "page": "2",
+      "page_size": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "inv_fixture_3", "product_id": "prd_fixture_3", "sku": "fixture-sku-3", "quantity": 0, "updated_at": "2026-01-03T00:00:00Z" }
+      ],
+      "meta": {}
+    }
+  }
+}

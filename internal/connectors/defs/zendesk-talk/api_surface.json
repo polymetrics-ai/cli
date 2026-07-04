@@ -2,18 +2,90 @@
   "api": "Zendesk Talk API v2 (https://developer.zendesk.com/api-reference/voice/talk-api/introduction/)",
   "docs": "https://developer.zendesk.com/api-reference/voice/talk-api/introduction/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (phone_numbers, greetings, greeting_categories, ivrs, agents_activity); the full Zendesk Talk surface (calls, call legs, current queue activity, account overview, lines, quality scores) is out of scope until Pass B. zendesk-talk has no allow-listed write actions in legacy (read-only connector).",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (phone_numbers, greetings, greeting_categories, ivrs, agents_activity); the full Zendesk Talk surface (calls, call legs, current queue activity, account overview, lines, quality scores) is out of scope outside this connector's current declared surface. zendesk-talk has no allow-listed write actions in legacy (read-only connector).",
   "endpoints": [
-    { "method": "GET", "path": "/phone_numbers", "covered_by": { "stream": "phone_numbers" } },
-    { "method": "GET", "path": "/greetings", "covered_by": { "stream": "greetings" } },
-    { "method": "GET", "path": "/greeting_categories", "covered_by": { "stream": "greeting_categories" } },
-    { "method": "GET", "path": "/ivrs", "covered_by": { "stream": "ivrs" } },
-    { "method": "GET", "path": "/stats/agents_activity", "covered_by": { "stream": "agents_activity" } },
-    { "method": "GET", "path": "/calls", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/calls/{call_id}/legs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/stats/current_queue_activity", "excluded": { "category": "non_data_endpoint", "reason": "point-in-time operational snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/stats/account_overview", "excluded": { "category": "non_data_endpoint", "reason": "account-level statistics summary, not a syncable object stream" } },
-    { "method": "GET", "path": "/lines", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/quality_scores", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/phone_numbers",
+      "covered_by": {
+        "stream": "phone_numbers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/greetings",
+      "covered_by": {
+        "stream": "greetings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/greeting_categories",
+      "covered_by": {
+        "stream": "greeting_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ivrs",
+      "covered_by": {
+        "stream": "ivrs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/agents_activity",
+      "covered_by": {
+        "stream": "agents_activity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls/{call_id}/legs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/current_queue_activity",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "point-in-time operational snapshot, not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/account_overview",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "account-level statistics summary, not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/quality_scores",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
   ]
 }

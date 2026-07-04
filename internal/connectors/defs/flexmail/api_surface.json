@@ -4,15 +4,80 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, custom_fields, interests, segments, sources); Flexmail is read-only in legacy, no writes are modeled.",
   "endpoints": [
-    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/custom-fields", "covered_by": { "stream": "custom_fields" } },
-    { "method": "GET", "path": "/interests", "covered_by": { "stream": "interests" } },
-    { "method": "GET", "path": "/segments", "covered_by": { "stream": "segments" } },
-    { "method": "GET", "path": "/sources", "covered_by": { "stream": "sources" } },
-    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented contact writes; Pass B capability expansion" } },
-    { "method": "PUT", "path": "/contacts/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented contact writes; Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/contacts/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive mutation, not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/mailings", "excluded": { "category": "out_of_scope", "reason": "campaign-send data not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/statistics", "excluded": { "category": "out_of_scope", "reason": "analytics surface not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom-fields",
+      "covered_by": {
+        "stream": "custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/interests",
+      "covered_by": {
+        "stream": "interests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments",
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources",
+      "covered_by": {
+        "stream": "sources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy connector never implemented contact writes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy connector never implemented contact writes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Destructive mutation, not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mailings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Campaign-send data not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/statistics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Analytics surface not modeled by legacy"
+      }
+    }
   ]
 }

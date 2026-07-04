@@ -48,7 +48,7 @@ None. `capabilities.write` is `false`; legacy's `Write` always returns
   narrows only the redundant alias key name): ACCEPTABLE.
 - Full Directory API surface (group members, domains, roles, schemas, mobile devices) is out of
   scope for this migration; see `api_surface.json`'s `excluded: {category: out_of_scope, reason:
-  "Pass B capability expansion"}` entries. Only the 4 legacy-parity streams are implemented.
+  "not implemented in this bundle"}` entries. Only the 4 legacy-parity streams are implemented.
 - Legacy's `page_size` validation bounds the value to `[1, 500]` (`maxPageSize`) and hard-errors
   outside that range; the engine's declarative `page_number`/`cursor` dialect has no config-value
   range-validation mechanism (out of scope for this migration — an out-of-range `page_size` is sent

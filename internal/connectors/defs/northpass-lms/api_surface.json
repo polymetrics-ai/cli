@@ -2,14 +2,59 @@
   "api": "Northpass API v2 (https://api.northpass.com/v2)",
   "docs": "https://developers.northpass.com/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Northpass surface (courses content, quizzes, certificates, webhooks) is out of scope until Pass B",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Northpass surface (courses content, quizzes, certificates, webhooks) is out of scope outside this connector's current declared surface",
   "endpoints": [
-    { "method": "GET", "path": "/v2/people", "covered_by": { "stream": "people" } },
-    { "method": "GET", "path": "/v2/courses", "covered_by": { "stream": "courses" } },
-    { "method": "GET", "path": "/v2/course_enrollments", "covered_by": { "stream": "course_enrollments" } },
-    { "method": "GET", "path": "/v2/groups", "covered_by": { "stream": "groups" } },
-    { "method": "GET", "path": "/v2/certificates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/quizzes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/people", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v2/people",
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/courses",
+      "covered_by": {
+        "stream": "courses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/course_enrollments",
+      "covered_by": {
+        "stream": "course_enrollments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/certificates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/quizzes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/people",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    }
   ]
 }

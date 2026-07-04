@@ -2,14 +2,58 @@
   "api": "LaunchDarkly REST API v2 (https://app.launchdarkly.com/api/v2)",
   "docs": "https://apidocs.launchdarkly.com/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: all 5 legacy-parity read streams (projects, members, auditlog, flags, environments); every other LaunchDarkly REST resource (segments, experiments, metrics, webhooks, integrations, approval requests, and all write/mutation endpoints) is out of scope until Pass B",
+  "scope": "wave2 fan-out migration: all 5 legacy-parity read streams (projects, members, auditlog, flags, environments); every other LaunchDarkly REST resource (segments, experiments, metrics, webhooks, integrations, approval requests, and all write/mutation endpoints) is out of scope outside this connector's current declared surface",
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/api/v2/members", "covered_by": { "stream": "members" } },
-    { "method": "GET", "path": "/api/v2/auditlog", "covered_by": { "stream": "auditlog" } },
-    { "method": "GET", "path": "/api/v2/flags/{project_key}", "covered_by": { "stream": "flags" } },
-    { "method": "GET", "path": "/api/v2/projects/{project_key}/environments", "covered_by": { "stream": "environments" } },
-    { "method": "*", "path": "/api/v2/segments/*, /api/v2/metrics/*, /api/v2/experiments/*, /api/v2/webhooks/*, /api/v2/integrations/*, /api/v2/approval-requests/*", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST/PATCH/DELETE", "path": "all LaunchDarkly mutation endpoints", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy itself is read-only (capabilities.write: false)" } }
+    {
+      "method": "GET",
+      "path": "/api/v2/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/members",
+      "covered_by": {
+        "stream": "members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/auditlog",
+      "covered_by": {
+        "stream": "auditlog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{project_key}",
+      "covered_by": {
+        "stream": "flags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{project_key}/environments",
+      "covered_by": {
+        "stream": "environments"
+      }
+    },
+    {
+      "method": "*",
+      "path": "/api/v2/segments/*, /api/v2/metrics/*, /api/v2/experiments/*, /api/v2/webhooks/*, /api/v2/integrations/*, /api/v2/approval-requests/*",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this connector's current declared surface"
+      }
+    },
+    {
+      "method": "POST/PATCH/DELETE",
+      "path": "all LaunchDarkly mutation endpoints",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle; legacy itself is read-only (capabilities.write: false)"
+      }
+    }
   ]
 }

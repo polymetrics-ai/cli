@@ -4,14 +4,71 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (accounts, leads, tasks, projects, invoices, agile_issues); Flowlu's broader module surface (finance, CRM sub-objects, webhooks, files) is out of scope for this pass",
   "endpoints": [
-    { "method": "GET", "path": "crm/account/list", "covered_by": { "stream": "accounts" } },
-    { "method": "GET", "path": "crm/lead/list", "covered_by": { "stream": "leads" } },
-    { "method": "GET", "path": "task/tasks/list", "covered_by": { "stream": "tasks" } },
-    { "method": "GET", "path": "st/projects/list", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "fin/invoice/list", "covered_by": { "stream": "invoices" } },
-    { "method": "GET", "path": "agile/issues/list", "covered_by": { "stream": "agile_issues" } },
-    { "method": "GET", "path": "crm/account/item", "excluded": { "category": "out_of_scope", "reason": "single-record detail endpoint; the list endpoint already covers full-stream sync, Pass B capability expansion" } },
-    { "method": "POST", "path": "crm/account/create", "excluded": { "category": "out_of_scope", "reason": "write surface not exposed by this read-only connector, Pass B capability expansion" } },
-    { "method": "GET", "path": "fin/invoice/item", "excluded": { "category": "out_of_scope", "reason": "single-record detail endpoint; the list endpoint already covers full-stream sync, Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "crm/account/list",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "crm/lead/list",
+      "covered_by": {
+        "stream": "leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "task/tasks/list",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "st/projects/list",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "fin/invoice/list",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "agile/issues/list",
+      "covered_by": {
+        "stream": "agile_issues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "crm/account/item",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Single-record detail endpoint; the list endpoint already covers full-stream sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "crm/account/create",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Write surface not exposed by this read-only connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "fin/invoice/item",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Single-record detail endpoint; the list endpoint already covers full-stream sync"
+      }
+    }
   ]
 }

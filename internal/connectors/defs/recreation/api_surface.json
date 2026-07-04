@@ -4,18 +4,104 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (facilities, campsites, activities, organizations, recareas); legacy itself ships no writes (capabilities.write is false) and no other RIDB resource is modeled.",
   "endpoints": [
-    { "method": "GET", "path": "/facilities", "covered_by": { "stream": "facilities" } },
-    { "method": "GET", "path": "/campsites", "covered_by": { "stream": "campsites" } },
-    { "method": "GET", "path": "/activities", "covered_by": { "stream": "activities" } },
-    { "method": "GET", "path": "/organizations", "covered_by": { "stream": "organizations" } },
-    { "method": "GET", "path": "/recareas", "covered_by": { "stream": "recareas" } },
-    { "method": "GET", "path": "/facilities/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented single-facility detail lookups; Pass B capability expansion" } },
-    { "method": "GET", "path": "/facilities/{id}/campsites", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented facility-scoped sub-resource fan-out; Pass B capability expansion" } },
-    { "method": "GET", "path": "/facilities/{id}/events", "excluded": { "category": "out_of_scope", "reason": "events not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/facilities/{id}/media", "excluded": { "category": "out_of_scope", "reason": "media not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/tours", "excluded": { "category": "out_of_scope", "reason": "tours not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/permitentrances", "excluded": { "category": "out_of_scope", "reason": "permit entrances not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/recareas/{id}/activities", "excluded": { "category": "out_of_scope", "reason": "recarea-scoped sub-resource fan-out not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/linkinfo", "excluded": { "category": "non_data_endpoint", "reason": "reference lookup table (link relationship types), not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/facilities",
+      "covered_by": {
+        "stream": "facilities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campsites",
+      "covered_by": {
+        "stream": "campsites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activities",
+      "covered_by": {
+        "stream": "activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas",
+      "covered_by": {
+        "stream": "recareas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy connector never implemented single-facility detail lookups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{id}/campsites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy connector never implemented facility-scoped sub-resource fan-out"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{id}/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Events not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{id}/media",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Media not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tours",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Tours not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/permitentrances",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Permit entrances not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{id}/activities",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Recarea-scoped sub-resource fan-out not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/linkinfo",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference lookup table (link relationship types), not a syncable object stream"
+      }
+    }
   ]
 }

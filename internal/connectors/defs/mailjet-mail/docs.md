@@ -49,5 +49,5 @@ None. The Mailjet Email REST API source is read-only for this connector (legacy'
   Mailjet's own real termination behavior.
 - Full Mailjet Email API surface (sending mail, templates, senders, DNS validation, event
   webhooks, bulk contact-list management) is out of scope for wave2; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries. Only the 5
+  `api_surface.json` concrete exclusion entries. Only the 5
   legacy-parity read streams are implemented.

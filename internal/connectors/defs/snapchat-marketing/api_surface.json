@@ -2,20 +2,106 @@
   "api": "Snapchat Marketing API (Ads API) v1",
   "docs": "https://marketingapi.snapchat.com/docs/",
   "reviewed_at": "2026-07-03",
-  "scope": "Fresh migration at legacy capability parity: the 5 legacy read streams only (organizations, adaccounts, campaigns, adsquads, ads); legacy snapchat-marketing is read-only (no reverse-ETL writes; Write always returns ErrUnsupportedOperation) and the full Snapchat Marketing API surface (creatives, media, audiences, catalogs, roles, billing, measurement/stats) is out of scope until Pass B",
+  "scope": "Fresh migration at legacy capability parity: the 5 legacy read streams only (organizations, adaccounts, campaigns, adsquads, ads); legacy snapchat-marketing is read-only (no reverse-ETL writes; Write always returns ErrUnsupportedOperation) and the full Snapchat Marketing API surface (creatives, media, audiences, catalogs, roles, billing, measurement/stats) is out of scope outside this connector's current declared surface",
   "endpoints": [
-    { "method": "GET", "path": "/organizations", "covered_by": { "stream": "organizations" } },
-    { "method": "GET", "path": "/organizations/{organization_id}/adaccounts", "covered_by": { "stream": "adaccounts" } },
-    { "method": "GET", "path": "/adaccounts/{ad_account_id}/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "/adaccounts/{ad_account_id}/adsquads", "covered_by": { "stream": "adsquads" } },
-    { "method": "GET", "path": "/adaccounts/{ad_account_id}/ads", "covered_by": { "stream": "ads" } },
-    { "method": "GET", "path": "/adaccounts/{ad_account_id}/creatives", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/adaccounts/{ad_account_id}/media", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/adaccounts/{ad_account_id}/segments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/adaccounts/{ad_account_id}/catalogs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/adaccounts/{ad_account_id}/stats", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/organizations/{organization_id}/roles", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/organizations/{organization_id}/billingcenters", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/adaccounts/{ad_account_id}/campaigns", "excluded": { "category": "out_of_scope", "reason": "no safe reverse-ETL write surface identified" } }
+    {
+      "method": "GET",
+      "path": "/organizations",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/adaccounts",
+      "covered_by": {
+        "stream": "adaccounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adaccounts/{ad_account_id}/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adaccounts/{ad_account_id}/adsquads",
+      "covered_by": {
+        "stream": "adsquads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adaccounts/{ad_account_id}/ads",
+      "covered_by": {
+        "stream": "ads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adaccounts/{ad_account_id}/creatives",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adaccounts/{ad_account_id}/media",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns or manages file/download payloads rather than JSON records expressible by this connector bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adaccounts/{ad_account_id}/segments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adaccounts/{ad_account_id}/catalogs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adaccounts/{ad_account_id}/stats",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/billingcenters",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/adaccounts/{ad_account_id}/campaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "no safe reverse-ETL write surface identified"
+      }
+    }
   ]
 }

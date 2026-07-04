@@ -71,4 +71,4 @@ None. Legacy's `Write` returns `connectors.ErrUnsupportedOperation`; `capabiliti
   expected query.
 - Full PostHog surface (insights, cohorts, feature flags, dashboards, actions, annotations, event
   capture) is out of scope for this wave; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries.
+  `api_surface.json` concrete exclusion entries.

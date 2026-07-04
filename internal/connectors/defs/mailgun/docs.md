@@ -86,5 +86,5 @@ None. Mailgun is a read-only source connector (legacy's `Write` returns
   the normally-absent first candidate — not a shape Mailgun's documented API ever produces.
 - Full Mailgun API surface (sending mail, suppressions, webhooks, templates, routes, IP pools,
   per-tag stats) is out of scope for wave2; see `api_surface.json`'s `excluded: {category:
-  out_of_scope, reason: "Pass B capability expansion"}` entries. Only the 4 legacy-parity read
+  out_of_scope, reason: "not implemented in this bundle"}` entries. Only the 4 legacy-parity read
   streams are implemented.

@@ -2,12 +2,45 @@
   "api": "Klaus (Zendesk QA) public REST API v2 (https://kibbles.klausapp.com/api/v2)",
   "docs": "https://help.klausapp.com/en/articles/2911907-klaus-api",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: 2 of 3 legacy-parity read streams (users, categories); the reviews stream is blocked (ENGINE_GAP, see docs.md) and every other Klaus resource (scorecards, root causes, comments/disputes management, and all write/mutation endpoints) is out of scope until Pass B",
+  "scope": "wave2 fan-out migration: 2 of 3 legacy-parity read streams (users, categories); the reviews stream is blocked (ENGINE_GAP, see docs.md) and every other Klaus resource (scorecards, root causes, comments/disputes management, and all write/mutation endpoints) is out of scope outside this connector's current declared surface",
   "endpoints": [
-    { "method": "GET", "path": "/account/{account}/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/account/{account}/workspace/{workspace}/categories", "covered_by": { "stream": "categories" } },
-    { "method": "GET", "path": "/account/{account}/workspace/{workspace}/reviews", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: legacy's reviews stream walks forward through fromDate/toDate weekly date windows (harvestWindowed), issuing one request per window until the configured/derived end is reached -- there is no PaginationSpec type or incremental-block shape that expresses a fixed-step sliding date-window request loop (the 6 declarative pagination types are all page/cursor/offset/link-based, single-request-per-page; incremental.request_param sends exactly one lower-bound param, never a paired fromDate+toDate window that re-issues sequential requests across a sync). This is a StreamHook-shaped whole-stream read override, forbidden under this wave's JSON+docs.md-only hard rule. See docs.md's Known limits." } },
-    { "method": "*", "path": "scorecards, root causes, comment/dispute management endpoints", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST/PATCH/DELETE", "path": "all Klaus mutation endpoints", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy itself is read-only (capabilities.write: false)" } }
+    {
+      "method": "GET",
+      "path": "/account/{account}/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account/{account}/workspace/{workspace}/categories",
+      "covered_by": {
+        "stream": "categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account/{account}/workspace/{workspace}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: legacy's reviews stream walks forward through fromDate/toDate weekly date windows (harvestWindowed), issuing one request per window until the configured/derived end is reached -- there is no PaginationSpec type or incremental-block shape that expresses a fixed-step sliding date-window request loop (the 6 declarative pagination types are all page/cursor/offset/link-based, single-request-per-page; incremental.request_param sends exactly one lower-bound param, never a paired fromDate+toDate window that re-issues sequential requests across a sync). This is a StreamHook-shaped whole-stream read override, forbidden under this wave's JSON+docs.md-only hard rule. See docs.md's Known limits."
+      }
+    },
+    {
+      "method": "*",
+      "path": "scorecards, root causes, comment/dispute management endpoints",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this connector's current declared surface"
+      }
+    },
+    {
+      "method": "POST/PATCH/DELETE",
+      "path": "all Klaus mutation endpoints",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle; legacy itself is read-only (capabilities.write: false)"
+      }
+    }
   ]
 }

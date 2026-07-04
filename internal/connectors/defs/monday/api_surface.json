@@ -2,15 +2,66 @@
   "api": "monday.com GraphQL API v2 (https://api.monday.com/v2)",
   "docs": "https://developer.monday.com/api-reference/docs",
   "reviewed_at": "2026-07-02",
-  "scope": "wave1-pilot migration: the 5 legacy-parity read streams only (boards, items, users, teams, tags), each a distinct GraphQL root QUERY field (a read, never a mutation) on the SAME single POST /v2 endpoint; monday's full documented API surface (mutations, webhooks, apps, other GraphQL types) is out of scope until Pass B. Every covered/excluded entry below is declared method GET (not the literal wire HTTP verb, which is always POST for GraphQL) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design §E.1 rule 4) — monday.com's GraphQL transport uses POST for both queries and mutations, so the wire verb alone cannot distinguish them the way REST's verb convention does.",
+  "scope": "wave1-pilot migration: the 5 legacy-parity read streams only (boards, items, users, teams, tags), each a distinct GraphQL root QUERY field (a read, never a mutation) on the SAME single POST /v2 endpoint; monday's full documented API surface (mutations, webhooks, apps, other GraphQL types) is out of scope outside this connector's current declared surface. Every covered/excluded entry below is declared method GET (not the literal wire HTTP verb, which is always POST for GraphQL) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design §E.1 rule 4) — monday.com's GraphQL transport uses POST for both queries and mutations, so the wire verb alone cannot distinguish them the way REST's verb convention does.",
   "endpoints": [
-    { "method": "GET", "path": "/v2 (query: boards)", "covered_by": { "stream": "boards" } },
-    { "method": "GET", "path": "/v2 (query: boards { items_page } / next_items_page)", "covered_by": { "stream": "items" } },
-    { "method": "GET", "path": "/v2 (query: users)", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/v2 (query: teams)", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/v2 (query: tags)", "covered_by": { "stream": "tags" } },
-    { "method": "GET", "path": "/v2 (query: me)", "excluded": { "category": "non_data_endpoint", "reason": "bounded identity/connectivity check used by Check(), not a syncable object stream" } },
-    { "method": "POST", "path": "/v2 (mutations: create_item, change_column_value, ...)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; monday is read-only in this migration (legacy Write returns ErrUnsupportedOperation)" } },
-    { "method": "GET", "path": "/v2 (query: workspaces, folders, updates, activity_logs)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v2 (query: boards)",
+      "covered_by": {
+        "stream": "boards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: boards { items_page } / next_items_page)",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: users)",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: teams)",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: tags)",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: me)",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "bounded identity/connectivity check used by Check(), not a syncable object stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2 (mutations: create_item, change_column_value, ...)",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle; monday is read-only in this migration (legacy Write returns ErrUnsupportedOperation)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (query: workspaces, folders, updates, activity_logs)",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
   ]
 }

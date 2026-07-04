@@ -60,4 +60,4 @@ is `false` and this bundle ships no `writes.json`, matching legacy's `Write` ret
   (there is nothing to exercise), which is the expected, honest outcome here.
 - Only the 4 core lookup endpoints are migrated; Interzoid's broader API catalog (email
   validation, geocoding, currency conversion) is out of scope for wave2 — see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries.
+  `api_surface.json` concrete exclusion entries.

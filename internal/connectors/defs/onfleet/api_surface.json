@@ -4,15 +4,80 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (tasks, workers, teams, hubs, administrators); Onfleet is read-only in legacy (write surface is operationally sensitive and deliberately out of scope), so there are no write endpoints in or out of scope",
   "endpoints": [
-    { "method": "GET", "path": "/tasks/all", "covered_by": { "stream": "tasks" } },
-    { "method": "GET", "path": "/workers", "covered_by": { "stream": "workers" } },
-    { "method": "GET", "path": "/teams", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/hubs", "covered_by": { "stream": "hubs" } },
-    { "method": "GET", "path": "/admins", "covered_by": { "stream": "administrators" } },
-    { "method": "GET", "path": "/auth/test", "excluded": { "category": "non_data_endpoint", "reason": "credential validation probe, not a syncable object stream; used by Check" } },
-    { "method": "POST", "path": "/tasks", "excluded": { "category": "destructive_admin", "reason": "creating live delivery tasks is operationally sensitive and out of scope for a read-only source connector" } },
-    { "method": "PUT", "path": "/tasks/{id}", "excluded": { "category": "destructive_admin", "reason": "mutating live delivery tasks is operationally sensitive and out of scope for a read-only source connector" } },
-    { "method": "GET", "path": "/organization", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/tasks/all",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workers",
+      "covered_by": {
+        "stream": "workers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hubs",
+      "covered_by": {
+        "stream": "hubs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admins",
+      "covered_by": {
+        "stream": "administrators"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/auth/test",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "credential validation probe, not a syncable object stream; used by Check"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "creating live delivery tasks is operationally sensitive and out of scope for a read-only source connector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tasks/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "mutating live delivery tasks is operationally sensitive and out of scope for a read-only source connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organization",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
   ]
 }

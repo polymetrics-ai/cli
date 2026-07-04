@@ -85,7 +85,7 @@ and no `writes.json` is declared.
 
 - Full Dataverse Web API surface (custom entities, `$expand` relationship traversal, actions/
   functions, `$batch` requests, entity metadata) is out of scope for this migration; see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
+  `api_surface.json` for concrete exclusion reasons
   entries. Only the 5 legacy-parity read streams are implemented.
 - **Config surface narrowing, documented parity deviation (base_url)**: legacy accepts EITHER a
   full `base_url` config value OR a bare `org_url` (with `base_url` derived as

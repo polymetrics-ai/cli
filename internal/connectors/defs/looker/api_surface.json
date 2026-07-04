@@ -4,20 +4,120 @@
   "reviewed_at": "2026-07-03",
   "scope": "legacy-parity migration: the 5 legacy-parity read streams only; the full Looker API surface (queries, renders, scheduled plans, content, embed, connections, boards, alerts, etc.) is out of scope until Pass B",
   "endpoints": [
-    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/groups", "covered_by": { "stream": "groups" } },
-    { "method": "GET", "path": "/folders", "covered_by": { "stream": "folders" } },
-    { "method": "GET", "path": "/looks", "covered_by": { "stream": "looks" } },
-    { "method": "GET", "path": "/dashboards", "covered_by": { "stream": "dashboards" } },
-    { "method": "POST", "path": "/login", "excluded": { "category": "non_data_endpoint", "reason": "auth token exchange, not a syncable object stream; modeled by base.auth's oauth2_client_credentials candidates" } },
-    { "method": "GET", "path": "/queries/{query_id}/run/{result_format}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/looks/{look_id}/run/{result_format}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/scheduled_plans", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/content_metadata", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/connections", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/boards", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/alerts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; connector is read-only in pm today" } },
-    { "method": "DELETE", "path": "/users/{user_id}", "excluded": { "category": "destructive_admin", "reason": "user deletion; not a safe reverse-ETL action" } }
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders",
+      "covered_by": {
+        "stream": "folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/looks",
+      "covered_by": {
+        "stream": "looks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards",
+      "covered_by": {
+        "stream": "dashboards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/login",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "auth token exchange, not a syncable object stream; modeled by base.auth's oauth2_client_credentials candidates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/queries/{query_id}/run/{result_format}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/queries/{query_id}/run/{result_format} is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/looks/{look_id}/run/{result_format}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/looks/{look_id}/run/{result_format} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheduled_plans",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/scheduled_plans is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content_metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/content_metadata is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/connections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/connections is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/boards is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/alerts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/alerts is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Connector is read-only in pm today"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "user deletion; not a safe reverse-ETL action"
+      }
+    }
   ]
 }

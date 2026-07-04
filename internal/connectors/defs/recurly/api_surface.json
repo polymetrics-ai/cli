@@ -4,17 +4,96 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (accounts, subscriptions, invoices, transactions, plans); legacy itself ships no writes (capabilities.write is false) and no other Recurly resource is modeled.",
   "endpoints": [
-    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
-    { "method": "GET", "path": "/subscriptions", "covered_by": { "stream": "subscriptions" } },
-    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } },
-    { "method": "GET", "path": "/transactions", "covered_by": { "stream": "transactions" } },
-    { "method": "GET", "path": "/plans", "covered_by": { "stream": "plans" } },
-    { "method": "POST", "path": "/accounts", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented account creation; Pass B capability expansion" } },
-    { "method": "PUT", "path": "/accounts/{account_id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented account updates; Pass B capability expansion" } },
-    { "method": "PUT", "path": "/subscriptions/{subscription_id}/cancel", "excluded": { "category": "destructive_admin", "reason": "subscription cancellation not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/accounts/{account_id}/invoices", "excluded": { "category": "out_of_scope", "reason": "account-scoped sub-resource fan-out not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/coupons", "excluded": { "category": "out_of_scope", "reason": "coupons not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/add_ons", "excluded": { "category": "out_of_scope", "reason": "plan add-ons not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/export_dates", "excluded": { "category": "non_data_endpoint", "reason": "bulk-export date index, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/accounts",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions",
+      "covered_by": {
+        "stream": "transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans",
+      "covered_by": {
+        "stream": "plans"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented account creation; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/accounts/{account_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented account updates; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/subscriptions/{subscription_id}/cancel",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "subscription cancellation not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/invoices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "account-scoped sub-resource fan-out not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coupons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "coupons not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/add_ons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "plan add-ons not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export_dates",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "bulk-export date index, not a syncable object stream"
+      }
+    }
   ]
 }

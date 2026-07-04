@@ -34,7 +34,7 @@ None. Encharge is read-only; `capabilities.write` is `false` and this bundle shi
 
 - Only the 5 legacy-parity read streams are implemented; the full Encharge surface (event
   ingestion, flows, tag/segment mutation) is out of scope for this wave — see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
+  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}`
   entries.
 - Legacy's `decodeRecords` defensively wraps a **scalar string** array element into
   `{"tag": <value>}` for the `account_tags` stream, in case `/tags-management`'s real payload is a

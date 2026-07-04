@@ -62,4 +62,4 @@ reverse-ETL write surface here (matches legacy's `Write` returning
   either knob.
 - Full Lightspeed Retail API surface (inventory adjustments, consignments, price books, gift
   cards, webhooks) is out of scope for this wave; see `api_surface.json`'s `excluded:
-  {category: out_of_scope, reason: "Pass B capability expansion"}` entries.
+  `api_surface.json` concrete exclusion entries.

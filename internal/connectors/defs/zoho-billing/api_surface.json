@@ -4,16 +4,90 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (customers, subscriptions, invoices); the full Zoho Billing surface (plans, addons, coupons, credit notes, payments, items, hosted pages, webhooks) is out of scope until Pass B. zoho-billing has no allow-listed write actions in legacy (read-only connector).",
   "endpoints": [
-    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
-    { "method": "GET", "path": "/subscriptions", "covered_by": { "stream": "subscriptions" } },
-    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } },
-    { "method": "GET", "path": "/plans", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/addons", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/coupons", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/creditnotes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/payments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/items", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy zoho-billing implements no write actions at all" } },
-    { "method": "GET", "path": "/settings/webhooks", "excluded": { "category": "non_data_endpoint", "reason": "webhook configuration, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/plans is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/addons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/addons is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coupons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/coupons is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditnotes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/creditnotes is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/payments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/items is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy zoho-billing implements no write actions at all"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/webhooks",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "webhook configuration, not a syncable object stream"
+      }
+    }
   ]
 }

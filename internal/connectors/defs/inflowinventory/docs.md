@@ -51,7 +51,7 @@ rejects every write with `connectors.ErrUnsupportedOperation`. No `writes.json` 
 
 - Full inFlow API surface (purchase orders, stock adjustments, locations, taxes, teams, webhooks)
   is out of scope for this wave; see `api_surface.json`'s `excluded: {category: out_of_scope,
-  reason: "Pass B capability expansion"}` entries. Only the 5 legacy-parity streams are
+  reason: "see api_surface.json for concrete exclusion reasons"}` entries. Only the 5 legacy-parity streams are
   implemented.
 - `companyid`'s legacy validation (rejecting `/`, `?`, `#`, and `..`) is not separately re-declared
   in `spec.json`; the engine's own path-interpolation guard (urlencoded-by-default per-segment

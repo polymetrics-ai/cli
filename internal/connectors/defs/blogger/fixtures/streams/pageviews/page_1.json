@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/blogs/synthetic-conformance-value/pageviews"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "blogger#page_views",
+      "blogId": "fixture_blog_1",
+      "counts": [
+        {
+          "timeRange": "ALL_TIME",
+          "count": "123"
+        },
+        {
+          "timeRange": "SEVEN_DAYS",
+          "count": "7"
+        }
+      ]
+    }
+  }
+}

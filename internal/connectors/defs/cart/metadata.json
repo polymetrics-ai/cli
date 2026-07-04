@@ -1,7 +1,7 @@
 {
   "name": "cart",
   "display_name": "Cart.com",
-  "description": "Reads Cart.com orders, customers, and products through a read-only REST API.",
+  "description": "Reads Cart.com orders, customers, products, and inventory through a read-only REST API.",
   "integration_type": "api",
   "docs_url": "https://developers.cart.com",
   "release_stage": "ga",
@@ -17,7 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Cart.com API read of order, customer, and product data",
+    "read": "external Cart.com API read of order, customer, product, and inventory data",
     "approval": "none; read-only"
   }
 }

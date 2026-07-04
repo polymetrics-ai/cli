@@ -52,7 +52,7 @@ None. Polygon Stock API is a read-only source in both legacy and this bundle
 - Only the 3 legacy-parity streams (`tickers`, `dividends`, `splits`) are implemented; the full
   Polygon.io stocks surface (ticker details, financials, aggregates/bars, snapshots, exchanges,
   market status) is out of scope for this wave — see `api_surface.json`'s `excluded:
-  {category: out_of_scope, reason: "Pass B capability expansion"}` entries.
+  {category: out_of_scope, reason: "not implemented in this bundle"}` entries.
 - `max_pages` (legacy default `3`, config-overridable including `0`/`all`/`unlimited` for
   unbounded) is NOT exposed as a config property here: the `next_url` paginator's `MaxPages` is a
   static `int` field on `streams.json`'s `pagination` block, with no runtime config-driven override

@@ -4,13 +4,66 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (transactions, memberships, accounts); the full Qonto surface (attachments, labels, clients, statements, transfers, cards, etc.) is out of scope until Pass B. Qonto is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
   "endpoints": [
-    { "method": "GET", "path": "/v2/transactions", "covered_by": { "stream": "transactions" } },
-    { "method": "GET", "path": "/v2/memberships", "covered_by": { "stream": "memberships" } },
-    { "method": "GET", "path": "/v2/accounts", "covered_by": { "stream": "accounts" } },
-    { "method": "GET", "path": "/v2/attachments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/labels", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/clients", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/transfers", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; Qonto connector is read-only, and payment initiation is a money-movement action out of scope for any read connector" } },
-    { "method": "GET", "path": "/v2/organizations/{slug}", "excluded": { "category": "non_data_endpoint", "reason": "organization profile introspection, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/v2/transactions",
+      "covered_by": {
+        "stream": "transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/memberships",
+      "covered_by": {
+        "stream": "memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounts",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v2/attachments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v2/labels is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/clients",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v2/clients is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfers",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "no allow-listed reverse-ETL writes; Qonto connector is read-only, and payment initiation is a money-movement action out of scope for any read connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{slug}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "organization profile introspection, not a syncable object stream"
+      }
+    }
   ]
 }

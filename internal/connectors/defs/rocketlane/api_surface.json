@@ -4,15 +4,80 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Rocketlane surface (fields, forms, spaces, activities, task-lists, invoices, custom-field write endpoints, etc.) is out of scope until Pass B",
   "endpoints": [
-    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
-    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
-    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/time-entries", "covered_by": { "stream": "time_entries" } },
-    { "method": "POST", "path": "/projects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/tasks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/spaces", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time-entries",
+      "covered_by": {
+        "stream": "time_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/projects is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/tasks is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/fields is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/spaces is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/invoices is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
   ]
 }

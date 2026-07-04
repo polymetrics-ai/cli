@@ -4,12 +4,59 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 2 legacy-parity read streams (tweets, authors) derived from the recent-search endpoint only; the full Twitter v2 API surface (full-archive search, spaces, DMs, lists, likes, follows, streaming filtered rules, etc.) is out of scope until Pass B",
   "endpoints": [
-    { "method": "GET", "path": "/2/tweets/search/recent", "covered_by": { "stream": "tweets" } },
-    { "method": "GET", "path": "/2/tweets/search/recent (includes.users expansion)", "covered_by": { "stream": "authors" } },
-    { "method": "GET", "path": "/2/tweets/search/all", "excluded": { "category": "requires_elevated_scope", "reason": "full-archive search requires Academic/Enterprise access tier, not exercised by legacy" } },
-    { "method": "GET", "path": "/2/tweets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/2/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/2/spaces", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/2/tweets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/2/tweets/search/recent",
+      "covered_by": {
+        "stream": "tweets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/search/recent (includes.users expansion)",
+      "covered_by": {
+        "stream": "authors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/search/all",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "full-archive search requires Academic/Enterprise access tier, not exercised by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/2/tweets is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/2/users is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/spaces",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/2/spaces is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/tweets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/2/tweets is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    }
   ]
 }

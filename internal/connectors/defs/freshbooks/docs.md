@@ -44,7 +44,7 @@ None. FreshBooks is exposed read-only, matching legacy's `Capabilities{Write: fa
 
 - Full FreshBooks API surface (estimates, time entries, projects, staff, bills, journal entries,
   webhooks, etc.) is out of scope for this wave; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries. Only the 5
+  `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}` entries. Only the 5
   legacy-parity read streams are implemented.
 - The page-count stop-signal deviation described above under Streams notes (request-count only,
   never a data divergence).

@@ -73,5 +73,5 @@ None. Legacy's `Write` returns `connectors.ErrUnsupportedOperation`; `capabiliti
   `totalResults` edge case documented above.
 - Full Outbrain Amplify surface (budget/creative/promoted-link management, marketer-scoped
   campaign/report paths, campaign mutation) is out of scope for this wave; see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
+  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}`
   entries.

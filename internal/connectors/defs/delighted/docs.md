@@ -2,7 +2,8 @@
 
 Delighted is a customer-experience (NPS/CSAT/CES) survey product. This bundle reads survey
 responses, people, bounces, unsubscribes, and aggregate metrics through the Delighted REST API.
-Read-only. This bundle migrates `internal/connectors/delighted` (the hand-written connector); the
+Pass B also adds Delighted people create/update and delete actions. This bundle migrates
+`internal/connectors/delighted` (the hand-written connector); the
 legacy package stays registered and unchanged until wave6's registry flip.
 
 ## Auth setup
@@ -40,8 +41,14 @@ with a blank password (`auth: [{"mode": "basic", "username": "{{ secrets.api_key
 
 ## Write actions & risks
 
-None. Delighted is a read-only source connector here (`capabilities.write: false`); legacy's
-`Write` unconditionally returns `ErrUnsupportedOperation`.
+- `create_person` sends `POST /people.json` with a form body. Delighted treats this endpoint as
+  create-or-update by person identity; it may also trigger survey-send behavior depending on the
+  fields and account settings. Required input is `email`; optional fields include `name`,
+  `phone_number`, `properties`, `send`, and `delay`.
+- `delete_person` sends `DELETE /people/{{ person_id }}.json` with no request body. A missing
+  person returns 404 and is treated as an idempotent delete success.
+
+Both actions mutate Delighted customer records and require reverse-ETL plan preview and approval.
 
 ## Known limits
 
@@ -74,5 +81,5 @@ None. Delighted is a read-only source connector here (`capabilities.write: false
   in-code fixture-mode sample data inconsistently emitted these as strings (`"50.0"`); this bundle's
   fixtures use real JSON numbers instead, tightening to the catalog's own declared type rather than
   reproducing a fixture-authoring inconsistency in legacy's own test-only code path.
-- Full Delighted API surface (creating/updating people, sending surveys) is out of scope for this
-  wave; see `api_surface.json`'s `excluded` entries.
+- Single-record survey response fetches are not modeled separately because the
+  `survey_responses` stream already covers the same object shape.

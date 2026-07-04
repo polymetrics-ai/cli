@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/inventory",
+    "query": { "page_size": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "inv_fixture_1", "product_id": "prd_fixture_1", "sku": "fixture-sku-1", "quantity": 12, "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "inv_fixture_2", "product_id": "prd_fixture_2", "sku": "fixture-sku-2", "quantity": 4, "updated_at": "2026-01-02T00:00:00Z" }
+      ],
+      "meta": { "next_page": "2" }
+    }
+  }
+}

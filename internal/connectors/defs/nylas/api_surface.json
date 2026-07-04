@@ -2,17 +2,83 @@
   "api": "Nylas v3 API (https://api.us.nylas.com)",
   "docs": "https://developer.nylas.com/docs/api/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Nylas v3 surface (drafts, threads, folders, webhooks, scheduling, notetaker) is out of scope until Pass B",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Nylas v3 surface (drafts, threads, folders, webhooks, scheduling, notetaker) is out of scope outside this connector's current declared surface",
   "endpoints": [
-    { "method": "GET", "path": "/v3/grants/{grant_id}/calendars", "covered_by": { "stream": "calendars" } },
-    { "method": "GET", "path": "/v3/grants/{grant_id}/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/v3/grants/{grant_id}/messages", "covered_by": { "stream": "messages" } },
-    { "method": "GET", "path": "/v3/grants/{grant_id}/events", "covered_by": { "stream": "events" } },
-    { "method": "GET", "path": "/v3/grants/{grant_id}/threads", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/grants/{grant_id}/drafts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/grants/{grant_id}/folders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v3/grants/{grant_id}/messages/send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v3/grants/{grant_id}/events", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/grants/{grant_id}", "excluded": { "category": "non_data_endpoint", "reason": "grant metadata lookup, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/v3/grants/{grant_id}/calendars",
+      "covered_by": {
+        "stream": "calendars"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/grants/{grant_id}/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/grants/{grant_id}/messages",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/grants/{grant_id}/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/grants/{grant_id}/threads",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/grants/{grant_id}/drafts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/grants/{grant_id}/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/grants/{grant_id}/messages/send",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/grants/{grant_id}/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/grants/{grant_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "grant metadata lookup, not a syncable object stream"
+      }
+    }
   ]
 }

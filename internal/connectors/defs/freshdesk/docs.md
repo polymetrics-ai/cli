@@ -38,7 +38,7 @@ None. Freshdesk is exposed read-only, matching legacy's `Capabilities{Write: fal
 
 - Full Freshdesk API surface (conversations, time entries, solutions/articles, canned responses,
   business hours, webhooks, etc.) is out of scope for this wave; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries. Only the 5
+  `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}` entries. Only the 5
   legacy-parity read streams are implemented.
 - **`base_url` is required config, not derived from `domain`.** Legacy derives the base URL from a
   bare `domain` config value when `base_url` is unset (`https://<domain>/api/v2`), validating the

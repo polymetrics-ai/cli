@@ -1,7 +1,8 @@
 # Overview
 
-Amazon Ads reads Amazon Advertising profiles and Sponsored Products campaigns, ad groups,
-portfolios, and targeting keywords through the Amazon Ads API (v2 entity endpoints). This bundle
+Amazon Ads reads Amazon Advertising profiles and Sponsored Products campaigns, ad groups, product
+ads, portfolios, targeting keywords, and negative keywords through the Amazon Ads API (v2 entity
+endpoints). This bundle
 migrates `internal/connectors/amazon-ads` (the hand-written connector) to a declarative defs bundle
 at capability parity; the legacy package stays registered and unchanged until wave6's registry flip.
 It is read-only — the Amazon Ads API does expose mutating operations (create/update campaigns, ad
@@ -65,7 +66,7 @@ a region-derived choice between three URLs (documented scope narrowing). Set `ba
 
 ## Streams notes
 
-Five streams, matching legacy's `amazonAdsStreamEndpoints` table exactly:
+Seven streams:
 
 - `profiles` — `GET v2/profiles`. Unscoped (no Scope header). Records at the JSON array root
   (`records.path: ""`).
@@ -73,6 +74,8 @@ Five streams, matching legacy's `amazonAdsStreamEndpoints` table exactly:
 - `ad_groups` — `GET v2/sp/adGroups`. Profile-scoped.
 - `portfolios` — `GET v2/portfolios`. Profile-scoped.
 - `keywords` — `GET v2/sp/keywords`. Profile-scoped.
+- `product_ads` — `GET v2/sp/productAds`. Profile-scoped.
+- `negative_keywords` — `GET v2/sp/negativeKeywords`. Profile-scoped.
 
 All five paginate identically with `pagination.type: offset_limit` (`limit_param: count`,
 `offset_param: startIndex`, `page_size: 100`), matching legacy's `harvest` loop's
@@ -101,9 +104,14 @@ None. This connector is `capabilities.write: false`; no `writes.json` is shipped
 
 ## Known limits
 
-- Sponsored Brands, Sponsored Display, reporting/metrics, and every write/mutating endpoint are out
-  of scope for this migration; see `api_surface.json`'s `excluded: {category: out_of_scope, reason:
-  "Pass B capability expansion"}` entries. Legacy never implemented them either.
+- Sponsored Brands and Sponsored Display campaigns are not modeled because their record shapes differ
+  from the Sponsored Products v2 entity surface carried by this bundle; they remain explicit
+  `api_surface.json` exclusions rather than guessed schemas.
+- Sponsored Products write endpoints use batch-array mutation bodies and partial-success semantics
+  that the current write dialect cannot express without a `WriteHook`; reporting endpoints require
+  async job creation/poll/download and conventionally require a `StreamHook`. No new hook packages
+  are allowed for this shard, so those endpoints are excluded with typed reasons in
+  `api_surface.json`.
 - `base_url`/`token_url` region selection: only the North America endpoint is a spec default; EU/FE
   accounts must set both `base_url` and `token_url` explicitly (see "Auth setup").
 - See "Auth setup" above for the AuthHook-folded conditional Scope header (a genuine Tier-2 need — no

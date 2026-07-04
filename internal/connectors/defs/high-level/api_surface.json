@@ -4,15 +4,80 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, opportunities, pipelines, custom_fields, form_submissions), routed through the upstream source-high-level proxy's /upstream/<resource> paths exactly as legacy calls them. HighLevel's write endpoints (contact/opportunity create-update-delete, workflow triggers, etc.) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
   "endpoints": [
-    { "method": "GET", "path": "/upstream/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/upstream/opportunities", "covered_by": { "stream": "opportunities" } },
-    { "method": "GET", "path": "/upstream/pipelines", "covered_by": { "stream": "pipelines" } },
-    { "method": "GET", "path": "/upstream/customfields", "covered_by": { "stream": "custom_fields" } },
-    { "method": "GET", "path": "/upstream/form-submissions", "covered_by": { "stream": "form_submissions" } },
-    { "method": "POST", "path": "/upstream/contacts", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented contact creation; Pass B capability expansion" } },
-    { "method": "PUT", "path": "/upstream/contacts/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented contact updates; Pass B capability expansion" } },
-    { "method": "POST", "path": "/upstream/opportunities", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented opportunity creation; Pass B capability expansion" } },
-    { "method": "GET", "path": "/upstream/calendars", "excluded": { "category": "out_of_scope", "reason": "calendars/appointments not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/upstream/workflows", "excluded": { "category": "out_of_scope", "reason": "workflows not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/upstream/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/upstream/opportunities",
+      "covered_by": {
+        "stream": "opportunities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/upstream/pipelines",
+      "covered_by": {
+        "stream": "pipelines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/upstream/customfields",
+      "covered_by": {
+        "stream": "custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/upstream/form-submissions",
+      "covered_by": {
+        "stream": "form_submissions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/upstream/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented contact creation; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/upstream/contacts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented contact updates; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/upstream/opportunities",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented opportunity creation; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/upstream/calendars",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "calendars/appointments not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/upstream/workflows",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workflows not modeled by legacy; not implemented in this bundle"
+      }
+    }
   ]
 }

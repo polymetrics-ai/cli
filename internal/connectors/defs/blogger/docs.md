@@ -1,8 +1,8 @@
 # Overview
 
 Blogger is a Tier-2 (AuthHook) migration of `internal/connectors/blogger` (legacy, read-only
-reference until the wave6 registry flip). It reads Google Blogger API v3 blogs, posts, pages, and
-comments via the Google OAuth 2.0 **refresh-token grant** only — the 3-legged consent/acquisition
+reference until the wave6 registry flip). It reads Google Blogger API v3 blogs, posts, pages,
+comments, and page-view counts via the Google OAuth 2.0 **refresh-token grant** only — the 3-legged consent/acquisition
 dance is out of scope (the refresh token arrives as a pre-issued secret; the credentials layer
 already owns acquisition/storage). This bundle is engine-vs-legacy parity-tested against
 `internal/connectors/blogger`. Read-only: legacy `blogger.go:494-496` always returns
@@ -31,13 +31,18 @@ is no `when`-gated bypass to declare.
 
 ## Streams notes
 
-Four streams, all primary-keyed on `id` with `x-cursor-field: updated` (legacy's catalog publishes
-`CursorFields: []string{"updated"}` for every stream, §8 rule 2): `blogs` (single-resource,
+Five streams. The four legacy-parity resource streams are primary-keyed on `id` with
+`x-cursor-field: updated` (legacy's catalog publishes `CursorFields: []string{"updated"}` for every
+legacy stream, §8 rule 2): `blogs` (single-resource,
 `pagination: {"type": "none"}`, `records.path: ""` selects the bare object response exactly like
 legacy's `readSingle`), and `posts`/`pages`/`comments` (all three paginated via Blogger's
 `pageToken`/`nextPageToken` cursor convention — `pagination.type: cursor` with
 `token_path: nextPageToken`, `cursor_param: pageToken`, `page_size: 100` sent as `maxResults`,
 matching legacy's `harvest` loop exactly).
+
+`pageviews` reads `GET /blogs/{{ config.blog_id }}/pageviews`, emits each `counts[]` entry, and
+stamps the configured `blog_id` because Blogger nests the counts under a single response object. It
+is non-paginated and primary-keyed by `blog_id` + `time_range`.
 
 `computed_fields` flatten legacy's nested-object reads (`nestedField(item, outer, inner)`,
 streams.go:201-207) into the schema's flat column names: `posts_total`/`pages_total` from
@@ -86,6 +91,10 @@ None — Blogger is read-only. `capabilities.write: false`, no `writes.json` fil
   error rather than legacy's dedicated `errors.New("blogger connector requires config blog_id")`
   message. Same rejected-input set, different (still honest) error-classification path — see
   conventions.md §5's postgres precedent for the same acceptable deviation shape.
+- **Lookup by URL and Blogger writes are not modeled**: `/blogs/byurl` requires a second identity
+  input (`blog_url`) while this bundle is intentionally keyed by `blog_id`; post/page create,
+  update, delete, and comment moderation require Blogger write/admin OAuth scopes. Those endpoints
+  stay excluded in `api_surface.json` with config/scope-specific reasons.
 - **Bundle-level `skip_dynamic` marker**: this bundle's sole auth candidate is `mode: custom` (no
   `when`-gated non-custom fallback, mirroring gmail exactly), and conformance's synthetic
   non-secret config can never carry a real `https` `token_url` the AuthHook's own guard would

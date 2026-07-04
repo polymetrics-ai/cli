@@ -50,7 +50,7 @@ None. OpenAQ is a read-only public reference API; `capabilities.write` is `false
   using the canonical key sees identical behavior.
 - Measurement/sensor time-series endpoints (`/locations/{id}/sensors`, `/sensors/{id}/measurements`)
   and account-scoped endpoints (`/owners`, `/providers`) are out of scope for this wave; see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
+  `api_surface.json` for concrete exclusion reasons
   entries. Only the 5 legacy-parity reference streams are implemented.
 - Legacy's runtime-configurable `page_size`/`max_pages` config keys are not declared here: the
   engine's `page_number` paginator reads its page size from `streams.json`'s fixed

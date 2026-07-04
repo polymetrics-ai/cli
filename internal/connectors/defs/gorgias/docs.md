@@ -56,7 +56,7 @@ None. Gorgias is a read-only source in this connector (legacy `Capabilities.Writ
 
 - Full Gorgias API surface (ticket create/update, tags, teams, views, macros, integrations, rules,
   etc.) is out of scope for wave2; see `api_surface.json`'s `excluded: {category: out_of_scope,
-  reason: "Pass B capability expansion"}` entries. Only the 4 legacy-parity read streams are
+  reason: "not implemented in this bundle"}` entries. Only the 4 legacy-parity read streams are
   implemented.
 - The `domain_name`-derived base URL convenience is dropped (see Auth setup above); `base_url` must
   be the fully-formed API root.

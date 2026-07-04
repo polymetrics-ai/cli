@@ -4,9 +4,36 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration, partial: only the project-metadata stream is implemented. The releases stream (legacy internal/connectors/pypi's second stream) is out of scope for this pass -- see the ENGINE_GAP blocker in this migration's report -- the dialect's records.path can only extract a single array/object at one dotted path, and cannot flatten a map-of-arrays keyed by version string (PyPI's 'releases' object) while stamping each record with its own map key as a field value; this requires a StreamHook (Tier 2) or an engine records-extraction primitive that does not exist today. PyPI is read-only and credential-free in legacy (Capabilities.Write is false) so no writes.json is shipped.",
   "endpoints": [
-    { "method": "GET", "path": "/pypi/{project}/json", "covered_by": { "stream": "project" } },
-    { "method": "GET", "path": "/pypi/{project}/{version}/json", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: powers the releases stream's map-of-arrays flatten-with-key-stamp behavior, which the current records.path/computed_fields dialect cannot express; see this migration's blockers[] and docs.md Known limits" } },
-    { "method": "GET", "path": "/simple/{project}/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy never implemented the Simple API index" } },
-    { "method": "GET", "path": "/stats", "excluded": { "category": "non_data_endpoint", "reason": "aggregate registry-wide statistics, not a per-project syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/pypi/{project}/json",
+      "covered_by": {
+        "stream": "project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pypi/{project}/{version}/json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: powers the releases stream's map-of-arrays flatten-with-key-stamp behavior, which the current records.path/computed_fields dialect cannot express; see this migration's blockers[] and docs.md Known limits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/simple/{project}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle; legacy never implemented the Simple API index"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate registry-wide statistics, not a per-project syncable object stream"
+      }
+    }
   ]
 }

@@ -103,6 +103,35 @@
         "bid": "{{ record.bid }}"
       },
       "schema": "schemas/keywords.json"
+    },
+    {
+      "name": "product_ads",
+      "path": "v2/sp/productAds",
+      "records": { "path": "" },
+      "computed_fields": {
+        "ad_id": "{{ record.adId }}",
+        "campaign_id": "{{ record.campaignId }}",
+        "ad_group_id": "{{ record.adGroupId }}",
+        "sku": "{{ record.sku }}",
+        "asin": "{{ record.asin }}",
+        "state": "{{ record.state }}",
+        "serving_status": "{{ record.servingStatus }}"
+      },
+      "schema": "schemas/product_ads.json"
+    },
+    {
+      "name": "negative_keywords",
+      "path": "v2/sp/negativeKeywords",
+      "records": { "path": "" },
+      "computed_fields": {
+        "keyword_id": "{{ record.keywordId }}",
+        "campaign_id": "{{ record.campaignId }}",
+        "ad_group_id": "{{ record.adGroupId }}",
+        "keyword_text": "{{ record.keywordText }}",
+        "match_type": "{{ record.matchType }}",
+        "state": "{{ record.state }}"
+      },
+      "schema": "schemas/negative_keywords.json"
     }
   ]
 }

@@ -67,5 +67,5 @@ None. OpenWeather is a read-only weather API; `capabilities.write` is `false` an
   `ENGINE_GAP` note applies.
 - The wider OpenWeather product surface (5-day/3-hour forecast, air pollution, geocoding,
   historical weather via `/onecall/timemachine`) is out of scope for this wave; see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
+  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}`
   entries.

@@ -4,15 +4,81 @@
   "reviewed_at": "2026-07-03",
   "scope": "Migration of the read-only legacy connector: object metadata (Describe Global) plus allow-listed Account/Contact/Lead SOQL queries. The full Salesforce object graph, Bulk API, and Streaming API are out of scope; a REST-based read-only migration mirrors legacy exactly.",
   "endpoints": [
-    { "method": "GET", "path": "/services/data/{version}/sobjects", "covered_by": { "stream": "sobjects" } },
-    { "method": "GET", "path": "/services/data/{version}/query (SELECT ... FROM Account)", "covered_by": { "stream": "accounts" } },
-    { "method": "GET", "path": "/services/data/{version}/query (SELECT ... FROM Contact)", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/services/data/{version}/query (SELECT ... FROM Lead)", "covered_by": { "stream": "leads" } },
-    { "method": "GET", "path": "/services/data/{version}/query (arbitrary SOQL)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/services/data/{version}/sobjects/{sObject}/describe", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/services/data/{version}/sobjects/{sObject}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "PATCH", "path": "/services/data/{version}/sobjects/{sObject}/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/services/data/{version}/sobjects/{sObject}/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/services/data/{version}/jobs/query (Bulk API)", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/sobjects",
+      "covered_by": {
+        "stream": "sobjects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (SELECT ... FROM Account)",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (SELECT ... FROM Contact)",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (SELECT ... FROM Lead)",
+      "covered_by": {
+        "stream": "leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (arbitrary SOQL)",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/services/data/{version}/query (arbitrary SOQL) is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/sobjects/{sObject}/describe",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/services/data/{version}/sobjects/{sObject}/describe is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/services/data/{version}/sobjects/{sObject}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/services/data/{version}/sobjects/{sObject} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/services/data/{version}/sobjects/{sObject}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/services/data/{version}/sobjects/{sObject}/{id} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/services/data/{version}/sobjects/{sObject}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/services/data/{version}/sobjects/{sObject}/{id} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/jobs/query (Bulk API)",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/services/data/{version}/jobs/query (Bulk API) is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      }
+    }
   ]
 }

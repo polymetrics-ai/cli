@@ -4,16 +4,88 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Mailjet Email surface (sending mail, templates, senders, DNS validation, event webhooks, etc.) is out of scope until Pass B",
   "endpoints": [
-    { "method": "GET", "path": "/v3/REST/contact", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/v3/REST/contactslist", "covered_by": { "stream": "contactslists" } },
-    { "method": "GET", "path": "/v3/REST/message", "covered_by": { "stream": "messages" } },
-    { "method": "GET", "path": "/v3/REST/campaign", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "/v3/REST/statcounters", "covered_by": { "stream": "stats" } },
-    { "method": "POST", "path": "/v3.1/send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/REST/template", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/REST/sender", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v3/REST/contactslist/{id}/managemanycontacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/REST/eventcallbackurl", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/REST/dns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v3/REST/contact",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/REST/contactslist",
+      "covered_by": {
+        "stream": "contactslists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/REST/message",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/REST/campaign",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/REST/statcounters",
+      "covered_by": {
+        "stream": "stats"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3.1/send",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v3.1/send is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/REST/template",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v3/REST/template is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/REST/sender",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v3/REST/sender is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/REST/contactslist/{id}/managemanycontacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v3/REST/contactslist/{id}/managemanycontacts is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/REST/eventcallbackurl",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v3/REST/eventcallbackurl is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/REST/dns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v3/REST/dns is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
   ]
 }

@@ -4,14 +4,72 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full MailerLite API surface (single-subscriber CRUD, webhooks, forms, fields, campaign content) is out of scope until Pass B",
   "endpoints": [
-    { "method": "GET", "path": "/subscribers", "covered_by": { "stream": "subscribers" } },
-    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "/groups", "covered_by": { "stream": "groups" } },
-    { "method": "GET", "path": "/segments", "covered_by": { "stream": "segments" } },
-    { "method": "GET", "path": "/automations", "covered_by": { "stream": "automations" } },
-    { "method": "POST", "path": "/subscribers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/forms/{type}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/subscribers",
+      "covered_by": {
+        "stream": "subscribers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments",
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations",
+      "covered_by": {
+        "stream": "automations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscribers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/subscribers is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/webhooks is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{type}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/forms/{type} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/fields is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
   ]
 }

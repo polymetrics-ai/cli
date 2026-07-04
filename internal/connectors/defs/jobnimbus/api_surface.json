@@ -4,14 +4,72 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, jobs, tasks, activities, files); JobNimbus's write endpoints (contact/job create/update, task completion, estimate/invoice CRUD) are out of scope for this wave (legacy itself ships no writes; capabilities.write is false).",
   "endpoints": [
-    { "method": "GET", "path": "/api1/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/api1/jobs", "covered_by": { "stream": "jobs" } },
-    { "method": "GET", "path": "/api1/tasks", "covered_by": { "stream": "tasks" } },
-    { "method": "GET", "path": "/api1/activities", "covered_by": { "stream": "activities" } },
-    { "method": "GET", "path": "/api1/files", "covered_by": { "stream": "files" } },
-    { "method": "POST", "path": "/api1/contacts", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented contact creation; Pass B capability expansion" } },
-    { "method": "POST", "path": "/api1/jobs", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented job creation; Pass B capability expansion" } },
-    { "method": "GET", "path": "/api1/estimates", "excluded": { "category": "out_of_scope", "reason": "estimates not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/api1/invoices", "excluded": { "category": "out_of_scope", "reason": "invoices not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/api1/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api1/jobs",
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api1/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api1/activities",
+      "covered_by": {
+        "stream": "activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api1/files",
+      "covered_by": {
+        "stream": "files"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api1/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented contact creation; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api1/jobs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented job creation; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api1/estimates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "estimates not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api1/invoices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoices not modeled by legacy; not implemented in this bundle"
+      }
+    }
   ]
 }

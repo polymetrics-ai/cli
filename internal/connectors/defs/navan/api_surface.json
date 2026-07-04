@@ -4,12 +4,57 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 migration: the 4 legacy-parity bookingType-partitioned read streams over /v1/bookings only; any other Navan API surface (expenses, users, policies) is out of scope until Pass B",
   "endpoints": [
-    { "method": "GET", "path": "/v1/bookings?bookingType=FLIGHT", "covered_by": { "stream": "bookings" } },
-    { "method": "GET", "path": "/v1/bookings?bookingType=HOTEL", "covered_by": { "stream": "hotel_bookings" } },
-    { "method": "GET", "path": "/v1/bookings?bookingType=CAR", "covered_by": { "stream": "car_bookings" } },
-    { "method": "GET", "path": "/v1/bookings?bookingType=RAIL", "covered_by": { "stream": "rail_bookings" } },
-    { "method": "GET", "path": "/v1/expenses", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/policies", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v1/bookings?bookingType=FLIGHT",
+      "covered_by": {
+        "stream": "bookings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/bookings?bookingType=HOTEL",
+      "covered_by": {
+        "stream": "hotel_bookings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/bookings?bookingType=CAR",
+      "covered_by": {
+        "stream": "car_bookings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/bookings?bookingType=RAIL",
+      "covered_by": {
+        "stream": "rail_bookings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/expenses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/expenses is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/users is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/policies is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
   ]
 }

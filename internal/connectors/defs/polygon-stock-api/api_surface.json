@@ -2,17 +2,84 @@
   "api": "Polygon.io Stocks REST API (https://api.polygon.io)",
   "docs": "https://polygon.io/docs/stocks/getting-started",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Polygon.io stocks surface (aggregates, snapshots, ticker details, financials, market status, exchanges) is out of scope until Pass B",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Polygon.io stocks surface (aggregates, snapshots, ticker details, financials, market status, exchanges) is out of scope outside this connector's current declared surface",
   "endpoints": [
-    { "method": "GET", "path": "/v3/reference/tickers", "covered_by": { "stream": "tickers" } },
-    { "method": "GET", "path": "/v3/reference/dividends", "covered_by": { "stream": "dividends" } },
-    { "method": "GET", "path": "/v3/reference/splits", "covered_by": { "stream": "splits" } },
-    { "method": "GET", "path": "/v3/reference/tickers/{ticker}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/reference/tickers/types", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/vX/reference/financials", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from}/{to}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/snapshot/locale/us/markets/stocks/tickers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/reference/exchanges", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/marketstatus/now", "excluded": { "category": "non_data_endpoint", "reason": "point-in-time market status, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/v3/reference/tickers",
+      "covered_by": {
+        "stream": "tickers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reference/dividends",
+      "covered_by": {
+        "stream": "dividends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reference/splits",
+      "covered_by": {
+        "stream": "splits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reference/tickers/{ticker}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reference/tickers/types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vX/reference/financials",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from}/{to}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/snapshot/locale/us/markets/stocks/tickers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reference/exchanges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/marketstatus/now",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "point-in-time market status, not a syncable object stream"
+      }
+    }
   ]
 }

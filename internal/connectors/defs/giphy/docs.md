@@ -44,7 +44,7 @@ legacy (`capabilities.write: false`, matching exactly); there is no `writes.json
 
 - Only the 4 legacy-parity read streams are implemented; other Giphy endpoints (get-by-id, random,
   translate, categories, stickers/clips trending) are out of scope for this migration wave — see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
+  `api_surface.json` for concrete exclusion reasons
   entries.
 - The legacy generic `query` config alias (fallback when a stream-specific query key is unset) is
   dropped; only the stream-specific keys (`query_for_gif`/`query_for_stickers`/`query_for_clips`)

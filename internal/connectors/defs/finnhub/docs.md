@@ -113,6 +113,6 @@ no `writes.json` is declared, matching legacy's `Write` stub
   `market_news_category` case above, for the same reason (no case-transform filter exists).
 - 4 of 5 legacy streams are now implemented. Finnhub's much larger documented surface (real-time
   quotes, forex, crypto, financials) is out of scope until Pass B; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries.
+  `api_surface.json` concrete exclusion entries.
 - `metadata.json` declares no `rate_limit` block: legacy enforces no client-side rate limiting, so
   this bundle adds none either (matching legacy's real, absent throttling behavior).

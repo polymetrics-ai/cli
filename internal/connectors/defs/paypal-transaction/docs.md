@@ -84,7 +84,7 @@ this data set.
 
 - Only the 4 legacy-parity read streams are implemented; see `api_surface.json`. PayPal's much
   larger REST surface (payments/orders, invoicing, payouts, subscriptions/billing plans, identity,
-  webhooks) is out of scope until Pass B.
+  webhooks) is out of scope outside this connector's current declared surface.
 - **`is_sandbox` is not modeled as a separate config toggle.** Legacy accepted an `is_sandbox`
   boolean config value as an alternative to an explicit `base_url` override, deriving
   `https://api-m.sandbox.paypal.com` from it (`isSandbox`/`paypalBaseURL`,

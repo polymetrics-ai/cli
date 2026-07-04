@@ -4,15 +4,81 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (projects, people, companies, tasks); the full Productive JSON:API surface (deals, budgets, time entries, invoices, boards, comments, custom fields, webhooks, etc.) is out of scope until Pass B. Productive is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/api/v2/people", "covered_by": { "stream": "people" } },
-    { "method": "GET", "path": "/api/v2/companies", "covered_by": { "stream": "companies" } },
-    { "method": "GET", "path": "/api/v2/tasks", "covered_by": { "stream": "tasks" } },
-    { "method": "GET", "path": "/api/v2/deals", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/budgets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/time_entries", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/api/v2/tasks", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; Productive connector is read-only" } },
-    { "method": "GET", "path": "/api/v2/organization_memberships", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/api/v2/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/people",
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/companies",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/deals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/v2/deals is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/budgets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/v2/budgets is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/time_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/v2/time_entries is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/invoices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/v2/invoices is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "no allow-listed reverse-ETL writes; Productive connector is read-only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/organization_memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/v2/organization_memberships is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
   ]
 }

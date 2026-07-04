@@ -4,15 +4,79 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (contacts, conversations, inboxes, tags, teammates, channels); Front's write/action endpoints (send message, create draft, archive/assign conversation) are out of scope (legacy itself ships no writes; capabilities.write is false).",
   "endpoints": [
-    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/conversations", "covered_by": { "stream": "conversations" } },
-    { "method": "GET", "path": "/inboxes", "covered_by": { "stream": "inboxes" } },
-    { "method": "GET", "path": "/tags", "covered_by": { "stream": "tags" } },
-    { "method": "GET", "path": "/teammates", "covered_by": { "stream": "teammates" } },
-    { "method": "GET", "path": "/channels", "covered_by": { "stream": "channels" } },
-    { "method": "POST", "path": "/conversations/{conversation_id}/messages", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
-    { "method": "PATCH", "path": "/conversations/{conversation_id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
-    { "method": "GET", "path": "/conversations/{conversation_id}/comments", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-teammate profile introspection, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations",
+      "covered_by": {
+        "stream": "conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes",
+      "covered_by": {
+        "stream": "inboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates",
+      "covered_by": {
+        "stream": "teammates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/channels",
+      "covered_by": {
+        "stream": "channels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/messages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented writes; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented writes; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-teammate profile introspection, not a syncable object stream"
+      }
+    }
   ]
 }

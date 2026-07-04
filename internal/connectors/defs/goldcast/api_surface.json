@@ -4,13 +4,64 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (organizations, events, agenda_items, discussion_groups, tracks) — legacy exposes only 'parent' Goldcast list endpoints, no partition-routed children like per-event webinars/members; Goldcast is read-only here (legacy itself ships no writes; capabilities.write is false).",
   "endpoints": [
-    { "method": "GET", "path": "/core/organization/", "covered_by": { "stream": "organizations" } },
-    { "method": "GET", "path": "/event/", "covered_by": { "stream": "events" } },
-    { "method": "GET", "path": "/event/agenda-item/", "covered_by": { "stream": "agenda_items" } },
-    { "method": "GET", "path": "/event/discussion-groups/", "covered_by": { "stream": "discussion_groups" } },
-    { "method": "GET", "path": "/event/tracks/", "covered_by": { "stream": "tracks" } },
-    { "method": "GET", "path": "/event/{event_id}/webinar/", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented per-event partition-routed child streams; Pass B capability expansion" } },
-    { "method": "GET", "path": "/event/{event_id}/members/", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented per-event partition-routed child streams; Pass B capability expansion" } },
-    { "method": "GET", "path": "/event/{event_id}/session/", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented per-event partition-routed child streams; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/core/organization/",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event/",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event/agenda-item/",
+      "covered_by": {
+        "stream": "agenda_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event/discussion-groups/",
+      "covered_by": {
+        "stream": "discussion_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event/tracks/",
+      "covered_by": {
+        "stream": "tracks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event/{event_id}/webinar/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented per-event partition-routed child streams; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event/{event_id}/members/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented per-event partition-routed child streams; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event/{event_id}/session/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented per-event partition-routed child streams; not implemented in this bundle"
+      }
+    }
   ]
 }

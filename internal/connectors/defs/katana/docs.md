@@ -58,7 +58,7 @@ None. Katana is read-only upstream (`capabilities.write: false`); there is no `w
   never changes default behavior.
 - Full Katana API surface (bill of materials, purchase orders, stocktakes, webhooks) is out of
   scope for this migration; see `api_surface.json`'s `excluded: {category: out_of_scope, reason:
-  "Pass B capability expansion"}` entries. Only the 5 legacy-parity read streams are implemented.
+  "see api_surface.json for concrete exclusion reasons"}` entries. Only the 5 legacy-parity read streams are implemented.
 - Fixtures (`fixtures/streams/**`) use synthetic-but-real-shaped Katana objects; `products` (the
   `pagination_terminates` conformance stream) ships a full 50-record page 1 and a 1-record page 2
   to exercise the short-page stop condition.

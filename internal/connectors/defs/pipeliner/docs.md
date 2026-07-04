@@ -53,7 +53,7 @@ None. Pipeliner is `capabilities.write: false`; no `writes.json` is shipped, mat
   ledger as an accepted, unreachable-in-practice narrowing rather than a silent gap.
 - Full Pipeliner entity surface (activities, projects, documents, custom entities) and all
   write/mutation endpoints are out of scope for this wave; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries.
+  `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}` entries.
 - `page_size`/`max_pages` config overrides from legacy (`intConfig` reading `config.page_size`/
   `config.max_pages`) have no runtime-config-driven equivalent in this engine dialect
   (`PaginationSpec.PageSize`/`MaxPages` are bundle-fixed values, never read from `RuntimeConfig` —

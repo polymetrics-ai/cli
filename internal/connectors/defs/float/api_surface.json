@@ -4,14 +4,72 @@
   "reviewed_at": "2026-07-03",
   "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (people, projects, clients, tasks, departments); Float is read-only in legacy, no writes are modeled.",
   "endpoints": [
-    { "method": "GET", "path": "/people", "covered_by": { "stream": "people" } },
-    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/clients", "covered_by": { "stream": "clients" } },
-    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
-    { "method": "GET", "path": "/departments", "covered_by": { "stream": "departments" } },
-    { "method": "POST", "path": "/people", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented people writes; Pass B capability expansion" } },
-    { "method": "GET", "path": "/allocations", "excluded": { "category": "out_of_scope", "reason": "scheduling/allocation data not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/logged-time", "excluded": { "category": "out_of_scope", "reason": "timesheet data not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/statuses", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/people",
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clients",
+      "covered_by": {
+        "stream": "clients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/departments",
+      "covered_by": {
+        "stream": "departments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented people writes; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/allocations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "scheduling/allocation data not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/logged-time",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "timesheet data not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not modeled by legacy; not implemented in this bundle"
+      }
+    }
   ]
 }

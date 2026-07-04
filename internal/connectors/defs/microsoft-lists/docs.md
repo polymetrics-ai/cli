@@ -85,7 +85,7 @@ None. Microsoft Lists is read-only in legacy (`Write` returns
 
 - Full Microsoft Graph SharePoint site surface (drives, pages, permissions, site activity, etc.) is
   out of scope for this migration; see `api_surface.json`'s `excluded: {category: out_of_scope,
-  reason: "Pass B capability expansion"}` entries. Only the 4 legacy-parity read streams are
+  reason: "not implemented in this bundle"}` entries. Only the 4 legacy-parity read streams are
   implemented.
 - **Dynamic conformance checks are skipped, stream-by-stream (every stream carries the marker) and
   also at the bundle level in `metadata.json`** — pagination is hook-driven for every stream, so no

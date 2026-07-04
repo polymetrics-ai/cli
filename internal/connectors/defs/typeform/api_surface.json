@@ -2,14 +2,58 @@
   "api": "Typeform REST API (https://api.typeform.com)",
   "docs": "https://www.typeform.com/developers/changelog/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: all 5 legacy-parity read streams (forms, responses, workspaces, themes, images) at capability parity -- responses (previously deferred, needing a per-form_id sub-resource fan-out) is now expressed via streams.json's fan_out dialect (S4 engine mini-wave item 2, docs/migration/conventions.md section 3), no Tier-2 StreamHook needed; the full Typeform API surface (webhooks, workspace/form mutation, etc.) is out of scope until Pass B",
+  "scope": "wave2 fan-out migration: all 5 legacy-parity read streams (forms, responses, workspaces, themes, images) at capability parity -- responses (previously deferred, needing a per-form_id sub-resource fan-out) is now expressed via streams.json's fan_out dialect (S4 engine mini-wave item 2, docs/migration/conventions.md section 3), no Tier-2 StreamHook needed; the full Typeform API surface (webhooks, workspace/form mutation, etc.) is out of scope outside this connector's current declared surface",
   "endpoints": [
-    { "method": "GET", "path": "/forms", "covered_by": { "stream": "forms" } },
-    { "method": "GET", "path": "/forms/{form_id}/responses", "covered_by": { "stream": "responses" } },
-    { "method": "GET", "path": "/workspaces", "covered_by": { "stream": "workspaces" } },
-    { "method": "GET", "path": "/themes", "covered_by": { "stream": "themes" } },
-    { "method": "GET", "path": "/images", "covered_by": { "stream": "images" } },
-    { "method": "POST", "path": "/forms", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/forms",
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{form_id}/responses",
+      "covered_by": {
+        "stream": "responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces",
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/themes",
+      "covered_by": {
+        "stream": "themes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/images",
+      "covered_by": {
+        "stream": "images"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/forms",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
   ]
 }

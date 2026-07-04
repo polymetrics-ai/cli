@@ -70,4 +70,4 @@ unconditionally).
   overrides either knob.
 - Full Lever API surface (opportunity/note/feedback mutation, panels, archive reasons, webhooks)
   is out of scope for this wave; see `api_surface.json`'s `excluded: {category: out_of_scope,
-  reason: "Pass B capability expansion"}` entries.
+  reason: "not implemented in this bundle"}` entries.

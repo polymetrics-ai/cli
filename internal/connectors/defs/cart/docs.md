@@ -1,6 +1,6 @@
 # Overview
 
-Cart.com reads orders, customers, and products through a read-only REST API against a
+Cart.com reads orders, customers, products, and inventory through a read-only REST API against a
 per-store `base_url`. This bundle migrates `internal/connectors/cart` (the hand-written connector)
 to a declarative defs bundle at capability parity; the legacy package stays registered and
 unchanged until wave6's registry flip. It is a pure Tier-1 declarative migration — legacy is a
@@ -32,13 +32,14 @@ implies for an operator migrating a legacy `store_name`-only config.
 
 ## Streams notes
 
-Three streams, matching legacy's `resources` table exactly:
+Four streams:
 
 - `orders` — `GET /orders`, records at `data`.
 - `customers` — `GET /customers`, records at `data`.
 - `products` — `GET /products`, records at `data`.
+- `inventory` — `GET /inventory`, records at `data`.
 
-All three send `page_size` (default `100`, matching legacy's `defaultPageSize`) as a static
+All four send `page_size` (default `100`, matching legacy's `defaultPageSize`) as a static
 per-stream query value templated from `config.page_size`. Pagination is `cursor` with `token_path:
 meta.next_page` (`cursor_param: page`) — the next page's `page` value is read verbatim from the
 current page's response body at `meta.next_page`, matching legacy's `readPaged` exactly (`next,
@@ -57,7 +58,7 @@ and test fixtures name explicitly (`id`, `order_number`, `updated_at`) as the ve
 passthrough mode means any additional real Cart.com API field survives in the emitted record
 regardless of whether it is declared in the schema.
 
-None of the three streams are incremental: legacy's `Catalog()` sets no `CursorFields` on any of
+None of the streams are incremental: legacy's `Catalog()` sets no `CursorFields` on any of
 them (despite exposing an `updated_at` timestamp field), and `Read`/`readPaged` performs no
 time-based filtering at all (full extraction every sync). This bundle therefore declares no
 `incremental` block and no `x-cursor-field`, matching legacy's real behavior rather than its
@@ -71,11 +72,9 @@ above — legacy has no write or native-destination surface to migrate.
 
 ## Known limits
 
-- Only the 3 legacy-parity read streams are implemented. Cart.com's broader store API (inventory,
-  shipments, coupons, and any mutation surface) is out of scope for this migration; see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
-  entries. Legacy itself never implemented any Cart.com write action, so there is no write parity
-  to port.
+- Shipments, coupons, and mutation surfaces remain excluded from this bundle's reviewed surface.
+  `inventory` is modeled as a passthrough collection stream; order creation and product update stay
+  excluded because the legacy connector exposes no reverse-ETL contract or approved write schema.
 - **`store_name` config key dropped; `base_url` is now required.** Legacy derives the API host
   from a `store_name` config value (`"https://" + store_name + "/api/v1"`) when `base_url` is
   unset. The engine's spec-default materialization only fills in a LITERAL per-key default — it

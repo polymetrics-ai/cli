@@ -37,7 +37,7 @@ legacy's `Write` stub that always returns `connectors.ErrUnsupportedOperation`.
 
 - Full Mux API surface (asset creation/deletion, live stream creation, DRM, playback restrictions,
   webhooks, Data API video views/errors) is out of scope for this wave; see `api_surface.json`'s
-  `excluded: {category: out_of_scope | destructive_admin, reason: "Pass B capability expansion"}`
+  `api_surface.json` concrete exclusion entries
   entries. Only the 4 legacy-parity read streams are implemented.
 - **`page_size` is not runtime-configurable.** Legacy exposes `page_size` as a config-driven
   override (`muxPageSize`, `mux.go:280-293`, default 25, max 100). The engine's `page_number`

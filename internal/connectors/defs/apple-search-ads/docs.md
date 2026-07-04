@@ -83,10 +83,9 @@ None. This connector is `capabilities.write: false`; no `writes.json` is shipped
 
 ## Known limits
 
-- Creative sets, geo/demographic targeting, spend/performance reports, and every write/mutating
-  endpoint are out of scope for this migration; see `api_surface.json`'s `excluded: {category:
-  out_of_scope, reason: "Pass B capability expansion"}` entries. Legacy never implemented them
-  either.
+- Creative sets, geo/demographic targeting, spend/performance reports, ACL discovery, and every
+  write/mutating endpoint are outside this connector's scoped surface; see `api_surface.json`'s
+  itemized exclusions. Legacy never implemented them either.
 - `conformance`'s dynamic (fixture-replay) checks are skipped bundle-wide (`metadata.json`'s
   `conformance.skip_dynamic`) for two independent, additive reasons: (1) `oauth2_client_credentials`'s
   `token_url` is a separate declared `config.token_refresh_endpoint` property that conformance's
