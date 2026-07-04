@@ -3,7 +3,6 @@
   "title": "campaigns",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "modifieddate",
   "required": ["id"],
   "properties": {
     "id": { "type": "integer" },

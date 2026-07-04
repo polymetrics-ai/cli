@@ -22,9 +22,6 @@
       "path": "/commerce/orders",
       "query": { "limit": "100" },
       "records": { "path": "result" },
-      "incremental": {
-        "cursor_field": "modifiedOn"
-      },
       "schema": "schemas/orders.json"
     },
     {
@@ -32,9 +29,6 @@
       "path": "/commerce/products",
       "query": { "limit": "100" },
       "records": { "path": "result" },
-      "incremental": {
-        "cursor_field": "modifiedOn"
-      },
       "schema": "schemas/products.json"
     },
     {

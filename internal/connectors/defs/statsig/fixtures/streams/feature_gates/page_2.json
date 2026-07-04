@@ -4,7 +4,7 @@
     "path": "/gates",
     "query": {
       "limit": "100",
-      "page": "2"
+      "offset": "100"
     }
   },
   "response": {

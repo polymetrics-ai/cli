@@ -50,6 +50,10 @@
       "records": {
         "path": "data"
       },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.full_name record.email }}",
+        "state": "{{ coalesce record.state record.status }}"
+      },
       "schema": "schemas/issues.json"
     },
     {
@@ -64,6 +68,10 @@
       },
       "records": {
         "path": "data"
+      },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.full_name record.email }}",
+        "state": "{{ coalesce record.state record.status }}"
       },
       "schema": "schemas/accounts.json"
     },
@@ -80,6 +88,10 @@
       "records": {
         "path": "data"
       },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.full_name record.email }}",
+        "state": "{{ coalesce record.state record.status }}"
+      },
       "schema": "schemas/contacts.json"
     },
     {
@@ -95,6 +107,10 @@
       "records": {
         "path": "data"
       },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.full_name record.email }}",
+        "state": "{{ coalesce record.state record.status }}"
+      },
       "schema": "schemas/users.json"
     },
     {
@@ -109,6 +125,10 @@
       },
       "records": {
         "path": "data"
+      },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.full_name record.email }}",
+        "state": "{{ coalesce record.state record.status }}"
       },
       "schema": "schemas/messages.json"
     },

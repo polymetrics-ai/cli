@@ -52,12 +52,11 @@
         }
       },
       "records": {
-        "path": "data",
-        "keyed_object": true,
-        "key_field": "abbreviation"
+        "path": "data"
       },
       "projection": "passthrough",
       "computed_fields": {
+        "id": "states",
         "stream": "states"
       },
       "schema": "schemas/states.json"
@@ -72,13 +71,11 @@
         }
       },
       "records": {
-        "path": "data",
-        "keyed_object": true,
-        "key_field": "ags"
+        "path": "data"
       },
       "projection": "passthrough",
       "computed_fields": {
-        "id": "{{ record.ags }}",
+        "id": "districts",
         "stream": "districts"
       },
       "schema": "schemas/districts.json"

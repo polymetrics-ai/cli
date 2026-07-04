@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/target_app", "query": { "limit": "100", "page": "1" } },
+  "request": { "method": "GET", "path": "/target_app", "query": { "limit": "100", "offset": "0" } },
   "response": {
     "status": 200,
     "body": {

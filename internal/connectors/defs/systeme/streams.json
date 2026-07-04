@@ -25,7 +25,7 @@
       "path": "/contacts",
       "records": { "path": "items" },
       "computed_fields": {
-        "created_at": "{{ record.createdAt }}"
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
       },
       "schema": "schemas/contacts.json"
     },

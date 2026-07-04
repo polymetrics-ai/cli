@@ -35,11 +35,14 @@ The bundle declares 28 streams:
 - Testing and vaccinations: `testing_history`, `vaccinations`, `vaccinations_states`,
   `vaccinations_history`.
 
-Object-keyed responses use `records.keyed_object` with the documented key stamped onto
-`abbreviation`, `ags`, or `age_group`. History-array responses use the documented `data` or
-`data.history` arrays and compute `id` from `date`. State/district history collection endpoints emit
-one record per state or district with the raw `history` array preserved, because the current dialect
-does not need to fan out inner history rows to satisfy a distinct documented collection resource.
+Object-keyed expanded responses use `records.keyed_object` with the documented key stamped onto
+`abbreviation`, `ags`, or `age_group`. The legacy `states` and `districts` streams intentionally
+keep the original `connsdk.RecordsAt(..., "data")` behavior: each emits the whole keyed object as
+one passthrough record with `id` set to the stream name. History-array responses use the documented
+`data` or `data.history` arrays and compute `id` from `date`. State/district history collection
+endpoints emit one record per state or district with the raw `history` array preserved, because the
+current dialect does not need to fan out inner history rows to satisfy a distinct documented
+collection resource.
 
 The optional `days` config value is still sent as a `days` query parameter on every stream when set.
 That preserves legacy behavior exactly: legacy builds one shared query map before calling each

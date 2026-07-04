@@ -34,8 +34,8 @@ legacy names its size query parameter `limit` even though the pagination style i
 page-number-based, not offset/limit — this bundle reproduces that exact query-param name). Primary
 key is `id` for every stream, matching legacy's `PrimaryKey: []string{"id"}`.
 
-Legacy performs no incremental/state-cursor filtering during `Read` — no stream declares an
-`incremental` block.
+Legacy performs no incremental/state-cursor filtering during `Read` and publishes no cursor
+fields — no legacy-parity stream declares an `incremental` block or `x-cursor-field`.
 
 ### Pass B additions
 
@@ -75,8 +75,10 @@ page). Their schemas declare only `id`/`ownerid`/`createddate`/`modifieddate` (`
 worked example — rather than a fuller field list, since the API's public documentation names these
 objects but does not enumerate their own per-field shapes anywhere reachable in this pass's
 research (the `/datadictionary/{object_name}` endpoint would return this authoritatively, but
-requires a live, authenticated call this pass could not make). A minimal, confidently-correct
-schema was judged better than a fuller but guessed one.
+requires a live, authenticated call this pass could not make). These added streams also do not
+declare `x-cursor-field`; neither the legacy connector nor the published API overview documents a
+request cursor contract for them. A minimal, confidently-correct schema was judged better than a
+fuller but guessed one.
 
 ## Write actions & risks
 

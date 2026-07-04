@@ -73,6 +73,6 @@ no `write.go`); `capabilities.write` is `false` here and this bundle ships no `w
 - Full Pinterest v5 API surface (pins, pin/campaign analytics, catalogs, conversion events, user
   account, ads, media uploads) is out of scope — legacy itself only ever implemented the 5 streams
   this bundle migrates; see `api_surface.json`'s `excluded: {category: out_of_scope}` entries.
-- `max_pages` (config) is enforced as a hard request-count cap by the engine's declarative read
-  path independent of page fullness, matching legacy's own `pinterestMaxPages`-driven loop bound
-  (`0`/`all`/`unlimited` all mean unbounded on both sides).
+- Legacy accepts a runtime `max_pages` cap, but the declarative engine only supports fixed
+  bundle-authored `pagination.max_pages` integers. This bundle intentionally does not declare an
+  ignored `max_pages` `spec.json` property.

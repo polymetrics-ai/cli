@@ -18,4 +18,4 @@ Streams covered: issues, accounts, contacts, users, messages, account_relationsh
 
 ## Known limits
 
-The legacy `/messages` stream is retained although current Pylon OpenAPI documents messages under `/issues/{id}/messages`. Existing legacy record-shape limitations remain: fallback `name`/`state` coalescing and the legacy `raw` nested field are not expressible in the current schema-projection dialect.
+The legacy `/messages` stream is retained although current Pylon OpenAPI documents messages under `/issues/{id}/messages`. Existing legacy record-shape limitations remain: the legacy `raw` nested field copies the entire source item, which is not expressible in the current schema-projection dialect.

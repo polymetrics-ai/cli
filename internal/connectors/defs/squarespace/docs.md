@@ -28,13 +28,12 @@ identical to legacy's `connsdk.CursorPaginator{CursorParam: "cursor", TokenPath:
 falsy-body-value stop signal either (it stops purely when the cursor token itself is empty or a page
 yields no records), so the engine's default stop-on-empty-token-only behavior matches exactly.
 
-`orders` and `products` declare `incremental.cursor_field: modifiedOn` to expose the
-`incremental_append` sync mode (matching legacy's own `CursorFields: []string{"modifiedOn"}`
-declaration on those two streams), but neither this bundle nor legacy ever sends a server-side
+`orders` and `products` declare `x-cursor-field: modifiedOn` in their schemas, matching legacy's
+own `CursorFields: []string{"modifiedOn"}` catalog metadata on those two streams. No stream-level
+`incremental` block is declared because neither this bundle nor legacy ever sends a server-side
 lower-bound filter or performs client-side filtering for these streams — both sides read the full
-list on every sync. No `request_param`/`client_filtered` is declared, matching legacy's real
-(lack of) incremental filtering behavior exactly, not introducing new filtering under the guise of a
-migration. `inventory` and `profiles` have no cursor field, matching legacy (full refresh only).
+list on every sync. `inventory` and `profiles` have no cursor field, matching legacy (full refresh
+only).
 
 `profiles`' record mapping (`id`, `name`, `createdOn`, `modifiedOn`) mirrors legacy's own
 `mapRecord: copyRecord("id", "name", "createdOn", "modifiedOn")` for that stream exactly — legacy
