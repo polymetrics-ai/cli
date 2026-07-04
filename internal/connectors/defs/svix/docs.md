@@ -43,8 +43,10 @@ gap does not affect fixture-replay correctness; it is a real, documented gap for
 where Svix returns a non-empty repeating iterator on the last page (`ENGINE_GAP`: the pagination
 dialect has no stop-when-truthy variant).
 
-`applications` (`GET /app`) lists every application; `created_at`/`updated_at` are `computed_fields`
-renames of the raw `createdAt`/`updatedAt` camelCase fields.
+`applications` (`GET /app`) lists every application. Its emitted schema is intentionally narrowed
+to legacy's fixed projection (`id`, `name`, `created_at`), with `created_at` filled from either the
+raw `created_at` or Svix's `createdAt` camelCase field. Legacy published no cursor field for this
+stream, so the schema declares none.
 
 `endpoints` (`GET /app/{app_id}/endpoint`) and `messages` (`GET /app/{app_id}/msg`) both `fan_out`
 over every application id (`ids_from.request`: `GET /app`, `records_path: data`, `id_field: id`),

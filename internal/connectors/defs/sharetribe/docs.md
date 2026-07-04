@@ -100,13 +100,12 @@ attachment by previously-uploaded id already flows through `create_listing`/`upd
   override mechanism at all (conventions.md §3). Neither key is declared in `spec.json` (a
   declared-but-unwireable key is worse than an absent one — searxng precedent).
 - `page_size` is baked at `100`, matching legacy's own default (`sharetribe.go:19`,
-  `defaultPageSize`); fixtures use a full 100-record page 1 for `listings` (to exercise the
-  page_number continuation into page 2) and single, sub-`page_size` pages for the other three
-  streams (to exercise the short-page termination signal).
-- Legacy's own default `max_pages` is `1` (`sharetribe.go:19`, `defaultMaxPages`); this bundle's
-  unset `MaxPages` (unbounded, stopped only by the short-page signal) is a strict superset of
-  legacy's default single-page behavior — no caller-visible behavior regresses for the common case
-  (fewer records than one page).
+  `defaultPageSize`); fixtures use a full 100-record page 1 for `listings`, matching a valid first
+  page that legacy would read before the default `max_pages: 1` cap stops pagination.
+- Legacy's own default `max_pages` is `1` (`sharetribe.go:19`, `defaultMaxPages`); this bundle bakes
+  in `max_pages: 1`, matching the legacy default. The legacy runtime config override remains
+  intentionally absent because the current pagination dialect has no per-request `max_pages`
+  template.
 - **`messages/query`, `availability_exceptions/query`, and `stock_adjustments/query` are NOT
   modeled as streams** (`api_surface.json`'s `excluded: {category: out_of_scope}` entries): each
   requires a mandatory parent-resource filter (`transactionId`/`ids` for messages; `listingId` for

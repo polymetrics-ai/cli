@@ -92,6 +92,7 @@ None. `capabilities.write: false`, no `writes.json` — matching legacy's `Write
   `config.mode == "fixture"` — this is a legacy-only testing convenience; parity is asserted against
   legacy's LIVE (httptest-driven) read path only, matching the wave1-pilot convention (monday's
   identical note).
-- **`base_url` is accepted as a legacy-compatible alias for `feed_url`** (`rss.go:172`'s
-  `feedURL` fallback: `feed_url`, then `base_url`, then the default `https://xkcd.com/rss.xml`),
-  reproduced verbatim by `hooks/rss/hooks.go`'s own `feedURL` helper.
+- **`base_url` alias fallback is not modeled.** Legacy's `feedURL` helper checks `feed_url`, then
+  `base_url`, then the default `https://xkcd.com/rss.xml`. The declarative `base.url` field can
+  reference only one resolved config value, so this bundle declares `feed_url` with the legacy
+  default and intentionally does not declare an ignored `base_url` alias.

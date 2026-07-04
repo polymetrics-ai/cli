@@ -3,7 +3,6 @@
   "title": "responses",
   "type": "object",
   "x-primary-key": ["uuid"],
-  "x-cursor-field": "collected_at",
   "required": ["uuid", "survey_id"],
   "properties": {
     "uuid": { "type": "string" },

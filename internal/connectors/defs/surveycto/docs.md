@@ -47,7 +47,9 @@ OpenAPI spec's own response examples for `datasets`/`dataset records`/`groups`/`
 `datasets` (`GET /datasets`) is the generic dataset catalog — every SurveyCTO dataset (general
 `DATA`, `ENUMERATORS`, and `CASES`-discriminated case-management datasets alike) as one uniform
 stream, matching the API's own single-endpoint modeling of what the prior bundle's `datasets` and
-`cases` streams incorrectly treated as two separate resources.
+`cases` streams incorrectly treated as two separate resources. The emitted record shape remains the
+legacy fixed projection (`id`, `title`, `version`); additional v2 dataset metadata is intentionally
+dropped.
 
 `dataset_records` (`GET /datasets/{dataset_id}/records`) `fan_out`s over every dataset id
 (`ids_from.request`: `GET /datasets`, `records_path: data`, `id_field: id`), stamping `dataset_id`
@@ -117,13 +119,11 @@ detail endpoint excluded per `api_surface.json`.
   no `recordId` at all — the API assigns/derives it from the submitted field map) is expressible.
   Updating or deleting a specific existing record by id is not possible through this bundle's
   writes today.
-- **`submissions`' real per-record field shape (beyond the 5 documented metadata fields) is
-  unconfirmed** — the OpenAPI spec's response schema for this endpoint is the bare `{"type":
-  "object"}` placeholder, not a `$ref`'d schema like `datasets`/`groups`/`users` get. The 5 fields
-  this bundle's schema declares (`submissionId`, `reviewStatus`, `formDefinitionVersion`,
-  `submissionDate`, `completionDate`) are drawn from the endpoint's own documented `orderBy` enum
-  (metadata fields the API can sort by, and therefore fields that certainly exist on the record),
-  not from an inspected live response body.
+- **`submissions`' real per-record field shape beyond legacy's fixed projection is unconfirmed** —
+  the OpenAPI spec's response schema for this endpoint is the bare `{"type": "object"}`
+  placeholder, not a `$ref`'d schema like `datasets`/`groups`/`users` get. This bundle therefore
+  emits only legacy's `id`, `form_id`, and `submissionDate` fields, with `id` filled from either
+  `id` or v2's documented `submissionId` metadata field.
 - **Encrypted-form submission handling is out of scope** — the multipart `POST
   /forms/{formID}/submissions` variant (accepting an RSA private-key PEM file part to decrypt
   encrypted payloads) is excluded; handling a private-key file upload is both a materially

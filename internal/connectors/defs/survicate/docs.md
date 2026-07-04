@@ -44,22 +44,20 @@ cursor with this paginator type. The request layer (`connsdk.Requester.resolveUR
 the relative path against `config.base_url` correctly either way.
 
 `surveys` (`GET /surveys`) lists every survey in the workspace; `items_per_page` is sent statically
-at 100 (the documented max). Survicate's real wire shape has no `updated_at` field and the API sends
-no server-side incremental filter for it — the bundle's prior version declared a fabricated
-`incremental.cursor_field: updated_at` that named a field the API never actually returns; this
-version corrects that (no `incremental` block; `x-primary-key: [id]` only).
+at 100 (the documented max). The legacy connector's catalog publishes `updated_at` as the survey
+cursor field and its record mapper emits `updated_at` when the API returns it, so the schema keeps
+that field and `x-cursor-field` for legacy catalog/data parity. The v2 Data Export API docs and
+fixtures do not show a server-side incremental filter for it, so no `incremental` block is declared.
 
 `survey_questions` (`GET /surveys/{survey_id}/questions`) and `responses`
 (`GET /surveys/{survey_id}/responses`) both `fan_out` over every survey id (`ids_from.request`:
 `GET /surveys`, `records_path: data`, `id_field: id`), stamping `survey_id` onto every emitted
 record — there is no "list all questions/responses across every survey" endpoint; each is
-inherently survey-scoped. `responses`' `collected_at` is kept as an informational
-`x-cursor-field` only (no `incremental` block): the API's documented `start`/`end` filters order
-responses **latest-to-oldest** (descending), the opposite of the engine's ascending
-lower-bound-filter incremental model, so wiring a naive `request_param` against `start` would
-silently invert which slice of history a "resume from cursor" sync actually returns — narrower
-(full-refresh-only) is the correct, honest choice here, not a `request_param` that would diverge
-from the API's real semantics.
+inherently survey-scoped. `responses` does not declare a cursor field: the API's documented
+`start`/`end` filters order responses **latest-to-oldest** (descending), the opposite of the
+engine's ascending lower-bound-filter incremental model, so wiring a naive `request_param` against
+`start` would silently invert which slice of history a "resume from cursor" sync actually returns —
+narrower (full-refresh-only) is the correct, honest choice here.
 
 `respondents/{respondent_uuid}/attributes` and `respondents/{respondent_uuid}/responses` are not
 modeled as streams: neither has a "list all respondent ids" discovery endpoint, so there is no
@@ -86,7 +84,7 @@ address across Survicate and connected services) rather than modeled as a revers
   end-to-end; this is a documented gap, not a hidden one.
 - **No respondent- or personal-data-scoped streams** — see Streams notes above; both require an
   externally-supplied id/email with no in-API discovery path.
-- **`responses`' `collected_at` is informational-only** — no `incremental` block is declared
+- **`responses` is full-refresh-only** — no `x-cursor-field` or `incremental` block is declared
   because the API's `start`/`end` filters order latest-to-oldest, the opposite of the engine's
   ascending lower-bound model; every sync is full-refresh.
 - Rate limits per Survicate's docs: 1000 requests/minute per workspace, 5 concurrent requests max;

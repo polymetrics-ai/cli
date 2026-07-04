@@ -24,8 +24,7 @@
       "query": { "limit": "50" },
       "records": { "path": "data" },
       "computed_fields": {
-        "created_at": "{{ record.createdAt }}",
-        "updated_at": "{{ record.updatedAt }}"
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
       },
       "schema": "schemas/applications.json"
     },

@@ -10,7 +10,8 @@
       "page_param": "page",
       "size_param": "per_page",
       "start_page": 1,
-      "page_size": 100
+      "page_size": 100,
+      "max_pages": 1
     },
     "check": { "method": "GET", "path": "/integration_api/listings/query" },
     "error_map": [

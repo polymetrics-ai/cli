@@ -7,12 +7,8 @@
     "feed_url": {
       "type": "string",
       "format": "uri",
-      "description": "The RSS feed URL to read. Falls back to base_url, then to a default fixture feed (https://xkcd.com/rss.xml) when both are unset, matching legacy's feedURL fallback chain."
-    },
-    "base_url": {
-      "type": "string",
-      "format": "uri",
-      "description": "Legacy-compatible alias for feed_url: consulted only when feed_url is unset. Provide either feed_url or base_url."
+      "default": "https://xkcd.com/rss.xml",
+      "description": "The RSS feed URL to read. Defaults to https://xkcd.com/rss.xml, matching legacy's final fallback."
     }
   }
 }
