@@ -271,3 +271,40 @@ func TestReadStream_EmitErrorPropagates(t *testing.T) {
 		t.Fatalf("emit called %d times, want exactly 1 (stop on first error)", calls)
 	}
 }
+
+// TestReadStream_DeclinesNonQueryStream locks in that the hook only handles
+// the caller-driven "query" stream. The declarative "datasets" catalog stream
+// must be declined (handled=false, no request issued) so the engine reads it
+// declaratively against its own path/fixture; without the stream-name guard
+// the hook hijacked every stream and drove it to config.query_path (which
+// broke dynamic conformance for the datasets stream).
+func TestReadStream_DeclinesNonQueryStream(t *testing.T) {
+	requested := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requested = true
+		_, _ = w.Write([]byte(`[]`))
+	}))
+	defer srv.Close()
+
+	h := Hooks{}
+	req := connectors.ReadRequest{Config: connectors.RuntimeConfig{Config: map[string]string{"query_path": "data.json"}}}
+	rt := newRuntime(srv.URL)
+
+	emitted := 0
+	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "datasets"}, req, rt, func(connectors.Record) error {
+		emitted++
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ReadStream(datasets) error = %v, want nil", err)
+	}
+	if handled {
+		t.Fatal("handled = true for the datasets stream, want false (engine must read it declaratively)")
+	}
+	if requested {
+		t.Fatal("hook issued an HTTP request for a stream it should have declined")
+	}
+	if emitted != 0 {
+		t.Fatalf("hook emitted %d records for a declined stream, want 0", emitted)
+	}
+}

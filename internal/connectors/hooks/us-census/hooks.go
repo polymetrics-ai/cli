@@ -47,6 +47,15 @@ func (Hooks) ConnectorName() string { return "us-census" }
 // array-of-arrays, and map the header row (row 0) to lower-cased field
 // names for every following data row.
 func (Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
+	// Only the caller-driven "query" stream needs hook handling (its wire
+	// shape is a header-row + data-row array-of-arrays with no fixed schema).
+	// The "datasets" catalog stream is a plain declarative array-of-objects
+	// the engine projects on its own, so decline it (handled=false) and let
+	// the declarative read path run. Without this guard the hook hijacks every
+	// stream, driving each request to config.query_path.
+	if stream.Name != "query" {
+		return false, nil
+	}
 	if err := ctx.Err(); err != nil {
 		return true, err
 	}
