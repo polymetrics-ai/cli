@@ -20,11 +20,6 @@
       "default": "100",
       "description": "Records per page (1-1000) for paginated streams."
     },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
-    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

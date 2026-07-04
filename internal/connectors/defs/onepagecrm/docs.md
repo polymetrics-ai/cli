@@ -65,6 +65,10 @@ full endpoint-specific payload contract remains server-validated by OnePageCRM.
   file upload, not a durable CRM object stream.
 - The pagination stop-condition deviation described above (body `max_page` vs. short-page heuristic)
   is an accepted, request-count-only difference — see Streams notes.
+- Legacy accepts runtime `page_size` (default `100`) and `max_pages` (default unbounded) config
+  values. The declarative engine only supports fixed `pagination.page_size`/`max_pages` integers, so
+  this bundle honors the legacy defaults but intentionally does not declare ignored `spec.json`
+  properties for those runtime knobs.
 - `contacts`/`deals`/`actions`/`companies` declare `updated_at` as `x-cursor-field` for manifest
   parity with legacy's published `CursorFields`, but neither legacy nor this bundle actually issues a
   server-side incremental filter against it (legacy's OnePageCRM API integration performs full syncs

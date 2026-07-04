@@ -24,6 +24,12 @@ func New() engine.Hooks { return Hooks{Connector: legacy.New()} }
 
 func (h Hooks) ConnectorName() string { return "rootly" }
 
+var handledStreams = map[string]struct{}{
+	"incidents": {},
+	"services":  {},
+	"users":     {},
+}
+
 var streamAliases = map[string]string{}
 
 func (h Hooks) connector() connectors.Connector {
@@ -48,6 +54,9 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 	}
 	if req.Stream == "" {
 		return true, fmt.Errorf("rootly" + " stream name is required")
+	}
+	if _, ok := handledStreams[req.Stream]; !ok {
+		return false, nil
 	}
 	return true, h.connector().Read(ctx, req, emit)
 }

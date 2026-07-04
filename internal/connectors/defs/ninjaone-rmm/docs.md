@@ -67,3 +67,7 @@ None. NinjaOne RMM is exposed read-only (no safe reverse-ETL write actions in th
 - `activityTime` (`activities`' cursor field) is declared for catalog/manifest parity only; neither
   connector filters or advances reads by it. Matches legacy's actual (non-)behavior exactly, not a
   narrowing.
+- **`max_pages` is not runtime-configurable.** Legacy accepts a `max_pages` config override, but the
+  engine's `PaginationSpec.MaxPages` is static and cannot be templated from config. The bundle
+  leaves pagination unbounded, matching legacy's default, and does not declare a dead `max_pages`
+  config key.

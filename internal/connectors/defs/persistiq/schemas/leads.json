@@ -3,7 +3,6 @@
   "title": "leads",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },

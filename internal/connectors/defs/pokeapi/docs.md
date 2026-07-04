@@ -18,7 +18,7 @@ proxies.
 ## Streams notes
 
 Resource-list streams use PokeAPI's `{count, next, previous, results[]}` envelope with
-`offset_limit` pagination (`limit`/`offset`, page size 100, default `max_pages: 3`). Named list
+`offset_limit` pagination (`limit`/`offset`, page size 100, `max_pages: 3`). Named list
 resources use `name` as the primary key, matching legacy. The documented unnamed list resources
 (`characteristic`, `contest-effect`, `evolution-chain`, `machine`, and `super-contest-effect`)
 use the URL-derived `id` as primary key because their list records contain only `url`.
@@ -40,5 +40,7 @@ None. PokeAPI documents the REST API as consumption-only with only HTTP GET avai
 ## Known limits
 
 Detail and `pokemon_location_areas` streams require the matching config ID/name because PokeAPI
-does not expose a bulk detail endpoint for those full resource objects. The list streams remain
-bounded by `max_pages` unless callers set `max_pages` to `0`, `all`, or `unlimited`.
+does not expose a bulk detail endpoint for those full resource objects. The list streams keep
+legacy's default page size and page cap (100 records per page, 3 pages) as static pagination
+settings because the engine's `offset_limit` pagination does not support runtime-configurable
+`page_size` or `max_pages`.

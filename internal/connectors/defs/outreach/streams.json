@@ -58,7 +58,7 @@
         "id": "{{ record.id }}",
         "type": "{{ record.type }}",
         "email": "{{ record.attributes.email }}",
-        "name": "{{ record.attributes.name }}",
+        "name": "{{ coalesce record.attributes.name record.attributes.displayName }}",
         "created_at": "{{ record.attributes.createdAt }}",
         "updated_at": "{{ record.attributes.updatedAt }}"
       },
@@ -82,7 +82,7 @@
         "id": "{{ record.id }}",
         "type": "{{ record.type }}",
         "email": "{{ record.attributes.email }}",
-        "name": "{{ record.attributes.name }}",
+        "name": "{{ coalesce record.attributes.name record.attributes.displayName }}",
         "created_at": "{{ record.attributes.createdAt }}",
         "updated_at": "{{ record.attributes.updatedAt }}"
       },
@@ -106,7 +106,7 @@
         "id": "{{ record.id }}",
         "type": "{{ record.type }}",
         "email": "{{ record.attributes.email }}",
-        "name": "{{ record.attributes.name }}",
+        "name": "{{ coalesce record.attributes.name record.attributes.displayName }}",
         "created_at": "{{ record.attributes.createdAt }}",
         "updated_at": "{{ record.attributes.updatedAt }}"
       },
@@ -130,7 +130,7 @@
         "id": "{{ record.id }}",
         "type": "{{ record.type }}",
         "email": "{{ record.attributes.email }}",
-        "name": "{{ record.attributes.name }}",
+        "name": "{{ coalesce record.attributes.name record.attributes.displayName }}",
         "created_at": "{{ record.attributes.createdAt }}",
         "updated_at": "{{ record.attributes.updatedAt }}"
       },

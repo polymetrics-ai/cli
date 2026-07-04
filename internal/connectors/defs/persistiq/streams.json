@@ -23,12 +23,6 @@
       "name": "leads",
       "path": "/v1/leads",
       "records": { "path": "leads" },
-      "incremental": {
-        "cursor_field": "updated_at",
-        "request_param": "updated_after",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
-      },
       "schema": "schemas/leads.json",
       "projection": "passthrough"
     },

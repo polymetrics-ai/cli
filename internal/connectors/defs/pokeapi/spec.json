@@ -9,16 +9,6 @@
       "default": "https://pokeapi.co/api/v2",
       "description": "PokeAPI base URL override for tests or proxies."
     },
-    "page_size": {
-      "type": "string",
-      "default": "100",
-      "description": "Records per page (1-1000)."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "3",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust paginated list streams."
-    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
