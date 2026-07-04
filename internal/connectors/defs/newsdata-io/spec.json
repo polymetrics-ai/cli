@@ -17,7 +17,7 @@
     },
     "search_query": {
       "type": "string",
-      "description": "Optional search keywords, sent as the 'q' query parameter on article streams."
+      "description": "Optional search keywords, sent as the 'q' query parameter."
     },
     "categories": {
       "type": "string",
@@ -37,21 +37,16 @@
     },
     "start_date": {
       "type": "string",
-      "description": "Optional archive lower-bound date (YYYY-MM-DD), sent as 'from_date' on the archive stream."
+      "description": "Optional lower-bound date (YYYY-MM-DD), sent as 'from_date'."
     },
     "end_date": {
       "type": "string",
-      "description": "Optional archive upper-bound date (YYYY-MM-DD), sent as 'to_date' on the archive stream."
+      "description": "Optional upper-bound date (YYYY-MM-DD), sent as 'to_date'."
     },
     "page_size": {
       "type": "string",
       "default": "10",
       "description": "Records per page (1-50), sent as the 'size' query parameter on article streams."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "10",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
     },
     "mode": {
       "type": "string",

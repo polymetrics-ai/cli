@@ -30,20 +30,18 @@ stream level to reproduce that exact single-page behavior.
 Every article stream sends `size=<page_size>` (default 10, matching legacy's
 `newsdataDefaultPageSize`) via the `stream.Query` optional-query dialect's `default` (never omitted,
 mirrors legacy always setting `size` for non-sources streams). The optional filter passthroughs
-(`q`/`category`/`country`/`language`/`domain`, plus `archive`'s `from_date`/`to_date`) use
+(`q`/`category`/`country`/`language`/`domain`/`from_date`/`to_date`) use
 `omit_when_absent: true` so an unset filter is left off the request entirely, matching legacy's
 `newsdataQueryFilters`' `setIf` helper (only set a param when the corresponding config value is
-non-empty).
+non-empty). Legacy builds those filters before branching on stream, so they are wired on all four
+streams here; `size` remains article-only, matching legacy's `stream != "sources"` guard.
 
-`max_pages` defaults to `10` (legacy's own default bound for the otherwise-unbounded NewsData.io
+The cursor paginator's `max_pages` defaults to `10` (legacy's own default bound for the otherwise-unbounded NewsData.io
 corpus, `newsdataMaxPages`'s bare-config-value branch), wired as `pagination.max_pages: 10` in this
 bundle's `base` block to reproduce that hard request-count cap; the cursor paginator otherwise
-would page indefinitely following `nextPage` until the token runs dry. `spec.json`'s `max_pages`
-config key documents the same default for parity with legacy's own config surface, but (like
-`PaginationSpec.MaxPages` generally, see the searxng/segment `max_pages`-not-runtime-configurable
-precedent) it is not template-wired into the static `pagination.max_pages` int at bundle-author
-time; a config-driven override of the default (legacy's `all`/`unlimited`/`0`/N-page forms) is not
-reproduced here — only the default bound itself is.
+would page indefinitely following `nextPage` until the token runs dry. The legacy runtime override
+(`all`/`unlimited`/`0`/N-page forms) is not declared in `spec.json` because the engine cannot
+template `PaginationSpec.MaxPages`; only the default bound itself is reproduced.
 
 ## Write actions & risks
 
@@ -60,9 +58,9 @@ stub.
 - Full NewsData.io API surface (news author search, generate podcast, other premium endpoints) is
   out of scope; only the 4 legacy-parity streams are implemented, matching legacy's own stream set
   one-for-one.
-- **`max_pages` is not runtime-configurable.** `spec.json` declares a `max_pages` config key
-  (default `"10"`) documenting legacy's own default bound, but the engine's `PaginationSpec.MaxPages`
-  is a static int set at bundle-author time with no config-template support; this bundle wires the
-  default (`pagination.max_pages: 10`) directly so a live sync hard-stops after 10 pages exactly
-  like legacy's un-overridden default, but legacy's runtime override (`all`/`unlimited`/`0`/N-page
-  config values) is not reproduced. This is the same class of gap documented for segment/searxng.
+- **`max_pages` is not runtime-configurable.** The engine's `PaginationSpec.MaxPages` is a static
+  int set at bundle-author time with no config-template support; this bundle wires the default
+  (`pagination.max_pages: 10`) directly so a live sync hard-stops after 10 pages exactly like
+  legacy's un-overridden default, but legacy's runtime override (`all`/`unlimited`/`0`/N-page config
+  values) is not reproduced or declared. This is the same class of gap documented for
+  segment/searxng.

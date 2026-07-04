@@ -3,6 +3,7 @@
   "title": "Piwik Visit",
   "type": "object",
   "x-primary-key": ["visit_id"],
+  "x-cursor-field": "last_action_at",
   "required": ["visit_id"],
   "properties": {
     "visit_id": { "type": "string" },

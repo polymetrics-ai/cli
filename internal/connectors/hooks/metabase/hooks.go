@@ -3,7 +3,6 @@ package metabase
 
 import (
 	"context"
-	"fmt"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
@@ -26,6 +25,14 @@ func (h Hooks) ConnectorName() string { return "metabase" }
 
 var streamAliases = map[string]string{}
 
+var handledStreams = map[string]struct{}{
+	"cards":       {},
+	"dashboards":  {},
+	"collections": {},
+	"databases":   {},
+	"users":       {},
+}
+
 func (h Hooks) connector() connectors.Connector {
 	if h.Connector != nil {
 		return h.Connector
@@ -47,7 +54,10 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 		req.Stream = legacyName
 	}
 	if req.Stream == "" {
-		return true, fmt.Errorf("metabase" + " stream name is required")
+		req.Stream = "cards"
+	}
+	if _, ok := handledStreams[req.Stream]; !ok {
+		return false, nil
 	}
 	return true, h.connector().Read(ctx, req, emit)
 }

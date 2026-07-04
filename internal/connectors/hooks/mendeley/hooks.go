@@ -3,7 +3,6 @@ package mendeley
 
 import (
 	"context"
-	"fmt"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
@@ -26,6 +25,13 @@ func (h Hooks) ConnectorName() string { return "mendeley" }
 
 var streamAliases = map[string]string{}
 
+var handledStreams = map[string]struct{}{
+	"documents":   {},
+	"folders":     {},
+	"groups":      {},
+	"annotations": {},
+}
+
 func (h Hooks) connector() connectors.Connector {
 	if h.Connector != nil {
 		return h.Connector
@@ -47,7 +53,10 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 		req.Stream = legacyName
 	}
 	if req.Stream == "" {
-		return true, fmt.Errorf("mendeley" + " stream name is required")
+		req.Stream = "documents"
+	}
+	if _, ok := handledStreams[req.Stream]; !ok {
+		return false, nil
 	}
 	return true, h.connector().Read(ctx, req, emit)
 }

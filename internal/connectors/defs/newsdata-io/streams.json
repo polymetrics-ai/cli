@@ -27,7 +27,9 @@
         "category": { "template": "{{ config.categories }}", "omit_when_absent": true },
         "country": { "template": "{{ config.countries }}", "omit_when_absent": true },
         "language": { "template": "{{ config.languages }}", "omit_when_absent": true },
-        "domain": { "template": "{{ config.domains }}", "omit_when_absent": true }
+        "domain": { "template": "{{ config.domains }}", "omit_when_absent": true },
+        "from_date": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "results" },
       "schema": "schemas/latest.json"
@@ -41,7 +43,9 @@
         "category": { "template": "{{ config.categories }}", "omit_when_absent": true },
         "country": { "template": "{{ config.countries }}", "omit_when_absent": true },
         "language": { "template": "{{ config.languages }}", "omit_when_absent": true },
-        "domain": { "template": "{{ config.domains }}", "omit_when_absent": true }
+        "domain": { "template": "{{ config.domains }}", "omit_when_absent": true },
+        "from_date": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
       },
       "records": { "path": "results" },
       "schema": "schemas/crypto.json"
@@ -65,6 +69,15 @@
     {
       "name": "sources",
       "path": "/sources",
+      "query": {
+        "q": { "template": "{{ config.search_query }}", "omit_when_absent": true },
+        "category": { "template": "{{ config.categories }}", "omit_when_absent": true },
+        "country": { "template": "{{ config.countries }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.languages }}", "omit_when_absent": true },
+        "domain": { "template": "{{ config.domains }}", "omit_when_absent": true },
+        "from_date": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to_date": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
       "records": { "path": "results" },
       "pagination": { "type": "none" },
       "schema": "schemas/sources.json"

@@ -64,8 +64,9 @@ func New() *Hooks { return &Hooks{} }
 func (h *Hooks) ConnectorName() string { return "keka" }
 
 var (
-	_ engine.Hooks    = (*Hooks)(nil)
-	_ engine.AuthHook = (*Hooks)(nil)
+	_ engine.Hooks      = (*Hooks)(nil)
+	_ engine.AuthHook   = (*Hooks)(nil)
+	_ engine.RecordHook = (*Hooks)(nil)
 )
 
 // Authenticator builds a token-caching OAuth2 authenticator using Keka's
@@ -117,6 +118,77 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 		Client:       h.Client,
 		Now:          h.Now,
 	}, nil
+}
+
+var legacyStreamFields = map[string][]string{
+	"employees": {
+		"id",
+		"employeeNumber",
+		"firstName",
+		"lastName",
+		"displayName",
+		"email",
+		"jobTitle",
+		"department",
+		"employmentStatus",
+	},
+	"attendance": {
+		"id",
+		"employeeId",
+		"attendanceDate",
+		"shiftStartTime",
+		"shiftEndTime",
+		"status",
+		"totalGrossHours",
+	},
+	"leave_types": {
+		"id",
+		"name",
+		"identifier",
+		"leaveTypeUnit",
+		"isActive",
+	},
+	"leave_requests": {
+		"id",
+		"employeeId",
+		"leaveTypeId",
+		"fromDate",
+		"toDate",
+		"status",
+		"dayCount",
+	},
+	"clients": {
+		"id",
+		"name",
+		"code",
+		"isActive",
+	},
+	"projects": {
+		"id",
+		"name",
+		"code",
+		"clientId",
+		"billingType",
+		"status",
+	},
+}
+
+// MapRecord preserves the legacy field-built projection for the six original
+// Keka streams. The legacy connector always assigns each field key, producing a
+// JSON null when the raw API key is absent; schema projection alone omits those
+// absent keys.
+func (h *Hooks) MapRecord(stream string, raw, projected connsdk.Record) (connsdk.Record, bool, error) {
+	fields, ok := legacyStreamFields[stream]
+	if !ok {
+		return projected, true, nil
+	}
+	if projected == nil {
+		projected = connsdk.Record{}
+	}
+	for _, field := range fields {
+		projected[field] = raw[field]
+	}
+	return projected, true, nil
 }
 
 func valueOr(raw, fallback string) string {

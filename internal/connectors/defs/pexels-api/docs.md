@@ -86,6 +86,9 @@ review.
   `max_pages` (F6, REVIEW.md). Pagination is bounded only by the short/empty `next_page` stop
   signal, matching legacy's own real termination behavior. This applies identically to the 3 Pass B
   streams.
+- **`page_size` is not runtime-configurable** because this bundle sends legacy's fixed
+  `per_page=40` static query on first requests; declaring a `page_size` spec key would be dead
+  config.
 - **Fixtures are single-page** for every stream, per `docs/migration/conventions.md` §4's
   sanctioned `next_url` exception: Pexels' `next_page` URL is the replay server's own runtime
   address and cannot be embedded in a static fixture file. Every fixture omits `next_page`

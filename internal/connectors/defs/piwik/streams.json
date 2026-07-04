@@ -52,8 +52,8 @@
         "type": "none"
       },
       "computed_fields": {
-        "site_id": "{{ record.idsite }}",
-        "main_url": "{{ record.main_url }}"
+        "site_id": "{{ coalesce record.idsite record.idSite record.site_id }}",
+        "main_url": "{{ coalesce record.main_url record.mainUrl }}"
       },
       "schema": "schemas/sites.json"
     },
@@ -75,12 +75,13 @@
         "type": "offset_limit",
         "limit_param": "filter_limit",
         "offset_param": "filter_offset",
-        "page_size": 100
+        "page_size": 100,
+        "max_pages": 3
       },
       "computed_fields": {
-        "visit_id": "{{ record.idVisit }}",
-        "visitor_id": "{{ record.visitorId }}",
-        "last_action_at": "{{ record.lastActionDateTime }}"
+        "visit_id": "{{ coalesce record.idVisit record.visit_id }}",
+        "visitor_id": "{{ coalesce record.visitorId record.visitor_id }}",
+        "last_action_at": "{{ coalesce record.lastActionDateTime record.last_action_at }}"
       },
       "schema": "schemas/visits.json"
     },
@@ -102,11 +103,12 @@
         "type": "offset_limit",
         "limit_param": "filter_limit",
         "offset_param": "filter_offset",
-        "page_size": 100
+        "page_size": 100,
+        "max_pages": 3
       },
       "computed_fields": {
-        "hits": "{{ record.nb_hits }}",
-        "visits": "{{ record.nb_visits }}"
+        "hits": "{{ coalesce record.nb_hits record.hits }}",
+        "visits": "{{ coalesce record.nb_visits record.visits }}"
       },
       "schema": "schemas/actions.json"
     },
@@ -130,7 +132,7 @@
         "type": "none"
       },
       "computed_fields": {
-        "goal_id": "{{ record.idgoal }}"
+        "goal_id": "{{ coalesce record.idgoal record.idGoal }}"
       },
       "schema": "schemas/goals.json"
     },
